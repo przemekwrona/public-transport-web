@@ -1,0 +1,16 @@
+name: Deploy Docker
+
+on:
+  workflow_dispatch:
+    inputs:
+
+env:
+  REGISTRY: registry.digitalocean.com/igeolab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build Artifact
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
