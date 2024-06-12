@@ -24,7 +24,6 @@ jobs:
           npm install
           npm run generate
           npm run build
-          ls -lh ../public-transport-web-server/src/main/resources/static/
 
       - name: Build Backend App
         uses: actions/setup-java@v4
