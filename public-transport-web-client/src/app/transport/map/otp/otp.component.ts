@@ -3,9 +3,8 @@ import * as L from 'leaflet';
 import {DivIcon, LatLngBounds, Map, Marker, Polyline} from "leaflet";
 import {OtpService} from "../../../http/otp.service";
 import moment from "moment";
-import {Itinerary, RoutesResponse} from "../../../../../generated";
-import {Leg} from "../../../../../generated/models/Leg";
 import {decode} from "@googlemaps/polyline-codec";
+import {Itinerary, RoutesResponse} from "../../../generated";
 
 export class OtpPoint {
   name: string = '';

@@ -1,9 +1,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DivIcon, LatLngBounds, Map, Marker, Polyline} from "leaflet";
 import * as L from "leaflet";
-import {Itinerary, Leg} from "../../../../../../generated";
 import moment from "moment";
 import {decode} from "@googlemaps/polyline-codec";
+import {Itinerary, Leg} from "../../../../generated";
 
 @Component({
   selector: 'app-itinerary-header',
