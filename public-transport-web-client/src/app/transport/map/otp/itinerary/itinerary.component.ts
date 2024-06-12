@@ -1,12 +1,12 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import {DivIcon, LatLng, LatLngBounds, Map, Marker, Polyline, PolyUtil} from "leaflet";
-import {Itinerary, Leg, TripPoint} from "../../../../../../generated";
 import moment from "moment";
 import {decode, encode} from "@googlemaps/polyline-codec";
 import {first, last} from "lodash";
 
 import {Stop} from "../../../../http/stop.service";
+import {Itinerary, Leg} from "../../../../generated";
 
 
 @Component({
