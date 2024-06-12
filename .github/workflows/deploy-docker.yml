@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-        run: |
+      - run: |
           cd ./public-transport-web-client
           npm install
           npm run generate
@@ -31,6 +31,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-        run: |
+      - run: |
           cd ./public-transport-web-server
           mvn clean install
