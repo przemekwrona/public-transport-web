@@ -1,0 +1,476 @@
+openapi: 3.0.0
+info:
+  title: Warsaw Public Transport API
+  description: Warsaw Public Transport API
+  version: 1.0.0
+servers:
+  - url: 'https://ckan.multimediagdansk.pl'
+paths:
+  /agencies:
+    get:
+      tags:
+        - agency
+      summary: Returns list of All Agencies
+      operationId: getAgencies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agencies'
+
+  /routes:
+    get:
+      tags:
+        - routes
+      summary: Returns list of All Routes
+      operationId: getRoutes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Routes'
+
+  /trips:
+    get:
+      tags:
+        - trips
+      summary: Returns list of All Trips
+      operationId: getTrips
+      parameters:
+        - in: query
+          name: line
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trips'
+
+  /agency/{agencyCode}/stops/{stopId}/departures:
+    get:
+      tags:
+        - stop-time
+      summary: Returns list of All Stop Times
+      operationId: getDeparturesByStopId
+      parameters:
+        - in: path
+          name: agencyCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: stopId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Departures'
+
+  /agency/{agencyCode}/stops/{stopId}/routes:
+    get:
+      tags:
+        - routes
+      summary: Returns list of Routes on Stop
+      operationId: getRoutesByStopId
+      parameters:
+        - in: path
+          name: agencyCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: stopId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Routes'
+
+  /agency/{agencyCode}/stops:
+    get:
+      tags:
+        - stops
+      summary: Returns list of stops
+      operationId: getStops
+      parameters:
+        - in: path
+          name: agencyCode
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: latitude
+          required: true
+          schema:
+            type: number
+            format: double
+        - in: query
+          name: longitude
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stops'
+
+  /agency/{agencyCode}/stops/{stopId}/timetables:
+    get:
+      tags:
+        - timetable
+      summary: Returns list of Stop Times for stops
+      operationId: getTimetableByStopId
+      parameters:
+        - in: path
+          name: agencyCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: stopId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timetables'
+
+  /agency/{agencyCode}/stops/{stopId}/shapes:
+    get:
+      tags:
+        - shape
+      summary: Returns list of Shapes of lines on dedicated stops
+      operationId: getShapesByStopId
+      parameters:
+        - in: path
+          name: agencyCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: stopId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShapeResponse'
+
+  /agency/{agencyCode}/trips:
+    get:
+      tags:
+        - trips
+      summary: Returns Trip by tripId
+      operationId: getTripByStopId
+      parameters:
+        - in: path
+          name: agencyCode
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: tripId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleTripResponse'
+
+components:
+  schemas:
+    Agency:
+      type: object
+      properties:
+        agencyId:
+          type: string
+        agencyName:
+          type: string
+
+    Agencies:
+      type: object
+      properties:
+        agencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Agency'
+
+    Route:
+      type: object
+      properties:
+        routeId:
+          type: string
+        agencyId:
+          type: string
+        routeShortName:
+          type: string
+        routeLongName:
+          type: string
+        routeDesc:
+          type: string
+        routeType:
+          type: integer
+        routeUrl:
+          type: string
+        routeColor:
+          type: string
+
+    Routes:
+      type: object
+      properties:
+        routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+
+    Trip:
+      type: object
+      properties:
+        routeId:
+          type: string
+        serviceId:
+          type: string
+        tripId:
+          type: string
+        tripHeadSign:
+          type: string
+        tripShortName:
+          type: string
+        directionId:
+          type: string
+        blockId:
+          type: string
+        shapeId:
+          type: string
+
+    Trips:
+      type: object
+      properties:
+        trips:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trip'
+
+    Stop:
+      type: object
+      properties:
+        stopId:
+          type: string
+        stopCode:
+          type: string
+        stopName:
+          type: string
+        stopDesc:
+          type: string
+        stopLat:
+          type: number
+          format: double
+        stopLon:
+          type: number
+          format: double
+        locationType:
+          type: integer
+        parentStation:
+          type: string
+        lines:
+          type: array
+          items:
+            type: string
+        types:
+          type: array
+          items:
+            type: integer
+
+    Stops:
+      type: object
+      properties:
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stop'
+
+    TimetableDeparture:
+      type: object
+      properties:
+        line:
+          type: string
+        date:
+          type: string
+        headsign:
+          type: string
+        departure:
+          type: string
+          format: date-time
+        shapeId:
+          type: string
+        tripId:
+          type: string
+
+    TimetableLine:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/TimetableDeparture'
+
+    Timetables:
+      type: object
+      properties:
+        stopId:
+          type: string
+        stopName:
+          type: string
+        lines:
+          type: array
+          items:
+            type: string
+        departures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Departure'
+        timetable:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/TimetableLine'
+        shapes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Shapes'
+
+
+    StopTime:
+      type: object
+      properties:
+        line:
+          type: string
+
+    StopTimes:
+      type: object
+      properties:
+        stopTimes:
+          type: array
+          items:
+            $ref: '#/components/schemas/StopTime'
+
+    Departure:
+      type: object
+      properties:
+        line:
+          type: string
+        headsign:
+          type: string
+        date:
+          type: string
+          format: date-time
+        shapeId:
+          type: string
+
+    Departures:
+      type: object
+      properties:
+        departures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Departure'
+
+    Shape:
+      type: object
+      properties:
+        shapeId:
+          type: string
+        shapePtLat:
+          type: number
+          format: double
+        shapePtLon:
+          type: number
+          format: double
+        shapePtSequence:
+          type: integer
+        shapeDistTraveled:
+          type: number
+          format: double
+
+    Shapes:
+      type: array
+      items:
+        $ref: '#/components/schemas/Shape'
+
+    ShapeResponse:
+      type: object
+      properties:
+        shapes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Shapes'
+
+    SimpleTripResponse:
+      type: object
+      properties:
+        tripId:
+          type: string
+        tripStops:
+          type: array
+          items:
+            $ref: '#/components/schemas/TripStop'
+
+    TripStop:
+      type: object
+      properties:
+        stopId:
+          type: string
+        stopName:
+          type: string
+        stopLat:
+          type: number
+          format: double
+        stopLon:
+          type: number
+          format: double
+        departure:
+          type: string
+        stopSequence:
+          type: integer
+        shapeId:
+          type: string
+        lines:
+          type: array
+          items:
+            type: string
+        types:
+          type: array
+          items:
+            type: integer
