@@ -32,6 +32,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - run: |
+          cd ./public-transport-web-server
           ls
           mvn clean install
         
