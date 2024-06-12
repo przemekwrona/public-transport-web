@@ -1,0 +1,42 @@
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .stop-details {
+    position: absolute;
+    top: 4px;
+    left: -6px;
+    z-index: 999;
+
+    .timetable-details {
+      margin-top: 12px;
+    }
+  }
+
+  .fa-circle-o {
+    background-color: white;
+    border-radius: 2em;
+  }
+}
+
+.map-frame {
+  border: 0 solid black;
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+}
+
+.stop-marker {
+  background-color: steelblue;
+
+  .stop-marker {
+    background-color: steelblue;
+  }
+
+}
+

@@ -1,0 +1,74 @@
+.otp-container {
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+
+  .mat-content.mat-content-hide-toggle {
+    margin-right: 0 !important;
+  }
+}
+
+.itinerary-walk {
+  background-color: #81CF5C;
+}
+
+:host ::ng-deep {
+  .mat-expansion-panel-header, .mat-expansion-panel-body {
+    padding: 12px;
+  }
+
+  .mat-content.mat-content-hide-toggle {
+    margin-right: 0;
+  }
+
+  .mat-expansion-panel-header-description {
+    margin-right: 0;
+  }
+}
+
+.app-itinerary-header {
+  width: 100% !important;
+}
+
+.mat-panel-description {
+  margin: 0 !important;
+}
+
+.mat-expansion-panel-header {
+  height: 100px !important;
+}
+
+.mat-expansion-panel-header {
+  height: 100px;
+}
+
+.itinerary-container {
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: calc(100% - 100px);
+  max-height: 540px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: lightgray;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: dimgray;
+  }
+}
+
+.mat-success {
+  background-color: #4CBB17;
+  color: #fff;
+}
+

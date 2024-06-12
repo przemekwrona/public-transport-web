@@ -1,0 +1,26 @@
+.stop {
+  background-color: #2d3666;
+  //background-color: #282641;
+  color: whitesmoke;
+  border-radius: 0 0 0 0;
+  opacity: 0.9;
+
+  .fa.fa-bus {
+    padding: 4px;
+    margin-right: 4px;
+    border-radius: 4px;
+    color: whitesmoke;
+
+    &.bus-blue {
+      background-color: #2296FF;
+    }
+
+    &.bus-black {
+      background-color: black;
+    }
+
+    &.tram-red {
+      background-color: #d00000;
+    }
+  }
+}

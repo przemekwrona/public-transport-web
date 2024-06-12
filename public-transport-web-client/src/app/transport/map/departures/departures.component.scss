@@ -1,0 +1,75 @@
+.departures {
+  background-color: whitesmoke;
+  opacity: 0.9;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  margin-top: 6px;
+
+  .departures-list {
+    &.departures-1 {
+      height: 40px;
+    }
+
+    &.departures-2 {
+      height: 80px;
+    }
+
+    &.departures-3 {
+      height: 120px;
+    }
+
+    &.departures-4 {
+      height: 160px;
+    }
+
+    &.departures-5 {
+      height: 200px;
+    }
+
+    &.departures-6 {
+      height: 240px;
+    }
+
+    &.departures-7 {
+      height: 280px;
+    }
+
+    &.departures-8 {
+      height: 320px;
+    }
+
+    &.departures-9 {
+      height: 360px;
+    }
+
+    &.departures-10 {
+      height: 400px;
+    }
+
+    overflow: hidden;
+    transition: height 1s ease;
+    transition-delay: 0.2s;
+
+    .row.pulse div {
+      animation: pulse 2s infinite;
+    }
+  }
+
+  .in {
+    margin-right: 4px;
+    margin-bottom: -2px;
+    font-size: 12px;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

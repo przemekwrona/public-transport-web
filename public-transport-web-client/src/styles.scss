@@ -1,0 +1,48 @@
+@font-face {
+  font-family: Roboto;
+  src: url(assets/font/Roboto/Roboto-Light.ttf) format("opentype");
+}
+
+* {
+  font-family: 'Roboto', 'arial', sans-serif;
+}
+
+/* You can add global styles to this file, and also import other style files */
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+$theme-colors: (
+  primary: #4ab140
+);
+
+$primary: #4ab140;
+
+.mat-success {
+  background-color: green;
+  color: #fff;
+}
+
+.leaflet-container .leaflet-pane.leaflet-map-pane .leaflet-pane.leaflet-tooltip-pane .leaflet-tooltip.leaflet-tooltip-igeolab {
+  padding: 2px 4px;
+  opacity: 1.0;
+  margin-left: 6px;
+  margin-top: 2px;
+  border: 0;
+
+  background-color: white;
+
+  &::before {
+    border: 0;
+    //content: "";
+  }
+}
+
+
+
+//@import "./node_modules/bootstrap/scss/bootstrap";
+
