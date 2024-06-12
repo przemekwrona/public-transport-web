@@ -1,0 +1,139 @@
+.itinerary-details {
+  margin-bottom: 2px;
+  border-radius: 8px;
+
+  max-height: 0;
+  transition: max-height 0.5s ease-out;
+  overflow: hidden;
+
+  &.open {
+    max-height: 1000px;
+    transition: max-height 0.5s ease-in;
+  }
+
+  .legs {
+    padding: 0 2px;
+
+    .itinerary-shortcut {
+      .walk {
+        &.first {
+          min-height: 2.3em;
+        }
+
+        &.icon {
+          margin-top: 18px;
+        }
+      }
+    }
+
+    .itinerary-description {
+      padding-right: 0;
+
+      .walk {
+        &.walk-from {
+          border-top: 1px solid lightgray;
+        }
+        padding: 6px 0;
+        border-bottom: 1px solid lightgray;
+      }
+    }
+
+    .walk-middle {
+      border-bottom: 1px solid lightgray;
+      color: dimgray;
+      font-size: 0.9em;
+    }
+
+    .line {
+      display: inline-block;
+      padding: 0 4px;
+      border-radius: 4px;
+      border: 1px solid dimgray;
+      min-width: 2em;
+      text-align: center;
+      margin-right: 4px;
+    }
+
+    .bus, .tram, .subway {
+      &.headsign, .headsign {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid lightgray;
+
+        .direction {
+          font-size: 0.8em;
+          color: dimgray;
+          margin-right: 4px;
+        }
+      }
+
+      .name {
+        border-bottom: 1px solid lightgray;
+        padding-bottom: 12px;
+        padding-top: 12px;
+      }
+    }
+
+    .bus .line {
+      border-color: #2296FF;
+    }
+
+    .tram .line {
+      border-color: #570202;
+    }
+
+    .subway .line {
+      border-color: dimgray;
+    }
+
+    .departure {
+      padding: 4px;
+      border-radius: 8px;
+      margin-right: 8px;
+      color: whitesmoke;
+      margin-top: 6px;
+      display: inline-block;
+    }
+
+    .arrival {
+      padding: 4px;
+      border-radius: 8px;
+      margin-right: 8px;
+      margin-top: 16px;
+      display: inline-block;
+    }
+
+    .tram {
+      .departure {
+        background-color: #570202;
+      }
+
+      .arrival {
+        border: 1px solid #570202;
+      }
+    }
+
+    .bus {
+      .departure {
+        background-color: #2296FF;
+      }
+
+      .arrival {
+        border: 1px solid #2296FF;
+      }
+    }
+
+    .subway .departure {
+      background-color: dimgray;
+    }
+
+    .icon {
+      font-size: 1.1em;
+      margin-top: 26px;
+
+      i {
+        font-size: 1.1em;
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+<div class="timetables container">
+
+  <div class="row row-line p-1">
+    <div class="col-2 line">{{line}}</div>
+    <div class="col-10 headsing">{{getMainHeadsing()}}</div>
+  </div>
+
+  <mat-stepper>
+    <mat-step state="done" [completed]="false">
+      <ng-template matStepLabel>Dzisiaj</ng-template>
+      <app-timetable-content [timetableDate]="getTimetableDates()[0]" [line]="line" [timetables]="getTimetable(getTimetableDates()[0])" (onClickDeparture)="clickDeparture($event)"></app-timetable-content>
+    </mat-step>
+    <mat-step state="done" [completed]="false">
+      <ng-template matStepLabel>Jutro
+<!--        {{getTimetableDates()[1].toDate() | date:'EEEE'}}-->
+      </ng-template>
+      <app-timetable-content [timetableDate]="getTimetableDates()[1]" [line]="line" [timetables]="getTimetable(getTimetableDates()[1])" (onClickDeparture)="clickDeparture($event)"></app-timetable-content>
+    </mat-step>
+    <mat-step state="done" [completed]="false">
+      <ng-template matStepLabel>
+        Pojutrze
+<!--        {{getTimetableDates()[2].toDate() | date:'dd.MM EEEE'}}-->
+      </ng-template>
+      <app-timetable-content [timetableDate]="getTimetableDates()[2]" [line]="line" [timetables]="getTimetable(getTimetableDates()[2])" (onClickDeparture)="clickDeparture($event)"></app-timetable-content>
+    </mat-step>
+
+    <ng-template matStepperIcon="number"></ng-template>
+  </mat-stepper>
+
+</div>

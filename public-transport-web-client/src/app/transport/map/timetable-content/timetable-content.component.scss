@@ -1,0 +1,86 @@
+.timetables {
+  background-color: whitesmoke;
+  border-radius: 8px;
+  opacity: 0.9;
+  width: 100%;
+  margin-top: 6px;
+
+  .no-departures {
+    .message {
+      display: inline-block;
+      font-size: 1.2rem;
+    }
+  }
+
+  .row-line {
+    .line {
+      text-align: center;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+
+    .headsing {
+      font-size: 1.2rem;
+      margin-top: 4px;
+    }
+  }
+
+  .timetable-section {
+    .row {
+      border-radius: 5px;
+
+      &.odd {
+        background-color: #DCDCDC;
+      }
+
+      &.even {
+      }
+
+      .row-container {
+        margin: 2px 0;
+      }
+    }
+
+    .hour {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .minutes {
+      display: inline-block;
+      min-width: 2rem;
+      text-align: center;
+
+      &.in-minutes {
+        color: darkgreen;
+        float: inline-end;
+      }
+
+      &.close {
+        border-radius: 4px;
+        background-color: darkgreen;
+        color: whitesmoke;
+        transform: scale(1);
+        animation: pulse 2s infinite;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.96);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    transform: scale(0.96);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}

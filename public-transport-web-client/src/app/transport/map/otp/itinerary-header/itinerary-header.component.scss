@@ -1,0 +1,132 @@
+.details {
+  //display: inline;
+  padding-left: 0;
+  width: 100%;
+
+  .ticking {
+    display: inline;
+    text-align: center;
+    padding: 16px 0 16px 8px;
+
+    .time {
+      font-size: 1.5em;
+    }
+
+    .unit {
+      font-size: 0.8em;
+      margin-top: -12px;
+    }
+  }
+
+  .legs-lines {
+    display: block;
+    margin-top: 4px;
+
+    .legs {
+      display: inline;
+
+      .leg {
+        display: inline;
+        margin-right: 0;
+
+        &.walk {
+          color: dimgray;
+          font-size: 1em;
+
+          i {
+            font-size: 1em;
+          }
+        }
+
+        &.bus, &.tram, &.rail, &.subway {
+          i {
+            font-size: 1.4em;
+          }
+
+          span {
+            font-size: 1em;
+            vertical-align: top;
+            border-radius: 4px;
+            padding: 2px 6px;
+            border: 1px solid gray;
+          }
+        }
+
+        &.bus span {
+          border: 1px solid #2296FF;
+        }
+
+        &.tram span {
+          border: 1px solid #570202;
+        }
+
+        &.subway span {
+          border: 1px solid gray;
+        }
+
+        &.rail span {
+          border: 1px solid gray;
+        }
+      }
+    }
+  }
+
+  .legs-times {
+    display: block;
+
+    .legs {
+      display: inline;
+
+      .name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: table-cell;
+        max-width: 10em;
+      }
+
+      .leg {
+        display: inline;
+        margin-right: 2px;
+        border-radius: 8px;
+        padding: 4px;
+        color: dimgray;
+
+        .name {
+          margin-right: 4px;
+        }
+
+        &.walk, .walk {
+          color: dimgray;
+          font-size: 0.9em;
+          padding: 4px 0;
+
+          i {
+            font-size: 0.9em;
+          }
+        }
+
+        &.tram {
+          background-color: #570202;
+          color: whitesmoke;
+        }
+
+        &.bus {
+          background-color: #2296FF;
+          color: whitesmoke;
+        }
+
+        &.subway {
+          background-color: gray;
+          color: whitesmoke;
+        }
+
+        &.rail {
+          background-color: gray;
+          color: whitesmoke;
+        }
+      }
+    }
+  }
+}
+
