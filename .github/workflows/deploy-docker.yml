@@ -18,4 +18,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: cd ./public-transport-web-client && npm install && npm run build
+      - run: cd ./public-transport-web-client && npm install && npm run generate && npm run build
