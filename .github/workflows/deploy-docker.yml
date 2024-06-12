@@ -25,3 +25,13 @@ jobs:
           npm run generate
           npm run build
           ls -lh ../public-transport-web-server/src/main/resources/static/
+
+      - name: Run the Maven verify phase
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - run: |
+          ls
+          mvn clean install
+        
