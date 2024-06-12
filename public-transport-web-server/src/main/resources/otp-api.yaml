@@ -91,6 +91,141 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RoutesResponse'
+
+  /otp/routers/{instance_id}/index/stops:
+    get:
+      tags:
+        - otp
+      summary: Return list of stop
+      operationId: getStops
+      parameters:
+        - name: instance_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Id of OTP router
+        - name: maxLat
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: minLon
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: minLat
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: maxLon
+          in: query
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stop'
+
+  /otp/routers/{instance_id}/index/stops/{stopId}:
+    get:
+      tags:
+        - otp
+      summary: Return stop details
+      operationId: getStopDetails
+      parameters:
+        - name: instance_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Id of OTP router
+        - name: stopId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Stop's id
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StopDetails'
+
+  /otp/routers/{instance_id}/index/stops/{stopId}/routes:
+    get:
+      tags:
+        - otp
+      summary: Return list of departures
+      operationId: getRoutes
+      parameters:
+        - name: instance_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Id of OTP router
+        - name: stopId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Stop's id
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+
+  /otp/routers/{instance_id}/index/stops/{stopId}/stoptimes/{date}:
+    get:
+      tags:
+        - otp
+      summary: Return list of departures
+      operationId: getStoptimes
+      parameters:
+        - name: instance_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Id of OTP router
+        - name: stopId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Stop's id
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Date in format yyyyMMdd
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StopTime'
+
 components:
   schemas:
     AgencyAndId:
@@ -230,6 +365,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Step'
+        routeColor:
+          type: string
+        routeTextColor:
+          type: string
     Itinerary:
       type: object
       properties:
@@ -329,3 +468,103 @@ components:
           $ref: '#/components/schemas/DebugOutput'
         elevationMetadata:
           $ref: '#/components/schemas/ElevationMetadata'
+
+    Stop:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        lat:
+          type: number
+        lon:
+          type: number
+
+    StopDetails:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        lat:
+          type: number
+        lon:
+          type: number
+        zoneId:
+          type: string
+        locationType:
+          type: integer
+        wheelchairBoarding:
+          type: boolean
+
+    Route:
+      type: object
+      properties:
+        id:
+          type: string
+        shortName:
+          type: string
+        longName:
+          type: string
+        mode:
+          type: string
+        color:
+          type: string
+        agencyName:
+          type: string
+
+    Pattern:
+      type: object
+      properties:
+        id:
+          type: string
+        desc:
+          type: string
+        routeId:
+          type: string
+
+    Time:
+      type: object
+      properties:
+        stopId:
+          type: string
+        stopIndex:
+          type: integer
+        stopCount:
+          type: integer
+        scheduledArrival:
+          type: integer
+        scheduledDeparture:
+          type: integer
+        realtimeArrival:
+          type: integer
+        realtimeDeparture:
+          type: integer
+        arrivalDelay:
+          type: integer
+        departureDelay:
+          type: integer
+        timepoint:
+          type: boolean
+        realtime:
+          type: boolean
+        realtimeState:
+          type: string
+        serviceDay:
+          type: integer
+        tripId:
+          type: string
+        headsign:
+          type: string
+
+    StopTime:
+      type: object
+      properties:
+        pattern:
+          $ref: '#/components/schemas/Pattern'
+        times:
+          type: array
+          items:
+            $ref: '#/components/schemas/Time'

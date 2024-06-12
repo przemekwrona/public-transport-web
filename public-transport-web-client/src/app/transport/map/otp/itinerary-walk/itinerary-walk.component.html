@@ -1,18 +1,14 @@
 <div class="itinerary container" (click)="isOpen = !isOpen">
-
   <div class="row">
-
     <div class="ticking col-2">
       <div class="icon"><i class="material-icons">directions_walk</i></div>
     </div>
 
     <div class="details col-10">
-      <div>
+      <div class="legs-departures">
         <div class="legs">
           <strong>{{now().format('HH:mm')}} - {{getLast().endTime | otpDate}}</strong>
-          <span>
-            ({{getTotalTime() | number: '1.0-0'}} min)
-          </span>
+          <div class="float-end">{{getTotalTime() | number: '1.0-0'}} min</div>
         </div>
       </div>
 

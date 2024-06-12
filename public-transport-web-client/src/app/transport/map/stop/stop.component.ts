@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Stop} from "../../../http/stop.service";
 import {interval, Subscription} from "rxjs";
 import moment from "moment";
+import {Route, Stop, StopDetails} from "../../../generated";
 
 @Component({
   selector: 'app-stop',
@@ -14,6 +14,8 @@ export class StopComponent implements OnInit, OnDestroy {
   private intervalSubscription: Subscription;
 
   @Input() stop: Stop | null;
+  @Input() stopDetails: StopDetails | null;
+  @Input() routes: Route[] = [];
 
   public currentDate: moment.Moment = moment();
 
@@ -28,11 +30,13 @@ export class StopComponent implements OnInit, OnDestroy {
   }
 
   public hasTrams(): boolean {
-    return (this.stop?.types || []).includes(0);
+    // return (this.stop?.types || []).includes(0);
+    return false;
   }
 
   public hasBuses(): boolean {
-    return (this.stop?.types || []).includes(3);
+    // return (this.stop?.types || []).includes(3);
+    return true;
   }
 
 }

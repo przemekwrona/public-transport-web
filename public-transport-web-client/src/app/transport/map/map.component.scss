@@ -1,3 +1,10 @@
+.bike-station-marker {
+  display: inline-flex;
+  .num {
+    position: absolute;
+  }
+}
+
 .map-container {
   position: absolute;
   top: 0;

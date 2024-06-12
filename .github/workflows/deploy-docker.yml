@@ -15,7 +15,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Build Angular App
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: cd ./public-transport-web-client && npm install && npm run generate && npm run build
+      - run: |
+          cd ./public-transport-web-client
+          npm install
+          npm run generate
+          npm run build
+
+      - name: Build Backend App
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - run: |
+          cd ./public-transport-web-server
+          mvn clean install

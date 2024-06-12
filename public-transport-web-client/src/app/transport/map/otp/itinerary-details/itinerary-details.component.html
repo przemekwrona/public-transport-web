@@ -1,5 +1,5 @@
 <div class="itinerary-details container open">
-  <div *ngFor="let leg of itinerary?.legs; let last = last; let first = first" class="row legs">
+    <div *ngFor="let leg of itinerary?.legs; let last = last; let first = first" class="row legs">
 
     <div class="col-2 itinerary-shortcut" (click)="zoomPath(leg)">
       <div *ngIf="isWalk(leg) && first" class="walk first">&nbsp;</div>
@@ -11,27 +11,32 @@
       <div *ngIf="isWalk(leg) && last" class="walk last">&nbsp;</div>
 
       <div *ngIf="isBus(leg)" class="bus">
-        <span class="departure">{{leg.from?.departure | otpDate}}</span>
+        <span class="departure" [style.background-color]="getRouteColor(leg)">{{leg.from?.departure | otpDate}}</span>
         <div class="icon text-center"><i class="material-icons">directions_bus</i></div>
-        <span class="arrival">{{leg.to?.departure | otpDate}}</span>
+        <span class="arrival" [style.border-color]="getRouteColor(leg)">{{leg.to?.departure | otpDate}}</span>
+      </div>
 
+      <div *ngIf="isBicycle(leg)" class="bus">
+        <span class="departure" [style.background-color]="getRouteColor(leg)">{{leg.from?.departure | otpDate}}</span>
+        <div class="icon text-center"><i class="material-icons">directions_bike</i></div>
+        <span class="arrival" [style.border-color]="getRouteColor(leg)">{{leg.to?.departure | otpDate}}</span>
       </div>
 
       <div *ngIf="isTram(leg)" class="tram">
-        <span class="departure">{{leg.from?.departure | otpDate}}</span>
+        <span class="departure" [style.background-color]="getRouteColor(leg)">{{leg.from?.departure | otpDate}}</span>
         <div class="icon text-center"><span class="icon"><i class="material-icons">tram</i></span></div>
-        <span class="arrival">{{leg.to?.departure | otpDate}}</span>
+        <span class="arrival" [style.border-color]="getRouteColor(leg)">{{leg.to?.departure | otpDate}}</span>
       </div>
 
-      <div *ngIf="isSubway(leg)" class="subway">
-        <span class="departure">{{leg.from?.departure | otpDate}}</span>
+      <div *ngIf="isSubway(leg)" class="subway {{leg.routeShortName}}">
+        <span class="departure" [style.background-color]="getRouteColor(leg)">{{leg.from?.departure | otpDate}}</span>
         <div class="icon text-center"><span class="icon"><i class="material-icons">subway</i></span></div>
-        <span class="arrival">{{leg.to?.departure | otpDate}}</span>
+        <span class="arrival" [style.border-color]="getRouteColor(leg)">{{leg.to?.departure | otpDate}}</span>
       </div>
 
       <div *ngIf="isRail(leg)">
-        <span class="departure">{{leg.from?.departure | otpDate}}</span>
-        <span class="arrival">{{leg.to?.departure | otpDate}}</span>
+        <span class="departure" [style.background-color]="getRouteColor(leg)">{{leg.from?.departure | otpDate}}</span>
+        <span class="arrival" [style.border-color]="getRouteColor(leg)">{{leg.to?.departure | otpDate}}</span>
       </div>
     </div>
 
@@ -64,7 +69,7 @@
       </div>
 
       <div *ngIf="isBus(leg)" (click)="zoomPath(leg)" class="bus headsign">
-        <span class="line">{{leg.routeShortName}}</span>
+        <span class="line" [style.border-color]="getRouteColor(leg)">{{leg.routeShortName}}</span>
         <span class="direction">kierunek:</span>
         <span>{{leg.headsign}}</span>
       </div>
@@ -78,7 +83,7 @@
       </div>
 
       <div *ngIf="isTram(leg)" (click)="zoomPath(leg)" class="tram headsign">
-        <span class="line">{{leg.routeShortName}}</span>
+        <span class="line" [style.border-color]="getRouteColor(leg)">{{leg.routeShortName}}</span>
         <span class="direction">kierunek:</span>
         <span class="direction-headsign">{{leg.headsign}}</span>
       </div>
@@ -93,7 +98,7 @@
         </div>
 
         <div class="headsign">
-          <span class="line">{{leg.routeShortName}}</span>
+          <span class="line" [style.border-color]="getRouteColor(leg)">{{leg.routeShortName}}</span>
           <span class="direction">kierunek:</span>
           <span class="direction-headsign">{{leg.headsign}}</span>
         </div>
@@ -106,6 +111,19 @@
       <div *ngIf="isRail(leg)">
         <span class="icon"><i class="material-icons">train</i></span>
         <span>{{leg.from?.name}}</span>
+      </div>
+
+      <div *ngIf="isBicycle(leg)" class="bicycle from" (click)="zoomPoint(leg?.from)">
+        <div class="name"><div><img src="assets/warsaw/veturilo.png" class="veturilo"/>{{leg.from?.name}}</div>
+      </div>
+
+      <div *ngIf="isBicycle(leg)" (click)="zoomPath(leg)" class="bicycle middle">
+        <div>Rowerem</div>
+        <div>{{leg.distance | number: '2.0-0'}} m (około {{leg.duration | otpDuration | number : '1.0-0'}} min)</div>
+      </div>
+
+      <div *ngIf="isBicycle(leg)" class="bicycle to" (click)="zoomPoint(leg?.to)">
+        <div class="name"><img src="assets/warsaw/veturilo.png" class="veturilo"/>{{leg.to?.name}}</div>
       </div>
 
     </div>

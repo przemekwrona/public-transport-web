@@ -1,61 +1,77 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Stop} from "../../../http/stop.service";
+import {Route, Stop, StopDetails} from "../../../generated";
 
 @Component({
-  selector: 'app-routes',
-  templateUrl: './routes.component.html',
-  styleUrl: './routes.component.scss'
+    selector: 'app-routes',
+    templateUrl: './routes.component.html',
+    styleUrl: './routes.component.scss'
 })
 export class RoutesComponent {
 
-  @Input() stop: Stop | null;
+    @Input() stop: Stop | null;
+    @Input() stopDetails: StopDetails | null;
+    @Input() routes: Route[] = [];
 
-  @Output() clickLine = new EventEmitter<string>();
+    @Output() clickLine = new EventEmitter<string>();
 
-  constructor() {
-  }
+    constructor() {
+    }
 
-  onClickLine(line: string) {
-    this.clickLine.emit(line);
-  }
+    onClickLine(line: string) {
+        this.clickLine.emit(line);
+    }
 
-  public getTrams(): string[] {
-    return (this.stop?.lines || [])
-      .filter(line => this.isTram(line))
-      .sort((prev, curr) => Number(prev) - Number(curr));
-  }
+    public getTrams(): string[] {
+        const routes = this.routes
+            .filter(route => this.isTram(route))
+            .map(route => route.shortName || '')
+            .sort((prev, curr) => Number(prev) - Number(curr));
+        return [...new Set(routes)];
+    }
 
-  public hasTrams(): boolean {
-    return this.getTrams().length > 0;
-  }
+    public hasTrams(): boolean {
+        return this.getTrams().length > 0;
+    }
 
-  public getBuses(): string[] {
-    return (this.stop?.lines || [])
-      .filter(line => !line.startsWith('N'))
-      .filter(line => !this.isTram(line))
-      .sort();
-  }
+    public getBuses(): string[] {
+        const routes = this.routes
+            .filter(route => this.isBus(route))
+            .filter(route => !this.isNightBus(route))
+            .map(route => route.shortName || '')
+            .sort((prev, curr) => prev.localeCompare(curr));
+        return [...new Set(routes)];
+    }
 
-  public hasBuses(): boolean {
-    return this.getBuses().length > 0;
-  }
+    public hasBuses(): boolean {
+        return this.getBuses().length > 0;
+    }
 
-  public getNightBus(): string[] {
-    return (this.stop?.lines || [])
-      .filter(line => line.startsWith('N')).sort();
-  }
+    public getNightBus(): string[] {
+        const routes = this.routes
+            .filter(route => this.isNightBus(route))
+            .map(route => route.shortName || '')
+            .sort((prev, curr) => prev.localeCompare(curr));
+        return [...new Set(routes)];
+    }
 
-  public hasNightBuses(): boolean {
-    return this.getNightBus().length > 0;
-  }
+    public hasNightBuses(): boolean {
+        return this.getNightBus().length > 0;
+    }
 
-  private isTram(value: string): boolean {
-    const tramNumber = Number(value);
-    return !isNaN(tramNumber) && tramNumber < 100;
-  }
+    private isTram(route: Route): boolean {
+        return route.mode === 'TRAM';
+    }
 
-  public isFast(line: string) {
-    return line.startsWith('5') && line.length === 3;
-  }
+    private isBus(route: Route): boolean {
+        return route.mode === 'BUS';
+    }
+
+    private isNightBus(route: Route): boolean {
+        return this.isBus(route) && (route.shortName || '').startsWith('N');
+    }
+
+    public isFast(line: string) {
+        return line.startsWith('5') && line.length === 3;
+    }
 
 }
