@@ -1,28 +1,27 @@
 <div class="timetables container">
 
-  <div *ngIf="!hasTimetables()" class="no-departures text-center mt-2">
-    <div>
-      <i class="fa fa-calendar-times-o fa-4x" aria-hidden="true"></i>
-    </div>
-    <div class="message w-75 p-2">Brak odjazdów w wybranym dniu</div>
-  </div>
-
-  <div class="timetable-section" *ngIf="hasTimetables()">
-    <div *ngFor="let hour of getHours(); index as index;" [ngClass]="{even: index % 2 === 1, odd: index % 2 !== 1}"
-         class="row row-container">
-      <div class="col-1 hour">
-        {{hour | timetableHour}}
-      </div>
-      <div class="col-11">
-        <div *ngFor="let timetable of groupedTimetables[hour]" (click)="showTimetable(timetable)"
-             [ngClass]="{close: isClose(timetable.departure)}" class="minutes">
-          {{timetable.departure | date:'mm'}}
+    <div *ngIf="!hasTimetables()" class="no-departures text-center mt-2">
+        <div>
+            <i class="fa fa-calendar-times-o fa-4x" aria-hidden="true"></i>
         </div>
-        <div class="minutes in-minutes" *ngIf="hasClose(hour)">
-          za {{getClosesDepartureInMinutes()}} min
-        </div>
-      </div>
+        <div class="message w-75 p-2">Brak odjazdów w wybranym dniu</div>
     </div>
-  </div>
 
+    <div class="timetable-section" *ngIf="hasTimetables()">
+        <div *ngFor="let hour of getHours(); index as index;" [ngClass]="{even: index % 2 === 1, odd: index % 2 !== 1}"
+             class="row row-container">
+            <div class="col-1 hour">
+                {{hour | timetableHour}}
+            </div>
+            <div class="col-11">
+                <div *ngFor="let timetable of groupedTimetables[hour]" (click)="showTimetable(timetable)"
+                     [ngClass]="{close: isClose(timetable)}" class="minutes">
+                    {{(timetable?.time?.scheduledDeparture || 0) / 60 % 60 | timetableMinute}}
+                </div>
+                <div class="minutes in-minutes" *ngIf="hasClose(hour)">
+                    za {{getClosesDepartureInMinutes()}} min
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
