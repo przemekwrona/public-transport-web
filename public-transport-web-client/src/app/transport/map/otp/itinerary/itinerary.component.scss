@@ -1,5 +1,5 @@
 .itinerary {
-  background-color: whitesmoke;
+  //background-color: whitesmoke;
   opacity: 0.9;
   border-radius: 8px;
   margin-bottom: 2px;
@@ -26,6 +26,12 @@
     .details {
       display: inline;
       padding-left: 0;
+
+      .legs-departures {
+        .legs {
+          font-size: 1.1em;
+        }
+      }
 
       .legs-lines {
         display: block;

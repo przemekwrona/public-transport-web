@@ -106,5 +106,7 @@ export class ItineraryHeaderComponent implements OnInit, OnDestroy {
     this.firstAndLatStops = [];
   }
 
-
+  public getRouteColor(leg: Leg) {
+    return `#${leg.routeColor}`;
+  }
 }

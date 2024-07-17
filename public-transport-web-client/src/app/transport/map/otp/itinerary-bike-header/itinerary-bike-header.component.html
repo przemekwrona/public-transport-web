@@ -1,0 +1,36 @@
+<div class="itinerary container" (click)="isOpen = !isOpen">
+    <div class="row">
+
+        <div class="ticking col-2">
+            <div class="icon"><i class="material-icons">directions_bike</i></div>
+        </div>
+
+        <div class="details col-10">
+            <div class="legs-departures">
+                <div class="legs">
+                    <strong>{{now().format('HH:mm')}} - {{getLast().endTime | otpDate}}</strong>
+                    <div class="float-end">{{getTotalTime() | number: '1.0-0'}} min</div>
+                </div>
+            </div>
+
+            <div class="legs-lines">
+                <div *ngFor="let leg of itinerary.legs; let last = last; let first = first" class="legs">
+                    <div *ngIf="isWalk(leg)" class="leg bicycle">
+                        <i class="material-icons">directions_walk</i>
+                    </div>
+                    <div *ngIf="isBicycle(leg)" class="leg bicycle">
+                        <i class="material-icons">directions_bike</i>
+                    </div>
+                    <div class="leg chevron" *ngIf="!last">
+                        <i class="material-icons">chevron_right</i>
+                    </div>
+                </div>
+                <span class="burn">
+                 <i class="material-icons">local_fire_department</i>
+                    {{getKcal() | number : '1.0-0'}}kCal
+              </span>
+            </div>
+
+        </div>
+    </div>
+</div>

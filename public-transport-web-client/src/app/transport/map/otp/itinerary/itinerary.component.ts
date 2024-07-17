@@ -3,9 +3,7 @@ import * as L from 'leaflet';
 import {DivIcon, LatLng, LatLngBounds, Map, Marker, Polyline, PolyUtil} from "leaflet";
 import moment from "moment";
 import {decode, encode} from "@googlemaps/polyline-codec";
-import {first, last} from "lodash";
 
-import {Stop} from "../../../../http/stop.service";
 import {Itinerary, Leg} from "../../../../generated";
 
 
@@ -69,6 +67,10 @@ export class ItineraryComponent implements OnInit, OnDestroy {
     return leg.mode == 'WALK';
   }
 
+  public isBicycle(leg: Leg): boolean {
+    return leg.mode == 'BICYCLE';
+  }
+
   public isBus(leg: Leg): boolean {
     return leg.mode == 'BUS';
   }
@@ -107,6 +109,20 @@ export class ItineraryComponent implements OnInit, OnDestroy {
         }
 
         if (leg.mode == 'TRAM') {
+          config = {
+            weight: 7,
+            color: "#631F18"
+          }
+        }
+
+        if (leg.mode == 'SUBWAY' && leg.routeShortName == 'M1') {
+          config = {
+            weight: 7,
+            color: "#005BBC"
+          }
+        }
+
+        if (leg.mode == 'SUBWAY' && leg.routeShortName == 'M2') {
           config = {
             weight: 7,
             color: "#631F18"

@@ -1,0 +1,26 @@
+.container.itinerary {
+  .legs-lines {
+    .legs {
+      .leg.bicycle, .leg.chevron {
+        font-size: 1.1em;
+
+        i {
+          font-size: 1.1em;
+        }
+      }
+    }
+
+    .burn {
+      padding: 2px 4px;
+      border-radius: 4px;
+      background-color: #FF8C00;
+      color: whitesmoke;
+
+      font-size: 0.9em;
+
+      i {
+        font-size: 0.9em;
+      }
+    }
+  }
+}
