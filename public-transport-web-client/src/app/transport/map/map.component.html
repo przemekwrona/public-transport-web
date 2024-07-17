@@ -1,31 +1,45 @@
 <div class="map-container">
 
-  <div class="container">
-    <div class="row">
-      <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 stop-details">
-        <app-brand-header *ngIf="!hasCurrentStop()"></app-brand-header>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 stop-details">
+                <app-brand-header *ngIf="!hasCurrentStop()"></app-brand-header>
 
-        <app-stop [stop]="currentStop" *ngIf="hasCurrentStop()"></app-stop>
+                <app-stop [stop]="currentStop"
+                          [stopDetails]="currentStopDetails"
+                          [routes]="currentStopRoutes"
+                          *ngIf="hasCurrentStop()"></app-stop>
 
-        <app-routes [stop]="currentStop" *ngIf="hasCurrentStop()"
-                    (clickLine)="onClickLine($event)" class="routes-details component-container"></app-routes>
+                <app-routes [stop]="currentStop"
+                            [stopDetails]="currentStopDetails"
+                            [routes]="currentStopRoutes"
+                            *ngIf="hasCurrentStop()"
+                            (clickLine)="onClickLine($event)" class="routes-details component-container"></app-routes>
 
-        <app-departures [stop]="currentStop" [departures]="currentTimetables?.departures || []" [line]="currentLine"
-                        class="component-container"></app-departures>
+                <app-departures [stop]="currentStop"
+                                [stopTimes]="currentStopTimes || []"
+                                [line]="currentLine"
+                                [routes]="currentStopRoutes"
+                                class="component-container"></app-departures>
 
-        <app-otp *ngIf="!hasCurrentStop()" [startPoint]="startPoint" [endPoint]="endPoint" [map]="map"></app-otp>
+                <app-otp *ngIf="!hasCurrentStop()"
+                         [startPoint]="startPoint"
+                         [endPoint]="endPoint"
+                         [map]="map"></app-otp>
 
-        <app-timetable [stop]="currentStop" [line]="currentLine || ''" [timetables]="currentTimetables?.timetable || {}"
-                       *ngIf="hasCurrentLine()" (onClickDeparture)="showTrip($event)"
-                       class="timetable-details"></app-timetable>
-      </div>
+                <app-timetable [stop]="currentStop"
+                               [line]="currentLine || ''"
+                               [stopTimes]="currentStopTimes || []"
+                               *ngIf="hasCurrentLine()" (onClickDeparture)="showTrip($event)"
+                               class="timetable-details"></app-timetable>
+            </div>
+        </div>
     </div>
-  </div>
 
 
-  <div class="map-frame">
-    <div id="map"></div>
-  </div>
+    <div class="map-frame">
+        <div id="map"></div>
+    </div>
 
 </div>
 

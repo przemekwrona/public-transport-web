@@ -20,46 +20,52 @@ import {TimetableContentComponent} from "./timetable-content/timetable-content.c
 import {OtpModule} from "./otp/otp.module";
 import {MatIconModule} from "@angular/material/icon";
 import {BrandHeaderComponent} from "./brand-header/brand-header.component";
+import {OtpService} from "../../http/otp.service";
+import {TimetableMinutePipe} from "./timetable/timetable-minute.pipe";
+import {GbfsService} from "../../http/gbfs.service";
 
 
 @NgModule({
-  declarations: [
-    MapComponent,
-    StopComponent,
-    DeparturesComponent,
-    DepartureTimePipe,
-    DepartureTimePrefixPipe,
-    RoutesComponent,
-    TimetableComponent,
-    TimetableHourPipe,
-    TimetableContentComponent,
-    BrandHeaderComponent
-  ],
-  exports: [
-    MapComponent
-  ],
-  imports: [
-    CommonModule,
-    OtpModule,
-    MatGridListModule,
-    MatStepperModule,
-    MatButtonModule,
-    MatIconModule
-  ],
-  providers: [
-    StopService,
-    DepartureService,
-    RouteService,
-    TimetableService,
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: true }
-    }
-    // {
-    //   provide: STEPPER_GLOBAL_OPTIONS,
-    //   useValue: { displayDefaultIndicatorType: false }
-    // }
-  ]
+    declarations: [
+        MapComponent,
+        StopComponent,
+        DeparturesComponent,
+        DepartureTimePipe,
+        DepartureTimePrefixPipe,
+        RoutesComponent,
+        TimetableComponent,
+        TimetableHourPipe,
+        TimetableMinutePipe,
+        TimetableContentComponent,
+        BrandHeaderComponent
+    ],
+    exports: [
+        MapComponent
+    ],
+    imports: [
+        CommonModule,
+        OtpModule,
+        MatGridListModule,
+        MatStepperModule,
+        MatButtonModule,
+        MatIconModule
+    ],
+    providers: [
+        StopService,
+        DepartureService,
+        RouteService,
+        TimetableService,
+        OtpService,
+        GbfsService,
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: {displayDefaultIndicatorType: true}
+        }
+        // {
+        //   provide: STEPPER_GLOBAL_OPTIONS,
+        //   useValue: { displayDefaultIndicatorType: false }
+        // }
+    ]
 })
 export class MapModule {
 }
