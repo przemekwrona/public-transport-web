@@ -4,7 +4,7 @@
       <mat-icon aria-hidden="false" fontIcon="tram" *ngIf="hasTrams()" class="bus-blue"></mat-icon>
       <mat-icon aria-hidden="false" fontIcon="directions_bus" *ngIf="hasBuses()" class="tram-red"></mat-icon>
 
-      <span> {{stop?.stopName | uppercase}}</span>
+      <span> {{stop?.name | uppercase}}</span>
     </div>
     <div class="col-2">{{currentDate.toDate() | date: 'H:mm'}}</div>
   </div>
