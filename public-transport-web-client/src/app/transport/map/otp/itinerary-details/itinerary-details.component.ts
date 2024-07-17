@@ -33,6 +33,10 @@ export class ItineraryDetailsComponent implements OnDestroy {
     return leg.mode == 'RAIL';
   }
 
+  public isBicycle(leg: Leg): boolean {
+    return leg.mode == 'BICYCLE';
+  }
+
   public zoomPath(leg: Leg): void {
     this.map.fitBounds([
       [leg.from?.lat || 0, leg.from?.lon || 0],
@@ -45,6 +49,10 @@ export class ItineraryDetailsComponent implements OnDestroy {
       return;
     }
     this.map.setView([tripPoint.lat || 0, tripPoint.lon || 0], 16);
+  }
+
+  public getRouteColor(leg: Leg) {
+    return leg.routeColor == null ? '#2790FF' : `#${leg.routeColor}`;
   }
 
   ngOnDestroy(): void {

@@ -14,17 +14,19 @@ import {SharedModule} from "../../../shared/shared.module";
 import {CommonModule} from "@angular/common";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {ItineraryHeaderComponent} from "./itinerary-header/itinerary-header.component";
-import {ItineraryDescriptionComponent} from "./itinerary-description/itinerary-description.component";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatCardModule} from "@angular/material/card";
+import {ItineraryBikeHeaderComponent} from "./itinerary-bike-header/itinerary-bike-header.component";
+import {ItineraryBikeDetailsComponent} from "./itinerary-bike-details/itinerary-bike-details.component";
 
 
 @NgModule({
   declarations: [
     OtpComponent,
     ItineraryComponent,
+    ItineraryBikeHeaderComponent,
+    ItineraryBikeDetailsComponent,
     ItineraryHeaderComponent,
-    ItineraryDescriptionComponent,
     ItineraryDetailsComponent,
     ItineraryWalkComponent,
     ItineraryTransitComponent

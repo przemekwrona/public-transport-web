@@ -1,7 +1,7 @@
 .details {
   //display: inline;
   padding-left: 0;
-  width: 100%;
+  //width: 100%;
 
   .ticking {
     display: inline;
@@ -15,6 +15,12 @@
     .unit {
       font-size: 0.8em;
       margin-top: -12px;
+    }
+  }
+
+  .legs-departures {
+    .legs {
+      font-size: 1.2em;
     }
   }
 
@@ -50,22 +56,6 @@
             padding: 2px 6px;
             border: 1px solid gray;
           }
-        }
-
-        &.bus span {
-          border: 1px solid #2296FF;
-        }
-
-        &.tram span {
-          border: 1px solid #570202;
-        }
-
-        &.subway span {
-          border: 1px solid gray;
-        }
-
-        &.rail span {
-          border: 1px solid gray;
         }
       }
     }

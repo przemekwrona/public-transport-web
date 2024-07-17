@@ -6,7 +6,7 @@
   </div>
 
   <div class="col-10">
-    <div>
+    <div class="legs-departures">
       <div class="legs">
         <strong>{{getFirst().startTime | otpDate}} - {{getLast().endTime | otpDate}}</strong>
         <div class="float-end">
@@ -19,22 +19,22 @@
       <div *ngFor="let leg of getLegsWithoutWalk(); let last = last; let first = first" class="legs">
         <div *ngIf="isBus(leg)" class="leg bus">
           <i class="material-icons">directions_bus</i>
-          <span>{{leg.routeShortName}}</span>
+          <span [style.border-color]="getRouteColor(leg)">{{leg.routeShortName}}</span>
         </div>
         <div *ngIf="isTram(leg)" class="leg tram">
           <i class="material-icons">tram</i>
-          <span>{{leg.routeShortName}}</span>
+          <span [style.border-color]="getRouteColor(leg)">{{leg.routeShortName}}</span>
         </div>
         <!--          <div *ngIf="isWalk(leg)" class="leg walk">-->
         <!--            <i class="material-icons">directions_walk</i>-->
         <!--          </div>-->
         <div *ngIf="isSubway(leg)" class="leg subway">
           <i class="material-icons">subway</i>
-          <span>{{leg.routeShortName}}</span>
+          <span [style.border-color]="getRouteColor(leg)">{{leg.routeShortName}}</span>
         </div>
         <div *ngIf="isRail(leg)" class="leg rail">
           <i class="material-icons">train</i>
-          <span>{{leg.routeShortName}}</span>
+          <span [style.border-color]="getRouteColor(leg)">{{leg.routeShortName}}</span>
         </div>
         <div *ngIf="!isWalk(leg) && !last" class="leg">
           <i class="material-icons">chevron_right</i>

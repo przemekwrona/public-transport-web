@@ -33,6 +33,7 @@
         &.walk-from {
           border-top: 1px solid lightgray;
         }
+
         padding: 6px 0;
         border-bottom: 1px solid lightgray;
       }
@@ -54,7 +55,20 @@
       margin-right: 4px;
     }
 
-    .bus, .tram, .subway {
+    .bus, .tram, .subway, .bicycle {
+      &.from {
+        padding: 2px 0;
+      }
+
+      &.middle {
+        padding: 4px 0;
+        border-bottom: 1px solid lightgray;
+      }
+
+      &.to {
+        padding: 2px 0;
+      }
+
       &.headsign, .headsign {
         padding-top: 12px;
         padding-bottom: 12px;
@@ -71,19 +85,13 @@
         border-bottom: 1px solid lightgray;
         padding-bottom: 12px;
         padding-top: 12px;
+
+        img.veturilo {
+          width: 18px;
+          border-radius: 4px;
+          margin: 0 4px 4px 0;
+        }
       }
-    }
-
-    .bus .line {
-      border-color: #2296FF;
-    }
-
-    .tram .line {
-      border-color: #570202;
-    }
-
-    .subway .line {
-      border-color: dimgray;
     }
 
     .departure {
@@ -100,31 +108,9 @@
       border-radius: 8px;
       margin-right: 8px;
       margin-top: 16px;
+      border-style: solid;
+      border-width: 1px;
       display: inline-block;
-    }
-
-    .tram {
-      .departure {
-        background-color: #570202;
-      }
-
-      .arrival {
-        border: 1px solid #570202;
-      }
-    }
-
-    .bus {
-      .departure {
-        background-color: #2296FF;
-      }
-
-      .arrival {
-        border: 1px solid #2296FF;
-      }
-    }
-
-    .subway .departure {
-      background-color: dimgray;
     }
 
     .icon {

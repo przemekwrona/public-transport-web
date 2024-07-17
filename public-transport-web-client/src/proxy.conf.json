@@ -1,6 +1,12 @@
 {
   "/api": {
-    "target": "http://localhost:8080",
+    "target": "http://localhost:8084",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/maps/gbfs/v1": {
+    "target": "https://gbfs.nextbike.net",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

@@ -7,10 +7,12 @@ import {interval, map, Observable, timer} from "rxjs";
 })
 export class DepartureTimePipe implements PipeTransform {
 
-  transform(value: Date, format: string): Observable<string> {
+  transform(value: number | undefined, format: string): Observable<string> {
     return timer(0, 1000)
       .pipe(map(() => {
-        const now = moment(value);
+          // moment().transform('YYYY-MM-+01 00:00:00.000'); // Tonight at midnight
+
+        const now = moment(moment().format('yyyy-MM-DD')).add(value, 'seconds');
         const differenceInMinutes = now.diff(moment(), 'minutes') + 1;
 
         if (differenceInMinutes <= 1) {
@@ -28,7 +30,7 @@ export class DepartureTimePipe implements PipeTransform {
         } else if (differenceInMinutes <= 60) {
           return `${differenceInMinutes} min`;
         }
-        return moment(value).format(format);
+        return  moment(moment().format('yyyy-MM-DD')).add(value, 'seconds').format(format);
       }));
   }
 
