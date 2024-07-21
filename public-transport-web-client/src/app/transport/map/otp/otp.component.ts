@@ -92,8 +92,6 @@ export class OtpComponent {
     }
 
     public showItineraryOnMap(itinerary: Itinerary): void {
-        console.log(itinerary);
-
         this.polyline.forEach(polyline => polyline.removeFrom(this.map));
 
         this.polyline = (itinerary.legs || [])
@@ -159,17 +157,11 @@ export class OtpComponent {
             .map(leg => (leg.intermediateStops || []))
             .flat().length;
 
-        let legIndex = 0;
-        const legSize = itinerary.legs?.length;
         this.intermediateStops = (itinerary.legs || [])
             .map(leg => (leg.intermediateStops || []))
             .flat()
             .map(stop => {
                 const marker = L.marker([stop?.lat || 0, stop?.lon || 0], {icon: this.STOP_CIRCLE});
-
-                legIndex++;
-
-                console.log(`Size ${legIndex} / ${legSize} (${stop?.name || ''})`);
 
                 if (stopCount < 15) {
                     marker.bindTooltip(`<div>${stop.name}</div>`, {

@@ -21,10 +21,31 @@ export class RoutesComponent {
         this.clickLine.emit(line);
     }
 
-    public getTrams(): string[] {
+    public getRoutes(): Route[] {
+        return this.routes
+            .reduce((accumulator: Route[], current: Route) => {
+                if (!accumulator.find((route: Route) => route.shortName === current.shortName)) {
+                    accumulator.push(current);
+                }
+                return accumulator;
+            }, [])
+            .sort((prev: Route, curr: Route) => {
+                if (!isNaN(Number(prev.shortName)) && !isNaN(Number(curr.shortName))) {
+                    return Number(prev.shortName) - Number(curr.shortName);
+                } else if (!isNaN(Number(prev.shortName)) && !isNaN(Number(curr.shortName))) {
+                    return (prev.shortName || '').localeCompare(curr.shortName || '');
+                } else if (!isNaN(Number(prev.shortName))) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
+    }
+
+    public getTrams(): Route[] {
         const routes = this.routes
             .filter(route => this.isTram(route))
-            .map(route => route.shortName || '')
+            // .map(route => route.shortName || '')
             .sort((prev, curr) => Number(prev) - Number(curr));
         return [...new Set(routes)];
     }
@@ -72,6 +93,10 @@ export class RoutesComponent {
 
     public isFast(line: string) {
         return line.startsWith('5') && line.length === 3;
+    }
+
+    public getColor(route: Route): string {
+        return `#${route.color}`;
     }
 
 }

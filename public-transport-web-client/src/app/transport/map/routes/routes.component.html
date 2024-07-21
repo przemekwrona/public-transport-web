@@ -1,12 +1,5 @@
 <div class="routes">
-
-  <div *ngIf="hasTrams()" class="line-section">
-    <div *ngFor="let line of getTrams()" (click)="onClickLine(line)" class="line mt-1">{{line}}</div>
+  <div *ngIf="routes.length > 0" class="line-section">
+    <div *ngFor="let route of getRoutes()" (click)="onClickLine(route.shortName || '')" class="line mt-1" [ngStyle]="{'background-color': getColor(route)}">{{route?.shortName}}</div>
   </div>
-
-  <div class="line-section">
-    <div *ngFor="let line of getBuses()" (click)="onClickLine(line)"  [ngClass]="{'line-fast': isFast(line)}" class="line mt-1" >{{line}}</div>
-    <div *ngFor="let line of getNightBus()" (click)="onClickLine(line)" class="line line-night mt-1">{{line}}</div>
-  </div>
-
 </div>
