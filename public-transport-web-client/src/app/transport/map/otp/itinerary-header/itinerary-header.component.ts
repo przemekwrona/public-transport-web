@@ -58,7 +58,8 @@ export class ItineraryHeaderComponent implements OnInit, OnDestroy {
   }
 
   public startTime(): number {
-    return moment((this.itinerary?.legs || [])[0].startTime).diff(moment(), 'minutes');
+    const firstLeg = (this.itinerary?.legs || [])[0];
+    return moment(moment(new Date(Number(firstLeg.startTime)))).diff(moment(), 'minutes');
   }
 
   public isWalk(leg: Leg): boolean {

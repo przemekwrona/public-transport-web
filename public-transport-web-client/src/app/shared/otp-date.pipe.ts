@@ -7,7 +7,8 @@ import moment from "moment";
 export class OtpDatePipe implements PipeTransform {
 
   transform(value: number | string | undefined, format: string = 'HH:mm'): string {
-    return moment(value).format(format);
+    const numberValue = Number(value);
+    return moment(numberValue).format(format);
   }
 
 }

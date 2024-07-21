@@ -1,0 +1,800 @@
+# cspell:ignore jwks,bikeshare
+openapi: 3.0.1
+info:
+  title: GBFS service
+  description: General Bikeshare Feed Specification service.
+  version: 2.3.0
+servers:
+  - url: https://gbfs.api.ridedott.com/
+paths:
+  ####### Global #######
+  /v2/free_bike_status.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes bikes that are not at a station and are not currently in the middle of an active ride.
+      operationId: v2_global_free_bike_status
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FreeBikeStatusV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 30000
+      description: '**Timeout:** 30000ms'
+  /v2/gbfs.json:
+    get:
+      tags:
+        - API v2
+      summary: Auto-discovery file that links to all of the other files published by the system.
+      operationId: v2_global_gbfs
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GbfsV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /v2/gbfs_versions.json:
+    get:
+      tags:
+        - API v2
+      summary: Lists all feed endpoints published according to versions of the GBFS documentation.
+      operationId: v2_gbfs_versions
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GbfsVersionsV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  /v2/system_information.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the system's general information.
+      operationId: v2_system_information
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInformationV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /v2/system_pricing_plans.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes pricing for the system.
+      operationId: v2_system_pricing_plans
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemPricingPlansV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /v2/vehicle_types.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the types of vehicles that System operator has available for rent.
+      operationId: v2_global_vehicle_types
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleTypesV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  /v2/geofencing_zones.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes geofencing zones and their associated rules and attributes.
+      operationId: v2_geofencing_zones
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeofencingZonesV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  /v2/station_information.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes stations.
+      operationId: v2_global_station_information
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationInformationV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 30000
+      description: '**Timeout:** 30000ms'
+  /v2/station_status.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the capacity and rental availability of a station.
+      operationId: v2_global_station_status
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 5000
+      description: '**Timeout:** 5000ms'
+  ####### Regional #######
+  /v2/{regionName}/gbfs.json:
+    get:
+      tags:
+        - API v2
+      summary: Auto-discovery file that links to all of the other files published by the system.
+      operationId: v2_regional_gbfs
+      parameters:
+        - in: path
+          name: regionName
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GbfsV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /v2/{regionName}/gbfs_versions.json:
+    get:
+      tags:
+        - API v2
+      summary: Lists all feed endpoints published according to versions of the GBFS documentation.
+      operationId: v2_regional_gbfs_versions
+      parameters:
+        - in: path
+          name: regionName
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GbfsVersionsV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  /v2/{regionName}/station_information.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes stations.
+      operationId: v2_regional_station_information
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationInformationV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 30000
+      description: '**Timeout:** 30000ms'
+  /v2/{regionName}/station_status.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the capacity and rental availability of a station.
+      operationId: v2_regional_station_status
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 5000
+      description: '**Timeout:** 5000ms'
+  /v2/{regionName}/free_bike_status.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes bikes that are not at a station and are not currently in the middle of an active ride.
+      operationId: v2_regional_free_bike_status
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FreeBikeStatusV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 30000
+      description: '**Timeout:** 30000ms'
+  /v2/{regionName}/system_information.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the system's general information.
+      operationId: v2_regional_system_information
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInformationV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /v2/{regionName}/system_pricing_plans.json:
+    get:
+      tags:
+        - API v2
+      summary: System pricing scheme.
+      operationId: v2_regional_system_pricing_plans
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemPricingPlansV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /v2/{regionName}/vehicle_types.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the types of vehicles that System operator has available for rent.
+      operationId: v2_regional_vehicle_types
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleTypesV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  /v2/{regionName}/geofencing_zones.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes geofencing zones and their associated rules and attributes.
+      operationId: v2_regional_geofencing_zones
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeofencingZonesV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  ####### Public Global #######
+  /public/v2/gbfs.json:
+    get:
+      tags:
+        - API v2
+      summary: Auto-discovery file that links to all of the other files published by the system.
+      operationId: v2_global_gbfs_public
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GbfsV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /public/v2/gbfs_versions.json:
+    get:
+      tags:
+        - API v2
+      summary: Lists all feed endpoints published according to versions of the GBFS documentation.
+      operationId: v2_global_gbfs_versions_public
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GbfsVersionsV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  ####### Public Regional #######
+  /public/v2/{regionName}/gbfs.json:
+    get:
+      tags:
+        - API v2
+      summary: Auto-discovery file that links to all of the other files published by the system.
+      operationId: v2_regional_gbfs_public
+      parameters:
+        - in: path
+          name: regionName
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GbfsV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /public/v2/{regionName}/gbfs_versions.json:
+    get:
+      tags:
+        - API v2
+      summary: Lists all feed endpoints published according to versions of the GBFS documentation.
+      operationId: v2_regional_gbfs_versions_public
+      parameters:
+        - in: path
+          name: regionName
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GbfsVersionsV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  /public/v2/{regionName}/free_bike_status.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes bikes that are not at a station and are not currently in the middle of an active ride.
+      operationId: v2_regional_free_bike_status_public
+      parameters:
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FreeBikeStatusV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 30000
+      description: '**Timeout:** 30000ms'
+  /public/v2/{regionName}/system_information.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the system's general information.
+      operationId: v2_regional_system_information_public
+      parameters:
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInformationV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /public/v2/{regionName}/system_pricing_plans.json:
+    get:
+      tags:
+        - API v2
+      summary: System pricing scheme.
+      operationId: v2_regional_system_pricing_plans_public
+      parameters:
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemPricingPlansV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 10000
+      description: '**Timeout:** 10000ms'
+  /public/v2/{regionName}/vehicle_types.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the types of vehicles that System operator has available for rent.
+      operationId: v2_regional_vehicle_types_public
+      parameters:
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleTypesV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  /public/v2/{regionName}/geofencing_zones.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes geofencing zones and their associated rules and attributes.
+      operationId: v2_regional_geofencing_zones_public
+      parameters:
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeofencingZonesV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  /public/v2/{regionName}/station_information.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes stations.
+      operationId: v2_regional_station_information_public
+      parameters:
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationInformationV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 30000
+      description: '**Timeout:** 30000ms'
+  /public/v2/{regionName}/station_status.json:
+    get:
+      tags:
+        - API v2
+      summary: Describes the capacity and rental availability of a station.
+      operationId: v2_regional_station_status_public
+      parameters:
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 5000
+      description: '**Timeout:** 5000ms'
+  #
+  ####### GBFS v2beta1 #######
+
+  ####### Global #######
+  /v2beta1/station_information.json:
+    get:
+      tags:
+        - API v2beta1
+      summary: Describes stations.
+      operationId: v2beta1_global_station_information
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationInformationV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 30000
+      description: '**Timeout:** 30000ms'
+  /v2beta1/station_status.json:
+    get:
+      tags:
+        - API v2beta1
+      summary: Describes the capacity and rental availability of a station.
+      operationId: v2beta1_global_station_status
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 5000
+      description: '**Timeout:** 5000ms'
+  /v2beta1/geofencing_zones.json:
+    get:
+      tags:
+        - API v2beta1
+      summary: Describes geofencing zones and their associated rules and attributes.
+      operationId: v2beta1_geofencing_zones
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeofencingZonesV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+  ####### Regional #######
+  /v2beta1/{regionName}/station_information.json:
+    get:
+      tags:
+        - API v2beta1
+      summary: Describes stations.
+      operationId: v2beta1_regional_station_information
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationInformationV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 30000
+      description: '**Timeout:** 30000ms'
+  /v2beta1/{regionName}/station_status.json:
+    get:
+      tags:
+        - API v2beta1
+      summary: Describes the capacity and rental availability of a station.
+      operationId: v2beta1_regional_station_status
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationStatusV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 5000
+      description: '**Timeout:** 5000ms'
+  /v2beta1/{regionName}/geofencing_zones.json:
+    get:
+      tags:
+        - API v2beta1
+      summary: Describes geofencing zones and their associated rules and attributes.
+      operationId: v2beta1_regional_geofencing_zones
+      parameters:
+        - $ref: '#/components/parameters/ref_AuthorizationParameter'
+        - $ref: '#/components/parameters/ref_RegionNameParameter'
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeofencingZonesV2_3'
+        default:
+          $ref: '#/components/responses/errorResponse'
+      deprecated: false
+      x-ridedott-timeout: 15000
+      description: '**Timeout:** 15000ms'
+components:
+  responses:
+    errorResponse:
+      description: Default error response with error object.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+  parameters:
+    ref_AuthorizationParameter:
+      description: Authorization header (Bearer token)
+      in: header
+      name: Authorization
+      required: true
+      schema:
+        type: string
+    ref_RegionNameParameter:
+      name: regionName
+      in: path
+      description: Region name.
+      required: true
+      schema:
+        type: string
+  schemas:
+    # V2
+    FreeBikeStatusV2_3:
+      $ref: './external/open-api/v2.3/free_bike_status.json'
+    GbfsV2_3:
+      $ref: './external/open-api/v2.3/gbfs.json'
+    GbfsVersionsV2_3:
+      $ref: './external/open-api/v2.3/gbfs_versions.json'
+    GeofencingZonesV2_3:
+      $ref: './external/open-api/v2.3/geofencing_zones.json'
+    StationInformationV2_3:
+      $ref: './external/open-api/v2.3/station_information.json'
+    StationStatusV2_3:
+      $ref: './external/open-api/v2.3/station_status.json'
+    SystemInformationV2_3:
+      $ref: './external/open-api/v2.3/system_information.json'
+    SystemPricingPlansV2_3:
+      $ref: './external/open-api/v2.3/system_pricing_plans.json'
+    VehicleTypesV2_3:
+      $ref: './external/open-api/v2.3/vehicle_types.json'
+    Error:
+      required:
+        - error
+      type: object
+      properties:
+        error:
+          required:
+            - message
+            - name
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties: { }
+            message:
+              type: string
+            name:
+              type: string
+    ApiError:
+      required:
+        - error
+      type: object
+      properties:
+        error:
+          type: string

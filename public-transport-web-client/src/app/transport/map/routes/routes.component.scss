@@ -1,28 +1,16 @@
 .routes {
-  background-color: #2d3666;
-  //background-color: #1d4c14;
-  //background-color: #282641;
+  margin-top: 6px;
+  background-color: whitesmoke;
   color: whitesmoke;
-  border-radius: 0 0 8px 8px;
+  border-radius: 8px;
   opacity: 0.9;
-  padding: 0 12px 12px 12px;
+  padding: 6px 12px 6px 12px;
 
   .line-section {
     .line {
       background-color: whitesmoke;
       min-width: 1.7rem;
-      color: black;
-
-      &.line-night {
-        background-color: black;
-        color: whitesmoke;
-      }
-
-      &.line-fast {
-        background-color: #570202;
-        color: whitesmoke;
-      }
-
+      color: whitesmoke;
       text-align: center;
       padding: 2px 6px;
       display: inline-block;
