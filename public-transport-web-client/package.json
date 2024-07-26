@@ -5,8 +5,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --ssr=false",
-    "generate": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/otp-api.yaml -g typescript-angular -o ./src/app/generated",
-    "gbfs": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/gbfs/v1.0/gbfs.json -g typescript-angular -o ./src/app/generated/gbfs",
+    "generate": "npm run generate-api & npm run generate-gbfs",
+    "generate-api": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/otp-api.yaml -g typescript-angular -o ./src/app/generated",
+    "generate-gbfs": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/gbfs-api.yaml -g typescript-angular -o ./src/app/generated/gbfs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "mock:server": "mockserver -p 3000 -m mock"
