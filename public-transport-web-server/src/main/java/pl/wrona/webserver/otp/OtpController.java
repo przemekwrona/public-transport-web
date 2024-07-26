@@ -27,13 +27,14 @@ public class OtpController implements OtpApi {
     }
 
     @Override
-    public ResponseEntity<Route> getRoutes(String instanceId, String stopId) {
+    public ResponseEntity<List<Route>> getRoutes(String instanceId, String stopId) {
         return this.otpService.getRoutes(instanceId, stopId);
     }
 
     @Override
-    public ResponseEntity<List<StopDetails>> getStopDetails(String instanceId, String stopId) {
-        return this.otpService.getStopDetails(instanceId, stopId);
+    public ResponseEntity<StopDetails> getStopDetails(String instanceId, String stopId) {
+        StopDetails stopDetails = otpService.getStopDetails(instanceId, stopId).getBody();
+        return ResponseEntity.ok(stopDetails);
     }
 
     @Override

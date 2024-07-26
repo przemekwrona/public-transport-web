@@ -68,7 +68,6 @@ export class TimetableComponent {
             .map(stopTime => (stopTime?.times || []).map(time => time?.headsign || ''))
             .flat();
 
-        console.log(headsigns[0]);
         return headsigns[0];
     }
 
