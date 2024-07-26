@@ -3,6 +3,11 @@ name: Deploy Docker
 on:
   workflow_dispatch:
     inputs:
+      artifact:
+        type: choice
+        description: Artifact ID
+        options:
+          - public-transport-web-server
 
 env:
   REGISTRY: registry.digitalocean.com/igeolab
@@ -25,11 +30,20 @@ jobs:
           npm run generate
           npm run build
 
-      - name: Build Backend App
+      - name: Build Backend App ${{ inputs.artifact }}
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
       - run: |
-          cd ./public-transport-web-server
+          cd ${{ inputs.artifact }}
           mvn clean install
+
+#      - name: Install doctl
+#        uses: digitalocean/action-doctl@v2
+#        with:
+#          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+#
+#      - name: Build docker public-transport-web
+#        run: cd ./public-transport-web-server && docker build -t igeolab/public-transport-web:latest .
+
