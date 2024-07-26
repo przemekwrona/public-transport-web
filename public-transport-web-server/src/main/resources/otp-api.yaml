@@ -160,9 +160,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StopDetails'
+                $ref: '#/components/schemas/StopDetails'
 
   /otp/routers/{instance_id}/index/stops/{stopId}/routes:
     get:
@@ -189,7 +187,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Route'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
 
   /otp/routers/{instance_id}/index/stops/{stopId}/stoptimes/{date}:
     get:

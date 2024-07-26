@@ -66,7 +66,11 @@ export class MapComponent implements AfterViewInit {
 
         tiles.addTo(this.map);
 
-        timer(0, 60 * 1000).subscribe(() => this.getBikeStationStatus(this.map));
+        timer(0, 60 * 1000).subscribe(() => {
+            if(this.map.getZoom() >= 15) {
+                this.getBikeStationStatus(this.map);
+            }
+        });
 
         this.map.on('moveend', (event: LeafletEvent) => {
             if (this.map.getZoom() >= this.ZOOM) {

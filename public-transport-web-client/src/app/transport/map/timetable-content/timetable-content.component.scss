@@ -86,7 +86,7 @@
 }
 
 .container.timetables {
-  padding: 0;
+  padding: -1px;
   overflow-x: hidden;
   overflow-y: scroll;
   height: calc(100% - 100px);
