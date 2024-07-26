@@ -8,7 +8,7 @@
         <div class="details col-10">
             <div class="legs-departures">
                 <div class="legs">
-                    <strong>{{now().format('HH:mm')}} - {{getLast().endTime | otpDate}}</strong>
+                    <div>{{now().format('HH:mm')}} - {{getLast().endTime | otpDate}}</div>
                     <div class="float-end">{{getTotalTime() | number: '1.0-0'}} min</div>
                 </div>
             </div>

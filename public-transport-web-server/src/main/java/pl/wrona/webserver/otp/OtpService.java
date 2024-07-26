@@ -26,11 +26,11 @@ public class OtpService {
         return this.otpClient.getStops(instanceId, maxLat, minLon, minLat, maxLon);
     }
 
-    public ResponseEntity<List<StopDetails>> getStopDetails(String instanceId, String stopId) {
+    public ResponseEntity<StopDetails> getStopDetails(String instanceId, String stopId) {
         return this.otpClient.getStopDetails(instanceId, stopId);
     }
 
-    public ResponseEntity<Route> getRoutes(String instanceId, String stopId) {
+    public ResponseEntity<List<Route>> getRoutes(String instanceId, String stopId) {
         return this.otpClient.getRoutes(instanceId, stopId);
     }
 
