@@ -13,7 +13,7 @@ env:
   REGISTRY: registry.digitalocean.com/igeolab
 
 jobs:
-  dev:
+  build:
     runs-on: ubuntu-latest
     name: Build Artifact
     steps:
