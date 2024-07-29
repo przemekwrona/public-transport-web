@@ -38,9 +38,9 @@ jobs:
       - run: |
           cd ${{ inputs.artifact }}
           mvn clean install
-          echo ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          
-      
+
+      - name: Dump GitHub context
+        run: echo ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
