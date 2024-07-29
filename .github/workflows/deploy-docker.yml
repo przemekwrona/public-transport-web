@@ -11,6 +11,7 @@ on:
 
 env:
   REGISTRY: registry.digitalocean.com/igeolab
+  ARTIFACT: igeolab/public-transport-web
 
 jobs:
   build:
@@ -48,13 +49,13 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Build docker ${{ input.artifact }}
-        run: cd ${{ input.artifact }} && docker build -t igeolab/public-transport-web:latest .
+        run: cd ${{ input.artifact }} && docker build -t ${{ env.ARTIFACT }}:latest .
 
       - name: Tag Image
-        run: docker tag igeolab/public-transport-web:latest ${{env.REGISTRY}}/igeolab/public-transport-web:latest
+        run: docker tag ${{ env.ARTIFACT }}:latest ${{ env.REGISTRY }}/${{ env.ARTIFACT }}:latest
 
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
 
       - name: Deploy docker image
-        run: docker push ${{env.REGISTRY}}/igeolab/public-transport-web:latest
+        run: docker push ${{ env.REGISTRY }}/${{ env.ARTIFACT }}:latest
