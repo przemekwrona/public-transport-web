@@ -1,0 +1,24 @@
+name: Deploy k8s
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact:
+        type: choice
+        description: Artifact ID
+        options:
+          - public-transport-web-server
+      version:
+        type: string
+        description: Artifact's version to deploy
+
+env:
+  REGISTRY: registry.digitalocean.com/igeolab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build Artifact
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
