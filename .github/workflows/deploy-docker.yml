@@ -47,14 +47,14 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-#      - name: Build docker ${{ input.artifact }}
-#        run: cd ${{ input.artifact }} && docker build -t igeolab/public-transport-web:latest .
-#
-#      - name: Tag Image
-#        run: docker tag igeolab/${{ inputs.artifact }}:latest ${{env.REGISTRY}}/igeolab/${{ inputs.artifact }}:latest
-#
-#      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-#        run: doctl registry login --expiry-seconds 1200
-#
-#      - name: Deploy docker image
-#        run: docker push ${{env.REGISTRY}}/igeolab/${{ inputs.artifact }}:latest
+      - name: Build docker ${{ input.artifact }}
+        run: cd ${{ input.artifact }} && docker build -t igeolab/public-transport-web:latest .
+
+      - name: Tag Image
+        run: docker tag igeolab/public-transport-web:latest ${{env.REGISTRY}}/igeolab/public-transport-web:latest
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 1200
+
+      - name: Deploy docker image
+        run: docker push ${{env.REGISTRY}}/igeolab/public-transport-web:latest
