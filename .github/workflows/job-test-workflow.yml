@@ -1,4 +1,4 @@
-name: Build and test
+name: QA Test
 
 on:
   workflow_call:
