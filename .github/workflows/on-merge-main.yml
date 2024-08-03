@@ -1,6 +1,9 @@
 name: Deploy master
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   call-test-workflow:
