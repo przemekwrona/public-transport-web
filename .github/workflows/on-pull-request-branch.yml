@@ -3,7 +3,7 @@ name: Test branch
 on:
   pull_request:
     branches:
-      - 'feature/**'
+      - !master
 
 jobs:
   call-test-workflow:
