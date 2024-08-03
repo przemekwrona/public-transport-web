@@ -24,4 +24,3 @@ jobs:
       - run: |
           cd ${{ inputs.artifact }}
           mvn clean verify
-        
