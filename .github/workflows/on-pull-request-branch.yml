@@ -3,7 +3,7 @@ name: Deploy master
 on: [pull_request]
 
 jobs:
-  call-workflow:
+  call-build-and-test-workflow:
     uses: ./.github/workflows/build-and-test.yml@main
     with:
       artifact: public-transport-web-server
