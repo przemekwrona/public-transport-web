@@ -46,11 +46,11 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
 
+      - name: Clear registry
+        run: doctl registry garbage-collection start --include-untagged-manifests --force ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}
+
       - name: Deploy docker image
         run: docker push ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}:${{ inputs.version }}
-
-      - name: Clear registry
-        run: doctl registry garbage-collection start --include-untagged-manifests --force ${{ env.REGISTRY }}
 
   k8s:
     runs-on: ubuntu-latest
