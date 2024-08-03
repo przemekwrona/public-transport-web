@@ -3,7 +3,7 @@ name: Deploy master
 on: [pull_request]
 
 jobs:
-  call-build-and-test-workflow:
+  call-test-workflow:
     name: Test
     uses: ./.github/workflows/job-test-workflow.yml
     with:
