@@ -48,3 +48,13 @@ jobs:
 
       - name: Deploy docker image
         run: docker push ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}:${{ inputs.version }}
+
+      - name: Clear registry
+        run: doctl registry garbage-collection start --include-untagged-manifests ${{ env.REGISTRY }}
+
+  k8s:
+    runs-on: ubuntu-latest
+    needs: [ docker ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
