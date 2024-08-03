@@ -8,6 +8,7 @@ on:
 
 env:
   DOCKER_REGISTRY: registry.digitalocean.com/igeolab
+  K8S_CLUSTER: iot-public-transport
   DOCKER_TAG: igeolab/${{ inputs.artifact }}:${{ inputs.version }}
 
 jobs:
@@ -59,7 +60,7 @@ jobs:
         run: doctl registry login --expiry-seconds 1200
 
       - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 iot-public-transport
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
 
       - name: Connect to Kubernetes
         run: doctl kubernetes cluster get iot-public-transport
