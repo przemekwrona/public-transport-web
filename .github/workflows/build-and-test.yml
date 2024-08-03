@@ -1,0 +1,25 @@
+name: Build and test
+
+on: [push]
+
+env:
+  WEB_SERVER_ARTIFACT: public-transport-web-server
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    name: Build Artifact
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Build Backend App ${{ env.WEB_SERVER_ARTIFACT }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          - run: |
+              cd ${{ env.WEB_SERVER_ARTIFACT }}
+              mvn clean verify
+        
