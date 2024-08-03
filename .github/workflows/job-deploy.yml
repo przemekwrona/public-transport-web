@@ -30,11 +30,11 @@ jobs:
           cd ${{ inputs.artifact }}
           ls -lh
 
-#      - name: Install doctl
-#        uses: digitalocean/action-doctl@v2
-#        with:
-#          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-#
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
 #        - name: Build docker ${{ inputs.artifact }}
 #          run: cd ${{ inputs.artifact }} && docker build -t ${{ env.ARTIFACT }}:latest .
 #
