@@ -1,7 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: public-transport-web-server
+  labels:
+    app: web
 spec:
   replicas: 1
   selector:
