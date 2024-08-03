@@ -36,7 +36,6 @@ jobs:
       - run: |
           cd ${{ inputs.artifact }}
           mvn clean install -Dmaven.test.skip=true
-          ls -lh
 
       - name: Archive Artifact
         uses: actions/upload-artifact@v4
