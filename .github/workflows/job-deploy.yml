@@ -14,3 +14,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: ls target
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          - run: |
+              cd ${{ inputs.artifact }}
+              ls -lh
