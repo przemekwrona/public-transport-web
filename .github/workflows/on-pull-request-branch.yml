@@ -4,6 +4,9 @@ on: [pull_request]
 
 jobs:
   call-build-and-test:
-    uses: ./.github/workflows/build-and-test.yml@main
-    with:
-      artifact: public-transport-web-server
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - uses: ./.github/workflows/build-and-test.yml@main
+      with:
+        artifact: public-transport-web-server
