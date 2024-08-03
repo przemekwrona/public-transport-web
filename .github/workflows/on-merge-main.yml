@@ -18,7 +18,7 @@ jobs:
       artifact: public-transport-web-server
 
   deploy:
-    uses: ./.github/workflows/job-build.yml
+    uses: ./.github/workflows/job-deploy.yml
     needs: [ build ]
     with:
       artifact: public-transport-web-server
