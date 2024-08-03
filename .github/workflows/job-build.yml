@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
       - run: |
           cd public-transport-web-client
           npm install
@@ -31,6 +32,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'maven'
       - run: |
           cd ${{ inputs.artifact }}
           mvn clean install -Dmaven.test.skip=true
