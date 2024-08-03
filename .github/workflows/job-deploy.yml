@@ -3,6 +3,8 @@ on:
     inputs:
       artifact:
         type: string
+      version:
+        type: string
 
 env:
   REGISTRY: registry.digitalocean.com/igeolab
@@ -35,9 +37,9 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-#        - name: Build docker ${{ inputs.artifact }}
-#          run: cd ${{ inputs.artifact }} && docker build -t ${{ env.ARTIFACT }}:latest .
-#
+      - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
+        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.artifact }}:${{ inputs.version }} .
+
 #        - name: Tag Image
 #          run: docker tag ${{ env.ARTIFACT }}:latest ${{ env.REGISTRY }}/${{ env.ARTIFACT }}:latest
 #
