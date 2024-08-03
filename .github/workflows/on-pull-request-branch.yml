@@ -6,8 +6,7 @@ on:
       - feature/**
 
 jobs:
-  call-test-workflow:
-    name: Test
+  test:
     uses: ./.github/workflows/job-test-workflow.yml
     with:
       artifact: public-transport-web-server
