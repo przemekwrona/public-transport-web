@@ -4,10 +4,9 @@ on:
   pull_request:
     branches:
       - main
-    types: [closed]
 
 jobs:
   call-build-and-test:
-    uses:
+    uses: build-and-test.yml
     with:
       artifact: public-transport-web-server
