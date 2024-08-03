@@ -23,6 +23,7 @@ jobs:
           - run: |
               cd ${{ inputs.artifact }}
               ls -lh
+              ls -lh
 
 #      - name: Install doctl
 #        uses: digitalocean/action-doctl@v2
