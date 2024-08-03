@@ -7,7 +7,7 @@ on:
         type: string
 
 env:
-  REGISTRY: registry.digitalocean.com/igeolab
+  DOCKER_REGISTRY: registry.digitalocean.com/igeolab
   DOCKER_TAG: igeolab/${{ inputs.artifact }}:${{ inputs.version }}
 
 jobs:
@@ -32,13 +32,13 @@ jobs:
         run: cd ${{ inputs.artifact }} && docker build -t ${{ env.DOCKER_TAG }} .
 
       - name: Tag Image
-        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.REGISTRY }}/${{ env.DOCKER_TAG }}
+        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
 
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
 
       - name: Deploy docker image
-        run: docker push ${{ env.REGISTRY }}/${{ env.DOCKER_TAG }}
+        run: docker push ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
 
       - name: Clear registry
         run: doctl registry garbage-collection start --include-untagged-manifests igeolab --force
