@@ -1,11 +1,10 @@
 name: Deploy Docker
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       artifact:
-        type: choice
-        description: Artifact ID
+        type: string
         options:
           - public-transport-web-server
 
