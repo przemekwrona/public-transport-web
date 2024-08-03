@@ -8,7 +8,7 @@ on:
 
 env:
   DOCKER_REGISTRY: registry.digitalocean.com/igeolab
-  K8S_CLUSTER: iot-public-transport
+  K8S_CLUSTER: iot-public-transport-v2
   DOCKER_TAG: igeolab/${{ inputs.artifact }}:${{ inputs.version }}
 
 jobs:
@@ -68,8 +68,8 @@ jobs:
       - name: Get Pods
         run: kubectl get pods --show-labels
 
-      - name: Logs
-        run: kubectl logs web
+#      - name: Logs
+#        run: kubectl logs web
 
       - name: Verify deployment
         run: kubectl rollout status deployment/${{ inputs.artifact }} --timeout 5m
