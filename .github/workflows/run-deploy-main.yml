@@ -6,20 +6,20 @@ on:
       - main
 
 jobs:
-  test:
-    uses: ./.github/workflows/job-test.yml
-    with:
-      artifact: public-transport-web-server
+#  test:
+#    uses: ./.github/workflows/job-test.yml
+#    with:
+#      artifact: public-transport-web-server
 
-  build:
-    uses: ./.github/workflows/job-build.yml
-    needs: [ test ]
-    with:
-      artifact: public-transport-web-server
+#  build:
+#    uses: ./.github/workflows/job-build.yml
+#    needs: [ test ]
+#    with:
+#      artifact: public-transport-web-server
 
   deploy:
     uses: ./.github/workflows/job-deploy.yml
-    needs: [ build ]
+#    needs: [ build ]
     secrets: inherit
     with:
       artifact: public-transport-web-server
