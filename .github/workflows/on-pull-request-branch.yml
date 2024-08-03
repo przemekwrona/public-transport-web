@@ -1,0 +1,9 @@
+name: Deploy master
+
+on: [pull_request]
+
+jobs:
+  call-build-and-test:
+    uses: build-and-test.yml
+    with:
+      artifact: public-transport-web-server

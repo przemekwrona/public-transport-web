@@ -1,9 +1,6 @@
 name: Deploy master
 
-on:
-  pull_request:
-    branches:
-      - main
+on: [pull_request]
 
 jobs:
   call-build-and-test:
