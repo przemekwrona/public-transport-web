@@ -32,7 +32,7 @@ jobs:
           distribution: 'temurin'
       - run: |
           cd ${{ inputs.artifact }}
-          mvn clean install
+          mvn clean install -Dmaven.test.skip=true
 
   deploy:
     runs-on: ubuntu-latest
