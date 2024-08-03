@@ -3,7 +3,7 @@ name: Run Deploy Main
 on:
   push:
     branches:
-      - main
+      - feature/**
 
 jobs:
 #  test:
