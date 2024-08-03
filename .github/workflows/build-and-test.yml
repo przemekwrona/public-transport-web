@@ -21,7 +21,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          - run: |
-              cd ${{ inputs.artifact }}
-              mvn clean verify
+      - run: |
+          cd ${{ inputs.artifact }}
+          mvn clean verify
         
