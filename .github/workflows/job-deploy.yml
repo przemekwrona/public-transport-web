@@ -5,7 +5,7 @@ on:
         type: string
     secrets:
       DIGITALOCEAN_ACCESS_TOKEN:
-        required: false
+        required: true
 
 env:
   REGISTRY: registry.digitalocean.com/igeolab
