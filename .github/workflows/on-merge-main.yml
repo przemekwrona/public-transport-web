@@ -20,5 +20,6 @@ jobs:
   deploy:
     uses: ./.github/workflows/job-deploy.yml
     needs: [ build ]
+    secrets: inherit
     with:
       artifact: public-transport-web-server
