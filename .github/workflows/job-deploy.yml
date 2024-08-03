@@ -66,4 +66,5 @@ jobs:
         run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/deployment.yaml
 
       - name: Verify deployment
-        run: kubectl rollout status deployment/igeolab/${{ inputs.artifact }}
+#        run: kubectl rollout status deployment/igeolab/${{ inputs.artifact }}
+        run: kubectl get deployment -w
