@@ -38,7 +38,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
-        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.artifact }}:${{ inputs.version }} .
+        run: cd ${{ inputs.artifact }} && docker build -t ${{ inputs.artifact }}:${{ inputs.version }} .
 
 #        - name: Tag Image
 #          run: docker tag ${{ env.ARTIFACT }}:latest ${{ env.REGISTRY }}/${{ env.ARTIFACT }}:latest
