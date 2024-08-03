@@ -11,41 +11,44 @@ env:
   DOCKER_TAG: igeolab/${{ inputs.artifact }}:${{ inputs.version }}
 
 jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download app jar
-        uses: actions/download-artifact@v4
-        with:
-          name: app-jar
-          path: ${{ inputs.artifact }}/target
-
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
-        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.DOCKER_TAG }} .
-
-      - name: Tag Image
-        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
-
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 1200
-
-      - name: Deploy docker image
-        run: docker push ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
-
-      - name: Clear registry
-        run: doctl registry garbage-collection start --include-untagged-manifests igeolab --force
+#  docker:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Download app jar
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: app-jar
+#          path: ${{ inputs.artifact }}/target
+#
+#      - name: Install doctl
+#        uses: digitalocean/action-doctl@v2
+#        with:
+#          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+#
+#      - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
+#        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.DOCKER_TAG }} .
+#
+#      - name: Tag Image
+#        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
+#
+#      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+#        run: doctl registry login --expiry-seconds 1200
+#
+#      - name: Deploy docker image
+#        run: docker push ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
+#
+#      - name: Clear registry
+#        run: doctl registry garbage-collection start --include-untagged-manifests igeolab --force
 
   k8s:
     runs-on: ubuntu-latest
-    needs: [ docker ]
+#    needs: [ docker ]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Log in to Kubernetes
+        run: doctl auth init
+
+      - name: Log in to Kubernetes
+        run: kubectl version
