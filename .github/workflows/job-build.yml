@@ -36,9 +36,10 @@ jobs:
       - run: |
           cd ${{ inputs.artifact }}
           mvn clean install -Dmaven.test.skip=true
+          ls -lh
 
-      - name: Archive jar
+      - name: Archive Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: target/**.jar
+          path: ${{ inputs.artifact }}/target/**.jar
