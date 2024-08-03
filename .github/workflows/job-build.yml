@@ -1,0 +1,36 @@
+on:
+  workflow_call:
+    inputs:
+      artifact:
+        type: string
+
+env:
+  REGISTRY: registry.digitalocean.com/igeolab
+  ARTIFACT: igeolab/public-transport-web
+
+jobs:
+  jar:
+    runs-on: ubuntu-latest
+    name:
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Angular App
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: |
+          cd public-transport-web-client
+          npm install
+          npm run generate
+          npm run build
+
+      - name: Build Backend App ${{ inputs.artifact }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - run: |
+          cd ${{ inputs.artifact }}
+          mvn clean install -Dmaven.test.skip=true

@@ -7,12 +7,18 @@ on:
 
 jobs:
   test:
-    uses: ./.github/workflows/job-test-workflow.yml
+    uses: ./.github/workflows/job-test.yml
     with:
       artifact: public-transport-web-server
 
   build:
-    uses: ./.github/workflows/job-deploy-docker.yml
-    needs: [test]
+    uses: ./.github/workflows/job-build.yml
+    needs: [ test ]
+    with:
+      artifact: public-transport-web-server
+
+  deploy:
+    uses: ./.github/workflows/job-deploy.yml
+    needs: [ build ]
     with:
       artifact: public-transport-web-server

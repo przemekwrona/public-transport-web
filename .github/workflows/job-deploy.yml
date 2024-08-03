@@ -9,35 +9,8 @@ env:
   ARTIFACT: igeolab/public-transport-web
 
 jobs:
-  build:
+  docker:
     runs-on: ubuntu-latest
-    name:
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Build Angular App
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - run: |
-          cd public-transport-web-client
-          npm install
-          npm run generate
-          npm run build
-
-      - name: Build Backend App ${{ inputs.artifact }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - run: |
-          cd ${{ inputs.artifact }}
-          mvn clean install -Dmaven.test.skip=true
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
