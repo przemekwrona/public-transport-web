@@ -3,6 +3,9 @@ on:
     inputs:
       artifact:
         type: string
+    secrets:
+      DIGITALOCEAN_ACCESS_TOKEN:
+        required: false
 
 env:
   REGISTRY: registry.digitalocean.com/igeolab
