@@ -23,31 +23,22 @@ jobs:
           name: app-jar
           path: ${{ inputs.artifact }}/target
 
-      - name: ls target
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - run: |
-          cd ${{ inputs.artifact }}
-          ls -lh
-
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
-        run: cd ${{ inputs.artifact }} && docker build -t igeolab/${{ inputs.artifact }}:${{ inputs.version }} .
+        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.DOCKER_TAG }} .
 
       - name: Tag Image
-        run: docker tag igeolab/${{ inputs.artifact }}:${{ inputs.version }} ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}:${{ inputs.version }}
+        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.REGISTRY }}/${{ env.DOCKER_TAG }}
 
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
 
       - name: Deploy docker image
-        run: docker push ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}:${{ inputs.version }}
+        run: docker push ${{ env.REGISTRY }}/${{ env.DOCKER_TAG }}
 
       - name: Clear registry
         run: doctl registry garbage-collection start --include-untagged-manifests igeolab --force
