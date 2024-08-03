@@ -61,8 +61,8 @@ jobs:
       - name: Save DigitalOcean kubeconfig with short-lived credentials
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 iot-public-transport
 
-#      - name: Connect to Kubernetes
-#        run: doctl kubernetes cluster get iot-public-transport
+      - name: Connect to Kubernetes
+        run: doctl kubernetes cluster get iot-public-transport
 
 #      - name: Check Kubernetes version
 #        run: doctl kubernetes version
