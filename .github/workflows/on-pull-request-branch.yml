@@ -7,6 +7,6 @@ on:
 
 jobs:
   test:
-    uses: ./.github/workflows/job-test-workflow.yml
+    uses: ./.github/workflows/job-test.yml
     with:
       artifact: public-transport-web-server
