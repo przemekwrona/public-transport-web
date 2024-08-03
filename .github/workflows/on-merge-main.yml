@@ -3,7 +3,7 @@ name: Deploy master
 on:
   push:
     branches:
-      - feature/**
+      - main
 
 jobs:
   test:
