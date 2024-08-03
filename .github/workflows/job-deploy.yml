@@ -38,13 +38,13 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
-        run: cd ${{ inputs.artifact }} && docker build -t ${{ inputs.artifact }}:${{ inputs.version }} .
+        run: cd ${{ inputs.artifact }} && docker build -t igeolab/${{ inputs.artifact }}:${{ inputs.version }} .
 
-#        - name: Tag Image
-#          run: docker tag ${{ env.ARTIFACT }}:latest ${{ env.REGISTRY }}/${{ env.ARTIFACT }}:latest
-#
-#        - name: Log in to DigitalOcean Container Registry with short-lived credentials
-#          run: doctl registry login --expiry-seconds 1200
-#
+      - name: Tag Image
+        run: docker tag igeolab/${{ inputs.artifact }}:${{ inputs.version }} ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}:${{ inputs.version }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 1200
+
 #        - name: Deploy docker image
 #          run: docker push ${{ env.REGISTRY }}/${{ env.ARTIFACT }}:latest
