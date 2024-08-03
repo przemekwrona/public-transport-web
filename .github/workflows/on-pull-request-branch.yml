@@ -4,6 +4,6 @@ on: [pull_request]
 
 jobs:
   call-build-and-test:
-    uses: build-and-test.yml
+    uses: build-and-test.yml@main
     with:
       artifact: public-transport-web-server
