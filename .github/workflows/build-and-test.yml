@@ -1,9 +1,11 @@
 name: Build and test
 
-on: [push]
-
-env:
-  WEB_SERVER_ARTIFACT: public-transport-web-server
+on:
+  workflow_dispatch:
+    inputs:
+      artifact:
+        required: true
+        type: string
 
 jobs:
   build:
@@ -14,12 +16,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         
-      - name: Build Backend App ${{ env.WEB_SERVER_ARTIFACT }}
+      - name: Build Backend App ${{ inputs.artifact }}
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           - run: |
-              cd ${{ env.WEB_SERVER_ARTIFACT }}
+              cd ${{ inputs.artifact }}
               mvn clean verify
         
