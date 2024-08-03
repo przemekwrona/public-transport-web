@@ -53,4 +53,4 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Connect to Kubernetes
-        run: doctl kubernetes cluster kubeconfig save iot-public-transport
+        run: doctl registry kubernetes-manifest iot-public-transport
