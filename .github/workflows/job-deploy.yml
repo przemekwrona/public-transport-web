@@ -52,8 +52,8 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-#      - name: Log in to Kubernetes
-#        run: doctl auth init
+      - name: Log in
+        run: doctl auth init
 
-      - name: Log in to Kubernetes
+      - name: Connect to Kubernetes
         run: doctl kubernetes cluster kubeconfig save iot-public-transport
