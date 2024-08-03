@@ -13,7 +13,7 @@ spec:
         app: web
     spec:
       containers:
-        - name: web
+        - name: public-transport-web-server
           image: igeolab/public-transport-web-server:1.0.0
           ports:
             - containerPort: 8080
