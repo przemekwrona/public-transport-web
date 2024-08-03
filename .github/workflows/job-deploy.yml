@@ -47,10 +47,10 @@ jobs:
         run: doctl registry login --expiry-seconds 1200
 
       - name: Clear registry
-        run: doctl registry garbage-collection start --include-untagged-manifests --force ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}
+        run: doctl registry garbage-collection start --include-untagged-manifests ${{ env.REGISTRY }} --force
 
-      - name: Deploy docker image
-        run: docker push ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}:${{ inputs.version }}
+#      - name: Deploy docker image
+#        run: docker push ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}:${{ inputs.version }}
 
   k8s:
     runs-on: ubuntu-latest
