@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: registry.digitalocean.com/igeolab
-  ARTIFACT: igeolab/public-transport-web
+  DOCKER_TAG: igeolab/${{ inputs.artifact }}:${{ inputs.version }}
 
 jobs:
   docker:
@@ -47,7 +47,7 @@ jobs:
         run: doctl registry login --expiry-seconds 1200
 
       - name: Clear registry
-        run: doctl registry garbage-collection start --include-untagged-manifests ${{ env.REGISTRY }}
+        run: doctl registry garbage-collection start --include-untagged-manifests ${{ env.REGISTRY }} --force
 
 #      - name: Deploy docker image
 #        run: docker push ${{ env.REGISTRY }}/igeolab/${{ inputs.artifact }}:${{ inputs.version }}
