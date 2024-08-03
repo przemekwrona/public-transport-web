@@ -54,3 +54,6 @@ jobs:
 
       - name: Connect to Kubernetes
         run: doctl registry kubernetes-manifest iot-public-transport
+
+      - name: Check Kubernetes version
+        run: kubectl version
