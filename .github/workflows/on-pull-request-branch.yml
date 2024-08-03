@@ -5,5 +5,5 @@ on: [pull_request]
 jobs:
   call-workflow:
     uses: ./.github/workflows/build-and-test.yml@main
-      with:
-        artifact: public-transport-web-server
+    with:
+      artifact: public-transport-web-server
