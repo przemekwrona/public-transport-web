@@ -8,7 +8,7 @@ on:
 
 env:
   DOCKER_REGISTRY: registry.digitalocean.com/igeolab
-  K8S_CLUSTER: iot-public-transport-v2
+  K8S_CLUSTER: iot-public-transport
   DOCKER_TAG: igeolab/${{ inputs.artifact }}:${{ inputs.version }}
 
 jobs:
@@ -60,13 +60,15 @@ jobs:
         run: doctl registry login --expiry-seconds 1200
 
       - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
+        run: doctl kubernetes clusters create --size s-4vcpu-8gb ${{ env.K8S_CLUSTER }} --1-clicks kubernetes-dashboard
 
-      - name: Deploy to DigitalOcean Kubernetes
-        run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/deployment.yaml
+#        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
 
-      - name: Get Pods
-        run: kubectl get pods --show-labels
+#      - name: Deploy to DigitalOcean Kubernetes
+#        run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/deployment.yaml
+
+#      - name: Get Pods
+#        run: kubectl get pods --show-labels
 
 #      - name: Logs
 #        run: kubectl logs web
