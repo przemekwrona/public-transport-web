@@ -6,14 +6,13 @@ on:
       - feature/**
 
 jobs:
-  call-test-workflow:
-    name: Test
+  test:
     uses: ./.github/workflows/job-test-workflow.yml
     with:
       artifact: public-transport-web-server
 
-  call-deploy-docker-workflow:
-    name: Docker
+  build:
     uses: ./.github/workflows/job-deploy-docker.yml
+    needs: [test]
     with:
       artifact: public-transport-web-server
