@@ -63,7 +63,7 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
 
       - name: Connect to Kubernetes
-        run: doctl kubernetes cluster get iot-public-transport
+        run: doctl kubernetes cluster get ${{ env.K8S_CLUSTER }}
 
 #      - name: Check Kubernetes version
 #        run: doctl kubernetes version
