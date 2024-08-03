@@ -67,3 +67,6 @@ jobs:
 
       - name: Verify deployment
         run: kubectl rollout status deployment/${{ inputs.artifact }}
+
+      - name: ls
+        run: ls -lh
