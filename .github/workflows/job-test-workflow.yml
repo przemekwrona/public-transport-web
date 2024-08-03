@@ -8,13 +8,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    name: Unit Test ${{ inputs.artifact }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         
-      - name: Build Backend App ${{ inputs.artifact }}
+      - name: Test ${{ inputs.artifact }}
         uses: actions/setup-java@v4
         with:
           java-version: '17'
