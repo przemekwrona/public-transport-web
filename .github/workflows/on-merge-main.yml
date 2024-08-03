@@ -4,6 +4,9 @@ on: [pull_request]
 
 jobs:
   call-build-and-test:
+    runs-on: ubuntu-latest
+    name: Build and Test
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
