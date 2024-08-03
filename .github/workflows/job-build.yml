@@ -23,9 +23,9 @@ jobs:
           cache: 'npm'
       - run: |
           cd public-transport-web-client
-          npm install
-          npm run generate
-          npm run build
+#          npm install
+#          npm run generate
+#          npm run build
 
       - name: Build Backend App ${{ inputs.artifact }}
         uses: actions/setup-java@v4
