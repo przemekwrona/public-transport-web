@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   call-build-and-test-workflow:
-    name: Build and Test
+    name: Test
     uses: ./.github/workflows/build-and-test.yml@main
     with:
       artifact: public-transport-web-server
