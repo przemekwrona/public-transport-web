@@ -1,24 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: public-transport-web-server
+  name: public-transport-web-deployment
   labels:
-    name: web
-    app: web
+    app: public-transport-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: web
-      app: web
+      app: public-transport-web
   template:
     metadata:
       labels:
-        name: web
-        app: web
+        app: public-transport-web
     spec:
       containers:
-        - name: public-transport-web-server
+        - name: public-transport-web
           image: igeolab/public-transport-web-server:1.0.0
           ports:
             - containerPort: 8080
