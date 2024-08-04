@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: public-transport-web-server
-          image: igeolab/public-transport-web-server:1.0.0
+          image: registry.digitalocean.com/igeolab/igeolab/public-transport-web-server:1.0.0
           ports:
             - containerPort: 80
