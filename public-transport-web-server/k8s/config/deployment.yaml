@@ -3,15 +3,18 @@ kind: Deployment
 metadata:
   name: public-transport-web-server
   labels:
+    name: web
     app: web
 spec:
   replicas: 1
   selector:
     matchLabels:
+      name: web
       app: web
   template:
     metadata:
       labels:
+        name: web
         app: web
     spec:
       containers:
