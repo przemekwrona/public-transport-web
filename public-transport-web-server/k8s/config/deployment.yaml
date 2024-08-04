@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: public-transport-web-deployment
+  name: public-transport-web-server
   labels:
-    app: public-transport-web
+    app: public-transport-web-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: public-transport-web
+      app: public-transport-web-server
   template:
     metadata:
       labels:
-        app: public-transport-web
+        app: public-transport-web-server
     spec:
       containers:
         - name: public-transport-web-server
