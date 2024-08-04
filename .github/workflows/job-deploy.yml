@@ -66,8 +66,8 @@ jobs:
 #      - name: Apply Service
 #        run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/service.yaml
 
-#      - name: Get Pods
-#        run: kubectl get pods --show-labels
+      - name: Get Pods
+        run: kubectl get pods --show-labels
 
 #      - name: Logs
 #        run: kubectl logs web
