@@ -15,7 +15,7 @@ spec:
         app: public-transport-web
     spec:
       containers:
-        - name: igeolab/public-transport-web-server
+        - name: public-transport-web-server
           image: igeolab/public-transport-web-server:1.0.0
           ports:
             - containerPort: 80
