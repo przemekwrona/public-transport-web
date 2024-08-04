@@ -59,8 +59,8 @@ jobs:
       - name: Save DigitalOcean kubeconfig
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
 
-#      - name: Apply Deployment
-#        run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/deployment.yaml
+      - name: Apply Deployment
+        run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/deployment.yaml
 
 #      - name: Apply Service
 #        run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/service.yaml
