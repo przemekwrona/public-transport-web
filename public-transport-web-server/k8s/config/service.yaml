@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: public-transport-web-server
 spec:
-  selector:
-    app.kubernetes.io/name: public-transport-web-server
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
   type: LoadBalancer
+  selector:
+    name: webapp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

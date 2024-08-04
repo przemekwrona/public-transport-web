@@ -8,14 +8,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: public-transport-web-server
+      app: webapp
   template:
     metadata:
       labels:
-        app: public-transport-web-server
+        app: webapp
     spec:
       containers:
-        - name: public-transport-web-server
-          image: registry.digitalocean.com/igeolab/igeolab/public-transport-web-server:1.0.0
-          ports:
-            - containerPort: 8080
+      - name: public-transport-web-server
+        image: registry.digitalocean.com/igeolab/igeolab/public-transport-web-server:1.0.0
+        ports:
+        - containerPort: 8080
