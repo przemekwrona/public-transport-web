@@ -63,7 +63,7 @@ jobs:
         run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/deployment.yaml
 
       - name: Verify deployment
-        run: kubectl rollout status deployment/${{ inputs.artifact }} --timeout 5m
+        run: kubectl rollout status deployment/webapp --timeout 5m
 
 #      - name: Get Pods
 #        run: kubectl get pods --show-labels
