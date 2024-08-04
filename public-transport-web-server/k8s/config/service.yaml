@@ -3,13 +3,13 @@ kind: Service
 metadata:
   name: public-transport-web-server-service
   labels:
-    name: web-service
-    app: web-app
+    name: web
+    app: web
 spec:
   ports:
     - port: 80
       targetPort: 8080
     selector:
-      name: web-pod
-      app: web-app
+      name: web
+      app: web
 
