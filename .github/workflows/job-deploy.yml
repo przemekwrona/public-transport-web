@@ -60,8 +60,6 @@ jobs:
         run: doctl registry login --expiry-seconds 1200
 
 #      - name: Save DigitalOcean kubeconfig with short-lived credentials
-#        run: doctl kubernetes clusters create --size s-4vcpu-8gb ${{ env.K8S_CLUSTER }} --1-clicks kubernetes-dashboard
-
 #        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
 
 #      - name: Deploy to DigitalOcean Kubernetes
@@ -73,5 +71,5 @@ jobs:
 #      - name: Logs
 #        run: kubectl logs web
 
-      - name: Verify deployment
-        run: kubectl rollout status deployment/${{ inputs.artifact }} --timeout 5m
+#      - name: Verify deployment
+#        run: kubectl rollout status deployment/${{ inputs.artifact }} --timeout 5m
