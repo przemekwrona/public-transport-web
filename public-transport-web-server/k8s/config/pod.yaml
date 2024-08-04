@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: public-transport-web-server-pod
+  labels:
+    name: web-pod
+    app: web-app
+spec:
+  containers:
+    - name: public-transport-web-server
+      image: igeolab/public-transport-web-server:1.0.0
+      ports:
+        - containerPort: 8080
