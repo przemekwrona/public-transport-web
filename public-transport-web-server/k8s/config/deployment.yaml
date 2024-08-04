@@ -18,4 +18,4 @@ spec:
         - name: public-transport-web
           image: igeolab/public-transport-web-server:1.0.0
           ports:
-            - containerPort: 8080
+            - containerPort: 80
