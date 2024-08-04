@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: public-transport-web-server
   labels:
-    app: public-transport-web-server
+    app: webapp
 spec:
   replicas: 1
   selector:
