@@ -3,7 +3,7 @@ name: Run Test Branch
 on:
   push:
     branches:
-      - main
+      - feature/**
 
 jobs:
   test:
