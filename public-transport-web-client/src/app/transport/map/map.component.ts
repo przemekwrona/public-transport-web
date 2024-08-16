@@ -1,6 +1,6 @@
 import {AfterViewInit, Component} from '@angular/core';
 import * as L from 'leaflet';
-import {LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
+import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {StopService} from "../../http/stop.service";
 import {Shape, Timetables, TimetableService} from "../../http/timetable.service";
 import {TripService} from "../../http/trip.service";
@@ -38,6 +38,10 @@ export class MapComponent implements AfterViewInit {
 
     public startPoint: OtpPoint = new OtpPoint();
     public endPoint: OtpPoint = new OtpPoint();
+    private startMarker: CircleMarker | null;
+    private startBorderMarker: CircleMarker | null;
+    private endMarker: CircleMarker | null;
+    private endBorderMarker: CircleMarker | null;
 
     constructor(private stopService: StopService, private timetableService: TimetableService, private tripService: TripService, private otpService: OtpService, private gbfsService: GbfsService) {
         this.getStops(52.240, 20.890, 52.220, 21.120);
@@ -90,6 +94,33 @@ export class MapComponent implements AfterViewInit {
             }
         });
 
+        this.map.on('zoomend', (event: LeafletEvent) => {
+            if (this.startBorderMarker != null) {
+                const startBorderMarker = this.getCircleBorderMarker(this.startBorderMarker.getLatLng(), this.map.getZoom());
+                this.startBorderMarker.removeFrom(this.map);
+                this.startBorderMarker = startBorderMarker;
+                this.startBorderMarker.addTo(this.map);
+            }
+            if (this.endBorderMarker != null) {
+                const endBorderMarker = this.getCircleBorderMarker(this.endBorderMarker.getLatLng(), this.map.getZoom());
+                this.endBorderMarker.removeFrom(this.map);
+                this.endBorderMarker = endBorderMarker;
+                this.endBorderMarker.addTo(this.map);
+            }
+            if (this.startMarker != null) {
+                const startMarker = this.getCircleMarker(this.startMarker.getLatLng(), this.map.getZoom(), '#20A470');
+                this.startMarker.removeFrom(this.map);
+                this.startMarker = startMarker;
+                this.startMarker.addTo(this.map);
+            }
+            if (this.endMarker != null) {
+                const endMarker = this.getCircleMarker(this.endMarker.getLatLng(), this.map.getZoom(), '#061431');
+                this.endMarker.removeFrom(this.map);
+                this.endMarker = endMarker;
+                this.endMarker.addTo(this.map);
+            }
+        });
+
         this.map.on('click', (event: LeafletMouseEvent) => {
 
             if (this.startPoint.name == '') {
@@ -97,11 +128,30 @@ export class MapComponent implements AfterViewInit {
                 this.startPoint.name = `${event.latlng.lat.toFixed(5)},${event.latlng.lng.toFixed(5)}`;
                 this.startPoint.lat = event.latlng.lat;
                 this.startPoint.lon = event.latlng.lng;
+
+                this.startMarker = this.getCircleMarker(event.latlng, this.map.getZoom(), '#20A470');
+                this.startBorderMarker = this.getCircleBorderMarker(event.latlng, this.map.getZoom())
+                this.startBorderMarker.addTo(this.map);
+                this.startMarker.addTo(this.map);
             } else {
                 this.endPoint = new OtpPoint();
                 this.endPoint.name = `${event.latlng.lat.toFixed(5)},${event.latlng.lng.toFixed(5)}`;
                 this.endPoint.lat = event.latlng.lat;
                 this.endPoint.lon = event.latlng.lng;
+
+                if (this.endMarker != null) {
+                    this.endMarker.removeFrom(this.map);
+                }
+
+                if (this.endBorderMarker != null) {
+                    this.endBorderMarker.removeFrom(this.map);
+                }
+
+                this.endMarker = this.getCircleMarker(event.latlng, this.map.getZoom(), '#061431');
+                this.endBorderMarker = this.getCircleBorderMarker(event.latlng, this.map.getZoom());
+
+                this.endBorderMarker.addTo(this.map);
+                this.endMarker.addTo(this.map);
             }
 
             if (this.currentLine == null) {
@@ -114,6 +164,35 @@ export class MapComponent implements AfterViewInit {
             this.currentLine = null;
         });
 
+    }
+
+    private markerRadius(price: number, zoom: number): number {
+        let radius = 3;
+        for (let i = 0; i < 18 - zoom; i++) {
+            radius = 2 * radius;
+        }
+        return radius;
+    }
+
+
+    private getCircleMarker(latlng: LatLng, zoom: number, color: string) {
+        return L.circle([latlng.lat, latlng.lng], {
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.4,
+            radius: this.markerRadius(12, zoom),
+            stroke: true,
+            weight: 6
+        });
+    }
+
+    private getCircleBorderMarker(latlng: LatLng, zoom: number) {
+        return L.circle([latlng.lat, latlng.lng], {
+            color: 'white',
+            radius: 1.1 * this.markerRadius(12, zoom),
+            stroke: true,
+            weight: 6
+        });
     }
 
     private getBikeStationStatus(map: Map) {
