@@ -73,7 +73,7 @@ export class OtpComponent {
 
     public isBike(itinerary: Itinerary): boolean {
         const bicycles = (itinerary.legs || []).map(leg => leg.mode).filter(mode => mode === 'BICYCLE');
-        if(bicycles.length > 0) {
+        if (bicycles.length > 0) {
             console.log(bicycles.length);
         }
         return false;
@@ -148,7 +148,9 @@ export class OtpComponent {
                 }
 
                 return marker;
-            });
+            })
+            .slice(1, -1);
+
         this.firstAndLatStops.forEach(stop => stop.addTo(this.map));
 
         this.intermediateStops.forEach(stop => stop.removeFrom(this.map));
