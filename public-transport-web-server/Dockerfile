@@ -1,6 +1,7 @@
 FROM openjdk:17-jdk-slim-buster
 MAINTAINER igeolab.pl
 WORKDIR /app
+EXPOSE 8082
 
 ENV PROFILE=''
 

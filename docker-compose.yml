@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  web-client:
+    build:
+      context: ./public-transport-web-server
+      dockerfile: Dockerfile
+    container_name: web-client
+    networks:
+      - gtfs_network
+    ports:
+      - '8080:8080'
+    environment:
+      PROFILE: dev-docker
+    depends_on:
+      - gtfs-warszawa
+
+  gtfs-warszawa:
+    build:
+      context: ../public-transport-otp
+      dockerfile: Dockerfile.warszawa
+    container_name: gtfs-warszawa
+    networks:
+      - gtfs_network
+    ports:
+      - '8082:8080'
+    environment:
+      - JAVA_OPTS=-Xmx4G
+
+  gtfs-krakow:
+    build:
+      context: ../public-transport-otp
+      dockerfile: Dockerfile.krakow
+    container_name: gtfs-krakow
+    networks:
+      - gtfs_network
+    ports:
+      - '8084:8080'
+    environment:
+      - JAVA_OPTS=-Xmx1G
+
+networks:
+  gtfs_network:
+    driver: bridge
