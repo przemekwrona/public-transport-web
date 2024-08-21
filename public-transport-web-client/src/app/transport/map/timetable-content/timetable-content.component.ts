@@ -24,7 +24,7 @@ export class PatternTime {
 })
 export class TimetableContentComponent {
 
-    private _timetables: StopTime[];
+    private _timetables: StopTime[] = [];
 
     @Input() set timetables(timetables: StopTime[]) {
         this._timetables = timetables;
@@ -33,7 +33,7 @@ export class TimetableContentComponent {
     }
 
     get timetables(): StopTime[] {
-        return this._timetables;
+        return this._timetables || [];
     }
 
     @Input() timetableDate: moment.Moment;
@@ -45,7 +45,7 @@ export class TimetableContentComponent {
     public groupedTimetables: { [hour: number]: PatternTime[] };
     public closestDeparture: PatternTime | null;
 
-    public hasTimetables() {
+    public hasTimetables(): boolean {
         return this.timetables.map(timetables => timetables.times).flat().length > 0;
     }
 
@@ -84,11 +84,6 @@ export class TimetableContentComponent {
 
     private findFirstDeparture(timetable: { [hour: number]: PatternTime[] }): PatternTime | null {
         const now: moment.Moment = moment();
-
-        // if (!now.isSame(this.timetableDate)) {
-        //     return null;
-        // }
-
         const currentHours: StopTime[] = (timetable[now.hour()] || []).filter(timetable => moment().startOf('day').add(timetable?.time?.scheduledDeparture, 'second').isAfter(now));
 
         if (currentHours.length > 0) {

@@ -1,56 +1,21 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {TimetableDeparture} from "../../../http/timetable.service";
-import {groupBy} from "lodash";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import moment from 'moment';
 import {DepartureMetadata} from "../timetable-content/timetable-content.component";
-import {Stop, StopTime} from "../../../generated";
+import {Route, Stop, StopTime} from "../../../generated";
 
 
 @Component({
     selector: 'app-timetable',
     templateUrl: './timetable.component.html',
-    styleUrl: './timetable.component.scss'
+    styleUrl: './timetable.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimetableComponent {
 
-    private _line: string = '';
-
-    @Input() set line(line: string) {
-        this._line = line;
-    }
-
-    get line(): string {
-        return this._line;
-    }
-
-    private _stopTimes: StopTime[];
-
-    @Input() set stopTimes(stopTimes: StopTime[]) {
-        this._stopTimes = stopTimes;
-
-        this.timetable = this.stopTimes.reduce((acc: { [routeId: string]: StopTime[] }, curr: StopTime) => {
-            let key: string = curr.pattern?.routeId || '';
-            if (!acc[key]) {
-                acc[key] = [];
-            }
-            acc[key].push(curr);
-            return acc;
-        }, {});
-
-        this.headsign = this.getMainHeadsing();
-
-        if (this.line != null) {
-            // this.numberOfDepartures = 3;
-        }
-        // this.departures = this.getDepartures(stopTimes);
-        // this.numberOfDepartures = this.countNumberOfLines();
-    }
-
-    get stopTimes(): StopTime[] {
-        return this._stopTimes;
-    }
-
+    @Input() line: string;
+    @Input() stopTimes: StopTime[] = [];
     @Input() stop: Stop | null;
+    @Input() routes: Route[];
     @Input() direction: string;
     @Output() onClickDeparture = new EventEmitter<DepartureMetadata>();
 
@@ -59,16 +24,24 @@ export class TimetableComponent {
 
     public timetableDate: moment.Moment = moment();
 
-    public getTimetable(date: moment.Moment): StopTime[] {
-        return this.timetable[this.getRouteId()];
+    public getTimetable(line: string, date: moment.Moment): StopTime[] {
+        const routesId: string[] = [...new Set<string>(this.routes
+            .filter(route => route.shortName === line)
+            .map(route => route.id || ''))];
+
+        return this.stopTimes.filter(stopTime => routesId.includes(stopTime.pattern?.routeId || ''));
     }
 
-    public getMainHeadsing(): string {
-        const headsigns: string[] = this.stopTimes
-            .map(stopTime => (stopTime?.times || []).map(time => time?.headsign || ''))
-            .flat();
+    public getMainHeadsing(line: string): string {
+        const routesId: string[] = [...new Set<string>(this.routes
+            .filter(route => route.shortName === line)
+            .map(route => route.id || ''))];
 
-        return headsigns[0];
+        const stopTime = this.stopTimes
+            .filter(stopTime => routesId.includes(stopTime.pattern?.routeId || ''))
+            .sort((prev: StopTime, curr: StopTime) => (curr.times?.length || 0) - (prev.times?.length || 0));
+
+        return (stopTime[0]?.times || [])[0]?.headsign || '';
     }
 
     clickDeparture(timetableDeparture: DepartureMetadata) {
@@ -85,10 +58,6 @@ export class TimetableComponent {
             moment().add(5, 'days'),
             moment().add(6, 'days')
         ];
-    }
-
-    public getRouteId(): string {
-        return `1:${this.line}`;
     }
 
 }
