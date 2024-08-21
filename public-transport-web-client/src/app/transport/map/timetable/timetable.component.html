@@ -2,7 +2,7 @@
 
   <div class="row row-line p-1">
     <div class="col-2 line">{{line}}</div>
-    <div class="col-10 headsing">{{headsign}}</div>
+    <div class="col-10 headsing">{{getMainHeadsing(line)}}</div>
   </div>
 
   <mat-stepper>
@@ -10,7 +10,7 @@
       <ng-template matStepLabel>Dzisiaj</ng-template>
       <app-timetable-content [timetableDate]="timetableDate"
                              [line]="line"
-                             [timetables]="getTimetable(getTimetableDates()[0])"
+                             [timetables]="getTimetable(line, getTimetableDates()[0])"
                              (onClickDeparture)="clickDeparture($event)"></app-timetable-content>
     </mat-step>
 <!--    <mat-step state="done" [completed]="false">-->
