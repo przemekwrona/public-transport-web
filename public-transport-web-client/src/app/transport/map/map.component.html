@@ -29,6 +29,7 @@
 
                 <app-timetable [stop]="currentStop"
                                [line]="currentLine || ''"
+                               [routes]="currentStopRoutes"
                                [stopTimes]="currentStopTimes || []"
                                *ngIf="hasCurrentLine()" (onClickDeparture)="showTrip($event)"
                                class="timetable-details"></app-timetable>
