@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import * as L from 'leaflet';
-import {DivIcon, LatLng, LatLngBounds, LatLngExpression, Map, Marker, Polyline} from "leaflet";
+import {DivIcon, LatLng, LatLngBounds, Map, Marker, Polyline} from "leaflet";
 import {OtpService} from "../../../http/otp.service";
 import moment from "moment";
 import {decode} from "@googlemaps/polyline-codec";
@@ -195,7 +195,7 @@ export class OtpComponent {
     public zoomToItinerary(): void {
         const bounds: LatLngBounds = this.polyline
             .map(poly => poly.getBounds())
-            .reduce((prev: LatLngBounds, curr: LatLngBounds) => prev.extend(curr));
+            .reduce((prev: LatLngBounds, curr: LatLngBounds) => prev.extend(curr), new LatLngBounds([]));
 
         bounds.extend(new LatLng(bounds.getSouthWest().lat, bounds.getSouthWest().lng - 0.008));
         this.map.fitBounds(bounds);
