@@ -56,7 +56,6 @@ export class ItineraryDetailsComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log("Destroy");
   }
 
 }
