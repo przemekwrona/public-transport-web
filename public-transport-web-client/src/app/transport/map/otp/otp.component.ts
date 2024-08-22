@@ -201,4 +201,11 @@ export class OtpComponent {
         this.map.fitBounds(bounds);
     }
 
+    public scrollToTop(index: number): void {
+        let el = document.getElementById(`mat-expansion-panel-header-${index}`);
+        if (el != null) {
+            el.scrollIntoView({ behavior: "smooth", block: "start", inline: "start" });
+        }
+    }
+
 }
