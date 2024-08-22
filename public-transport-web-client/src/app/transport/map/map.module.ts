@@ -23,6 +23,8 @@ import {BrandHeaderComponent} from "./brand-header/brand-header.component";
 import {OtpService} from "../../http/otp.service";
 import {TimetableMinutePipe} from "./timetable/timetable-minute.pipe";
 import {GbfsService} from "../../http/gbfs.service";
+import {MapService} from "./service/map.service";
+import {BikeMapManagerService} from "./service/bike-map-manager.service";
 
 
 @NgModule({
@@ -51,6 +53,8 @@ import {GbfsService} from "../../http/gbfs.service";
         MatIconModule
     ],
     providers: [
+        MapService,
+        BikeMapManagerService,
         StopService,
         DepartureService,
         RouteService,

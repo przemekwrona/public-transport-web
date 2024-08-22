@@ -49,15 +49,15 @@
       <app-itinerary-details [itinerary]="itinerary" [map]="map"></app-itinerary-details>
     </mat-expansion-panel>
 
-    <mat-expansion-panel hideToggle *ngFor="let itinerary of routeResponse?.plan?.itineraries"
+    <mat-expansion-panel hideToggle *ngFor="let itinerary of routeResponse?.plan?.itineraries; let index = index"
                          (click)="zoomToItinerary()"
-                         (afterExpand)="isExpanded = true; showItineraryOnMap(itinerary)"
+                         (afterExpand)="isExpanded = true; showItineraryOnMap(itinerary); scrollToTop(index)"
                          (afterCollapse)="isExpanded = false; hideItineraryOnMap()"
                          [ngClass]="{'itinerary-walk': isWalk(itinerary)}"
                          class="itinerary">
       <mat-expansion-panel-header (mouseenter)="showItineraryOnMap(itinerary)"
                                   (mouseleave)="hideItineraryOnMap()"
-      [ngClass]="{'walk': isWalk(itinerary)}">
+                                  [ngClass]="{'walk': isWalk(itinerary)}" id="mat-expansion-panel-header-{{index}}">
         <!--      <mat-expansion-panel-header>-->
         <mat-panel-description>
           <app-itinerary-header *ngIf="isItinerary(itinerary)" [itinerary]="itinerary" [map]="map" style="width: 100%"></app-itinerary-header>

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {StopService} from "../../http/stop.service";
@@ -9,17 +9,16 @@ import {OtpPoint} from "./otp/otp.component";
 import {OtpService} from "../../http/otp.service";
 import {Route, Stop, StopDetails, StopTime} from "../../generated";
 import moment from "moment";
-import {GbfsService} from "../../http/gbfs.service";
-import {v3} from "gbfs-typescript-types";
-import {Station} from "gbfs-typescript-types/v3.0/station_information";
 import {interval, Observable, timer} from "rxjs";
+import {MapService} from "./service/map.service";
+import {BikeMapManagerService} from "./service/bike-map-manager.service";
 
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
     styleUrl: './map.component.scss'
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements OnInit, AfterViewInit {
     private ZOOM: number = 16;
 
     private stopMarkers: Marker[] = [];
@@ -43,35 +42,18 @@ export class MapComponent implements AfterViewInit {
     private endMarker: CircleMarker | null;
     private endBorderMarker: CircleMarker | null;
 
-    constructor(private stopService: StopService, private timetableService: TimetableService, private tripService: TripService, private otpService: OtpService, private gbfsService: GbfsService) {
+    constructor(private mapService: MapService, private stopService: StopService, private timetableService: TimetableService, private tripService: TripService, private otpService: OtpService, private bikeMapManagerService: BikeMapManagerService) {
         this.getStops(52.240, 20.890, 52.220, 21.120);
     }
 
-    ngAfterViewInit(): void {
-
-        this.map = L.map('map', {
-            center: [52.23210, 21.00585],
-            zoom: this.ZOOM,
-            zoomControl: false
-        });
-
-        L.control.zoom({
-            position: 'bottomright'
-        }).addTo(this.map);
-
-
+    ngOnInit(): void {
+        this.map = this.mapService.initMap('WAWA');
         this.initHideBikeStation(this.map);
+    }
 
-        const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            minZoom: 3,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        });
-
-        tiles.addTo(this.map);
-
+    ngAfterViewInit(): void {
         timer(0, 60 * 1000).subscribe(() => {
-            if(this.map.getZoom() >= 15) {
+            if (this.map.getZoom() >= 15) {
                 this.getBikeStationStatus(this.map);
             }
         });
@@ -196,47 +178,12 @@ export class MapComponent implements AfterViewInit {
     }
 
     private getBikeStationStatus(map: Map) {
-        this.gbfsService.getStationInformation('nextbike_vw').subscribe((stationInformation: { [station_id: string]: Station }) => {
-            this.gbfsService.getStationStatus('nextbike_vw').subscribe((stationStatus: v3.StationStatus) => {
-                const bikeStationMarkers: Marker[] = stationStatus.data.stations.map(stationStatus => {
-                    let iconBike = L.divIcon({
-                        // html: `<mat-icon matBadge="15">home</mat-icon>`,
-                        html: `<div style="display: inline-flex; opacity: 0.5;"><img src="assets/warsaw/veturilo.png" width="20" height="20" style="border-radius: 4px"/><div class="num" style="background-color: #ED1C24;color:white;padding: 0 4px;border-radius: 12px;position: absolute;bottom: 4px;left: 14px;border: 1px solid red;font-size:0.5rem;">${stationStatus['num_bikes_available'] || 0}</div></div>`,
-                        className: 'bike-station-marker'
-                    });
-
-                    if (stationStatus['num_bikes_available'] > 0) {
-                        iconBike = L.divIcon({
-                            html: `<div style="display: inline-flex"><img src="assets/warsaw/veturilo.png" width="20" height="20" style="border-radius: 4px"/><div class="num" style="background-color: #ED1C24;color:white;padding: 0 4px;border-radius: 12px;position: absolute;bottom: 4px;left: 14px;border: 1px solid red;font-size:0.5rem;">${stationStatus['num_bikes_available'] || 0}</div></div>`,
-                            className: 'bike-station-marker'
-                        });
-                    }
-
-                    if (stationStatus['num_bikes_available'] > 2) {
-                        iconBike = L.divIcon({
-                            html: `<div style="display: inline-flex"><img src="assets/warsaw/veturilo.png" width="20" height="20" style="border-radius: 4px"/><div class="num" style="background-color: yellow;padding: 0 4px;border-radius: 12px;position: absolute;bottom: 4px;left: 14px;border: 2px solid yellow;font-size:0.5rem;">${stationStatus['num_bikes_available'] || 0}</div></div>`,
-                            className: 'bike-station-marker'
-                        })
-                    }
-
-                    if (stationStatus['num_bikes_available'] > 4) {
-                        iconBike = L.divIcon({
-                            html: `<div style="display: inline-flex"><img src="assets/warsaw/veturilo.png" width="20" height="20" style="border-radius: 4px"/><div class="num" style="background-color: #2D9127;color:white;padding: 0 4px;border-radius: 12px;position: absolute;bottom: 4px;left: 14px;font-size:0.5rem;">${stationStatus['num_bikes_available'] || 0}</div></div>`,
-                            className: 'bike-station-marker'
-                        })
-                    }
-
-
-                    let stationMarker = L.marker([stationInformation[stationStatus.station_id].lat || 0.0, stationInformation[stationStatus.station_id].lon || 0.0], {icon: iconBike});
-                    return stationMarker;
-                });
-                bikeStationMarkers.forEach(bikeStationMarker => bikeStationMarker.addTo(map));
-
-                for (let marker of this.bikeStationMarkers) {
-                    marker.removeFrom(map);
-                }
-                this.bikeStationMarkers = bikeStationMarkers;
-            })
+        this.bikeMapManagerService.getBikeStationStatus('WAWA').subscribe(bikeStationMarkers => {
+            bikeStationMarkers.forEach(bikeStationMarker => bikeStationMarker.addTo(map));
+            for (let marker of this.bikeStationMarkers) {
+                marker.removeFrom(map);
+            }
+            this.bikeStationMarkers = bikeStationMarkers;
         });
     }
 
@@ -270,7 +217,9 @@ export class MapComponent implements AfterViewInit {
                     this.currentStop = stop;
                     this.otpService.getStopDetails(stop.id || '').subscribe(stopDetails => this.currentStopDetails = stopDetails);
                     this.otpService.getRoutes(stop.id || '').subscribe(routes => this.currentStopRoutes = routes);
-                    this.currentLine = null;
+                    this.otpService.getStopTimes(stop.id || '', moment()).subscribe(stopTimes => this.currentStopTimes = stopTimes);
+
+                    // this.currentLine = null;
 
                     if (this.startPoint.name == '') {
                         this.startPoint = new OtpPoint();
@@ -283,9 +232,6 @@ export class MapComponent implements AfterViewInit {
                         this.endPoint.lat = stop.lat || 0.0;
                         this.endPoint.lon = stop.lon || 0.0;
                     }
-
-                    this.otpService.getStopTimes(stop.id || '', moment()).subscribe(stopTimes => this.currentStopTimes = stopTimes);
-                    //     this.timetableService.getTimetable(stop.stopId).subscribe(timetables => this.currentTimetables = timetables);
                 });
                 markers.push(stopMarker);
             }
@@ -397,7 +343,7 @@ export class MapComponent implements AfterViewInit {
                 this.bikeStationMarkers = [];
             } else {
                 if (this.bikeStationMarkers.length == 0) {
-                    this.getBikeStationStatus(this.map);
+                    this.getBikeStationStatus(map);
                 }
             }
         });
