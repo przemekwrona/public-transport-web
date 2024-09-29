@@ -10,7 +10,7 @@ import {Itinerary, Leg, TripPoint} from "../../../../generated";
 })
 export class ItineraryDetailsComponent implements OnDestroy {
 
-  @Input() itinerary: Itinerary;
+  @Input() itinerary: Itinerary | null;
   @Input() map: Map;
 
   public isWalk(leg: Leg): boolean {

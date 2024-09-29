@@ -35,6 +35,14 @@ export class ItineraryComponent implements OnInit, OnDestroy {
     }
   }
 
+  public countLegs(): number {
+    return (this.itinerary?.legs || []).length;
+  }
+
+  public getFirstLeg(): Leg | null {
+    return (this.itinerary?.legs || [])[0] || null;
+  }
+
   public getLegsWithoutWalk(): Leg[] {
     return (this.itinerary?.legs || []).filter(leg => !this.isWalk(leg));
   }
@@ -47,7 +55,7 @@ export class ItineraryComponent implements OnInit, OnDestroy {
   }
 
   public getFirst(): Leg {
-    return (this.itinerary?.legs || [])[0];
+    return (this.itinerary?.legs || [])[0] || {};
   }
 
   public getFirstNonWalk(): Leg {

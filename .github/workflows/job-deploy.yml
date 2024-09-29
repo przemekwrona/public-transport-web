@@ -56,11 +56,8 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 1200
-
-#      - name: Save DigitalOcean kubeconfig with short-lived credentials
-#        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
 
 #      - name: Deploy to DigitalOcean Kubernetes
 #        run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/deployment.yaml

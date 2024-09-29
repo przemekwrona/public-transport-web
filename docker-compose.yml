@@ -25,19 +25,19 @@ services:
     ports:
       - '8082:8080'
     environment:
-      - JAVA_OPTS=-Xmx4G
+      - JAVA_OPTS=-Xmx5G
 
-  gtfs-krakow:
-    build:
-      context: ../public-transport-otp
-      dockerfile: Dockerfile.krakow
-    container_name: gtfs-krakow
-    networks:
-      - gtfs_network
-    ports:
-      - '8084:8080'
-    environment:
-      - JAVA_OPTS=-Xmx1G
+#  gtfs-krakow:
+#    build:
+#      context: ../public-transport-otp
+#      dockerfile: Dockerfile.krakow
+#    container_name: gtfs-krakow
+#    networks:
+#      - gtfs_network
+#    ports:
+#      - '8084:8080'
+#    environment:
+#      - JAVA_OPTS=-Xmx2G
 
 networks:
   gtfs_network:

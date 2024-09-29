@@ -1,73 +1,71 @@
-<mat-card class="container otp-container">
-  <form>
-    <div class="row">
-      <div class="col col-first">
-        <mat-form-field class="w-100">
-          <mat-label>Skąd ruszamy?</mat-label>
-          <input matInput name="startPointName" [(ngModel)]="startPoint.name">
-        </mat-form-field>
-      </div>
-    </div>
+<div class="container otp-container">
+    <form class="pb-2">
+        <div class="row">
+            <div class="col col-first">
+                <mat-form-field class="w-100">
+                    <mat-label>Skąd ruszamy?</mat-label>
+                    <input matInput name="startPointName" [(ngModel)]="startPoint.name">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col">
+                <mat-form-field class="w-100">
+                    <mat-label>Gdzie jedziemy?</mat-label>
+                    <input matInput name="endPointName" [(ngModel)]="endPoint.name">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col text-end">
+                <button mat-flat-button matTooltip="Accent" color="primary" class="search-trip" (click)="plan()">
+                    Jedziemy
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container" *ngIf="hasPlan()">
 
     <div class="row">
-      <div class="col">
-        <mat-form-field class="w-100">
-          <mat-label>Gdzie jedziemy?</mat-label>
-          <input matInput name="endPointName" [(ngModel)]="endPoint.name">
-        </mat-form-field>
-      </div>
+        <div matRipple (click)="showItineraryOnMap(getBikeItinerary())" class="col-6 header bicycle">
+            <app-itinerary-bike-header [itinerary]="getBikeItinerary()" [map]="map"></app-itinerary-bike-header>
+        </div>
+        <div matRipple class="col-6 header walk">
+            <app-itinerary-walk [itinerary]="getWalkItinerary()" [map]="map"></app-itinerary-walk>
+        </div>
     </div>
-
-    <div class="row">
-      <div class="col text-end">
-        <button mat-flat-button matTooltip="Accent" color="primary" class="search-trip" (click)="plan()">
-          Jedziemy
-        </button>
-      </div>
-    </div>
-  </form>
-</mat-card>
-
+</div>
 <div class="container itinerary-container" *ngIf="hasPlan()">
-  <!--  <div *ngFor="let insettinerary of routeResponse?.plan?.itineraries" (click)="scrollTop()" class="itinerary">-->
-  <!--    <app-itinerary *ngIf="isItinerary(itinerary)" [itinerary]="itinerary" [itineraryCount]="routeResponse?.plan?.itineraries?.length || 0" [map]="map"></app-itinerary>-->
-  <!--    <app-itinerary-walk *ngIf="isWalk(itinerary)" [itinerary]="itinerary" [itineraryCount]="routeResponse?.plan?.itineraries?.length || 0"[map]="map"></app-itinerary-walk>-->
-  <!--  </div>-->
+    <mat-accordion>
+        <mat-expansion-panel hideToggle
+                             *ngFor="let itinerary of getPublicTransportItinerary(); let index = index"
+                             (click)="zoomToItinerary()"
+                             (afterExpand)="isExpanded = true; showItineraryOnMap(itinerary); scrollToTop(index)"
+                             (afterCollapse)="isExpanded = false; hideItineraryOnMap()"
+                             [ngClass]="{'itinerary-walk': isWalk(itinerary)}"
+                             class="itinerary">
 
-  <mat-accordion>
-    <mat-expansion-panel hideToggle *ngFor="let itinerary of bikeResponse?.plan?.itineraries"
-                         (click)="zoomToItinerary()"
-                         (afterExpand)="isExpanded = true; showItineraryOnMap(itinerary)"
-                         (afterCollapse)="isExpanded = false; hideItineraryOnMap()"
-                         [ngClass]="{'itinerary-walk': isWalk(itinerary)}"
-                         class="itinerary">
-      <mat-expansion-panel-header (mouseenter)="showItineraryOnMap(itinerary)" (mouseleave)="hideItineraryOnMap()" class="bicycle">
-        <mat-panel-description>
-          <app-itinerary-bike-header [itinerary]="itinerary" [map]="map" style="width: 100%"></app-itinerary-bike-header>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <app-itinerary-details [itinerary]="itinerary" [map]="map"></app-itinerary-details>
-    </mat-expansion-panel>
+            <mat-expansion-panel-header (mouseenter)="showItineraryOnMap(itinerary)"
+                                        (mouseleave)="hideItineraryOnMap()"
+                                        [ngClass]="{'walk': isWalk(itinerary)}"
+                                        id="mat-expansion-panel-header-{{index}}">
+                <mat-panel-description>
+                    <app-itinerary-header *ngIf="isItinerary(itinerary)" [itinerary]="itinerary" [map]="map"
+                                          style="width: 100%"></app-itinerary-header>
 
-    <mat-expansion-panel hideToggle *ngFor="let itinerary of routeResponse?.plan?.itineraries; let index = index"
-                         (click)="zoomToItinerary()"
-                         (afterExpand)="isExpanded = true; showItineraryOnMap(itinerary); scrollToTop(index)"
-                         (afterCollapse)="isExpanded = false; hideItineraryOnMap()"
-                         [ngClass]="{'itinerary-walk': isWalk(itinerary)}"
-                         class="itinerary">
-      <mat-expansion-panel-header (mouseenter)="showItineraryOnMap(itinerary)"
-                                  (mouseleave)="hideItineraryOnMap()"
-                                  [ngClass]="{'walk': isWalk(itinerary)}" id="mat-expansion-panel-header-{{index}}">
-        <!--      <mat-expansion-panel-header>-->
-        <mat-panel-description>
-          <app-itinerary-header *ngIf="isItinerary(itinerary)" [itinerary]="itinerary" [map]="map" style="width: 100%"></app-itinerary-header>
+                    <!--                        <app-itinerary-walk *ngIf="isWalk(itinerary)" [itinerary]="itinerary" [map]="map"-->
+                    <!--                                            style="width: 100%"></app-itinerary-walk>-->
 
-          <app-itinerary-walk *ngIf="isWalk(itinerary)" [itinerary]="itinerary" [map]="map" style="width: 100%"></app-itinerary-walk>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <app-itinerary-details [itinerary]="itinerary" [map]="map"></app-itinerary-details>
-    </mat-expansion-panel>
-  </mat-accordion>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <app-itinerary-details [itinerary]="itinerary" [map]="map"></app-itinerary-details>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <!--    </div>-->
 </div>
 
 

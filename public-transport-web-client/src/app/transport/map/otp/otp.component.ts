@@ -4,7 +4,7 @@ import {DivIcon, LatLng, LatLngBounds, Map, Marker, Polyline} from "leaflet";
 import {OtpService} from "../../../http/otp.service";
 import moment from "moment";
 import {decode} from "@googlemaps/polyline-codec";
-import {Itinerary, RoutesResponse} from "../../../generated";
+import {Itinerary, Leg, RoutesResponse} from "../../../generated";
 
 export class OtpPoint {
     name: string = '';
@@ -56,7 +56,7 @@ export class OtpComponent {
     public plan(): void {
         this.wasPlanned = true;
         this.otpService.plan(this.startPoint.lat, this.startPoint.lon, this.endPoint.lat, this.endPoint.lon, moment()).subscribe(routeResponse => this.routeResponse = routeResponse);
-        this.otpService.planBike(this.startPoint.lat, this.startPoint.lon, this.endPoint.lat, this.endPoint.lon, moment()).subscribe(bikeResponse => this.bikeResponse = bikeResponse);
+        this.otpService.planBike(this.startPoint.lat, this.startPoint.lon, this.endPoint.lat, this.endPoint.lon, moment()).subscribe(bikeResponse => {console.log(bikeResponse); this.bikeResponse = bikeResponse; });
     }
 
     public hasPlan(): boolean {
@@ -89,6 +89,11 @@ export class OtpComponent {
 
     public collapse(): void {
         this.isExpanded = false;
+    }
+
+    public getPublicTransportItinerary(): Itinerary[] {
+        return (this.routeResponse?.plan?.itineraries || [])
+            .filter((itinerarie: Itinerary) => (itinerarie.legs || [])?.length != (itinerarie.legs || []).filter((leg: Leg) => leg.mode === 'WALK')?.length);
     }
 
     public showItineraryOnMap(itinerary: Itinerary): void {
@@ -204,8 +209,26 @@ export class OtpComponent {
     public scrollToTop(index: number): void {
         let el = document.getElementById(`mat-expansion-panel-header-${index}`);
         if (el != null) {
-            el.scrollIntoView({ behavior: "smooth", block: "start", inline: "start" });
+            el.scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
         }
+    }
+
+    public hasBikes(): boolean {
+        return this.bikeResponse?.plan?.itineraries != undefined
+            && this.bikeResponse?.plan?.itineraries.length > 0;
+    }
+
+    public getBikeItinerary(): Itinerary {
+        if (this.bikeResponse?.plan?.itineraries != undefined
+            && this.bikeResponse?.plan?.itineraries.length > 0) {
+            return this.bikeResponse?.plan?.itineraries[0] || {};
+        }
+        return {};
+    }
+
+    public getWalkItinerary(): Itinerary {
+        return this.routeResponse?.plan?.itineraries
+            ?.filter(itinerarity => this.isWalk(itinerarity))[0] || {};
     }
 
 }

@@ -54,7 +54,7 @@ export class BikeMapManagerService {
                         })
                     }
 
-                    return L.marker([this.stations[stationStatus.station_id].lat || 0.0, this.stations[stationStatus.station_id].lon || 0.0], {icon: iconBike});
+                    return L.marker([(this.stations[stationStatus.station_id])?.lat || 0.0, (this.stations[stationStatus.station_id])?.lon || 0.0], {icon: iconBike});
                 });
             }));
     }
