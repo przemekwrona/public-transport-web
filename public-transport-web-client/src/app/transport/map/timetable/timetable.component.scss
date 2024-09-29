@@ -19,11 +19,11 @@
 
 .timetables {
   background-color: whitesmoke;
-  border-radius: 8px;
-  opacity: 0.9;
+  border-top: 1px solid #E4E4E4E4;
   padding: 0 2px;
 
   overflow-y:scroll;
+  scrollbar-width: thin;
 
   .no-departures {
     .message {

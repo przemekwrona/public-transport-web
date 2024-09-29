@@ -1,25 +1,24 @@
-.container.itinerary {
-  .legs-lines {
+.itinerary.container {
+  width: 100%;
+
+  .legs-times {
     .legs {
-      .leg.bicycle, .leg.chevron {
-        font-size: 1.1em;
+      .leg {
+        .walk {
 
-        i {
-          font-size: 1.1em;
         }
-      }
-    }
 
-    .burn {
-      padding: 2px 4px;
-      border-radius: 4px;
-      background-color: #FF8C00;
-      color: whitesmoke;
+        .burn {
+          display: inline-block;
+          padding: 0 4px;
+          border-radius: 4px;
+          background-color: #FF8C00;
+          color: white;
 
-      font-size: 0.9em;
-
-      i {
-        font-size: 0.9em;
+          i.material-icons {
+            font-size: 10px;
+          }
+        }
       }
     }
   }

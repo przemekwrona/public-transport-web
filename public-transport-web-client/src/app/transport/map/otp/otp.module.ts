@@ -18,6 +18,7 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatCardModule} from "@angular/material/card";
 import {ItineraryBikeHeaderComponent} from "./itinerary-bike-header/itinerary-bike-header.component";
 import {ItineraryBikeDetailsComponent} from "./itinerary-bike-details/itinerary-bike-details.component";
+import {MatRippleModule} from "@angular/material/core";
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import {ItineraryBikeDetailsComponent} from "./itinerary-bike-details/itinerary-
     MatIconModule,
     MatExpansionModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    MatRippleModule
   ],
   providers: [
     OtpService

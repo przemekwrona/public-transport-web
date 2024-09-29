@@ -1,8 +1,8 @@
 <div class="map-container">
 
-    <div class="container">
+    <div class="container utils-panel-container">
         <div class="row">
-            <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 stop-details">
+            <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 stop-details itinerary-details" [ngClass]="{'itinerary-details': true}">
                 <app-brand-header *ngIf="!hasCurrentStop()"></app-brand-header>
 
                 <app-stop [stop]="currentStop"

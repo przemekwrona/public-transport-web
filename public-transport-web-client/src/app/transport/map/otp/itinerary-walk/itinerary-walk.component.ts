@@ -17,9 +17,7 @@ export class ItineraryWalkComponent extends ItineraryComponent {
   }
 
   public getKcal(): number {
-    const leg = this.getFirst();
-    const difference = moment(leg.endTime).diff(leg.startTime, 'minutes')
-    return (261 * difference) / 60;
+    return  300 * (this.getFirst().duration || 0) / 3600;
   }
 
 }
