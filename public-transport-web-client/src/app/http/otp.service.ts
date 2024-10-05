@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import moment from "moment";
 import {RoutesResponse, Stop, StopDetails, Route, StopTime} from "../generated";
@@ -21,7 +21,12 @@ export class OtpService {
   }
 
   getStops(maxLat: number, minLon: number, minLat: number, maxLon: number): Observable<Stop[]> {
-    return this.httpClient.get<Stop[]>(`/api/otp/routers/default/index/stops?maxLat=${maxLat}&minLon=${minLon}&minLat=${minLat}&maxLon=${maxLon}`);
+      const headerDict = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+      }
+
+    return this.httpClient.get<Stop[]>(`/api/otp/routers/default/index/stops?maxLat=${maxLat}&minLon=${minLon}&minLat=${minLat}&maxLon=${maxLon}`, {headers: new HttpHeaders(headerDict)});
   }
 
   getStopDetails(stopId: string): Observable<StopDetails> {

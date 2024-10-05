@@ -4,7 +4,8 @@ WORKDIR /app
 EXPOSE 8082
 
 ENV PROFILE=''
+ENV JAVA_OPTS=''
 
 COPY target/public-transport-web-server-*.jar public-transport-web-server.jar
 
-ENTRYPOINT java -jar -Dspring.profiles.active=$PROFILE public-transport-web-server.jar
+ENTRYPOINT java $JAVA_OPTS -jar -Dspring.profiles.active=$PROFILE public-transport-web-server.jar

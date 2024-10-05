@@ -19,7 +19,7 @@ export class ItineraryComponent implements OnInit, OnDestroy {
     className: 'stop-circle'
   });
 
-  @Input() itinerary: Itinerary;
+  @Input() itinerary: Itinerary | null;
   @Input() map: Map;
   @Input() itineraryCount: number = 0;
 
@@ -97,7 +97,7 @@ export class ItineraryComponent implements OnInit, OnDestroy {
 
   public showItineraryOnMap(): void {
     this.polyline.forEach(polyline => polyline.removeFrom(this.map));
-    this.polyline = (this.itinerary.legs || [])
+    this.polyline = (this.itinerary?.legs || [])
       .map(leg => {
         let config = {};
 
@@ -142,7 +142,7 @@ export class ItineraryComponent implements OnInit, OnDestroy {
     this.polyline.forEach(polyline => polyline.addTo(this.map));
 
     this.firstAndLatStops.forEach(stop => stop.removeFrom(this.map));
-    this.firstAndLatStops = (this.itinerary.legs || [])
+    this.firstAndLatStops = (this.itinerary?.legs || [])
       .map(leg => [leg?.from, leg?.to])
       .flat()
       .map(stop => {
@@ -159,11 +159,11 @@ export class ItineraryComponent implements OnInit, OnDestroy {
 
     this.intermediateStops.forEach(stop => stop.removeFrom(this.map));
 
-    const stopCount = (this.itinerary.legs || [])
+    const stopCount = (this.itinerary?.legs || [])
       .map(leg => (leg.intermediateStops || []))
       .flat().length;
 
-    this.intermediateStops = (this.itinerary.legs || [])
+    this.intermediateStops = (this.itinerary?.legs || [])
       .map(leg => (leg.intermediateStops || []))
       .flat()
       .map(stop => {

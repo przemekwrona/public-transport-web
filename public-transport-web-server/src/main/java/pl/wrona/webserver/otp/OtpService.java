@@ -19,15 +19,18 @@ public class OtpService {
     private final OtpClient otpClient;
 
     public ResponseEntity<RoutesResponse> planTrip(String instanceId, String fromPlace, String toPlace, String date, String time, String mode, String local, Boolean showIntermediateStops, Double maxWalkDistance, Boolean arriveBy, Boolean wheelchair, Integer numItineraries, Boolean realtime, String optimize) {
-        return this.otpClient.planTrip(instanceId, fromPlace, toPlace, date, time, mode, local, showIntermediateStops, maxWalkDistance, arriveBy, wheelchair, numItineraries, realtime, optimize);
+        ResponseEntity<RoutesResponse> response = this.otpClient.planTrip(instanceId, fromPlace, toPlace, date, time, mode, local, showIntermediateStops, maxWalkDistance, arriveBy, wheelchair, numItineraries, realtime, optimize);
+        return ResponseEntity.ok(response.getBody());
     }
 
     public ResponseEntity<List<Stop>> getStops(String instanceId, BigDecimal maxLat, BigDecimal minLon, BigDecimal minLat, BigDecimal maxLon) {
-        return this.otpClient.getStops(instanceId, maxLat, minLon, minLat, maxLon);
+        ResponseEntity<List<Stop>> response = this.otpClient.getStops(instanceId, maxLat, minLon, minLat, maxLon);
+        return ResponseEntity.ok(response.getBody());
     }
 
     public ResponseEntity<StopDetails> getStopDetails(String instanceId, String stopId) {
-        return this.otpClient.getStopDetails(instanceId, stopId);
+        ResponseEntity<StopDetails> response = this.otpClient.getStopDetails(instanceId, stopId);
+        return ResponseEntity.ok(response.getBody());
     }
 
     public ResponseEntity<List<Route>> getRoutes(String instanceId, String stopId) {
