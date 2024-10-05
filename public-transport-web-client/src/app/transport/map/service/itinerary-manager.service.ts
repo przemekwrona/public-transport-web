@@ -58,8 +58,6 @@ export class ItineraryManagerService {
             .map(stop => {
                 const marker = L.marker([stop?.lat || 0, stop?.lon || 0], {icon: this.STOP_CIRCLE});
 
-                console.log(stop?.name);
-
                 if (stop?.vertexType === 'BIKESHARE') {
                     marker.bindTooltip(`<div><img src="assets/warsaw/veturilo.png" style="width: 18px; border-radius: 5px; margin-right: 4px">${stop?.name || ''}</div>`, {
                         direction: 'right',

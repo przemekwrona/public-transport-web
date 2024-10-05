@@ -48,7 +48,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -151,7 +159,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/gbfs.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/gbfs-api.yaml</inputSpec>
                             <configHelp>false</configHelp>
                             <generatorName>spring</generatorName>
                             <generateApiTests>false</generateApiTests>

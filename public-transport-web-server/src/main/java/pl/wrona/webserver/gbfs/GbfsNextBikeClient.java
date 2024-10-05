@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Resource
 @FeignClient(value = "${gbfs.client.warsaw.name}", url = "${gbfs.client.warsaw.url}")
-public interface GbfsClient extends ApiV2Api {
+public interface GbfsNextBikeClient extends ApiV2Api {
 
     @GetMapping("/v2/{region}/{language}/station_information.json")
     ResponseEntity<StationInformationV23> v2RegionalStationInformationPublic(@PathVariable String region, @PathVariable String language);
