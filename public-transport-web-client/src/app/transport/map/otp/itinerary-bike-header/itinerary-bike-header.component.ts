@@ -17,7 +17,7 @@ export class ItineraryBikeHeaderComponent extends ItineraryComponent {
     }
 
     public getKcal(): number {
-        const kcal: number[] = (this.itinerary.legs || [])
+        const kcal: number[] = (this.itinerary?.legs || [])
             .map(leg => {
                 switch (leg.mode) {
                     case 'WALK':

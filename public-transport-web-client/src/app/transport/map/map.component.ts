@@ -12,6 +12,7 @@ import moment from "moment";
 import {interval, Observable, timer} from "rxjs";
 import {MapService} from "./service/map.service";
 import {BikeMapManagerService} from "./service/bike-map-manager.service";
+import {ItineraryManagerService} from "./service/itinerary-manager.service";
 
 @Component({
     selector: 'app-map',
@@ -42,12 +43,12 @@ export class MapComponent implements OnInit, AfterViewInit {
     private endMarker: CircleMarker | null;
     private endBorderMarker: CircleMarker | null;
 
-    constructor(private mapService: MapService, private stopService: StopService, private timetableService: TimetableService, private tripService: TripService, private otpService: OtpService, private bikeMapManagerService: BikeMapManagerService) {
+    constructor(private mapService: MapService, private stopService: StopService, private timetableService: TimetableService, private tripService: TripService, private otpService: OtpService, private bikeMapManagerService: BikeMapManagerService, private itineraryManagerService: ItineraryManagerService) {
         this.getStops(52.240, 20.890, 52.220, 21.120);
     }
 
     ngOnInit(): void {
-        this.map = this.mapService.initMap('WAWA');
+        this.map = this.mapService.initMap();
         this.initHideBikeStation(this.map);
     }
 
@@ -105,6 +106,8 @@ export class MapComponent implements OnInit, AfterViewInit {
 
         this.map.on('click', (event: LeafletMouseEvent) => {
 
+            this.currentStop = null;
+
             if (this.startPoint.name == '') {
                 this.startPoint = new OtpPoint();
                 this.startPoint.name = `${event.latlng.lat.toFixed(5)},${event.latlng.lng.toFixed(5)}`;
@@ -136,14 +139,14 @@ export class MapComponent implements OnInit, AfterViewInit {
                 this.endMarker.addTo(this.map);
             }
 
-            if (this.currentLine == null) {
-                this.currentStop = null;
-                this.polyline?.removeFrom(this.map);
-                this.polyline = null;
-                this.tripMarkers.forEach(tripMaker => tripMaker.removeFrom(this.map));
-                this.tripMarkers = [];
-            }
-            this.currentLine = null;
+            // if (this.currentLine == null) {
+            //     this.currentStop = null;
+            //     this.polyline?.removeFrom(this.map);
+            //     this.polyline = null;
+            //     this.tripMarkers.forEach(tripMaker => tripMaker.removeFrom(this.map));
+            //     this.tripMarkers = [];
+            // }
+            // this.currentLine = null;
         });
 
     }
@@ -177,7 +180,7 @@ export class MapComponent implements OnInit, AfterViewInit {
         });
     }
 
-    private getBikeStationStatus(map: Map) {
+    private getBikeStationStatus(map: Map): void {
         this.bikeMapManagerService.getBikeStationStatus('WAWA').subscribe(bikeStationMarkers => {
             bikeStationMarkers.forEach(bikeStationMarker => bikeStationMarker.addTo(map));
             for (let marker of this.bikeStationMarkers) {
@@ -220,6 +223,8 @@ export class MapComponent implements OnInit, AfterViewInit {
                     this.otpService.getStopTimes(stop.id || '', moment()).subscribe(stopTimes => this.currentStopTimes = stopTimes);
 
                     // this.currentLine = null;
+
+                    this.itineraryManagerService.hidePublicTransportOnMap();
 
                     if (this.startPoint.name == '') {
                         this.startPoint = new OtpPoint();

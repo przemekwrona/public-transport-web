@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as L from "leaflet";
 import {Map} from "leaflet";
+import {CityManagerService} from "./city-manager.service";
 
 @Injectable({
     providedIn: 'root'
@@ -10,10 +11,12 @@ export class MapService {
     private ZOOM: number = 16;
     private map: Map;
 
-    constructor() {
+    constructor(private cityManagerService: CityManagerService) {
     }
 
-    public initMap(city: string): Map {
+    public initMap(): Map {
+        const city: string = this.cityManagerService.getCurrentCity();
+
         this.map = L.map('map', {
             center: [52.23210, 21.00585],
             zoom: this.ZOOM,

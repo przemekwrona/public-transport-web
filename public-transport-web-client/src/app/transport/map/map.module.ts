@@ -25,6 +25,8 @@ import {TimetableMinutePipe} from "./timetable/timetable-minute.pipe";
 import {GbfsService} from "../../http/gbfs.service";
 import {MapService} from "./service/map.service";
 import {BikeMapManagerService} from "./service/bike-map-manager.service";
+import {ItineraryManagerService} from "./service/itinerary-manager.service";
+import {CityManagerService} from "./service/city-manager.service";
 
 
 @NgModule({
@@ -55,6 +57,8 @@ import {BikeMapManagerService} from "./service/bike-map-manager.service";
     providers: [
         MapService,
         BikeMapManagerService,
+        ItineraryManagerService,
+        CityManagerService,
         StopService,
         DepartureService,
         RouteService,

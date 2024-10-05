@@ -70,9 +70,9 @@
       <div class="legs-times">
         <div class="legs">
           <div class="leg">
-            <span>{{getFirstNonWalk()?.from?.departure | otpDate}}</span>
+            <span>{{getFirstNonWalk().from?.departure | otpDate}}</span>
             <span> z: </span>
-            <span class="name">{{getFirstNonWalk()?.from?.name}}</span>
+            <span class="name">{{getFirstNonWalk().from?.name}}</span>
             <span *ngIf="getFirst().mode == 'WALK'" class="walk">
               <i class="material-icons">directions_walk</i>
               {{getFirst().distance | number : '1.0-0'}}m

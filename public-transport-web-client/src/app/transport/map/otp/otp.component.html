@@ -31,11 +31,11 @@
 <div class="container" *ngIf="hasPlan()">
 
     <div class="row">
-        <div matRipple (click)="showItineraryOnMap(getBikeItinerary())" class="col-6 header bicycle">
-            <app-itinerary-bike-header [itinerary]="getBikeItinerary()" [map]="map"></app-itinerary-bike-header>
+        <div matRipple (mouseenter)="showItineraryBikeMap()" (mouseleave)="hideItineraryBikeMap()" class="col-6 header bicycle">
+            <app-itinerary-bike-header [itinerary]="bikeItinerary" [map]="map"></app-itinerary-bike-header>
         </div>
-        <div matRipple class="col-6 header walk">
-            <app-itinerary-walk [itinerary]="getWalkItinerary()" [map]="map"></app-itinerary-walk>
+        <div matRipple (mouseenter)="showItineraryWalkMap()" (mouseleave)="hideItineraryWalkMap()" class="col-6 header walk">
+            <app-itinerary-walk [itinerary]="walkItinerary" [map]="map"></app-itinerary-walk>
         </div>
     </div>
 </div>
@@ -46,6 +46,7 @@
                              (click)="zoomToItinerary()"
                              (afterExpand)="isExpanded = true; showItineraryOnMap(itinerary); scrollToTop(index)"
                              (afterCollapse)="isExpanded = false; hideItineraryOnMap()"
+                             [expanded]="wasPlanned && index === 0"
                              [ngClass]="{'itinerary-walk': isWalk(itinerary)}"
                              class="itinerary">
 
