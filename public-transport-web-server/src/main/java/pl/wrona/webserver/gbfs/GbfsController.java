@@ -1,6 +1,7 @@
 package pl.wrona.webserver.gbfs;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.igeolab.iot.gbfs.server.api.ApiV2Api;
 import org.igeolab.iot.gbfs.server.api.model.FreeBikeStatusV23;
 import org.igeolab.iot.gbfs.server.api.model.GbfsV23;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
