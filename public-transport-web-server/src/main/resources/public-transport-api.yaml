@@ -149,6 +149,35 @@ components:
         car:
           $ref: '#/components/schemas/Difference'
 
+    CityBikeStatistic:
+      type: object
+      properties:
+        numBikesAvailable:
+          type: integer
+        numDocksAvailable:
+          type: integer
+        numDocks:
+          type: integer
+        occupancyRatio:
+          type: number
+          format: float
+
+    CityBike:
+      type: object
+      properties:
+        nearest_name:
+          type: string
+        nearest_distance:
+          type: integer
+        nearest:
+          $ref: '#/components/schemas/CityBikeStatistic'
+        _100_m:
+          $ref: '#/components/schemas/CityBikeStatistic'
+        _250_m:
+          $ref: '#/components/schemas/CityBikeStatistic'
+        _500_m:
+          $ref: '#/components/schemas/CityBikeStatistic'
+
     JourneySummaryResponse:
       type: object
       properties:
@@ -172,3 +201,6 @@ components:
               $ref: '#/components/schemas/ModeDifference'
             car:
               $ref: '#/components/schemas/ModeDifference'
+
+        city_bike:
+          $ref: '#/components/schemas/CityBike'

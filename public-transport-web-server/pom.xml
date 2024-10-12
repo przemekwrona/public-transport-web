@@ -21,6 +21,8 @@
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
         <java.version>17</java.version>
+
+        <lucene-spatial-extras.version>9.12.0</lucene-spatial-extras.version>
     </properties>
 
     <dependencyManagement>
@@ -97,6 +99,13 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-spatial-extras</artifactId>
+            <version>${lucene-spatial-extras.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>
