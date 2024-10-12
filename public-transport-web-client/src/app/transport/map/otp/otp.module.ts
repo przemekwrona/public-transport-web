@@ -19,38 +19,51 @@ import {MatCardModule} from "@angular/material/card";
 import {ItineraryBikeHeaderComponent} from "./itinerary-bike-header/itinerary-bike-header.component";
 import {ItineraryBikeDetailsComponent} from "./itinerary-bike-details/itinerary-bike-details.component";
 import {MatRippleModule} from "@angular/material/core";
+import {SummaryJourneyComponent} from "./summary-journey/summary-journey.component";
+import {MatDialogModule} from "@angular/material/dialog";
+import {JourneyDistancePipe} from "./summary-journey/journey-distance.pipe";
+import {JourneyDurationPipe} from "./summary-journey/journey-duration.pipe";
+import {MatDividerModule} from "@angular/material/divider";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 
 @NgModule({
-  declarations: [
-    OtpComponent,
-    ItineraryComponent,
-    ItineraryBikeHeaderComponent,
-    ItineraryBikeDetailsComponent,
-    ItineraryHeaderComponent,
-    ItineraryDetailsComponent,
-    ItineraryWalkComponent,
-    ItineraryTransitComponent
-  ],
-  exports: [
-    OtpComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatCardModule,
-    MatRippleModule
-  ],
-  providers: [
-    OtpService
-  ]
+    declarations: [
+        OtpComponent,
+        ItineraryComponent,
+        ItineraryBikeHeaderComponent,
+        ItineraryBikeDetailsComponent,
+        ItineraryHeaderComponent,
+        ItineraryDetailsComponent,
+        ItineraryWalkComponent,
+        ItineraryTransitComponent,
+        SummaryJourneyComponent,
+        JourneyDistancePipe,
+        JourneyDurationPipe
+    ],
+    exports: [
+        OtpComponent
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        MatExpansionModule,
+        MatGridListModule,
+        MatCardModule,
+        MatRippleModule,
+        MatDialogModule,
+        MatDividerModule,
+        MatInputModule,
+        MatAutocompleteModule
+    ],
+    providers: [
+        OtpService
+    ]
 })
 export class OtpModule {
 }
