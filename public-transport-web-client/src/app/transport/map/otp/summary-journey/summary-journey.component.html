@@ -340,7 +340,7 @@
         <div class="col-2"><500m</div>
     </div>
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-4"></div>
         <div class="col-2">
             {{summary?.city_bike?.nearest?.numBikesAvailable}} / {{ (summary?.city_bike?.nearest?.numDocks)}}
@@ -367,6 +367,28 @@
             <h2 class="mx-0">Warunki pogodowe</h2>
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="col-2">Temperatura</div>
+        <div class="col-2">Wilgotność</div>
+        <div class="col-2">Zachmurzenie</div>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-2">{{summary?.weather?.tempC}}&deg;C</div>
+        <div class="col-2">{{summary?.weather?.humidity}}%</div>
+        <div class="col-2">{{summary?.weather?.cloud}}%</div>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+    </div>
+
+    <mat-divider></mat-divider>
+
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">

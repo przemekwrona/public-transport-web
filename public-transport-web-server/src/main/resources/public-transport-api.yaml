@@ -178,6 +178,17 @@ components:
         _500_m:
           $ref: '#/components/schemas/CityBikeStatistic'
 
+    Weather:
+      type: object
+      properties:
+        tempC:
+          type: number
+          format: float
+        humidity:
+          type: integer
+        cloud:
+          type: integer
+
     JourneySummaryResponse:
       type: object
       properties:
@@ -201,6 +212,7 @@ components:
               $ref: '#/components/schemas/ModeDifference'
             car:
               $ref: '#/components/schemas/ModeDifference'
-
         city_bike:
           $ref: '#/components/schemas/CityBike'
+        weather:
+          $ref: '#/components/schemas/Weather'
