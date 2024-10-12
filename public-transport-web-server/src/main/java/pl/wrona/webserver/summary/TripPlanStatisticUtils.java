@@ -11,26 +11,26 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @UtilityClass
-public class TripPlanUtils {
+public class TripPlanStatisticUtils {
 
     ModeSummary statisticForFirstByWalk(TripPlan tripPlan) {
         return tripPlan.getItineraries().stream()
                 .filter(itinerary -> itinerary.getLegs().size() == 1 && "WALK".equals(itinerary.getLegs().get(0).getMode()))
                 .findFirst()
-                .map(TripPlanUtils::getStatistic)
+                .map(TripPlanStatisticUtils::getStatistic)
                 .orElse(null);
     }
     ModeSummary statisticForFirstByNotWalk(TripPlan tripPlan) {
         return tripPlan.getItineraries().stream()
                 .filter(itinerary -> !(itinerary.getLegs().size() == 1 && "WALK".equals(itinerary.getLegs().get(0).getMode())))
                 .findFirst()
-                .map(TripPlanUtils::getStatistic)
+                .map(TripPlanStatisticUtils::getStatistic)
                 .orElse(null);
     }
 
     List<ModeSummary> statistic(TripPlan tripPlan) {
         return tripPlan.getItineraries().stream()
-                .map(TripPlanUtils::getStatistic)
+                .map(TripPlanStatisticUtils::getStatistic)
                 .toList();
     }
 
