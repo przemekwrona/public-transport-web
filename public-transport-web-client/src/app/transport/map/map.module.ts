@@ -27,6 +27,8 @@ import {MapService} from "./service/map.service";
 import {BikeMapManagerService} from "./service/bike-map-manager.service";
 import {ItineraryManagerService} from "./service/itinerary-manager.service";
 import {CityManagerService} from "./service/city-manager.service";
+import {JourneySummaryService} from "../../http/journey-summary.service";
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 @NgModule({
@@ -52,7 +54,8 @@ import {CityManagerService} from "./service/city-manager.service";
         MatGridListModule,
         MatStepperModule,
         MatButtonModule,
-        MatIconModule
+        MatIconModule,
+        MatDialogModule
     ],
     providers: [
         MapService,
@@ -65,6 +68,7 @@ import {CityManagerService} from "./service/city-manager.service";
         TimetableService,
         OtpService,
         GbfsService,
+        JourneySummaryService,
         {
             provide: STEPPER_GLOBAL_OPTIONS,
             useValue: {displayDefaultIndicatorType: true}

@@ -1,0 +1,326 @@
+<h2 mat-dialog-title>Statystyki podróży</h2>
+<mat-dialog-content class="mat-typography">
+
+    <div class="row my-3">
+        <div class="col-12">
+            <h2 class="mx-0">Porównywanie różnych środków transpory</h2>
+        </div>
+    </div>
+
+    <div class="row text-center my-2">
+        <div class="col-4"></div>
+        <div class="col-2">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_bus"></mat-icon>
+        </div>
+        <div class="col-2">
+            <mat-icon aria-hidden="false" aria-label="bike" fontIcon="directions_bike"></mat-icon>
+        </div>
+        <div class="col-2">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_car"></mat-icon>
+        </div>
+        <div class="col-2">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_walk"></mat-icon>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="row text-center my-2">
+        <div class="col-4 text-start">
+            Całkowita trasa
+        </div>
+        <div class="col-2">
+            {{summary?.transit?.totalDistance | journeyDistance}}
+            {{summary?.transit?.totalDuration | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.bike?.totalDistance | journeyDistance}}
+            {{summary?.bike?.totalDuration | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.car?.totalDistance | journeyDistance}}
+            {{summary?.car?.totalDuration | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.walk?.totalDistance | journeyDistance}}
+            {{summary?.walk?.totalDuration | journeyDuration : true}}
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="row text-center my-2">
+        <div class="col-4 text-start">
+            Do przystanku/stacji roweru miejskiego
+        </div>
+        <div class="col-2">
+            {{summary?.transit?.walkDistanceToStation | journeyDistance}}
+            {{summary?.transit?.walkDurationToStation | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.bike?.walkDistanceToStation | journeyDistance}}
+            {{summary?.bike?.walkDurationToStation | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.car?.walkDistanceToStation | journeyDistance}}
+            {{summary?.car?.walkDurationToStation | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.walk?.walkDistanceToStation | journeyDistance}}
+            {{summary?.walk?.walkDurationToStation | journeyDuration : true}}
+        </div>
+    </div>
+
+    <div class="row text-center my-0">
+        <div class="col-4 text-start">
+            Liczba przesiadek
+        </div>
+        <div class="col-2 border-top border-danger border-start border-end">
+            {{summary?.transit?.transfers}}
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2">
+            -
+        </div>
+    </div>
+
+    <div class="row text-center my-0">
+        <div class="col-4 text-start">
+            Przesiadki
+        </div>
+        <div class="col-2 border-danger border-start border-end">
+            {{summary?.transit?.transferWalkDistance | journeyDistance}}
+            {{summary?.transit?.transferWalkDuration | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2">
+            -
+        </div>
+    </div>
+
+    <div class="row text-center my-0">
+        <div class="col-4 text-start">
+            Czas oczekiwania
+        </div>
+        <div class="col-2 border-bottom border-danger border-start border-end">
+            {{summary?.transit?.transfersWaitingAtStop | journeyDuration}}
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2">
+            -
+        </div>
+    </div>
+
+    <div class="row text-center my-2">
+        <div class="col-4 text-start">
+            Z przystanku/stacji roweru miejskiego
+        </div>
+        <div class="col-2">
+            {{summary?.transit?.walkDistanceFromStation | journeyDistance}}
+            {{summary?.transit?.walkDurationFromStation | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.bike?.walkDistanceFromStation | journeyDistance}}
+            {{summary?.bike?.walkDurationFromStation | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.car?.walkDistanceFromStation | journeyDistance}}
+            {{summary?.car?.walkDurationFromStation | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.walk?.walkDistanceFromStation | journeyDistance}}
+            {{summary?.walk?.walkDurationFromStation | journeyDuration : true}}
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="row text-center my-2">
+        <div class="col-4 text-start">
+            Trasa TYLKO pieszo
+        </div>
+        <div class="col-2">
+            {{summary?.transit?.totalWalkDistance | journeyDistance}}
+            {{summary?.transit?.totalWalkDuration | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.bike?.totalWalkDistance | journeyDistance}}
+            {{summary?.bike?.totalWalkDuration | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.car?.totalWalkDistance | journeyDistance}}
+            {{summary?.car?.totalWalkDuration | journeyDuration : true}}
+        </div>
+        <div class="col-2">
+            {{summary?.walk?.totalWalkDistance | journeyDistance}}
+            {{summary?.walk?.totalWalkDuration | journeyDuration : true}}
+        </div>
+    </div>
+
+    <div class="row text-center my-2">
+        <div class="col-4 text-start">
+            Trasa TYLKO środkiem transportu
+        </div>
+        <div class="col-2">
+            {{summary?.transit?.travelModeDistance | journeyDistance}}
+            {{summary?.transit?.travelModeDuration | journeyDuration}}
+        </div>
+        <div class="col-2">
+            {{summary?.bike?.travelModeDistance | journeyDistance}}
+            {{summary?.bike?.travelModeDuration | journeyDuration}}
+        </div>
+        <div class="col-2">
+            {{summary?.car?.travelModeDistance | journeyDistance}}
+            {{summary?.car?.travelModeDuration | journeyDuration}}
+        </div>
+        <div class="col-2">
+            {{summary?.walk?.travelModeDistance | journeyDistance}}
+            {{summary?.walk?.travelModeDuration | journeyDuration}}
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <h2 class="mx-0">Porównywanie różnych środków transpory</h2>
+        </div>
+    </div>
+
+    <div class="row text-center py-2">
+        <div class="col-4"></div>
+        <div class="col-2">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_bus"></mat-icon>
+        </div>
+        <div class="col-2">
+            <mat-icon aria-hidden="false" aria-label="bike" fontIcon="directions_bike"></mat-icon>
+        </div>
+        <div class="col-2">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_car"></mat-icon>
+        </div>
+        <div class="col-2">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_walk"></mat-icon>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-4">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_bus"></mat-icon>
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.transit?.bike?.time | journeyDuration}}
+            ({{summary?.differences?.transit?.bike?.percentage}}%)
+            x{{summary?.differences?.transit?.bike?.ratio | number : '.2-2'}}
+        </div>
+        <div class="col-2"
+             [ngClass]="{'green': isPositive(summary?.differences?.transit?.car?.time), 'red': isNegative(summary?.differences?.transit?.car?.time)}">
+            {{summary?.differences?.transit?.car?.time | journeyDuration}}
+            ({{summary?.differences?.transit?.car?.percentage}}%)
+            x{{summary?.differences?.transit?.car?.ratio | number : '.2-2'}}
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.transit?.walk?.time | journeyDuration}}
+            ({{summary?.differences?.transit?.walk?.percentage}}%)
+            x{{summary?.differences?.transit?.walk?.ratio | number : '.2-2'}}
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-4">
+            <mat-icon aria-hidden="false" aria-label="bike" fontIcon="directions_bike"></mat-icon>
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.bike?.transit?.time | journeyDuration}}
+            ({{summary?.differences?.bike?.transit?.percentage}}%)
+            x{{summary?.differences?.bike?.transit?.ratio | number : '.2-2'}}
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2"
+             [ngClass]="{'green': isPositive(summary?.differences?.bike?.car?.time), 'red': isNegative(summary?.differences?.bike?.car?.time)}">
+            {{summary?.differences?.bike?.car?.time | journeyDuration}}
+            ({{summary?.differences?.bike?.car?.percentage}}%)
+            x{{summary?.differences?.bike?.car?.ratio | number : '.2-2'}}
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.bike?.walk?.time | journeyDuration}}
+            ({{summary?.differences?.bike?.walk?.percentage}}%)
+            x{{summary?.differences?.bike?.walk?.ratio | number : '.2-2'}}
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-4">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_car"></mat-icon>
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.car?.transit?.time | journeyDuration}}
+            ({{summary?.differences?.car?.transit?.percentage}}%)
+            {{summary?.differences?.car?.transit?.ratio | number : '.2-2'}}
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.car?.bike?.time | journeyDuration}}
+            ({{summary?.differences?.car?.bike?.percentage}}%)
+            {{summary?.differences?.car?.bike?.ratio | number : '.2-2'}}
+        </div>
+        <div class="col-2">
+            -
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.car?.walk?.time | journeyDuration}}
+            ({{summary?.differences?.car?.walk?.percentage}}%)
+            {{summary?.differences?.car?.walk?.ratio | number : '.2-2'}}
+        </div>
+    </div>
+
+    <div class="row text-center mb-4">
+        <div class="col-4">
+            <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_walk"></mat-icon>
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.walk?.transit?.time | journeyDuration}}
+            ({{summary?.differences?.walk?.transit?.percentage}}%)
+            {{summary?.differences?.walk?.transit?.ratio | number : '.2-2'}}
+        </div>
+        <div class="col-2">
+            {{summary?.differences?.walk?.bike?.time | journeyDuration}}
+            ({{summary?.differences?.walk?.bike?.percentage}}%)
+            {{summary?.differences?.walk?.bike?.ratio | number : '.2-2'}}
+        </div>
+        <div class="col-2"
+             [ngClass]="{'green': isPositive(summary?.differences?.walk?.car?.time), 'red': isNegative(summary?.differences?.walk?.car?.time)}">
+            {{summary?.differences?.walk?.car?.time | journeyDuration}}
+            ({{summary?.differences?.walk?.car?.percentage}}%)
+            {{summary?.differences?.walk?.car?.percentage | number : '.2-2'}}
+        </div>
+        <div class="col-2">
+            -
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
+</mat-dialog-actions>

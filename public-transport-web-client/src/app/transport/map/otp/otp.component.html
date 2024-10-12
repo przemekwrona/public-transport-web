@@ -1,5 +1,5 @@
 <div class="container otp-container">
-    <form class="pb-2">
+    <form>
         <div class="row">
             <div class="col col-first">
                 <mat-form-field class="w-100">
@@ -20,7 +20,24 @@
 
         <div class="row mt-3">
             <div class="col text-end">
-                <button mat-flat-button matTooltip="Accent" color="primary" class="search-trip" (click)="plan()">
+<!--                <mat-form-field class="example-full-width">-->
+<!--                    <mat-label>Number</mat-label>-->
+<!--                    <input type="text"-->
+<!--                           placeholder="Pick one"-->
+<!--                           aria-label="Number"-->
+<!--                           matInput-->
+<!--                           [formControl]="myControl"-->
+<!--                           [matAutocomplete]="auto">-->
+<!--                    <mat-autocomplete #auto="matAutocomplete">-->
+<!--                        <mat-option [value]="'now'">Now</mat-option>-->
+<!--                    </mat-autocomplete>-->
+<!--                </mat-form-field>-->
+
+                <button mat-mini-fab (click)="summary()" class="mx-1" color="Secondary" aria-label="Example icon button with a home icon">
+                    <mat-icon>commute</mat-icon>
+                </button>
+
+                <button mat-raised-button matTooltip="Accent" color="primary" class="mx-1 mb-3 search-trip" (click)="plan()">
                     Jedziemy
                 </button>
             </div>

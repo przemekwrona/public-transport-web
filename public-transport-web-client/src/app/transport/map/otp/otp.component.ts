@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import {DivIcon, LatLng, LatLngBounds, Map, Marker, polyline, Polyline} from "leaflet";
 import {OtpService} from "../../../http/otp.service";
@@ -6,6 +6,10 @@ import moment from "moment";
 import {decode} from "@googlemaps/polyline-codec";
 import {Itinerary, Leg, RoutesResponse} from "../../../generated";
 import {ItineraryManagerService} from "../service/itinerary-manager.service";
+import {JourneySummaryService} from "../../../http/journey-summary.service";
+import {MatDialog} from "@angular/material/dialog";
+import {SummaryJourneyComponent} from "./summary-journey/summary-journey.component";
+import {FormControl} from "@angular/forms";
 
 export class OtpPoint {
     name: string = '';
@@ -18,7 +22,9 @@ export class OtpPoint {
     templateUrl: './otp.component.html',
     styleUrl: './otp.component.scss'
 })
-export class OtpComponent {
+export class OtpComponent implements OnDestroy {
+    public myControl = new FormControl('');
+
     @Input() startPoint: OtpPoint;
     @Input() map: Map;
 
@@ -48,7 +54,7 @@ export class OtpComponent {
     private bikePolyline: Polyline[] = [];
     public isExpanded: boolean = true;
 
-    constructor(private otpService: OtpService, private itineraryManagerService: ItineraryManagerService) {
+    constructor(private otpService: OtpService, private itineraryManagerService: ItineraryManagerService, private journeySummaryService: JourneySummaryService, private mdatDialog: MatDialog) {
     }
 
     public plan(): void {
@@ -69,6 +75,12 @@ export class OtpComponent {
         this.otpService.planBike(this.startPoint.lat, this.startPoint.lon, this.endPoint.lat, this.endPoint.lon, moment()).subscribe(bikeResponse => {
             this.bikeResponse = bikeResponse;
             this.bikeItinerary = this.getBikeItinerary(bikeResponse);
+        });
+    }
+
+    public summary(): void {
+        this.journeySummaryService.summary(this.startPoint.lat, this.startPoint.lon, this.endPoint.lat, this.endPoint.lon, moment()).subscribe(summaryResponse => {
+            this.mdatDialog.open(SummaryJourneyComponent, {data: summaryResponse});
         });
     }
 
@@ -165,6 +177,10 @@ export class OtpComponent {
 
     public getWalkItinerary(routesResponse: RoutesResponse): Itinerary {
         return (routesResponse?.plan?.itineraries || []).filter((itinerary: Itinerary) => this.isWalk(itinerary))[0] || {};
+    }
+
+    ngOnDestroy(): void {
+        console.log("On destroy");
     }
 
 }

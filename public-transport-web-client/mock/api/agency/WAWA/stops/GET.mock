@@ -1,0 +1,1695 @@
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "stops": [
+    {
+      "stopId": "7902p1",
+      "stopCode": null,
+      "stopName": "Warszawa Powiśle peron 1",
+      "stopDesc": null,
+      "stopLat": 52.233649,
+      "stopLon": 21.028167
+    },
+    {
+      "stopId": "7902p2",
+      "stopCode": null,
+      "stopName": "Warszawa Powiśle peron 2",
+      "stopDesc": null,
+      "stopLat": 52.233759,
+      "stopLon": 21.028079
+    },
+    {
+      "stopId": "7043mP2",
+      "stopCode": null,
+      "stopName": "Nowy Świat-Uniwersytet",
+      "stopDesc": null,
+      "stopLat": 52.236818,
+      "stopLon": 21.016803
+    },
+    {
+      "stopId": "415204",
+      "stopCode": null,
+      "stopName": "Lindleya 04",
+      "stopDesc": null,
+      "stopLat": 52.223382,
+      "stopLon": 20.99862
+    },
+    {
+      "stopId": "415201",
+      "stopCode": null,
+      "stopName": "Lindleya 01",
+      "stopDesc": null,
+      "stopLat": 52.22341,
+      "stopLon": 20.996509
+    },
+    {
+      "stopId": "7079mE2",
+      "stopCode": null,
+      "stopName": "2",
+      "stopDesc": null,
+      "stopLat": 52.239597,
+      "stopLon": 21.030425
+    },
+    {
+      "stopId": "7088mE10",
+      "stopCode": null,
+      "stopName": "10",
+      "stopDesc": null,
+      "stopLat": 52.233125,
+      "stopLon": 20.997238
+    },
+    {
+      "stopId": "7088mE11",
+      "stopCode": null,
+      "stopName": "11",
+      "stopDesc": null,
+      "stopLat": 52.233644,
+      "stopLon": 20.997602
+    },
+    {
+      "stopId": "703305",
+      "stopCode": null,
+      "stopName": "Krucza 05",
+      "stopDesc": null,
+      "stopLat": 52.23069,
+      "stopLon": 21.015851
+    },
+    {
+      "stopId": "703306",
+      "stopCode": null,
+      "stopName": "Krucza 06",
+      "stopDesc": null,
+      "stopLat": 52.230957,
+      "stopLon": 21.016979
+    },
+    {
+      "stopId": "703303",
+      "stopCode": null,
+      "stopName": "Krucza 03",
+      "stopDesc": null,
+      "stopLat": 52.230247,
+      "stopLon": 21.016538
+    },
+    {
+      "stopId": "703304",
+      "stopCode": null,
+      "stopName": "Krucza 04",
+      "stopDesc": null,
+      "stopLat": 52.22922,
+      "stopLon": 21.017262
+    },
+    {
+      "stopId": "703301",
+      "stopCode": null,
+      "stopName": "Krucza 01",
+      "stopDesc": null,
+      "stopLat": 52.231027,
+      "stopLon": 21.017979
+    },
+    {
+      "stopId": "703302",
+      "stopCode": null,
+      "stopName": "Krucza 02",
+      "stopDesc": null,
+      "stopLat": 52.231327,
+      "stopLon": 21.018133
+    },
+    {
+      "stopId": "4901p1",
+      "stopCode": null,
+      "stopName": "Warszawa Ochota peron 1",
+      "stopDesc": null,
+      "stopLat": 52.225827,
+      "stopLon": 20.99082
+    },
+    {
+      "stopId": "703402",
+      "stopCode": null,
+      "stopName": "Wspólna 02",
+      "stopDesc": null,
+      "stopLat": 52.226838,
+      "stopLon": 21.018477
+    },
+    {
+      "stopId": "703401",
+      "stopCode": null,
+      "stopName": "Wspólna 01",
+      "stopDesc": null,
+      "stopLat": 52.228174,
+      "stopLon": 21.017585
+    },
+    {
+      "stopId": "703503",
+      "stopCode": null,
+      "stopName": "Mokotowska 03",
+      "stopDesc": null,
+      "stopLat": 52.224188,
+      "stopLon": 21.019602
+    },
+    {
+      "stopId": "703501",
+      "stopCode": null,
+      "stopName": "Mokotowska 01",
+      "stopDesc": null,
+      "stopLat": 52.223458,
+      "stopLon": 21.018393
+    },
+    {
+      "stopId": "703502",
+      "stopCode": null,
+      "stopName": "Mokotowska 02",
+      "stopDesc": null,
+      "stopLat": 52.223716,
+      "stopLon": 21.02116
+    },
+    {
+      "stopId": "704902",
+      "stopCode": null,
+      "stopName": "Ordynacka 02",
+      "stopDesc": null,
+      "stopLat": 52.235839,
+      "stopLon": 21.01833
+    },
+    {
+      "stopId": "503904",
+      "stopCode": null,
+      "stopName": "Norblin 04",
+      "stopDesc": null,
+      "stopLat": 52.232036,
+      "stopLon": 20.992933
+    },
+    {
+      "stopId": "503903",
+      "stopCode": null,
+      "stopName": "Norblin 03",
+      "stopDesc": null,
+      "stopLat": 52.232167,
+      "stopLon": 20.993745
+    },
+    {
+      "stopId": "503906",
+      "stopCode": null,
+      "stopName": "Norblin 06",
+      "stopDesc": null,
+      "stopLat": 52.232442,
+      "stopLon": 20.992225
+    },
+    {
+      "stopId": "503905",
+      "stopCode": null,
+      "stopName": "Norblin 05",
+      "stopDesc": null,
+      "stopLat": 52.231499,
+      "stopLon": 20.992676
+    },
+    {
+      "stopId": "503902",
+      "stopCode": null,
+      "stopName": "Norblin 02",
+      "stopDesc": null,
+      "stopLat": 52.231666,
+      "stopLon": 20.990869
+    },
+    {
+      "stopId": "503901",
+      "stopCode": null,
+      "stopName": "Norblin 01",
+      "stopDesc": null,
+      "stopLat": 52.231995,
+      "stopLon": 20.993624
+    },
+    {
+      "stopId": "704901",
+      "stopCode": null,
+      "stopName": "Ordynacka 01",
+      "stopDesc": null,
+      "stopLat": 52.236112,
+      "stopLon": 21.018153
+    },
+    {
+      "stopId": "701003",
+      "stopCode": null,
+      "stopName": "Pl. Zbawiciela 03",
+      "stopDesc": null,
+      "stopLat": 52.220712,
+      "stopLon": 21.017324
+    },
+    {
+      "stopId": "508802",
+      "stopCode": null,
+      "stopName": "Sienna 02",
+      "stopDesc": null,
+      "stopLat": 52.230706,
+      "stopLon": 20.993329
+    },
+    {
+      "stopId": "508801",
+      "stopCode": null,
+      "stopName": "Sienna 01",
+      "stopDesc": null,
+      "stopLat": 52.229748,
+      "stopLon": 20.993715
+    },
+    {
+      "stopId": "703701",
+      "stopCode": null,
+      "stopName": "Pl. Na Rozdrożu 01",
+      "stopDesc": null,
+      "stopLat": 52.220712,
+      "stopLon": 21.024805
+    },
+    {
+      "stopId": "701108",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 08",
+      "stopDesc": null,
+      "stopLat": 52.222849,
+      "stopLon": 21.016379
+    },
+    {
+      "stopId": "701109",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 09",
+      "stopDesc": null,
+      "stopLat": 52.222628,
+      "stopLon": 21.015572
+    },
+    {
+      "stopId": "701110",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 10",
+      "stopDesc": null,
+      "stopLat": 52.2223,
+      "stopLon": 21.016689
+    },
+    {
+      "stopId": "701104",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 04",
+      "stopDesc": null,
+      "stopLat": 52.223452,
+      "stopLon": 21.0171
+    },
+    {
+      "stopId": "701103",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 03",
+      "stopDesc": null,
+      "stopLat": 52.222789,
+      "stopLon": 21.014415
+    },
+    {
+      "stopId": "701106",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 06",
+      "stopDesc": null,
+      "stopLat": 52.222855,
+      "stopLon": 21.01611
+    },
+    {
+      "stopId": "701105",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 05",
+      "stopDesc": null,
+      "stopLat": 52.22345,
+      "stopLon": 21.015524
+    },
+    {
+      "stopId": "701102",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 02",
+      "stopDesc": null,
+      "stopLat": 52.222524,
+      "stopLon": 21.01656
+    },
+    {
+      "stopId": "701101",
+      "stopCode": null,
+      "stopName": "Pl. Konstytucji 01",
+      "stopDesc": null,
+      "stopLat": 52.22232,
+      "stopLon": 21.015754
+    },
+    {
+      "stopId": "708602",
+      "stopCode": null,
+      "stopName": "Hala Mirowska 02",
+      "stopDesc": null,
+      "stopLat": 52.237814,
+      "stopLon": 20.996562
+    },
+    {
+      "stopId": "708601",
+      "stopCode": null,
+      "stopName": "Hala Mirowska 01",
+      "stopDesc": null,
+      "stopLat": 52.238349,
+      "stopLon": 20.995896
+    },
+    {
+      "stopId": "708604",
+      "stopCode": null,
+      "stopName": "Hala Mirowska 04",
+      "stopDesc": null,
+      "stopLat": 52.238617,
+      "stopLon": 20.996049
+    },
+    {
+      "stopId": "708603",
+      "stopCode": null,
+      "stopName": "Hala Mirowska 03",
+      "stopDesc": null,
+      "stopLat": 52.238133,
+      "stopLon": 20.996196
+    },
+    {
+      "stopId": "7013mP1",
+      "stopCode": null,
+      "stopName": "Centrum",
+      "stopDesc": null,
+      "stopLat": 52.231059,
+      "stopLon": 21.010188
+    },
+    {
+      "stopId": "703804",
+      "stopCode": null,
+      "stopName": "Piękna 04",
+      "stopDesc": null,
+      "stopLat": 52.223995,
+      "stopLon": 21.024766
+    },
+    {
+      "stopId": "703802",
+      "stopCode": null,
+      "stopName": "Piękna 02",
+      "stopDesc": null,
+      "stopLat": 52.22322,
+      "stopLon": 21.024338
+    },
+    {
+      "stopId": "703803",
+      "stopCode": null,
+      "stopName": "Piękna 03",
+      "stopDesc": null,
+      "stopLat": 52.223818,
+      "stopLon": 21.023331
+    },
+    {
+      "stopId": "702504",
+      "stopCode": null,
+      "stopName": "Pl. Grzybowski 04",
+      "stopDesc": null,
+      "stopLat": 52.237294,
+      "stopLon": 21.001775
+    },
+    {
+      "stopId": "702503",
+      "stopCode": null,
+      "stopName": "Pl. Grzybowski 03",
+      "stopDesc": null,
+      "stopLat": 52.237376,
+      "stopLon": 21.0041
+    },
+    {
+      "stopId": "405202",
+      "stopCode": null,
+      "stopName": "Pl. Starynkiewicza 02",
+      "stopDesc": null,
+      "stopLat": 52.226104,
+      "stopLon": 20.99359
+    },
+    {
+      "stopId": "405201",
+      "stopCode": null,
+      "stopName": "Pl. Starynkiewicza 01",
+      "stopDesc": null,
+      "stopLat": 52.226023,
+      "stopLon": 20.994585
+    },
+    {
+      "stopId": "405204",
+      "stopCode": null,
+      "stopName": "Pl. Starynkiewicza 04",
+      "stopDesc": null,
+      "stopLat": 52.226568,
+      "stopLon": 20.996387
+    },
+    {
+      "stopId": "405203",
+      "stopCode": null,
+      "stopName": "Pl. Starynkiewicza 03",
+      "stopDesc": null,
+      "stopLat": 52.226281,
+      "stopLon": 20.995189
+    },
+    {
+      "stopId": "405206",
+      "stopCode": null,
+      "stopName": "Pl. Starynkiewicza 06",
+      "stopDesc": null,
+      "stopLat": 52.227547,
+      "stopLon": 20.995284
+    },
+    {
+      "stopId": "701203",
+      "stopCode": null,
+      "stopName": "Hoża 03",
+      "stopDesc": null,
+      "stopLat": 52.227265,
+      "stopLon": 21.013243
+    },
+    {
+      "stopId": "701202",
+      "stopCode": null,
+      "stopName": "Hoża 02",
+      "stopDesc": null,
+      "stopLat": 52.226693,
+      "stopLon": 21.013858
+    },
+    {
+      "stopId": "701204",
+      "stopCode": null,
+      "stopName": "Hoża 04",
+      "stopDesc": null,
+      "stopLat": 52.225888,
+      "stopLon": 21.014109
+    },
+    {
+      "stopId": "701201",
+      "stopCode": null,
+      "stopName": "Hoża 01",
+      "stopDesc": null,
+      "stopLat": 52.225514,
+      "stopLon": 21.014105
+    },
+    {
+      "stopId": "7013mE1",
+      "stopCode": null,
+      "stopName": "1·2·3",
+      "stopDesc": null,
+      "stopLat": 52.230354,
+      "stopLon": 21.010684
+    },
+    {
+      "stopId": "708701",
+      "stopCode": null,
+      "stopName": "Al. Jana Pawła II 01",
+      "stopDesc": null,
+      "stopLat": 52.235997,
+      "stopLon": 20.997873
+    },
+    {
+      "stopId": "708702",
+      "stopCode": null,
+      "stopName": "Al. Jana Pawła II 02",
+      "stopDesc": null,
+      "stopLat": 52.235746,
+      "stopLon": 20.995663
+    },
+    {
+      "stopId": "7013mE5",
+      "stopCode": null,
+      "stopName": "5",
+      "stopDesc": null,
+      "stopLat": 52.231976,
+      "stopLon": 21.009824
+    },
+    {
+      "stopId": "7013mE6",
+      "stopCode": null,
+      "stopName": "6",
+      "stopDesc": null,
+      "stopLat": 52.23238,
+      "stopLon": 21.00988
+    },
+    {
+      "stopId": "7013mE4",
+      "stopCode": null,
+      "stopName": "4",
+      "stopDesc": null,
+      "stopLat": 52.231065,
+      "stopLon": 21.009775
+    },
+    {
+      "stopId": "7013mE9",
+      "stopCode": null,
+      "stopName": "9",
+      "stopDesc": null,
+      "stopLat": 52.232028,
+      "stopLon": 21.010087
+    },
+    {
+      "stopId": "7013mE7",
+      "stopCode": null,
+      "stopName": "7",
+      "stopDesc": null,
+      "stopLat": 52.232467,
+      "stopLon": 21.010464
+    },
+    {
+      "stopId": "7013mE8",
+      "stopCode": null,
+      "stopName": "8",
+      "stopDesc": null,
+      "stopLat": 52.23216,
+      "stopLon": 21.010616
+    },
+    {
+      "stopId": "7901",
+      "stopCode": null,
+      "stopName": "Warszawa Śródmieście",
+      "stopDesc": null,
+      "stopLat": 52.229387,
+      "stopLon": 21.007599
+    },
+    {
+      "stopId": "7900",
+      "stopCode": null,
+      "stopName": "Warszawa Centralna",
+      "stopDesc": null,
+      "stopLat": 52.228841,
+      "stopLon": 21.003275
+    },
+    {
+      "stopId": "7902",
+      "stopCode": null,
+      "stopName": "Warszawa Powiśle",
+      "stopDesc": null,
+      "stopLat": 52.233742,
+      "stopLon": 21.028092
+    },
+    {
+      "stopId": "701301",
+      "stopCode": null,
+      "stopName": "Centrum 01",
+      "stopDesc": null,
+      "stopLat": 52.229076,
+      "stopLon": 21.011909
+    },
+    {
+      "stopId": "701304",
+      "stopCode": null,
+      "stopName": "Centrum 04",
+      "stopDesc": null,
+      "stopLat": 52.231426,
+      "stopLon": 21.010996
+    },
+    {
+      "stopId": "701303",
+      "stopCode": null,
+      "stopName": "Centrum 03",
+      "stopDesc": null,
+      "stopLat": 52.231621,
+      "stopLon": 21.010446
+    },
+    {
+      "stopId": "503601",
+      "stopCode": null,
+      "stopName": "Mennica 01",
+      "stopDesc": null,
+      "stopLat": 52.235096,
+      "stopLon": 20.993097
+    },
+    {
+      "stopId": "7043mE4",
+      "stopCode": null,
+      "stopName": "4",
+      "stopDesc": null,
+      "stopLat": 52.236522,
+      "stopLon": 21.016406
+    },
+    {
+      "stopId": "7043mE5",
+      "stopCode": null,
+      "stopName": "5",
+      "stopDesc": null,
+      "stopLat": 52.236765,
+      "stopLon": 21.016079
+    },
+    {
+      "stopId": "7043mE1",
+      "stopCode": null,
+      "stopName": "1",
+      "stopDesc": null,
+      "stopLat": 52.237016,
+      "stopLon": 21.017394
+    },
+    {
+      "stopId": "7043mE2",
+      "stopCode": null,
+      "stopName": "2",
+      "stopDesc": null,
+      "stopLat": 52.236788,
+      "stopLon": 21.017165
+    },
+    {
+      "stopId": "7043mE3",
+      "stopCode": null,
+      "stopName": "3",
+      "stopDesc": null,
+      "stopLat": 52.236568,
+      "stopLon": 21.0166
+    },
+    {
+      "stopId": "503603",
+      "stopCode": null,
+      "stopName": "Mennica 03",
+      "stopDesc": null,
+      "stopLat": 52.23418,
+      "stopLon": 20.991003
+    },
+    {
+      "stopId": "703901",
+      "stopCode": null,
+      "stopName": "Wiejska 01",
+      "stopDesc": null,
+      "stopLat": 52.224255,
+      "stopLon": 21.028815
+    },
+    {
+      "stopId": "703902",
+      "stopCode": null,
+      "stopName": "Wiejska 02",
+      "stopDesc": null,
+      "stopLat": 52.224471,
+      "stopLon": 21.030483
+    },
+    {
+      "stopId": "7014m",
+      "stopCode": null,
+      "stopName": "Świętokrzyska",
+      "stopDesc": null,
+      "stopLat": 52.235107,
+      "stopLon": 21.007898
+    },
+    {
+      "stopId": "7013m",
+      "stopCode": null,
+      "stopName": "Centrum",
+      "stopDesc": null,
+      "stopLat": 52.23118,
+      "stopLon": 21.01021
+    },
+    {
+      "stopId": "701309",
+      "stopCode": null,
+      "stopName": "Centrum 09",
+      "stopDesc": null,
+      "stopLat": 52.229687,
+      "stopLon": 21.011146
+    },
+    {
+      "stopId": "701306",
+      "stopCode": null,
+      "stopName": "Centrum 06",
+      "stopDesc": null,
+      "stopLat": 52.229589,
+      "stopLon": 21.009962
+    },
+    {
+      "stopId": "701308",
+      "stopCode": null,
+      "stopName": "Centrum 08",
+      "stopDesc": null,
+      "stopLat": 52.229455,
+      "stopLon": 21.011993
+    },
+    {
+      "stopId": "701307",
+      "stopCode": null,
+      "stopName": "Centrum 07",
+      "stopDesc": null,
+      "stopLat": 52.230212,
+      "stopLon": 21.01148
+    },
+    {
+      "stopId": "701315",
+      "stopCode": null,
+      "stopName": "Centrum 15",
+      "stopDesc": null,
+      "stopLat": 52.229989,
+      "stopLon": 21.013157
+    },
+    {
+      "stopId": "701310",
+      "stopCode": null,
+      "stopName": "Centrum 10",
+      "stopDesc": null,
+      "stopLat": 52.229975,
+      "stopLon": 21.012365
+    },
+    {
+      "stopId": "708808",
+      "stopCode": null,
+      "stopName": "Rondo ONZ 08",
+      "stopDesc": null,
+      "stopLat": 52.232797,
+      "stopLon": 20.996637
+    },
+    {
+      "stopId": "708810",
+      "stopCode": null,
+      "stopName": "Rondo ONZ 10",
+      "stopDesc": null,
+      "stopLat": 52.23123,
+      "stopLon": 20.999847
+    },
+    {
+      "stopId": "708802",
+      "stopCode": null,
+      "stopName": "Rondo ONZ 02",
+      "stopDesc": null,
+      "stopLat": 52.234479,
+      "stopLon": 20.997964
+    },
+    {
+      "stopId": "708801",
+      "stopCode": null,
+      "stopName": "Rondo ONZ 01",
+      "stopDesc": null,
+      "stopLat": 52.23171,
+      "stopLon": 20.998998
+    },
+    {
+      "stopId": "708804",
+      "stopCode": null,
+      "stopName": "Rondo ONZ 04",
+      "stopDesc": null,
+      "stopLat": 52.234017,
+      "stopLon": 20.997965
+    },
+    {
+      "stopId": "708803",
+      "stopCode": null,
+      "stopName": "Rondo ONZ 03",
+      "stopDesc": null,
+      "stopLat": 52.232158,
+      "stopLon": 20.99892
+    },
+    {
+      "stopId": "708806",
+      "stopCode": null,
+      "stopName": "Rondo ONZ 06",
+      "stopDesc": null,
+      "stopLat": 52.232818,
+      "stopLon": 20.995965
+    },
+    {
+      "stopId": "708805",
+      "stopCode": null,
+      "stopName": "Rondo ONZ 05",
+      "stopDesc": null,
+      "stopLat": 52.233409,
+      "stopLon": 21.000086
+    },
+    {
+      "stopId": "706201",
+      "stopCode": null,
+      "stopName": "Zajęcza 01",
+      "stopDesc": null,
+      "stopLat": 52.239415,
+      "stopLon": 21.026955
+    },
+    {
+      "stopId": "706202",
+      "stopCode": null,
+      "stopName": "Zajęcza 02",
+      "stopDesc": null,
+      "stopLat": 52.238629,
+      "stopLon": 21.027943
+    },
+    {
+      "stopId": "701402",
+      "stopCode": null,
+      "stopName": "Metro Świętokrzyska 02",
+      "stopDesc": null,
+      "stopLat": 52.234157,
+      "stopLon": 21.009365
+    },
+    {
+      "stopId": "701403",
+      "stopCode": null,
+      "stopName": "Metro Świętokrzyska 03",
+      "stopDesc": null,
+      "stopLat": 52.234869,
+      "stopLon": 21.007222
+    },
+    {
+      "stopId": "701401",
+      "stopCode": null,
+      "stopName": "Metro Świętokrzyska 01",
+      "stopDesc": null,
+      "stopLat": 52.236352,
+      "stopLon": 21.007656
+    },
+    {
+      "stopId": "7088mE9",
+      "stopCode": null,
+      "stopName": "9",
+      "stopDesc": null,
+      "stopLat": 52.232983,
+      "stopLon": 20.997305
+    },
+    {
+      "stopId": "7088mE8",
+      "stopCode": null,
+      "stopName": "8",
+      "stopDesc": null,
+      "stopLat": 52.232631,
+      "stopLon": 20.997445
+    },
+    {
+      "stopId": "7088mE7",
+      "stopCode": null,
+      "stopName": "7",
+      "stopDesc": null,
+      "stopLat": 52.232416,
+      "stopLon": 20.998279
+    },
+    {
+      "stopId": "7088mE6",
+      "stopCode": null,
+      "stopName": "6",
+      "stopDesc": null,
+      "stopLat": 52.232467,
+      "stopLon": 20.998608
+    },
+    {
+      "stopId": "7088mE5",
+      "stopCode": null,
+      "stopName": "5",
+      "stopDesc": null,
+      "stopLat": 52.232597,
+      "stopLon": 20.99915
+    },
+    {
+      "stopId": "7088mE4",
+      "stopCode": null,
+      "stopName": "4",
+      "stopDesc": null,
+      "stopLat": 52.233089,
+      "stopLon": 20.999299
+    },
+    {
+      "stopId": "7088mE3",
+      "stopCode": null,
+      "stopName": "3",
+      "stopDesc": null,
+      "stopLat": 52.233497,
+      "stopLon": 20.999149
+    },
+    {
+      "stopId": "7088mE2",
+      "stopCode": null,
+      "stopName": "2",
+      "stopDesc": null,
+      "stopLat": 52.23375,
+      "stopLon": 20.998509
+    },
+    {
+      "stopId": "7088mE1",
+      "stopCode": null,
+      "stopName": "1",
+      "stopDesc": null,
+      "stopLat": 52.233706,
+      "stopLon": 20.998197
+    },
+    {
+      "stopId": "701406",
+      "stopCode": null,
+      "stopName": "Metro Świętokrzyska 06",
+      "stopDesc": null,
+      "stopLat": 52.234845,
+      "stopLon": 21.008767
+    },
+    {
+      "stopId": "701404",
+      "stopCode": null,
+      "stopName": "Metro Świętokrzyska 04",
+      "stopDesc": null,
+      "stopLat": 52.235027,
+      "stopLon": 21.007284
+    },
+    {
+      "stopId": "701405",
+      "stopCode": null,
+      "stopName": "Metro Świętokrzyska 05",
+      "stopDesc": null,
+      "stopLat": 52.235585,
+      "stopLon": 21.008271
+    },
+    {
+      "stopId": "700102",
+      "stopCode": null,
+      "stopName": "Emilii Plater 02",
+      "stopDesc": null,
+      "stopLat": 52.23317,
+      "stopLon": 21.00307
+    },
+    {
+      "stopId": "700101",
+      "stopCode": null,
+      "stopName": "Emilii Plater 01",
+      "stopDesc": null,
+      "stopLat": 52.232947,
+      "stopLon": 21.002685
+    },
+    {
+      "stopId": "400107",
+      "stopCode": null,
+      "stopName": "Pl. Zawiszy 07",
+      "stopDesc": null,
+      "stopLat": 52.223681,
+      "stopLon": 20.991333
+    },
+    {
+      "stopId": "400103",
+      "stopCode": null,
+      "stopName": "Pl. Zawiszy 03",
+      "stopDesc": null,
+      "stopLat": 52.225006,
+      "stopLon": 20.990644
+    },
+    {
+      "stopId": "708901",
+      "stopCode": null,
+      "stopName": "Koszykowa 01",
+      "stopDesc": null,
+      "stopLat": 52.22305,
+      "stopLon": 21.003466
+    },
+    {
+      "stopId": "708903",
+      "stopCode": null,
+      "stopName": "Koszykowa 03",
+      "stopDesc": null,
+      "stopLat": 52.22333,
+      "stopLon": 21.004585
+    },
+    {
+      "stopId": "708902",
+      "stopCode": null,
+      "stopName": "Koszykowa 02",
+      "stopDesc": null,
+      "stopLat": 52.222992,
+      "stopLon": 21.005983
+    },
+    {
+      "stopId": "708904",
+      "stopCode": null,
+      "stopName": "Koszykowa 04",
+      "stopDesc": null,
+      "stopLat": 52.222721,
+      "stopLon": 21.004789
+    },
+    {
+      "stopId": "701505",
+      "stopCode": null,
+      "stopName": "Królewska 05",
+      "stopDesc": null,
+      "stopLat": 52.23862,
+      "stopLon": 21.006364
+    },
+    {
+      "stopId": "701506",
+      "stopCode": null,
+      "stopName": "Królewska 06",
+      "stopDesc": null,
+      "stopLat": 52.239049,
+      "stopLon": 21.005765
+    },
+    {
+      "stopId": "701503",
+      "stopCode": null,
+      "stopName": "Królewska 03",
+      "stopDesc": null,
+      "stopLat": 52.238531,
+      "stopLon": 21.007936
+    },
+    {
+      "stopId": "701504",
+      "stopCode": null,
+      "stopName": "Królewska 04",
+      "stopDesc": null,
+      "stopLat": 52.238023,
+      "stopLon": 21.005777
+    },
+    {
+      "stopId": "700209",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 09",
+      "stopDesc": null,
+      "stopLat": 52.228113,
+      "stopLon": 21.001632
+    },
+    {
+      "stopId": "700206",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 06",
+      "stopDesc": null,
+      "stopLat": 52.227486,
+      "stopLon": 21.000096
+    },
+    {
+      "stopId": "700205",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 05",
+      "stopDesc": null,
+      "stopLat": 52.227004,
+      "stopLon": 21.002083
+    },
+    {
+      "stopId": "700208",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 08",
+      "stopDesc": null,
+      "stopLat": 52.227932,
+      "stopLon": 21.002737
+    },
+    {
+      "stopId": "700207",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 07",
+      "stopDesc": null,
+      "stopLat": 52.228125,
+      "stopLon": 21.003818
+    },
+    {
+      "stopId": "700212",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 12",
+      "stopDesc": null,
+      "stopLat": 52.23052,
+      "stopLon": 21.00459
+    },
+    {
+      "stopId": "700214",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 14",
+      "stopDesc": null,
+      "stopLat": 52.229572,
+      "stopLon": 21.00514
+    },
+    {
+      "stopId": "700211",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 11",
+      "stopDesc": null,
+      "stopLat": 52.229981,
+      "stopLon": 21.00441
+    },
+    {
+      "stopId": "700210",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 10",
+      "stopDesc": null,
+      "stopLat": 52.228777,
+      "stopLon": 21.00128
+    },
+    {
+      "stopId": "700202",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 02",
+      "stopDesc": null,
+      "stopLat": 52.228223,
+      "stopLon": 21.003378
+    },
+    {
+      "stopId": "700201",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 01",
+      "stopDesc": null,
+      "stopLat": 52.22789,
+      "stopLon": 21.00375
+    },
+    {
+      "stopId": "700204",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 04",
+      "stopDesc": null,
+      "stopLat": 52.22899,
+      "stopLon": 21.00141
+    },
+    {
+      "stopId": "700203",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 03",
+      "stopDesc": null,
+      "stopLat": 52.229014,
+      "stopLon": 21.000793
+    },
+    {
+      "stopId": "702801",
+      "stopCode": null,
+      "stopName": "Zachęta 01",
+      "stopDesc": null,
+      "stopLat": 52.239346,
+      "stopLon": 21.01059
+    },
+    {
+      "stopId": "702802",
+      "stopCode": null,
+      "stopName": "Zachęta 02",
+      "stopDesc": null,
+      "stopLat": 52.239674,
+      "stopLon": 21.011267
+    },
+    {
+      "stopId": "701501",
+      "stopCode": null,
+      "stopName": "Królewska 01",
+      "stopDesc": null,
+      "stopLat": 52.238651,
+      "stopLon": 21.00585
+    },
+    {
+      "stopId": "701502",
+      "stopCode": null,
+      "stopName": "Królewska 02",
+      "stopDesc": null,
+      "stopLat": 52.237581,
+      "stopLon": 21.007321
+    },
+    {
+      "stopId": "7088mP2",
+      "stopCode": null,
+      "stopName": "Rondo ONZ",
+      "stopDesc": null,
+      "stopLat": 52.233102,
+      "stopLon": 20.998285
+    },
+    {
+      "stopId": "700227",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 27",
+      "stopDesc": null,
+      "stopLat": 52.229183,
+      "stopLon": 21.002897
+    },
+    {
+      "stopId": "700229",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 29",
+      "stopDesc": null,
+      "stopLat": 52.229286,
+      "stopLon": 21.003772
+    },
+    {
+      "stopId": "700230",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 30",
+      "stopDesc": null,
+      "stopLat": 52.229208,
+      "stopLon": 21.003465
+    },
+    {
+      "stopId": "700216",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 16",
+      "stopDesc": null,
+      "stopLat": 52.229563,
+      "stopLon": 21.005305
+    },
+    {
+      "stopId": "700223",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 23",
+      "stopDesc": null,
+      "stopLat": 52.22925,
+      "stopLon": 21.002852
+    },
+    {
+      "stopId": "700225",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 25",
+      "stopDesc": null,
+      "stopLat": 52.229365,
+      "stopLon": 21.003778
+    },
+    {
+      "stopId": "700221",
+      "stopCode": null,
+      "stopName": "Dw. Centralny 21",
+      "stopDesc": null,
+      "stopLat": 52.229444,
+      "stopLon": 21.003724
+    },
+    {
+      "stopId": "7013mE10",
+      "stopCode": null,
+      "stopName": "10",
+      "stopDesc": null,
+      "stopLat": 52.231226,
+      "stopLon": 21.010419
+    },
+    {
+      "stopId": "7043m",
+      "stopCode": null,
+      "stopName": "Nowy Świat-Uniwersytet",
+      "stopDesc": null,
+      "stopLat": 52.236851,
+      "stopLon": 21.016991
+    },
+    {
+      "stopId": "7014mP2",
+      "stopCode": null,
+      "stopName": "Świętokrzyska",
+      "stopDesc": null,
+      "stopLat": 52.235336,
+      "stopLon": 21.009089
+    },
+    {
+      "stopId": "7014mP1",
+      "stopCode": null,
+      "stopName": "Świętokrzyska",
+      "stopDesc": null,
+      "stopLat": 52.235836,
+      "stopLon": 21.007458
+    },
+    {
+      "stopId": "700402",
+      "stopCode": null,
+      "stopName": "Noakowskiego 02",
+      "stopDesc": null,
+      "stopLat": 52.222809,
+      "stopLon": 21.009242
+    },
+    {
+      "stopId": "700401",
+      "stopCode": null,
+      "stopName": "Noakowskiego 01",
+      "stopDesc": null,
+      "stopLat": 52.222823,
+      "stopLon": 21.007699
+    },
+    {
+      "stopId": "707904",
+      "stopCode": null,
+      "stopName": "Metro Centrum Nauki Kopernik 04",
+      "stopDesc": null,
+      "stopLat": 52.239795,
+      "stopLon": 21.029268
+    },
+    {
+      "stopId": "707905",
+      "stopCode": null,
+      "stopName": "Metro Centrum Nauki Kopernik 05",
+      "stopDesc": null,
+      "stopLat": 52.238852,
+      "stopLon": 21.029445
+    },
+    {
+      "stopId": "7014mE3",
+      "stopCode": null,
+      "stopName": "3",
+      "stopDesc": null,
+      "stopLat": 52.235231,
+      "stopLon": 21.009287
+    },
+    {
+      "stopId": "7014mE2",
+      "stopCode": null,
+      "stopName": "2",
+      "stopDesc": null,
+      "stopLat": 52.235451,
+      "stopLon": 21.009212
+    },
+    {
+      "stopId": "7014mE1",
+      "stopCode": null,
+      "stopName": "1",
+      "stopDesc": null,
+      "stopLat": 52.235599,
+      "stopLon": 21.00859
+    },
+    {
+      "stopId": "704002",
+      "stopCode": null,
+      "stopName": "Pl. Trzech Krzyży 02",
+      "stopDesc": null,
+      "stopLat": 52.228986,
+      "stopLon": 21.022861
+    },
+    {
+      "stopId": "704001",
+      "stopCode": null,
+      "stopName": "Pl. Trzech Krzyży 01",
+      "stopDesc": null,
+      "stopLat": 52.226923,
+      "stopLon": 21.023225
+    },
+    {
+      "stopId": "704006",
+      "stopCode": null,
+      "stopName": "Pl. Trzech Krzyży 06",
+      "stopDesc": null,
+      "stopLat": 52.228335,
+      "stopLon": 21.023506
+    },
+    {
+      "stopId": "704004",
+      "stopCode": null,
+      "stopName": "Pl. Trzech Krzyży 04",
+      "stopDesc": null,
+      "stopLat": 52.23053,
+      "stopLon": 21.021735
+    },
+    {
+      "stopId": "704003",
+      "stopCode": null,
+      "stopName": "Pl. Trzech Krzyży 03",
+      "stopDesc": null,
+      "stopLat": 52.229572,
+      "stopLon": 21.021556
+    },
+    {
+      "stopId": "7014mE7",
+      "stopCode": null,
+      "stopName": "7",
+      "stopDesc": null,
+      "stopLat": 52.235215,
+      "stopLon": 21.007308
+    },
+    {
+      "stopId": "7014mE6",
+      "stopCode": null,
+      "stopName": "6",
+      "stopDesc": null,
+      "stopLat": 52.234831,
+      "stopLon": 21.007555
+    },
+    {
+      "stopId": "7014mE5",
+      "stopCode": null,
+      "stopName": "5",
+      "stopDesc": null,
+      "stopLat": 52.234791,
+      "stopLon": 21.00844
+    },
+    {
+      "stopId": "7014mE4",
+      "stopCode": null,
+      "stopName": "4",
+      "stopDesc": null,
+      "stopLat": 52.234995,
+      "stopLon": 21.009062
+    },
+    {
+      "stopId": "7014mE9",
+      "stopCode": null,
+      "stopName": "9",
+      "stopDesc": null,
+      "stopLat": 52.236233,
+      "stopLon": 21.006766
+    },
+    {
+      "stopId": "7014mE8",
+      "stopCode": null,
+      "stopName": "8",
+      "stopDesc": null,
+      "stopLat": 52.235583,
+      "stopLon": 21.007866
+    },
+    {
+      "stopId": "700502",
+      "stopCode": null,
+      "stopName": "Pl. Politechniki 02",
+      "stopDesc": null,
+      "stopLat": 52.220071,
+      "stopLon": 21.010984
+    },
+    {
+      "stopId": "700501",
+      "stopCode": null,
+      "stopName": "Pl. Politechniki 01",
+      "stopDesc": null,
+      "stopLat": 52.220031,
+      "stopLon": 21.0115
+    },
+    {
+      "stopId": "706701",
+      "stopCode": null,
+      "stopName": "Topiel 01",
+      "stopDesc": null,
+      "stopLat": 52.23755,
+      "stopLon": 21.026808
+    },
+    {
+      "stopId": "706702",
+      "stopCode": null,
+      "stopName": "Topiel 02",
+      "stopDesc": null,
+      "stopLat": 52.237627,
+      "stopLon": 21.026771
+    },
+    {
+      "stopId": "706703",
+      "stopCode": null,
+      "stopName": "Topiel 03",
+      "stopDesc": null,
+      "stopLat": 52.237057,
+      "stopLon": 21.026241
+    },
+    {
+      "stopId": "704101",
+      "stopCode": null,
+      "stopName": "Muzeum Narodowe 01",
+      "stopDesc": null,
+      "stopLat": 52.232178,
+      "stopLon": 21.023445
+    },
+    {
+      "stopId": "704106",
+      "stopCode": null,
+      "stopName": "Muzeum Narodowe 06",
+      "stopDesc": null,
+      "stopLat": 52.231945,
+      "stopLon": 21.021633
+    },
+    {
+      "stopId": "704105",
+      "stopCode": null,
+      "stopName": "Muzeum Narodowe 05",
+      "stopDesc": null,
+      "stopLat": 52.231584,
+      "stopLon": 21.020079
+    },
+    {
+      "stopId": "704102",
+      "stopCode": null,
+      "stopName": "Muzeum Narodowe 02",
+      "stopDesc": null,
+      "stopLat": 52.232231,
+      "stopLon": 21.022235
+    },
+    {
+      "stopId": "7901p2/3",
+      "stopCode": null,
+      "stopName": "Warszawa Śródmieście peron 2/3",
+      "stopDesc": null,
+      "stopLat": 52.229446,
+      "stopLon": 21.007541
+    },
+    {
+      "stopId": "700604",
+      "stopCode": null,
+      "stopName": "Metro Politechnika 04",
+      "stopDesc": null,
+      "stopLat": 52.219933,
+      "stopLon": 21.016035
+    },
+    {
+      "stopId": "700603",
+      "stopCode": null,
+      "stopName": "Metro Politechnika 03",
+      "stopDesc": null,
+      "stopLat": 52.21994,
+      "stopLon": 21.014997
+    },
+    {
+      "stopId": "7088m",
+      "stopCode": null,
+      "stopName": "Rondo ONZ",
+      "stopDesc": null,
+      "stopLat": 52.23307,
+      "stopLon": 20.998113
+    },
+    {
+      "stopId": "709001",
+      "stopCode": null,
+      "stopName": "Nowowiejska 01",
+      "stopDesc": null,
+      "stopLat": 52.221281,
+      "stopLon": 21.004647
+    },
+    {
+      "stopId": "709003",
+      "stopCode": null,
+      "stopName": "Nowowiejska 03",
+      "stopDesc": null,
+      "stopLat": 52.220582,
+      "stopLon": 21.004848
+    },
+    {
+      "stopId": "709002",
+      "stopCode": null,
+      "stopName": "Nowowiejska 02",
+      "stopDesc": null,
+      "stopLat": 52.221029,
+      "stopLon": 21.005053
+    },
+    {
+      "stopId": "709005",
+      "stopCode": null,
+      "stopName": "Nowowiejska 05",
+      "stopDesc": null,
+      "stopLat": 52.220224,
+      "stopLon": 21.0042
+    },
+    {
+      "stopId": "709006",
+      "stopCode": null,
+      "stopName": "Nowowiejska 06",
+      "stopDesc": null,
+      "stopLat": 52.220211,
+      "stopLon": 21.005583
+    },
+    {
+      "stopId": "706801",
+      "stopCode": null,
+      "stopName": "PKP Powiśle 01",
+      "stopDesc": null,
+      "stopLat": 52.232715,
+      "stopLon": 21.02592
+    },
+    {
+      "stopId": "706802",
+      "stopCode": null,
+      "stopName": "PKP Powiśle 02",
+      "stopDesc": null,
+      "stopLat": 52.232902,
+      "stopLon": 21.025718
+    },
+    {
+      "stopId": "706803",
+      "stopCode": null,
+      "stopName": "PKP Powiśle 03",
+      "stopDesc": null,
+      "stopLat": 52.23413,
+      "stopLon": 21.030264
+    },
+    {
+      "stopId": "706804",
+      "stopCode": null,
+      "stopName": "PKP Powiśle 04",
+      "stopDesc": null,
+      "stopLat": 52.234689,
+      "stopLon": 21.030266
+    },
+    {
+      "stopId": "7901p1/2",
+      "stopCode": null,
+      "stopName": "Warszawa Śródmieście peron 1/2",
+      "stopDesc": null,
+      "stopLat": 52.229309,
+      "stopLon": 21.007624
+    },
+    {
+      "stopId": "704202",
+      "stopCode": null,
+      "stopName": "Foksal 02",
+      "stopDesc": null,
+      "stopLat": 52.233266,
+      "stopLon": 21.019528
+    },
+    {
+      "stopId": "704201",
+      "stopCode": null,
+      "stopName": "Foksal 01",
+      "stopDesc": null,
+      "stopLat": 52.232358,
+      "stopLon": 21.020015
+    },
+    {
+      "stopId": "7900p4",
+      "stopCode": null,
+      "stopName": "Warszawa Centralna peron 4",
+      "stopDesc": null,
+      "stopLat": 52.229046,
+      "stopLon": 21.003093
+    },
+    {
+      "stopId": "706904",
+      "stopCode": null,
+      "stopName": "Książęca 04",
+      "stopDesc": null,
+      "stopLat": 52.230173,
+      "stopLon": 21.029553
+    },
+    {
+      "stopId": "426102",
+      "stopCode": null,
+      "stopName": "Krzywickiego 02",
+      "stopDesc": null,
+      "stopLat": 52.223238,
+      "stopLon": 21.001375
+    },
+    {
+      "stopId": "706902",
+      "stopCode": null,
+      "stopName": "Książęca 02",
+      "stopDesc": null,
+      "stopLat": 52.230766,
+      "stopLon": 21.030441
+    },
+    {
+      "stopId": "704304",
+      "stopCode": null,
+      "stopName": "Nowy Świat 04",
+      "stopDesc": null,
+      "stopLat": 52.237255,
+      "stopLon": 21.019218
+    },
+    {
+      "stopId": "704303",
+      "stopCode": null,
+      "stopName": "Nowy Świat 03",
+      "stopDesc": null,
+      "stopLat": 52.23719,
+      "stopLon": 21.019392
+    },
+    {
+      "stopId": "704302",
+      "stopCode": null,
+      "stopName": "Nowy Świat 02",
+      "stopDesc": null,
+      "stopLat": 52.236863,
+      "stopLon": 21.016779
+    },
+    {
+      "stopId": "704301",
+      "stopCode": null,
+      "stopName": "Nowy Świat 01",
+      "stopDesc": null,
+      "stopLat": 52.2366,
+      "stopLon": 21.015896
+    },
+    {
+      "stopId": "704402",
+      "stopCode": null,
+      "stopName": "Uniwersytet 02",
+      "stopDesc": null,
+      "stopLat": 52.23921,
+      "stopLon": 21.0173
+    },
+    {
+      "stopId": "4901",
+      "stopCode": null,
+      "stopName": "Warszawa Ochota",
+      "stopDesc": null,
+      "stopLat": 52.225805,
+      "stopLon": 20.990786
+    }
+  ]
+}
