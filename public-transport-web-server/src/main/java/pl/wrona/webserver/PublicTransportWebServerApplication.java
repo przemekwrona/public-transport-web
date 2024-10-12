@@ -24,13 +24,26 @@ public class PublicTransportWebServerApplication {
 
     @Bean
     public Caffeine caffeineConfig() {
-        return Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES);
+        return Caffeine.newBuilder()
+                .expireAfterWrite(1, TimeUnit.MINUTES);
     }
 
     @Bean
     public CacheManager cacheManager(Caffeine caffeine) {
         CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
-        caffeineCacheManager.setCaffeine(caffeine);
+
+        caffeineCacheManager.registerCustomCache("station_information", Caffeine.newBuilder()
+                .expireAfterWrite(1, TimeUnit.MINUTES)
+                .build());
+
+        caffeineCacheManager.registerCustomCache("station_status", Caffeine.newBuilder()
+                .expireAfterWrite(1, TimeUnit.MINUTES)
+                .build());
+
+        caffeineCacheManager.registerCustomCache("weather", Caffeine.newBuilder()
+                .expireAfterWrite(1, TimeUnit.HOURS)
+                .build());
+
         return caffeineCacheManager;
     }
 
