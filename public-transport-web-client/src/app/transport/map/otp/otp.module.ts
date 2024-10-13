@@ -25,6 +25,7 @@ import {JourneyDistancePipe} from "./summary-journey/journey-distance.pipe";
 import {JourneyDurationPipe} from "./summary-journey/journey-duration.pipe";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {NgxGaugeModule} from "ngx-gauge";
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         MatDialogModule,
         MatDividerModule,
         MatInputModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        NgxGaugeModule
     ],
     providers: [
         OtpService

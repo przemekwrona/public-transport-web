@@ -332,31 +332,38 @@
         Znajduje się w odległości: {{summary?.city_bike?.nearest_distance}}m
     </div>
 
-    <div class="row">
-        <div class="col-4">Stacje roweru miejskiego</div>
-        <div class="col-2">Najbliższa</div>
-        <div class="col-2"><100m</div>
-        <div class="col-2"><250m</div>
-        <div class="col-2"><500m</div>
-    </div>
-
     <div class="row mb-3">
-        <div class="col-4"></div>
-        <div class="col-2">
-            {{summary?.city_bike?.nearest?.numBikesAvailable}} / {{ (summary?.city_bike?.nearest?.numDocks)}}
-            ({{summary?.city_bike?.nearest?.occupancyRatio | number : '.0-0'}}%)
+        <div class="col-3">
+            <ngx-gauge [type]="'arch'" [size]="130" [value]="round(summary?.city_bike?.nearest?.occupancyRatio)"
+                       [label]="'Najbliższa'" [append]="'%'"></ngx-gauge>
+            <div>
+                {{summary?.city_bike?.nearest?.numBikesAvailable}} / {{ (summary?.city_bike?.nearest?.numDocks)}}
+                ({{summary?.city_bike?.nearest?.occupancyRatio | number : '.0-0'}}%)
+            </div>
         </div>
-        <div class="col-2">
-            {{summary?.city_bike?._100_m?.numBikesAvailable}} / {{ (summary?.city_bike?._100_m?.numDocks)}}
-            ({{summary?.city_bike?._100_m?.occupancyRatio | number : '.0-0'}}%)
+        <div class="col-3">
+            <ngx-gauge [type]="'arch'" [size]="130" [value]="round(summary?.city_bike?._100_m?.occupancyRatio)"
+                       [label]="'<100m'" [append]="'%'"></ngx-gauge>
+            <div>
+                {{summary?.city_bike?._100_m?.numBikesAvailable}} / {{ (summary?.city_bike?._100_m?.numDocks)}}
+                ({{summary?.city_bike?._100_m?.occupancyRatio | number : '.0-0'}}%)
+            </div>
         </div>
-        <div class="col-2">
-            {{summary?.city_bike?._250_m?.numBikesAvailable}} / {{ (summary?.city_bike?._250_m?.numDocks)}}
-            ({{summary?.city_bike?._250_m?.occupancyRatio | number : '.0-0'}}%)
+        <div class="col-3">
+            <ngx-gauge [type]="'arch'" [size]="130" [value]="round(summary?.city_bike?._250_m?.occupancyRatio)"
+                       [label]="'<250m'" [append]="'%'"></ngx-gauge>
+            <div>
+                {{summary?.city_bike?._250_m?.numBikesAvailable}} / {{ (summary?.city_bike?._250_m?.numDocks)}}
+                ({{summary?.city_bike?._250_m?.occupancyRatio | number : '.0-0'}}%)
+            </div>
         </div>
-        <div class="col-2">
-            {{summary?.city_bike?._500_m?.numBikesAvailable}} / {{ (summary?.city_bike?._500_m?.numDocks)}}
-            ({{summary?.city_bike?._500_m?.occupancyRatio | number : '.0-0'}}%)
+        <div class="col-3">
+            <ngx-gauge [type]="'arch'" [size]="130" [value]="round(summary?.city_bike?._500_m?.occupancyRatio)"
+                       [label]="'<500m'" [append]="'%'"></ngx-gauge>
+            <div>
+                {{summary?.city_bike?._500_m?.numBikesAvailable}} / {{ (summary?.city_bike?._500_m?.numDocks)}}
+                ({{summary?.city_bike?._500_m?.occupancyRatio | number : '.0-0'}}%)
+            </div>
         </div>
     </div>
 
