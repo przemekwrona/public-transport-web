@@ -25,4 +25,12 @@ export class SummaryJourneyComponent {
         }
         return value < 0;
     }
+
+    public round(value: number | undefined): number {
+        if (value == undefined) {
+            return 0;
+        }
+
+        return Math.round(value);
+    }
 }
