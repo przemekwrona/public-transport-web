@@ -2,7 +2,9 @@
 
     <div class="container utils-panel-container">
         <div class="row">
-            <div class="col-xl-4 col-lg-5 col-md-5 col-sm-7 stop-details itinerary-details" [ngClass]="{'itinerary-details': true}">
+            <div class="col-xl-4 col-lg-5 col-md-5 col-sm-7 stop-details"
+                 [ngClass]="{'itinerary-details': showPlanDetails}">
+
                 <app-brand-header *ngIf="!hasCurrentStop()"></app-brand-header>
 
                 <app-stop [stop]="currentStop"
@@ -25,7 +27,8 @@
                 <app-otp *ngIf="!hasCurrentStop()"
                          [startPoint]="startPoint"
                          [endPoint]="endPoint"
-                         [map]="map"></app-otp>
+                         [map]="map"
+                         (clickPlan)="planHasBeenClicked($event)"></app-otp>
 
                 <app-timetable [stop]="currentStop"
                                [line]="currentLine || ''"

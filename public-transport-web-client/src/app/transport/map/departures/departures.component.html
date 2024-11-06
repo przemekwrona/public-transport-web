@@ -5,7 +5,7 @@
     <div *ngFor="let departure of departures.slice(0, 8);">
 
       <div class="row py-2" [ngClass]="{pulse: lessThan1Min(departure.time)}" (click)="showShape(departure.time.tripId || '')">
-        <div class="col-2 text-center">{{getRouteByRouteId(departure?.pattern?.routeId || '').shortName || ''}}</div>
+        <div class="col-2 text-center">{{getRouteByRouteId(departure?.pattern?.routeId || '')?.shortName || ''}}</div>
         <div class="col-6 text-truncate">{{departure.time.headsign || ''}}</div>
         <div class="col-4 text-end mx-0">
           <span class="in">{{departure.time.scheduledDeparture | departureTimePrefix | async}}</span>

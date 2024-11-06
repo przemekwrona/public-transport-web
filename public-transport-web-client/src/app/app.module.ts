@@ -7,24 +7,30 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {TransportModule} from "./transport/transport.module";
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import {RouterModule} from "@angular/router";
+import {routes} from "./app.routes";
 
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    TransportModule,
-    MapModule,
-    LandingModule,
-    FormsModule
-  ],
-  declarations: [
-    AppComponent
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+    imports: [
+        RouterModule.forRoot(routes),
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        TransportModule,
+        MapModule,
+        LandingModule,
+        FormsModule
+    ],
+    exports: [
+        RouterModule
+    ],
+    declarations: [
+        AppComponent
+    ],
+    bootstrap: [
+        AppComponent
+    ]
 
 })
 export class AppModule {
