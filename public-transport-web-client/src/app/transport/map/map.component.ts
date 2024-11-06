@@ -43,6 +43,8 @@ export class MapComponent implements OnInit, AfterViewInit {
     private endMarker: CircleMarker | null;
     private endBorderMarker: CircleMarker | null;
 
+    public showPlanDetails: boolean = false;
+
     constructor(private mapService: MapService, private stopService: StopService, private timetableService: TimetableService, private tripService: TripService, private otpService: OtpService, private bikeMapManagerService: BikeMapManagerService, private itineraryManagerService: ItineraryManagerService) {
         this.getStops(52.240, 20.890, 52.220, 21.120);
     }
@@ -221,8 +223,7 @@ export class MapComponent implements OnInit, AfterViewInit {
                     this.otpService.getStopDetails(stop.id || '').subscribe(stopDetails => this.currentStopDetails = stopDetails);
                     this.otpService.getRoutes(stop.id || '').subscribe(routes => this.currentStopRoutes = routes);
                     this.otpService.getStopTimes(stop.id || '', moment()).subscribe(stopTimes => this.currentStopTimes = stopTimes);
-
-                    // this.currentLine = null;
+                    this.showPlanDetails = false;
 
                     this.itineraryManagerService.hidePublicTransportOnMap();
 
@@ -352,5 +353,9 @@ export class MapComponent implements OnInit, AfterViewInit {
                 }
             }
         });
+    }
+
+    public planHasBeenClicked(event: boolean) {
+        this.showPlanDetails = event;
     }
 }

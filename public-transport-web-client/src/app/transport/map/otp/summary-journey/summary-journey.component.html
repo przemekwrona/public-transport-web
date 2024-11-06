@@ -333,7 +333,7 @@
     </div>
 
     <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-3 text-center">
             <ngx-gauge [type]="'arch'" [size]="130" [value]="round(summary?.city_bike?.nearest?.occupancyRatio)"
                        [label]="'Najbliższa'" [append]="'%'"></ngx-gauge>
             <div>
@@ -341,7 +341,7 @@
                 ({{summary?.city_bike?.nearest?.occupancyRatio | number : '.0-0'}}%)
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-3 text-center">
             <ngx-gauge [type]="'arch'" [size]="130" [value]="round(summary?.city_bike?._100_m?.occupancyRatio)"
                        [label]="'<100m'" [append]="'%'"></ngx-gauge>
             <div>
@@ -349,7 +349,7 @@
                 ({{summary?.city_bike?._100_m?.occupancyRatio | number : '.0-0'}}%)
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-3 text-center">
             <ngx-gauge [type]="'arch'" [size]="130" [value]="round(summary?.city_bike?._250_m?.occupancyRatio)"
                        [label]="'<250m'" [append]="'%'"></ngx-gauge>
             <div>
@@ -357,7 +357,7 @@
                 ({{summary?.city_bike?._250_m?.occupancyRatio | number : '.0-0'}}%)
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-3 text-center">
             <ngx-gauge [type]="'arch'" [size]="130" [value]="round(summary?.city_bike?._500_m?.occupancyRatio)"
                        [label]="'<500m'" [append]="'%'"></ngx-gauge>
             <div>

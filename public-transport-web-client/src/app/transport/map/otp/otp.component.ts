@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import * as L from 'leaflet';
 import {DivIcon, LatLng, LatLngBounds, Map, Marker, polyline, Polyline} from "leaflet";
 import {OtpService} from "../../../http/otp.service";
@@ -27,6 +27,7 @@ export class OtpComponent implements OnDestroy {
 
     @Input() startPoint: OtpPoint;
     @Input() map: Map;
+    @Output() clickPlan = new EventEmitter<boolean>();
 
     private _endPoint: OtpPoint;
 
@@ -59,6 +60,7 @@ export class OtpComponent implements OnDestroy {
 
     public plan(): void {
         this.wasPlanned = true;
+        this.clickPlan.emit(true);
         this.otpService.plan(this.startPoint.lat, this.startPoint.lon, this.endPoint.lat, this.endPoint.lon, moment()).subscribe(routeResponse => {
             this.routeResponse = routeResponse;
             this.walkItinerary = this.getWalkItinerary(routeResponse)
@@ -180,7 +182,6 @@ export class OtpComponent implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        console.log("On destroy");
     }
 
 }
