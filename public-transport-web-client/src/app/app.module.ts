@@ -9,6 +9,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {routes} from "./app.routes";
+import {AgencyModule} from "./agency/agency.module";
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import {routes} from "./app.routes";
         HttpClientModule,
         BrowserAnimationsModule,
         TransportModule,
+        AgencyModule,
         MapModule,
         LandingModule,
         FormsModule
