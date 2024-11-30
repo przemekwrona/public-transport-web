@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: Agency API
+  description: Service that define Agency
+  version: 1.0.0
+paths:
+  /agency/{agency_code}/routes:
+    post:
+      tags:
+        - route
+      summary: Create new route
+      operationId: createRoute
+      parameters:
+        - name: agency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Agency code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoute'
+        required: true
+
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRouteResponse'
+
+  /agency/{agency_code}/routes/{route_id}:
+    get:
+      tags:
+        - route
+      summary: Get route with trips
+      operationId: findRouteByLine
+      parameters:
+        - name: agency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Agency code
+        - name: route_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Agency code
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRouteResponse'
+
+components:
+  schemas:
+    CreateRouteStopTime:
+      type: object
+      properties:
+        otp_id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        lon:
+          type: number
+        lat:
+          type: number
+        order:
+          type: integer
+
+    CreateRouteTrip:
+      type: object
+      properties:
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateRouteStopTime'
+
+    CreateRoute:
+      type: object
+      properties:
+        line:
+          type: string
+        trips:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateRouteTrip'
+
+    CreateRouteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+
+    GetRouteResponse:
+      type: object
+      properties:
+        line:
+          type: string
