@@ -226,6 +226,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/StopTime'
 
+
+
 components:
   schemas:
     AgencyAndId:

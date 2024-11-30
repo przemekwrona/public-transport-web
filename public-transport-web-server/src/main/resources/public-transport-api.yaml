@@ -92,6 +92,45 @@ paths:
               schema:
                 $ref: '#/components/schemas/JourneySummaryResponse'
 
+  /stops:
+    get:
+      tags:
+        - stops
+      summary: Return stops in indicated area
+      operationId: getStopsInArea
+      parameters:
+        - name: maxLat
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+        - name: minLon
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+        - name: minLat
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+        - name: maxLon
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopsResponse'
+
 components:
   schemas:
     ModeSummary:
@@ -216,3 +255,28 @@ components:
           $ref: '#/components/schemas/CityBike'
         weather:
           $ref: '#/components/schemas/Weather'
+
+    Stop:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        ref:
+          type: string
+        lon:
+          type: number
+          format: float
+        lat:
+          type: number
+          format: float
+
+    StopsResponse:
+      type: object
+      properties:
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stop'
