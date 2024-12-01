@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.agency.model.Agency;
 
 @Repository
-public interface AgencyRepository extends JpaRepository<Agency, String> {
+public interface AgencyRepository extends JpaRepository<Agency, Long> {
 
     Agency findByAgencyCodeEquals(String agencyCode);
 }
