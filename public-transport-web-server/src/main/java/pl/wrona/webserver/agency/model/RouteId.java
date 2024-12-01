@@ -20,6 +20,6 @@ public class RouteId implements Serializable {
     private String routeId;
 
     @ManyToOne
-    @JoinColumn(name = "agency_code", nullable = false)
+    @JoinColumn(name = "agency_code", referencedColumnName = "agency_code", nullable = false)
     private Agency agency;
 }

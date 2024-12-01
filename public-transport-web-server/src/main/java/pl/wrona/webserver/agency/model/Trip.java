@@ -19,13 +19,13 @@ public class Trip {
     @EmbeddedId
     private TripId tripId;
 
-    @ManyToOne
-    @MapsId("agencyCode")
+//    @ManyToOne
+//    @MapsId("agencyCode")
 //    @JoinColumn(name = "route_id", referencedColumnName = "route_id")
 //    @JoinColumns({
 //            @JoinColumn(name = "agency_code", referencedColumnName = "agency_code"),
 //            @JoinColumn(name = "route_id", referencedColumnName = "route_id")
 //    })
-    private Route route;
+//    private Route route;
 
 }
