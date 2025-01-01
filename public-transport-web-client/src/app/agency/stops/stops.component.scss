@@ -1,12 +1,18 @@
-.map-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 50px;
+.ribbon {
+  background-color: #09747A;
+  color: white;
 
-  #map {
+  .btn.add-stops {
+    background-color: #09747A;
+    color: white;
+  }
+}
+
+.map-container {
+  position: relative;
+  height: 100%;
+
+  .map {
     height: 100%;
   }
 }

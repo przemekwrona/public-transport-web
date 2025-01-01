@@ -88,7 +88,7 @@ export class DeparturesComponent implements OnInit, OnDestroy {
     }
 
     getDepartures(stopTimes: StopTime[]): TimeTuple[] {
-        const now = moment()
+        const now = moment().add(1, 'hour');
         const secondOfTheDay = now.hour() * 60 * 60 + now.minute() * 60 + now.second();
 
         return stopTimes

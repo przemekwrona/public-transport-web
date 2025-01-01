@@ -3,6 +3,8 @@ import {CommonModule} from '@angular/common';
 import {AgencyComponent} from "./agency.component";
 import {StopsModule} from "./stops/stops.module";
 import {StopService} from "../http/stop.service";
+import {RouterModule} from "@angular/router";
+import {RoutesModule} from "./routes/routes.module";
 
 
 @NgModule({
@@ -14,8 +16,9 @@ import {StopService} from "../http/stop.service";
     ],
     imports: [
         CommonModule,
-        StopsModule
-        // RoutesModule
+        RouterModule,
+        StopsModule,
+        RoutesModule
     ],
     providers: [
         StopService

@@ -2,11 +2,13 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {StopsComponent} from "./stops.component";
 import {StopService} from "../../http/stop.service";
+import {MatIconModule} from "@angular/material/icon";
 
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
+        MatIconModule
     ],
     declarations: [
         StopsComponent

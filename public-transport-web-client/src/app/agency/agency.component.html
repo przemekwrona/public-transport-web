@@ -1,5 +1,20 @@
-<p>agency works!</p>
+<div class="row h-100">
+    <div class="col-2">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a [routerLink]="['/agency/stops']" class="nav-link active">Przystanki</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/agency/routes']" class="nav-link">Linie</a>
+            </li>
 
-<app-stops></app-stops>
-<!--<app-routes></app-routes>-->
+            <li class="nav-item">
+                <a [routerLink]="['/agency/routes']" class="nav-link">Linie</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-10 h-100">
+        <router-outlet></router-outlet>
+    </div>
+</div>
 
