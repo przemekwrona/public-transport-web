@@ -1,5 +1,37 @@
-<p>stops works!</p>
+<!--<div class="col ribbon text-end">-->
+<!--    <button mat-icon-button class="btn add-stops">-->
+<!--        <mat-icon>add_circle</mat-icon>-->
+<!--    </button>-->
+<!--</div>-->
 
-<div class="map-container">
-    <div id="map"></div>
+<div class="row h-100">
+    <div class="col-3">
+        <div *ngFor="let stop of stops">
+            {{stop.name}}
+<!--            <mat-expansion-panel hideToggle>-->
+<!--                <mat-expansion-panel-header>-->
+<!--                    <mat-panel-title>-->
+<!--                        {{route.line}}-->
+<!--                    </mat-panel-title>-->
+<!--                    <mat-panel-description>-->
+<!--                        {{route.variants.length}} warianty-->
+<!--                    </mat-panel-description>-->
+<!--                </mat-expansion-panel-header>-->
+
+<!--                <div class="row">-->
+<!--                    <div class="col-4">-->
+<!--                        &lt;!&ndash;                <app-field [key]="'Liczba wariantów'" [value]="route.variants.length"></app-field>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="col-4"></div>-->
+<!--                    <div class="col-4"></div>-->
+<!--                </div>-->
+<!--            </mat-expansion-panel>-->
+        </div>
+    </div>
+
+    <div class="col-9 h-100">
+        <div class="map-container">
+            <div id="map-stops" class="map"></div>
+        </div>
+    </div>
 </div>
