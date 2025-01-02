@@ -1,13 +1,16 @@
 package pl.wrona.webserver.stops;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "bdot10k_stop")
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,10 +18,13 @@ import lombok.NoArgsConstructor;
 public class BusStop {
 
     @Id
-    private Long osmId;
+    @Column(name = "bdot10k_id")
+    private String bdot10kId;
+
     private String name;
-    private String ref;
+
     private float lon;
+
     private float lat;
 }
 

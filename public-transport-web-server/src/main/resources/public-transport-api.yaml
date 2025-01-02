@@ -4,6 +4,46 @@ info:
   description: Open Tip Planner API
   version: 1.0.0
 paths:
+  /users:
+    post:
+      tags:
+        - auth
+      summary: Create new user in system
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAppUserRequest'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAppUserResponse'
+
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login to platform with credentials
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginAppUserRequest'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginAppUserResponse'
+
   /otp/routers/{instance_id}/plan/summary:
     get:
       tags:
@@ -133,6 +173,38 @@ paths:
 
 components:
   schemas:
+    CreateAppUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+
+    CreateAppUserResponse:
+      type: object
+      properties:
+        username:
+          type: string
+
+    LoginAppUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    LoginAppUserResponse:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+
     ModeSummary:
       type: object
       properties:
@@ -260,11 +332,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-        name:
           type: string
-        ref:
+        name:
           type: string
         lon:
           type: number
