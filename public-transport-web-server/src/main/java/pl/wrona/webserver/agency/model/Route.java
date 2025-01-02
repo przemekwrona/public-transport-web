@@ -1,8 +1,12 @@
 package pl.wrona.webserver.agency.model;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,10 +20,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class Route {
 
-    @EmbeddedId
-    private RouteId routeId;
+    @Id
+    @Column(name = "route_id")
+    private String routeId;
 
-//    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
-//    private Set<Trip> trips;
+    @ManyToOne
+    @JoinColumn(name = "agency_id", nullable = false)
+    private Agency agency;
+
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Trip> trips;
 
 }

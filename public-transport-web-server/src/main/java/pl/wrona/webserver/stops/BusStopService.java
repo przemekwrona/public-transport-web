@@ -14,9 +14,8 @@ public class BusStopService {
     public StopsResponse findBusStop(float maxLat, float minLon, float minLat, float maxLon) {
         var stops = busStopRepository.findAllByArea(maxLat, minLon, minLat, maxLon).stream()
                 .map(stop -> new Stop()
-                        .id(stop.getOsmId())
+                        .id(stop.getBdot10kId())
                         .name(stop.getName())
-                        .ref(stop.getRef())
                         .lon(stop.getLon())
                         .lat(stop.getLat()))
                 .toList();

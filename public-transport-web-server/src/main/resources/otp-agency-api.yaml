@@ -79,6 +79,8 @@ components:
     CreateRouteTrip:
       type: object
       properties:
+        id:
+          type: string
         stops:
           type: array
           items:
@@ -100,8 +102,32 @@ components:
         id:
           type: string
 
+    GetRouteStopTime:
+      type: object
+      properties:
+        name:
+          type: string
+
+    GetRouteTrip:
+      type: object
+      properties:
+        name:
+          type: string
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetRouteStopTime'
+
     GetRouteResponse:
       type: object
       properties:
+        agency_code:
+          type: string
+        agency_name:
+          type: string
         line:
           type: string
+        trips:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetRouteTrip'
