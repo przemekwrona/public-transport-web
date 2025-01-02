@@ -5,6 +5,8 @@ import {StopsModule} from "./stops/stops.module";
 import {StopService} from "../http/stop.service";
 import {RouterModule} from "@angular/router";
 import {RoutesModule} from "./routes/routes.module";
+import {MatTreeModule} from "@angular/material/tree";
+import {ProfileModule} from "./profile/profile.module";
 
 
 @NgModule({
@@ -16,9 +18,11 @@ import {RoutesModule} from "./routes/routes.module";
     ],
     imports: [
         CommonModule,
+        ProfileModule,
         RouterModule,
         StopsModule,
-        RoutesModule
+        RoutesModule,
+        MatTreeModule
     ],
     providers: [
         StopService

@@ -1,13 +1,19 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
-import {LeafletEvent, Map, Marker} from "leaflet";
+import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
 import * as L from "leaflet";
 import {StopService} from "../stops/stop.service";
+import {Stop} from "../../generated/public-transport";
+
+enum RouteComponentMode {
+    OVERVIEW,
+    EDIT
+}
 
 @Component({
     selector: 'app-routes',
     templateUrl: './routes.component.html',
     styleUrl: './routes.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class RoutesComponent implements AfterViewInit {
     private ICON = L.divIcon({
@@ -17,6 +23,9 @@ export class RoutesComponent implements AfterViewInit {
 
     private map: Map;
     private stopMarkers: Marker[] = [];
+    private mode: RouteComponentMode = RouteComponentMode.OVERVIEW;
+
+    public stops: Stop[] = [];
 
     constructor(private stopService: StopService) {
     }
@@ -62,7 +71,11 @@ export class RoutesComponent implements AfterViewInit {
         if (map.getZoom() > 12) {
             const bounds = map.getBounds();
             this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
-                const stopMarkers: Marker[] = response.stops?.map(stop => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON})) || []
+                const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON})
+                    .on('click', (event: LeafletMouseEvent) => {
+                        this.stops.push(stop);
+                    })) || []
+
                 stopMarkers.forEach(marker => marker.addTo(map));
 
                 for (let marker of this.stopMarkers) {
@@ -74,6 +87,10 @@ export class RoutesComponent implements AfterViewInit {
             this.stopMarkers.forEach(marker => marker.removeFrom(map));
             this.stopMarkers = [];
         }
+    }
+
+    public clickEdit() {
+        this.mode = RouteComponentMode.EDIT;
     }
 
     public routes = [{
