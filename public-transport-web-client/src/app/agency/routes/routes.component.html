@@ -21,7 +21,18 @@
             </mat-expansion-panel>
         </div>
 
-        <button class="btn btn-success">Dodaj Trasę</button>
+        <button (click)="clickEdit()" class="btn btn-success">Dodaj Trasę</button>
+
+        <div>
+            Pzystanek początkowy <input type="text"/>
+        </div>
+        <div>
+            Kierunek <input type="text"/>
+        </div>
+
+
+        <div *ngFor="let stop of stops">{{stop.name}}</div>
+
     </div>
 
     <div class="col-9 h-100">
