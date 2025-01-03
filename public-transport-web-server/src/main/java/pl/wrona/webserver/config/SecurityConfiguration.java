@@ -26,6 +26,7 @@ public class SecurityConfiguration {
 
     private final AppUserDetailsService appUserDetailsService;
     private final AuthTokenFilter authTokenFilter;
+    private final AuthTokenEntryPoint authTokenEntryPoint;
 
     private static final String[] WHITE_LIST_URL = {
         "/**"
@@ -59,7 +60,7 @@ public class SecurityConfiguration {
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-//                .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(authTokenEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
