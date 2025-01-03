@@ -22,6 +22,6 @@ public class AppUserController implements AuthApi {
 
     @Override
     public ResponseEntity<LoginAppUserResponse> login(LoginAppUserRequest loginAppUserRequest) {
-        return null;
+        return ResponseEntity.ok(appUserService.login(loginAppUserRequest));
     }
 }

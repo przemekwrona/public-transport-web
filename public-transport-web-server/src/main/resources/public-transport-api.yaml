@@ -200,9 +200,7 @@ components:
     LoginAppUserResponse:
       type: object
       properties:
-        username:
-          type: string
-        email:
+        token:
           type: string
 
     ModeSummary:
