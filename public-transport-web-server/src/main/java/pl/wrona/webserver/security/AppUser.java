@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -28,8 +28,8 @@ public class AppUser {
     private String username;
     private String email;
     private String password;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     private boolean accountNonExpired;
     private boolean accountNonLocked;

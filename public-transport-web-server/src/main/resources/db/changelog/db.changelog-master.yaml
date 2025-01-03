@@ -60,9 +60,6 @@ databaseChangeLog:
                   name: updated_at
                   type: datetime
               - column:
-                  name: non_expired
-                  type: boolean
-              - column:
                   name: account_non_expired
                   type: boolean
               - column:
