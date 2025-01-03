@@ -10,6 +10,7 @@ import {FormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {routes} from "./app.routes";
 import {AgencyModule} from "./agency/agency.module";
+import {AuthModule} from "./auth/auth.module";
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import {AgencyModule} from "./agency/agency.module";
         AgencyModule,
         MapModule,
         LandingModule,
+        AuthModule,
         FormsModule
     ],
     exports: [

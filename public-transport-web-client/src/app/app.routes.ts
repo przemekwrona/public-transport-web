@@ -5,9 +5,11 @@ import {AgencyComponent} from "./agency/agency.component";
 import {StopsComponent} from "./agency/stops/stops.component";
 import {RoutesComponent} from "./agency/routes/routes.component";
 import {ProfileComponent} from "./agency/profile/profile.component";
+import {SigninComponent} from "./auth/signin/signin.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'planner', pathMatch: 'full'},
+    {path: 'signin', component: SigninComponent},
     {path: 'planner', component: TransportComponent},
     {
         path: 'agency', component: AgencyComponent, children: [
