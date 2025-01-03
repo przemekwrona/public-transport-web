@@ -29,7 +29,9 @@ public class SecurityConfiguration {
     private final AuthTokenEntryPoint authTokenEntryPoint;
 
     private static final String[] WHITE_LIST_URL = {
-        "/**"
+            "/actuator",
+            "/actuator/health",
+            "/users"
     };
 
     @Bean
