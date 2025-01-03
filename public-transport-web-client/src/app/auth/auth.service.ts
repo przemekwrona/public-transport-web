@@ -24,4 +24,8 @@ export class AuthService {
         this.token = '';
     }
 
+    getToken(): string {
+        return this.token;
+    }
+
 }
