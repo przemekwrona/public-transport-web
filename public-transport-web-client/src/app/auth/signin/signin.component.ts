@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthService} from "../auth.service";
-import {LoginAppUserRequest} from "../../generated/public-transport";
+import {LoginAppUserRequest, LoginAppUserResponse} from "../../generated/public-transport";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-signin',
@@ -11,11 +12,13 @@ export class SigninComponent {
 
     public loginAppUserRequest: LoginAppUserRequest = {};
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService, private router: Router) {
     }
 
     public login() {
-        this.authService.login(this.loginAppUserRequest).subscribe()
+        this.authService.login(this.loginAppUserRequest).subscribe((response: LoginAppUserResponse) => {
+            this.router.navigate(['/agency/profile']);
+        });
     }
 
 }
