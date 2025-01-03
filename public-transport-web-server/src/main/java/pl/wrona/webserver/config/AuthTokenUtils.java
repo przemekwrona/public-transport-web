@@ -7,9 +7,8 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import pl.wrona.webserver.security.AppUser;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -20,17 +19,14 @@ public class AuthTokenUtils {
 //    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
 //    @Value("${baeldung.app.jwtSecret}")
-    private String jwtSecret = "secret";
+    private String jwtSecret = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzQmVOGH0XZgdcdILCCTFOCFKB83T+b5o6EaePx8XcnF8jhyNwuLGCKpII1O40NFAeDqJaRIHPEVp+sgkJs/lwoVpLXOK0rKwKCHvfs+JuI8qBzP9IkFiczkDwrUw8nBioJMAIbK+yPRgKDP9zgdyAGM7e5is1SwKfpPtsKKAJJ2LJDAe6sEJSlAMaweXCskZp2NcgjKKYVBhwl3kziLGQRbWNbxSU84SIn7kKiRM7iEs1I6gC8DZ1MtOxu8kvf7DxRca+8NJ733X9sN4lZz8B4pZpOwBl7xX607P4joLu3ye4ze9rP4fULSwD3M2wKn6wE3a8ikrRymekR9dbYRyBQIDAQAB";
 
 //    @Value("${baeldung.app.jwtExpirationMs}")
     private int jwtExpirationMs = 600_000;
 
-    public String generateJwtToken(Authentication authentication) {
-
-        AppUser userPrincipal = (AppUser) authentication.getPrincipal();
-
+    public String generateJwtToken(UserDetails userDetails) {
         return Jwts.builder()
-                .subject((userPrincipal.getUsername()))
+                .subject((userDetails.getUsername()))
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(getSigningKey())
