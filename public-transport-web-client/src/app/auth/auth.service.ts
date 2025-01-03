@@ -1,17 +1,27 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {LoginAppUserRequest, LoginAppUserResponse} from "../generated/public-transport";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private httpClient: HttpClient) { }
+    private token: string = '';
 
-  login(loginCredentials: LoginAppUserRequest): Observable<LoginAppUserResponse> {
-    return this.httpClient.post<LoginAppUserResponse>(`/api/v1/auth/login`, loginCredentials);
-  }
+    constructor(private httpClient: HttpClient) {
+    }
+
+    login(loginCredentials: LoginAppUserRequest): Observable<LoginAppUserResponse> {
+        return this.httpClient.post<LoginAppUserResponse>(`/api/v1/auth/login`, loginCredentials)
+            .pipe(tap((response: LoginAppUserResponse) => {
+                this.token = response.token || '';
+            }));
+    }
+
+    logout(): void {
+        this.token = '';
+    }
 
 }
