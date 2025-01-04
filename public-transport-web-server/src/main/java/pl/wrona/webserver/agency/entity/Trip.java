@@ -1,4 +1,4 @@
-package pl.wrona.webserver.agency.model;
+package pl.wrona.webserver.agency.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

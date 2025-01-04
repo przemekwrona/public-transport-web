@@ -21,13 +21,14 @@ export class AddHeaderInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        // Get token
         const token: string = this.authService.getToken();
 
         // Clone the request to add the new header
         const clonedRequest = req.clone({headers: req.headers.append('Authorization', `Bearer ${token}`)});
 
         // Pass the cloned request instead of the original request to the next handle
-        return next.handle(req)
+        return next.handle(clonedRequest)
             .pipe(tap((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
                     const headers: HttpHeaders = event.headers;

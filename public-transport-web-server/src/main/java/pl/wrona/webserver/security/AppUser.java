@@ -1,5 +1,6 @@
 package pl.wrona.webserver.security;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,7 @@ import java.util.List;
 public class AppUser implements UserDetails {
 
     @Id
+    @Column(name = "app_user_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_id_seq")
     @SequenceGenerator(name = "app_user_id_seq", sequenceName = "app_user_id_seq",  allocationSize=1)
     private Long id;

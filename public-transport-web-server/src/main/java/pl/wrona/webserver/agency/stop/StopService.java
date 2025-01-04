@@ -3,7 +3,7 @@ package pl.wrona.webserver.agency.stop;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.agency.api.model.CreateRouteStopTime;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.agency.model.Stop;
+import pl.wrona.webserver.agency.entity.Stop;
 
 import java.util.List;
 import java.util.Map;

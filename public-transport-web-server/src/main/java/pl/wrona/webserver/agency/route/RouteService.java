@@ -8,11 +8,11 @@ import org.igeolab.iot.agency.api.model.CreateRouteTrip;
 import org.igeolab.iot.agency.api.model.GetRouteResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.agency.agency.AgencyService;
-import pl.wrona.webserver.agency.model.Agency;
-import pl.wrona.webserver.agency.model.Route;
-import pl.wrona.webserver.agency.model.Stop;
-import pl.wrona.webserver.agency.model.Trip;
+import pl.wrona.webserver.agency.AgencyService;
+import pl.wrona.webserver.agency.entity.Agency;
+import pl.wrona.webserver.agency.entity.Route;
+import pl.wrona.webserver.agency.entity.Stop;
+import pl.wrona.webserver.agency.entity.Trip;
 import pl.wrona.webserver.agency.stop.StopService;
 import pl.wrona.webserver.agency.trip.TripService;
 
