@@ -22,7 +22,7 @@ public class AuthTokenUtils {
     private String jwtSecret = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzQmVOGH0XZgdcdILCCTFOCFKB83T+b5o6EaePx8XcnF8jhyNwuLGCKpII1O40NFAeDqJaRIHPEVp+sgkJs/lwoVpLXOK0rKwKCHvfs+JuI8qBzP9IkFiczkDwrUw8nBioJMAIbK+yPRgKDP9zgdyAGM7e5is1SwKfpPtsKKAJJ2LJDAe6sEJSlAMaweXCskZp2NcgjKKYVBhwl3kziLGQRbWNbxSU84SIn7kKiRM7iEs1I6gC8DZ1MtOxu8kvf7DxRca+8NJ733X9sN4lZz8B4pZpOwBl7xX607P4joLu3ye4ze9rP4fULSwD3M2wKn6wE3a8ikrRymekR9dbYRyBQIDAQAB";
 
 //    @Value("${baeldung.app.jwtExpirationMs}")
-    private int jwtExpirationMs = 600_000;
+    private int jwtExpirationMs = 36_000_000;
 
     public String generateJwtToken(UserDetails userDetails) {
         return Jwts.builder()

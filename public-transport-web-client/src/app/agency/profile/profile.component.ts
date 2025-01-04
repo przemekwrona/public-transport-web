@@ -1,14 +1,27 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ProfileService} from "./profile.service";
+import {AgencyDetails} from "../../generated/public-transport";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrl: './profile.component.scss'
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
 
-  public companyName: string = 'NEOBUS POLSKA Czurczak Spółka Komandytowa';
-  public agencyUrl: string = 'neobus.pl';
-  public timetableUrl: string = '';
+    public agencyDetails: AgencyDetails = {};
+
+    constructor(private profileService: ProfileService) {
+    }
+
+    ngOnInit(): void {
+        this.profileService.getAgencyDetails().subscribe((response: AgencyDetails) => {
+            this.agencyDetails = response;
+        })
+    }
+
+    public saveAgencyDetails() {
+        this.profileService.saveAgencyDetails(this.agencyDetails).subscribe(() => {});
+    }
 
 }

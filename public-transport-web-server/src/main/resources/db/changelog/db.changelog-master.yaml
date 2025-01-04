@@ -39,7 +39,7 @@ databaseChangeLog:
             tableName: app_user
             columns:
               - column:
-                  name: id
+                  name: app_user_id
                   type: integer
                   constraints:
                     primaryKey: true
@@ -150,7 +150,36 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
-                    unique: true
+              - column:
+                  name: agency_url
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: agency_timetable_url
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: agency_phone
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: app_user_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_agency_app_user
+                    references: app_user(app_user_id)
+
+  - changeSet:
+      id: insert-example-data
+      author: pwrona
+      changes:
+        - sqlFile:
+            path: db/init.sql
+
 
 #        - createTable:
 #            tableName: route
