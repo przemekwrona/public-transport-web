@@ -2,7 +2,7 @@ package pl.wrona.webserver;
 
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -10,7 +10,10 @@ public class ActuatorIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldCheckIfHealthPathIsExposed() {
-        get("/api/v1/actuator")
+        given()
+                .header(authHeader)
+                .when()
+                .get("/api/v1/actuator")
                 .then()
                 .statusCode(200)
                 .assertThat()
@@ -20,7 +23,10 @@ public class ActuatorIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldCheckIfHealthStatusIsUP() {
-        get("/api/v1/actuator/health")
+        given()
+                .header(authHeader)
+                .when()
+                .get("/api/v1/actuator/health")
                 .then()
                 .statusCode(200)
                 .assertThat()

@@ -4,17 +4,24 @@ import {RoutesComponent} from "./routes.component";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {FieldComponent} from "./field/field.component";
 import {MatIconModule} from "@angular/material/icon";
+import {CreateRouteComponent} from "./create-route/create-route.component";
+import {RouterModule} from "@angular/router";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
     declarations: [
+        CreateRouteComponent,
         RoutesComponent,
         FieldComponent
     ],
     exports: [
+        CreateRouteComponent,
         RoutesComponent
     ],
     imports: [
         CommonModule,
+        FormsModule,
+        RouterModule,
         MatExpansionModule,
         MatIconModule
     ]

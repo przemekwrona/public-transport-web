@@ -47,4 +47,8 @@ public class AgencyService {
         return new Status()
                 .status("SUCCESS");
     }
+
+    public Agency findAgencyByAppUser(AppUser appUser) {
+        return agencyRepository.findByAppUser(appUser);
+    }
 }

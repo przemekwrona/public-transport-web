@@ -204,6 +204,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/StopsResponse'
 
+  /routes:
+    post:
+      tags:
+        - route
+      summary: Create new route in agency
+      operationId: createRoute
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Route'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    get:
+      tags:
+        - route
+      summary: Return list of routes
+      operationId: getRoutes
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Routes'
+
 components:
   schemas:
     CreateAppUserRequest:
@@ -390,6 +423,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Stop'
+
+    Route:
+      type: object
+      properties:
+        line:
+          type: string
+        origin:
+          type: string
+        destination:
+          type: string
+        via:
+          type: string
+
+    Routes:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
 
     Status:
       type: object

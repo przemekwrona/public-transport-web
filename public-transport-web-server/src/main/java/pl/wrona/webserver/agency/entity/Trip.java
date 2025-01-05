@@ -19,8 +19,8 @@ public class Trip {
     @Id
     private String tripId;
 
-    @ManyToOne
-    @JoinColumn(name = "route_id", referencedColumnName = "route_id")
-    private Route route;
-
+//    @ManyToOne
+//    @JoinColumn(name = "route_id", referencedColumnName = "route_id")
+//    private Route route;
+//
 }
