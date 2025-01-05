@@ -127,7 +127,7 @@ databaseChangeLog:
                   type: NUMERIC
 
   - changeSet:
-      id: create-basic-model
+      id: create-agency-table
       author: pwrona
       changes:
         - createTable:
@@ -174,30 +174,50 @@ databaseChangeLog:
                     references: app_user(app_user_id)
 
   - changeSet:
+      id: create-route-table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: route
+            columns:
+              - column:
+                  name: route_id
+                  type: varchar(30)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_route
+                    nullable: false
+              - column:
+                  name: line
+                  type: varchar(10)
+              - column:
+                  name: origin
+                  type: varchar(50)
+              - column:
+                  name: destination
+                  type: varchar(50)
+              - column:
+                  name: via
+                  type: varchar(250)
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_route_agency
+                    references: agency(agency_id)
+
+        - createSequence:
+            sequenceName: route_id_seq
+            startValue: 1
+            incrementBy: 1
+
+  - changeSet:
       id: insert-example-data
       author: pwrona
       changes:
         - sqlFile:
             path: db/init.sql
 
-
-#        - createTable:
-#            tableName: route
-#            columns:
-#              - column:
-#                  name: route_id
-#                  type: varchar(30)
-#                  constraints:
-#                    primaryKey: true
-#                    primaryKeyName: pk_route
-#                    nullable: false
-#              - column:
-#                  name: agency_id
-#                  type: integer
-#                  constraints:
-#                    foreignKeyName: fk_route_agency
-#                    references: agency(agency_id)
-#
 #        - createTable:
 #            tableName: trip
 #            columns:

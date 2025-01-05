@@ -1,9 +1,10 @@
-package pl.wrona.webserver.agency.route;
+package pl.wrona.webserver.agency;
 
 import io.restassured.http.ContentType;
 import org.igeolab.iot.agency.api.model.CreateRoute;
 import org.igeolab.iot.agency.api.model.CreateRouteStopTime;
 import org.igeolab.iot.agency.api.model.CreateRouteTrip;
+import org.igeolab.iot.pt.server.api.model.Route;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.wrona.webserver.BaseIntegrationTest;
@@ -20,6 +21,7 @@ class RouteControllerIntegrationTest extends BaseIntegrationTest {
     @Disabled
     void shouldCreateRouteAndReturnStatus201() {
         with().contentType(ContentType.JSON)
+                .header(authHeader)
                 .body(new CreateRoute()
                         .line("201")
                         .addTripsItem(new CreateRouteTrip()
@@ -43,6 +45,23 @@ class RouteControllerIntegrationTest extends BaseIntegrationTest {
                 .assertThat()
                 .body("agency_code", equalTo("NEXTBUS"))
                 .body("line", equalTo("201"));
+    }
+
+    @Test
+    void shouldCreateRouteAndReturnStatus2011() {
+        with().contentType(ContentType.JSON)
+                .header(authHeader)
+                .body(new Route()
+                        .line("201")
+                        .origin("KIELCE")
+                        .destination("BUSKO-ZDRÓJ")
+                        .via("MORAWICA,CHMIELNIK"))
+                .when()
+                .post("/api/v1/routes")
+                .then()
+                .statusCode(202)
+                .assertThat()
+                .body("status", equalTo("CREATED"));
     }
 
 }
