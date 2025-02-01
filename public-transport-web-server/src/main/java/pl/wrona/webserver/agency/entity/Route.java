@@ -27,6 +27,8 @@ public class Route {
     @SequenceGenerator(name = "route_id_seq", sequenceName = "route_id_seq",  allocationSize=1)
     private Long routeId;
 
+    private String name;
+
     private String line;
 
     private String origin;
@@ -38,7 +40,7 @@ public class Route {
     @JoinColumn(name = "agency_id", nullable = false)
     private Agency agency;
 
-//    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Trip> trips;
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TripEntity> tripEntities;
 
 }

@@ -5,6 +5,7 @@ import io.restassured.http.Header;
 import org.igeolab.iot.pt.server.api.model.LoginAppUserRequest;
 import org.igeolab.iot.pt.server.api.model.LoginAppUserResponse;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,9 +43,18 @@ public class BaseIntegrationTest {
 
     protected Header authHeader;
 
+    @BeforeAll
+    static void setup() {
+//        if (!postgres.isRunning()) {
+        postgres.start();
+//        }
+    }
+
     @AfterAll
     static void afterAll() {
+//        if (postgres.isRunning()) {
         postgres.stop();
+//        }
     }
 
     @BeforeEach

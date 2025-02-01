@@ -1,5 +1,5 @@
 <div class="row h-100">
-    <div class="col-2">
+    <div class="col-3">
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a [routerLink]="['/agency/profile']" class="nav-link active">Profil</a>
@@ -11,19 +11,15 @@
                 <a [routerLink]="['/agency/routes']" class="nav-link">Linie</a>
             </li>
 
-            <li class="nav-item" *ngFor="let item of routes.items">
-                <a [routerLink]="['/agency/routes']" class="nav-link">
-                    <div>{{item.line}} {{item.origin}} - {{item.destination}}</div>
-                    <div>{{item.via}}</div>
+            <li class="nav-item" *ngFor="let item of routes?.items || []">
+                <a (click)="openTrip(item)" class="nav-link">
+                    <div>{{ item.line }} {{ item.name }}</div>
+                    <div></div>
                 </a>
-            </li>
-
-            <li class="nav-item">
-                <a [routerLink]="['/agency/trips']" class="nav-link">Trips</a>
             </li>
         </ul>
     </div>
-    <div class="col-10 h-100">
+    <div class="col-9 h-100">
         <router-outlet></router-outlet>
     </div>
 </div>

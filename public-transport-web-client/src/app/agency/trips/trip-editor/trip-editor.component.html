@@ -1,0 +1,47 @@
+<div class="row h-100">
+    <div class="col-4">
+
+        <div class="row">
+            <div class="col-6">Nazwa lini</div>
+            <div class="col-6">{{state?.name}}</div>
+        </div>
+        <div class="row">
+            <div class="col-6">Numer lini</div>
+            <div class="col-6">{{state?.line}}</div>
+        </div>
+
+
+        <div>
+            Przystanek początkowy <input type="text"/>
+        </div>
+        <div>
+            Kierunek <input type="text"/>
+        </div>
+
+        <table class="table-auto">
+            <thead>
+            <tr>
+                <th class="w-52">Przystanek</th>
+                <th>km</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let stopTime of stopTimes">
+                <td>{{stopTime?.stopName}}</td>
+                <td>{{sumMeters(stopTime.stopId || '') | distance | number: '1.1-1' }} {{stopTime.meters | distance | number: '1.1-1'}}km</td>
+                <td>{{stopTime.minutes | time | number: '1.0-0'}}min</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <button (click)="clickCreateOrEdit()" class="btn btn-success">Dodaj Trasę</button>
+
+    </div>
+
+    <div class="col-8 h-100">
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>
