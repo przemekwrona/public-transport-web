@@ -237,6 +237,84 @@ paths:
               schema:
                 $ref: '#/components/schemas/Routes'
 
+  /trips:
+    post:
+      tags:
+        - trip
+      summary: Create new version of trip and assign to route
+      operationId: createTrip
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trip'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /trips/details:
+    post:
+      tags:
+        - trip
+      summary: Return list of trips create but user and assigned to agency
+      operationId: getTrips
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trips'
+
+  /trips/variant-details:
+    post:
+      tags:
+        - trip
+      summary: Return details of trip for indicated variant but user and assigned to agency
+      operationId: getTripByVariant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trips'
+
+  /trips/measure-distance:
+    post:
+      tags:
+        - trip
+      summary: Measure distance between stops
+      operationId: measureDistance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trip'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+
 components:
   schemas:
     CreateAppUserRequest:
@@ -424,9 +502,29 @@ components:
           items:
             $ref: '#/components/schemas/Stop'
 
+    RouteId:
+      type: object
+      properties:
+        name:
+          type: string
+        line:
+          type: string
+
+    TripId:
+      type: object
+      properties:
+        name:
+          type: string
+        line:
+          type: string
+        variant:
+          type: string
+
     Route:
       type: object
       properties:
+        name:
+          type: string
         line:
           type: string
         origin:
@@ -443,6 +541,54 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Route'
+
+    StopTime:
+      type: object
+      properties:
+        stopId:
+          type: string
+        stopName:
+          type: string
+        lon:
+          type: number
+          format: float
+        lat:
+          type: number
+          format: float
+        arrivalTime:
+          type: integer
+        departureTime:
+          type: integer
+        meters:
+          type: number
+          format: float
+        minutes:
+          type: number
+          format: float
+
+    Trip:
+      type: object
+      properties:
+        name:
+          type: string
+        line:
+          type: string
+        variant:
+          type: string
+        headsign:
+          type: string
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/StopTime'
+
+    Trips:
+      type: object
+      properties:
+        trips:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trip'
 
     Status:
       type: object

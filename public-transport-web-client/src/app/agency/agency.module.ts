@@ -7,6 +7,7 @@ import {RouterModule} from "@angular/router";
 import {RoutesModule} from "./routes/routes.module";
 import {MatTreeModule} from "@angular/material/tree";
 import {ProfileModule} from "./profile/profile.module";
+import {TripsModule} from "./trips/trips.module";
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import {ProfileModule} from "./profile/profile.module";
         CommonModule,
         ProfileModule,
         RouterModule,
+        TripsModule,
         StopsModule,
         RoutesModule,
         MatTreeModule

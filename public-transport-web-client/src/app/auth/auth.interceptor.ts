@@ -17,12 +17,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 @Injectable()
 export class AddHeaderInterceptor implements HttpInterceptor {
 
-    constructor(private authService: AuthService) {
+    constructor() {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // Get token
-        const token: string = this.authService.getToken();
+        const token: string = sessionStorage.getItem(AuthService.SESSION_STORAGE_AUTH_TOKEN_KEY) || '';
 
         // Clone the request to add the new header
         const clonedRequest = req.clone({headers: req.headers.append('Authorization', `Bearer ${token}`)});
@@ -32,7 +32,6 @@ export class AddHeaderInterceptor implements HttpInterceptor {
             .pipe(tap((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
                     const headers: HttpHeaders = event.headers;
-                    console.log(headers);
                 }
             }));
     }

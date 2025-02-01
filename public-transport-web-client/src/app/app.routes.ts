@@ -6,9 +6,10 @@ import {StopsComponent} from "./agency/stops/stops.component";
 import {RoutesComponent} from "./agency/routes/routes.component";
 import {ProfileComponent} from "./agency/profile/profile.component";
 import {SigninComponent} from "./auth/signin/signin.component";
-import {TripsComponent} from "./agency/trips/trips.component";
 import {CreateRouteComponent} from "./agency/routes/create-route/create-route.component";
 import {RoutesResolver} from "./agency/routes/routes.resolver";
+import {TripListComponent} from "./agency/trips/trip-list/trip-list.component";
+import {TripEditorComponent} from "./agency/trips/trip-editor/trip-editor.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'planner', pathMatch: 'full'},
@@ -20,7 +21,9 @@ export const routes: Routes = [
             {path: 'stops', component: StopsComponent},
             {path: 'routes', component: RoutesComponent, resolve: { routes: RoutesResolver }},
             {path: 'routes/create', component: CreateRouteComponent},
-            {path: 'trips', component: TripsComponent}
+            {path: 'trips', component: TripListComponent, runGuardsAndResolvers: 'always'},
+            {path: 'trips/create', component: TripEditorComponent},
+            {path: 'trips/edit', component: TripEditorComponent}
         ]
     },
     {path: 'info', component: LandingComponent},

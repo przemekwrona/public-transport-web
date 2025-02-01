@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "bdot10k_stop")
+@Table(name = "stop")
 @Data
 @Builder
 @NoArgsConstructor

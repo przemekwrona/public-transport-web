@@ -8,7 +8,7 @@ import {LoginAppUserRequest, LoginAppUserResponse} from "../generated/public-tra
 })
 export class AuthService {
 
-    private token: string = '';
+    static SESSION_STORAGE_AUTH_TOKEN_KEY = 'token';
 
     constructor(private httpClient: HttpClient) {
     }
@@ -16,16 +16,12 @@ export class AuthService {
     login(loginCredentials: LoginAppUserRequest): Observable<LoginAppUserResponse> {
         return this.httpClient.post<LoginAppUserResponse>(`/api/v1/auth/login`, loginCredentials)
             .pipe(tap((response: LoginAppUserResponse) => {
-                this.token = response.token || '';
+                sessionStorage.setItem(AuthService.SESSION_STORAGE_AUTH_TOKEN_KEY, response.token || '');
             }));
     }
 
     logout(): void {
-        this.token = '';
-    }
-
-    getToken(): string {
-        return this.token;
+        sessionStorage.setItem(AuthService.SESSION_STORAGE_AUTH_TOKEN_KEY, '');
     }
 
 }

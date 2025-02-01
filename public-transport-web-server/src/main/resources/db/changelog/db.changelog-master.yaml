@@ -1,36 +1,4 @@
 databaseChangeLog:
-#  - changeSet:
-#      id: create-table-bus-stops
-#      author: pwrona
-#      changes:
-#        - createTable:
-#            tableName: stop
-#            columns:
-#              - column:
-#                  name: osm_id
-#                  type: bigint
-#                  constraints:
-#                    primaryKey: true
-#                    nullable: false
-#              - column:
-#                  name: name
-#                  type: varchar(150)
-#                  constraints:
-#                    nullable: true
-#              - column:
-#                  name: ref
-#                  type: varchar(150)
-#              - column:
-#                  name: lon
-#                  type: float
-#              - column:
-#                  name: lat
-#                  type: float
-#
-#        - createSequence:
-#            sequenceName: stop_id_seq
-#            startValue: 1
-#            incrementBy: 1
   - changeSet:
       id: create-table-app-user
       author: pwrona
@@ -82,7 +50,7 @@ databaseChangeLog:
       author: pwrona
       changes:
         - createTable:
-            tableName: bdot10k_stop
+            tableName: stop
             columns:
               - column:
                   name: bdot10k_id
@@ -103,7 +71,7 @@ databaseChangeLog:
                   type: float
 
         - loadData:
-            tableName: bdot10k_stop
+            tableName: stop
             file: stops/TKI_bus_stops.csv
             separator: ;
             encoding: UTF-8
@@ -182,14 +150,21 @@ databaseChangeLog:
             columns:
               - column:
                   name: route_id
-                  type: varchar(30)
+                  type: integer
                   constraints:
                     primaryKey: true
                     primaryKeyName: pk_route
                     nullable: false
               - column:
+                  - name: name
+                    type: varchar(255)
+                    constraints:
+                      nullable: false
+              - column:
                   name: line
                   type: varchar(10)
+                  constraints:
+                    nullable: false
               - column:
                   name: origin
                   type: varchar(50)
@@ -211,65 +186,97 @@ databaseChangeLog:
             startValue: 1
             incrementBy: 1
 
+        - createIndex:
+            indexName: idx_route_name_line
+            tableName: route
+            columns:
+              - column:
+                  descending: true
+                  name: agency_id
+              - column:
+                  descending: true
+                  name: line
+              - column:
+                  descending: true
+                  name: name
+
+  - changeSet:
+      id: create-trip-table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: trip
+            columns:
+              - column:
+                  name: trip_id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_trip
+                    nullable: false
+              - column:
+                  name: variant
+                  type: varchar(4)
+              - column:
+                  name: headsign
+                  type: varchar(30)
+              - column:
+                  name: route_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_trip_route
+                    references: route(route_id)
+                    nullable: false
+
+        - createSequence:
+            sequenceName: trip_id_seq
+            startValue: 1
+            incrementBy: 1
+
+  - changeSet:
+      id: create-stop-time-table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: stop_time
+            columns:
+              - column:
+                  name: trip_id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_stop_time
+                    foreignKeyName: fk_stop_time_trip
+                    references: trip(trip_id)
+                    nullable: false
+              - column:
+                  name: stop_sequence
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_stop_time
+                    nullable: false
+              - column:
+                  name: arrival_time
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: departure_time
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stop_id
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_stop_time_stop
+                    references: stop(bdot10k_id)
+
   - changeSet:
       id: insert-example-data
       author: pwrona
       changes:
         - sqlFile:
             path: db/init.sql
-
-#        - createTable:
-#            tableName: trip
-#            columns:
-#              - column:
-#                  name: trip_id
-#                  type: varchar(30)
-#                  constraints:
-#                    primaryKey: true
-#                    primaryKeyName: pk_trip
-#                    nullable: false
-#              - column:
-#                  name: route_id
-#                  type: varchar(30)
-#                  constraints:
-#                    foreignKeyName: fk_trip_route
-#                    references: route(route_id)
-#                    nullable: false
-#
-#        - createTable:
-#            tableName: stop_time
-#            columns:
-#              - column:
-#                  name: agency_code
-#                  type: varchar(10)
-#                  constraints:
-#                    nullable: false
-#              - column:
-#                  name: trip_id
-#                  type: varchar(30)
-#                  constraints:
-#                    foreignKeyName: fk_stop_time_trip
-#                    references: trip(trip_id)
-#                    nullable: false
-#              - column:
-#                  name: arrival_time
-#                  type: int
-#                  constraints:
-#                    nullable: false
-#              - column:
-#                  name: departure_time
-#                  type: varchar(8)
-#                  constraints:
-#                    nullable: false
-#              - column:
-#                  name: stop_id
-#                  type: int
-#                  constraints:
-#                    nullable: false
-#                    foreignKeyName: fk_stop_time_stop
-#                    references: stop(osm_id)
-#              - column:
-#                  name: stop_sequence
-#                  type: int
-#                  constraints:
-#                    nullable: false

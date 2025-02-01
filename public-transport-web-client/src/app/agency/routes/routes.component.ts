@@ -1,14 +1,8 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
-import * as L from "leaflet";
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {StopService} from "../stops/stop.service";
-import {Routes, Stop} from "../../generated/public-transport";
+import {Route, Routes, Stop} from "../../generated/public-transport";
 import {ActivatedRoute, Router} from "@angular/router";
-
-enum RouteComponentMode {
-    OVERVIEW,
-    EDIT
-}
+import {RouterQueryParams} from "../trips/trips.resolver";
 
 @Component({
     selector: 'app-routes',
@@ -30,6 +24,13 @@ export class RoutesComponent implements OnInit {
 
     public clickAddRoute(): void {
         this.router.navigate(['/agency/routes/create']);
+    }
+
+    public openRoute(route: Route) {
+        const state = {name: route.name, line: route.line};
+        console.log(state);
+        // this._router.navigateByUrl('/agency/trips/create', {state: state});
+        this.router.navigateByUrl('/agency/trips', {state: state});
     }
 
 }
