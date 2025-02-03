@@ -217,6 +217,13 @@ databaseChangeLog:
               - column:
                   name: variant
                   type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mode
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
               - column:
                   name: headsign
                   type: varchar(30)

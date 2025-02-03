@@ -34,7 +34,9 @@
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
+    "ngx-drag-drop": "^17.0.0",
     "ngx-gauge": "^9.0.0",
+    "ngx-sortable": "^2.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

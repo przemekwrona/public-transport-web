@@ -8,8 +8,8 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripMode;
 import org.igeolab.iot.pt.server.api.model.Trips;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,7 @@ import pl.wrona.webserver.agency.entity.Stop;
 import pl.wrona.webserver.agency.entity.StopTimeEntity;
 import pl.wrona.webserver.agency.entity.StopTimeId;
 import pl.wrona.webserver.agency.entity.TripEntity;
+import pl.wrona.webserver.agency.entity.TripVariantMode;
 import pl.wrona.webserver.security.AppUser;
 
 import java.time.LocalTime;
@@ -38,27 +39,28 @@ public class TripService {
     private final StopTimeRepository stopTimeRepository;
 
     @Transactional
-    public Status createTrip(Trip trips) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = (AppUser) authentication.getPrincipal();
-
-        List<String> stopIds = trips.getStops().stream()
+    public Status createTrip(Trip trip) {
+        List<String> stopIds = trip.getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
         Map<String, Stop> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        Route route = routeQueryService.findRouteByNameAndLine(trips.getName(), trips.getLine());
+        Route route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
 
-        TripEntity lastTrip = tripRepository.findFirstByRouteOrderByVariant(route);
+        TripEntity tripEntity = new TripEntity();
+        tripEntity.setRoute(route);
+        tripEntity.setVariant(trip.getVariant());
 
-        TripEntity trip = new TripEntity();
-        trip.setRoute(route);
-        trip.setVariant(trip.getVariant());
-        trip.setHeadsign(trips.getHeadsign());
+        if (TripMode.MAIN.equals(trip.getMode())) {
+            tripEntity.setMode(TripVariantMode.MAIN);
+        } else if (TripMode.BACK.equals(trip.getMode())) {
+            tripEntity.setMode(TripVariantMode.BACK);
+        }
+        tripEntity.setHeadsign(trip.getHeadsign());
 
-        TripEntity savedTrip = tripRepository.save(trip);
+        TripEntity savedTrip = tripRepository.save(tripEntity);
 
-        StopTime[] stopTimes = trips.getStops().toArray(StopTime[]::new);
+        StopTime[] stopTimes = trip.getStops().toArray(StopTime[]::new);
 
         List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
                 .mapToObj(i -> {
@@ -72,8 +74,8 @@ public class TripService {
                     entity.setStopTimeId(stopTimeId);
 
                     entity.setStop(stopDictionary.get(stopTime.getStopId()));
-                    entity.setArrivalTime(LocalTime.MIDNIGHT.plusMinutes(stopTime.getMinutes().longValue()));
-                    entity.setDepartureTime(LocalTime.MIDNIGHT.plusMinutes(stopTime.getMinutes().longValue()));
+                    entity.setArrivalTime(LocalTime.MIDNIGHT.plusSeconds(stopTime.getSeconds().longValue()));
+                    entity.setDepartureTime(LocalTime.MIDNIGHT.plusSeconds(stopTime.getSeconds().longValue()));
 
                     return entity;
                 }).toList();
@@ -82,6 +84,44 @@ public class TripService {
 
         return new Status()
                 .status("CREATED");
+    }
+
+    @Transactional
+    public Status updateTrip(Trip trip) {
+        List<String> stopIds = trip.getStops().stream()
+                .map(StopTime::getStopId)
+                .toList();
+
+        Map<String, Stop> stopDictionary = stopService.mapStopByIdsIn(stopIds);
+        Route route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
+        TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, trip.getVariant(), TripModeMapper.map(trip.getMode()));
+        tripEntity.setHeadsign(trip.getHeadsign());
+        stopTimeRepository.deleteByTripId(tripEntity.getTripId());
+
+        StopTime[] stopTimes = trip.getStops().toArray(StopTime[]::new);
+
+        List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
+                .mapToObj(i -> {
+                    StopTime stopTime = stopTimes[i];
+
+                    StopTimeEntity entity = new StopTimeEntity();
+
+                    StopTimeId stopTimeId = new StopTimeId();
+                    stopTimeId.setTripId(tripEntity.getTripId());
+                    stopTimeId.setStopSequence(i + 1);
+                    entity.setStopTimeId(stopTimeId);
+
+                    entity.setStop(stopDictionary.get(stopTime.getStopId()));
+                    entity.setArrivalTime(LocalTime.MIDNIGHT.plusSeconds(stopTime.getSeconds().longValue()));
+                    entity.setDepartureTime(LocalTime.MIDNIGHT.plusSeconds(stopTime.getSeconds().longValue()));
+
+                    return entity;
+                }).toList();
+
+        stopTimeRepository.saveAll(entities);
+
+        return new Status()
+                .status("UPDATED");
     }
 
     public Trips getTrips(RouteId routeId) {
@@ -95,19 +135,16 @@ public class TripService {
                         .name(route.getName())
                         .line(route.getLine())
                         .variant(trip.getVariant())
+                        .mode(TripModeMapper.map(trip.getMode()))
                         .headsign(trip.getHeadsign())).toList();
-
 
         return new Trips()
                 .trips(tripsResponse);
     }
 
     public Trips getTripByVariant(TripId tripId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = (AppUser) authentication.getPrincipal();
-
         Route route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
-        TripEntity tripEntity = tripRepository.findAllByRouteAndVariant(route, tripId.getVariant());
+        TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, tripId.getVariant(), TripVariantMode.MAIN);
         Trip tripsResponse = Optional.of(tripEntity)
                 .map(trip -> new Trip()
                         .name(route.getName())
@@ -130,32 +167,41 @@ public class TripService {
     }
 
     public Trip measureDistance(Trip trips) {
-        List<StopTime> stopTimes = pairConsecutiveElements(trips.getStops()).stream()
-                .map(pairStopTime -> {
-                    if (pairStopTime.getLeft() == null) {
-                        return new StopTime()
-                                .stopId(pairStopTime.getRight().getStopId())
-                                .stopName(pairStopTime.getRight().getStopName())
-                                .lon(pairStopTime.getRight().getLon())
-                                .lat(pairStopTime.getRight().getLat())
-                                .meters(0.0f)
-                                .minutes(0.0f);
-                    }
+        int meters = 0;
+        int seconds = 0;
 
-                    float haversinMeters = (float) SloppyMath.haversinMeters(pairStopTime.getLeft().getLat(),
-                            pairStopTime.getLeft().getLon(),
-                            pairStopTime.getRight().getLat(),
-                            pairStopTime.getRight().getLon());
+        List<StopTime> stopTimes = new ArrayList<>();
 
-                    return new StopTime()
-                            .stopId(pairStopTime.getRight().getStopId())
-                            .stopName(pairStopTime.getRight().getStopName())
-                            .lon(pairStopTime.getRight().getLon())
-                            .lat(pairStopTime.getRight().getLat())
-                            .meters(haversinMeters)
-                            .minutes((float)(haversinMeters * 0.2777));
-                })
-                .toList();
+        for (Pair<StopTime, StopTime> pairStopTime : pairConsecutiveElements(trips.getStops())) {
+            if (pairStopTime.getLeft() == null) {
+                stopTimes.add(new StopTime()
+                        .stopId(pairStopTime.getRight().getStopId())
+                        .stopName(pairStopTime.getRight().getStopName())
+                        .lon(pairStopTime.getRight().getLon())
+                        .lat(pairStopTime.getRight().getLat())
+                        .meters(0)
+                        .seconds(0));
+            } else {
+                int haversinMeters = (int) SloppyMath.haversinMeters(pairStopTime.getLeft().getLat(),
+                        pairStopTime.getLeft().getLon(),
+                        pairStopTime.getRight().getLat(),
+                        pairStopTime.getRight().getLon());
+
+                meters = meters + haversinMeters;
+                seconds = seconds + (int) (((double) haversinMeters) / 8.3);
+
+                stopTimes.add(new StopTime()
+                        .stopId(pairStopTime.getRight().getStopId())
+                        .stopName(pairStopTime.getRight().getStopName())
+                        .lon(pairStopTime.getRight().getLon())
+                        .lat(pairStopTime.getRight().getLat())
+                        .meters(meters)
+                        .arrivalTime(seconds)
+                        .departureTime(seconds)
+                        .seconds(seconds));
+            }
+
+        }
 
         return new Trip()
                 .line(trips.getLine())
