@@ -15,10 +15,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class StopTimeId implements Serializable {
 
-//    @ManyToOne
-//    @JoinColumn(name = "trip_id", referencedColumnName = "trip_id")
-//    private Trip trip;
-
     private Long tripId;
 
     private int stopSequence;

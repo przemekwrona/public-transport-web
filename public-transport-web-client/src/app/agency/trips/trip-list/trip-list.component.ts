@@ -37,7 +37,7 @@ export class TripListComponent implements OnInit {
     }
 
     public editTrip(trip: Trip) {
-        const state = {name: trip.name, line: trip.line, variant: trip.variant};
+        const state = {name: trip.name, line: trip.line, variant: trip.variant, mode: trip.mode};
         this._router.navigateByUrl('/agency/trips/edit', {state: state});
     }
 

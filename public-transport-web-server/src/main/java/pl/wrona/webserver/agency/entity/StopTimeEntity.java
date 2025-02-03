@@ -20,11 +20,6 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class StopTimeEntity {
 
-//    @ManyToOne
-//    @JoinColumn(name = "trip_id", referencedColumnName = "trip_id")
-//    private Trip trip;
-//    private int order;
-
     @EmbeddedId
     private StopTimeId stopTimeId;
 

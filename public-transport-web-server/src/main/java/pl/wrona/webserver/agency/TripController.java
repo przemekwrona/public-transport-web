@@ -24,6 +24,11 @@ public class TripController implements TripApi {
     }
 
     @Override
+    public ResponseEntity<Status> updateTrip(Trip trip) {
+        return ResponseEntity.status(CREATED).body(tripService.updateTrip(trip));
+    }
+
+    @Override
     public ResponseEntity<Trips> getTripByVariant(TripId tripId) {
         return ResponseEntity.ok(tripService.getTripByVariant(tripId));
     }

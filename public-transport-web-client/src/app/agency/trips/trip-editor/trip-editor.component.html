@@ -1,39 +1,34 @@
 <div class="row h-100">
+
     <div class="col-4">
+        <div class="grid grid-cols-4 gap-1">
+            <div class="col-span-4 h2">Linia {{state?.line}} {{state?.name}}</div>
 
-        <div class="row">
-            <div class="col-6">Nazwa lini</div>
-            <div class="col-6">{{state?.name}}</div>
-        </div>
-        <div class="row">
-            <div class="col-6">Numer lini</div>
-            <div class="col-6">{{state?.line}}</div>
+            <div class="col-span-2">Wariant</div>
+            <div>
+                <input type="text" name="variant" id="variant" [(ngModel)]="variant" class="form-control"/>
+            </div>
+            <div>
+                <select name="mode" id="mode" [(ngModel)]="mode" class="form-select">
+                    <option [value]="tripMode.Main">TAM</option>
+                    <option [value]="tripMode.Back">POWRÓT</option>
+                </select>
+            </div>
+
+            <div class="col-span-2">Kierunek na tablicy czołowej</div>
+            <div class="col-span-2"><input type="text" name="headsign" id="headsign" [(ngModel)]="headsign"
+                                           class="form-control"/></div>
         </div>
 
 
-        <div>
-            Przystanek początkowy <input type="text"/>
+        <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+            @for (stopTime of stopTimes; track stopTime) {
+            <div class="example-box" cdkDrag (dblclick)="remove(stopTime)" [@simpleFadeAnimation]="'in'">
+                <span>{{stopTime?.stopName}}</span>
+                <span>{{stopTime.meters | distance | number: '1.1-1'}}km {{stopTime.seconds | time | number: '1.0-0'}}min</span>
+            </div>
+            }
         </div>
-        <div>
-            Kierunek <input type="text"/>
-        </div>
-
-        <table class="table-auto">
-            <thead>
-            <tr>
-                <th class="w-52">Przystanek</th>
-                <th>km</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let stopTime of stopTimes">
-                <td>{{stopTime?.stopName}}</td>
-                <td>{{sumMeters(stopTime.stopId || '') | distance | number: '1.1-1' }} {{stopTime.meters | distance | number: '1.1-1'}}km</td>
-                <td>{{stopTime.minutes | time | number: '1.0-0'}}min</td>
-            </tr>
-            </tbody>
-        </table>
 
         <button (click)="clickCreateOrEdit()" class="btn btn-success">Dodaj Trasę</button>
 

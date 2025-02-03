@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.agency.entity.Route;
 import pl.wrona.webserver.agency.entity.TripEntity;
+import pl.wrona.webserver.agency.entity.TripVariantMode;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface TripRepository extends JpaRepository<TripEntity, Long> {
 
     List<TripEntity> findAllByRoute(Route route);
 
-    TripEntity findAllByRouteAndVariant(Route route, String variant);
+    TripEntity findAllByRouteAndVariantAndMode(Route route, String variant, TripVariantMode mode);
 }

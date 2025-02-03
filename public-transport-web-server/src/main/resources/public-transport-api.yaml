@@ -256,6 +256,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+    put:
+      tags:
+        - trip
+      summary: Update trip's stops list and headsign
+      operationId: updateTrip
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trip'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
 
   /trips/details:
     post:
@@ -510,6 +528,12 @@ components:
         line:
           type: string
 
+    TripMode:
+      type: string
+      enum:
+        - MAIN
+        - BACK
+
     TripId:
       type: object
       properties:
@@ -519,6 +543,8 @@ components:
           type: string
         variant:
           type: string
+        mode:
+          $ref: '#/components/schemas/TripMode'
 
     Route:
       type: object
@@ -560,11 +586,9 @@ components:
         departureTime:
           type: integer
         meters:
-          type: number
-          format: float
-        minutes:
-          type: number
-          format: float
+          type: integer
+        seconds:
+          type: integer
 
     Trip:
       type: object
@@ -575,6 +599,8 @@ components:
           type: string
         variant:
           type: string
+        mode:
+          $ref: '#/components/schemas/TripMode'
         headsign:
           type: string
         stops:
@@ -595,4 +621,3 @@ components:
       properties:
         status:
           type: string
-

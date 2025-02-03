@@ -2,6 +2,8 @@ package pl.wrona.webserver.agency.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +32,9 @@ public class TripEntity {
     private Long tripId;
 
     private String variant;
+
+    @Enumerated(EnumType.STRING)
+    private TripVariantMode mode;
 
     private String headsign;
 
