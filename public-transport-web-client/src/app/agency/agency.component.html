@@ -1,26 +1,47 @@
-<div class="row h-100">
-    <div class="col-3">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a [routerLink]="['/agency/profile']" class="nav-link active">Profil</a>
-            </li>
-            <li class="nav-item">
-                <a [routerLink]="['/agency/stops']" class="nav-link active">Przystanki</a>
-            </li>
-            <li class="nav-item">
-                <a [routerLink]="['/agency/routes']" class="nav-link">Linie</a>
-            </li>
+<ng-container class="dupa" style="width: 100%">
+    <app-sidebar></app-sidebar>
+    <div class="wrapper flex grow flex-col">
+        <app-header></app-header>
+        <main class="grow content pt-5" id="content" role="content">
+            <!-- begin: container -->
+            <div class="container-fixed" id="content_container">
+            </div>
+            <!-- end: container -->
 
-            <li class="nav-item" *ngFor="let item of routes?.items || []">
-                <a (click)="openTrip(item)" class="nav-link">
-                    <div>{{ item.line }} {{ item.name }}</div>
-                    <div></div>
-                </a>
-            </li>
-        </ul>
+            <!-- begin: container -->
+<!--            <div class="container-fixed">-->
+                <router-outlet></router-outlet>
+<!--            </div>-->
+            <!-- end: container -->
+        </main>
+        <app-footer></app-footer>
     </div>
-    <div class="col-9 h-100">
-        <router-outlet></router-outlet>
-    </div>
-</div>
+    <!--    <app-search-modal></app-search-modal>-->
+</ng-container>
+
+<!--<div class="row h-100">-->
+<!--    <div class="col-3">-->
+<!--        <ul class="nav flex-column">-->
+<!--            <li class="nav-item">-->
+<!--                <a [routerLink]="['/agency/profile']" class="nav-link active">Profil</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a [routerLink]="['/agency/stops']" class="nav-link active">Przystanki</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a [routerLink]="['/agency/routes']" class="nav-link">Linie</a>-->
+<!--            </li>-->
+
+<!--            <li class="nav-item" *ngFor="let item of routes?.items || []">-->
+<!--                <a (click)="openTrip(item)" class="nav-link">-->
+<!--                    <div>{{ item.line }} {{ item.name }}</div>-->
+<!--                    <div></div>-->
+<!--                </a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <div class="col-9 h-100">-->
+<!--        <router-outlet></router-outlet>-->
+<!--    </div>-->
+<!--</div>-->
 

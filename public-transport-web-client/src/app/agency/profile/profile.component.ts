@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ProfileService} from "./profile.service";
 import {AgencyDetails} from "../../generated/public-transport";
+import {faGlobe, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-profile',
@@ -8,6 +9,8 @@ import {AgencyDetails} from "../../generated/public-transport";
     styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
+
+    public faGlobe: IconDefinition = faGlobe;
 
     public agencyDetails: AgencyDetails = {};
 
