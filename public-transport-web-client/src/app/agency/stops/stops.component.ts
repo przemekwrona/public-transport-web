@@ -1,8 +1,14 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
+import {find} from "lodash";
+
 import {StopService} from "./stop.service";
 import {Stop, StopsResponse} from "../../generated/public-transport";
+
+interface StopMarker extends L.Marker {
+    id: string;
+}
 
 @Component({
     selector: 'app-stops',
@@ -19,12 +25,12 @@ export class StopsComponent implements OnInit, AfterViewInit {
     private stopMarkers: Marker[] = [];
 
     public stops: Stop[] = [];
+    public lastClickedStop: Stop;
 
     constructor(private stopService: StopService) {
     }
 
     ngAfterViewInit(): void {
-        console.log("View stops init");
         this.map = this.initMap();
         this.reloadStops(this.map);
         this.onZoomEnd(this.map);
@@ -69,8 +75,14 @@ export class StopsComponent implements OnInit, AfterViewInit {
         if (map.getZoom() > 12) {
             const bounds = map.getBounds();
             this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe((response: StopsResponse) => {
-                const stopMarkers: Marker[] = response.stops?.map(stop => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON})) || []
+                const stopMarkers: StopMarker[] = response.stops?.map(stop => {
+                    const stopMarker: StopMarker = L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON, title: stop.name}) as StopMarker
+                    stopMarker.id = stop.id;
+                    return stopMarker;
+                }) || []
+                stopMarkers.forEach(marker => marker.on('click', (event: LeafletMouseEvent) => this.lastClickedStop = find(this.stops, {id: event.target.id})));
                 stopMarkers.forEach(marker => marker.addTo(map));
+
 
                 this.stops = response.stops || [];
 

@@ -30,6 +30,8 @@ public class RouteService {
         unsavedRoute.setOrigin(route.getOrigin());
         unsavedRoute.setDestination(route.getDestination());
         unsavedRoute.setVia(route.getVia());
+        unsavedRoute.setGoogle(route.getGoogle());
+        unsavedRoute.setActive(route.getActive());
         unsavedRoute.setAgency(agencyService.findAgencyByAppUser(appUser));
 
         routeRepository.save(unsavedRoute);
@@ -46,6 +48,8 @@ public class RouteService {
                 .map(route -> new org.igeolab.iot.pt.server.api.model.Route()
                         .name(route.getName())
                         .line(route.getLine())
+                        .google(route.isGoogle())
+                        .active(route.isActive())
                         .origin(route.getOrigin())
                         .destination(route.getDestination())
                         .via(route.getVia()))

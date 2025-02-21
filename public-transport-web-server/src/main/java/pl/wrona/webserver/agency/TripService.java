@@ -188,7 +188,9 @@ public class TripService {
                         pairStopTime.getRight().getLon());
 
                 meters = meters + haversinMeters;
-                seconds = seconds + (int) (((double) haversinMeters) / 8.3);
+
+                // Communication speed 45km/h
+                seconds = seconds + (int) (((double) haversinMeters) / 12.5);
 
                 stopTimes.add(new StopTime()
                         .stopId(pairStopTime.getRight().getStopId())

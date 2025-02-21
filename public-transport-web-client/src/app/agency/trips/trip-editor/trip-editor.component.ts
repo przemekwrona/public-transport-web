@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import * as L from "leaflet";
-import { findIndex, keyBy } from "lodash";
+import { findIndex, last } from "lodash";
 import {Stop, StopTime, Trip, TripMode, Trips} from "../../../generated/public-transport";
 import {StopService} from "../../stops/stop.service";
 import {TripsService} from "../trips.service";
@@ -217,5 +217,16 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const index = findIndex(this.stopTimes, {stopId: stopTime.stopId});
         this.stopTimes.splice(index, 1);
         this.drawPolyline();
+    }
+
+    public addBrake() {
+        const lastStop = last(this.stopTimes);
+        const stopTime: StopTime = {} as StopTime;
+        stopTime.stopId = lastStop.stopId + '-break';
+        stopTime.stopName = lastStop.stopName;
+        stopTime.lon = lastStop.lon;
+        stopTime.lat = lastStop.lat;
+
+        this.stopTimes.push(stopTime);
     }
 }

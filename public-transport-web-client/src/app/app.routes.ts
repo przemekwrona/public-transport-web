@@ -10,6 +10,7 @@ import {CreateRouteComponent} from "./agency/routes/create-route/create-route.co
 import {RoutesResolver} from "./agency/routes/routes.resolver";
 import {TripListComponent} from "./agency/trips/trip-list/trip-list.component";
 import {TripEditorComponent} from "./agency/trips/trip-editor/trip-editor.component";
+import {GoogleMapsComponent} from "./agency/google-maps/google-maps.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'planner', pathMatch: 'full'},
@@ -23,7 +24,8 @@ export const routes: Routes = [
             {path: 'routes/create', component: CreateRouteComponent},
             {path: 'trips', component: TripListComponent, runGuardsAndResolvers: 'always'},
             {path: 'trips/create', component: TripEditorComponent},
-            {path: 'trips/edit', component: TripEditorComponent}
+            {path: 'trips/edit', component: TripEditorComponent},
+            {path: 'google/maps', component: GoogleMapsComponent}
         ]
     },
     {path: 'info', component: LandingComponent},

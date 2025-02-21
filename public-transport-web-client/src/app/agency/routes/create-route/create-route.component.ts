@@ -9,7 +9,10 @@ import {Route, Status} from "../../../generated/public-transport";
 })
 export class CreateRouteComponent {
 
-    public route: Route = {};
+    public route: Route = {
+        google: false,
+        active: true
+    };
 
     constructor(private routeService: RoutesService) {
     }

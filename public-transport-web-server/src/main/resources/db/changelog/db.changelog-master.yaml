@@ -156,15 +156,23 @@ databaseChangeLog:
                     primaryKeyName: pk_route
                     nullable: false
               - column:
-                  - name: name
-                    type: varchar(255)
-                    constraints:
-                      nullable: false
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
               - column:
                   name: line
                   type: varchar(10)
                   constraints:
                     nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+              - column:
+                  name: google
+                  type: boolean
+                  defaultValueBoolean: false
               - column:
                   name: origin
                   type: varchar(50)

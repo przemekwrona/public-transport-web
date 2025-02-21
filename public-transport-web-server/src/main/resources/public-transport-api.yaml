@@ -553,6 +553,10 @@ components:
           type: string
         line:
           type: string
+        google:
+          type: boolean
+        active:
+          type: boolean
         origin:
           type: string
         destination:

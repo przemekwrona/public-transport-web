@@ -8,11 +8,18 @@ import {RoutesModule} from "./routes/routes.module";
 import {MatTreeModule} from "@angular/material/tree";
 import {ProfileModule} from "./profile/profile.module";
 import {TripsModule} from "./trips/trips.module";
+import {SidebarComponent} from "./sidebar/sidebar.component";
+import {HeaderComponent} from "./header/header.component";
+import {FooterComponent} from "./footer/footer.component";
+import {GoogleMapsModule} from "./google-maps/google-maps.module";
 
 
 @NgModule({
     declarations: [
-        AgencyComponent
+        AgencyComponent,
+        HeaderComponent,
+        FooterComponent,
+        SidebarComponent
     ],
     exports: [
         AgencyComponent
@@ -24,6 +31,7 @@ import {TripsModule} from "./trips/trips.module";
         TripsModule,
         StopsModule,
         RoutesModule,
+        GoogleMapsModule,
         MatTreeModule
     ],
     providers: [
