@@ -8,6 +8,7 @@ import {TripsService} from "../trips.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, trigger, state, style, transition} from "@angular/animations";
+import {debounceTime, Subject} from "rxjs";
 
 interface DropzoneLayout {
     container: string;
@@ -37,11 +38,16 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private stopMarkers: Marker[] = [];
     private routePolyline: Polyline;
 
+    private communicationVelocitySubject = new Subject<number>();
+
+
     public state: { name: string, line: string, variant: string, mode: TripMode };
 
     public variant: string = '';
     public mode: TripMode | null;
     public headsign: string = '';
+
+    public communicationVelocity: number = 45;
 
     public tripMode = TripMode;
 
@@ -52,6 +58,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.state = navigation?.extras.state as { name: string, line: string, variant: string, mode: TripMode };
         this.variant = this.state.variant || '';
         this.mode = this.state.mode;
+
+        this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
     }
 
     ngOnInit(): void {
@@ -142,6 +150,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const trips: Trip = {};
         trips.line = this.state.line || '';
         trips.headsign = '';
+        trips.communicationVelocity = this.communicationVelocity;
 
         trips.stops = this.stopTimes.map(stop => {
             const stopTime: StopTime = {};
@@ -172,6 +181,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         trip.variant = this.variant;
         trip.mode = this.mode || TripMode.Main;
         trip.headsign = this.headsign;
+        trip.communicationVelocity = this.communicationVelocity;
 
         trip.stops = this.stopTimes.map(stop => {
             const stopTime: StopTime = {};
@@ -228,5 +238,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         stopTime.lat = lastStop.lat;
 
         this.stopTimes.push(stopTime);
+    }
+
+    public onCommunicationVelocityChange(value: number): void {
+        this.communicationVelocitySubject.next(value);
     }
 }

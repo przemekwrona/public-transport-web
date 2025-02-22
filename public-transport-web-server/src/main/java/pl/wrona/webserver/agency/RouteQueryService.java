@@ -1,6 +1,7 @@
 package pl.wrona.webserver.agency;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,11 @@ public class RouteQueryService {
 
         Agency agency = this.agencyRepository.findByAppUser(appUser);
         return this.routeRepository.findByAgencyCodeAndRouteId(agency, name, line);
+    }
+
+    @Transactional
+    public Route findRouteByNameAndLine(RouteId routeId) {
+        return findRouteByNameAndLine(routeId.getName(), routeId.getLine());
     }
 
 }

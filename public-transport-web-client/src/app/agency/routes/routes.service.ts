@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
-import {Route, Routes, Status} from "../../generated/public-transport";
+import {Route, Routes, Status, UpdateRouteRequest} from "../../generated/public-transport";
 import {HttpClient} from "@angular/common/http";
 
 @Injectable({
@@ -16,5 +16,9 @@ export class RoutesService {
 
   public getRoutes(): Observable<Routes> {
     return this.httpClient.get<Routes>(`/api/v1/routes`);
+  }
+
+  public updateRoute(updateRouteRequest: UpdateRouteRequest): Observable<Status> {
+    return this.httpClient.put<Status>(`/api/v1/routes`, updateRouteRequest)
   }
 }

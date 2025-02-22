@@ -39,7 +39,10 @@ public class Route {
 
     private boolean google;
 
+    private String description;
+
     private String via;
+
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
     private Agency agency;

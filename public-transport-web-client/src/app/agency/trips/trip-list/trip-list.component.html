@@ -9,7 +9,15 @@
             </div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a (click)="createTrip()" class="btn btn-sm btn-primary">Dodaj nowy wariant</a>
+            <a [routerLink]="['/agency/routes']" class="btn btn-sm btn-secondary">Wróć do listy linii</a>
+            <a *ngIf="!hasVariants()" (click)="scrollNoVariants()" class="btn btn-sm btn-primary pr-0">
+                Pokaż warianty
+                <img src="assets/gif/arrow-down.gif" alt="Computer man" style="width:2rem;height:2rem;">
+            </a>
+            <a *ngIf="hasVariants()" (click)="scrollVariants()" class="btn btn-sm btn-primary pr-0">
+                Pokaż warianty
+                <img src="assets/gif/arrow-down.gif" alt="Computer man" style="width:2rem;height:2rem;">
+            </a>
         </div>
     </div>
 
@@ -17,17 +25,19 @@
         <div class="flex flex-col justify-center gap-2">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Informacje podstawowe o linii</h3>
+                    <h3 class="card-title">Informacje podstawowe</h3>
                 </div>
                 <div class="card-body lg:py-7.5 grid gap-5 lg:gap-5">
                     <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label class="form-label flex items-center gap-1 max-w-56">Numer Linii</label>
-                        <input type="text" name="line" id="line" class="input" placeholder="L1">
+                        <input type="text" name="line" id="line" [(ngModel)]="trips.route.line" class="input"
+                               placeholder="L1">
                     </div>
 
                     <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label class="form-label flex items-center gap-1 max-w-56">Nazwa linii</label>
-                        <input type="text" name="name" id="name" class="input" placeholder="Kielce - Wrocław">
+                        <input type="text" name="name" id="name" [(ngModel)]="trips.route.name" class="input"
+                               placeholder="Kielce - Wrocław">
                     </div>
 
                     <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
@@ -35,34 +45,48 @@
                             <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">
                             <div class="flex flex-col gap-0.5">
                                 <a class="text-sm font-medium text-gray-900 hover:text-primary-active">Google</a>
-                                <a class="text-2sm text-gray-700 hover:text-primary-active">
+                                <a *ngIf="trips.route.google" class="text-2sm text-gray-700 hover:text-primary-active">
                                     Chcę aby rozkład jazdy dla linii {{ state?.line || '' }} {{ state?.name || '' }} był
+                                    udostępniony w Google Maps.
+                                </a>
+                                <a *ngIf="!trips.route.google" class="text-2sm text-gray-700 hover:text-primary-active">
+                                    NIE chcę aby rozkład jazdy dla linii {{ state?.line || '' }} {{ state?.name || '' }}
+                                    był
                                     udostępniony w Google Maps.
                                 </a>
                             </div>
                         </div>
                         <div class="flex items-center gap-5"><label class="switch switch-sm">
-                            <input type="checkbox" readonly="" value="1" checked=""></label>
+                            <input type="checkbox" [(ngModel)]="trips.route.google"></label>
                         </div>
                     </div>
 
                     <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
                         <div class="flex items-center flex-wrap gap-3.5">
-                            <span class="menu-icon items-start w-[25px] text-green-700 dark:text-green-700">
+                            <span *ngIf="trips.route.active"
+                                  class="menu-icon items-start w-[25px] text-green-700 dark:text-green-700">
                                 <i class="ki-filled ki-check-circle text-3xl"></i>
                             </span>
-                            <div class="flex flex-col gap-0.5">
+                            <div *ngIf="trips.route.active" class="flex flex-col gap-0.5">
                                 <a class="text-2sm text-gray-700 hover:text-primary-active"> Linia jest aktywna </a>
+                            </div>
+
+                            <span *ngIf="!trips.route.active"
+                                  class="menu-icon items-start w-[25px] text-red-800 dark:text-red-800">
+                                <fa-icon [icon]="faCircleXmark" [class]="'text-3xl'"></fa-icon>
+                            </span>
+                            <div *ngIf="!trips.route.active" class="flex flex-col gap-0.5">
+                                <a class="text-2sm text-gray-700 hover:text-primary-active"> Linia nie jest aktywna </a>
                             </div>
                         </div>
                         <div class="flex items-center gap-5">
                             <label class="switch switch-sm" data-dashlane-label="true">
-                                <input type="checkbox">
+                                <input type="checkbox" [(ngModel)]="trips.route.active">
                             </label>
                         </div>
                     </div>
 
-<!--                    <div class="border-t border-gray-200 my-2.5"></div>-->
+                    <div class="border-t border-gray-200 my-2.5"></div>
 
                     <div class="flex flex-wrap justify-between gap-5">
                         <div class="flex flex-col">
@@ -70,22 +94,63 @@
                             <span class="text-gray-700 text-2sm">Opis linii lub przystanki pośrednie przez które jedzie linia</span>
                         </div>
                         <div class="flex flex-col w-full gap-1">
-                            <textarea class="textarea" placeholder="Kielce - Częstochowa - Wrocław" rows="3" value=""></textarea>
+                            <textarea [(ngModel)]="trips.route.description" class="textarea"
+                                      placeholder="Kielce - Częstochowa - Wrocław" rows="3"></textarea>
+                        </div>
+                        <div class="flex justify-end w-full gap-2.5">
+                            <button [routerLink]="['/agency/routes']" class="btn btn-secondary">Wróć do listy linii</button>
+                            <button (click)="saveBasicInfo()" class="btn btn-success">Zapisz Informacje Podstawowe</button>
                         </div>
                     </div>
 
-                    <p class="text-2sm text-gray-800">Unlock the full potential of your application with our API, a
-                        secure gateway facilitating seamless integration, empowering developers to create innovative and
-                        dynamic experiences effortlessly.</p></div>
+                    <p class="text-2sm text-gray-800">
+                        Dodaj nowe warianty trasy i zacznij publikować rozkłady jazdy. Bądź widoczny w Google Maps i w
+                        naszej aplikacji – ułatwiaj pasażerom podróżowanie i docieraj do większej liczby klientów!
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+    <!-- Container -->
+    <div #noVariants *ngIf="!hasVariants()" class="grid gap-5 lg:gap-7.5">
+        <div class="card">
+            <div class="card-body flex flex-col items-center gap-2.5 py-7.5">
+                <div class="flex justify-center p-7.5 py-9">
+                    <img alt="image" class="dark:hidden max-h-[230px]" src="assets/media/illustrations/22.svg"/>
+                    <img alt="image" class="light:hidden max-h-[230px]" src="assets/media/illustrations/22-dark.svg"/>
+                </div>
+                <div class="flex flex-col gap-5 lg:gap-7.5">
+                    <div class="flex flex-col gap-3 text-center">
+                        <h2 class="text-1.5xl font-semibold text-gray-900">
+                            Zdefiniuj i skonfiguruj nowy wariant
+                        </h2>
+                        <p class="text-sm text-gray-800">
+                            Wygląda na to że dodałeś Nową Linię bez wariantu trasy
+                            <br/>
+                            Kliknij poniżej Dodaj Nowy Wariant
+                        </p>
+                    </div>
+                    <div class="flex justify-center mb-5">
+                        <a (click)="createTrip()" class="btn btn-primary">
+                            Dodaj Nowy Wariant
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Container -->
+
+    <!-- Container -->
+    <div #variants *ngIf="hasVariants()" class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
         <div class="flex flex-col justify-center gap-2">
             <div class="card" data-dashlane-rid="1114b9cb18de893c" data-dashlane-classification="other">
                 <div class="card-header">
-                    <h3 class="card-title">Lista wariantów</h3>
+                    <h3 (click)="createTrip()" class="card-title">Lista wariantów ({{ (trips?.trips || []).length || 0 }})</h3>
+                    <div class="flex items-center gap-2.5">
+                        <a (click)="createTrip()" class="btn btn-sm btn-primary">Dodaj nowy wariant</a>
+                    </div>
                 </div>
                 <div class="card-body lg:py-7.5 grid gap-5 lg:gap-5">
                     <div *ngFor="let trip of trips?.trips || []"
@@ -130,5 +195,6 @@
             </div>
         </div>
     </div>
+    <!-- End of Container -->
 
 </div>

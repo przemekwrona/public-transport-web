@@ -3,6 +3,7 @@ package pl.wrona.webserver.agency;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.lucene.util.SloppyMath;
+import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
@@ -10,17 +11,14 @@ import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.igeolab.iot.pt.server.api.model.TripMode;
 import org.igeolab.iot.pt.server.api.model.Trips;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.agency.entity.Route;
 import pl.wrona.webserver.agency.entity.Stop;
 import pl.wrona.webserver.agency.entity.StopTimeEntity;
 import pl.wrona.webserver.agency.entity.StopTimeId;
 import pl.wrona.webserver.agency.entity.TripEntity;
 import pl.wrona.webserver.agency.entity.TripVariantMode;
-import pl.wrona.webserver.security.AppUser;
+import pl.wrona.webserver.agency.mapper.RouteMapper;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -45,7 +43,7 @@ public class TripService {
                 .toList();
 
         Map<String, Stop> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        Route route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
+        var route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
 
         TripEntity tripEntity = new TripEntity();
         tripEntity.setRoute(route);
@@ -93,7 +91,7 @@ public class TripService {
                 .toList();
 
         Map<String, Stop> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        Route route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
+        var route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, trip.getVariant(), TripModeMapper.map(trip.getMode()));
         tripEntity.setHeadsign(trip.getHeadsign());
         stopTimeRepository.deleteByTripId(tripEntity.getTripId());
@@ -125,10 +123,7 @@ public class TripService {
     }
 
     public Trips getTrips(RouteId routeId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = (AppUser) authentication.getPrincipal();
-
-        Route route = routeQueryService.findRouteByNameAndLine(routeId.getName(), routeId.getLine());
+        var route = routeQueryService.findRouteByNameAndLine(routeId.getName(), routeId.getLine());
         List<TripEntity> trips = tripRepository.findAllByRoute(route);
         List<Trip> tripsResponse = trips.stream()
                 .map(trip -> new Trip()
@@ -139,11 +134,12 @@ public class TripService {
                         .headsign(trip.getHeadsign())).toList();
 
         return new Trips()
+                .route(RouteMapper.map(route))
                 .trips(tripsResponse);
     }
 
     public Trips getTripByVariant(TripId tripId) {
-        Route route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
+        var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, tripId.getVariant(), TripVariantMode.MAIN);
         Trip tripsResponse = Optional.of(tripEntity)
                 .map(trip -> new Trip()
@@ -190,7 +186,9 @@ public class TripService {
                 meters = meters + haversinMeters;
 
                 // Communication speed 45km/h
-                seconds = seconds + (int) (((double) haversinMeters) / 12.5);
+                int velocityKmPerH = Optional.ofNullable(trips.getCommunicationVelocity()).orElse(45);
+                double velocityMetersPerSec = (velocityKmPerH * 1000.0) / 3600.0d;
+                seconds = seconds + (int) (((double) haversinMeters) / velocityMetersPerSec);
 
                 stopTimes.add(new StopTime()
                         .stopId(pairStopTime.getRight().getStopId())
