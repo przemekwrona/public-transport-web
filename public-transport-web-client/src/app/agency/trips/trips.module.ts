@@ -15,11 +15,14 @@ import {
 } from "ngx-drag-drop";
 import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 import {FormsModule} from "@angular/forms";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        RouterModule,
         NgxSortableModule,
         DndModule,
 
@@ -29,7 +32,8 @@ import {FormsModule} from "@angular/forms";
         DndDropzoneDirective,
         DndPlaceholderRefDirective,
         DndDraggableDirective,
-        DndHandleDirective
+        DndHandleDirective,
+        FaIconComponent
     ],
     declarations: [
         TripEditorComponent,

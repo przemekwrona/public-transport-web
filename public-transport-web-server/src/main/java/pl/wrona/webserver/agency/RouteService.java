@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Route;
+import pl.wrona.webserver.agency.mapper.RouteMapper;
 import pl.wrona.webserver.security.AppUser;
 
 @Service
@@ -43,20 +44,10 @@ public class RouteService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        var routes = routeRepository.findAllByAgency(agencyService.findAgencyByAppUser(appUser));
-        var items = routes.stream()
-                .map(route -> new org.igeolab.iot.pt.server.api.model.Route()
-                        .name(route.getName())
-                        .line(route.getLine())
-                        .google(route.isGoogle())
-                        .active(route.isActive())
-                        .origin(route.getOrigin())
-                        .destination(route.getDestination())
-                        .via(route.getVia()))
-                .toList();
+        var routes = routeRepository.findAllByAgencyOrderByLineAscNameAsc(agencyService.findAgencyByAppUser(appUser));
+        var items = routes.stream().map(RouteMapper::map).toList();
 
-        return new Routes()
-                .items(items);
+        return new Routes().items(items);
     }
 
 }

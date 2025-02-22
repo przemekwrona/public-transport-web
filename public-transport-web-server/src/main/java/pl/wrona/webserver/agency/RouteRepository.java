@@ -15,5 +15,6 @@ public interface RouteRepository extends JpaRepository<Route, String> {
     @Query("SELECT r FROM Route r WHERE r.agency = :agency AND r.name = :name AND r.line = :line")
     Route findByAgencyCodeAndRouteId(@Param("agency") Agency agency, @Param("name") String name, @Param("line") String line);
 
-    List<Route> findAllByAgency(Agency agency);
+    List<Route> findAllByAgencyOrderByLineAscNameAsc(Agency agency);
+
 }
