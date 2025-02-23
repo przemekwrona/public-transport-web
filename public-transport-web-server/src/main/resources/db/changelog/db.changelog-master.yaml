@@ -240,6 +240,9 @@ databaseChangeLog:
                   name: headsign
                   type: varchar(30)
               - column:
+                  name: communication_velocity
+                  type: int
+              - column:
                   name: route_id
                   type: integer
                   constraints:
@@ -251,6 +254,19 @@ databaseChangeLog:
             sequenceName: trip_id_seq
             startValue: 1
             incrementBy: 1
+
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: route_id
+              - column:
+                  name: variant
+              - column:
+                  name: mode
+            indexName: idx_trip_unique
+            tableName: trip
+            unique: true
 
   - changeSet:
       id: create-stop-time-table
@@ -276,13 +292,18 @@ databaseChangeLog:
                     primaryKeyName: pk_stop_time
                     nullable: false
               - column:
-                  name: arrival_time
-                  type: time
+                  name: arrival_second
+                  type: int
                   constraints:
                     nullable: false
               - column:
-                  name: departure_time
-                  type: time
+                  name: departure_second
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: distance_meters
+                  type: int
                   constraints:
                     nullable: false
               - column:

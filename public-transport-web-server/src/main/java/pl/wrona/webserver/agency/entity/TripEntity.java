@@ -38,6 +38,8 @@ public class TripEntity {
 
     private String headsign;
 
+    private int communicationVelocity;
+
 //    @OneToMany(mappedBy = "stopTimeId")
 //    private Set<StopTime> stopTimes;
 

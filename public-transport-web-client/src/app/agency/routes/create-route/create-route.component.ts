@@ -18,11 +18,7 @@ export class CreateRouteComponent {
     }
 
     public createRoute(): void {
-
         this.routeService.createRoute(this.route).subscribe((status: Status) => {
-
         });
     }
-
-
 }

@@ -1,14 +1,16 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import * as L from "leaflet";
-import { findIndex, last } from "lodash";
+import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
+import {findIndex, last} from "lodash";
 import {Stop, StopTime, Trip, TripMode, Trips} from "../../../generated/public-transport";
 import {StopService} from "../../stops/stop.service";
 import {TripsService} from "../trips.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
-import {animate, trigger, state, style, transition} from "@angular/animations";
+import {animate, state, style, transition, trigger} from "@angular/animations";
 import {debounceTime, Subject} from "rxjs";
+import {TripEditorMode} from "./trip-editor-mode";
+import {DistancePipe} from "./distance.pipe";
 
 interface DropzoneLayout {
     container: string;
@@ -50,6 +52,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public communicationVelocity: number = 45;
 
     public tripMode = TripMode;
+    public tripEditorMode: TripEditorMode;
 
     public stopTimes: StopTime[] = [];
 
@@ -58,6 +61,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.state = navigation?.extras.state as { name: string, line: string, variant: string, mode: TripMode };
         this.variant = this.state.variant || '';
         this.mode = this.state.mode;
+
+        this.route.data.subscribe((data: Data) => this.tripEditorMode = data['mode']);
 
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
     }
@@ -195,8 +200,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             return stopTime;
         });
 
-        this.tripsService.create(trip).subscribe(() => {
-        });
+        if (this.tripEditorMode == TripEditorMode.CREATE) {
+            this.tripsService.create(trip).subscribe(() => {
+            });
+        } else if (this.tripEditorMode == TripEditorMode.EDIT) {
+            this.tripsService.update(trip).subscribe(() => {
+            });
+        }
+
     }
 
     public drawPolyline() {
@@ -243,4 +254,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public onCommunicationVelocityChange(value: number): void {
         this.communicationVelocitySubject.next(value);
     }
+
+    public getLastStop(): StopTime {
+        return last(this.stopTimes);
+    }
+
 }

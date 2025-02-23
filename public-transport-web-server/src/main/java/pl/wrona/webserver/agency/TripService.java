@@ -3,7 +3,6 @@ package pl.wrona.webserver.agency;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.lucene.util.SloppyMath;
-import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
@@ -20,7 +19,6 @@ import pl.wrona.webserver.agency.entity.TripEntity;
 import pl.wrona.webserver.agency.entity.TripVariantMode;
 import pl.wrona.webserver.agency.mapper.RouteMapper;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +53,7 @@ public class TripService {
             tripEntity.setMode(TripVariantMode.BACK);
         }
         tripEntity.setHeadsign(trip.getHeadsign());
+        tripEntity.setCommunicationVelocity(trip.getCommunicationVelocity());
 
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
@@ -72,8 +71,9 @@ public class TripService {
                     entity.setStopTimeId(stopTimeId);
 
                     entity.setStop(stopDictionary.get(stopTime.getStopId()));
-                    entity.setArrivalTime(LocalTime.MIDNIGHT.plusSeconds(stopTime.getSeconds().longValue()));
-                    entity.setDepartureTime(LocalTime.MIDNIGHT.plusSeconds(stopTime.getSeconds().longValue()));
+                    entity.setArrivalSecond(stopTime.getSeconds());
+                    entity.setDepartureSecond(stopTime.getSeconds());
+                    entity.setDistanceMeters(stopTime.getMeters());
 
                     return entity;
                 }).toList();
@@ -94,6 +94,7 @@ public class TripService {
         var route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, trip.getVariant(), TripModeMapper.map(trip.getMode()));
         tripEntity.setHeadsign(trip.getHeadsign());
+        tripEntity.setCommunicationVelocity(trip.getCommunicationVelocity());
         stopTimeRepository.deleteByTripId(tripEntity.getTripId());
 
         StopTime[] stopTimes = trip.getStops().toArray(StopTime[]::new);
@@ -110,8 +111,9 @@ public class TripService {
                     entity.setStopTimeId(stopTimeId);
 
                     entity.setStop(stopDictionary.get(stopTime.getStopId()));
-                    entity.setArrivalTime(LocalTime.MIDNIGHT.plusSeconds(stopTime.getSeconds().longValue()));
-                    entity.setDepartureTime(LocalTime.MIDNIGHT.plusSeconds(stopTime.getSeconds().longValue()));
+                    entity.setArrivalSecond(stopTime.getSeconds());
+                    entity.setDepartureSecond(stopTime.getSeconds());
+                    entity.setDistanceMeters(stopTime.getMeters());
 
                     return entity;
                 }).toList();
@@ -141,7 +143,8 @@ public class TripService {
     public Trips getTripByVariant(TripId tripId) {
         var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, tripId.getVariant(), TripVariantMode.MAIN);
-        Trip tripsResponse = Optional.of(tripEntity)
+
+        Trip tripsResponse = Optional.ofNullable(tripEntity)
                 .map(trip -> new Trip()
                         .name(route.getName())
                         .line(route.getLine())
@@ -149,12 +152,17 @@ public class TripService {
                         .headsign(trip.getHeadsign()))
                 .orElse(null);
 
-        List<StopTimeEntity> stopTimes = stopTimeRepository.findAllByTripId(tripEntity.getTripId());
+        List<StopTimeEntity> stopTimes = tripEntity != null
+                ? stopTimeRepository.findAllByTripId(tripEntity.getTripId()) : List.of();
 
         stopTimes.forEach((StopTimeEntity stopTime) -> {
             tripsResponse.addStopsItem(new StopTime()
                     .stopId(stopTime.getStop().getStopId())
                     .stopName(stopTime.getStop().getName())
+                    .arrivalTime(stopTime.getArrivalSecond())
+                    .departureTime(stopTime.getDepartureSecond())
+                    .seconds(stopTime.getDepartureSecond())
+                    .meters(stopTime.getDistanceMeters())
                     .lon((float) stopTime.getStop().getLon())
                     .lat((float) stopTime.getStop().getLat()));
         });

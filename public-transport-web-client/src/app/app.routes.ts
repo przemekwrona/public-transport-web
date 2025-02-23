@@ -11,6 +11,7 @@ import {RoutesResolver} from "./agency/routes/routes.resolver";
 import {TripListComponent} from "./agency/trips/trip-list/trip-list.component";
 import {TripEditorComponent} from "./agency/trips/trip-editor/trip-editor.component";
 import {GoogleMapsComponent} from "./agency/google-maps/google-maps.component";
+import {TripEditorMode} from "./agency/trips/trip-editor/trip-editor-mode";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'planner', pathMatch: 'full'},
@@ -23,8 +24,8 @@ export const routes: Routes = [
             {path: 'routes', component: RoutesComponent, resolve: { routes: RoutesResolver }},
             {path: 'routes/create', component: CreateRouteComponent},
             {path: 'trips', component: TripListComponent, runGuardsAndResolvers: 'always'},
-            {path: 'trips/create', component: TripEditorComponent},
-            {path: 'trips/edit', component: TripEditorComponent},
+            {path: 'trips/create', component: TripEditorComponent, data: {mode: TripEditorMode.CREATE}},
+            {path: 'trips/edit', component: TripEditorComponent,  data: {mode: TripEditorMode.EDIT}},
             {path: 'google/maps', component: GoogleMapsComponent}
         ]
     },
