@@ -27,6 +27,7 @@ public class StopTimeEntity {
     @JoinColumn(name = "stop_id")
     private Stop stop;
 
-    private LocalTime arrivalTime;
-    private LocalTime departureTime;
+    private int arrivalSecond;
+    private int departureSecond;
+    private int distanceMeters;
 }

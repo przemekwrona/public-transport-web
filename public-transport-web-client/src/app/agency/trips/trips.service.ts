@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Route, Trips, Trip} from "../../generated/public-transport";
+import {Route, Trips, Trip, Status} from "../../generated/public-transport";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -12,6 +12,10 @@ export class TripsService {
 
   public create(trips: Trip): Observable<Trip> {
     return this.httpClient.post<Trip>(`/api/v1/trips`, trips);
+  }
+
+  public update(trips: Trip): Observable<Status> {
+    return this.httpClient.put<Status>(`/api/v1/trips`, trips);
   }
 
   public getTrips(name: string, line: string): Observable<Trips> {
