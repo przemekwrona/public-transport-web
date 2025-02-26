@@ -263,7 +263,7 @@ paths:
       summary: Return all trips by filter line
       operationId: getTripsByLineOrName
       parameters:
-        - name: line
+        - name: filter
           in: query
           required: false
           schema:
