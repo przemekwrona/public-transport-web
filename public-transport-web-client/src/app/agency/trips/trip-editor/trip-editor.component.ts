@@ -2,21 +2,23 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {findIndex, last} from "lodash";
-import {Stop, StopTime, Trip, TripMode, Trips} from "../../../generated/public-transport";
+import {
+    Stop,
+    StopTime,
+    Trip, TripId,
+    TripMode,
+    Trips,
+    TripsDetails,
+    UpdateTripDetailsRequest
+} from "../../../generated/public-transport";
 import {StopService} from "../../stops/stop.service";
 import {TripsService} from "../trips.service";
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {debounceTime, Subject} from "rxjs";
-import {TripEditorMode} from "./trip-editor-mode";
-import {DistancePipe} from "./distance.pipe";
-
-interface DropzoneLayout {
-    container: string;
-    list: string;
-    dndHorizontal: boolean;
-}
+import {debounceTime, map, Subject} from "rxjs";
+import {TripEditorComponentMode} from "./trip-editor-component-mode";
+import {routes} from "../../../app.routes";
 
 @Component({
     selector: 'app-trip-editor',
@@ -42,48 +44,33 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     private communicationVelocitySubject = new Subject<number>();
 
-
     public state: { name: string, line: string, variant: string, mode: TripMode };
 
-    public variant: string = '';
-    public mode: TripMode | null;
-    public headsign: string = '';
+    public tripModeSelectValue = TripMode;
+    public tripEditorComponentMode: TripEditorComponentMode;
 
-    public communicationVelocity: number = 45;
+    public $tripDetails: TripsDetails;
 
-    public tripMode = TripMode;
-    public tripEditorMode: TripEditorMode;
-
-    public stopTimes: StopTime[] = [];
-
-    constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private route: ActivatedRoute) {
-        const navigation = this.router.getCurrentNavigation();
-        this.state = navigation?.extras.state as { name: string, line: string, variant: string, mode: TripMode };
-        this.variant = this.state.variant || '';
-        this.mode = this.state.mode;
-
-        this.route.data.subscribe((data: Data) => this.tripEditorMode = data['mode']);
-
+    constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private _route: ActivatedRoute) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
     }
 
     ngOnInit(): void {
+        this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
+        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => this.$tripDetails = tripDetails);
+        this._route.queryParams.subscribe(params => this.state = params as {
+            line: string,
+            name: string,
+            variant: string,
+            mode: TripMode
+        });
     }
 
     ngAfterViewInit(): void {
         this.map = this.initMap();
 
-        this.tripsService.getTripsByVariant(this.state.name, this.state.line, this.state.variant).subscribe((trips: Trips) => {
-            const tripVariants = (trips?.trips || []);
-            if (tripVariants.length == 1) {
-                const tripVariant: Trip = tripVariants[0];
-                this.headsign = tripVariant.headsign || '';
-                this.stopTimes = tripVariant.stops || [];
-            }
-
-            this.drawPolyline();
-        });
-
+        this.drawPolyline();
+        this.zoomPolyline();
 
         this.reloadStops(this.map);
         this.onZoomEnd(this.map);
@@ -132,7 +119,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         stopTime.lon = stop.lon;
                         stopTime.lat = stop.lat;
 
-                        this.stopTimes.push(stopTime);
+                        this.$tripDetails.trip.stops.push(stopTime);
 
                         this.measureDistance();
 
@@ -155,9 +142,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const trips: Trip = {};
         trips.line = this.state.line || '';
         trips.headsign = '';
-        trips.communicationVelocity = this.communicationVelocity;
+        trips.communicationVelocity = this.$tripDetails.trip.communicationVelocity;
 
-        trips.stops = this.stopTimes.map(stop => {
+        trips.stops = this.$tripDetails.trip.stops.map(stop => {
             const stopTime: StopTime = {};
             stopTime.stopId = stop.stopId;
             stopTime.stopName = stop.stopName;
@@ -171,8 +158,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
             for (const index in response.stops) {
                 const stopTime: StopTime = (response.stops || [])[Number(index)];
-                this.stopTimes[Number(index)].meters = stopTime.meters;
-                this.stopTimes[Number(index)].seconds = stopTime.seconds;
+                this.$tripDetails.trip.stops[Number(index)].meters = stopTime.meters;
+                this.$tripDetails.trip.stops[Number(index)].seconds = stopTime.seconds;
             }
 
             this.drawPolyline();
@@ -180,38 +167,26 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public clickCreateOrEdit() {
-        const trip: Trip = {};
-        trip.line = this.state.line;
-        trip.name = this.state.name;
-        trip.variant = this.variant;
-        trip.mode = this.mode || TripMode.Main;
-        trip.headsign = this.headsign;
-        trip.communicationVelocity = this.communicationVelocity;
+        const tripId: TripId = {};
+        tripId.line = this.state.line;
+        tripId.name = this.state.name;
+        tripId.variant = this.state.variant;
+        tripId.mode = this.state.mode;
 
-        trip.stops = this.stopTimes.map(stop => {
-            const stopTime: StopTime = {};
-            stopTime.stopId = stop.stopId;
-            stopTime.stopName = stop.stopName;
-            stopTime.lon = stop.lon;
-            stopTime.lat = stop.lat;
-            stopTime.meters = stop.meters;
-            stopTime.seconds = stop.seconds;
+        const tripDetailsRequest: UpdateTripDetailsRequest = {};
+        tripDetailsRequest.tripId = tripId;
+        tripDetailsRequest.trip = this.$tripDetails;
 
-            return stopTime;
-        });
-
-        if (this.tripEditorMode == TripEditorMode.CREATE) {
-            this.tripsService.create(trip).subscribe(() => {
-            });
-        } else if (this.tripEditorMode == TripEditorMode.EDIT) {
-            this.tripsService.update(trip).subscribe(() => {
-            });
+        if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
+            this.tripsService.create(tripDetailsRequest).subscribe(() => {});
+        } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
+            this.tripsService.update(tripDetailsRequest).subscribe(() => {});
         }
 
     }
 
     public drawPolyline() {
-        const latLngPoints = this.stopTimes.map(stopTime => new L.LatLng(stopTime.lat || 0.0, stopTime.lon || 0.0));
+        const latLngPoints = this.$tripDetails.trip.stops.map(stopTime => new L.LatLng(stopTime.lat || 0.0, stopTime.lon || 0.0));
         const polyline = L.polyline(latLngPoints, {
             color: '#416AB6',
             weight: 8,
@@ -230,25 +205,25 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public drop(event: CdkDragDrop<string[]>) {
-        moveItemInArray(this.stopTimes, event.previousIndex, event.currentIndex);
+        moveItemInArray(this.$tripDetails.trip.stops, event.previousIndex, event.currentIndex);
         this.measureDistance();
     }
 
     public remove(stopTime: StopTime) {
-        const index = findIndex(this.stopTimes, {stopId: stopTime.stopId});
-        this.stopTimes.splice(index, 1);
+        const index = findIndex(this.$tripDetails.trip.stops, {stopId: stopTime.stopId});
+        this.$tripDetails.trip.stops.splice(index, 1);
         this.drawPolyline();
     }
 
     public addBrake() {
-        const lastStop = last(this.stopTimes);
-        const stopTime: StopTime = {} as StopTime;
-        stopTime.stopId = lastStop.stopId + '-break';
-        stopTime.stopName = lastStop.stopName;
-        stopTime.lon = lastStop.lon;
-        stopTime.lat = lastStop.lat;
-
-        this.stopTimes.push(stopTime);
+        // const lastStop = last(this.stopTimes);
+        // const stopTime: StopTime = {} as StopTime;
+        // stopTime.stopId = lastStop.stopId + '-break';
+        // stopTime.stopName = lastStop.stopName;
+        // stopTime.lon = lastStop.lon;
+        // stopTime.lat = lastStop.lat;
+        //
+        // this.stopTimes.push(stopTime);
     }
 
     public onCommunicationVelocityChange(value: number): void {
@@ -256,7 +231,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public getLastStop(): StopTime {
-        return last(this.stopTimes);
+        return last(this.$tripDetails.trip.stops);
     }
 
+    public zoomPolyline(): void {
+        this.map.fitBounds(this.routePolyline.getBounds());
+    }
+
+    protected readonly routes = routes;
 }

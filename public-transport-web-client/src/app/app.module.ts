@@ -33,11 +33,9 @@ import {AddHeaderInterceptor} from "./auth/auth.interceptor";
     declarations: [
         AppComponent
     ],
-    providers: [{
-        provide: HTTP_INTERCEPTORS,
-        useClass: AddHeaderInterceptor,
-        multi: true,
-    }],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true}
+    ],
     bootstrap: [
         AppComponent
     ]
