@@ -10,6 +10,8 @@ import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.igeolab.iot.pt.server.api.model.TripMode;
 import org.igeolab.iot.pt.server.api.model.Trips;
+import org.igeolab.iot.pt.server.api.model.TripsDetails;
+import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Stop;
@@ -18,6 +20,7 @@ import pl.wrona.webserver.agency.entity.StopTimeId;
 import pl.wrona.webserver.agency.entity.TripEntity;
 import pl.wrona.webserver.agency.entity.TripVariantMode;
 import pl.wrona.webserver.agency.mapper.RouteMapper;
+import pl.wrona.webserver.agency.mapper.TripModeMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,15 +88,27 @@ public class TripService {
     }
 
     @Transactional
-    public Status updateTrip(Trip trip) {
+    public Status deleteTripByTripId(TripId tripId) {
+        TripEntity deleteTrip = tripRepository.findByLineAndNameAndVariantAndMode(tripId.getLine(), tripId.getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
+        tripRepository.delete(deleteTrip);
+        return new Status().status("DELETED");
+    }
+
+    @Transactional
+    public Status updateTrip(UpdateTripDetailsRequest updateTripDetailsRequest) {
+        var tripId = updateTripDetailsRequest.getTripId();
+        var trip = updateTripDetailsRequest.getTrip().getTrip();
+
         List<String> stopIds = trip.getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
         Map<String, Stop> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        var route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
-        TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, trip.getVariant(), TripModeMapper.map(trip.getMode()));
+        var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
+        TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
         tripEntity.setHeadsign(trip.getHeadsign());
+        tripEntity.setVariant(trip.getVariant());
+        tripEntity.setMode(TripModeMapper.map(trip.getMode()));
         tripEntity.setCommunicationVelocity(trip.getCommunicationVelocity());
         stopTimeRepository.deleteByTripId(tripEntity.getTripId());
 
@@ -140,15 +155,17 @@ public class TripService {
                 .trips(tripsResponse);
     }
 
-    public Trips getTripByVariant(TripId tripId) {
+    public TripsDetails getTripByVariant(TripId tripId) {
         var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
-        TripEntity tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, tripId.getVariant(), TripVariantMode.MAIN);
+        var tripEntity = tripRepository.findAllByRouteAndVariantAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
 
-        Trip tripsResponse = Optional.ofNullable(tripEntity)
+        var tripResponse = Optional.ofNullable(tripEntity)
                 .map(trip -> new Trip()
                         .name(route.getName())
                         .line(route.getLine())
                         .variant(trip.getVariant())
+                        .mode(TripModeMapper.map(trip.getMode()))
+                        .communicationVelocity(trip.getCommunicationVelocity())
                         .headsign(trip.getHeadsign()))
                 .orElse(null);
 
@@ -156,7 +173,7 @@ public class TripService {
                 ? stopTimeRepository.findAllByTripId(tripEntity.getTripId()) : List.of();
 
         stopTimes.forEach((StopTimeEntity stopTime) -> {
-            tripsResponse.addStopsItem(new StopTime()
+            tripResponse.addStopsItem(new StopTime()
                     .stopId(stopTime.getStop().getStopId())
                     .stopName(stopTime.getStop().getName())
                     .arrivalTime(stopTime.getArrivalSecond())
@@ -166,8 +183,9 @@ public class TripService {
                     .lon((float) stopTime.getStop().getLon())
                     .lat((float) stopTime.getStop().getLat()));
         });
-        return new Trips()
-                .trips(List.of(tripsResponse));
+        return new TripsDetails()
+                .route(RouteMapper.map(route))
+                .trip(tripResponse);
     }
 
     public Trip measureDistance(Trip trips) {

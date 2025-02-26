@@ -240,6 +240,12 @@ databaseChangeLog:
                   name: headsign
                   type: varchar(30)
               - column:
+                  name: variant_designation
+                  type: varchar(4)
+              - column:
+                  name: variant_description
+                  type: varchar(255)
+              - column:
                   name: communication_velocity
                   type: int
               - column:
@@ -281,8 +287,6 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     primaryKeyName: pk_stop_time
-                    foreignKeyName: fk_stop_time_trip
-                    references: trip(trip_id)
                     nullable: false
               - column:
                   name: stop_sequence
@@ -313,6 +317,14 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_stop_time_stop
                     references: stop(bdot10k_id)
+
+        - addForeignKeyConstraint:
+            constraintName: fk_stop_time_trip
+            baseTableName: stop_time
+            baseColumnNames: trip_id
+            referencedTableName: trip
+            referencedColumnNames: trip_id
+            onDelete:  CASCADE
 
   - changeSet:
       id: insert-example-data
