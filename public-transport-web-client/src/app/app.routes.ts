@@ -30,7 +30,7 @@ export const routes: Routes = [
             {path: 'trips', component: TripListComponent, resolve: {trips: tripsResolver}},
             {path: 'trips/create', component: TripEditorComponent, data: {mode: TripEditorComponentMode.CREATE}},
             {path: 'trips/edit', component: TripEditorComponent,  resolve: {trip: tripEditorResolver}, data: {mode: TripEditorComponentMode.EDIT}},
-            {path: 'brigade', component: BrigadeListComponent},
+            {path: 'brigade', component: BrigadeEditorComponent},
             {path: 'brigade/create', component: BrigadeEditorComponent},
             {path: 'google/maps', component: GoogleMapsComponent}
         ]
