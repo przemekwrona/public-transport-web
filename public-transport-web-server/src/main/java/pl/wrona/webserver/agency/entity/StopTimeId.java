@@ -1,5 +1,6 @@
 package pl.wrona.webserver.agency.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class StopTimeId implements Serializable {
 
+    @Column(name = "trip_id")
     private Long tripId;
 
     private int stopSequence;
