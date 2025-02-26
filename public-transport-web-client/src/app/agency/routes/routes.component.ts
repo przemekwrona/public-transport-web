@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {StopService} from "../stops/stop.service";
 import {Route, Routes, Stop} from "../../generated/public-transport";
 import {ActivatedRoute, Router} from "@angular/router";
-import {RouterQueryParams} from "../trips/trips.resolver";
 
 @Component({
     selector: 'app-routes',
@@ -15,7 +14,7 @@ export class RoutesComponent implements OnInit {
 
     public routes: Routes = {};
 
-    constructor(private stopService: StopService, private router: Router, private route: ActivatedRoute) {
+    constructor(private stopService: StopService, private _router: Router, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -23,14 +22,12 @@ export class RoutesComponent implements OnInit {
     }
 
     public clickAddRoute(): void {
-        this.router.navigate(['/agency/routes/create']);
+        this._router.navigate(['/agency/routes/create']);
     }
 
     public openRoute(route: Route) {
-        const state = {name: route.name, line: route.line};
-        console.log(state);
-        // this._router.navigateByUrl('/agency/trips/create', {state: state});
-        this.router.navigateByUrl('/agency/trips', {state: state});
+        const state = {line: route.line, name: route.name};
+        this._router.navigate(['/agency/trips'], {queryParams: state})
     }
 
 }
