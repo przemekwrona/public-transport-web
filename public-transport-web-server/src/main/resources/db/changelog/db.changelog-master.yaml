@@ -227,8 +227,8 @@ databaseChangeLog:
                     primaryKeyName: pk_trip
                     nullable: false
               - column:
-                  name: variant
-                  type: varchar(4)
+                  name: variant_name
+                  type: varchar(30)
                   constraints:
                     nullable: false
               - column:
@@ -240,8 +240,29 @@ databaseChangeLog:
                   name: headsign
                   type: varchar(30)
               - column:
+                  name: variant_designation
+                  type: varchar(30)
+              - column:
+                  name: variant_description
+                  type: varchar(255)
+              - column:
                   name: communication_velocity
                   type: int
+              - column:
+                  name: distance_in_meters
+                  type: int
+              - column:
+                  name: travel_time_in_seconds
+                  type: int
+              - column:
+                  name: is_main_variant
+                  type: boolean
+              - column:
+                  name: origin
+                  type: varchar(30)
+              - column:
+                  name: destination
+                  type: varchar(30)
               - column:
                   name: route_id
                   type: integer
@@ -261,7 +282,7 @@ databaseChangeLog:
               - column:
                   name: route_id
               - column:
-                  name: variant
+                  name: variant_name
               - column:
                   name: mode
             indexName: idx_trip_unique
@@ -281,8 +302,6 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     primaryKeyName: pk_stop_time
-                    foreignKeyName: fk_stop_time_trip
-                    references: trip(trip_id)
                     nullable: false
               - column:
                   name: stop_sequence
@@ -313,6 +332,14 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_stop_time_stop
                     references: stop(bdot10k_id)
+
+        - addForeignKeyConstraint:
+            constraintName: fk_stop_time_trip
+            baseTableName: stop_time
+            baseColumnNames: trip_id
+            referencedTableName: trip
+            referencedColumnNames: trip_id
+            onDelete:  CASCADE
 
   - changeSet:
       id: insert-example-data

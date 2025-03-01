@@ -257,6 +257,26 @@ paths:
                 $ref: '#/components/schemas/Routes'
 
   /trips:
+    get:
+      tags:
+        - trip
+      summary: Return all trips by filter line
+      operationId: getTripsByLineOrName
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+            default: ''
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllTripsResponse'
+
     post:
       tags:
         - trip
@@ -266,7 +286,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Trip'
+              $ref: '#/components/schemas/CreateTripDetailsRequest'
         required: true
       responses:
         201:
@@ -284,11 +304,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Trip'
+              $ref: '#/components/schemas/UpdateTripDetailsRequest'
         required: true
       responses:
         201:
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+    delete:
+      tags:
+        - trip
+      summary: Delete trip by tripId
+      operationId: deleteTripByTripId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripId'
+        required: true
+      responses:
+        204:
+          description: Deleted
           content:
             application/json:
               schema:
@@ -330,7 +368,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trips'
+                $ref: '#/components/schemas/TripsDetails'
 
   /trips/measure-distance:
     post:
@@ -638,10 +676,50 @@ components:
           type: string
         communicationVelocity:
           type: integer
+        distanceInMeters:
+          type: integer
+        travelTimeInSeconds:
+          type: integer
+        isMainVariant:
+          type: boolean
+        variantDesignation:
+          type: string
+        variantDescription:
+          type: string
+        origin:
+          type: string
+        destination:
+          type: string
         stops:
           type: array
           items:
             $ref: '#/components/schemas/StopTime'
+
+    CreateTripDetailsRequest:
+      type: object
+      properties:
+        tripId:
+          $ref: '#/components/schemas/TripId'
+        trip:
+          $ref: '#/components/schemas/TripsDetails'
+
+    UpdateTripDetailsRequest:
+      type: object
+      properties:
+        tripId:
+          $ref: '#/components/schemas/TripId'
+        trip:
+          $ref: '#/components/schemas/TripsDetails'
+
+    GetAllTripsResponse:
+      type: object
+      properties:
+        filter:
+          type: string
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trips'
 
     Trips:
       type: object
@@ -652,6 +730,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Trip'
+
+    TripsDetails:
+      type: object
+      properties:
+        route:
+          $ref: '#/components/schemas/Route'
+        trip:
+          $ref: '#/components/schemas/Trip'
 
     Status:
       type: object

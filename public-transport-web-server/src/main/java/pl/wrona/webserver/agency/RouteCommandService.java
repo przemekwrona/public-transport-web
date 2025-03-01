@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class RouteCommandService {
 
-    private final RouteService routeService;
     private final RouteQueryService routeQueryService;
     private final RouteRepository routeRepository;
 

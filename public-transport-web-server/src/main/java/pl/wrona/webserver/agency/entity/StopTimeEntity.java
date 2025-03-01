@@ -27,6 +27,10 @@ public class StopTimeEntity {
     @JoinColumn(name = "stop_id")
     private Stop stop;
 
+    @ManyToOne
+    @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false, nullable = false)
+    private TripEntity trip;
+
     private int arrivalSecond;
     private int departureSecond;
     private int distanceMeters;

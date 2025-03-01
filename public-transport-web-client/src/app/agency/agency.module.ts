@@ -12,6 +12,7 @@ import {SidebarComponent} from "./sidebar/sidebar.component";
 import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
 import {GoogleMapsModule} from "./google-maps/google-maps.module";
+import {BrigadeModule} from "./brigade/brigade.module";
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {GoogleMapsModule} from "./google-maps/google-maps.module";
         StopsModule,
         RoutesModule,
         GoogleMapsModule,
-        MatTreeModule
+        MatTreeModule,
+        BrigadeModule
     ],
     providers: [
         StopService
