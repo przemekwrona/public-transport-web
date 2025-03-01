@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BrigadeService} from "../brigade.service";
-import {GetAllTripsResponse} from "../../../generated/public-transport";
+import {GetAllTripsResponse, Trip} from "../../../generated/public-transport";
 
 @Component({
   selector: 'app-brigade-editor',
@@ -18,5 +18,4 @@ export class BrigadeEditorComponent implements OnInit {
     this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => this.trips = response);
   }
 
-  protected readonly JSON = JSON;
 }

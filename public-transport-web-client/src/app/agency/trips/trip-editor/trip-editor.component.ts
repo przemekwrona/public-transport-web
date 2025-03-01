@@ -43,13 +43,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private routePolyline: Polyline;
 
     private communicationVelocitySubject = new Subject<number>();
+    private previousVariantName = '';
 
     public state: { name: string, line: string, variant: string, mode: TripMode };
 
     public tripModeSelectValue = TripMode;
     public tripEditorComponentMode: TripEditorComponentMode;
 
-    public $tripDetails: TripsDetails;
+    public $tripDetails: TripsDetails = {trip: {}};
 
     constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private _route: ActivatedRoute) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
@@ -58,6 +59,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => this.$tripDetails = tripDetails);
+        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => console.log(tripDetails));
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,
             name: string,
@@ -178,15 +180,17 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.trip = this.$tripDetails;
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
-            this.tripsService.create(tripDetailsRequest).subscribe(() => {});
+            this.tripsService.create(tripDetailsRequest).subscribe(() => {
+            });
         } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
-            this.tripsService.update(tripDetailsRequest).subscribe(() => {});
+            this.tripsService.update(tripDetailsRequest).subscribe(() => {
+            });
         }
 
     }
 
     public drawPolyline() {
-        const latLngPoints = this.$tripDetails.trip.stops.map(stopTime => new L.LatLng(stopTime.lat || 0.0, stopTime.lon || 0.0));
+        const latLngPoints = (this.$tripDetails?.trip?.stops || []).map(stopTime => new L.LatLng(stopTime.lat || 0.0, stopTime.lon || 0.0));
         const polyline = L.polyline(latLngPoints, {
             color: '#416AB6',
             weight: 8,
@@ -235,7 +239,21 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public zoomPolyline(): void {
-        this.map.fitBounds(this.routePolyline.getBounds());
+        if (this.routePolyline.getBounds().isValid()) {
+            this.map.fitBounds(this.routePolyline.getBounds());
+        }
+    }
+
+    public clickIsMainVariant(): void {
+        if (this.$tripDetails.trip.isMainVariant) {
+            this.$tripDetails.trip.variant = this.previousVariantName;
+        } else {
+            this.previousVariantName = this.$tripDetails.trip.variant;
+            this.$tripDetails.trip.variant = 'MAIN';
+            this.$tripDetails.trip.variantDesignation = '';
+            this.$tripDetails.trip.variantDescription = '';
+        }
+
     }
 
     protected readonly routes = routes;

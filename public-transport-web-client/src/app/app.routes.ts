@@ -28,7 +28,7 @@ export const routes: Routes = [
             {path: 'routes', component: RoutesComponent, resolve: { routes: RoutesResolver }},
             {path: 'routes/create', component: CreateRouteComponent},
             {path: 'trips', component: TripListComponent, resolve: {trips: tripsResolver}},
-            {path: 'trips/create', component: TripEditorComponent, data: {mode: TripEditorComponentMode.CREATE}},
+            {path: 'trips/create', component: TripEditorComponent, resolve: {trip: tripEditorResolver}, data: {mode: TripEditorComponentMode.CREATE}},
             {path: 'trips/edit', component: TripEditorComponent,  resolve: {trip: tripEditorResolver}, data: {mode: TripEditorComponentMode.EDIT}},
             {path: 'brigade', component: BrigadeEditorComponent},
             {path: 'brigade/create', component: BrigadeEditorComponent},

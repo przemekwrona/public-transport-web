@@ -286,7 +286,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Trip'
+              $ref: '#/components/schemas/CreateTripDetailsRequest'
         required: true
       responses:
         201:
@@ -676,10 +676,32 @@ components:
           type: string
         communicationVelocity:
           type: integer
+        distanceInMeters:
+          type: integer
+        travelTimeInSeconds:
+          type: integer
+        isMainVariant:
+          type: boolean
+        variantDesignation:
+          type: string
+        variantDescription:
+          type: string
+        origin:
+          type: string
+        destination:
+          type: string
         stops:
           type: array
           items:
             $ref: '#/components/schemas/StopTime'
+
+    CreateTripDetailsRequest:
+      type: object
+      properties:
+        tripId:
+          $ref: '#/components/schemas/TripId'
+        trip:
+          $ref: '#/components/schemas/TripsDetails'
 
     UpdateTripDetailsRequest:
       type: object
