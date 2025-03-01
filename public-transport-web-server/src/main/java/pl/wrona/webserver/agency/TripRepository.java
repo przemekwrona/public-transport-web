@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface TripRepository extends JpaRepository<TripEntity, Long> {
 
-    TripEntity findFirstByRouteOrderByVariant(Route route);
+    TripEntity findFirstByRouteOrderByVariantName(Route route);
 
     List<TripEntity> findAllByRoute(Route route);
 
@@ -24,12 +24,12 @@ public interface TripRepository extends JpaRepository<TripEntity, Long> {
     @Override
     void delete(TripEntity entity);
 
-    TripEntity findAllByRouteAndVariantAndMode(Route route, String variant, TripVariantMode mode);
+    TripEntity findAllByRouteAndVariantNameAndMode(Route route, String variantName, TripVariantMode mode);
 
     @Modifying
-    @Query("DELETE FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variant = :variant AND t.mode = :mode")
-    void deleteByLineAndNameAndVariantAndMode(@Param("line") String line, @Param("name") String name, @Param("variant") String variant, @Param("mode") TripVariantMode mode);
+    @Query("DELETE FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variantName = :variantName AND t.mode = :mode")
+    void deleteByLineAndNameAndVariantAndMode(@Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("mode") TripVariantMode mode);
 
-    @Query("SELECT t FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variant = :variant AND t.mode = :mode")
-    TripEntity findByLineAndNameAndVariantAndMode(@Param("line") String line, @Param("name") String name, @Param("variant") String variant, @Param("mode") TripVariantMode mode);
+    @Query("SELECT t FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variantName = :variantName AND t.mode = :mode")
+    TripEntity findByLineAndNameAndVariantAndMode(@Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("mode") TripVariantMode mode);
 }

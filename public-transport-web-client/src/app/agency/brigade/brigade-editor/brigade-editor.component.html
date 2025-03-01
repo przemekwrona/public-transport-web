@@ -3,7 +3,7 @@
         <div class="flex flex-col justify-center gap-2">
             <h1 class="text-xl font-medium leading-none text-gray-900">Dodaj nową brygadę</h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-                Brygada jest to plan kursów które są do wykonania dla jednego kierowcy
+                Brygada jest to plan kursów które są do wykonania przez jednego kierowcą w ciągu jednej doby
             </div>
         </div>
         <div class="flex items-center gap-2.5">
@@ -12,5 +12,72 @@
     </div>
 </div>
 
+<!-- Container -->
+<div class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
+        <div class="col-span-1">
+            <div class="grid gap-5 lg:gap-7.5">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Community Badges
+                        </h3>
+                    </div>
+                    <div class="card-body pb-7.5">
+                        <form class="max-w-[8rem] mx-auto">
+                            <label for="time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Godzina rozpoczęcia:</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <input type="time" id="time" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required />
+                            </div>
+                        </form>
 
-{{ JSON.stringify(trips) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-2">
+            <div class="flex flex-col gap-5 lg:gap-7.5">
+                <div class="flex flex-col gap-5 lg:gap-7.5">
+
+                    @for (trip of trips?.lines || []; track trip) {
+                        <div class="card">
+                            <div class="card-body lg:py-7.5">
+                                <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
+                                    <div class="flex flex-wrap items-center gap-5 justify-between">
+                                        <div class="flex flex-col gap-1">
+                                            <div class="flex items-center gap-2.5">
+                                                <h4 class="text-2xl font-semibold text-gray-900">{{ trip.route.line }} {{ trip.route.name }}</h4>
+                                                <span *ngIf="!trip.route.active" class="badge badge-sm badge-danger badge-outline">Linia jest nieaktywna</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center flex-wrap gap-2 lg:gap-5">
+                                        @for (line of trip?.trips || []; track line) {
+                                            <div [ngClass]="{'border-solid': line.isMainVariant,'border-dashed': !line.isMainVariant}"
+                                                 class="grid grid-cols-1 content-between gap-1.5 border border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+                                                <span class="text-gray-900 text-md leading-none font-medium">{{line.origin}}-{{line.destination}} ({{ line.travelTimeInSeconds | brigadeEditorTime }})</span>
+                                                <span *ngIf="line.variant === 'MAIN'" class="text-gray-700 text-2sm">Wariant podstawowy</span>
+                                                <span *ngIf="line.variant !== 'MAIN'" class="text-gray-700 text-2sm">{{ line.variantDescription }}</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end: grid -->
+</div>
+<!-- End of Container -->
+
+

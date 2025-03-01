@@ -12,12 +12,14 @@ import {routes} from "./app.routes";
 import {AgencyModule} from "./agency/agency.module";
 import {AuthModule} from "./auth/auth.module";
 import {AddHeaderInterceptor} from "./auth/auth.interceptor";
+import {CommonModule} from "@angular/common";
 
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes),
         BrowserModule,
+        CommonModule,
+        RouterModule.forRoot(routes),
         HttpClientModule,
         BrowserAnimationsModule,
         TransportModule,
@@ -26,9 +28,6 @@ import {AddHeaderInterceptor} from "./auth/auth.interceptor";
         LandingModule,
         AuthModule,
         FormsModule
-    ],
-    exports: [
-        RouterModule
     ],
     declarations: [
         AppComponent

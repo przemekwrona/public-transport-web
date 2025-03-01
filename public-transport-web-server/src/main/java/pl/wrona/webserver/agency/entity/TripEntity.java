@@ -34,7 +34,8 @@ public class TripEntity {
     @SequenceGenerator(name = "trip_id_seq", sequenceName = "trip_id_seq",  allocationSize=1)
     private Long tripId;
 
-    private String variant;
+    @Column(name = "variant_name")
+    private String variantName;
 
     @Enumerated(EnumType.STRING)
     private TripVariantMode mode;
@@ -43,9 +44,20 @@ public class TripEntity {
 
     private int communicationVelocity;
 
+    private int distanceInMeters;
+
+    private int travelTimeInSeconds;
+
+    @Column(name = "is_main_variant")
+    private boolean mainVariant;
+
     private String variantDesignation;
 
     private String variantDescription;
+
+    private String origin;
+
+    private String destination;
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
     private Set<StopTimeEntity> stopTimes;

@@ -2,6 +2,7 @@ package pl.wrona.webserver.agency;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.TripApi;
+import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
@@ -24,8 +25,8 @@ public class TripController implements TripApi {
     private final TripQueryService tripQueryService;
 
     @Override
-    public ResponseEntity<Status> createTrip(Trip trips) {
-        return ResponseEntity.status(CREATED).body(tripService.createTrip(trips));
+    public ResponseEntity<Status> createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
+        return ResponseEntity.status(CREATED).body(tripService.createTrip(createTripDetailsRequest));
     }
 
     @Override
