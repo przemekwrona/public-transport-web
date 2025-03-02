@@ -3,7 +3,7 @@
         <div class="flex flex-col justify-center gap-2">
             <h1 class="text-xl font-medium leading-none text-gray-900">Dodaj nową brygadę</h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-                Brygada jest to plan kursów które są do wykonania przez jednego kierowcą w ciągu jednej doby
+                Brygada to harmonogram kursów przypisanych jednemu kierowcy do realizacji w ciągu doby.
             </div>
         </div>
         <div class="flex items-center gap-2.5">
@@ -13,7 +13,7 @@
 </div>
 
 <!-- Container -->
-<div class="container-fixed">
+<div cdkDropListGroup class="container-fixed">
     <!-- begin: grid -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
         <div class="col-span-1">
@@ -24,23 +24,156 @@
                             Community Badges
                         </h3>
                     </div>
-                    <div class="card-body pb-7.5">
-                        <form class="max-w-[8rem] mx-auto">
-                            <label for="time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Godzina rozpoczęcia:</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
-                                    </svg>
+                    <div class="pb-7.5">
+
+                        @for (brigadeItem of brigadeItems || []; track brigadeItem) {
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div cdkDropList
+                                     [cdkDropListData]="items"
+                                     (cdkDropListDropped)="drop($event)"
+                                     (cdkDropListEntered)="entered($event)"
+                                     (cdkDropListExited)="exited($event)"
+                                     [cdkDropListEnterPredicate]="oneElementPredicate"
+                                     class="flex flex-wrap sm:flex-nowrap w-full example-list">
+                                    <div *ngIf="brigadeItem.draggableElement"
+                                         class="flex bg-center w-full p-5 lg:p-7 bg-no-repeat bg-[length:550px] border border-gray-300 rounded-xl border-dashed branding-bg">
+                                        <div class="flex flex-col place-items-center place-content-center text-center rounded-xl w-full">
+                                            <div class="flex items-center mb-2.5">
+                                                <div class="relative size-11 shrink-0">
+                                                    <svg class="w-full h-full stroke-brand-clarity fill-light"
+                                                         fill="none"
+                                                         height="48" viewBox="0 0 44 48" width="44"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
+										18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937
+										39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z"
+                                                              fill="">
+                                                        </path>
+                                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
+										18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937
+										39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z"
+                                                              stroke="" stroke-opacity="0.2">
+                                                        </path>
+                                                    </svg>
+                                                    <div class="absolute leading-none left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4">
+                                                        <i class="ki-filled ki-picture text-xl ps-px text-brand">
+                                                        </i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a class="text-gray-900 text-xs font-medium hover:text-primary-active mb-px"
+                                               href="/metronic/tailwind/demo1/network/user-cards/mini-cards">
+                                                Drag &amp; Drop
+                                            </a>
+                                            <span class="text-2xs text-gray-700 text-nowrap">Przesuń i upuść linię</span>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="!brigadeItem.draggableElement">
+                                        <div [ngClass]="{'border-solid': brigadeItem.isMainVariant,'border-dashed': !brigadeItem.isMainVariant}"
+                                             class="grid grid-cols-1 content-between gap-1.5 border border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+                                                    <span class="text-gray-900 text-md leading-none font-medium">
+                                                        z: {{ brigadeItem.origin }} do: {{ brigadeItem.destination }}
+                                                        (+{{ brigadeItem.travelTimeInSeconds | brigadeEditorTime }}
+                                                        )</span>
+                                            <span *ngIf="brigadeItem.variant === 'MAIN'"
+                                                  class="text-gray-700 text-2sm">Wariant podstawowy</span>
+                                            <span *ngIf="brigadeItem.variant !== 'MAIN'"
+                                                  class="text-gray-700 text-2sm">{{ brigadeItem.variantDescription }}</span>
+
+                                            <div class="flex flex-wrap justify-between">
+<!--                                                <div class="flex flex-col">-->
+<!--                                                    <div class="text-gray-900 text-sm font-medium">Odjazd</div>-->
+<!--                                                    <span class="text-gray-700 text-2sm">Odjazd</span>-->
+<!--                                                </div>-->
+
+                                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-16">
+                                                    <label class="form-label max-w-56 text-gray-800 font-normal">
+                                                        Odjazd
+                                                    </label>
+                                                    <label class="input" data-dashlane-label="true">
+<!--                                                        <input placeholder="Right icon" type="text" value="abc123xyz456sample789key000" data-dashlane-rid="26abe646bad30216" data-dashlane-classification="other">-->
+                                                        <input type="time" id="time"
+                                                               [(ngModel)]="brigadeItem.departure"
+                                                               class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                               min="09:00" max="18:00" value="00:00" required/>
+<!--                                                        <button class="btn btn-icon">-->
+<!--                                                            <i class="ki-filled ki-copy"></i>-->
+<!--                                                        </button>-->
+
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <span class="text-gray-700 text-2sm">
+                                                Planowanie zakończenie kursu
+                                                <strong>{{ getArrivalTime(brigadeItem).format('HH:mm') }} </strong>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--begin:: Alert-->
+                            <div class="flex flex-col justify-center gap-1 rounded-lg px-4 py-1 bg-success-light my-1">
+                                <h3 class="text-2sm leading-none font-semibold text-gray-900">
+                                    Przerwa 5min
+                                </h3>
+                                <p class="text-gray-700 text-2sm font-normal"></p>
+                            </div>
+                            <!--end:: Alert-->
+                        }
+
+                        <div class="flex flex-wrap justify-between gap-5">
+                            <div cdkDropList
+                                 [cdkDropListData]="items"
+                                 (cdkDropListDropped)="drop($event)"
+                                 (cdkDropListEntered)="entered($event)"
+                                 (cdkDropListExited)="exited($event)"
+                                 [cdkDropListEnterPredicate]="oneElementPredicate"
+                                 class="flex flex-wrap sm:flex-nowrap w-full example-list">
+                                <div *ngIf="!isEntered"
+                                     class="flex bg-center w-full p-5 lg:p-7 bg-no-repeat bg-[length:550px] border border-gray-300 rounded-xl border-dashed branding-bg">
+                                    <div class="flex flex-col place-items-center place-content-center text-center rounded-xl w-full">
+                                        <div class="flex items-center mb-2.5">
+                                            <div class="relative size-11 shrink-0">
+                                                <svg class="w-full h-full stroke-brand-clarity fill-light"
+                                                     fill="none"
+                                                     height="48" viewBox="0 0 44 48" width="44"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
+										18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937
+										39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z"
+                                                          fill="">
+                                                    </path>
+                                                    <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
+										18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937
+										39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z"
+                                                          stroke="" stroke-opacity="0.2">
+                                                    </path>
+                                                </svg>
+                                                <div class="absolute leading-none left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4">
+                                                    <i class="ki-filled ki-picture text-xl ps-px text-brand">
+                                                    </i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a class="text-gray-900 text-xs font-medium hover:text-primary-active mb-px"
+                                           href="/metronic/tailwind/demo1/network/user-cards/mini-cards">
+                                            Drag &amp; Drop
+                                        </a>
+                                        <span class="text-2xs text-gray-700 text-nowrap">Przesuń i upuść linię</span>
+                                    </div>
                                 </div>
                                 <input type="time" id="time" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required />
                             </div>
-                        </form>
-
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col-span-2">
             <div class="flex flex-col gap-5 lg:gap-7.5">
                 <div class="flex flex-col gap-5 lg:gap-7.5">
@@ -48,25 +181,58 @@
                     @for (trip of trips?.lines || []; track trip) {
                         <div class="card">
                             <div class="card-body lg:py-7.5">
-                                <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
+                                <div class="flex flex-col items-stretch gap-5 lg:gap-5">
                                     <div class="flex flex-wrap items-center gap-5 justify-between">
                                         <div class="flex flex-col gap-1">
                                             <div class="flex items-center gap-2.5">
-                                                <h4 class="text-2xl font-semibold text-gray-900">{{ trip.route.line }} {{ trip.route.name }}</h4>
-                                                <span *ngIf="!trip.route.active" class="badge badge-sm badge-danger badge-outline">Linia jest nieaktywna</span>
+                                                @if (trip.route.active) {
+                                                    <h4 class="text-2xl font-semibold text-gray-900">{{ trip.route.line }} {{ trip.route.name }}</h4>
+                                                } @else {
+                                                    <h4 class="text-2xl font-semibold text-gray-900 opacity-40">{{ trip.route.line }} {{ trip.route.name }}</h4>
+                                                }
+                                                <span *ngIf="!trip.route.active"
+                                                      class="badge badge-sm badge-danger badge-outline">Linia jest nieaktywna</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="flex items-center flex-wrap gap-2 lg:gap-5">
-                                        @for (line of trip?.trips || []; track line) {
-                                            <div [ngClass]="{'border-solid': line.isMainVariant,'border-dashed': !line.isMainVariant}"
-                                                 class="grid grid-cols-1 content-between gap-1.5 border border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-                                                <span class="text-gray-900 text-md leading-none font-medium">{{line.origin}}-{{line.destination}} ({{ line.travelTimeInSeconds | brigadeEditorTime }})</span>
-                                                <span *ngIf="line.variant === 'MAIN'" class="text-gray-700 text-2sm">Wariant podstawowy</span>
-                                                <span *ngIf="line.variant !== 'MAIN'" class="text-gray-700 text-2sm">{{ line.variantDescription }}</span>
-                                            </div>
-                                        }
-                                    </div>
+                                    @if (trip.route.active) {
+                                        <div cdkDropList
+                                             cdkDropListSortingDisabled
+                                             [cdkDropListData]="trip?.trips"
+                                             (cdkDropListDropped)="drop($event)"
+                                             [cdkDropListEnterPredicate]="noReturnPredicate"
+                                             class="flex items-center flex-wrap gap-1 lg:gap-1">
+                                            @for (line of trip?.trips || []; track line) {
+                                                <div cdkDrag
+                                                     [ngClass]="{'border-solid': line.isMainVariant,'border-dashed': !line.isMainVariant}"
+                                                     class="grid grid-cols-1 content-between gap-1.5 border border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+                                                    <span class="text-gray-900 text-md leading-none font-medium">
+                                                        z: {{ line.origin }} do: {{ line.destination }}
+                                                        ({{ line.travelTimeInSeconds | brigadeEditorTime }})</span>
+                                                    <span *ngIf="line.variant === 'MAIN'"
+                                                          class="text-gray-700 text-2sm">Wariant podstawowy</span>
+                                                    <span *ngIf="line.variant !== 'MAIN'"
+                                                          class="text-gray-700 text-2sm">{{ line.variantDescription }}</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    } @else {
+                                        <div class="flex items-center flex-wrap gap-1 lg:gap-1 opacity-30">
+                                            @for (line of trip?.trips || []; track line) {
+                                                <div [ngClass]="{'border-solid': line.isMainVariant,'border-dashed': !line.isMainVariant}"
+                                                     class="grid grid-cols-1 content-between gap-1.5 border border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+                                                    <span class="text-gray-900 text-md leading-none font-medium">
+                                                        z: {{ line.origin }} do: {{ line.destination }}
+                                                        ({{ line.travelTimeInSeconds | brigadeEditorTime }})</span>
+                                                    <span *ngIf="line.variant === 'MAIN'"
+                                                          class="text-gray-700 text-2sm">Wariant podstawowy</span>
+                                                    <span *ngIf="line.variant !== 'MAIN'"
+                                                          class="text-gray-700 text-2sm">{{ line.variantDescription }}</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+
                                 </div>
                             </div>
                         </div>
@@ -75,6 +241,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     <!-- end: grid -->
 </div>
