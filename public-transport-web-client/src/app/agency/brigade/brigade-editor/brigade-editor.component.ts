@@ -12,12 +12,19 @@ import {
 import {BrigadeModel} from "./brigade-editor.model";
 import moment from "moment";
 import {last} from "lodash";
-import {faGlobe} from "@fortawesome/free-solid-svg-icons";
+import {animate, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
     selector: 'app-brigade-editor',
     templateUrl: './brigade-editor.component.html',
-    styleUrl: './brigade-editor.component.scss'
+    styleUrl: './brigade-editor.component.scss',
+    animations: [
+        trigger('fadeBrigadeAnimation', [
+            state('in', style({opacity: 1})),
+            transition(':enter', [style({opacity: 0}), animate(500)]),
+            transition(':leave', animate(500, style({opacity: 0})))
+        ])
+    ]
 })
 export class BrigadeEditorComponent implements OnInit {
 
@@ -61,7 +68,7 @@ export class BrigadeEditorComponent implements OnInit {
 
             brigadeModel.travelTimeInSeconds = previousBrigadeModel.travelTimeInSeconds
 
-            this.brigadeItems.push(brigadeModel);
+            this.brigadeItems.splice(event.currentIndex, 0, brigadeModel);
             copyArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex,);
         }
     }
@@ -98,6 +105,10 @@ export class BrigadeEditorComponent implements OnInit {
         const departureTime = moment(currnetBrigadeModel.departureTime, "HH:mm");
 
         return  departureTime.diff(arrivalTime, 'minutes');
+    }
+
+    remove(brigadeIndex: number): void {
+        this.brigadeItems.splice(brigadeIndex, 1);
     }
 
 }
