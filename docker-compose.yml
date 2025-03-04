@@ -1,6 +1,17 @@
 version: '3.7'
 
 services:
+  db:
+    image: postgres
+    container_name: app-db
+    # restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: stops_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: welcome1
+
   web-client:
     build:
       context: ./public-transport-web-server
