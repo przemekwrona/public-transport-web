@@ -104,6 +104,12 @@ public class TripService {
         var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
         TripEntity updatedTrip = TripMapper.update(tripEntity, trip);
+        Optional<StopTime> lastStopOptional = trip.getStops().stream().reduce((first, second) -> second);
+        lastStopOptional.ifPresent(lastStop -> {
+            updatedTrip.setDistanceInMeters(lastStop.getMeters());
+            updatedTrip.setTravelTimeInSeconds(lastStop.getSeconds());
+        });
+
 
         stopTimeRepository.deleteByTripId(updatedTrip.getTripId());
 

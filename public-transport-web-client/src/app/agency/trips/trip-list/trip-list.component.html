@@ -152,6 +152,7 @@
                     </div>
                     <div class="card-body lg:py-7.5 grid gap-5 lg:gap-5">
                         <div *ngFor="let trip of trips?.trips || []"
+                             [ngClass]="{'border-dashed': !trip?.isMainVariant}"
                              class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg">
                             <div class="flex items-center gap-4">
                                 <div class="relative size-[50px] shrink-0">
@@ -174,13 +175,21 @@
                                             Wariant {{ trip.variant }} {{ trip.mode }}
                                         </a>
                                     </div>
-                                    <div class="form-info text-gray-800 font-normal">
-                                        This API key can only access&nbsp;
-                                    </div>
+                                    @if (trip.isMainVariant) {
+                                        <div class="form-info text-gray-800 font-normal">
+                                            Wariant Podstawowy
+                                        </div>
+                                    } @else {
+                                        <div class="form-info text-gray-800 font-normal">
+                                            {{ trip?.variantDescription }} ({{ trip?.variantDesignation }})
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
-                                <button (click)="deleteTrip(trip)" class="btn btn-sm btn-dark shrink-0" data-dashlane-label="true">Usuń wariant</button>
+                                <button (click)="deleteTrip(trip)" class="btn btn-sm btn-dark shrink-0"
+                                        data-dashlane-label="true">Usuń wariant
+                                </button>
                                 <a (click)="editTrip(trip)" class="btn btn-sm btn-clear btn-light">Szczegóły</a>
                             </div>
                         </div>
