@@ -15,13 +15,13 @@ import {last} from "lodash";
 import {faGlobe} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
-  selector: 'app-brigade-editor',
-  templateUrl: './brigade-editor.component.html',
-  styleUrl: './brigade-editor.component.scss'
+    selector: 'app-brigade-editor',
+    templateUrl: './brigade-editor.component.html',
+    styleUrl: './brigade-editor.component.scss'
 })
 export class BrigadeEditorComponent implements OnInit {
 
-  public trips: GetAllTripsResponse = {};
+    public trips: GetAllTripsResponse = {};
 
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
@@ -31,9 +31,9 @@ export class BrigadeEditorComponent implements OnInit {
     constructor(private brigadeService: BrigadeService) {
     }
 
-  ngOnInit(): void {
-    this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => this.trips = response);
-  }
+    ngOnInit(): void {
+        this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => this.trips = response);
+    }
 
     drop(event: CdkDragDrop<Trip[]>) {
         if (event.previousContainer === event.container) {
@@ -53,10 +53,10 @@ export class BrigadeEditorComponent implements OnInit {
             brigadeModel.variantDescription = previousBrigadeModel.variantDescription
 
             if (this.brigadeItems.length === 0) {
-                brigadeModel.departure = moment().format('HH:mm');
+                brigadeModel.departureTime = moment().format('HH:mm');
             } else {
                 const lastBrigadeItems = last(this.brigadeItems);
-                brigadeModel.departure = this.getArrivalTime(lastBrigadeItems).format("HH:mm");
+                brigadeModel.departureTime = this.getArrivalTime(lastBrigadeItems).format("HH:mm");
             }
 
             brigadeModel.travelTimeInSeconds = previousBrigadeModel.travelTimeInSeconds
@@ -67,7 +67,7 @@ export class BrigadeEditorComponent implements OnInit {
     }
 
     getArrivalTime(trip: BrigadeModel): moment.Moment {
-        return moment(trip.departure, 'HH:mm').add(trip.travelTimeInSeconds, 'seconds');
+        return moment(trip.departureTime, 'HH:mm').add(trip.travelTimeInSeconds, 'seconds');
     }
 
     entered(event: CdkDragEnter<any[]>) {
@@ -87,5 +87,17 @@ export class BrigadeEditorComponent implements OnInit {
         return true;
     }
 
-    protected readonly faGlobe = faGlobe;
+    getDiff(currentIndex: number, currnetBrigadeModel: BrigadeModel): number {
+        if(currentIndex === 0) {
+            return 0;
+        }
+        const previousIndex = currentIndex - 1;
+        const previousBrigadeModel: BrigadeModel = this.brigadeItems[previousIndex];
+
+        const arrivalTime = moment(previousBrigadeModel.departureTime, "HH:mm").add(previousBrigadeModel.travelTimeInSeconds, 'seconds');
+        const departureTime = moment(currnetBrigadeModel.departureTime, "HH:mm");
+
+        return  departureTime.diff(arrivalTime, 'minutes');
+    }
+
 }

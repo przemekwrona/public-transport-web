@@ -26,9 +26,29 @@
                     </div>
                     <div class="pb-7.5">
 
-                        @for (brigadeItem of brigadeItems || []; track brigadeItem) {
+                        @for (brigadeItem of brigadeItems || []; track brigadeItem; let index = $index) {
 
-                            <div class="flex flex-wrap justify-between gap-5">
+                            <!--begin:: Alert-->
+                            @if (getDiff(index, brigadeItem) > 0) {
+                                <div class="flex flex-col justify-center gap-1 rounded-lg px-4 bg-success-light">
+                                    <h3 class="text-2sm leading-none font-semibold text-gray-900">
+                                        Przerwa {{ getDiff(index, brigadeItem) }}min
+                                    </h3>
+                                    <p class="text-gray-700 text-2sm font-normal"></p>
+                                </div>
+                            }
+
+                            @if (getDiff(index, brigadeItem) < 0) {
+                                <div class="flex flex-col justify-center gap-1 rounded-lg px-4 py-1 bg-danger">
+                                    <h3 class="text-2sm leading-none font-semibold text-gray-900">
+                                        Przyjazd jest {{ getDiff(index, brigadeItem) }}min przed następnym kursem
+                                    </h3>
+                                    <p class="text-gray-700 text-2sm font-normal"></p>
+                                </div>
+                            }
+                            <!--end:: Alert-->
+
+                            <div class="flex flex-wrap justify-between gap-5 py-1">
                                 <div cdkDropList
                                      [cdkDropListData]="items"
                                      (cdkDropListDropped)="drop($event)"
@@ -75,33 +95,32 @@
                                              class="grid grid-cols-1 content-between gap-1.5 border border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
                                                     <span class="text-gray-900 text-md leading-none font-medium">
                                                         z: {{ brigadeItem.origin }} do: {{ brigadeItem.destination }}
-                                                        (+{{ brigadeItem.travelTimeInSeconds | brigadeEditorTime }}
-                                                        )</span>
+                                                        (+{{ brigadeItem.travelTimeInSeconds | brigadeEditorTime }})
+                                                    </span>
                                             <span *ngIf="brigadeItem.variant === 'MAIN'"
                                                   class="text-gray-700 text-2sm">Wariant podstawowy</span>
                                             <span *ngIf="brigadeItem.variant !== 'MAIN'"
                                                   class="text-gray-700 text-2sm">{{ brigadeItem.variantDescription }}</span>
 
                                             <div class="flex flex-wrap justify-between">
-<!--                                                <div class="flex flex-col">-->
-<!--                                                    <div class="text-gray-900 text-sm font-medium">Odjazd</div>-->
-<!--                                                    <span class="text-gray-700 text-2sm">Odjazd</span>-->
-<!--                                                </div>-->
+                                                <!--                                                <div class="flex flex-col">-->
+                                                <!--                                                    <div class="text-gray-900 text-sm font-medium">Odjazd</div>-->
+                                                <!--                                                    <span class="text-gray-700 text-2sm">Odjazd</span>-->
+                                                <!--                                                </div>-->
 
                                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-16">
                                                     <label class="form-label max-w-56 text-gray-800 font-normal">
                                                         Odjazd
                                                     </label>
-                                                    <label class="input" data-dashlane-label="true">
-<!--                                                        <input placeholder="Right icon" type="text" value="abc123xyz456sample789key000" data-dashlane-rid="26abe646bad30216" data-dashlane-classification="other">-->
+                                                    <label class="input">
+                                                        <!--                                                        <input placeholder="Right icon" type="text" value="abc123xyz456sample789key000" data-dashlane-rid="26abe646bad30216" data-dashlane-classification="other">-->
                                                         <input type="time" id="time"
-                                                               [(ngModel)]="brigadeItem.departure"
-                                                               class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                               [(ngModel)]="brigadeItem.departureTime"
+                                                               class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                                                min="09:00" max="18:00" value="00:00" required/>
-<!--                                                        <button class="btn btn-icon">-->
-<!--                                                            <i class="ki-filled ki-copy"></i>-->
-<!--                                                        </button>-->
-
+                                                        <!--                                                        <button class="btn btn-icon">-->
+                                                        <!--                                                            <i class="ki-filled ki-copy"></i>-->
+                                                        <!--                                                        </button>-->
                                                     </label>
                                                 </div>
                                             </div>
@@ -114,15 +133,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!--begin:: Alert-->
-                            <div class="flex flex-col justify-center gap-1 rounded-lg px-4 py-1 bg-success-light my-1">
-                                <h3 class="text-2sm leading-none font-semibold text-gray-900">
-                                    Przerwa 5min
-                                </h3>
-                                <p class="text-gray-700 text-2sm font-normal"></p>
-                            </div>
-                            <!--end:: Alert-->
                         }
 
                         <div class="flex flex-wrap justify-between gap-5">
@@ -166,7 +176,6 @@
                                         <span class="text-2xs text-gray-700 text-nowrap">Przesuń i upuść linię</span>
                                     </div>
                                 </div>
-                                <input type="time" id="time" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required />
                             </div>
                         </div>
                     </div>
