@@ -1,0 +1,181 @@
+<div class="container-fixed">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
+        <div class="col-span-2">
+            <div class="card min-w-full">
+                <div class="card-header gap-2">
+                    <h3 class="card-title">Rozkład Jazdy</h3>
+                </div>
+
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col">
+                            <div class="text-gray-900 text-sm font-medium">Oznaczenie na rozkładzie</div>
+                            <span class="text-gray-700 text-2sm">Lorem Ipsum</span>
+                        </div>
+                        <label class="input sm:max-w-full xl:max-w-96">
+                            <i class="ki-solid ki-calendar"></i>
+                            <input type="text" placeholder="D"/>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col">
+                            <div class="text-gray-900 text-sm font-medium">
+                                Wyjaśnienie
+                            </div>
+                            <span class="text-gray-700 text-2sm">Lorem Ipsum</span>
+                        </div>
+                        <label class="input sm:max-w-full xl:max-w-96 w-full">
+                            <i class="ki-solid ki-calendar">
+                            </i>
+                            <input type="text" placeholder="kursuje od poniedziałku do piątku oprócz świąt"/>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col">
+                            <div class="text-gray-900 text-sm font-medium">
+                                Rozkład Obowiązuje OD
+                            </div>
+                            <span class="text-gray-700 text-2sm">Signature Palette Branding Element</span>
+                        </div>
+                        <label class="input sm:max-w-full xl:max-w-96 w-full">
+                            <i class="ki-solid ki-calendar">
+                            </i>
+                            <input type="text" value="2025-01-01"/>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col">
+                            <div class="text-gray-900 text-sm font-medium">
+                                Rozkład Obowiązuje DO
+                            </div>
+                            <span class="text-gray-700 text-2sm">Signature Palette Branding Element</span>
+                        </div>
+                        <label class="input sm:max-w-full xl:max-w-96 w-full">
+                            <i class="ki-solid ki-calendar">
+                            </i>
+                            <input type="text" value="2025-12-31"/>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card-body lg:py-7.5 py-5">
+
+                    <div class="border-t border-gray-200 my-7.5"></div>
+
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col">
+                            <div class="text-gray-900 text-sm font-medium">
+                                Dni tygodnia
+                            </div>
+                            <span class="text-gray-700 text-2sm">Dni tygodnia w które odbywają się kursy</span>
+                        </div>
+                        <div class="flex flex-row gap-2.5">
+                            <label class="checkbox-group">
+                                <input class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="monday"/>
+                                <span class="checkbox-label">Poniedziałek</span>
+                            </label>
+
+                            <label class="checkbox-group">
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="tuesday"/>
+                                <span class="checkbox-label">Wtorek</span>
+                            </label>
+
+                            <label class="checkbox-group">
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="wednesday"/>
+                                <span class="checkbox-label">Środa</span>
+                            </label>
+
+                            <label class="checkbox-group">
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="thursday"/>
+                                <span class="checkbox-label">Czwartek</span>
+                            </label>
+
+                            <label class="checkbox-group">
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="friday"/>
+                                <span class="checkbox-label">Piątek</span>
+                            </label>
+
+                            <label class="checkbox-group">
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="saturday"/>
+                                <span class="checkbox-label">Sobota</span>
+                            </label>
+
+                            <label class="checkbox-group">
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="sunday"/>
+                                <span class="checkbox-label">Niedziela</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col">
+                            <div class="text-gray-900 text-sm font-medium">
+                                Nie kursuje w dni
+                            </div>
+                            <!--<span class="text-gray-700 text-2sm">Lorem Ipsum</span>-->
+                        </div>
+                        <label class="sm:max-w-full xl:max-w-96 w-full">
+                            @for (excludedDay of getExcludeDays(); track includeDays) {
+                                <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset mr-1">{{ excludedDay }}</span>
+                            }
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col">
+                            <div class="text-gray-900 text-sm font-medium">
+                                Kursuje w dodatkowe dni
+                            </div>
+                            <!--<span class="text-gray-700 text-2sm">Lorem Ipsum</span>-->
+                        </div>
+                        <label class="sm:max-w-full xl:max-w-96 w-full">
+                            @for (includedDay of getIncludeDays(); track includeDays) {
+                                <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">{{ includedDay }}</span>
+                            }
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="border-t border-gray-200 my-7.5"></div>
+
+                    <h2 class="text-center">
+                        <button class="btn" (click)="prevYear()">Prev</button>
+                        {{ year }}
+                        <button class="btn" (click)="nextYear()">Next</button>
+                    </h2>
+                    <div class="grid grid-cols-3 gap-4">
+
+                        @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
+                            <div>
+                                <app-calendar-picker [year]="year" [month]="month"
+                                                     [weekdays]="getDays()"
+                                                     [(includeDays)]="includeDays"
+                                                     [(excludeDays)]="excludeDays"></app-calendar-picker>
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col-span-1">B</div>
+    </div>
+
+</div>
+

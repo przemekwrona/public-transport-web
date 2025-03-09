@@ -14,8 +14,8 @@ import {GoogleMapsComponent} from "./agency/google-maps/google-maps.component";
 import {TripEditorComponentMode} from "./agency/trips/trip-editor/trip-editor-component-mode";
 import {tripsResolver} from "./agency/trips/trip-list/trip-list.resolver";
 import {tripEditorResolver} from "./agency/trips/trip-editor/trip-editor.resolver";
-import {BrigadeListComponent} from "./agency/brigade/brigade-list/brigade-list.component";
 import {BrigadeEditorComponent} from "./agency/brigade/brigade-editor/brigade-editor.component";
+import {CalendarsEditorComponent} from "./agency/calendars/calendars-editor/calendars-editor.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'planner', pathMatch: 'full'},
@@ -32,6 +32,8 @@ export const routes: Routes = [
             {path: 'trips/edit', component: TripEditorComponent,  resolve: {trip: tripEditorResolver}, data: {mode: TripEditorComponentMode.EDIT}},
             {path: 'brigade', component: BrigadeEditorComponent},
             {path: 'brigade/create', component: BrigadeEditorComponent},
+            {path: 'calendars', component: CalendarsEditorComponent},
+            {path: 'calendars/create', component: CalendarsEditorComponent},
             {path: 'google/maps', component: GoogleMapsComponent}
         ]
     },

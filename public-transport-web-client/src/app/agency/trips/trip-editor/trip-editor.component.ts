@@ -59,7 +59,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => this.$tripDetails = tripDetails);
-        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => console.log(tripDetails));
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,
             name: string,
