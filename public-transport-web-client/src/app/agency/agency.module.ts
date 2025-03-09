@@ -13,6 +13,7 @@ import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
 import {GoogleMapsModule} from "./google-maps/google-maps.module";
 import {BrigadeModule} from "./brigade/brigade.module";
+import {CalendarsModule} from "./calendars/calendars.module";
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import {BrigadeModule} from "./brigade/brigade.module";
         RoutesModule,
         GoogleMapsModule,
         MatTreeModule,
-        BrigadeModule
+        BrigadeModule,
+        CalendarsModule
     ],
     providers: [
         StopService

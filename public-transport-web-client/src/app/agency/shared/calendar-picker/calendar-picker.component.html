@@ -1,0 +1,45 @@
+<div class="grid grid-cols-7 gap-1.25 w-fit" style="">
+
+    <div class="col-start-1 col-end-8 text-center">{{ selectedMonth.format("MMM") }}</div>
+    <div class="col-span-1 w-fit text-sm text-center">PN</div>
+    <div class="col-span-1 w-fit text-sm text-center">WT</div>
+    <div class="col-span-1 w-fit text-sm text-center">ŚR</div>
+    <div class="col-span-1 w-fit text-sm text-center">CZ</div>
+    <div class="col-span-1 w-fit text-sm text-center">PT</div>
+    <div class="col-span-1 w-fit text-sm text-center">SB</div>
+    <div class="col-span-1 w-fit text-sm text-center">ND</div>
+
+    @for (day of getCalendar(); track day; let index = $index) {
+        @if (index === 0) {
+            <div class="col-span-1 btn w-fit h-fit py-1.75 px-1.5 rounded-full"
+                 [ngClass]="{
+                 'col-start-1': day.weekday() === 1,
+                 'col-start-2': day.weekday() === 2,
+                 'col-start-3': day.weekday() === 3,
+                 'col-start-4': day.weekday() === 4,
+                 'col-start-5': day.weekday() === 5,
+                 'col-start-6': day.weekday() === 6,
+                 'col-start-7': day.weekday() === 7 || day.weekday() == 0,
+                 'btn-success': isIncludedWeekday(day),
+                 'btn-danger': isExcluded(day),
+                 'btn-dark': isIncluded(day),
+                 'outline-double outline-danger': isHoliday(day) }" (click)="handleDay(day)">
+                {{ day.format('DD') }}
+            </div>
+        } @else {
+            <div>
+                <button class="col-span-1 btn w-fit h-fit py-1.75 px-1.5 rounded-full"
+                        [ngClass]="{
+                        'btn-success': isIncludedWeekday(day),
+                        'btn-danger': isExcluded(day),
+                        'btn-dark': isIncluded(day),
+                        'outline-double outline-danger': isHoliday(day)
+                        }"
+                        (click)="handleDay(day)"> {{ day.format('DD') }}
+                </button>
+            </div>
+
+        }
+    }
+
+</div>
