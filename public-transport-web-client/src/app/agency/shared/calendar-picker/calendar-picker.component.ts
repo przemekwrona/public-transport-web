@@ -13,13 +13,14 @@ import moment from "moment";
 @Component({
     selector: 'app-calendar-picker',
     templateUrl: './calendar-picker.component.html',
-    styleUrl: './calendar-picker.component.css',
+    styleUrl: './calendar-picker.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarPickerComponent implements OnInit, OnChanges {
 
     @Input() public year: number;
     @Input() public month: number;
+    @Input() public singleSelection: boolean = false;
 
     @Input() public weekdays: number[] = []
 
@@ -39,7 +40,13 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
         '12-25', '12-26'];
 
     ngOnInit(): void {
-        this.selectedMonth = moment(`${this.year}-${this.month}`, 'YYYY-MM');
+        if (this.year == null) {
+            this.year = moment().year();
+        }
+        if (this.month == null) {
+            this.month = moment().month();
+        }
+        this.selectedMonth = moment(`${this.year}-${this.month}-01`, 'YYYY-MM-DD');
     }
 
     public getCalendar(): moment.Moment[] {
@@ -69,11 +76,17 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
             }
             this.excludeDaysChange.emit(this.excludeDays);
         } else {
-            if (this.includeDays.has(value)) {
-                this.includeDays.delete(value);
-            } else {
+            if (this.singleSelection) {
+                this.includeDays.clear();
                 this.includeDays.add(value);
+            } else {
+                if (this.includeDays.has(value)) {
+                    this.includeDays.delete(value);
+                } else {
+                    this.includeDays.add(value);
+                }
             }
+
             this.includeDaysChange.emit(this.includeDays);
         }
     }
@@ -91,7 +104,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['weekdays'].currentValue) {
+        if (changes['weekdays']?.currentValue) {
             for (let includedDay of this.includeDays.values()) {
                 const day: moment.Moment = moment(includedDay);
                 if (this.weekdays.includes(day.weekday())) {
