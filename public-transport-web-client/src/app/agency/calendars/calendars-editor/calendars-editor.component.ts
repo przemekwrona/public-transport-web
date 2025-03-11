@@ -3,7 +3,7 @@ import {Component} from '@angular/core';
 @Component({
     selector: 'app-calendars-editor',
     templateUrl: './calendars-editor.component.html',
-    styleUrl: './calendars-editor.component.css'
+    styleUrl: './calendars-editor.component.scss'
 })
 export class CalendarsEditorComponent {
 
