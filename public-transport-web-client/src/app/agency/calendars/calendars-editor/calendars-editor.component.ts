@@ -24,6 +24,8 @@ export class CalendarsEditorComponent {
 
     public year: number = 2025;
 
+    public selectedDate: string = '2025-03-10';
+
     public getDays(): number[] {
         const days: number[] = [];
 
