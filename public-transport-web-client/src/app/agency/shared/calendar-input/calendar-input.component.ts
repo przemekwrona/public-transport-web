@@ -47,7 +47,15 @@ export class CalendarInputComponent implements ControlValueAccessor {
 
     onInput(event: Event): void {
         const inputValue = (event.target as HTMLInputElement).value;
-        this.selectedDate = inputValue;
+
+        if(moment(inputValue, 'YYYY-MM-DD', true).isValid()) {
+            this.selectedDate = inputValue;
+
+            const currentIncludeDays = new Set<string>();
+            currentIncludeDays.add(this.selectedDate);
+            this.includeDays = currentIncludeDays;
+        }
+
         this.onChange(inputValue);
     }
 }

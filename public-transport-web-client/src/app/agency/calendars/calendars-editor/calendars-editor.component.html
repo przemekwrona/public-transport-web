@@ -44,7 +44,7 @@
                             <span class="text-gray-700 text-2sm">Signature Palette Branding Element</span>
                         </div>
                         <label class="sm:max-w-full xl:max-w-96 w-full">
-                            <app-calendar-input [(ngModel)]="selectedDate"></app-calendar-input>
+                            <app-calendar-input [(ngModel)]="dateFrom"/>
                         </label>
                     </div>
                 </div>
@@ -57,10 +57,8 @@
                             </div>
                             <span class="text-gray-700 text-2sm">Signature Palette Branding Element</span>
                         </div>
-                        <label class="input sm:max-w-full xl:max-w-96 w-full">
-                            <i class="ki-solid ki-calendar">
-                            </i>
-                            <input type="text" value="2025-12-31"/>
+                        <label class="sm:max-w-full xl:max-w-96 w-full">
+                            <app-calendar-input [(ngModel)]="dateTo"/>
                         </label>
                     </div>
                 </div>
