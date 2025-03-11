@@ -1,0 +1,19 @@
+<label class="input">
+    <i class="ki-solid ki-calendar"></i>
+    <div>
+        <input type="text" [(ngModel)]="selectedDate"
+               (ngModelChange)="onChangeSelectedDate()"
+               (focusin)="isFocus = true"/>
+    </div>
+</label>
+
+<!--<div class="relative h-72 bg-cover bg-center">-->
+<div class="relative h-fit w-fit inset-0 bg-opacity-50">
+    <div class="relative z-10 p-4" [ngClass]="{'hidden': !isFocus}">
+        <app-calendar-picker [singleSelection]="true"
+                             [includeDays]="includeDays"
+                             (includeDaysChange)="onChangeIncludeDays($event)"
+                             [year]="2025" [month]="3"></app-calendar-picker>
+    </div>
+</div>
+<!--</div>-->

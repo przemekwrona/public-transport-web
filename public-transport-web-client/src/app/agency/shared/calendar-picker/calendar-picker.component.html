@@ -1,18 +1,18 @@
-<div class="grid grid-cols-7 gap-1.25 w-fit" style="">
+<div class="grid grid-cols-7 w-fit" style="">
 
-    <div class="col-start-1 col-end-8 text-center">{{ selectedMonth.format("MMM") }}</div>
-    <div class="col-span-1 w-fit text-sm text-center">PN</div>
-    <div class="col-span-1 w-fit text-sm text-center">WT</div>
-    <div class="col-span-1 w-fit text-sm text-center">ŚR</div>
-    <div class="col-span-1 w-fit text-sm text-center">CZ</div>
-    <div class="col-span-1 w-fit text-sm text-center">PT</div>
-    <div class="col-span-1 w-fit text-sm text-center">SB</div>
-    <div class="col-span-1 w-fit text-sm text-center">ND</div>
+    <div class="col-start-1 col-end-8 text-center p-2">{{ selectedMonth.format("MMM") }}</div>
+    <div class="col-span-1 w-fit text-sm text-center p-2">PN</div>
+    <div class="col-span-1 w-fit text-sm text-center p-2">WT</div>
+    <div class="col-span-1 w-fit text-sm text-center p-2">ŚR</div>
+    <div class="col-span-1 w-fit text-sm text-center p-2">CZ</div>
+    <div class="col-span-1 w-fit text-sm text-center p-2">PT</div>
+    <div class="col-span-1 w-fit text-sm text-center p-2">SB</div>
+    <div class="col-span-1 w-fit text-sm text-center p-2">ND</div>
 
     @for (day of getCalendar(); track day; let index = $index) {
         @if (index === 0) {
-            <div class="col-span-1 btn w-fit h-fit py-1.75 px-1.5 rounded-full"
-                 [ngClass]="{
+            <button class="col-span-1 btn w-fit h-fit p-2 rounded-full"
+                    [ngClass]="{
                  'col-start-1': day.weekday() === 1,
                  'col-start-2': day.weekday() === 2,
                  'col-start-3': day.weekday() === 3,
@@ -25,19 +25,17 @@
                  'btn-dark': isIncluded(day),
                  'outline-double outline-danger': isHoliday(day) }" (click)="handleDay(day)">
                 {{ day.format('DD') }}
-            </div>
+            </button>
         } @else {
-            <div>
-                <button class="col-span-1 btn w-fit h-fit py-1.75 px-1.5 rounded-full"
-                        [ngClass]="{
+            <button class="col-span-1 btn w-fit h-fit p-2 rounded-full"
+                    [ngClass]="{
                         'btn-success': isIncludedWeekday(day),
                         'btn-danger': isExcluded(day),
                         'btn-dark': isIncluded(day),
                         'outline-double outline-danger': isHoliday(day)
                         }"
-                        (click)="handleDay(day)"> {{ day.format('DD') }}
-                </button>
-            </div>
+                    (click)="handleDay(day)"> {{ day.format('DD') }}
+            </button>
 
         }
     }
