@@ -1,8 +1,9 @@
 <label class="input">
     <i class="ki-solid ki-calendar"></i>
     <div>
-        <input type="text" [(ngModel)]="selectedDate"
-               (ngModelChange)="onChangeSelectedDate()"
+        <input type="text"
+               [value]="selectedDate"
+               (input)="onInput($event)"
                (focusin)="isFocus = true"/>
     </div>
 </label>
