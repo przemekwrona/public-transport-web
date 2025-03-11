@@ -1,4 +1,6 @@
 import {Component} from '@angular/core';
+import {groupBy, uniq} from "lodash";
+import moment from "moment";
 
 @Component({
     selector: 'app-calendars-editor',
@@ -53,8 +55,24 @@ export class CalendarsEditorComponent {
         return [...this.includeDays];
     }
 
+    public getUniqueIncludedYears(): number[] {
+        return uniq(this.getIncludeDays().map((date: string): number => moment(date).year())).sort();
+    }
+
+    public getGroupedIncludedDaysByYear() {
+        return groupBy(this.getIncludeDays(), (date: string) => moment(date).year());
+    }
+
     public getExcludeDays(): string[] {
         return [...this.excludeDays];
+    }
+
+    public getUniqueExcludedYears(): number[] {
+        return uniq(this.getExcludeDays().map((date: string): number => moment(date).year())).sort();
+    }
+
+    public getGroupedExcludedDaysByYear() {
+        return groupBy(this.getExcludeDays(), (date: string) => moment(date).year());
     }
 
     public nextYear(): void {
