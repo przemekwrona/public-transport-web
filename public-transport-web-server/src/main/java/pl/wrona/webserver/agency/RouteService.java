@@ -37,7 +37,7 @@ public class RouteService {
 
         routeRepository.save(unsavedRoute);
 
-        return new Status().status("CREATED");
+        return new Status().status(Status.StatusEnum.CREATED);
     }
 
     public Routes getRoutes() {

@@ -45,7 +45,7 @@ public class AgencyService {
         agencyRepository.save(agency);
 
         return new Status()
-                .status("SUCCESS");
+                .status(Status.StatusEnum.SUCCESS);
     }
 
     public Agency findAgencyByAppUser(AppUser appUser) {

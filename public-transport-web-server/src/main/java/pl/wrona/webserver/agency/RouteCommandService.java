@@ -25,6 +25,6 @@ public class RouteCommandService {
         var savedRoute = routeRepository.save(route);
 
         return new Status()
-                .status("OK");
+                .status(Status.StatusEnum.SUCCESS);
     }
 }
