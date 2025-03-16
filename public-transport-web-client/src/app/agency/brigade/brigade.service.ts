@@ -1,20 +1,24 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {GetAllTripsResponse} from "../../generated/public-transport";
+import {BrigadeBody, GetAllTripsResponse, Status} from "../../generated/public-transport";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class BrigadeService {
 
-  constructor(private httpClient: HttpClient) {
-  }
+    constructor(private httpClient: HttpClient) {
+    }
 
-  public getRoutes(lineOrName: string): Observable<GetAllTripsResponse> {
-    let params = new HttpParams();
-    params = params.set('filter', lineOrName);
+    public getRoutes(lineOrName: string): Observable<GetAllTripsResponse> {
+        let params = new HttpParams();
+        params = params.set('filter', lineOrName);
 
-    return this.httpClient.get<GetAllTripsResponse>(`/api/v1/trips`, {params: params});
-  }
+        return this.httpClient.get<GetAllTripsResponse>(`/api/v1/trips`, {params: params});
+    }
+
+    public saveBrigade(brigadeBody: BrigadeBody): Observable<Status> {
+        return this.httpClient.post<Status>(`/api/v1/brigades`, brigadeBody);
+    }
 }
