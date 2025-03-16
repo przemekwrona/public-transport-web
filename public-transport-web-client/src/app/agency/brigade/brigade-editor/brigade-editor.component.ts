@@ -1,6 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {BrigadeService} from "../brigade.service";
-import {GetAllTripsResponse, Trip} from "../../../generated/public-transport";
+import {
+    BrigadeBody,
+    BrigadeTrip,
+    GetAllTripsResponse,
+    Trip,
+    TripId
+} from "../../../generated/public-transport";
 import {
     CdkDrag,
     CdkDragDrop,
@@ -10,8 +16,8 @@ import {
     transferArrayItem
 } from "@angular/cdk/drag-drop";
 import {BrigadeModel} from "./brigade-editor.model";
-import moment from "moment";
-import {last} from "lodash";
+import moment, {Moment} from "moment";
+import {first, last} from "lodash";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
@@ -28,18 +34,18 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 })
 export class BrigadeEditorComponent implements OnInit {
 
-    public trips: GetAllTripsResponse = {};
+    public tripsResponse: GetAllTripsResponse = {};
 
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
 
-    items = [];
+    public items = [];
 
     constructor(private brigadeService: BrigadeService) {
     }
 
     ngOnInit(): void {
-        this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => this.trips = response);
+        this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => this.tripsResponse = response);
     }
 
     drop(event: CdkDragDrop<Trip[]>) {
@@ -53,10 +59,11 @@ export class BrigadeEditorComponent implements OnInit {
             const brigadeModel: BrigadeModel = {} as BrigadeModel;
             brigadeModel.line = previousBrigadeModel.line
             brigadeModel.name = previousBrigadeModel.name
+            brigadeModel.variant = previousBrigadeModel.variant
+            brigadeModel.mode = previousBrigadeModel.mode;
             brigadeModel.origin = previousBrigadeModel.origin
             brigadeModel.destination = previousBrigadeModel.destination
             brigadeModel.isMainVariant = previousBrigadeModel.isMainVariant
-            brigadeModel.variant = previousBrigadeModel.variant
             brigadeModel.variantDescription = previousBrigadeModel.variantDescription
 
             if (this.brigadeItems.length === 0) {
@@ -94,21 +101,77 @@ export class BrigadeEditorComponent implements OnInit {
         return true;
     }
 
+    getDifferenceBetweenBrigades(previousBrigadeModel: BrigadeModel, currentBrigadeModel: BrigadeModel): number {
+        const departureTime = moment(previousBrigadeModel.departureTime, "HH:mm").add(previousBrigadeModel.travelTimeInSeconds, 'seconds');
+        const arrivalTime = moment(currentBrigadeModel.departureTime, "HH:mm");
+
+        return arrivalTime.diff(departureTime, 'minutes');
+    }
+
     getDiff(currentIndex: number, currnetBrigadeModel: BrigadeModel): number {
-        if(currentIndex === 0) {
+        if (currentIndex === 0) {
             return 0;
         }
         const previousIndex = currentIndex - 1;
         const previousBrigadeModel: BrigadeModel = this.brigadeItems[previousIndex];
 
-        const arrivalTime = moment(previousBrigadeModel.departureTime, "HH:mm").add(previousBrigadeModel.travelTimeInSeconds, 'seconds');
-        const departureTime = moment(currnetBrigadeModel.departureTime, "HH:mm");
-
-        return  departureTime.diff(arrivalTime, 'minutes');
+        return this.getDifferenceBetweenBrigades(previousBrigadeModel, currnetBrigadeModel);
     }
 
     remove(brigadeIndex: number): void {
         this.brigadeItems.splice(brigadeIndex, 1);
+    }
+
+    getFirstBrigade(): BrigadeModel {
+        return first(this.brigadeItems);
+    }
+
+    getLastBrigade(): BrigadeModel {
+        return last(this.brigadeItems);
+    }
+
+    getLastArrivalBrigade(): Moment {
+        const lastBrigadeTrip = this.getLastBrigade();
+        if (lastBrigadeTrip == null) {
+            return null;
+        }
+        return moment(lastBrigadeTrip.departureTime, "HH:mm").add(lastBrigadeTrip.travelTimeInSeconds, 'seconds');
+    }
+
+    getDifferenceBetweenFirstAndLastTrip(): number {
+        if (this.getFirstBrigade() == null) {
+            return null;
+        }
+
+        const lastTrip: BrigadeModel = this.getLastBrigade();
+
+        const departureTime = moment(this.getFirstBrigade().departureTime, "HH:mm");
+        const arrivalTime = moment(lastTrip.departureTime, "HH:mm").add(lastTrip.travelTimeInSeconds, 'seconds');
+
+        return arrivalTime.diff(departureTime, 'minutes');
+    }
+
+    saveBrigade(): void {
+        let brigadeBody: BrigadeBody = {};
+        brigadeBody.brigadeNumber = '';
+
+        brigadeBody.trips = this.brigadeItems.map(brigadeBody => {
+            let tripId: TripId = {};
+            tripId.line = brigadeBody.line;
+            tripId.name = brigadeBody.name;
+            tripId.mode = brigadeBody.mode;
+            tripId.variant = brigadeBody.variant;
+
+            let brigadeTrip: BrigadeTrip = {};
+            brigadeTrip.tripId = tripId;
+            brigadeTrip.departureTime = brigadeBody.departureTime;
+            brigadeTrip.arrivalTime = moment(brigadeBody.departureTime, "HH:mm").add(brigadeBody.travelTimeInSeconds, 'seconds').format('HH:mm');
+
+            return brigadeTrip;
+        });
+
+        this.brigadeService.saveBrigade(brigadeBody).subscribe(response => {
+        });
     }
 
 }
