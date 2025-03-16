@@ -797,10 +797,10 @@ components:
       properties:
         tripId:
           $ref: '#/components/schemas/TripId'
-        arrivalSecond:
-          type: integer
-        departureSecond:
-          type: integer
+        arrivalTime:
+          type: string
+        departureTime:
+          type: string
 
     Status:
       type: object
