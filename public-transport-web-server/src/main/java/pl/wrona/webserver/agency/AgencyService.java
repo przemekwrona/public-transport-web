@@ -17,8 +17,11 @@ public class AgencyService {
 
     private final AgencyRepository agencyRepository;
 
-    public Agency findAgencyByAgencyCode(String agencyCode) {
-        return agencyRepository.findByAgencyCodeEquals(agencyCode);
+    public Agency getLoggedAgency() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = (AppUser) authentication.getPrincipal();
+
+        return agencyRepository.findByAppUser(appUser);
     }
 
     public AgencyDetails getAgency() {

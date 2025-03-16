@@ -1,0 +1,120 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-app-user
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: brigade
+            columns:
+              - column:
+                  name: brigade_trip_id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_brigade
+                    nullable: false
+              - column:
+                  name: brigade_number
+                  type: varchar(50)
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_brigade_agency
+                    references: agency(agency_id)
+                    nullable: false
+
+        - createSequence:
+            sequenceName: brigade_trip_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: brigade_trip
+            columns:
+              - column:
+                  name: trip_id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_brigade_trip
+                    nullable: false
+              - column:
+                  name: variant_name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mode
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: headsign
+                  type: varchar(30)
+              - column:
+                  name: variant_designation
+                  type: varchar(30)
+              - column:
+                  name: variant_description
+                  type: varchar(255)
+              - column:
+                  name: communication_velocity
+                  type: int
+              - column:
+                  name: distance_in_meters
+                  type: int
+              - column:
+                  name: travel_time_in_seconds
+                  type: int
+              - column:
+                  name: is_main_variant
+                  type: boolean
+              - column:
+                  name: origin
+                  type: varchar(30)
+              - column:
+                  name: destination
+                  type: varchar(30)
+              - column:
+                  name: route_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_trip_route
+                    references: route(route_id)
+                    nullable: false
+
+        - createTable:
+            tableName: brigade_stop_time
+            columns:
+              - column:
+                  name: trip_id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_brigade_stop_time
+                    nullable: false
+              - column:
+                  name: stop_sequence
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_stop_time
+                    nullable: false
+              - column:
+                  name: arrival_second
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: departure_second
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stop_id
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_stop_time_stop
+                    references: stop(bdot10k_id)
