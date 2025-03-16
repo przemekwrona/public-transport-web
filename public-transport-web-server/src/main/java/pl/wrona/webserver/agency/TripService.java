@@ -81,14 +81,14 @@ public class TripService {
         stopTimeRepository.saveAll(entities);
 
         return new Status()
-                .status("CREATED");
+                .status(Status.StatusEnum.CREATED);
     }
 
     @Transactional
     public Status deleteTripByTripId(TripId tripId) {
         TripEntity deleteTrip = tripRepository.findByLineAndNameAndVariantAndMode(tripId.getLine(), tripId.getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
         tripRepository.delete(deleteTrip);
-        return new Status().status("DELETED");
+        return new Status().status(Status.StatusEnum.DELETED);
     }
 
     @Transactional
@@ -138,7 +138,7 @@ public class TripService {
         tripRepository.save(updatedTrip);
 
         return new Status()
-                .status("UPDATED");
+                .status(Status.StatusEnum.SUCCESS);
     }
 
     public Trips getTrips(RouteId routeId) {
