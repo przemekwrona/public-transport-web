@@ -36,7 +36,7 @@
                     <div cdkDropList (cdkDropListDropped)="drop($event)" class="pb-7.5">
 
                         @for (brigadeItem of brigadeItems || []; track brigadeItem; let brigadeIndex = $index) {
-                            <div cdkDrag (dblclick)="remove(brigadeIndex)" [@fadeBrigadeAnimation]="'in'">
+                            <div cdkDrag [@fadeBrigadeAnimation]="'in'">
                                 <!--begin:: Alert-->
                                 @if (getDiff(brigadeIndex, brigadeItem) > 0) {
                                     <div class="flex flex-col justify-center gap-1 rounded-lg px-4 bg-success-light">
@@ -65,7 +65,7 @@
                                          (cdkDropListEntered)="entered($event)"
                                          (cdkDropListExited)="exited($event)"
                                          [cdkDropListEnterPredicate]="oneElementPredicate"
-                                         class="flex flex-wrap sm:flex-nowrap w-full example-list">
+                                         class="flex flex-wrap sm:flex-nowrap w-full cdk-drag-list">
                                         <div *ngIf="brigadeItem.draggableElement"
                                              class="flex bg-center w-full p-5 lg:p-7 bg-no-repeat bg-[length:550px] border border-gray-300 rounded-xl border-dashed branding-bg">
                                             <div class="flex flex-col place-items-center place-content-center text-center rounded-xl w-full">
@@ -100,13 +100,18 @@
                                             </div>
                                         </div>
 
-                                        <div *ngIf="!brigadeItem.draggableElement">
-                                            <div [ngClass]="{'border-solid': brigadeItem.isMainVariant,'border-dashed': !brigadeItem.isMainVariant}"
+                                        <div *ngIf="!brigadeItem.draggableElement" class="draggable-item">
+                                            <div [ngClass]="{'border-solid': brigadeItem.isMainVariant, 'border-dashed': !brigadeItem.isMainVariant}"
                                                  class="grid grid-cols-1 content-between gap-1.5 border border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+                                                <div class="flex w-full justify-between">
                                                     <span class="text-gray-900 text-md leading-none font-medium">
                                                         z: {{ brigadeItem.origin }} do: {{ brigadeItem.destination }}
                                                         (+{{ brigadeItem.travelTimeInSeconds | brigadeEditorTime }})
                                                     </span>
+                                                    <span (click)="remove(brigadeIndex)" class="text-end text-cross text-gray-900 text-md leading-none font-medium">
+                                                        <i class="ki-duotone ki-cross text-gray-900 fs-2tx"></i>
+                                                    </span>
+                                                </div>
                                                 <span *ngIf="brigadeItem.variant === 'MAIN'"
                                                       class="text-gray-700 text-2sm">Wariant podstawowy</span>
                                                 <span *ngIf="brigadeItem.variant !== 'MAIN'"
@@ -140,45 +145,47 @@
 
                         <div class="flex flex-wrap justify-between gap-5">
                             <div cdkDropList
-                                 [cdkDropListData]="items"
                                  (cdkDropListDropped)="drop($event)"
                                  (cdkDropListEntered)="entered($event)"
                                  (cdkDropListExited)="exited($event)"
                                  [cdkDropListEnterPredicate]="oneElementPredicate"
-                                 class="flex flex-wrap sm:flex-nowrap w-full example-list">
-                                <div *ngIf="!isEntered"
-                                     class="flex bg-center w-full p-5 lg:p-7 bg-no-repeat bg-[length:550px] border border-gray-300 rounded-xl border-dashed branding-bg">
-                                    <div class="flex flex-col place-items-center place-content-center text-center rounded-xl w-full">
-                                        <div class="flex items-center mb-2.5">
-                                            <div class="relative size-11 shrink-0">
-                                                <svg class="w-full h-full stroke-brand-clarity fill-light"
-                                                     fill="none"
-                                                     height="48" viewBox="0 0 44 48" width="44"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
+                                 class="flex flex-wrap sm:flex-nowrap w-full">
+
+                                @if (isBrigadesEmpty()) {
+                                    <div [@fadeDragAndDropAnimation]="'in'"
+                                         class="flex bg-center w-full p-5 lg:p-7 bg-no-repeat bg-[length:550px] border border-gray-300 rounded-xl border-dashed branding-bg">
+                                        <div class="flex flex-col place-items-center place-content-center text-center rounded-xl w-full">
+                                            <div class="flex items-center mb-2.5">
+                                                <div class="relative size-11 shrink-0">
+                                                    <svg class="w-full h-full stroke-brand-clarity fill-light"
+                                                         fill="none"
+                                                         height="48" viewBox="0 0 44 48" width="44"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
 										18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937
 										39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z"
-                                                          fill="">
-                                                    </path>
-                                                    <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
+                                                              fill="">
+                                                        </path>
+                                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
 										18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937
 										39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z"
-                                                          stroke="" stroke-opacity="0.2">
-                                                    </path>
-                                                </svg>
-                                                <div class="absolute leading-none left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4">
-                                                    <i class="ki-filled ki-picture text-xl ps-px text-brand">
-                                                    </i>
+                                                              stroke="" stroke-opacity="0.2">
+                                                        </path>
+                                                    </svg>
+                                                    <div class="absolute leading-none left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4">
+                                                        <i class="ki-filled ki-picture text-xl ps-px text-brand">
+                                                        </i>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <a class="text-gray-900 text-xs font-medium hover:text-primary-active mb-px"
+                                               href="/metronic/tailwind/demo1/network/user-cards/mini-cards">
+                                                Drag &amp; Drop
+                                            </a>
+                                            <span class="text-2xs text-gray-700 text-nowrap">Przesuń i upuść linię</span>
                                         </div>
-                                        <a class="text-gray-900 text-xs font-medium hover:text-primary-active mb-px"
-                                           href="/metronic/tailwind/demo1/network/user-cards/mini-cards">
-                                            Drag &amp; Drop
-                                        </a>
-                                        <span class="text-2xs text-gray-700 text-nowrap">Przesuń i upuść linię</span>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
