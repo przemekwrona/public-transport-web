@@ -29,6 +29,10 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
             state('in', style({opacity: 1})),
             transition(':enter', [style({opacity: 0}), animate(500)]),
             transition(':leave', animate(500, style({opacity: 0})))
+        ]),
+        trigger('fadeDragAndDropAnimation', [
+            state('in', style({opacity: 1})),
+            transition(':enter', [style({opacity: 0}), animate('500ms 600ms ease-in')])
         ])
     ]
 })
@@ -39,8 +43,6 @@ export class BrigadeEditorComponent implements OnInit {
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
 
-    public items = [];
-
     constructor(private brigadeService: BrigadeService) {
     }
 
@@ -50,7 +52,7 @@ export class BrigadeEditorComponent implements OnInit {
 
     drop(event: CdkDragDrop<Trip[]>) {
         if (event.previousContainer === event.container) {
-            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+            moveItemInArray(this.brigadeItems, event.previousIndex, event.currentIndex);
         } else {
             this.isEntered = false;
 
@@ -76,7 +78,6 @@ export class BrigadeEditorComponent implements OnInit {
             brigadeModel.travelTimeInSeconds = previousBrigadeModel.travelTimeInSeconds
 
             this.brigadeItems.splice(event.currentIndex, 0, brigadeModel);
-            copyArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex,);
         }
     }
 
@@ -149,6 +150,10 @@ export class BrigadeEditorComponent implements OnInit {
         const arrivalTime = moment(lastTrip.departureTime, "HH:mm").add(lastTrip.travelTimeInSeconds, 'seconds');
 
         return arrivalTime.diff(departureTime, 'minutes');
+    }
+
+    isBrigadesEmpty(): boolean {
+        return this.brigadeItems.length === 0;
     }
 
     saveBrigade(): void {
