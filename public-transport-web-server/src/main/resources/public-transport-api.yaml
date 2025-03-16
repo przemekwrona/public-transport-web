@@ -77,6 +77,43 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+  /brigades:
+    post:
+      tags:
+        - brigade
+      summary: Create new brigade
+      operationId: createBrigade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrigadeBody'
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /brigades/details:
+    post:
+      tags:
+        - brigade
+      operationId: getBrigadeByBrigadeName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrigadePayload'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrigadeBody'
+
   /otp/routers/{instance_id}/plan/summary:
     get:
       tags:
@@ -739,8 +776,38 @@ components:
         trip:
           $ref: '#/components/schemas/Trip'
 
+    BrigadePayload:
+      type: object
+      properties:
+        brigadeNumber:
+          type: string
+
+    BrigadeBody:
+      type: object
+      properties:
+        brigadeNumber:
+          type: string
+        trips:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrigadeTrip'
+
+    BrigadeTrip:
+      type: object
+      properties:
+        tripId:
+          $ref: '#/components/schemas/TripId'
+        arrivalSecond:
+          type: integer
+        departureSecond:
+          type: integer
+
     Status:
       type: object
       properties:
         status:
           type: string
+          enum:
+            - CREATED
+            - DELETED
+            - SUCCESS
