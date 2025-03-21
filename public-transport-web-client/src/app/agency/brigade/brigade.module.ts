@@ -6,11 +6,13 @@ import {FormsModule} from "@angular/forms";
 import {BrigadeTimePipe} from "./brigade-time.pipe";
 import {CdkDrag, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        RouterModule,
         CdkDropListGroup,
         CdkDropList,
         CdkDrag,

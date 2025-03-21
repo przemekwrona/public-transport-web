@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {BrigadeBody, GetAllTripsResponse, Status} from "../../generated/public-transport";
+import {BrigadeBody, GetAllTripsResponse, GetBrigadeResponse, Status} from "../../generated/public-transport";
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +16,10 @@ export class BrigadeService {
         params = params.set('filter', lineOrName);
 
         return this.httpClient.get<GetAllTripsResponse>(`/api/v1/trips`, {params: params});
+    }
+
+    public getAllBrigades(): Observable<GetBrigadeResponse> {
+        return this.httpClient.get<GetBrigadeResponse>(`/api/v1/brigades`);
     }
 
     public saveBrigade(brigadeBody: BrigadeBody): Observable<Status> {
