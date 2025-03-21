@@ -238,4 +238,7 @@ public class TripService {
         return pairedElements;
     }
 
+    public TripEntity findByTripId(TripId tripId) {
+        return tripRepository.findByLineAndNameAndVariantAndMode(tripId.getLine(), tripId.getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
+    }
 }
