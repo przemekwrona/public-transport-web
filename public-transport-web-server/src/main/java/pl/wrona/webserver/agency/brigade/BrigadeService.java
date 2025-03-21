@@ -3,6 +3,8 @@ package pl.wrona.webserver.agency.brigade;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.BrigadeBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
+import org.igeolab.iot.pt.server.api.model.GetBrigadeBody;
+import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
@@ -69,5 +71,15 @@ public class BrigadeService {
                 .map(brigadeEntity -> new BrigadeBody()
                         .brigadeNumber(brigadeEntity.getBrigadeNumber()))
                 .orElse(null);
+    }
+
+    public GetBrigadeResponse findBrigades() {
+        var brigades = brigadeRepository.findAll().stream()
+                .map(brigadeEntity -> new GetBrigadeBody()
+                        .brigadeNumber(brigadeEntity.getBrigadeNumber()))
+                .toList();
+
+        return new GetBrigadeResponse()
+                .brigades(brigades);
     }
 }

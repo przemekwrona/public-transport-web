@@ -78,6 +78,18 @@ paths:
                 $ref: '#/components/schemas/Status'
 
   /brigades:
+    get:
+      tags:
+        - brigade
+      summary: Get list of brigades
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBrigadeResponse'
+
     post:
       tags:
         - brigade
@@ -801,6 +813,20 @@ components:
           type: string
         departureTime:
           type: string
+
+    GetBrigadeBody:
+      type: object
+      properties:
+        brigadeNumber:
+          type: string
+
+    GetBrigadeResponse:
+      type: object
+      properties:
+        brigades:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBrigadeBody'
 
     Status:
       type: object
