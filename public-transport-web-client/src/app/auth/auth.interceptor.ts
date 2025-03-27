@@ -7,8 +7,9 @@ import {
     HttpRequest, HttpResponse
 } from '@angular/common/http';
 import {Injectable} from "@angular/core";
-import {Observable, tap} from "rxjs";
+import {catchError, Observable, of, tap} from "rxjs";
 import {AuthService} from "./auth.service";
+import {Router} from "@angular/router";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
@@ -17,7 +18,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 @Injectable()
 export class AddHeaderInterceptor implements HttpInterceptor {
 
-    constructor() {
+    constructor(private _router: Router) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -33,6 +34,14 @@ export class AddHeaderInterceptor implements HttpInterceptor {
                 if (event instanceof HttpResponse) {
                     const headers: HttpHeaders = event.headers;
                 }
+            }))
+            .pipe(catchError((error: HttpErrorResponse) => {
+                const httpStatus: number = error.status;
+                if (httpStatus === 401) {
+                    this._router.navigate(['/signin']);
+                }
+
+                return of();
             }));
     }
 }
