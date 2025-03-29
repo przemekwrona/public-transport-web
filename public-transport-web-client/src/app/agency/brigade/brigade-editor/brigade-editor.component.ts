@@ -11,14 +11,13 @@ import {
     CdkDrag,
     CdkDragDrop,
     CdkDragEnter, CdkDragExit,
-    copyArrayItem,
-    moveItemInArray,
-    transferArrayItem
+    moveItemInArray
 } from "@angular/cdk/drag-drop";
 import {BrigadeModel} from "./brigade-editor.model";
 import moment, {Moment} from "moment";
 import {first, last} from "lodash";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'app-brigade-editor',
@@ -40,14 +39,19 @@ export class BrigadeEditorComponent implements OnInit {
 
     public tripsResponse: GetAllTripsResponse = {};
 
+    public queryBrigadeName: string = '';
+    public brigadeName = '';
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
 
-    constructor(private brigadeService: BrigadeService) {
+    constructor(private brigadeService: BrigadeService, private _route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
         this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => this.tripsResponse = response);
+
+        this._route.queryParams.subscribe(params => this.brigadeName = params['name']);
+        this._route.queryParams.subscribe(params => this.queryBrigadeName = params['name']);
     }
 
     drop(event: CdkDragDrop<Trip[]>) {
@@ -77,12 +81,21 @@ export class BrigadeEditorComponent implements OnInit {
 
             brigadeModel.travelTimeInSeconds = previousBrigadeModel.travelTimeInSeconds
 
+            if(event.currentIndex === 0 && this.brigadeItems.length > 0) {
+                const firstBrigadeItems = first(this.brigadeItems);
+                brigadeModel.departureTime = this.getDepartureTime(firstBrigadeItems).subtract(firstBrigadeItems.travelTimeInSeconds, 'seconds').startOf('minute').format('HH:mm');
+            }
+
             this.brigadeItems.splice(event.currentIndex, 0, brigadeModel);
         }
     }
 
+    getDepartureTime(trip: BrigadeModel): moment.Moment {
+        return moment(trip.departureTime, 'HH:mm');
+    }
+
     getArrivalTime(trip: BrigadeModel): moment.Moment {
-        return moment(trip.departureTime, 'HH:mm').add(trip.travelTimeInSeconds, 'seconds');
+        return moment(trip.departureTime, 'HH:mm').add(trip.travelTimeInSeconds, 'seconds').startOf('minute').add(1, 'minute');
     }
 
     entered(event: CdkDragEnter<any[]>) {
@@ -136,7 +149,7 @@ export class BrigadeEditorComponent implements OnInit {
         if (lastBrigadeTrip == null) {
             return null;
         }
-        return moment(lastBrigadeTrip.departureTime, "HH:mm").add(lastBrigadeTrip.travelTimeInSeconds, 'seconds');
+        return moment(lastBrigadeTrip.departureTime, "HH:mm").add(lastBrigadeTrip.travelTimeInSeconds, 'seconds').startOf('minute').add(1, 'minute');
     }
 
     getDifferenceBetweenFirstAndLastTrip(): number {
@@ -149,7 +162,7 @@ export class BrigadeEditorComponent implements OnInit {
         const departureTime = moment(this.getFirstBrigade().departureTime, "HH:mm");
         const arrivalTime = moment(lastTrip.departureTime, "HH:mm").add(lastTrip.travelTimeInSeconds, 'seconds');
 
-        return arrivalTime.diff(departureTime, 'minutes');
+        return arrivalTime.diff(departureTime, 'seconds');
     }
 
     isBrigadesEmpty(): boolean {
@@ -158,7 +171,7 @@ export class BrigadeEditorComponent implements OnInit {
 
     saveBrigade(): void {
         let brigadeBody: BrigadeBody = {};
-        brigadeBody.brigadeNumber = '';
+        brigadeBody.brigadeName = this.brigadeName;
 
         brigadeBody.trips = this.brigadeItems.map(brigadeBody => {
             let tripId: TripId = {};

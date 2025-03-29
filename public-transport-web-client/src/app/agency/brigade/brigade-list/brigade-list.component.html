@@ -16,7 +16,7 @@
 
     @for (brigade of brigadesResponse.brigades || []; track brigade; ) {
 
-        <a> {{ brigade?.brigadeNumber }} </a>
+        <a [routerLink]="['/agency/brigade/edit']" [queryParams]="{name: brigade?.brigadeName}"> {{ brigade?.brigadeName }} </a>
 
     }
 

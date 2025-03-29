@@ -22,6 +22,10 @@ export class BrigadeService {
         return this.httpClient.get<GetBrigadeResponse>(`/api/v1/brigades`);
     }
 
+    public getAllBrigadesByBrigadeName(brigadeName: string): Observable<GetBrigadeResponse> {
+        return this.httpClient.get<GetBrigadeResponse>(`/api/v1/brigades`);
+    }
+
     public saveBrigade(brigadeBody: BrigadeBody): Observable<Status> {
         return this.httpClient.post<Status>(`/api/v1/brigades`, brigadeBody);
     }
