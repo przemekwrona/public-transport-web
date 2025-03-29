@@ -1,23 +1,20 @@
 import {Component, OnInit} from '@angular/core';
 import {BrigadeService} from "../brigade.service";
 import {
-    BrigadeBody,
+    BrigadeBody, BrigadePatchBody,
+    BrigadePayload,
     BrigadeTrip,
     GetAllTripsResponse,
     Trip,
     TripId
 } from "../../../generated/public-transport";
-import {
-    CdkDrag,
-    CdkDragDrop,
-    CdkDragEnter, CdkDragExit,
-    moveItemInArray
-} from "@angular/cdk/drag-drop";
+import {CdkDrag, CdkDragDrop, CdkDragEnter, CdkDragExit, moveItemInArray} from "@angular/cdk/drag-drop";
 import {BrigadeModel} from "./brigade-editor.model";
 import moment, {Moment} from "moment";
 import {first, last} from "lodash";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ActivatedRoute} from "@angular/router";
+import {BrigadeEditorComponentMode} from "./brigade-editor-component-mode";
 
 @Component({
     selector: 'app-brigade-editor',
@@ -37,6 +34,8 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class BrigadeEditorComponent implements OnInit {
 
+    private componentMode: BrigadeEditorComponentMode = null;
+
     public tripsResponse: GetAllTripsResponse = {};
 
     public queryBrigadeName: string = '';
@@ -52,6 +51,8 @@ export class BrigadeEditorComponent implements OnInit {
 
         this._route.queryParams.subscribe(params => this.brigadeName = params['name']);
         this._route.queryParams.subscribe(params => this.queryBrigadeName = params['name']);
+
+        this._route.data.subscribe(data => this.componentMode = data['mode']);
     }
 
     drop(event: CdkDragDrop<Trip[]>) {
@@ -81,7 +82,7 @@ export class BrigadeEditorComponent implements OnInit {
 
             brigadeModel.travelTimeInSeconds = previousBrigadeModel.travelTimeInSeconds
 
-            if(event.currentIndex === 0 && this.brigadeItems.length > 0) {
+            if (event.currentIndex === 0 && this.brigadeItems.length > 0) {
                 const firstBrigadeItems = first(this.brigadeItems);
                 brigadeModel.departureTime = this.getDepartureTime(firstBrigadeItems).subtract(firstBrigadeItems.travelTimeInSeconds, 'seconds').startOf('minute').format('HH:mm');
             }
@@ -169,7 +170,10 @@ export class BrigadeEditorComponent implements OnInit {
         return this.brigadeItems.length === 0;
     }
 
-    saveBrigade(): void {
+    saveOrEditBrigade(): void {
+        let brigadePayload: BrigadePayload = {};
+        brigadePayload.brigadeName = this.queryBrigadeName;
+
         let brigadeBody: BrigadeBody = {};
         brigadeBody.brigadeName = this.brigadeName;
 
@@ -188,8 +192,20 @@ export class BrigadeEditorComponent implements OnInit {
             return brigadeTrip;
         });
 
-        this.brigadeService.saveBrigade(brigadeBody).subscribe(response => {
-        });
+        if (this.componentMode === BrigadeEditorComponentMode.CREATE) {
+            this.brigadeService.saveBrigade(brigadeBody).subscribe(response => {
+            });
+        }
+
+        if (this.componentMode === BrigadeEditorComponentMode.EDIT) {
+            let brigadePatchBody: BrigadePatchBody = {};
+            brigadePatchBody.brigadePayload = brigadePayload;
+            brigadePatchBody.brigadeBody = brigadeBody;
+
+            this.brigadeService.putBrigade(brigadePatchBody).subscribe(response => {
+            });
+        }
+
     }
 
 }

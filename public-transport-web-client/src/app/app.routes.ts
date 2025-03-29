@@ -35,6 +35,7 @@ export const routes: Routes = [
             {path: 'trips/edit', component: TripEditorComponent,  resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
             {path: 'brigade', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'brigade/create', component: BrigadeEditorComponent, data: { mode: BrigadeEditorComponentMode.CREATE }},
+            {path: 'brigade/edit', component: BrigadeEditorComponent, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'calendars', component: CalendarsEditorComponent},
             {path: 'calendars/create', component: CalendarsEditorComponent},
             {path: 'google/maps', component: GoogleMapsComponent}
