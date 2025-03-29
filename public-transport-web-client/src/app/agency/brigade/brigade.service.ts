@@ -1,7 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {BrigadeBody, GetAllTripsResponse, GetBrigadeResponse, Status} from "../../generated/public-transport";
+import {
+    BrigadeBody,
+    BrigadePatchBody,
+    GetAllTripsResponse,
+    GetBrigadeResponse,
+    Status
+} from "../../generated/public-transport";
 
 @Injectable({
     providedIn: 'root'
@@ -28,5 +34,9 @@ export class BrigadeService {
 
     public saveBrigade(brigadeBody: BrigadeBody): Observable<Status> {
         return this.httpClient.post<Status>(`/api/v1/brigades`, brigadeBody);
+    }
+
+    public putBrigade(brigadePatchBody: BrigadePatchBody): Observable<Status> {
+        return this.httpClient.put<Status>(`/api/v1/brigades`, brigadePatchBody);
     }
 }
