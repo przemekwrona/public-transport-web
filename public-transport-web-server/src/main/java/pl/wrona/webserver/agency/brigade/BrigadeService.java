@@ -2,6 +2,7 @@ package pl.wrona.webserver.agency.brigade;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.BrigadeBody;
+import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeBody;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
@@ -28,7 +29,7 @@ public class BrigadeService {
     @Transactional
     public Status createBrigade(BrigadeBody request) {
         var brigadeEntity = new BrigadeEntity();
-        brigadeEntity.setBrigadeNumber(request.getBrigadeNumber());
+        brigadeEntity.setBrigadeNumber(request.getBrigadeName());
         brigadeEntity.setAgency(agencyService.getLoggedAgency());
 
         var savedBrigade = brigadeRepository.save(brigadeEntity);
@@ -67,19 +68,31 @@ public class BrigadeService {
     }
 
     public BrigadeBody getBrigadeByBrigadeName(BrigadePayload brigadePayload) {
-        return brigadeRepository.findByBrigadeNumber(brigadePayload.getBrigadeNumber())
+        return brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadePayload.getBrigadeName())
                 .map(brigadeEntity -> new BrigadeBody()
-                        .brigadeNumber(brigadeEntity.getBrigadeNumber()))
+                        .brigadeName(brigadeEntity.getBrigadeNumber()))
                 .orElse(null);
     }
 
     public GetBrigadeResponse findBrigades() {
         var brigades = brigadeRepository.findAll().stream()
                 .map(brigadeEntity -> new GetBrigadeBody()
-                        .brigadeNumber(brigadeEntity.getBrigadeNumber()))
+                        .brigadeName(brigadeEntity.getBrigadeNumber()))
                 .toList();
 
         return new GetBrigadeResponse()
                 .brigades(brigades);
+    }
+
+    public Status updateBrigade(BrigadePatchBody brigadePatchBody) {
+        String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();
+
+        brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadeId).ifPresent(entity -> {
+            entity.setBrigadeNumber(brigadePatchBody.getBrigadeBody().getBrigadeName());
+
+            brigadeRepository.save(entity);
+        });
+
+        return new Status().status(Status.StatusEnum.CREATED);
     }
 }

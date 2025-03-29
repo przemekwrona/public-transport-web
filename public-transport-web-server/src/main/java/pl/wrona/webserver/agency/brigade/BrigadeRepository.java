@@ -8,5 +8,5 @@ import java.util.Optional;
 @Repository
 public interface BrigadeRepository extends JpaRepository<BrigadeEntity, Long> {
 
-    Optional<BrigadeEntity> findByBrigadeNumber(String brigadeNumber);
+    Optional<BrigadeEntity> findBrigadeEntitiesByBrigadeNumber(String brigadeNumber);
 }

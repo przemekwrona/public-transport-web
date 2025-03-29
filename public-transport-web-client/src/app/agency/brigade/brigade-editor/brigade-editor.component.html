@@ -23,16 +23,22 @@
                         <h3 class="card-title">Plan Brygady</h3>
                     </div>
                     <div class="card-header">
+                        Nazwa brygady:
+                        <input [(ngModel)]="brigadeName">
+                    </div>
+                    <div class="card-header">
                         @if (getFirstBrigade()?.departureTime && getFirstBrigade()?.departureTime) {
                             <h2>
                                 <span>Czas pracy: </span>
-                                <span>{{ getFirstBrigade()?.departureTime }}-{{ getLastArrivalBrigade()?.format('HH:mm') }}</span>
-                                <span>({{ getDifferenceBetweenFirstAndLastTrip() }}min)</span>
+                                <span>{{ getFirstBrigade()?.departureTime }}
+                                    -{{ getLastArrivalBrigade()?.format('HH:mm') }}</span>
+                                <span>({{ getDifferenceBetweenFirstAndLastTrip() | brigadeEditorTime }})</span>
                             </h2>
                         } @else {
                             <h2>Czas Pracy: 0min</h2>
                         }
                     </div>
+
                     <div cdkDropList (cdkDropListDropped)="drop($event)" class="pb-7.5">
 
                         @for (brigadeItem of brigadeItems || []; track brigadeItem; let brigadeIndex = $index) {
@@ -107,7 +113,8 @@
                                                         z: {{ brigadeItem.origin }} do: {{ brigadeItem.destination }}
                                                         (+{{ brigadeItem.travelTimeInSeconds | brigadeEditorTime }})
                                                     </span>
-                                                    <span (click)="remove(brigadeIndex)" class="text-end text-cross text-gray-900 text-md leading-none font-medium">
+                                                    <span (click)="remove(brigadeIndex)"
+                                                          class="text-end text-cross text-gray-900 text-md leading-none font-medium">
                                                         <i class="ki-duotone ki-cross text-gray-900 fs-2tx"></i>
                                                     </span>
                                                 </div>
@@ -117,7 +124,7 @@
                                                       class="text-gray-700 text-2sm">{{ brigadeItem.variantDescription }}</span>
 
                                                 <div class="flex flex-wrap justify-between">
-                                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-16">
+                                                    <div class="flex items-baseline lg:flex-nowrap gap-2">
                                                         <label class="form-label max-w-56 text-gray-800 font-normal">
                                                             Odjazd
                                                         </label>

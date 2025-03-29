@@ -3,6 +3,7 @@ package pl.wrona.webserver.agency.brigade;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.BrigadeApi;
 import org.igeolab.iot.pt.server.api.model.BrigadeBody;
+import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
@@ -29,5 +30,10 @@ public class BrigadeController implements BrigadeApi {
     @Override
     public ResponseEntity<BrigadeBody> getBrigadeByBrigadeName(BrigadePayload brigadePayload) {
         return ResponseEntity.ok(brigadeService.getBrigadeByBrigadeName(brigadePayload));
+    }
+
+    @Override
+    public ResponseEntity<Status> updateBrigade(BrigadePatchBody brigadePatchBody) {
+        return ResponseEntity.ok(brigadeService.updateBrigade(brigadePatchBody));
     }
 }
