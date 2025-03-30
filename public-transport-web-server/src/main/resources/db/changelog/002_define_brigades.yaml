@@ -93,6 +93,8 @@ databaseChangeLog:
               - column:
                   name: travel_time_in_seconds
                   type: int
+                  constraints:
+                    nullable: false
               - column:
                   name: is_main_variant
                   type: boolean
