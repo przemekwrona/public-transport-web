@@ -34,9 +34,9 @@ export const routes: Routes = [
             {path: 'trips', component: TripListComponent, resolve: {trips: tripsResolver}},
             {path: 'trips/create', component: TripEditorComponent, resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.CREATE }},
             {path: 'trips/edit', component: TripEditorComponent,  resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
-            {path: 'brigade', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
-            {path: 'brigade/create', component: BrigadeEditorComponent, data: { mode: BrigadeEditorComponentMode.CREATE }},
-            {path: 'brigade/edit', component: BrigadeEditorComponent, resolve: { brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
+            {path: 'brigades', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
+            {path: 'brigades/create', component: BrigadeEditorComponent, data: { mode: BrigadeEditorComponentMode.CREATE }},
+            {path: 'brigades/edit', component: BrigadeEditorComponent, resolve: { brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'calendars', component: CalendarsEditorComponent},
             {path: 'calendars/create', component: CalendarsEditorComponent},
             {path: 'google/maps', component: GoogleMapsComponent}
