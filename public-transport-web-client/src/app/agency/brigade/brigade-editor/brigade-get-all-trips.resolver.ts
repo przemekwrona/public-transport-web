@@ -6,6 +6,5 @@ import {GetBrigadeResponse} from "../../../generated/public-transport";
 
 export const brigadeGetAllTripsResolver: ResolveFn<Observable<GetBrigadeResponse>> = (route, state) => {
   const brigadeService = inject(BrigadeService);
-  //
   return brigadeService.getAllBrigades();
 };

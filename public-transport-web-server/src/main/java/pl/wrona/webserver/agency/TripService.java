@@ -230,6 +230,9 @@ public class TripService {
 
     public static List<Pair<StopTime, StopTime>> pairConsecutiveElements(List<StopTime> elements) {
         List<Pair<StopTime, StopTime>> pairedElements = new ArrayList<>();
+        if (elements.isEmpty()) {
+            return List.of();
+        }
         pairedElements.add(Pair.of(null, elements.get(0)));
 
         for (int i = 0; i < elements.size() - 1; i++) {

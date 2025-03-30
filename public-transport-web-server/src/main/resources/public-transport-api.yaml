@@ -835,10 +835,16 @@ components:
       properties:
         tripId:
           $ref: '#/components/schemas/TripId'
+        origin:
+          type: string
+        destination:
+          type: string
+        travelTimeInSeconds:
+          type: integer
         arrivalTime:
-          type: string
+          type: integer
         departureTime:
-          type: string
+          type: integer
 
     GetBrigadeBody:
       type: object

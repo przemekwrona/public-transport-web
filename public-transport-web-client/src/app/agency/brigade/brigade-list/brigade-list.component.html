@@ -15,8 +15,9 @@
 <div class="container-fixed">
 
     @for (brigade of brigadesResponse.brigades || []; track brigade; ) {
-
-        <a [routerLink]="['/agency/brigade/edit']" [queryParams]="{name: brigade?.brigadeName}"> {{ brigade?.brigadeName }} </a>
+        <div>
+            <a [routerLink]="['/agency/brigade/edit']" [queryParams]="{name: brigade?.brigadeName}"> {{ brigade?.brigadeName }} </a>
+        </div>
 
     }
 
