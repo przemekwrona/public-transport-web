@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {RoutesService} from "../routes.service";
 import {Route, Status} from "../../../generated/public-transport";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-create-route',
@@ -14,11 +15,12 @@ export class CreateRouteComponent {
         active: true
     };
 
-    constructor(private routeService: RoutesService) {
+    constructor(private routeService: RoutesService, private _router: Router) {
     }
 
     public createRoute(): void {
         this.routeService.createRoute(this.route).subscribe((status: Status) => {
+            this._router.navigate(['/agency/trips/create'], {queryParams: {line: this.route.line, name: this.route.name}}).then();
         });
     }
 }

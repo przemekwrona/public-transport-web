@@ -55,6 +55,15 @@ public class BrigadeTripEntity {
     @Column(name = "variant_description")
     private String variantDescription;
 
+    @Column(name = "origin")
+    private String origin;
+
+    @Column(name = "destination")
+    private String destination;
+
+    @Column(name = "travel_time_in_seconds")
+    private int travelTimeInSeconds;
+
 //    private int arrivalTimeInSeconds;
 //
 //    private int departureTimeInSeconds;

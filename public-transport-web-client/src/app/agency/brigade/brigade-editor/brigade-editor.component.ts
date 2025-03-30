@@ -53,6 +53,23 @@ export class BrigadeEditorComponent implements OnInit {
         this._route.queryParams.subscribe(params => this.queryBrigadeName = params['name']);
 
         this._route.data.subscribe(data => this.componentMode = data['mode']);
+        this._route.data.subscribe(data => {
+            this.brigadeItems = data['brigade'].trips.map((trip: BrigadeTrip) => {
+                const brigadeModel: BrigadeModel = {} as BrigadeModel;
+                brigadeModel.line = trip.tripId.line;
+                brigadeModel.name = trip.tripId.name;
+                brigadeModel.mode = trip.tripId.mode;
+
+                brigadeModel.origin = trip.origin;
+                brigadeModel.destination = trip.destination;
+
+                // brigadeModel.travelTimeInSeconds;
+                brigadeModel.departureTime = moment().startOf('day').add(trip.departureTime, 'seconds').format('HH:mm');
+                brigadeModel.travelTimeInSeconds = trip.travelTimeInSeconds;
+
+                return brigadeModel;
+            })
+        });
     }
 
     drop(event: CdkDragDrop<Trip[]>) {
@@ -186,8 +203,13 @@ export class BrigadeEditorComponent implements OnInit {
 
             let brigadeTrip: BrigadeTrip = {};
             brigadeTrip.tripId = tripId;
-            brigadeTrip.departureTime = brigadeBody.departureTime;
-            brigadeTrip.arrivalTime = moment(brigadeBody.departureTime, "HH:mm").add(brigadeBody.travelTimeInSeconds, 'seconds').format('HH:mm');
+            brigadeTrip.origin = brigadeBody.origin;
+            brigadeTrip.destination = brigadeBody.destination;
+
+            const midnight = moment().startOf('day');
+            brigadeTrip.departureTime = moment(brigadeBody.departureTime, "HH:mm").diff(midnight, 'seconds');
+            brigadeTrip.arrivalTime = moment(brigadeBody.departureTime, "HH:mm").add(brigadeBody.travelTimeInSeconds, 'seconds').diff(midnight, 'seconds');
+            brigadeTrip.travelTimeInSeconds = brigadeBody.travelTimeInSeconds;
 
             return brigadeTrip;
         });

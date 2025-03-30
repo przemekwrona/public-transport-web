@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.BrigadeBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
+import org.igeolab.iot.pt.server.api.model.BrigadeTrip;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeBody;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
@@ -14,6 +15,7 @@ import pl.wrona.webserver.agency.AgencyService;
 import pl.wrona.webserver.agency.TripService;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -43,8 +45,11 @@ public class BrigadeService {
                     brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
 
                     brigadeTripEntity.setBrigade(savedBrigade);
+                    brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
+                    brigadeTripEntity.setDestination(brigadeTrip.getDestination());
+                    brigadeTripEntity.setTravelTimeInSeconds(brigadeTrip.getTravelTimeInSeconds());
 
-                    int secondOfDay = LocalTime.parse(brigadeTrip.getArrivalTime()).toSecondOfDay();
+                    int secondOfDay = LocalTime.MIN.plusSeconds(brigadeTrip.getArrivalTime()).toSecondOfDay();
                     brigadeTripEntity.setDepartureTimeInSeconds(secondOfDay);
 
                     var tripId = new TripId()
@@ -68,9 +73,24 @@ public class BrigadeService {
     }
 
     public BrigadeBody getBrigadeByBrigadeName(BrigadePayload brigadePayload) {
+        List<BrigadeTrip> trips = brigadeTripRepository.findAllByBrigadeName(brigadePayload.getBrigadeName()).stream()
+                .map(brigade -> new BrigadeTrip()
+                        .tripId(new TripId()
+                                .line(brigade.getLine())
+                                .name(brigade.getName())
+                                .variant(brigade.getVariant())
+                                .mode(null))
+                        .origin(brigade.getOrigin())
+                        .destination(brigade.getDestination())
+                        .travelTimeInSeconds(brigade.getTravelTimeInSeconds())
+                        .arrivalTime(0)
+                        .departureTime(brigade.getDepartureTimeInSeconds()))
+                .toList();
+
         return brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadePayload.getBrigadeName())
                 .map(brigadeEntity -> new BrigadeBody()
-                        .brigadeName(brigadeEntity.getBrigadeNumber()))
+                        .brigadeName(brigadeEntity.getBrigadeNumber())
+                        .trips(trips))
                 .orElse(null);
     }
 
