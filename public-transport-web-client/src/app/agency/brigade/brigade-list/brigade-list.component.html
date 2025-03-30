@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a [routerLink]="['/agency/brigade/create']" class="btn btn-sm btn-primary">Dodaj nową brygadę</a>
+            <a [routerLink]="['/agency/brigades/create']" class="btn btn-sm btn-primary">Dodaj nową brygadę</a>
         </div>
     </div>
 </div>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="form-info text-gray-800 font-normal">
                             To jest tylko krótki opis brygady. Kliknij&nbsp;
-                            <a [routerLink]="['/agency/brigade/edit']"
+                            <a [routerLink]="['/agency/brigades/edit']"
                                [queryParams]="{name: brigade?.brigadeName}"
                                class="link">Pokaż Szczegóły</a>
                             i dowiedz się więcej.
@@ -50,7 +50,7 @@
                 <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
                     <button class="btn btn-sm btn-dark shrink-0">Usuń</button>
 
-                    <a [routerLink]="['/agency/brigade/edit']"
+                    <a [routerLink]="['/agency/brigades/edit']"
                        [queryParams]="{name: brigade?.brigadeName}"
                        class="btn btn-sm shrink-0 btn-secondary">Pokaż szczegóły</a>
                 </div>

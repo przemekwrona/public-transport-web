@@ -7,7 +7,8 @@
             </div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a class="btn btn-sm btn-primary">Dodaj nową brygadę</a>
+            <a [routerLink]="['/agency/brigades']" class="btn btn-sm btn-secondary">Wróć do listy brygad</a>
+            <a [routerLink]="['/agency/brigades/create']" class="btn btn-sm btn-primary">Dodaj nową brygadę</a>
         </div>
     </div>
 </div>
