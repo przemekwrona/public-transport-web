@@ -24,25 +24,25 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: monday
-                  type: smallint
+                  type: boolean
               - column:
                   name: tuesday
-                  type: smallint
+                  type: boolean
               - column:
                   name: wednesday
-                  type: smallint
+                  type: boolean
               - column:
                   name: thursday
-                  type: smallint
+                  type: boolean
               - column:
                   name: friday
-                  type: smallint
+                  type: boolean
               - column:
                   name: saturday
-                  type: smallint
+                  type: boolean
               - column:
                   name: sunday
-                  type: smallint
+                  type: boolean
               - column:
                   name: start_date
                   type: date
@@ -61,10 +61,10 @@ databaseChangeLog:
                   type: date
               - column:
                   name: exception_type
-                  type: smallint
+                  type: varchar(8)
 
         - createSequence:
-            sequenceName: brigade_trip_id_seq
+            sequenceName: service_id_seq
             startValue: 1
             incrementBy: 1
 
