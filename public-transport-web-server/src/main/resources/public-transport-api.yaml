@@ -476,6 +476,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+    get:
+      tags:
+        - calendar
+      summary: Return active calendars
+      operationId: getCalendars
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCalendarsResponse'
+
 components:
   schemas:
     CreateAppUserRequest:
@@ -924,6 +937,14 @@ components:
           items:
             type: string
             format: date
+
+    GetCalendarsResponse:
+      type: object
+      properties:
+        calendars:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalendarBody'
 
     Status:
       type: object

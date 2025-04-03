@@ -1,15 +1,15 @@
 package pl.wrona.webserver.agency.calendar;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import org.igeolab.iot.pt.server.api.model.CalendarPayload;
+import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.agency.AgencyRepository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -72,5 +72,39 @@ public class CalendarService {
         calendarDatesRepository.saveAll(calendarDates);
 
         return new Status().status(Status.StatusEnum.CREATED);
+    }
+
+    public GetCalendarsResponse getCalendars() {
+
+        var calendars = calendarRepository.findAll().stream()
+                .map(calendar -> {
+                    List<LocalDate> included = calendar.getCalendarDates().stream()
+                            .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
+                            .map(cd -> cd.getCalendarDatesId().getDate()).toList();
+
+                    List<LocalDate> excluded = calendar.getCalendarDates().stream()
+                            .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
+                            .map(cd -> cd.getCalendarDatesId().getDate()).toList();
+
+                    return new CalendarBody()
+                            .calendarName(calendar.getCalendarName())
+                            .designation(calendar.getDesignation())
+                            .description(calendar.getDescription())
+                            .startDate(calendar.getStartDate())
+                            .endDate(calendar.getEndDate())
+                            .monday(calendar.isMonday())
+                            .tuesday(calendar.isTuesday())
+                            .wednesday(calendar.isWednesday())
+                            .thursday(calendar.isThursday())
+                            .friday(calendar.isFriday())
+                            .saturday(calendar.isSaturday())
+                            .sunday(calendar.isSunday())
+                            .included(included)
+                            .excluded(excluded);
+                })
+                .toList();
+
+        return new GetCalendarsResponse()
+                .calendars(calendars);
     }
 }
