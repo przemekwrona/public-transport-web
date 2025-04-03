@@ -52,18 +52,18 @@ public class CalendarService {
                                 .serviceId(savedCalendar.getServiceId())
                                 .date(includeDate)
                                 .build())
-                        .exceptionType("0")
+                        .exceptionType(ExceptionType.ADDED)
                         .calendar(savedCalendar)
                         .build())
                 .collect(Collectors.toSet());
 
-        Set<CalendarDatesEntity> calendarDatesExcluded = calendarBody.getIncluded().stream()
+        Set<CalendarDatesEntity> calendarDatesExcluded = calendarBody.getExcluded().stream()
                 .map(excludedDate -> CalendarDatesEntity.builder()
                         .calendarDatesId(CalendarDatesId.builder()
                                 .serviceId(savedCalendar.getServiceId())
                                 .date(excludedDate)
                                 .build())
-                        .exceptionType("1")
+                        .exceptionType(ExceptionType.REMOVED)
                         .calendar(savedCalendar)
                         .build())
                 .collect(Collectors.toSet());
