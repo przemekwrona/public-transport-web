@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.wrona.webserver.agency.brigade.BrigadeEntity;
+import pl.wrona.webserver.agency.calendar.CalendarEntity;
 import pl.wrona.webserver.security.AppUser;
 
 import java.util.Set;
@@ -48,4 +49,7 @@ public class Agency {
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
     private Set<BrigadeEntity> brigades;
+
+    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
+    private Set<CalendarEntity> calendars;
 }
