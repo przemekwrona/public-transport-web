@@ -5,10 +5,12 @@ import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {CalendarsComponent} from "./calendars/calendars.component";
 import {CalendarsService} from "./calendars.service";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
     imports: [
         CommonModule,
+        RouterModule,
         SharedModule,
         FormsModule
     ],
