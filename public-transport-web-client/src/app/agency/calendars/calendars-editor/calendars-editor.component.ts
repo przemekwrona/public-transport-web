@@ -1,58 +1,64 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {groupBy, uniq} from "lodash";
 import moment from "moment";
 import {CalendarsService} from "../calendars.service";
+import {CalendarBody, CalendarPayload} from "../../../generated/public-transport";
 
 @Component({
     selector: 'app-calendars-editor',
     templateUrl: './calendars-editor.component.html',
     styleUrl: './calendars-editor.component.scss'
 })
-export class CalendarsEditorComponent {
+export class CalendarsEditorComponent implements OnInit {
 
-    public monday: boolean = false;
-    public tuesday: boolean = false;
-    public wednesday: boolean = false;
-    public thursday: boolean = false;
-    public friday: boolean = false;
-    public saturday: boolean = false;
-    public sunday: boolean = false;
+    public calendarBody: CalendarBody = {};
 
     public includeDays: Set<string> = new Set<string>();
     public excludeDays: Set<string> = new Set<string>();
 
     public days: number[] = [];
-
     public year: number = 2025;
 
-    public dateFrom: string = '2025-03-10';
-    public dateTo: string = '2025-03-10';
-
     constructor(private calendarsService: CalendarsService) {
+    }
+
+    ngOnInit(): void {
+        this.calendarBody.designation = '';
+        this.calendarBody.description = '';
+        this.calendarBody.startDate = '2025-03-10';
+        this.calendarBody.endDate = '2025-03-10';
+
+        this.calendarBody.monday = false;
+        this.calendarBody.tuesday = false;
+        this.calendarBody.wednesday = false;
+        this.calendarBody.thursday = false;
+        this.calendarBody.friday = false;
+        this.calendarBody.saturday = false;
+        this.calendarBody.sunday = false;
     }
 
     public getDays(): number[] {
         const days: number[] = [];
 
-        if (this.monday) {
+        if (this.calendarBody.monday) {
             days.push(1);
         }
-        if (this.tuesday) {
+        if (this.calendarBody.tuesday) {
             days.push(2);
         }
-        if (this.wednesday) {
+        if (this.calendarBody.wednesday) {
             days.push(3);
         }
-        if (this.thursday) {
+        if (this.calendarBody.thursday) {
             days.push(4);
         }
-        if (this.friday) {
+        if (this.calendarBody.friday) {
             days.push(5);
         }
-        if (this.saturday) {
+        if (this.calendarBody.saturday) {
             days.push(6);
         }
-        if (this.sunday) {
+        if (this.calendarBody.sunday) {
             days.push(0);
         }
         return days;
@@ -91,7 +97,12 @@ export class CalendarsEditorComponent {
     }
 
     public save(): void {
+        const payload: CalendarPayload = {};
+        payload.body = this.calendarBody;
+        payload.body.included = [...this.includeDays];
+        payload.body.excluded = [...this.excludeDays];
 
+        this.calendarsService.createCalendar(payload)
     }
 
 }
