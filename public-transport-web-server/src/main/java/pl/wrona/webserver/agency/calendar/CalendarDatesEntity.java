@@ -2,6 +2,8 @@ package pl.wrona.webserver.agency.calendar;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -21,7 +23,8 @@ public class CalendarDatesEntity {
     @EmbeddedId
     private CalendarDatesId calendarDatesId;
 
-    private String exceptionType;
+    @Enumerated(EnumType.STRING)
+    private ExceptionType exceptionType;
 
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false, insertable = false, updatable = false)
