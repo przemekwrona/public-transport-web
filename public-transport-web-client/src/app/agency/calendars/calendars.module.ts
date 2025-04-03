@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {CalendarsEditorComponent} from "./calendars-editor/calendars-editor.component";
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
-import {CalendarsComponent} from "./calendars/calendars.component";
+import {CalendarListComponent} from "./calendar-list/calendar-list.component";
 import {CalendarsService} from "./calendars.service";
 import {RouterModule} from "@angular/router";
 
@@ -15,7 +15,7 @@ import {RouterModule} from "@angular/router";
         FormsModule
     ],
     declarations: [
-        CalendarsComponent,
+        CalendarListComponent,
         CalendarsEditorComponent
     ],
     providers: [

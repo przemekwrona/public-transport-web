@@ -20,8 +20,8 @@ import {BrigadeListComponent} from "./agency/brigade/brigade-list/brigade-list.c
 import {brigadeGetAllResolver} from "./agency/brigade/brigade-list/brigade-get-all.resolver";
 import {BrigadeEditorComponentMode} from "./agency/brigade/brigade-editor/brigade-editor-component-mode";
 import {brigadeResolver} from "./agency/brigade/brigade-editor/brigade.resolver";
-import {CalendarsComponent} from "./agency/calendars/calendars/calendars.component";
-import {getAllCalendarsResolver} from "./agency/calendars/calendars/get-all-calendars.resolver";
+import {CalendarListComponent} from "./agency/calendars/calendar-list/calendar-list.component";
+import {getAllCalendarsResolver} from "./agency/calendars/calendar-list/get-all-calendars.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'planner', pathMatch: 'full'},
@@ -39,7 +39,7 @@ export const routes: Routes = [
             {path: 'brigades', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'brigades/create', component: BrigadeEditorComponent, data: { mode: BrigadeEditorComponentMode.CREATE }},
             {path: 'brigades/edit', component: BrigadeEditorComponent, resolve: { brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
-            {path: 'calendars', component: CalendarsComponent, resolve: { calendars: getAllCalendarsResolver }},
+            {path: 'calendars', component: CalendarListComponent, resolve: { calendars: getAllCalendarsResolver }},
             {path: 'calendars/create', component: CalendarsEditorComponent},
             {path: 'google/maps', component: GoogleMapsComponent}
         ]
