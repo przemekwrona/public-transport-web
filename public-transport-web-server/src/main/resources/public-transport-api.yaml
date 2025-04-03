@@ -457,6 +457,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/Trip'
 
+  /calendar:
+    post:
+      tags:
+        - calendar
+      summary: Create new Calendar
+      operationId: createCalendar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalendarPayload'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
 components:
   schemas:
     CreateAppUserRequest:
@@ -859,6 +878,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GetBrigadeBody'
+
+    CalendarPayload:
+      type: object
+      properties:
+        body:
+          $ref: '#/components/schemas/CalendarBody'
+
+    CalendarBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        designation:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        monday:
+          type: boolean
+        tuesday:
+          type: boolean
+        wednesday:
+          type: boolean
+        thursday:
+          type: boolean
+        friday:
+          type: boolean
+        saturday:
+          type: boolean
+        sunday:
+          type: boolean
+        included:
+          type: array
+          items:
+            type: string
+            format: date
+        excluded:
+          type: array
+          items:
+            type: string
+            format: date
 
     Status:
       type: object

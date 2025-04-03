@@ -14,6 +14,15 @@ databaseChangeLog:
                     primaryKeyName: pk_calendar
                     nullable: false
               - column:
+                  name: calendar_name
+                  type: varchar(50)
+              - column:
+                  name: designation
+                  type: varchar(4)
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
                   name: monday
                   type: smallint
               - column:

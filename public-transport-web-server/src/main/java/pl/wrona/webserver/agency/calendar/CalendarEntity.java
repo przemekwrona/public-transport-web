@@ -29,6 +29,12 @@ public class CalendarEntity {
     @SequenceGenerator(name = "service_id_seq", sequenceName = "service_id_seq",  allocationSize=1)
     private Long serviceId;
 
+    @Column(name = "calendar_name")
+    private String calendarName;
+
+    private String designation;
+    private String description;
+
     private boolean monday;
     private boolean tuesday;
     private boolean wednesday;
