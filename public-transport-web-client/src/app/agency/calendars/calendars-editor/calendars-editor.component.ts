@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {groupBy, uniq} from "lodash";
 import moment from "moment";
+import {CalendarsService} from "../calendars.service";
 
 @Component({
     selector: 'app-calendars-editor',
@@ -26,6 +27,9 @@ export class CalendarsEditorComponent {
 
     public dateFrom: string = '2025-03-10';
     public dateTo: string = '2025-03-10';
+
+    constructor(private calendarsService: CalendarsService) {
+    }
 
     public getDays(): number[] {
         const days: number[] = [];
@@ -84,6 +88,10 @@ export class CalendarsEditorComponent {
 
     public prevYear(): void {
         this.year--;
+    }
+
+    public save(): void {
+
     }
 
 }
