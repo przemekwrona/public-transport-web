@@ -27,7 +27,7 @@ public class CalendarService {
 
         var calendarEntity = new CalendarEntity();
 
-        calendarEntity.setCalendarName(calendarBody.getName());
+        calendarEntity.setCalendarName(calendarBody.getCalendarName());
         calendarEntity.setDesignation(calendarBody.getDesignation());
         calendarEntity.setDescription(calendarBody.getDescription());
 
