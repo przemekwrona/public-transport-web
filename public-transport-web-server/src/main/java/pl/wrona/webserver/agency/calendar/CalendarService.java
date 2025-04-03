@@ -11,6 +11,7 @@ import pl.wrona.webserver.agency.AgencyService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 public class CalendarService {
 
     private final AgencyService agencyService;
+    private final CalendarDatesService calendarDatesService;
 
     private final CalendarRepository calendarRepository;
     private final CalendarDatesRepository calendarDatesRepository;
@@ -79,15 +81,16 @@ public class CalendarService {
     }
 
     public GetCalendarsResponse getCalendars() {
+        Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesService.findAllByAgency(agencyService.getLoggedAgency());
 
         var calendars = calendarRepository.findAllByAgency(agencyService.getLoggedAgency()).stream()
                 .map(calendar -> {
-                    List<LocalDate> included = calendar.getCalendarDates().stream()
+                    List<LocalDate> included = calendarDatesDictionary.get(calendar.getServiceId()).stream()
                             .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
                             .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
-                    List<LocalDate> excluded = calendar.getCalendarDates().stream()
-                            .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
+                    List<LocalDate> excluded = calendarDatesDictionary.get(calendar.getServiceId()).stream()
+                            .filter(calendarDate -> ExceptionType.REMOVED.equals(calendarDate.getExceptionType()))
                             .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
                     return new CalendarBody()
