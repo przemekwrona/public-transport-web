@@ -1,0 +1,45 @@
+package pl.wrona.webserver.agency.calendar;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "calendar")
+public class CalendarEntity {
+
+    @Id
+    @Column(name = "service_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "service_id_seq")
+    @SequenceGenerator(name = "service_id_seq", sequenceName = "service_id_seq",  allocationSize=1)
+    private Long serviceId;
+
+    private boolean monday;
+    private boolean tuesday;
+    private boolean wednesday;
+    private boolean thursday;
+    private boolean friday;
+    private boolean saturday;
+    private boolean sunday;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
+    private Set<CalendarDatesEntity> calendarDates;
+}

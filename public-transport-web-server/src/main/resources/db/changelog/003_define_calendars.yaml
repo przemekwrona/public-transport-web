@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-calendars
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: calendar
+            columns:
+              - column:
+                  name: service_id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_calendar
+                    nullable: false
+              - column:
+                  name: monday
+                  type: smallint
+              - column:
+                  name: tuesday
+                  type: smallint
+              - column:
+                  name: wednesday
+                  type: smallint
+              - column:
+                  name: thursday
+                  type: smallint
+              - column:
+                  name: friday
+                  type: smallint
+              - column:
+                  name: saturday
+                  type: smallint
+              - column:
+                  name: sunday
+                  type: smallint
+              - column:
+                  name: start_date
+                  type: date
+              - column:
+                  name: end_date
+                  type: date
+
+        - createTable:
+            tableName: calendar_dates
+            columns:
+              - column:
+                  name: service_id
+                  type: integer
+              - column:
+                  name: date
+                  type: date
+              - column:
+                  name: exception_type
+                  type: smallint
+
+        - createSequence:
+            sequenceName: brigade_trip_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - addColumn:
+            tableName: brigade_trip
+            columns:
+              - column:
+                  name: service_id
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_brigade_trip_calendar
+                    references: calendar(service_id)
