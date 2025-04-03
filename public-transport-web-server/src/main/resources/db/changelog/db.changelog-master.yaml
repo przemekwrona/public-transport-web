@@ -6,6 +6,7 @@ databaseChangeLog:
   - include:
       file: 002_define_brigades.yaml
       relativeToChangelogFile: true
-      
-#  - include:
-#      file: 003_define_calendars.yaml
+
+  - include:
+      file: 003_define_calendars.yaml
+      relativeToChangelogFile: true

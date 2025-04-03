@@ -1,0 +1,8 @@
+package pl.wrona.webserver.agency.calendar;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CalendarDatesRepository extends JpaRepository<CalendarDatesEntity, CalendarDatesId> {
+}
