@@ -102,7 +102,8 @@ export class CalendarsEditorComponent implements OnInit {
         payload.body.included = [...this.includeDays];
         payload.body.excluded = [...this.excludeDays];
 
-        this.calendarsService.createCalendar(payload)
+        this.calendarsService.createCalendar(payload).subscribe(status => {
+        });
     }
 
 }
