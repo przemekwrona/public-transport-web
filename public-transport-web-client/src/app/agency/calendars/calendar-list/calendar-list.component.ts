@@ -5,10 +5,10 @@ import {includes} from "lodash";
 
 @Component({
     selector: 'app-calendars',
-    templateUrl: './calendars.component.html',
-    styleUrl: './calendars.component.scss'
+    templateUrl: './calendar-list.component.html',
+    styleUrl: './calendar-list.component.scss'
 })
-export class CalendarsComponent implements OnInit {
+export class CalendarListComponent implements OnInit {
 
     public calendarsResponse: GetCalendarsResponse;
 

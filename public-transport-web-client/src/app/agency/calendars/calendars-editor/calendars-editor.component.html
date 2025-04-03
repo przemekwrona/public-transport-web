@@ -6,8 +6,20 @@
                     <h3 class="card-title">Rozkład Jazdy</h3>
                 </div>
 
-                {{ calendarBody | json }}
                 <button (click)="save()" class="btn btn-success">Save</button>
+
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col">
+                            <div class="text-gray-900 text-sm font-medium">Nazwa kalendarza</div>
+                            <span class="text-gray-700 text-2sm">Lorem Ipsum</span>
+                        </div>
+                        <label class="input sm:max-w-full xl:max-w-96">
+                            <i class="ki-solid ki-note"></i>
+                            <input type="text" [(ngModel)]="calendarBody.calendarName" placeholder="DP/2025/1"/>
+                        </label>
+                    </div>
+                </div>
 
                 <div class="card-body lg:py-7.5 py-5">
                     <div class="flex flex-wrap justify-between gap-5">
