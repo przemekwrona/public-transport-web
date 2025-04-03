@@ -41,19 +41,27 @@
                             <!--                            <a class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ brigade?.brigadeName }} </a>-->
                         </div>
                         <div class="form-info text-gray-800 font-normal">
-                            Obowiązuje od {{ calendar?.startDate }} do {{ calendar?.endDate }}.
-                            To jest tylko krótki opis brygady. Kliknij&nbsp;
-                            <a [routerLink]="['/agency/calendars/edit']" class="link">Pokaż Szczegóły</a>
-                            i dowiedz się więcej.
+                            <div>
+                                Obowiązuje od {{ calendar?.startDate }} do {{ calendar?.endDate }}.
+                                To jest tylko krótki opis brygady. Kliknij&nbsp;
+                                <a [routerLink]="['/agency/calendars/edit']" class="link">Pokaż Szczegóły</a>
+                                i dowiedz się więcej.
+                            </div>
 
-                            @for (included of calendar.included; track included) {
-                                {{ included }}
-                            }
+                            <div>
+                                <span>Kursuje dodatkowo w dni: </span>
+                                @for (included of calendar.included; track included) {
+                                    {{ included }}
+                                }
+                            </div>
 
-                            @for (excluded of calendar.excluded; track excluded) {
-                                {{ excluded }}
-                            }
+                            <div>
+                                <span>NIE kursuje w dni:</span>
 
+                                @for (excluded of calendar.excluded; track excluded) {
+                                    {{ excluded }}
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
