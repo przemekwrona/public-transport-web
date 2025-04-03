@@ -888,7 +888,7 @@ components:
     CalendarBody:
       type: object
       properties:
-        name:
+        calendarName:
           type: string
         description:
           type: string
