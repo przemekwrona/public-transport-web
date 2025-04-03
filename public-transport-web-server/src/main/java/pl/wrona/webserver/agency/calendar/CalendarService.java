@@ -7,6 +7,7 @@ import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.agency.AgencyService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class CalendarService {
 
+    private final AgencyService agencyService;
+
     private final CalendarRepository calendarRepository;
     private final CalendarDatesRepository calendarDatesRepository;
 
@@ -26,6 +29,7 @@ public class CalendarService {
         var calendarBody = calendarPayload.getBody();
 
         var calendarEntity = new CalendarEntity();
+        calendarEntity.setAgency(agencyService.getLoggedAgency());
 
         calendarEntity.setCalendarName(calendarBody.getCalendarName());
         calendarEntity.setDesignation(calendarBody.getDesignation());
@@ -76,7 +80,7 @@ public class CalendarService {
 
     public GetCalendarsResponse getCalendars() {
 
-        var calendars = calendarRepository.findAll().stream()
+        var calendars = calendarRepository.findAllByAgency(agencyService.getLoggedAgency()).stream()
                 .map(calendar -> {
                     List<LocalDate> included = calendar.getCalendarDates().stream()
                             .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))

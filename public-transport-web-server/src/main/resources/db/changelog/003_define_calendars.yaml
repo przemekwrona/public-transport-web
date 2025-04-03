@@ -14,6 +14,12 @@ databaseChangeLog:
                     primaryKeyName: pk_calendar
                     nullable: false
               - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_calendar_agency
+                    references: agency(agency_id)
+              - column:
                   name: calendar_name
                   type: varchar(50)
               - column:
