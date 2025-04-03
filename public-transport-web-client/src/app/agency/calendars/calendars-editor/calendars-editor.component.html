@@ -14,7 +14,7 @@
                         </div>
                         <label class="input sm:max-w-full xl:max-w-96">
                             <i class="ki-solid ki-calendar"></i>
-                            <input type="text" placeholder="D"/>
+                            <input type="text" [(ngModel)]="calendarBody.designation" placeholder="D"/>
                         </label>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                         <label class="input sm:max-w-full xl:max-w-96 w-full">
                             <i class="ki-solid ki-calendar">
                             </i>
-                            <input type="text" placeholder="kursuje od poniedziałku do piątku oprócz świąt"/>
+                            <input type="text" [(ngModel)]="calendarBody.description" placeholder="kursuje od poniedziałku do piątku oprócz świąt"/>
                         </label>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             <span class="text-gray-700 text-2sm">Signature Palette Branding Element</span>
                         </div>
                         <label class="sm:max-w-full xl:max-w-96 w-full">
-                            <app-calendar-input [(ngModel)]="dateFrom"/>
+                            <app-calendar-input [(ngModel)]="calendarBody.startDate"/>
                         </label>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                             <span class="text-gray-700 text-2sm">Signature Palette Branding Element</span>
                         </div>
                         <label class="sm:max-w-full xl:max-w-96 w-full">
-                            <app-calendar-input [(ngModel)]="dateTo"/>
+                            <app-calendar-input [(ngModel)]="calendarBody.endDate"/>
                         </label>
                     </div>
                 </div>
@@ -76,37 +76,37 @@
                         </div>
                         <div class="flex flex-row gap-2.5">
                             <label class="checkbox-group">
-                                <input class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="monday"/>
+                                <input class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.monday"/>
                                 <span class="checkbox-label">Poniedziałek</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="tuesday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.tuesday"/>
                                 <span class="checkbox-label">Wtorek</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="wednesday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.wednesday"/>
                                 <span class="checkbox-label">Środa</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="thursday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.thursday"/>
                                 <span class="checkbox-label">Czwartek</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="friday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.friday"/>
                                 <span class="checkbox-label">Piątek</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="saturday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.saturday"/>
                                 <span class="checkbox-label">Sobota</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="sunday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.sunday"/>
                                 <span class="checkbox-label">Niedziela</span>
                             </label>
                         </div>
