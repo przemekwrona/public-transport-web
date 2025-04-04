@@ -3,13 +3,13 @@ package pl.wrona.webserver.agency.calendar;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import org.igeolab.iot.pt.server.api.model.CalendarPayload;
+import org.igeolab.iot.pt.server.api.model.CalendarQuery;
 import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.AgencyService;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,34 +84,24 @@ public class CalendarService {
         Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesService.findAllByAgency(agencyService.getLoggedAgency());
 
         var calendars = calendarRepository.findAllByAgency(agencyService.getLoggedAgency()).stream()
-                .map(calendar -> {
-                    List<LocalDate> included = calendarDatesDictionary.get(calendar.getServiceId()).stream()
-                            .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
-                            .map(cd -> cd.getCalendarDatesId().getDate()).toList();
-
-                    List<LocalDate> excluded = calendarDatesDictionary.get(calendar.getServiceId()).stream()
-                            .filter(calendarDate -> ExceptionType.REMOVED.equals(calendarDate.getExceptionType()))
-                            .map(cd -> cd.getCalendarDatesId().getDate()).toList();
-
-                    return new CalendarBody()
-                            .calendarName(calendar.getCalendarName())
-                            .designation(calendar.getDesignation())
-                            .description(calendar.getDescription())
-                            .startDate(calendar.getStartDate())
-                            .endDate(calendar.getEndDate())
-                            .monday(calendar.isMonday())
-                            .tuesday(calendar.isTuesday())
-                            .wednesday(calendar.isWednesday())
-                            .thursday(calendar.isThursday())
-                            .friday(calendar.isFriday())
-                            .saturday(calendar.isSaturday())
-                            .sunday(calendar.isSunday())
-                            .included(included)
-                            .excluded(excluded);
-                })
+                .map(calendar -> CalendarBodyMapper.apply(calendar, calendarDatesDictionary))
                 .toList();
 
         return new GetCalendarsResponse()
                 .calendars(calendars);
+    }
+
+    public Status deleteCalendarByCalendarName(CalendarQuery calendarQuery) {
+        calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarQuery.getCalendarName())
+                .ifPresent(calendarRepository::delete);
+        return new Status().status(Status.StatusEnum.DELETED);
+    }
+
+    public CalendarBody getCalendarByCalendarName(CalendarQuery calendarQuery) {
+        Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesService.findAllByAgency(agencyService.getLoggedAgency());
+
+        return calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarQuery.getCalendarName())
+                .map(calendar -> CalendarBodyMapper.apply(calendar, calendarDatesDictionary))
+                .orElseThrow();
     }
 }

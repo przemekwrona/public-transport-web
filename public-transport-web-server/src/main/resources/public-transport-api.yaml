@@ -489,6 +489,43 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetCalendarsResponse'
 
+  /calendar/details:
+    post:
+      tags:
+        - calendar
+      operationId: getCalendarByCalendarName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalendarQuery'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarBody'
+
+    delete:
+      tags:
+        - calendar
+      summary: Delete calendar by calendarName
+      operationId: deleteCalendarByCalendarName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalendarQuery'
+        required: true
+      responses:
+        204:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
 components:
   schemas:
     CreateAppUserRequest:
@@ -897,6 +934,12 @@ components:
       properties:
         body:
           $ref: '#/components/schemas/CalendarBody'
+
+    CalendarQuery:
+      type: object
+      properties:
+        calendarName:
+          type: string
 
     CalendarBody:
       type: object

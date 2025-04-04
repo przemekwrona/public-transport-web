@@ -2,7 +2,9 @@ package pl.wrona.webserver.agency.calendar;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.CalendarApi;
+import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import org.igeolab.iot.pt.server.api.model.CalendarPayload;
+import org.igeolab.iot.pt.server.api.model.CalendarQuery;
 import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,19 @@ public class CalendarController implements CalendarApi {
     }
 
     @Override
+    public ResponseEntity<Status> deleteCalendarByCalendarName(CalendarQuery calendarQuery) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(calendarService.deleteCalendarByCalendarName(calendarQuery));
+    }
+
+    @Override
+    public ResponseEntity<CalendarBody> getCalendarByCalendarName(CalendarQuery calendarQuery) {
+        return ResponseEntity.status(HttpStatus.OK).body(calendarService.getCalendarByCalendarName(calendarQuery));
+    }
+
+    @Override
     public ResponseEntity<GetCalendarsResponse> getCalendars() {
         return ResponseEntity.ok(calendarService.getCalendars());
     }
+
 
 }
