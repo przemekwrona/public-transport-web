@@ -28,4 +28,8 @@ export class CalendarsService {
     public getAllCalendars(): Observable<GetCalendarsResponse> {
         return this.httpClient.get<GetCalendarsResponse>(`/api/v1/calendar`);
     }
+
+    public deleteCalendarByCalendarName(calendarQuery: CalendarQuery): Observable<Status> {
+        return this.httpClient.delete<Status>(`/api/v1/calendar`, { body: calendarQuery });
+    }
 }

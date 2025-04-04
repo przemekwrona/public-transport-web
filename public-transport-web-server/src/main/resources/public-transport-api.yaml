@@ -489,24 +489,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetCalendarsResponse'
 
-  /calendar/details:
-    post:
-      tags:
-        - calendar
-      operationId: getCalendarByCalendarName
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CalendarQuery'
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CalendarBody'
-
     delete:
       tags:
         - calendar
@@ -525,6 +507,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+
+  /calendar/details:
+    post:
+      tags:
+        - calendar
+      operationId: getCalendarByCalendarName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalendarQuery'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarBody'
 
 components:
   schemas:

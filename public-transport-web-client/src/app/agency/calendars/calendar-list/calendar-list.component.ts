@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {GetCalendarsResponse} from "../../../generated/public-transport";
-import {includes} from "lodash";
+import {CalendarQuery, GetCalendarsResponse} from "../../../generated/public-transport";
+import {CalendarsService} from "../calendars.service";
 
 @Component({
     selector: 'app-calendars',
@@ -12,12 +12,17 @@ export class CalendarListComponent implements OnInit {
 
     public calendarsResponse: GetCalendarsResponse;
 
-    constructor(private route: ActivatedRoute) {
+    constructor(private calendarService: CalendarsService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
         this.calendarsResponse = this.route.snapshot.data['calendars'];
     }
 
-    protected readonly includes = includes;
+    public deleteByCalendarName(calendarName: string) {
+        const query: CalendarQuery = {};
+        query.calendarName = calendarName;
+        this.calendarService.deleteCalendarByCalendarName(query).subscribe(() => {
+        });
+    }
 }
