@@ -44,7 +44,7 @@
                             <div>
                                 Obowiązuje od {{ calendar?.startDate }} do {{ calendar?.endDate }}.
                                 To jest tylko krótki opis brygady. Kliknij&nbsp;
-                                <a [routerLink]="['/agency/calendars/edit']" class="link">Pokaż Szczegóły</a>
+                                <a [routerLink]="['/agency/calendars/edit']" [queryParams]="{name: calendar?.calendarName}"  class="link">Pokaż Szczegóły</a>
                                 i dowiedz się więcej.
                             </div>
 
@@ -67,7 +67,7 @@
                 </div>
                 <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
                     <button class="btn btn-sm btn-dark shrink-0">Usuń</button>
-                    <a [routerLink]="['/agency/brigades/edit']" class="btn btn-sm shrink-0 btn-secondary">Pokaż
+                    <a [routerLink]="['/agency/calendars/edit']" [queryParams]="{name: calendar?.calendarName}" class="btn btn-sm shrink-0 btn-secondary">Pokaż
                         szczegóły</a>
                 </div>
             </div>
