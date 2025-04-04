@@ -62,6 +62,10 @@ databaseChangeLog:
               - column:
                   name: service_id
                   type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_calendar_dates_calendar
+                    references: calendar(service_id)
               - column:
                   name: date
                   type: date
