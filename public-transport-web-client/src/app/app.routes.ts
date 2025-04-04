@@ -15,15 +15,15 @@ import {TripEditorComponentMode} from "./agency/trips/trip-editor/trip-editor-co
 import {tripsResolver} from "./agency/trips/trip-list/trip-list.resolver";
 import {tripEditorResolver} from "./agency/trips/trip-editor/trip-editor.resolver";
 import {BrigadeEditorComponent} from "./agency/brigade/brigade-editor/brigade-editor.component";
-import {CalendarsEditorComponent} from "./agency/calendars/calendars-editor/calendars-editor.component";
+import {CalendarsEditorComponent} from "./agency/calendars/calendar-editor/calendars-editor.component";
 import {BrigadeListComponent} from "./agency/brigade/brigade-list/brigade-list.component";
 import {brigadeGetAllResolver} from "./agency/brigade/brigade-list/brigade-get-all.resolver";
 import {BrigadeEditorComponentMode} from "./agency/brigade/brigade-editor/brigade-editor-component-mode";
 import {brigadeResolver} from "./agency/brigade/brigade-editor/brigade.resolver";
 import {CalendarListComponent} from "./agency/calendars/calendar-list/calendar-list.component";
 import {getAllCalendarsResolver} from "./agency/calendars/calendar-list/get-all-calendars.resolver";
-import {calendarResolver} from "./agency/calendars/calendars-editor/calendar.resolver";
-import {CalendarEditorComponentMode} from "./agency/calendars/calendars-editor/calendar-editor-component-mode";
+import {calendarResolver} from "./agency/calendars/calendar-editor/calendar.resolver";
+import {CalendarEditorComponentMode} from "./agency/calendars/calendar-editor/calendar-editor-component-mode";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'planner', pathMatch: 'full'},

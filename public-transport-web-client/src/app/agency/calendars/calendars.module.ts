@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CalendarsEditorComponent} from "./calendars-editor/calendars-editor.component";
+import {CalendarsEditorComponent} from "./calendar-editor/calendars-editor.component";
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {CalendarListComponent} from "./calendar-list/calendar-list.component";
