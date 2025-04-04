@@ -1,6 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {CalendarPayload, GetCalendarsResponse, Status} from "../../generated/public-transport";
+import {
+    CalendarBody,
+    CalendarPayload,
+    CalendarQuery,
+    GetCalendarsResponse,
+    Status
+} from "../../generated/public-transport";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -13,6 +19,10 @@ export class CalendarsService {
 
     public createCalendar(payload: CalendarPayload): Observable<Status> {
         return this.httpClient.post<Status>(`/api/v1/calendar`, payload);
+    }
+
+    public getCalendarByCalendarName(calendarQuery: CalendarQuery): Observable<CalendarBody> {
+        return this.httpClient.post<CalendarBody>(`/api/v1/calendar/details`, calendarQuery);
     }
 
     public getAllCalendars(): Observable<GetCalendarsResponse> {

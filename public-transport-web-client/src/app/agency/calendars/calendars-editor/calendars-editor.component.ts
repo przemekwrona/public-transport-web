@@ -3,6 +3,8 @@ import {groupBy, uniq} from "lodash";
 import moment from "moment";
 import {CalendarsService} from "../calendars.service";
 import {CalendarBody, CalendarPayload} from "../../../generated/public-transport";
+import {ActivatedRoute} from "@angular/router";
+import {CalendarEditorComponentMode} from "./calendar-editor-component-mode";
 
 @Component({
     selector: 'app-calendars-editor',
@@ -10,6 +12,8 @@ import {CalendarBody, CalendarPayload} from "../../../generated/public-transport
     styleUrl: './calendars-editor.component.scss'
 })
 export class CalendarsEditorComponent implements OnInit {
+
+    private componentMode: CalendarEditorComponentMode;
 
     public calendarBody: CalendarBody = {};
 
@@ -19,10 +23,12 @@ export class CalendarsEditorComponent implements OnInit {
     public days: number[] = [];
     public year: number = 2025;
 
-    constructor(private calendarsService: CalendarsService) {
+    constructor(private calendarsService: CalendarsService, private _route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
+        this._route.data.subscribe(data => this.componentMode = data['mode']);
+
         this.calendarBody.designation = '';
         this.calendarBody.description = '';
         this.calendarBody.startDate = '2025-03-10';
@@ -35,6 +41,26 @@ export class CalendarsEditorComponent implements OnInit {
         this.calendarBody.friday = false;
         this.calendarBody.saturday = false;
         this.calendarBody.sunday = false;
+
+        this._route.data.subscribe(data => {
+            const calendar: CalendarBody = data['calendar'];
+            this.calendarBody.calendarName = calendar.calendarName;
+            this.calendarBody.designation = calendar.designation;
+            this.calendarBody.description = calendar.description;
+            this.calendarBody.startDate = calendar.startDate;
+            this.calendarBody.endDate = calendar.endDate;
+
+            this.calendarBody.monday = calendar.monday;
+            this.calendarBody.tuesday = calendar.tuesday;
+            this.calendarBody.wednesday = calendar.wednesday;
+            this.calendarBody.thursday = calendar.thursday;
+            this.calendarBody.friday = calendar.friday;
+            this.calendarBody.saturday = calendar.saturday;
+            this.calendarBody.sunday = calendar.sunday;
+
+            this.includeDays = new Set(calendar.included)
+            this.excludeDays = new Set(calendar.excluded)
+        });
     }
 
     public getDays(): number[] {
