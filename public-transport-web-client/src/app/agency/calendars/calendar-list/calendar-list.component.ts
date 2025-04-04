@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {CalendarQuery, GetCalendarsResponse} from "../../../generated/public-transport";
+import {CalendarQuery, GetCalendarsResponse, Status} from "../../../generated/public-transport";
 import {CalendarsService} from "../calendars.service";
 
 @Component({
@@ -22,7 +22,9 @@ export class CalendarListComponent implements OnInit {
     public deleteByCalendarName(calendarName: string) {
         const query: CalendarQuery = {};
         query.calendarName = calendarName;
-        this.calendarService.deleteCalendarByCalendarName(query).subscribe(() => {
+        this.calendarService.deleteCalendarByCalendarName(query).subscribe((response: Status) => {
+            this.calendarService.getAllCalendars()
+                .subscribe((calendarResponse: GetCalendarsResponse) => this.calendarsResponse = calendarResponse);
         });
     }
 }
