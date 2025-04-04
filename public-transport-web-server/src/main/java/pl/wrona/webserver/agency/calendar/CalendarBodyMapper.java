@@ -9,11 +9,11 @@ import java.util.Map;
 public class CalendarBodyMapper {
 
     public static CalendarBody apply(CalendarEntity calendar, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
-        List<LocalDate> included = calendarDatesDictionary.get(calendar.getServiceId()).stream()
+        List<LocalDate> included = calendarDatesDictionary.getOrDefault(calendar.getServiceId(), List.of()).stream()
                 .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
-        List<LocalDate> excluded = calendarDatesDictionary.get(calendar.getServiceId()).stream()
+        List<LocalDate> excluded = calendarDatesDictionary.getOrDefault(calendar.getServiceId(), List.of()).stream()
                 .filter(calendarDate -> ExceptionType.REMOVED.equals(calendarDate.getExceptionType()))
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 

@@ -1,6 +1,7 @@
 package pl.wrona.webserver.agency.calendar;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,5 +14,9 @@ public interface CalendarDatesRepository extends JpaRepository<CalendarDatesEnti
 
     @Query("SELECT cd FROM CalendarDatesEntity cd WHERE cd.calendar.agency = :agency")
     List<CalendarDatesEntity> findAllByAgency(@Param("agency") Agency agency);
+
+    @Modifying
+    @Query("DELETE FROM CalendarDatesEntity cd WHERE cd.calendar.agency = :agency AND cd.calendar = :calendarEntity")
+    void deleteByAgencyAndCalendar(@Param("agency") Agency agency, @Param("calendarEntity") CalendarEntity calendarEntity);
 
 }

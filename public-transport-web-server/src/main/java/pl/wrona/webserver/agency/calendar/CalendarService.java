@@ -91,9 +91,14 @@ public class CalendarService {
                 .calendars(calendars);
     }
 
+    @Transactional
     public Status deleteCalendarByCalendarName(CalendarQuery calendarQuery) {
         calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarQuery.getCalendarName())
-                .ifPresent(calendarRepository::delete);
+                .ifPresent((CalendarEntity calendarEntity) -> {
+                    calendarDatesRepository.deleteByAgencyAndCalendar(agencyService.getLoggedAgency(), calendarEntity);
+                    calendarRepository.delete(calendarEntity);
+                });
+
         return new Status().status(Status.StatusEnum.DELETED);
     }
 
