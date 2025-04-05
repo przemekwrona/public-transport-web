@@ -37,44 +37,53 @@
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <div class="flex items-center flex-wrap gap-2.5">
-                            <span>{{ calendar?.designation }} - {{ calendar?.description }} ({{ calendar?.calendarName }})</span>
+                            <span>{{ calendar?.designation }} - {{ calendar?.description }}
+                                ({{ calendar?.calendarName }})</span>
                             <!--                            <a class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ brigade?.brigadeName }} </a>-->
                         </div>
                         <div class="form-info text-gray-800 font-normal">
                             <div>
                                 Obowiązuje od {{ calendar?.startDate }} do {{ calendar?.endDate }}.
                                 To jest tylko krótki opis brygady. Kliknij&nbsp;
-                                <a [routerLink]="['/agency/calendars/edit']" [queryParams]="{name: calendar?.calendarName}"  class="link">Pokaż Szczegóły</a>
+                                <a [routerLink]="['/agency/calendars/edit']"
+                                   [queryParams]="{name: calendar?.calendarName}" class="link">Pokaż Szczegóły</a>
                                 i dowiedz się więcej.
                             </div>
 
-                            <div>
-                                <span>Kursuje dodatkowo w dni: </span>
-                                @for (included of calendar.included; track included) {
-                                    {{ included }}
-                                }
-                            </div>
+                            @if (hasElements(calendar.included)) {
+                                <div class="mt-1">
+                                    <span><strong>Dodatkowy kurs w dniach: </strong></span>
+                                    @for (included of calendar.included; track included) {
+                                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">{{ included | date: "dd.MM" }}</span>
+                                    }
+                                </div>
+                            }
 
-                            <div>
-                                <span>NIE kursuje w dni:</span>
+                            @if (hasElements(calendar.excluded)) {
+                                <div class="mt-1">
+                                    <span><strong>NIE kursuje w dni: </strong></span>
 
-                                @for (excluded of calendar.excluded; track excluded) {
-                                    {{ excluded }}
-                                }
-                            </div>
+                                    @for (excluded of calendar.excluded; track excluded) {
+                                        <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset mr-1">{{ excluded | date: "dd.MM" }}</span>
+                                    }
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
-                    <button (click)="deleteByCalendarName(calendar?.calendarName)" class="btn btn-sm btn-dark shrink-0">Usuń</button>
-                    <a [routerLink]="['/agency/calendars/edit']" [queryParams]="{name: calendar?.calendarName}" class="btn btn-sm shrink-0 btn-secondary">Pokaż
+                    <button (click)="deleteByCalendarName(calendar?.calendarName)" class="btn btn-sm btn-dark shrink-0">
+                        Usuń
+                    </button>
+                    <a [routerLink]="['/agency/calendars/edit']" [queryParams]="{name: calendar?.calendarName}"
+                       class="btn btn-sm shrink-0 btn-secondary">Pokaż
                         szczegóły</a>
                 </div>
             </div>
-            <p class="text-2sm text-gray-800">
-                Odblokuj pełne możliwości aplikacji i zacznij publikować rozkłady jazdy w Google Maps, docierając do
-                jeszcze większej liczby pasażerów!
-            </p>
         }
+        <p class="text-2sm text-gray-800">
+            Odblokuj pełne możliwości aplikacji i zacznij publikować rozkłady jazdy w Google Maps, docierając do
+            jeszcze większej liczby pasażerów!
+        </p>
     </div>
 </div>

@@ -6,8 +6,6 @@
                     <h3 class="card-title">Rozkład Jazdy</h3>
                 </div>
 
-                <button (click)="save()" class="btn btn-success">Save</button>
-
                 <div class="card-body lg:py-7.5 py-5">
                     <div class="flex flex-wrap justify-between gap-5">
                         <div class="flex flex-col">
@@ -45,7 +43,8 @@
                         <label class="input sm:max-w-full xl:max-w-96 w-full">
                             <i class="ki-solid ki-calendar">
                             </i>
-                            <input type="text" [(ngModel)]="calendarBody.description" placeholder="kursuje od poniedziałku do piątku oprócz świąt"/>
+                            <input type="text" [(ngModel)]="calendarBody.description"
+                                   placeholder="kursuje od poniedziałku do piątku oprócz świąt"/>
                         </label>
                     </div>
                 </div>
@@ -96,32 +95,38 @@
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.tuesday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
+                                       [(ngModel)]="calendarBody.tuesday"/>
                                 <span class="checkbox-label">Wtorek</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.wednesday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
+                                       [(ngModel)]="calendarBody.wednesday"/>
                                 <span class="checkbox-label">Środa</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.thursday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
+                                       [(ngModel)]="calendarBody.thursday"/>
                                 <span class="checkbox-label">Czwartek</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.friday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
+                                       [(ngModel)]="calendarBody.friday"/>
                                 <span class="checkbox-label">Piątek</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.saturday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
+                                       [(ngModel)]="calendarBody.saturday"/>
                                 <span class="checkbox-label">Sobota</span>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.sunday"/>
+                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
+                                       [(ngModel)]="calendarBody.sunday"/>
                                 <span class="checkbox-label">Niedziela</span>
                             </label>
                         </div>
@@ -195,6 +200,16 @@
 
                     </div>
 
+                </div>
+
+                <div class="card-body">
+                    @if (isCreate()) {
+                        <button (click)="save()" class="btn btn-success">Zapisz</button>
+                    }
+
+                    @if (isEdit()) {
+                        <button (click)="update()" class="btn btn-success">Aktulaizuj</button>
+                    }
                 </div>
 
             </div>

@@ -6,6 +6,8 @@ import org.igeolab.iot.pt.server.api.model.CalendarPayload;
 import org.igeolab.iot.pt.server.api.model.CalendarQuery;
 import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
+import org.igeolab.iot.pt.server.api.model.UpdateCalendarRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.AgencyService;
@@ -30,55 +32,15 @@ public class CalendarService {
     public Status createCalendar(CalendarPayload calendarPayload) {
         var calendarBody = calendarPayload.getBody();
 
-        var calendarEntity = new CalendarEntity();
-        calendarEntity.setAgency(agencyService.getLoggedAgency());
-
-        calendarEntity.setCalendarName(calendarBody.getCalendarName());
-        calendarEntity.setDesignation(calendarBody.getDesignation());
-        calendarEntity.setDescription(calendarBody.getDescription());
-
-        calendarEntity.setMonday(calendarBody.getMonday());
-        calendarEntity.setThursday(calendarBody.getMonday());
-        calendarEntity.setMonday(calendarBody.getMonday());
-        calendarEntity.setTuesday(calendarBody.getTuesday());
-        calendarEntity.setWednesday(calendarBody.getWednesday());
-        calendarEntity.setThursday(calendarBody.getThursday());
-        calendarEntity.setFriday(calendarBody.getFriday());
-        calendarEntity.setSaturday(calendarBody.getSaturday());
-        calendarEntity.setSunday(calendarBody.getSunday());
-
-        calendarEntity.setStartDate(calendarBody.getStartDate());
-        calendarEntity.setEndDate(calendarBody.getEndDate());
-
+        var calendarEntity = CalendarEntityMapper.apply(calendarBody, agencyService.getLoggedAgency());
         CalendarEntity savedCalendar = calendarRepository.save(calendarEntity);
 
-        Set<CalendarDatesEntity> calendarDatesIncluded = calendarBody.getIncluded().stream()
-                .map(includeDate -> CalendarDatesEntity.builder()
-                        .calendarDatesId(CalendarDatesId.builder()
-                                .serviceId(savedCalendar.getServiceId())
-                                .date(includeDate)
-                                .build())
-                        .exceptionType(ExceptionType.ADDED)
-                        .calendar(savedCalendar)
-                        .build())
-                .collect(Collectors.toSet());
-
-        Set<CalendarDatesEntity> calendarDatesExcluded = calendarBody.getExcluded().stream()
-                .map(excludedDate -> CalendarDatesEntity.builder()
-                        .calendarDatesId(CalendarDatesId.builder()
-                                .serviceId(savedCalendar.getServiceId())
-                                .date(excludedDate)
-                                .build())
-                        .exceptionType(ExceptionType.REMOVED)
-                        .calendar(savedCalendar)
-                        .build())
-                .collect(Collectors.toSet());
-
-        Set<CalendarDatesEntity> calendarDates = Stream.concat(calendarDatesIncluded.stream(), calendarDatesExcluded.stream()).collect(Collectors.toSet());
+        Set<CalendarDatesEntity> calendarDates = CalendarDatesEntityMapper.apply(calendarBody, savedCalendar);
         calendarDatesRepository.saveAll(calendarDates);
 
         return new Status().status(Status.StatusEnum.CREATED);
     }
+
 
     public GetCalendarsResponse getCalendars() {
         Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesService.findAllByAgency(agencyService.getLoggedAgency());
@@ -108,5 +70,19 @@ public class CalendarService {
         return calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarQuery.getCalendarName())
                 .map(calendar -> CalendarBodyMapper.apply(calendar, calendarDatesDictionary))
                 .orElseThrow();
+    }
+
+    @Transactional
+    public Status updateCalendar(UpdateCalendarRequest updateCalendarRequest) {
+        calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), updateCalendarRequest.getCalendarName()).ifPresent(calendarEntity -> {
+            calendarDatesRepository.deleteByAgencyAndCalendar(agencyService.getLoggedAgency(), calendarEntity);
+
+            CalendarEntity updatedCalendarEntity = CalendarEntityMapper.apply(calendarEntity, updateCalendarRequest.getBody(), agencyService.getLoggedAgency());
+            CalendarEntity savedCalendarEntity = calendarRepository.save(updatedCalendarEntity);
+
+            Set<CalendarDatesEntity> calendarDates = CalendarDatesEntityMapper.apply(updateCalendarRequest.getBody(), savedCalendarEntity);
+            calendarDatesRepository.saveAll(calendarDates);
+        });
+        return new Status().status(Status.StatusEnum.SUCCESS);
     }
 }
