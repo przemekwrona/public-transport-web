@@ -475,6 +475,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+    put:
+      tags:
+        - calendar
+      summary: Update a Calendar by calendar name
+      operationId: updateCalendar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCalendarRequest'
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
 
     get:
       tags:
@@ -941,6 +959,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GetBrigadeBody'
+
+    UpdateCalendarRequest:
+      type: object
+      properties:
+        calendarName:
+          type: string
+        body:
+          $ref: '#/components/schemas/CalendarBody'
 
     CalendarPayload:
       type: object

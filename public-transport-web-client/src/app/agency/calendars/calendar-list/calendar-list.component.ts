@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {CalendarQuery, GetCalendarsResponse, Status} from "../../../generated/public-transport";
-import {CalendarsService} from "../calendars.service";
+import {CalendarQuery, CalendarService, GetCalendarsResponse, Status} from "../../../generated/public-transport";
 
 @Component({
     selector: 'app-calendars',
@@ -12,7 +11,7 @@ export class CalendarListComponent implements OnInit {
 
     public calendarsResponse: GetCalendarsResponse;
 
-    constructor(private calendarService: CalendarsService, private route: ActivatedRoute) {
+    constructor(private calendarService: CalendarService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -23,8 +22,12 @@ export class CalendarListComponent implements OnInit {
         const query: CalendarQuery = {};
         query.calendarName = calendarName;
         this.calendarService.deleteCalendarByCalendarName(query).subscribe((response: Status) => {
-            this.calendarService.getAllCalendars()
+            this.calendarService.getCalendars()
                 .subscribe((calendarResponse: GetCalendarsResponse) => this.calendarsResponse = calendarResponse);
         });
+    }
+
+    public hasElements(array: any[]): boolean {
+        return array.length !== 0;
     }
 }

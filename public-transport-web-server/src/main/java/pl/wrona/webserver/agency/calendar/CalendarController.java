@@ -7,6 +7,7 @@ import org.igeolab.iot.pt.server.api.model.CalendarPayload;
 import org.igeolab.iot.pt.server.api.model.CalendarQuery;
 import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
+import org.igeolab.iot.pt.server.api.model.UpdateCalendarRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +36,11 @@ public class CalendarController implements CalendarApi {
     @Override
     public ResponseEntity<GetCalendarsResponse> getCalendars() {
         return ResponseEntity.ok(calendarService.getCalendars());
+    }
+
+    @Override
+    public ResponseEntity<Status> updateCalendar(UpdateCalendarRequest updateCalendarRequest) {
+        return ResponseEntity.ok(calendarService.updateCalendar(updateCalendarRequest));
     }
 
 

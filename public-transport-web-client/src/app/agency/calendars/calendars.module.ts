@@ -4,8 +4,8 @@ import {CalendarsEditorComponent} from "./calendar-editor/calendars-editor.compo
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {CalendarListComponent} from "./calendar-list/calendar-list.component";
-import {CalendarsService} from "./calendars.service";
 import {RouterModule} from "@angular/router";
+import {CalendarService} from "../../generated/public-transport";
 
 @NgModule({
     imports: [
@@ -19,7 +19,7 @@ import {RouterModule} from "@angular/router";
         CalendarsEditorComponent
     ],
     providers: [
-        CalendarsService
+        CalendarService
     ]
 })
 export class CalendarsModule {

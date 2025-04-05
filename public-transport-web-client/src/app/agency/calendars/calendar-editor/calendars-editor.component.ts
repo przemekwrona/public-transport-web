@@ -1,8 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {groupBy, uniq} from "lodash";
 import moment from "moment";
-import {CalendarsService} from "../calendars.service";
-import {CalendarBody, CalendarPayload} from "../../../generated/public-transport";
+import {
+    CalendarBody,
+    CalendarPayload,
+    CalendarService,
+    UpdateCalendarRequest
+} from "../../../generated/public-transport";
 import {ActivatedRoute} from "@angular/router";
 import {CalendarEditorComponentMode} from "./calendar-editor-component-mode";
 
@@ -14,6 +18,7 @@ import {CalendarEditorComponentMode} from "./calendar-editor-component-mode";
 export class CalendarsEditorComponent implements OnInit {
 
     private componentMode: CalendarEditorComponentMode;
+    private queryCalendarName: string = '';
 
     public calendarBody: CalendarBody = {};
 
@@ -23,11 +28,12 @@ export class CalendarsEditorComponent implements OnInit {
     public days: number[] = [];
     public year: number = 2025;
 
-    constructor(private calendarsService: CalendarsService, private _route: ActivatedRoute) {
+    constructor(private calendarService: CalendarService, private _route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
         this._route.data.subscribe(data => this.componentMode = data['mode']);
+        this._route.queryParams.subscribe(params => this.queryCalendarName = params['name']);
 
         this.calendarBody.designation = '';
         this.calendarBody.description = '';
@@ -122,13 +128,36 @@ export class CalendarsEditorComponent implements OnInit {
         this.year--;
     }
 
+    public isCreate(): boolean {
+        return this.componentMode === CalendarEditorComponentMode.CREATE;
+    }
+
+    public isEdit(): boolean {
+        return this.componentMode === CalendarEditorComponentMode.EDIT;
+    }
+
     public save(): void {
         const payload: CalendarPayload = {};
         payload.body = this.calendarBody;
         payload.body.included = [...this.includeDays];
         payload.body.excluded = [...this.excludeDays];
 
-        this.calendarsService.createCalendar(payload).subscribe(status => {
+        this.calendarService.createCalendar(payload).subscribe(status => {
+        });
+    }
+
+
+    public update(): void {
+        const payload: CalendarPayload = {};
+        payload.body = this.calendarBody;
+        payload.body.included = [...this.includeDays];
+        payload.body.excluded = [...this.excludeDays];
+
+        const request: UpdateCalendarRequest = {};
+        request.body = this.calendarBody;
+        request.calendarName = this.queryCalendarName;
+
+        this.calendarService.updateCalendar(request).subscribe(status => {
         });
     }
 
