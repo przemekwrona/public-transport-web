@@ -64,6 +64,6 @@ public class TripEntity {
 
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "route_id")
-    private Route route;
+    private RouteEntity route;
 
 }

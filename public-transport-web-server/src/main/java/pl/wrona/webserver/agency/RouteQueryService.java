@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Agency;
-import pl.wrona.webserver.agency.entity.Route;
+import pl.wrona.webserver.agency.entity.RouteEntity;
 import pl.wrona.webserver.security.AppUser;
 
 @Service
@@ -19,7 +19,7 @@ public class RouteQueryService {
 
 
     @Transactional
-    public Route findRouteByNameAndLine(String name, String line) {
+    public RouteEntity findRouteByNameAndLine(String name, String line) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
@@ -28,7 +28,7 @@ public class RouteQueryService {
     }
 
     @Transactional
-    public Route findRouteByNameAndLine(RouteId routeId) {
+    public RouteEntity findRouteByNameAndLine(RouteId routeId) {
         return findRouteByNameAndLine(routeId.getName(), routeId.getLine());
     }
 
