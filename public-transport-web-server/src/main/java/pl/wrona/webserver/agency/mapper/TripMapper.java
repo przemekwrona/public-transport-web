@@ -3,7 +3,7 @@ package pl.wrona.webserver.agency.mapper;
 import lombok.experimental.UtilityClass;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripMode;
-import pl.wrona.webserver.agency.entity.Route;
+import pl.wrona.webserver.agency.entity.RouteEntity;
 import pl.wrona.webserver.agency.entity.TripEntity;
 import pl.wrona.webserver.agency.entity.TripVariantMode;
 
@@ -32,10 +32,10 @@ public class TripMapper {
         return tripEntity;
     }
 
-    public Trip map(Route route, TripEntity trip) {
+    public Trip map(RouteEntity routeEntity, TripEntity trip) {
         return new Trip()
-                .name(route.getName())
-                .line(route.getLine())
+                .name(routeEntity.getName())
+                .line(routeEntity.getLine())
                 .variant(trip.getVariantName())
                 .communicationVelocity(trip.getCommunicationVelocity())
                 .variantDesignation(trip.getVariantDesignation())

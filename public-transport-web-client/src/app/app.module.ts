@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {InjectionToken, NgModule} from '@angular/core';
 import {AppComponent} from "./app.component";
 import {LandingModule} from "./landing/landing.module";
 import {BrowserModule} from "@angular/platform-browser";
@@ -13,7 +13,7 @@ import {AgencyModule} from "./agency/agency.module";
 import {AuthModule} from "./auth/auth.module";
 import {AddHeaderInterceptor} from "./auth/auth.interceptor";
 import {CommonModule} from "@angular/common";
-
+import {BASE_PATH} from "./generated/public-transport";
 
 @NgModule({
     imports: [
@@ -33,7 +33,8 @@ import {CommonModule} from "@angular/common";
         AppComponent
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true}
+        { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
+        { provide: BASE_PATH, useValue: 'http://localhost:4200/api/v1' }
     ],
     bootstrap: [
         AppComponent

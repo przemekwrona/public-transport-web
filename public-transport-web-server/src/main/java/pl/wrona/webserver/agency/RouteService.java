@@ -7,9 +7,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.agency.entity.Route;
+import pl.wrona.webserver.agency.entity.RouteEntity;
 import pl.wrona.webserver.agency.mapper.RouteMapper;
 import pl.wrona.webserver.security.AppUser;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -25,27 +27,31 @@ public class RouteService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        Route unsavedRoute = new Route();
-        unsavedRoute.setName(route.getName());
-        unsavedRoute.setLine(route.getLine());
-        unsavedRoute.setOrigin(route.getOrigin());
-        unsavedRoute.setDestination(route.getDestination());
-        unsavedRoute.setVia(route.getVia());
-        unsavedRoute.setGoogle(route.getGoogle());
-        unsavedRoute.setActive(route.getActive());
-        unsavedRoute.setAgency(agencyService.findAgencyByAppUser(appUser));
+        RouteEntity unsavedRouteEntity = new RouteEntity();
+        unsavedRouteEntity.setName(route.getName());
+        unsavedRouteEntity.setLine(route.getLine());
+        unsavedRouteEntity.setOrigin(route.getOrigin());
+        unsavedRouteEntity.setDestination(route.getDestination());
+        unsavedRouteEntity.setVia(route.getVia());
+        unsavedRouteEntity.setGoogle(route.getGoogle());
+        unsavedRouteEntity.setActive(route.getActive());
+        unsavedRouteEntity.setAgency(agencyService.findAgencyByAppUser(appUser));
 
-        routeRepository.save(unsavedRoute);
+        routeRepository.save(unsavedRouteEntity);
 
         return new Status().status(Status.StatusEnum.CREATED);
     }
 
-    public Routes getRoutes() {
+    public List<RouteEntity> getRoutesEntities() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        var routes = routeRepository.findAllByAgencyOrderByLineAscNameAsc(agencyService.findAgencyByAppUser(appUser));
-        var items = routes.stream().map(RouteMapper::map).toList();
+        return routeRepository.findAllByAgencyOrderByLineAscNameAsc(agencyService.findAgencyByAppUser(appUser));
+    }
+
+    public Routes getRoutes() {
+        var items = getRoutesEntities().stream()
+                .map(RouteMapper::map).toList();
 
         return new Routes().items(items);
     }

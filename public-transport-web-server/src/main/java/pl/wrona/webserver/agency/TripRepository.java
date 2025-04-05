@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pl.wrona.webserver.agency.entity.Route;
+import pl.wrona.webserver.agency.entity.RouteEntity;
 import pl.wrona.webserver.agency.entity.TripEntity;
 import pl.wrona.webserver.agency.entity.TripVariantMode;
 
@@ -14,9 +14,9 @@ import java.util.List;
 @Repository
 public interface TripRepository extends JpaRepository<TripEntity, Long> {
 
-    TripEntity findFirstByRouteOrderByVariantName(Route route);
+    TripEntity findFirstByRouteOrderByVariantName(RouteEntity routeEntity);
 
-    List<TripEntity> findAllByRoute(Route route);
+    List<TripEntity> findAllByRoute(RouteEntity routeEntity);
 
     @Query("SELECT t FROM TripEntity t WHERE t.route.line LIKE CONCAT(:lineOrName,'%') OR t.route.name = CONCAT(:lineOrName,'%')")
     List<TripEntity> findByLineOrNameContainingIgnoreCase(@Param("lineOrName") String lineOrName);
@@ -24,7 +24,7 @@ public interface TripRepository extends JpaRepository<TripEntity, Long> {
     @Override
     void delete(TripEntity entity);
 
-    TripEntity findAllByRouteAndVariantNameAndMode(Route route, String variantName, TripVariantMode mode);
+    TripEntity findAllByRouteAndVariantNameAndMode(RouteEntity routeEntity, String variantName, TripVariantMode mode);
 
     @Modifying
     @Query("DELETE FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variantName = :variantName AND t.mode = :mode")

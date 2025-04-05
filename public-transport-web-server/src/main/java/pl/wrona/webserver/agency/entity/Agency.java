@@ -45,7 +45,7 @@ public class Agency {
     private AppUser appUser;
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
-    private Set<Route> routes;
+    private Set<RouteEntity> routeEntities;
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
     private Set<BrigadeEntity> brigades;

@@ -5,7 +5,7 @@ import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.Trips;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.agency.entity.Route;
+import pl.wrona.webserver.agency.entity.RouteEntity;
 import pl.wrona.webserver.agency.entity.TripEntity;
 import pl.wrona.webserver.agency.mapper.RouteMapper;
 import pl.wrona.webserver.agency.mapper.TripMapper;
@@ -23,7 +23,7 @@ public class TripQueryService {
     private TripRepository tripRepository;
 
     public GetAllTripsResponse getTripsByLineOrName(String lineOrName) {
-        Map<Route, Set<TripEntity>> tripSet = tripRepository.findByLineOrNameContainingIgnoreCase(lineOrName).stream()
+        Map<RouteEntity, Set<TripEntity>> tripSet = tripRepository.findByLineOrNameContainingIgnoreCase(lineOrName).stream()
                 .collect(Collectors.groupingBy(TripEntity::getRoute, Collectors.toSet()));
 
         List<Trips> tripsResponse = tripSet.keySet().stream()

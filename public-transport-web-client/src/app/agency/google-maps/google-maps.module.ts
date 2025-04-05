@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {GoogleMapsComponent} from "./google-maps.component";
+import {GtfsService} from "../../generated/public-transport";
 
 
 @NgModule({
@@ -9,6 +10,9 @@ import {GoogleMapsComponent} from "./google-maps.component";
   ],
   imports: [
     CommonModule
+  ],
+  providers: [
+    GtfsService
   ]
 })
 export class GoogleMapsModule { }

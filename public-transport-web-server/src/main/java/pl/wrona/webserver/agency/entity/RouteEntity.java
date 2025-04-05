@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,10 @@ import java.util.Set;
 
 @Data
 @Entity
+@Table(name = "route")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Route {
+public class RouteEntity {
     @Id
     @Column(name = "route_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "route_id_seq")
