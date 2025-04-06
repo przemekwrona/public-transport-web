@@ -26,7 +26,6 @@ public class BusStopSink implements Sink {
         this.stopResource = stopResource;
     }
 
-
     @Override
     public void process(EntityContainer entityContainer) {
         Entity entity = entityContainer.getEntity();

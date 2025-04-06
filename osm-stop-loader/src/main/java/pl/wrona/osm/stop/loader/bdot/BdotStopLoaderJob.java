@@ -12,7 +12,6 @@ import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Point;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 import pl.wrona.osm.stop.loader.StopResource;
 
 import java.io.File;
@@ -30,22 +29,16 @@ public class BdotStopLoaderJob implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String filePath = "classpath:1005_SHP";
+        String filePath = "/Users/wronap/workspace/public-transport-web/Polska_SHP";
 
-        File pbfFile = ResourceUtils.getFile(filePath);
-
-        Files.walk(pbfFile.toPath())
-                .filter(Files::isRegularFile)
+        Files.walk(Path.of(filePath))
                 .filter(path -> path.toString().endsWith(".shp"))
                 .filter(path -> path.toString().endsWith("OT_OIKM_P.shp"))
-                .limit(1)
-                .forEach((Path path) -> {
-                    log.info("Processing file {}", path);
-                    this.processShp(path);
-                });
+                .forEach(this::processShp);
     }
 
     public void processShp(Path shpPath) {
+        log.info("Processing shp file: {}", shpPath);
         try {
             File file = shpPath.toFile();
             Map<String, String> connect = Map.of("url", file.toURI().toString());
@@ -62,17 +55,19 @@ public class BdotStopLoaderJob implements CommandLineRunner {
                 while (iterator.hasNext()) {
                     SimpleFeature feature = iterator.next();
 
-                    if (feature.getDefaultGeometry() instanceof Point) {
+                    if (feature.getDefaultGeometry() instanceof Point bdok10kPoint) {
                         String stopId = (String) feature.getAttribute("LOKALNYID");
                         String stopName = (String) feature.getAttribute("NAZWA");
-                        Point bdok10kPoint = (Point) feature.getDefaultGeometry();
+                        String formattedStopName = stopName.replaceAll("'", "''");
 
                         Point wgs84Point = bdot10kCoordinateProjection.apply(bdok10kPoint);
 
-                        stopResource.save(stopId, stopName, wgs84Point.getX(), wgs84Point.getY());
+                        stopResource.save(stopId, formattedStopName, wgs84Point.getY(), wgs84Point.getX());
                     }
                 }
             }
+
+            dataStore.dispose();
         } catch (Throwable e) {
             e.printStackTrace();
         }
