@@ -72,9 +72,9 @@ export class StopsComponent implements OnInit, AfterViewInit {
     }
 
     private reloadStops(map: Map) {
-        if (map.getZoom() > 12) {
+        if (map.getZoom() > 11) {
             const bounds = map.getBounds();
-            this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe((response: StopsResponse) => {
+            this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
                 const stopMarkers: StopMarker[] = response.stops?.map(stop => {
                     const stopMarker: StopMarker = L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON, title: stop.name}) as StopMarker
                     stopMarker.id = stop.id;

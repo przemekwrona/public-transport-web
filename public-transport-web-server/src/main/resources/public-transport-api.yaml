@@ -935,6 +935,8 @@ components:
       properties:
         tripId:
           $ref: '#/components/schemas/TripId'
+        tripSequence:
+          type: integer
         origin:
           type: string
         destination:

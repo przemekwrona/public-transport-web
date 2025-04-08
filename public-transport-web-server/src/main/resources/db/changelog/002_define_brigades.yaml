@@ -64,6 +64,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: trip_sequence
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
                   name: root_trip_id
                   type: integer
                   constraints:
