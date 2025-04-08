@@ -18,6 +18,10 @@ public class CRSConfig {
     @Bean
     public CoordinateReferenceSystem wgs84CRS() throws FactoryException {
         return CRS.decode("EPSG:4326");
+//        return CRS.decode("EPSG:4978");
+//        return CRS.decode("EPSG:3857");
+//        return CRS.decode("EPSG:4979");
+//        return CRS.decode("EPSG:4269");
     }
 
     @Bean
