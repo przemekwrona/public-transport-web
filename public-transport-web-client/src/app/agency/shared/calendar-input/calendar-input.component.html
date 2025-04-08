@@ -10,12 +10,12 @@
     </label>
 
     <div class="relative h-fit w-fit inset-0 bg-opacity-50">
-
         <div class="relative z-10 p-4" *ngIf="isFocus" @fadeInOut>
             <app-calendar-picker [singleSelection]="true"
                                  [includeDays]="includeDays"
                                  (includeDaysChange)="onChangeIncludeDays($event)"
-                                 [year]="2025" [month]="3"></app-calendar-picker>
+                                 [showNavigation]="showNavigation"></app-calendar-picker>
         </div>
+
     </div>
 </div>

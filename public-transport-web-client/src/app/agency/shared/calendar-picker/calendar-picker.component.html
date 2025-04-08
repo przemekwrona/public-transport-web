@@ -1,7 +1,9 @@
 <div class="grid grid-cols-7 w-fit" style="">
 
-    <div class="col-start-1 col-end-8 text-center p-2">{{ selectedMonth.format("MMM") }}</div>
-    <div class="col-span-1 w-fit text-sm text-center p-2">PN</div>
+    <div (click)="prev()" class="col-span-2 w-fit text-sm text-center p-2"> Prev </div>
+    <div class="col-span-3 text-center p-2">{{ selectedMonth.format("MMM") }}</div>
+    <div (click)="next()" class="col-span-2 w-full text-sm text-end p-2">Next</div>
+
     <div class="col-span-1 w-fit text-sm text-center p-2">WT</div>
     <div class="col-span-1 w-fit text-sm text-center p-2">ŚR</div>
     <div class="col-span-1 w-fit text-sm text-center p-2">CZ</div>

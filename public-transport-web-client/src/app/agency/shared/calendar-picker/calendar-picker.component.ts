@@ -18,6 +18,7 @@ import moment from "moment";
 })
 export class CalendarPickerComponent implements OnInit, OnChanges {
 
+    @Input() showNavigation: boolean = false;
     @Input() public year: number;
     @Input() public month: number;
     @Input() public singleSelection: boolean = false;
@@ -101,6 +102,18 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
     public isHoliday(day: moment.Moment): boolean {
         return this.holidays.includes(day.format('MM-DD'));
+    }
+
+    public prev(): void {
+        this.selectedMonth = this.selectedMonth.subtract(1, 'month')
+        this.year = this.selectedMonth.year();
+        this.month = this.selectedMonth.month() + 1;
+    }
+
+    public next(): void {
+        this.selectedMonth = this.selectedMonth.add(1, 'month');
+        this.year = this.selectedMonth.year();
+        this.month = this.selectedMonth.month() + 1;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
