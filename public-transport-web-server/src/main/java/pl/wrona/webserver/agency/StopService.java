@@ -2,7 +2,8 @@ package pl.wrona.webserver.agency;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.agency.entity.Stop;
+import pl.wrona.webserver.agency.entity.Agency;
+import pl.wrona.webserver.agency.entity.StopEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -15,12 +16,16 @@ public class StopService {
 
     private final StopRepository stopRepository;
 
-    public List<Stop> findStopByIdsIn(List<String> stopIds) {
+    public List<StopEntity> findStopByIdsIn(List<String> stopIds) {
         return stopRepository.findAllByStopIdIn(stopIds);
     }
 
-    public Map<String, Stop> mapStopByIdsIn(List<String> stopIds) {
+    public Map<String, StopEntity> mapStopByIdsIn(List<String> stopIds) {
         return findStopByIdsIn(stopIds).stream()
-                .collect(Collectors.toMap(Stop::getStopId, Function.identity()));
+                .collect(Collectors.toMap(StopEntity::getStopId, Function.identity()));
+    }
+
+    public List<StopEntity> findAllStops(Agency agency) {
+        return stopRepository.findAllByAgency(agency);
     }
 }

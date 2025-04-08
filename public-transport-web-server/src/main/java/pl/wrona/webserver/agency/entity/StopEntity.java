@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,9 +18,10 @@ import java.util.List;
 @Entity
 @Data
 @Builder
+@Table(name = "stop")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Stop {
+public class StopEntity {
 
     @Id
     @Column(name = "bdot10k_id")
@@ -31,6 +33,6 @@ public class Stop {
     private double lon;
     private double lat;
 
-    @OneToMany(mappedBy = "stop")
+    @OneToMany(mappedBy = "stopEntity")
     private List<StopTimeEntity> stopTimeEntities;
 }

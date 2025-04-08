@@ -10,8 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-
 @Data
 @Builder
 @Entity
@@ -25,7 +23,7 @@ public class StopTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "stop_id")
-    private Stop stop;
+    private StopEntity stopEntity;
 
     @ManyToOne
     @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false, nullable = false)

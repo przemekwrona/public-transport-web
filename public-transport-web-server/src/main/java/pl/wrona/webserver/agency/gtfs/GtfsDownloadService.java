@@ -38,6 +38,10 @@ public class GtfsDownloadService {
                     .map(route -> RouteHandler.handle(agency, route))
                     .forEach(writer::handleEntity);
 
+            stopService.findAllStops(agency).stream()
+                    .map(stop -> StopHandler.handle(agency, stop))
+                    .forEach(writer::handleEntity);
+
             writer.close();
 
             File zippedGtfs = ZipUtils.zip(tempFile);
