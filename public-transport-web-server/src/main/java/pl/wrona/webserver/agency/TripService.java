@@ -14,7 +14,7 @@ import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.agency.entity.Stop;
+import pl.wrona.webserver.agency.entity.StopEntity;
 import pl.wrona.webserver.agency.entity.StopTimeEntity;
 import pl.wrona.webserver.agency.entity.StopTimeId;
 import pl.wrona.webserver.agency.entity.TripEntity;
@@ -44,7 +44,7 @@ public class TripService {
                 .map(StopTime::getStopId)
                 .toList();
 
-        Map<String, Stop> stopDictionary = stopService.mapStopByIdsIn(stopIds);
+        Map<String, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         var route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
 
         TripEntity tripEntity = TripMapper.map(trip);
@@ -70,7 +70,7 @@ public class TripService {
                     stopTimeId.setStopSequence(i + 1);
                     entity.setStopTimeId(stopTimeId);
 
-                    entity.setStop(stopDictionary.get(stopTime.getStopId()));
+                    entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
                     entity.setArrivalSecond(stopTime.getSeconds());
                     entity.setDepartureSecond(stopTime.getSeconds());
                     entity.setDistanceMeters(stopTime.getMeters());
@@ -100,7 +100,7 @@ public class TripService {
                 .map(StopTime::getStopId)
                 .toList();
 
-        Map<String, Stop> stopDictionary = stopService.mapStopByIdsIn(stopIds);
+        Map<String, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
         TripEntity updatedTrip = TripMapper.update(tripEntity, trip);
@@ -126,7 +126,7 @@ public class TripService {
                     stopTimeId.setStopSequence(i + 1);
                     entity.setStopTimeId(stopTimeId);
 
-                    entity.setStop(stopDictionary.get(stopTime.getStopId()));
+                    entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
                     entity.setArrivalSecond(stopTime.getSeconds());
                     entity.setDepartureSecond(stopTime.getSeconds());
                     entity.setDistanceMeters(stopTime.getMeters());
@@ -166,14 +166,14 @@ public class TripService {
 
         stopTimes.forEach((StopTimeEntity stopTime) -> {
             tripResponse.addStopsItem(new StopTime()
-                    .stopId(stopTime.getStop().getStopId())
-                    .stopName(stopTime.getStop().getName())
+                    .stopId(stopTime.getStopEntity().getStopId())
+                    .stopName(stopTime.getStopEntity().getName())
                     .arrivalTime(stopTime.getArrivalSecond())
                     .departureTime(stopTime.getDepartureSecond())
                     .seconds(stopTime.getDepartureSecond())
                     .meters(stopTime.getDistanceMeters())
-                    .lon((float) stopTime.getStop().getLon())
-                    .lat((float) stopTime.getStop().getLat()));
+                    .lon((float) stopTime.getStopEntity().getLon())
+                    .lat((float) stopTime.getStopEntity().getLat()));
         });
         return new TripsDetails()
                 .route(RouteMapper.map(route))
