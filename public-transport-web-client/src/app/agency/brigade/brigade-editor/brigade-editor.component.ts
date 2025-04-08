@@ -4,7 +4,7 @@ import {
     BrigadeBody, BrigadePatchBody,
     BrigadePayload,
     BrigadeTrip,
-    GetAllTripsResponse,
+    GetAllTripsResponse, GetCalendarsResponse,
     Trip,
     TripId
 } from "../../../generated/public-transport";
@@ -37,6 +37,7 @@ export class BrigadeEditorComponent implements OnInit {
     private componentMode: BrigadeEditorComponentMode = null;
 
     public tripsResponse: GetAllTripsResponse = {};
+    public calendarsResponse: GetCalendarsResponse = {};
 
     public queryBrigadeName: string = '';
     public brigadeName = '';
@@ -69,8 +70,10 @@ export class BrigadeEditorComponent implements OnInit {
                 brigadeModel.travelTimeInSeconds = trip.travelTimeInSeconds;
 
                 return brigadeModel;
-            })
+            });
         });
+
+        this._route.data.subscribe(data => this.calendarsResponse = data['calendars']);
     }
 
     drop(event: CdkDragDrop<Trip[]>) {

@@ -27,6 +27,15 @@
                         Nazwa brygady:
                         <input [(ngModel)]="brigadeName">
                     </div>
+                    <div>
+                        <select class="select">
+                            @for (calendar of calendarsResponse.calendars || []; track calendar) {
+                                <option value="{{calendar.calendarName}}">
+                                    {{ calendar.designation }} - {{ calendar.description }} ({{ calendar.calendarName }})
+                                </option>
+                            }
+                        </select>
+                    </div>
                     <div class="card-header">
                         @if (getFirstBrigade()?.departureTime && getFirstBrigade()?.departureTime) {
                             <h2>
