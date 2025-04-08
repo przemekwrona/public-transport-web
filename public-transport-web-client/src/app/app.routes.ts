@@ -24,6 +24,7 @@ import {CalendarListComponent} from "./agency/calendars/calendar-list/calendar-l
 import {getAllCalendarsResolver} from "./agency/calendars/calendar-list/get-all-calendars.resolver";
 import {calendarResolver} from "./agency/calendars/calendar-editor/calendar.resolver";
 import {CalendarEditorComponentMode} from "./agency/calendars/calendar-editor/calendar-editor-component-mode";
+import {brigadeGetAllCalendarsResolver} from "./agency/brigade/brigade-editor/brigade-get-all-calendars.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'planner', pathMatch: 'full'},
@@ -39,8 +40,8 @@ export const routes: Routes = [
             {path: 'trips/create', component: TripEditorComponent, resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.CREATE }},
             {path: 'trips/edit', component: TripEditorComponent,  resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
             {path: 'brigades', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
-            {path: 'brigades/create', component: BrigadeEditorComponent, data: { mode: BrigadeEditorComponentMode.CREATE }},
-            {path: 'brigades/edit', component: BrigadeEditorComponent, resolve: { brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
+            {path: 'brigades/create', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver }, data: { mode: BrigadeEditorComponentMode.CREATE }},
+            {path: 'brigades/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'calendars', component: CalendarListComponent, resolve: { calendars: getAllCalendarsResolver }},
             {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}},
             {path: 'calendars/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
