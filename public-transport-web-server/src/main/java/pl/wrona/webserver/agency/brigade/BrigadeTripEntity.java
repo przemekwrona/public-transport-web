@@ -1,22 +1,18 @@
 package pl.wrona.webserver.agency.brigade;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.TripMode;
+import pl.wrona.webserver.agency.entity.Agency;
 import pl.wrona.webserver.agency.entity.TripEntity;
 
 import java.util.Set;
@@ -30,9 +26,7 @@ public class BrigadeTripEntity {
 
     @Id
     @Column(name = "brigade_trip_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brigade_trip_id_generator")
-    @SequenceGenerator(name = "brigade_trip_id_generator", sequenceName = "brigade_trip_id_seq",  allocationSize=1)
-    private Long brigadeTripId;
+    private String brigadeTripId;
 
     private String line;
 
@@ -71,6 +65,10 @@ public class BrigadeTripEntity {
 
     @Column(name = "travel_time_in_seconds")
     private int travelTimeInSeconds;
+
+    public String stringifyId(Agency agency, int stopSequence) {
+        return "%s/%s/%s/%s/%s/%s".formatted(agency.getAgencyCode(), line, name, variant, mode, stopSequence);
+    }
 
 //    private int arrivalTimeInSeconds;
 //

@@ -45,6 +45,7 @@ public class BrigadeService {
                     brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariant());
                     brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
                     brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
+                    brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), brigadeTrip.getTripSequence()));
 
                     brigadeTripEntity.setBrigade(savedBrigade);
                     brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
@@ -81,7 +82,7 @@ public class BrigadeService {
                                 .line(brigade.getLine())
                                 .name(brigade.getName())
                                 .variant(brigade.getVariant())
-                                .mode(null))
+                                .mode(brigade.getMode()))
                         .tripSequence(brigade.getTripSequence())
                         .origin(brigade.getOrigin())
                         .destination(brigade.getDestination())
@@ -126,7 +127,7 @@ public class BrigadeService {
                         brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariant());
                         brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
                         brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
-
+                        brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), brigadeTrip.getTripSequence()));
 
                         brigadeTripEntity.setBrigade(entity);
                         brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
@@ -154,6 +155,6 @@ public class BrigadeService {
             brigadeTripRepository.saveAll(brigadeTrips);
         });
 
-        return new Status().status(Status.StatusEnum.CREATED);
+        return new Status().status(Status.StatusEnum.SUCCESS);
     }
 }

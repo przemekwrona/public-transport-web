@@ -58,6 +58,7 @@ export class BrigadeEditorComponent implements OnInit {
                 const brigadeModel: BrigadeModel = {} as BrigadeModel;
                 brigadeModel.line = trip.tripId.line;
                 brigadeModel.name = trip.tripId.name;
+                brigadeModel.variant = trip.tripId.variant;
                 brigadeModel.mode = trip.tripId.mode;
 
                 brigadeModel.origin = trip.origin;
