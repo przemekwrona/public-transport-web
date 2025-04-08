@@ -194,6 +194,7 @@ export class BrigadeEditorComponent implements OnInit {
         let brigadeBody: BrigadeBody = {};
         brigadeBody.brigadeName = this.brigadeName;
 
+        let tripSequence: number = 0;
         brigadeBody.trips = this.brigadeItems.map(brigadeBody => {
             let tripId: TripId = {};
             tripId.line = brigadeBody.line;
@@ -203,6 +204,7 @@ export class BrigadeEditorComponent implements OnInit {
 
             let brigadeTrip: BrigadeTrip = {};
             brigadeTrip.tripId = tripId;
+            brigadeTrip.tripSequence = ++tripSequence;
             brigadeTrip.origin = brigadeBody.origin;
             brigadeTrip.destination = brigadeBody.destination;
 

@@ -70,21 +70,22 @@ databaseChangeLog:
                   name: lat
                   type: float
 
+        - createIndex:
+            indexName: idx_stop
+            tableName: stop
+            columns:
+              - column:
+                  name: lon
+              - column:
+                  name: lat
+
         - loadData:
             tableName: stop
-            file: stops/TKI_bus_stops.csv
+            file: stops/bus_stops.csv
             separator: ;
             encoding: UTF-8
             usePreparedStatements:  true
             columns:
-              - column:
-                  header: LOKALNYID
-                  name: bdot10k_id
-                  type: STRING
-              - column:
-                  header: NAZWA
-                  name: name
-                  type: STRING
               - column:
                   header: X
                   name: lon
@@ -93,6 +94,14 @@ databaseChangeLog:
                   header: Y
                   name: lat
                   type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: bdot10k_id
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: name
+                  type: STRING
 
   - changeSet:
       id: create-agency-table

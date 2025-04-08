@@ -1,7 +1,11 @@
 package pl.wrona.webserver.agency.brigade;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,7 +40,11 @@ public class BrigadeTripEntity {
 
     private String variant;
 
+    @Enumerated(value = EnumType.STRING)
     private TripMode mode;
+
+    @Column(name = "trip_sequence")
+    private int tripSequence;
 
     @ManyToOne
     @JoinColumn(name = "root_trip_id", referencedColumnName = "trip_id", nullable = false)

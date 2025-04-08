@@ -39,10 +39,12 @@ public class BrigadeService {
         var brigadeTrips = request.getTrips().stream()
                 .map(brigadeTrip -> {
                     var brigadeTripEntity = new BrigadeTripEntity();
+
                     brigadeTripEntity.setLine(brigadeTrip.getTripId().getLine());
                     brigadeTripEntity.setName(brigadeTrip.getTripId().getName());
                     brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariant());
                     brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
+                    brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
 
                     brigadeTripEntity.setBrigade(savedBrigade);
                     brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
@@ -80,6 +82,7 @@ public class BrigadeService {
                                 .name(brigade.getName())
                                 .variant(brigade.getVariant())
                                 .mode(null))
+                        .tripSequence(brigade.getTripSequence())
                         .origin(brigade.getOrigin())
                         .destination(brigade.getDestination())
                         .travelTimeInSeconds(brigade.getTravelTimeInSeconds())
@@ -104,13 +107,51 @@ public class BrigadeService {
                 .brigades(brigades);
     }
 
+    @Transactional
     public Status updateBrigade(BrigadePatchBody brigadePatchBody) {
         String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();
 
-        brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadeId).ifPresent(entity -> {
+        brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadeId).ifPresent((BrigadeEntity entity) -> {
             entity.setBrigadeNumber(brigadePatchBody.getBrigadeBody().getBrigadeName());
-
             brigadeRepository.save(entity);
+
+            brigadeTripRepository.deleteAllByBrigade(entity);
+
+            var brigadeTrips = brigadePatchBody.getBrigadeBody().getTrips().stream()
+                    .map(brigadeTrip -> {
+                        var brigadeTripEntity = new BrigadeTripEntity();
+
+                        brigadeTripEntity.setLine(brigadeTrip.getTripId().getLine());
+                        brigadeTripEntity.setName(brigadeTrip.getTripId().getName());
+                        brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariant());
+                        brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
+                        brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
+
+
+                        brigadeTripEntity.setBrigade(entity);
+                        brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
+                        brigadeTripEntity.setDestination(brigadeTrip.getDestination());
+                        brigadeTripEntity.setTravelTimeInSeconds(brigadeTrip.getTravelTimeInSeconds());
+
+                        int secondOfDay = LocalTime.MIN.plusSeconds(brigadeTrip.getArrivalTime()).toSecondOfDay();
+                        brigadeTripEntity.setDepartureTimeInSeconds(secondOfDay);
+
+                        var tripId = new TripId()
+                                .line(brigadeTrip.getTripId().getLine())
+                                .name(brigadeTrip.getTripId().getName())
+                                .variant(brigadeTrip.getTripId().getVariant())
+                                .mode(brigadeTrip.getTripId().getMode());
+
+                        var tripEntity = tripService.findByTripId(tripId);
+                        brigadeTripEntity.setRootTrip(tripEntity);
+
+//                        brigadeTripEntity.setVariantDesignation(tripEntity.getVariantDesignation());
+//                        brigadeTripEntity.setVariantDescription(tripEntity.getVariantDescription());
+
+                        return brigadeTripEntity;
+                    }).toList();
+
+            brigadeTripRepository.saveAll(brigadeTrips);
         });
 
         return new Status().status(Status.StatusEnum.CREATED);
