@@ -67,6 +67,16 @@ databaseChangeLog:
                     references: calendar(service_id)
                     nullable: false
 
+        - createIndex:
+            columns:
+              - column:
+                  name: agency_id
+              - column:
+                  name: calendar_name
+            indexName: idx_agency_and_calendar_name
+            tableName: calendar
+            unique: true
+
         - createTable:
             tableName: calendar_dates
             columns:
