@@ -7,17 +7,15 @@ import org.igeolab.iot.pt.server.api.model.CalendarQuery;
 import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.UpdateCalendarRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.AgencyService;
+import pl.wrona.webserver.exception.BusinessException;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +30,12 @@ public class CalendarService {
     @Transactional
     public Status createCalendar(CalendarPayload calendarPayload) {
         var calendarBody = calendarPayload.getBody();
+
+        var existsByCalendarName = this.existsByCalendarName(calendarBody.getCalendarName());
+
+        if (existsByCalendarName) {
+            throw new BusinessException("1000", "Calendar with name %s already exists. Select another one.".formatted(calendarBody.getCalendarName()));
+        }
 
         var calendarEntity = CalendarEntityMapper.apply(calendarBody, agencyService.getLoggedAgency());
         CalendarEntity savedCalendar = calendarRepository.save(calendarEntity);
@@ -89,5 +93,9 @@ public class CalendarService {
             calendarDatesRepository.saveAll(calendarDates);
         });
         return new Status().status(Status.StatusEnum.SUCCESS);
+    }
+
+    public boolean existsByCalendarName(String calendarName) {
+        return this.calendarRepository.existsByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarName);
     }
 }
