@@ -14,29 +14,33 @@
 </div>
 
 <!-- Container -->
-<div cdkDropListGroup class="container-fixed">
+<div class="container-fixed">
     <!-- begin: grid -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 lg:gap-7.5">
         <div class="col-span-1">
             <div class="grid gap-5 lg:gap-7.5">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Plan Brygady</h3>
                     </div>
+
                     <div class="card-header">
                         Nazwa brygady:
                         <input [(ngModel)]="brigadeName">
                     </div>
-                    <div>
+
+                    <div class="card-header">
                         <select [(ngModel)]="calendarName" class="select">
                             @for (calendar of calendarsResponse.calendars || []; track calendar) {
                                 <option [value]="calendar.calendarName">
-                                    {{ calendar.designation }} - {{ calendar.description }} ({{ calendar.calendarName }})
+                                    {{ calendar.designation }} - {{ calendar.description }} ({{ calendar.calendarName }}
+                                    )
                                 </option>
                             }
 
                         </select>
                     </div>
+
                     <div class="card-header">
                         @if (getFirstBrigade()?.departureTime && getFirstBrigade()?.departureTime) {
                             <h2>
@@ -48,6 +52,25 @@
                         } @else {
                             <h2>Czas Pracy: 0min</h2>
                         }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end: grid -->
+</div>
+
+<!-- End of Container -->
+
+<!-- Container -->
+<div cdkDropListGroup class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
+        <div class="col-span-1">
+            <div class="grid gap-5 lg:gap-7.5">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Plan Brygady</h3>
                     </div>
 
                     <div cdkDropList (cdkDropListDropped)="drop($event)" class="pb-7.5">
@@ -207,7 +230,15 @@
                         </div>
                     </div>
 
-                    <button (click)="saveOrEditBrigade()" class="btn btn-success">Zapisz</button>
+                    @if (saveError === null) {
+                        <button (click)="saveOrEditBrigade()" class="btn btn-success">Zapisz</button>
+                    }
+
+                    @if (saveError !== null) {
+                        <button class="btn btn-danger">
+                            Error: {{ saveError.errorCode }} {{ saveError.message }}
+                        </button>
+                    }
                 </div>
             </div>
         </div>
