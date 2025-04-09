@@ -24,6 +24,16 @@ databaseChangeLog:
                     references: agency(agency_id)
                     nullable: false
 
+        - createIndex:
+            columns:
+              - column:
+                  name: agency_id
+              - column:
+                  name: brigade_number
+            indexName: idx_agency_and_brigade_number
+            tableName: brigade
+            unique: true
+
         - createSequence:
             sequenceName: brigade_id_seq
             startValue: 1
