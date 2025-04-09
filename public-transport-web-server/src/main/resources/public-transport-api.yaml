@@ -1039,3 +1039,11 @@ components:
             - CREATED
             - DELETED
             - SUCCESS
+
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string
