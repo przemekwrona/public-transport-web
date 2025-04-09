@@ -41,6 +41,7 @@ export class BrigadeEditorComponent implements OnInit {
 
     public queryBrigadeName: string = '';
     public brigadeName = '';
+    public calendarName = '';
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
 
@@ -197,6 +198,7 @@ export class BrigadeEditorComponent implements OnInit {
 
         let brigadeBody: BrigadeBody = {};
         brigadeBody.brigadeName = this.brigadeName;
+        brigadeBody.calendarName = this.calendarName;
 
         let tripSequence: number = 0;
         brigadeBody.trips = this.brigadeItems.map(brigadeBody => {

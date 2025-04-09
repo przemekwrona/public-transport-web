@@ -56,6 +56,17 @@ databaseChangeLog:
                   name: end_date
                   type: date
 
+        - addColumn:
+            tableName: brigade
+            columns:
+              - column:
+                  name: service_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_brigade_calendar
+                    references: calendar(service_id)
+                    nullable: false
+
         - createTable:
             tableName: calendar_dates
             columns:

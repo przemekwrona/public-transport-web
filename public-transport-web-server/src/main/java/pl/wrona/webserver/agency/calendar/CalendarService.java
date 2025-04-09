@@ -14,6 +14,7 @@ import pl.wrona.webserver.agency.AgencyService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,6 +52,10 @@ public class CalendarService {
 
         return new GetCalendarsResponse()
                 .calendars(calendars);
+    }
+
+    public Optional<CalendarEntity> findCalendarByCalendarName(String calendarName) {
+        return calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarName);
     }
 
     @Transactional
