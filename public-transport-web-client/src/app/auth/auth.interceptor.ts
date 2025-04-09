@@ -7,7 +7,7 @@ import {
     HttpRequest, HttpResponse
 } from '@angular/common/http';
 import {Injectable} from "@angular/core";
-import {catchError, Observable, of, tap} from "rxjs";
+import {catchError, Observable, of, tap, throwError} from "rxjs";
 import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
 
@@ -39,9 +39,10 @@ export class AddHeaderInterceptor implements HttpInterceptor {
                 const httpStatus: number = error.status;
                 if (httpStatus === 401) {
                     this._router.navigate(['/signin']);
+                    return of();
+                } else {
+                    return throwError(() => error);
                 }
-
-                return of();
             }));
     }
 }

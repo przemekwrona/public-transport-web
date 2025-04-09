@@ -3,7 +3,7 @@ import {BrigadeService} from "../brigade.service";
 import {
     BrigadeBody, BrigadePatchBody,
     BrigadePayload,
-    BrigadeTrip,
+    BrigadeTrip, ErrorResponse,
     GetAllTripsResponse, GetCalendarsResponse,
     Trip,
     TripId
@@ -15,6 +15,7 @@ import {first, last} from "lodash";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ActivatedRoute} from "@angular/router";
 import {BrigadeEditorComponentMode} from "./brigade-editor-component-mode";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
     selector: 'app-brigade-editor',
@@ -36,7 +37,7 @@ export class BrigadeEditorComponent implements OnInit {
 
     private componentMode: BrigadeEditorComponentMode = null;
 
-    public tripsResponse: GetAllTripsResponse = {};
+    public tripsResponse: GetAllTripsResponse = {filter: '', lines: []};
     public calendarsResponse: GetCalendarsResponse = {};
 
     public queryBrigadeName: string = '';
@@ -45,18 +46,25 @@ export class BrigadeEditorComponent implements OnInit {
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
 
+    public saveError: ErrorResponse | null = null;
+
     constructor(private brigadeService: BrigadeService, private _route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
-        this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => this.tripsResponse = response);
+        this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => response === null ? {
+            filter: '',
+            lines: []
+        } : this.tripsResponse = response);
 
         this._route.queryParams.subscribe(params => this.brigadeName = params['name']);
         this._route.queryParams.subscribe(params => this.queryBrigadeName = params['name']);
 
         this._route.data.subscribe(data => this.componentMode = data['mode']);
         this._route.data.subscribe(data => {
-            this.brigadeItems = data['brigade'].trips.map((trip: BrigadeTrip) => {
+            this.calendarName = data['brigade']?.calendarName;
+            this.brigadeItems = data['brigade'];
+            this.brigadeItems = (data['brigade']?.trips || []).map((trip: BrigadeTrip) => {
                 const brigadeModel: BrigadeModel = {} as BrigadeModel;
                 brigadeModel.line = trip.tripId.line;
                 brigadeModel.name = trip.tripId.name;
@@ -189,7 +197,7 @@ export class BrigadeEditorComponent implements OnInit {
     }
 
     isBrigadesEmpty(): boolean {
-        return this.brigadeItems.length === 0;
+        return this.brigadeItems?.length === 0;
     }
 
     saveOrEditBrigade(): void {
@@ -223,8 +231,12 @@ export class BrigadeEditorComponent implements OnInit {
         });
 
         if (this.componentMode === BrigadeEditorComponentMode.CREATE) {
-            this.brigadeService.saveBrigade(brigadeBody).subscribe(response => {
-            });
+            this.brigadeService.saveBrigade(brigadeBody).subscribe(
+                (response) => {
+                },
+                (response: HttpErrorResponse) => {
+                    this.saveError = response.error;
+                });
         }
 
         if (this.componentMode === BrigadeEditorComponentMode.EDIT) {
