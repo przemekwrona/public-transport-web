@@ -2,6 +2,7 @@ package pl.wrona.webserver.agency.brigade;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import pl.wrona.webserver.agency.entity.Agency;
 
 import java.util.Optional;
 
@@ -9,4 +10,6 @@ import java.util.Optional;
 public interface BrigadeRepository extends JpaRepository<BrigadeEntity, Long> {
 
     Optional<BrigadeEntity> findBrigadeEntitiesByBrigadeNumber(String brigadeNumber);
+
+    boolean existsBrigadeEntitiesByAgencyAndBrigadeNumber(Agency agency, String brigadeNumber);
 }

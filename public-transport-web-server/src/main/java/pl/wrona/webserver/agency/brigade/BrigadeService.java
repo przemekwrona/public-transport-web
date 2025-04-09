@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.AgencyService;
 import pl.wrona.webserver.agency.TripService;
 import pl.wrona.webserver.agency.calendar.CalendarService;
+import pl.wrona.webserver.exception.BusinessException;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -32,6 +33,11 @@ public class BrigadeService {
 
     @Transactional
     public Status createBrigade(BrigadeBody request) {
+
+        if (existsByBrigadeName(request.getBrigadeName())) {
+            throw new BusinessException("1000", "Brigade with name %s already exists. Select another one.".formatted(request.getBrigadeName()));
+        }
+
         var brigadeEntity = new BrigadeEntity();
         brigadeEntity.setBrigadeNumber(request.getBrigadeName());
         brigadeEntity.setCalendar(calendarService.findCalendarByCalendarName(request.getCalendarName()).orElse(null));
@@ -98,6 +104,7 @@ public class BrigadeService {
         return brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadePayload.getBrigadeName())
                 .map(brigadeEntity -> new BrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
+                        .calendarName(brigadeEntity.getCalendar().getCalendarName())
                         .trips(trips))
                 .orElse(null);
     }
@@ -162,5 +169,9 @@ public class BrigadeService {
         });
 
         return new Status().status(Status.StatusEnum.SUCCESS);
+    }
+
+    public boolean existsByBrigadeName(String brigadeName) {
+        return this.brigadeRepository.existsBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadeName);
     }
 }
