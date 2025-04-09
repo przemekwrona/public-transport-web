@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.AgencyService;
 import pl.wrona.webserver.agency.TripService;
+import pl.wrona.webserver.agency.calendar.CalendarService;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -25,6 +26,7 @@ public class BrigadeService {
 
     private final BrigadeRepository brigadeRepository;
     private final BrigadeTripRepository brigadeTripRepository;
+    private final CalendarService calendarService;
 
     private final TripService tripService;
 
@@ -32,6 +34,8 @@ public class BrigadeService {
     public Status createBrigade(BrigadeBody request) {
         var brigadeEntity = new BrigadeEntity();
         brigadeEntity.setBrigadeNumber(request.getBrigadeName());
+        brigadeEntity.setCalendar(calendarService.findCalendarByCalendarName(request.getCalendarName()).orElse(null));
+
         brigadeEntity.setAgency(agencyService.getLoggedAgency());
 
         var savedBrigade = brigadeRepository.save(brigadeEntity);
@@ -114,6 +118,8 @@ public class BrigadeService {
 
         brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadeId).ifPresent((BrigadeEntity entity) -> {
             entity.setBrigadeNumber(brigadePatchBody.getBrigadeBody().getBrigadeName());
+            entity.setCalendar(calendarService.findCalendarByCalendarName(brigadePatchBody.getBrigadeBody().getCalendarName()).orElse(null));
+
             brigadeRepository.save(entity);
 
             brigadeTripRepository.deleteAllByBrigade(entity);

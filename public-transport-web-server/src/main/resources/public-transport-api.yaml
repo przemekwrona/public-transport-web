@@ -492,8 +492,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-
-
     get:
       tags:
         - calendar
@@ -916,6 +914,8 @@ components:
       type: object
       properties:
         brigadeName:
+          type: string
+        calendarName:
           type: string
         trips:
           type: array

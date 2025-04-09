@@ -28,12 +28,13 @@
                         <input [(ngModel)]="brigadeName">
                     </div>
                     <div>
-                        <select class="select">
+                        <select [(ngModel)]="calendarName" class="select">
                             @for (calendar of calendarsResponse.calendars || []; track calendar) {
-                                <option value="{{calendar.calendarName}}">
+                                <option [value]="calendar.calendarName">
                                     {{ calendar.designation }} - {{ calendar.description }} ({{ calendar.calendarName }})
                                 </option>
                             }
+
                         </select>
                     </div>
                     <div class="card-header">

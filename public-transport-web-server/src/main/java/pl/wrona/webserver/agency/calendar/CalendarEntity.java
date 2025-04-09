@@ -14,7 +14,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.agency.brigade.BrigadeEntity;
 import pl.wrona.webserver.agency.entity.Agency;
+import pl.wrona.webserver.agency.entity.RouteEntity;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -35,6 +37,9 @@ public class CalendarEntity {
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
     private Agency agency;
+
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
+    private Set<BrigadeEntity> brigadeEntities;
 
     @Column(name = "calendar_name")
     private String calendarName;

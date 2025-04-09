@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.BrigadeTrip;
+import pl.wrona.webserver.agency.calendar.CalendarEntity;
 import pl.wrona.webserver.agency.entity.Agency;
 
 import java.util.Set;
@@ -29,12 +29,16 @@ public class BrigadeEntity {
     @Id
     @Column(name = "brigade_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brigade_id_generator")
-    @SequenceGenerator(name = "brigade_id_generator", sequenceName = "brigade_id_seq",  allocationSize=1)
+    @SequenceGenerator(name = "brigade_id_generator", sequenceName = "brigade_id_seq", allocationSize = 1)
     private Long brigadeId;
 
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
     private Agency agency;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id")
+    private CalendarEntity calendar;
 
     private String brigadeNumber;
 
