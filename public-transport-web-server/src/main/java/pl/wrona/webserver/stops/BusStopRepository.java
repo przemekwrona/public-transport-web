@@ -12,4 +12,6 @@ public interface BusStopRepository extends JpaRepository<BusStop, Long> {
 
     @Query(value = "SELECT s FROM BusStop s WHERE s.lat < :maxLat and s.lon > :minLon and s.lat > :minLat and s.lon < :maxLon")
     List<BusStop> findAllByArea(@Param("maxLat") float maxLat, @Param("minLon") float minLon, @Param("minLat") float minLat, @Param("maxLon") float maxLon);
+
+    List<BusStop> findBusStopByNameStartsWith(String name);
 }
