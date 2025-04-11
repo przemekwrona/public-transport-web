@@ -1,0 +1,16 @@
+<div class="w-full">
+    <div class="custom-select">
+        <input #toggleInput type="text" [(ngModel)]="stopNamePrefix" (focus)="showOptions = true" (ngModelChange)="onWrite(stopNamePrefix)"
+               placeholder="KIELCE, SOPOT, WAWEL, STARE MIASTO" class="input"
+               autocomplete="off"/>
+        <div #menu class="custom-options" *ngIf="showOptions">
+
+<!--            <input type="text" name="origin" id="origin" [(ngModel)]="route.origin" class="input"-->
+<!--                   placeholder="KIELCE, SOPOT, WAWEL, STARE MIASTO">-->
+
+            <div *ngFor="let busStop of busStops" (click)="onSelect(busStop)">
+                {{ busStop.name }}
+            </div>
+        </div>
+    </div>
+</div>
