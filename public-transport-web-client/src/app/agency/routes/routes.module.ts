@@ -7,6 +7,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {CreateRouteComponent} from "./create-route/create-route.component";
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import {FormsModule} from "@angular/forms";
         CommonModule,
         FormsModule,
         RouterModule,
+        SharedModule,
         MatExpansionModule,
         MatIconModule
     ]
