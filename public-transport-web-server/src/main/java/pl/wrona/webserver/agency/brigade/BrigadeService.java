@@ -101,7 +101,7 @@ public class BrigadeService {
                         .departureTime(brigade.getDepartureTimeInSeconds()))
                 .toList();
 
-        return brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadePayload.getBrigadeName())
+        return brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadePayload.getBrigadeName())
                 .map(brigadeEntity -> new BrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
                         .calendarName(brigadeEntity.getCalendar().getCalendarName())
@@ -123,7 +123,7 @@ public class BrigadeService {
     public Status updateBrigade(BrigadePatchBody brigadePatchBody) {
         String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();
 
-        brigadeRepository.findBrigadeEntitiesByBrigadeNumber(brigadeId).ifPresent((BrigadeEntity entity) -> {
+        brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadeId).ifPresent((BrigadeEntity entity) -> {
             entity.setBrigadeNumber(brigadePatchBody.getBrigadeBody().getBrigadeName());
             entity.setCalendar(calendarService.findCalendarByCalendarName(brigadePatchBody.getBrigadeBody().getCalendarName()).orElse(null));
 
@@ -147,8 +147,11 @@ public class BrigadeService {
                         brigadeTripEntity.setDestination(brigadeTrip.getDestination());
                         brigadeTripEntity.setTravelTimeInSeconds(brigadeTrip.getTravelTimeInSeconds());
 
-                        int secondOfDay = LocalTime.MIN.plusSeconds(brigadeTrip.getArrivalTime()).toSecondOfDay();
-                        brigadeTripEntity.setDepartureTimeInSeconds(secondOfDay);
+                        int departureTime = LocalTime.MIN.plusSeconds(brigadeTrip.getDepartureTime()).toSecondOfDay();
+                        brigadeTripEntity.setDepartureTimeInSeconds(departureTime);
+
+                        int arrivalTime = LocalTime.MIN.plusSeconds(brigadeTrip.getArrivalTime()).toSecondOfDay();
+//                        brigadeTripEntity.set(arrivalTime);
 
                         var tripId = new TripId()
                                 .line(brigadeTrip.getTripId().getLine())
