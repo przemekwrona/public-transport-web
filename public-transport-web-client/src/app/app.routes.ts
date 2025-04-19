@@ -27,7 +27,9 @@ import {CalendarEditorComponentMode} from "./agency/calendars/calendar-editor/ca
 import {brigadeGetAllCalendarsResolver} from "./agency/brigade/brigade-editor/brigade-get-all-calendars.resolver";
 
 export const routes: Routes = [
-    {path: '', redirectTo: 'planner', pathMatch: 'full'},
+    {path: '', redirectTo: 'company', pathMatch: 'full'},
+
+    {path: 'company', component: LandingComponent},
     {path: 'signin', component: SigninComponent},
     {path: 'planner', component: TransportComponent},
     {
