@@ -1,23 +1,476 @@
-<!-- Navigation-->
-<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand" href="#page-top">NEXT STATION</a>
-        <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="info#portfolio">Planner</a></li>
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">API</a></li>
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Kontakt</a></li>
-            </ul>
+<!-- home section -->
+<section class="bg-white mb-20 md:mb-52 xl:mb-72">
+
+    <nav>
+        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div class="relative flex h-16 items-center justify-between">
+                <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                    <!-- Mobile menu button-->
+                    <button type="button"
+                            class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset"
+                            aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="absolute -inset-0.5"></span>
+                        <span class="sr-only">Open main menu</span>
+                        <!--
+                          Icon when menu is closed.
+
+                          Menu open: "hidden", Menu closed: "block"
+                        -->
+                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                        </svg>
+                        <!--
+                          Icon when menu is open.
+
+                          Menu open: "block", Menu closed: "hidden"
+                        -->
+                        <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start z-50">
+                    <div class="flex shrink-0 items-center">
+                        <img src="assets/image/navbar-logo.png" alt="Logo img"
+                             class="h-8 w-auto w-52 md:w-80 lg:w-full">
+                    </div>
+                    <div class="hidden sm:block m-auto">
+                        <div class="flex space-x-4">
+                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+<!--                            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"-->
+<!--                               aria-current="page">Dashboard</a>-->
+<!--                            <a href="#"-->
+<!--                               class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">Team</a>-->
+                            <a (click)="scrollToProduct()"
+                               class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">Produkt</a>
+                            <a (click)="scrollToAbout()"
+                               class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">O
+                                Mnie</a>
+                        </div>
+                    </div>
+                    <button (click)="navigateToLogin()" class="px-5 py-3 lg:block border-2 border-blue-700 rounded-lg font-semibold text-blue-700 text-sm hover:bg-blue-700 hover:text-white transition ease-linear duration-500">
+                        Sprawdź usługę DEMO
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="sm:hidden" id="mobile-menu">
+            <div class="space-y-1 px-2 pt-2 pb-3">
+                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                <a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
+                   aria-current="page">Dashboard</a>
+                <a href="#"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
+                <a href="#product"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Produkt</a>
+                <a href="#about"
+                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">O
+                    Mnie</a>
+            </div>
+
+            <button class="btn btn-outline btn-success px-5 py-3 lg:block border-2 border-blue-700 rounded-lg font-semibold text-blue-700 text-lg hover:bg-green-700 hover:text-white transition ease-linear duration-500">
+                Request quote
+            </button>
+        </div>
+    </nav>
+
+    <div class="container max-w-screen-xl mx-auto px-4">
+
+        <div class="flex items-center justify-center xl:justify-start">
+
+            <div class="mt-28 text-center xl:text-left">
+                <h1 class="font-semibold text-4xl md:text-5xl lg:text-5xl text-gray-900 leading-normal mb-6"> Daj się
+                    znaleźć <br> na mapie! <br>Google Maps
+                    <img class="inline-block" src="assets/google_maps_logo_icon_171055.png" height="64">
+                </h1>
+
+
+                <p class="font-normal text-xl text-gray-600 leading-relaxed mb-12">
+                    Prowadzisz działalność związaną z przewozem osób? <br>
+                    Chcesz być widoczny w Google Maps? <br>
+                    Napisz do mnie – pomogę Ci być widocznym w Google Maps!
+                </p>
+
+                <button class="btn-demo px-6 py-4 bg-blue-700 text-white font-semibold text-lg rounded-xl hover:bg-blue-900 transition ease-in-out duration-500">
+                    Napisz do Mnie
+                </button>
+            </div>
+
+            <div class="hidden xl:block xl:absolute z-0 top-0 right-0">
+                <!--                <img src="assets/image/google-maps-bus-routes.jpg" class="h-full" alt="Home img">-->
+                <img src="assets/image/home-img.png" class="h-full" alt="Home img">
+            </div>
+
+        </div>
+
+    </div> <!-- container.// -->
+
+</section>
+<!-- home section //nd -->
+
+<!-- feature section -->
+<section id="product" class="bg-white py-10 md:py-16 xl:relative">
+
+    <div class="container max-w-screen-xl mx-auto px-4">
+
+        <div class="flex flex-col xl:flex-row justify-end">
+
+            <div class="hidden xl:block xl:absolute left-0 bottom-0 w-full">
+                <img src="assets/image/feature-img.png" alt="Feature img">
+            </div>
+
+            <div class="">
+
+                <h1 class="font-semibold text-gray-900 text-xl md:text-4xl text-center leading-normal mb-6">
+                    Digitalizacja Rozkładów Jazdy
+                </h1>
+
+                <p class="font-normal text-gray-600 text-md md:text-xl text-center mb-16">
+                    Dostarczam rozkłady jazdy w formacie dla <br>
+                    Planer Podróży Google <br>
+                </p>
+
+                <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4 mb-20">
+                    <div class="px-4 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
+                        <!--                        <i class="ki-filled ki-map text-xl text-green-900"></i>-->
+                        <img src="assets/google_maps_logo.png" width="48">
+                    </div>
+
+                    <div class="text-center md:text-left">
+                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Rozkłady na Google Maps</h4>
+                        <p class="font-normal text-gray-600 text-xl leading-relaxed">
+                            Gwarantujemy poprawność danych rozkładow jazdy <br>
+                            dostarczanych dla Google
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4 mb-20">
+                    <div class="px-8 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
+                        <i class="ki-filled ki-route text-xl text-green-900"></i>
+                    </div>
+
+                    <div class="text-center md:text-left">
+                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Zarządaj Liniami i Trasami</h4>
+                        <p class="font-normal text-gray-600 text-xl leading-relaxed">
+                            Posoadasz możliwość samodzielnego dodawania linii <br>
+                            oraz konfiguracji każdego wariantu trasy
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4">
+                    <div class="px-8 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
+                        <i class="ki-filled ki-time text-xl text-green-900"></i>
+                    </div>
+
+                    <div class="text-center md:text-left">
+                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Planuj Rozkłady Jazdy</h4>
+                        <p class="font-normal text-gray-600 text-xl leading-relaxed">
+                            Konfigurujesz kalendaż i decydujesz <br>
+                            w jakie dni kursuje dana linia
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div> <!-- container.// -->
+
+</section>
+<!-- feature section //end -->
+
+<!-- gallery section -->
+<!--<section class="bg-white py-10 md:py-16">-->
+
+<!--    <div class="container max-w-screen-xl mx-auto px-4">-->
+
+<!--        <h1 class="font-semibold text-gray-900 text-4xl text-center mb-10">Our Gallery</h1>-->
+
+<!--        <div class="hidden md:block flex items-center text-center space-x-10 lg:space-x-20 mb-12">-->
+<!--            <a href="#" class="px-6 py-2 bg-green-800 text-white font-semibold text-xl rounded-lg hover:bg-green-600 transition ease-in-out duration-500">All</a>-->
+<!--            <a href="#" class="px-6 py-2 text-gray-900 font-normal text-xl rounded-lg hover:bg-gray-200 hover:text-gray-600 transition ease-in-out duration-500">Exterior</a>-->
+<!--            <a href="#" class="px-6 py-2 text-gray-900 font-normal text-xl rounded-lg hover:bg-gray-200 hover:text-gray-600 transition ease-in-out duration-500">Interior</a>-->
+<!--            <a href="#" class="px-6 py-2 text-gray-900 font-normal text-xl rounded-lg hover:bg-gray-200 hover:text-gray-600 transition ease-in-out duration-500">Building</a>-->
+<!--        </div>-->
+
+<!--        <div class="flex space-x-4 md:space-x-6 lg:space-x-8">-->
+<!--            <div>-->
+<!--                <img src="assets/image/gallery-1.png" alt="image" class="mb-4 md:mb-6 lg:mb-8 hover:opacity-75 transition ease-in-out duration-500">-->
+<!--                <img src="assets/image/gallery-4.png" alt="image" class="hover:opacity-75 transition ease-in-out duration-500">-->
+<!--            </div>-->
+
+<!--            <div>-->
+<!--                <img src="assets/image/gallery-2.png" alt="image" class="mb-4 md:mb-6 lg:mb-8 hover:opacity-75 transition ease-in-out duration-500">-->
+<!--                <img src="assets/image/gallery-5.png" alt="image" class="mb-3 md:mb-6 lg:mb-8 hover:opacity-75 transition ease-in-out duration-500">-->
+<!--                <img src="assets/image/gallery-6.png" alt="image" class="hover:opacity-75 transition ease-in-out duration-500">-->
+<!--            </div>-->
+
+<!--            <div>-->
+<!--                <img src="assets/image/gallery-3.png" alt="image" class="mb-4 md:mb-6 lg:mb-8 hover:opacity-75 transition ease-in-out duration-500">-->
+<!--                <img src="assets/image/gallery-7.png" alt="image" class="hover:opacity-75 transition ease-in-out duration-500">-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div> &lt;!&ndash; container.// &ndash;&gt;-->
+
+<!--</section>-->
+<!-- gallery section //end -->
+
+<!-- testimoni section -->
+<section id="about" class="bg-white py-10 md:py-16">
+
+    <div class="container max-w-screen-xl mx-auto px-4 xl:relative">
+
+        <p class="font-normal text-gray-600 text-lg md:text-xl text-center uppercase mb-6">O Mnie</p>
+
+        <h1 class="font-semibold text-gray-900 text-2xl md:text-4xl text-center leading-normal mb-14">Kim jestesm?</h1>
+
+        <div class="hidden xl:block xl:absolute top-0">
+            <img src="assets/image/testimoni-1.png" alt="Image">
+        </div>
+
+        <div class="hidden xl:block xl:absolute top-32">
+            <img src="assets/image/testimoni-2.png" alt="Image">
+        </div>
+
+        <!--        <div class="flex flex-col md:flex-row md:items-center justify-center md:space-x-8 lg:space-x-12 mb-10 md:mb-20">-->
+
+        <!--            <div class="bg-gray-100 rounded-lg mb-10 md:mb-0">-->
+        <!--                <img src="assets/image/testimoni-3.png" alt="Image" class="mx-8 my-8">-->
+
+        <!--                <div class="flex items-center gap-5 mx-8">-->
+        <!--                    <i data-feather="star" class="text-yellow-500"></i>-->
+        <!--                    <i data-feather="star" class="text-yellow-500"></i>-->
+        <!--                    <i data-feather="star" class="text-yellow-500"></i>-->
+        <!--                    <i data-feather="star" class="text-yellow-500"></i>-->
+        <!--                    <i data-feather="star" class="text-yellow-500"></i>-->
+        <!--                </div>-->
+
+        <!--                <p class="font-normal text-sm lg:text-md text-gray-600 mx-8 my-8">-->
+        <!--                    Jestem naukowcem zajmującym się analizą danych telemetrycznych i lokalizacyjnych transportu-->
+        <!--                    publicznego. <br>-->
+        <!--                    Posiadam ponad 10-letnie doświadczenie w tworzeniu aplikacji webowych <br>-->
+        <!--                    oraz 4 lata pracy naukowej na Wydziale Matematyki i Nauk Informacyjnych Politechniki Warszawskiej.-->
+        <!--                    <br>-->
+        <!--                    Moja praca łączy wiedzę z zakresu informatyki, matematyki stosowanej i analizy danych, co pozwala mi-->
+        <!--                    tworzyć nowoczesne i wydajne rozwiązania wspierające rozwój inteligentnych systemów transportowych.-->
+        <!--                </p>-->
+
+        <!--                <h3 class="font-semibold text-gray-900 text-xl md:text-2xl lg:text-3xl mx-8 mb-8">Przemysław WRONA</h3>-->
+        <!--            </div>-->
+
+        <!--        </div>-->
+
+    </div> <!-- container.// -->
+
+</section>
+<!-- testimoni section //end -->
+
+<section class="pt-10 overflow-hidden bg-gray-50 dark:bg-gray-800 md:pt-0 sm:pt-16 2xl:pt-16">
+    <div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+        <div class="grid items-center grid-cols-1 md:grid-cols-2">
+
+            <div>
+                <h2 class="text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl lg:text-5xl">
+                    Cześć 👋 Mam na imię
+                    <br class="block sm:hidden"/>Przemysław Wrona
+                </h2>
+                <p class="max-w-lg mt-3 text-xl leading-relaxed text-gray-600 dark:text-gray-300 md:mt-8">
+                    Jestem naukowcem zajmującym się analizą danych telemetrycznych i lokalizacyjnych transportu
+                    publicznego.
+                    10 lat doświadczenie w tworzeniu aplikacji webowych
+                    4 lata pracy naukowej na Wydziale Matematyki i Nauk Informacyjnych Politechniki Warszawskiej.
+                    Moja praca łączy wiedzę z zakresu informatyki, matematyki stosowanej i analizy danych, co pozwala mi
+                    tworzyć nowoczesne i wydajne rozwiązania wspierające rozwój inteligentnych systemów transportowych.
+                </p>
+
+                <p class="mt-4 text-xl text-gray-600 dark:text-gray-300 md:mt-8">
+                    <span class="relative inline-block">
+                        <span class="absolute inline-block w-full bottom-0.5 h-2 bg-yellow-300 dark:bg-gray-900"></span>
+                    <span class="relative"> Masz do mnie pytanie? </span>
+                    </span>
+                    <br class="block sm:hidden"/>Napisz do mnie mail <a href="#" title=""
+                                                                        class="transition-all duration-200 text-sky-500 dark:text-sky-400 hover:text-sky-600 dark:hover:text-sky-500 hover:underline">Twitter</a>
+                </p>
+            </div>
+
+            <div class="relative">
+                <img class="absolute inset-x-0 bottom-0 -mb-48 -translate-x-1/2 left-1/2"
+                     src="https://cdn.rareblocks.xyz/collection/celebration/images/team/1/blob-shape.svg" alt=""/>
+
+                <img class="relative w-full xl:max-w-lg xl:mx-auto 2xl:origin-bottom 2xl:scale-110"
+                     src="https://cdn.rareblocks.xyz/collection/celebration/images/team/1/business-woman.png" alt=""/>
+            </div>
+
         </div>
     </div>
-</nav>
+</section>
 
-<div class="container">
+<!-- book section -->
+<!--<section class="bg-white py-10 md:py-16">-->
 
+<!--    <div class="container max-w-screen-xl mx-auto px-4 xl:relative">-->
 
+<!--        <div class="bg-green-800 flex flex-col lg:flex-row items-center justify-evenly py-14 rounded-3xl">-->
 
-</div>
+<!--            <div class="text-center lg:text-left mb-10 lg:mb-0">-->
+<!--                <h1 class="font-semibold text-white text-4xl md:text-5xl lg:text-7xl leading-normal mb-4">Talk to us-->
+<!--                    <br> to discuss</h1>-->
+
+<!--                <p class="font-normal text-white text-md md:text-xl">Need more time to discuss? Won’t worry, we are <br>-->
+<!--                    ready to help you. You can fill in the column on the <br> right to book a meeting with us. Totally-->
+<!--                    free.</p>-->
+<!--            </div>-->
+
+<!--            <div class="hidden xl:block xl:absolute right-0">-->
+<!--                <img src="assets/image/book.png" alt="Image">-->
+<!--            </div>-->
+
+<!--            <div class="hidden md:block bg-white xl:relative px-6 py-3 rounded-3xl">-->
+<!--                <div class="py-3">-->
+<!--                    <h3 class="font-semibold text-gray-900 text-3xl">Book a meeting</h3>-->
+<!--                </div>-->
+
+<!--                <div class="py-3">-->
+<!--                    <input type="text" placeholder="Full Name"-->
+<!--                           class="px-4 py-4 w-96 bg-gray-100 placeholder-gray-400 rounded-xl outline-none">-->
+<!--                </div>-->
+
+<!--                <div class="py-3">-->
+<!--                    <input type="text" placeholder="Email"-->
+<!--                           class="px-4 py-4 w-96 bg-gray-100 placeholder-gray-400 rounded-xl outline-none">-->
+<!--                </div>-->
+
+<!--                <div class="py-3 relative">-->
+<!--                    <input type="text" placeholder="Date"-->
+<!--                           class="px-4 py-4 w-96 bg-gray-100 font-normal text-lg placeholder-gray-400 rounded-xl outline-none">-->
+
+<!--                    <div class="absolute inset-y-0 left-80 ml-6 flex items-center text-xl text-gray-600">-->
+<!--                        <i data-feather="calendar"></i>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="py-3 relative">-->
+<!--                    <input type="text" placeholder="Virtual Meeting"-->
+<!--                           class="px-4 py-4 w-96 bg-gray-100 placeholder-gray-400 rounded-xl outline-none">-->
+
+<!--                    <div class="absolute inset-y-0 left-80 ml-6 flex items-center text-xl text-gray-600">-->
+<!--                        <i data-feather="chevron-down"></i>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="py-3">-->
+<!--                    <button class="w-full py-4 font-semibold text-lg text-white bg-green-700 rounded-xl hover:bg-green-900 transition ease-in-out duration-500">-->
+<!--                        Booking-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+
+<!--    </div> &lt;!&ndash; container.// &ndash;&gt;-->
+
+<!--</section>-->
+<!-- book section //end -->
+
+<!-- footer -->
+<footer class="bg-white py-10 md:py-16">
+
+    <div class="container max-w-screen-xl mx-auto px-4">
+
+        <div class="flex flex-col lg:flex-row justify-between">
+            <div class="text-center lg:text-left mb-10 lg:mb-0">
+                <div class="flex justify-center lg:justify-start mb-5">
+                    <img src="assets/image/footer-logo.png" alt="Image">
+                </div>
+
+                <p class="font-light text-gray-600 text-xl mb-10">Get your dream house with <br> D’house</p>
+
+                <div class="flex items-center justify-center lg:justify-start space-x-5">
+                    <a href="#"
+                       class="px-3 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-green-800 hover:text-white transition ease-in-out duration-500">
+                        <i data-feather="facebook"></i>
+                    </a>
+
+                    <a href="#"
+                       class="px-3 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-green-800 hover:text-white transition ease-in-out duration-500">
+                        <i data-feather="twitter"></i>
+                    </a>
+
+                    <a href="#"
+                       class="px-3 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-green-800 hover:text-white transition ease-in-out duration-500">
+                        <i data-feather="linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+<!--            <div class="text-center lg:text-left mb-10 lg:mb-0">-->
+<!--                <h4 class="font-semibold text-gray-900 text-2xl mb-6">Sitemap</h4>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Home</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Features</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Gallery</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Testimoni</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Book-->
+<!--                    a meeting</a>-->
+<!--            </div>-->
+
+<!--            <div class="text-center lg:text-left mb-10 lg:mb-0">-->
+<!--                <h4 class="font-semibold text-gray-900 text-2xl mb-6">Landing</h4>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Mobile-->
+<!--                    App</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Property</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Personal-->
+<!--                    Website</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Web-->
+<!--                    Developer</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Online-->
+<!--                    Course</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Donation</a>-->
+<!--            </div>-->
+
+<!--            <div class="text-center lg:text-left">-->
+<!--                <h4 class="font-semibold text-gray-900 text-2xl mb-6">Utility</h4>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">FAQ</a>-->
+
+<!--                <a href="#"-->
+<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Terms-->
+<!--                    & Conditions</a>-->
+<!--            </div>-->
+        </div>
+
+    </div> <!-- container.// -->
+
+</footer>
+<!-- footer //end -->
