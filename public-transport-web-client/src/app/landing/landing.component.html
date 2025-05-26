@@ -1,5 +1,5 @@
 <!-- home section -->
-<section class="bg-white mb-20 md:mb-52 xl:mb-72">
+<section id="header" class="bg-white mb-5 min-h-screen">
 
     <nav>
         <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -34,16 +34,18 @@
                 </div>
                 <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start z-50">
                     <div class="flex shrink-0 items-center">
-                        <img src="assets/image/navbar-logo.png" alt="Logo img"
-                             class="h-8 w-auto w-52 md:w-80 lg:w-full">
+                        <div class="font-bold tracking-widest">NASTĘPNA STACJA</div>
+                        <!--                        <div class="font-bold tracking-widest">RATUSZ ARSENAŁ</div>-->
+                        <!--                        <img src="assets/image/navbar-logo.png" alt="Logo img"-->
+                        <!--                             class="h-8 w-auto w-52 md:w-80 lg:w-full">-->
                     </div>
                     <div class="hidden sm:block m-auto">
                         <div class="flex space-x-4">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-<!--                            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"-->
-<!--                               aria-current="page">Dashboard</a>-->
-<!--                            <a href="#"-->
-<!--                               class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">Team</a>-->
+                            <!--                            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"-->
+                            <!--                               aria-current="page">Dashboard</a>-->
+                            <!--                            <a href="#"-->
+                            <!--                               class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">Team</a>-->
                             <a (click)="scrollToProduct()"
                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">Produkt</a>
                             <a (click)="scrollToAbout()"
@@ -51,9 +53,6 @@
                                 Mnie</a>
                         </div>
                     </div>
-                    <button (click)="navigateToLogin()" class="px-5 py-3 lg:block border-2 border-blue-700 rounded-lg font-semibold text-blue-700 text-sm hover:bg-blue-700 hover:text-white transition ease-linear duration-500">
-                        Sprawdź usługę DEMO
-                    </button>
                 </div>
             </div>
         </div>
@@ -62,48 +61,53 @@
         <div class="sm:hidden" id="mobile-menu">
             <div class="space-y-1 px-2 pt-2 pb-3">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
-                   aria-current="page">Dashboard</a>
-                <a href="#"
-                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
-                <a href="#product"
+                <a (click)="scrollToProduct()"
                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Produkt</a>
-                <a href="#about"
+                <a (click)="scrollToAbout()"
                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">O
                     Mnie</a>
             </div>
-
-            <button class="btn btn-outline btn-success px-5 py-3 lg:block border-2 border-blue-700 rounded-lg font-semibold text-blue-700 text-lg hover:bg-green-700 hover:text-white transition ease-linear duration-500">
-                Request quote
-            </button>
         </div>
     </nav>
 
-    <div class="container max-w-screen-xl mx-auto px-4">
+    <div class="container max-w-screen-xl mx-auto px-4 min-h-screen">
 
-        <div class="flex items-center justify-center xl:justify-start">
+        <div class="flex items-center justify-center xl:justify-start min-h-screen">
 
-            <div class="mt-28 text-center xl:text-left">
-                <h1 class="font-semibold text-4xl md:text-5xl lg:text-5xl text-gray-900 leading-normal mb-6"> Daj się
-                    znaleźć <br> na mapie! <br>Google Maps
-                    <img class="inline-block" src="assets/google_maps_logo_icon_171055.png" height="64">
-                </h1>
+            <div class="text-center xl:text-left">
+                <div class="inline-flex">
+                    <h1 class="font-semibold text-4xl md:text-5xl lg:text-5xl text-gray-900 leading-normal mb-6 mt-6">
+                        Daj
+                        się
+                        znaleźć <br> na mapie!
+                    </h1>
+                    <span class="flex items-center">
+                        <img class="inline-block" src="assets/media/images/landing-page/google_maps_logo.png"
+                             height="48">
+                    </span>
+                </div>
 
 
                 <p class="font-normal text-xl text-gray-600 leading-relaxed mb-12">
                     Prowadzisz działalność związaną z przewozem osób? <br>
                     Chcesz być widoczny w Google Maps? <br>
-                    Napisz do mnie – pomogę Ci być widocznym w Google Maps!
+                    Napisz do mnie – pomogę Ci przygotować rozkład jazdy!
                 </p>
 
-                <button class="btn-demo px-6 py-4 bg-blue-700 text-white font-semibold text-lg rounded-xl hover:bg-blue-900 transition ease-in-out duration-500">
-                    Napisz do Mnie
-                </button>
+                <div class="flex">
+                    <button class="px-5 py-3 bg-blue-700 text-white text-sm font-semibold rounded-lg hover:bg-blue-900 transition ease-in-out duration-500 mr-5">
+                        Napisz do Mnie
+                    </button>
+
+                    <button (click)="navigateToLogin()"
+                            class="px-5 py-3 lg:block border-2 border-blue-700 hover:border-blue-900 rounded-lg font-semibold text-blue-700 text-sm hover:bg-blue-900 hover:text-white transition ease-in-out duration-500">
+                        Sprawdź usługę DEMO
+                    </button>
+                </div>
             </div>
 
-            <div class="hidden xl:block xl:absolute z-0 top-0 right-0">
-                <!--                <img src="assets/image/google-maps-bus-routes.jpg" class="h-full" alt="Home img">-->
-                <img src="assets/image/home-img.png" class="h-full" alt="Home img">
+            <div class="hidden xl:block xl:absolute top-0 right-0">
+                <img src="assets/media/images/landing-page/bus.jpg" class="max-h-screen" alt="Home img">
             </div>
 
         </div>
@@ -114,70 +118,80 @@
 <!-- home section //nd -->
 
 <!-- feature section -->
-<section id="product" class="bg-white py-10 md:py-16 xl:relative">
+<section id="product" class="bg-white xl:relative">
 
     <div class="container max-w-screen-xl mx-auto px-4">
 
         <div class="flex flex-col xl:flex-row justify-end">
 
-            <div class="hidden xl:block xl:absolute left-0 bottom-0 w-full">
-                <img src="assets/image/feature-img.png" alt="Feature img">
+            <div class="hidden xl:block xl:absolute left-0 bottom-0 w-full h-full">
+                <img src="assets/media/images/landing-page/city-map-routes.png" class="h-full" alt="Feature img">
             </div>
 
-            <div class="">
+            <div class="bg-white/95 z-1 lg:pl-8">
 
-                <h1 class="font-semibold text-gray-900 text-xl md:text-4xl text-center leading-normal mb-6">
+                <h1 class="font-semibold text-gray-900 text-xl md:text-4xl text-center leading-normal my-6">
                     Digitalizacja Rozkładów Jazdy
                 </h1>
 
-                <p class="font-normal text-gray-600 text-md md:text-xl text-center mb-16">
-                    Dostarczam rozkłady jazdy w formacie dla <br>
-                    Planer Podróży Google <br>
+                <p class="font-normal text-gray-600 text-md md:text-xl text-center mb-8">
+                    Dostarczam rozkłady jazdy dla <br>
+                    Planera Podróży Google <br>
                 </p>
 
                 <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4 mb-20">
                     <div class="px-4 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
                         <!--                        <i class="ki-filled ki-map text-xl text-green-900"></i>-->
-                        <img src="assets/google_maps_logo.png" width="48">
+                        <img src="../../assets/media/images/landing-page/google_maps_logo_icon.png" width="48">
                     </div>
 
-                    <div class="text-center md:text-left">
-                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Rozkłady na Google Maps</h4>
+                    <div class="text-center lg:text-left">
+                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Rozkłady Jazdy na Google Maps</h4>
                         <p class="font-normal text-gray-600 text-xl leading-relaxed">
-                            Gwarantujemy poprawność danych rozkładow jazdy <br>
-                            dostarczanych dla Google
+                            Wdrażam rozkłady jazdy do powszechnie znanych aplikacji, <br> w tym do Map Google
                         </p>
                     </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4 mb-20">
-                    <div class="px-8 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
-                        <i class="ki-filled ki-route text-xl text-green-900"></i>
+                    <div class="px-2 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
+                        <img src="assets/media/images/landing-page/routes_icon.png" width="64">
                     </div>
 
-                    <div class="text-center md:text-left">
+                    <div class="text-center lg:text-left">
                         <h4 class="font-semibold text-gray-900 text-2xl mb-2">Zarządaj Liniami i Trasami</h4>
                         <p class="font-normal text-gray-600 text-xl leading-relaxed">
-                            Posoadasz możliwość samodzielnego dodawania linii <br>
-                            oraz konfiguracji każdego wariantu trasy
+                            W aplikacji możesz samodzielnie dodawać nowe linie <br>
+                            oraz konfigurować wariant trasy
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4 mb-20">
+                    <div class="px-2 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
+                        <img src="../../assets/media/images/landing-page/timetable_icon.png" width="72">
+                    </div>
+
+                    <div class="text-center lg:text-left">
+                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Zaplanuj Rozkład Jazdy</h4>
+                        <p class="font-normal text-gray-600 text-xl leading-relaxed">
+                            Skonfiguruj kalendrz i zdecyduj w jakie dni kursuje linia autobusowa <br>
                         </p>
                     </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4">
-                    <div class="px-8 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
-                        <i class="ki-filled ki-time text-xl text-green-900"></i>
+                    <div class="px-2 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
+                        <img src="assets/media/images/landing-page/timetables_icon.png" width="64">
                     </div>
 
-                    <div class="text-center md:text-left">
-                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Planuj Rozkłady Jazdy</h4>
+                    <div class="text-center lg:text-left">
+                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Tabliczki przystankowe</h4>
                         <p class="font-normal text-gray-600 text-xl leading-relaxed">
-                            Konfigurujesz kalendaż i decydujesz <br>
-                            w jakie dni kursuje dana linia
+                            Na podstawie danych wygenerujesz tabliczki przystankowe.
                         </p>
                     </div>
                 </div>
-
             </div>
 
         </div>
@@ -225,21 +239,21 @@
 <!-- gallery section //end -->
 
 <!-- testimoni section -->
-<section id="about" class="bg-white py-10 md:py-16">
+<section id="about" class="md:py-16 mt-8 mb-8">
 
     <div class="container max-w-screen-xl mx-auto px-4 xl:relative">
 
         <p class="font-normal text-gray-600 text-lg md:text-xl text-center uppercase mb-6">O Mnie</p>
 
-        <h1 class="font-semibold text-gray-900 text-2xl md:text-4xl text-center leading-normal mb-14">Kim jestesm?</h1>
+        <h1 class="font-semibold text-gray-900 text-2xl md:text-4xl text-center leading-normal">Kim jestem?</h1>
 
-        <div class="hidden xl:block xl:absolute top-0">
-            <img src="assets/image/testimoni-1.png" alt="Image">
-        </div>
+        <!--        <div class="hidden xl:block xl:absolute top-0">-->
+        <!--            <img src="assets/image/testimoni-1.png" alt="Image">-->
+        <!--        </div>-->
 
-        <div class="hidden xl:block xl:absolute top-32">
-            <img src="assets/image/testimoni-2.png" alt="Image">
-        </div>
+        <!--        <div class="hidden xl:block xl:absolute top-32">-->
+        <!--            <img src="assets/image/testimoni-2.png" alt="Image">-->
+        <!--        </div>-->
 
         <!--        <div class="flex flex-col md:flex-row md:items-center justify-center md:space-x-8 lg:space-x-12 mb-10 md:mb-20">-->
 
@@ -286,28 +300,32 @@
                 <p class="max-w-lg mt-3 text-xl leading-relaxed text-gray-600 dark:text-gray-300 md:mt-8">
                     Jestem naukowcem zajmującym się analizą danych telemetrycznych i lokalizacyjnych transportu
                     publicznego.
-                    10 lat doświadczenie w tworzeniu aplikacji webowych
+                    Mam 10 lat doświadczenie w tworzeniu Systemów Informatycznych oraz
                     4 lata pracy naukowej na Wydziale Matematyki i Nauk Informacyjnych Politechniki Warszawskiej.
-                    Moja praca łączy wiedzę z zakresu informatyki, matematyki stosowanej i analizy danych, co pozwala mi
-                    tworzyć nowoczesne i wydajne rozwiązania wspierające rozwój inteligentnych systemów transportowych.
+                    Moja praca łączy wiedzę z zakresu informatyki, matematyki i analizy danych.
+                    Tworzę nowoczesne rozwiązania wspierające rozwój inteligentnych systemów transportowych.
                 </p>
 
                 <p class="mt-4 text-xl text-gray-600 dark:text-gray-300 md:mt-8">
                     <span class="relative inline-block">
                         <span class="absolute inline-block w-full bottom-0.5 h-2 bg-yellow-300 dark:bg-gray-900"></span>
-                    <span class="relative"> Masz do mnie pytanie? </span>
+                        <span class="relative"> Masz do mnie pytanie? </span>
                     </span>
-                    <br class="block sm:hidden"/>Napisz do mnie mail <a href="#" title=""
-                                                                        class="transition-all duration-200 text-sky-500 dark:text-sky-400 hover:text-sky-600 dark:hover:text-sky-500 hover:underline">Twitter</a>
+                    <!--                    <br class="block sm:hidden"/>-->
+                    <a href="mailto:przemekwrona25@gmail.com?subject=Zapytanie ofertowe&body=Dzień Dobry,%0A%0Aw odpowiedzi na tego maila proszę o kontakt i przesłanie bla bla bla"
+                       class="transition-all duration-200 text-sky-500 dark:text-sky-400 hover:text-sky-600 dark:hover:text-sky-500 hover:underline">
+                        Wyślji mail</a>
                 </p>
             </div>
 
             <div class="relative">
                 <img class="absolute inset-x-0 bottom-0 -mb-48 -translate-x-1/2 left-1/2"
-                     src="https://cdn.rareblocks.xyz/collection/celebration/images/team/1/blob-shape.svg" alt=""/>
+                     src="assets/media/svg/landing-page/blob-shape.svg" alt="Blob shape SVG"/>
 
                 <img class="relative w-full xl:max-w-lg xl:mx-auto 2xl:origin-bottom 2xl:scale-110"
                      src="https://cdn.rareblocks.xyz/collection/celebration/images/team/1/business-woman.png" alt=""/>
+
+                <!--                <img src="assets/media/images/landing-page/wrona.jpg">-->
             </div>
 
         </div>
@@ -382,95 +400,51 @@
 <!-- book section //end -->
 
 <!-- footer -->
-<footer class="bg-white py-10 md:py-16">
+<footer class="bg-gray-900 text-white py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-3 gap-8">
 
-    <div class="container max-w-screen-xl mx-auto px-4">
-
-        <div class="flex flex-col lg:flex-row justify-between">
-            <div class="text-center lg:text-left mb-10 lg:mb-0">
-                <div class="flex justify-center lg:justify-start mb-5">
-                    <img src="assets/image/footer-logo.png" alt="Image">
+            <!-- Logo i nazwa -->
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <!--                    <img src="/logo.svg" alt="Logo" class="h-8 w-8">-->
+                    <span class="font-semibold tracking-widest">NASTĘPNA STACJA</span>
                 </div>
-
-                <p class="font-light text-gray-600 text-xl mb-10">Get your dream house with <br> D’house</p>
-
-                <div class="flex items-center justify-center lg:justify-start space-x-5">
-                    <a href="#"
-                       class="px-3 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-green-800 hover:text-white transition ease-in-out duration-500">
-                        <i data-feather="facebook"></i>
-                    </a>
-
-                    <a href="#"
-                       class="px-3 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-green-800 hover:text-white transition ease-in-out duration-500">
-                        <i data-feather="twitter"></i>
-                    </a>
-
-                    <a href="#"
-                       class="px-3 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-green-800 hover:text-white transition ease-in-out duration-500">
-                        <i data-feather="linkedin"></i>
-                    </a>
-                </div>
+                <p class="text-sm text-gray-400">Systemy informatyczne dla Organizatorów Transportu Publicznego</p>
             </div>
 
-<!--            <div class="text-center lg:text-left mb-10 lg:mb-0">-->
-<!--                <h4 class="font-semibold text-gray-900 text-2xl mb-6">Sitemap</h4>-->
+            <!-- Linki nawigacyjne -->
+            <div>
+                <h4 class="text-white font-semibold mb-4">Nawigacja</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a (click)="scrollToHeader()" class="hover:underline">Strona główna</a></li>
+                    <li><a (click)="scrollToProduct()" class="hover:underline">Usługi</a></li>
+                    <li><a (click)="scrollToAbout()" class="hover:underline">O mnie</a></li>
+                </ul>
+            </div>
 
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Home</a>-->
+            <!-- Kontakt -->
+            <div>
+                <h4 class="text-white font-semibold mb-4">Kontakt</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <!--                    <li>-->
+                    <!--                        <span class="block">📍 ul. Przykładowa 123, 00-001 Warszawa</span>-->
+                    <!--                    </li>-->
+                    <!--                    <li>-->
+                    <!--                        <span class="block">📞 +48 123 456 789</span>-->
+                    <!--                    </li>-->
+                    <li>
+                        <span class="block">✉️ przemekwrona25 gmail.com</span>
+                    </li>
+                </ul>
+            </div>
 
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Features</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Gallery</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Testimoni</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Book-->
-<!--                    a meeting</a>-->
-<!--            </div>-->
-
-<!--            <div class="text-center lg:text-left mb-10 lg:mb-0">-->
-<!--                <h4 class="font-semibold text-gray-900 text-2xl mb-6">Landing</h4>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Mobile-->
-<!--                    App</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Property</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Personal-->
-<!--                    Website</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Web-->
-<!--                    Developer</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Online-->
-<!--                    Course</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Donation</a>-->
-<!--            </div>-->
-
-<!--            <div class="text-center lg:text-left">-->
-<!--                <h4 class="font-semibold text-gray-900 text-2xl mb-6">Utility</h4>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">FAQ</a>-->
-
-<!--                <a href="#"-->
-<!--                   class="block font-light text-gray-600 text-xl mb-6 hover:text-gray-800 transition ease-in-out duration-300">Terms-->
-<!--                    & Conditions</a>-->
-<!--            </div>-->
         </div>
 
-    </div> <!-- container.// -->
-
+        <div class="mt-8 border-t border-gray-700 pt-4 text-center text-sm text-gray-500">
+            &copy; 2025 <span class="tracking-widest">NASTĘPNA STACJA</span>. Wszelkie prawa zastrzeżone.
+        </div>
+    </div>
 </footer>
+
 <!-- footer //end -->
