@@ -1,13 +1,36 @@
-import {Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild} from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    EventEmitter,
+    inject,
+    Input,
+    Output,
+    Renderer2,
+    ViewChild
+} from '@angular/core';
 import {StopsResponse, StopsService} from "../../../generated/public-transport";
 import {Stop} from "../../../generated";
+import {faMap, faBus} from "@fortawesome/free-solid-svg-icons";
+import {MatDialog} from "@angular/material/dialog";
+import {BusStopModalSelectorComponent} from "../bus-stop-modal-selector/bus-stop-modal-selector.component";
+
+export interface DialogData {
+    animal: string;
+    name: string;
+}
 
 @Component({
     selector: 'app-bus-stop-selector',
     templateUrl: './bus-stop-selector.component.html',
-    styleUrl: './bus-stop-selector.component.scss'
+    styleUrl: './bus-stop-selector.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BusStopSelectorComponent {
+    readonly dialog = inject(MatDialog);
+
+    readonly faMap = faMap;
+    readonly faBus = faBus;
 
     /**
      * Holds the current value of the slider
@@ -18,7 +41,6 @@ export class BusStopSelectorComponent {
      * Invoked when the model has been changed
      */
     @Output() busStopIdChange: EventEmitter<string> = new EventEmitter<string>();
-
 
 
     @ViewChild('toggleInput') toggleButton: ElementRef;
@@ -56,8 +78,22 @@ export class BusStopSelectorComponent {
         if (this.stopNamePrefix.length > 2) {
             this.stopsService.findStopsByStopName(stopNamePrefix).subscribe((response: StopsResponse) => {
                 this.busStops = response.stops
+                this.showOptions = true;
             });
         }
+    }
+
+    openDialog(): void {
+        const dialogRef = this.dialog.open(BusStopModalSelectorComponent, {
+            data: {name: 'this.name()', animal: 'this.animal()'},
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+            if (result !== undefined) {
+                // 'this.animal.set(result);'
+            }
+        });
     }
 
 }
