@@ -15,7 +15,7 @@ import {faMap, faBus} from "@fortawesome/free-solid-svg-icons";
 import {MatDialog} from "@angular/material/dialog";
 import {BusStopModalSelectorComponent} from "../bus-stop-modal-selector/bus-stop-modal-selector.component";
 
-export interface BusStopDialogData {
+export interface BusStopSelectorData {
     stopId: string;
     stopName: string;
     stopLon: number;

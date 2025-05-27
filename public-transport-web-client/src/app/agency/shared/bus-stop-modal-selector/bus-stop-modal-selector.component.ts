@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, inject, model} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {BusStopDialogData} from "../bus-stop-selector/bus-stop-selector.component";
+import {BusStopSelectorData} from "../bus-stop-selector/bus-stop-selector.component";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
 import * as L from "leaflet";
 import {Stop, StopsResponse} from "../../../generated/public-transport";
@@ -24,7 +24,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
     });
 
     readonly dialogRef = inject(MatDialogRef<BusStopModalSelectorComponent>);
-    readonly data = inject<BusStopDialogData>(MAT_DIALOG_DATA);
+    readonly data = inject<BusStopSelectorData>(MAT_DIALOG_DATA);
     readonly stopId = model(this.data.stopId);
     readonly stopName = model(this.data.stopName);
 
@@ -69,7 +69,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
                 stopMarkers.forEach(marker => marker.on('click', (event: LeafletMouseEvent) => {
                     const lastClickedStop: Stop = find(this.stops, {id: event.target.id});
 
-                    const selectedStop: BusStopDialogData = {} as BusStopDialogData;
+                    const selectedStop: BusStopSelectorData = {} as BusStopSelectorData;
                     selectedStop.stopId = lastClickedStop.id;
                     selectedStop.stopName = lastClickedStop.name;
                     selectedStop.stopLat = lastClickedStop.lat;
@@ -118,7 +118,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
         return map;
     }
 
-    closeModal(selectedStop: BusStopDialogData) {
+    closeModal(selectedStop: BusStopSelectorData) {
         this.dialogRef.close(selectedStop);
     }
 
