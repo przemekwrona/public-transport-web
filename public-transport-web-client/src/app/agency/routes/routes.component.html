@@ -3,11 +3,11 @@
         <div class="flex flex-col justify-center gap-2">
             <h1 class="text-xl font-medium leading-none text-gray-900">Lista lini autobusowych</h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-                Central Hub for Personal Customization
+                Lista linii autobusowych to spis tras, które obsługiwane są przez autobusy w danym systemie komunikacji miejskiej, podmiejskiej lub międzymiastowej.
             </div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a (click)="clickAddRoute()" class="btn btn-sm btn-primary">Dodaj nową linię</a>
+            <a (click)="clickAddRoute()" data-testid="add-route" class="btn btn-sm btn-primary">Dodaj nową linię</a>
         </div>
     </div>
 </div>
@@ -38,12 +38,6 @@
                     <div class="flex items-center flex-wrap gap-2.5">
                         <a (click)="openRoute(route)" class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ route.name }}</a>
                         <span *ngIf="!route.active" class="badge badge-sm badge-outline badge-danger">NIE Aktywna</span>
-                    </div>
-                    <div class="form-info text-gray-800 font-normal">
-                        {{ route.description }}<br>
-                        To jest tylko krótki opis linii. Kliknij&nbsp;
-                        <a (click)="openRoute(route)" class="link">Pokaż Szczegóły</a>
-                        i dowiedz się więcej.
                     </div>
                 </div>
             </div>

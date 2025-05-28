@@ -89,29 +89,18 @@
                     <div class="w-full">
                         <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                             <label class="form-label flex items-center gap-1 max-w-56">
-                                Miejsowość początkowa
+                                Przystanek początkowy
                             </label>
-                            <app-bus-stop-selector [(busStopId)]="route.origin" class="w-full"></app-bus-stop-selector>
+                            <app-bus-stop-selector [(busStopId)]="origin" class="w-full"></app-bus-stop-selector>
                         </div>
                     </div>
 
                     <div class="w-full">
                         <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                             <label class="form-label flex items-center gap-1 max-w-56">
-                                Miejscowość pośrednia
+                                Przystanek końcowy
                             </label>
-
-                            <input type="text" name="via" id="via" [(ngModel)]="route.via"
-                                   class="input" placeholder="">
-                        </div>
-                    </div>
-
-                    <div class="w-full">
-                        <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                            <label class="form-label flex items-center gap-1 max-w-56">
-                                Miejscowość docelowa
-                            </label>
-                            <app-bus-stop-selector [(busStopId)]="route.destination" class="w-full"></app-bus-stop-selector>
+                            <app-bus-stop-selector [(busStopId)]="destination" class="w-full"></app-bus-stop-selector>
                         </div>
                     </div>
 
