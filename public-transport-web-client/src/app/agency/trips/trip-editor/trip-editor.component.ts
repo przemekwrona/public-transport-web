@@ -51,6 +51,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public tripEditorComponentMode: TripEditorComponentMode;
 
     public $tripDetails: TripsDetails = {trip: {}};
+    public $tripVariants: Trips = {};
 
     constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private _route: ActivatedRoute) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
@@ -58,17 +59,65 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
-        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => this.$tripDetails = tripDetails);
+        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => {
+            this.$tripDetails = tripDetails;
+
+            this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: Trips) => {
+                this.$tripVariants = tripVariants;
+
+                if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
+                    if (this.$tripVariants?.trips.length || 0 == 0) {
+                        this.$tripDetails.trip.isMainVariant = true;
+                        this.$tripDetails.trip.variant = "MAIN";
+                        this.$tripDetails.trip.mode = TripMode.Front;
+                        this.$tripDetails.trip.origin = tripVariants.route.originStop.name;
+                        this.$tripDetails.trip.destination = tripVariants.route.destinationStop.name;
+                        this.$tripDetails.trip.headsign = tripVariants.route.destinationStop.name;
+
+                        const stopTime: StopTime = {} as StopTime;
+                        stopTime.stopId = tripVariants.route.originStop.id;
+                        stopTime.stopName = tripVariants.route.originStop.name;
+                        stopTime.lon = tripVariants.route.originStop.lon;
+                        stopTime.lat = tripVariants.route.originStop.lat;
+
+                        this.$tripDetails.trip.stops.push(stopTime);
+
+                        this.measureDistance();
+                    } else if (this.$tripVariants.trips.length == 1 && this.$tripVariants.trips[0].isMainVariant && this.$tripVariants.trips[0].mode === TripMode.Front) {
+                        this.$tripDetails.trip.isMainVariant = true;
+                        this.$tripDetails.trip.variant = "MAIN";
+                        this.$tripDetails.trip.mode = TripMode.Back;
+                        this.$tripDetails.trip.origin = tripVariants.route.destinationStop.name;
+                        this.$tripDetails.trip.destination = tripVariants.route.originStop.name;
+                        this.$tripDetails.trip.headsign = tripVariants.route.originStop.name;
+
+                        const stopTime: StopTime = {} as StopTime;
+                        stopTime.stopId = tripVariants.route.destinationStop.id;
+                        stopTime.stopName = tripVariants.route.destinationStop.name;
+                        stopTime.lon = tripVariants.route.destinationStop.lon;
+                        stopTime.lat = tripVariants.route.destinationStop.lat;
+
+                        this.$tripDetails.trip.stops.push(stopTime);
+
+                        this.measureDistance();
+                    }
+                }
+            });
+        });
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,
             name: string,
             variant: string,
             mode: TripMode
         });
+        this.$tripDetails.trip.communicationVelocity = 45;
     }
 
     ngAfterViewInit(): void {
         this.map = this.initMap();
+        if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
+            this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
+        }
 
         this.drawPolyline();
         this.zoomPolyline();

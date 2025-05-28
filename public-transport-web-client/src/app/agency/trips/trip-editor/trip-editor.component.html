@@ -6,7 +6,7 @@
                 Linia {{ state?.line }} {{ state?.name }}
             </h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-                Central Hub for Personal Customization
+                Konfiguracja lini autobusowej
             </div>
         </div>
         <div class="flex items-center gap-2.5">
@@ -91,27 +91,32 @@
         <div class="col-span-1 lg:col-span-2">
             <div class="flex flex-col gap-5 lg:gap-7.5">
                 <div class="card">
-                    <div class="card-header"><h3 class="card-title">Informacje Podstawowa</h3></div>
+                    <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
                     <div class="card-body grid gap-5">
-                        <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
+                        <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
                             <div class="flex items-center flex-wrap gap-3.5">
-                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">
+                                <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
                                 <div class="flex flex-col gap-0.5">
-                                    <a class="text-sm font-medium text-gray-900 hover:text-primary-active">Wariant
-                                        Podstawowy</a>
-                                    <a class="text-2sm text-gray-700 hover:text-primary-active">
-                                        Zaznacz obcję jeżeli wariant jest wariantem podstawowym
-                                    </a>
+                                    <span class="text-sm font-medium text-gray-900">Wariant
+                                        Podstawowy</span>
+                                    <span class="text-2sm text-gray-700">
+                                        <strong>Wariant podstawowy trasy autobusowej</strong> to główny, standardowy
+                                        przebieg trasy, którą dany autobus pokonuje zgodnie z rozkładem jazdy. Jest to
+                                        najbardziej typowa i regularna wersja trasy, która obowiązuje przez większość
+                                        kursów danej linii.
+                                    </span>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-5"><label class="switch switch-sm">
-                                <input type="checkbox" [(ngModel)]="$tripDetails.trip.isMainVariant" (click)="clickIsMainVariant()"></label>
+                            <div class="flex items-center gap-5">
+                                <label class="switch switch-sm">
+                                    <input type="checkbox" [(ngModel)]="$tripDetails.trip.isMainVariant"
+                                           (click)="clickIsMainVariant()"></label>
                             </div>
                         </div>
 
                         <div class="text-gray-800 text-2sm">
                             <span class="text-danger uppercase">UWAGA:</span>
-                            Każda linia posiada 1 wariant postawowy jeżeli kurs odbywa się w pętli lub 2 warianty podstawowe (TAM i POWRÓT) jeżeli linia kursuje pomiędzy 2 miejscowościami.
+                            Linia posiada 2 warianty podstawowe (TAM i POWRÓT).
                         </div>
 
                         <div class="w-full">
@@ -126,7 +131,7 @@
                                 <label class="form-label max-w-56">Kierunek wariantu</label>
                                 <div class="grow">
                                     <select name="mode" id="mode" [(ngModel)]="$tripDetails.trip.mode" class="select">
-                                        <option [value]="tripModeSelectValue.Main">TAM</option>
+                                        <option [value]="tripModeSelectValue.Front">TAM</option>
                                         <option [value]="tripModeSelectValue.Back">POWRÓT</option>
                                     </select>
                                 </div>
@@ -137,7 +142,8 @@
 
                         <div class="w-full" *ngIf="!$tripDetails.trip.isMainVariant">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Symbol jakim oznaczysz kurs na rozkładzie jazdy</label>
+                                <label class="form-label max-w-56">Symbol jakim oznaczysz kurs na rozkładzie
+                                    jazdy</label>
                                 <input name="variantDesignation" id="variantDesignation"
                                        [(ngModel)]="$tripDetails.trip.variantDesignation" class="input"
                                        type="text" placeholder="W">
