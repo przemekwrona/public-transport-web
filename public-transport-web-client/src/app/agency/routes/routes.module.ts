@@ -8,6 +8,7 @@ import {CreateRouteComponent} from "./create-route/create-route.component";
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import {SharedModule} from "../shared/shared.module";
         RouterModule,
         SharedModule,
         MatExpansionModule,
-        MatIconModule
+        MatIconModule,
+        MatDialogModule
     ]
 })
 export class RoutesModule {
