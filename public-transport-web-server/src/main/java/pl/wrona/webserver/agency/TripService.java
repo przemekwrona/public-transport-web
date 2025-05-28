@@ -50,10 +50,11 @@ public class TripService {
         TripEntity tripEntity = TripMapper.map(trip);
         tripEntity.setRoute(route);
         var lastStop = trip.getStops().stream()
-                .reduce((first, second) -> second)
-                .orElse(new StopTime());
-        tripEntity.setDistanceInMeters(lastStop.getMeters());
-        tripEntity.setTravelTimeInSeconds(lastStop.getSeconds());
+                .reduce((first, second) -> second);
+
+
+        tripEntity.setDistanceInMeters(lastStop.map(StopTime::getMeters).orElse(0));
+        tripEntity.setTravelTimeInSeconds(lastStop.map(StopTime::getSeconds).orElse(0));
 
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
@@ -148,8 +149,10 @@ public class TripService {
                 .map(trip -> TripMapper.map(route, trip))
                 .toList();
 
+        var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());
+
         return new Trips()
-                .route(RouteMapper.map(route))
+                .route(RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds)))
                 .trips(tripsResponse);
     }
 
@@ -175,8 +178,10 @@ public class TripService {
                     .lon((float) stopTime.getStopEntity().getLon())
                     .lat((float) stopTime.getStopEntity().getLat()));
         });
+
+        var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());
         return new TripsDetails()
-                .route(RouteMapper.map(route))
+                .route(RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds)))
                 .trip(tripResponse);
     }
 

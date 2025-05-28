@@ -19,15 +19,15 @@ public class TripMapper {
         tripEntity.setVariantDesignation(trip.getVariantDesignation());
         tripEntity.setVariantDescription(trip.getVariantDescription());
 
-        if (TripMode.MAIN.equals(trip.getMode())) {
-            tripEntity.setMode(TripVariantMode.MAIN);
+        if (TripMode.FRONT.equals(trip.getMode())) {
+            tripEntity.setMode(TripVariantMode.FRONT);
         } else if (TripMode.BACK.equals(trip.getMode())) {
             tripEntity.setMode(TripVariantMode.BACK);
         }
         tripEntity.setHeadsign(trip.getHeadsign());
         tripEntity.setCommunicationVelocity(trip.getCommunicationVelocity());
-        tripEntity.setOrigin(trip.getOrigin());
-        tripEntity.setDestination(trip.getDestination());
+        tripEntity.setOriginStopName(trip.getOrigin());
+        tripEntity.setDestinationStopName(trip.getDestination());
         tripEntity.setMainVariant(trip.getIsMainVariant());
         return tripEntity;
     }
@@ -43,8 +43,8 @@ public class TripMapper {
                 .travelTimeInSeconds(trip.getTravelTimeInSeconds())
                 .distanceInMeters(trip.getDistanceInMeters())
                 .mode(TripModeMapper.map(trip.getMode()))
-                .origin(trip.getOrigin())
-                .destination(trip.getDestination())
+                .origin(trip.getOriginStopName())
+                .destination(trip.getDestinationStopName())
                 .isMainVariant(trip.isMainVariant())
                 .headsign(trip.getHeadsign());
     }

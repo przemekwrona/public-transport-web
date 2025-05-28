@@ -2,13 +2,14 @@ package pl.wrona.webserver.agency;
 
 import io.restassured.http.ContentType;
 import org.igeolab.iot.pt.server.api.model.Route;
+import org.igeolab.iot.pt.server.api.model.Stop;
 import org.junit.jupiter.api.Test;
 import pl.wrona.webserver.BaseIntegrationTest;
 
 import static io.restassured.RestAssured.with;
 import static org.hamcrest.Matchers.equalTo;
 
-class RouteControllerIntegrationTest extends BaseIntegrationTest {
+class RouteEntityControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldCreateRouteAndReturnStatus2011() {
@@ -17,8 +18,10 @@ class RouteControllerIntegrationTest extends BaseIntegrationTest {
                 .body(new Route()
                         .name("KIELCE - BUSKO-ZDRÓJ")
                         .line("201")
-                        .origin("KIELCE")
-                        .destination("BUSKO-ZDRÓJ")
+                        .originStop(new Stop()
+                                .name("KIELCE"))
+                        .destinationStop(new Stop()
+                                .name("BUSKO-ZDRÓJ"))
                         .via("MORAWICA,CHMIELNIK"))
                 .when()
                 .post("/api/v1/routes")

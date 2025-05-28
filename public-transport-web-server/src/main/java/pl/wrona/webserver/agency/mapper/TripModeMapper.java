@@ -8,8 +8,8 @@ import pl.wrona.webserver.agency.entity.TripVariantMode;
 public class TripModeMapper {
 
     public TripMode map(TripVariantMode mode) {
-        if (TripVariantMode.MAIN.equals(mode)) {
-            return TripMode.MAIN;
+        if (TripVariantMode.FRONT.equals(mode)) {
+            return TripMode.FRONT;
         } else if (TripVariantMode.BACK.equals(mode)) {
             return TripMode.BACK;
         } else {
@@ -18,8 +18,8 @@ public class TripModeMapper {
     }
 
     public TripVariantMode map(TripMode mode) {
-        if (TripMode.MAIN.equals(mode)) {
-            return TripVariantMode.MAIN;
+        if (TripMode.FRONT.equals(mode)) {
+            return TripVariantMode.FRONT;
         } else if (TripMode.BACK.equals(mode)) {
             return TripVariantMode.BACK;
         } else {

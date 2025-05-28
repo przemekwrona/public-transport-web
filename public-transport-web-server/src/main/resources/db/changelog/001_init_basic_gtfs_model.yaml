@@ -187,10 +187,16 @@ databaseChangeLog:
                   type: varchar(1000)
                   defaultValue: ''
               - column:
-                  name: origin
+                  name: origin_stop_id
+                  type: varchar(60)
+              - column:
+                  name: origin_stop_name
                   type: varchar(50)
               - column:
-                  name: destination
+                  name: destination_stop_id
+                  type: varchar(60)
+              - column:
+                  name: destination_stop_name
                   type: varchar(50)
               - column:
                   name: via
@@ -242,7 +248,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: mode
-                  type: varchar(4)
+                  type: varchar(8)
                   constraints:
                     nullable: false
               - column:
@@ -267,10 +273,16 @@ databaseChangeLog:
                   name: is_main_variant
                   type: boolean
               - column:
-                  name: origin
+                  name: origin_stop_id
+                  type: varchar(60)
+              - column:
+                  name: origin_stop_name
                   type: varchar(30)
               - column:
-                  name: destination
+                  name: destination_stop_id
+                  type: varchar(60)
+              - column:
+                  name: destination_stop_name
                   type: varchar(30)
               - column:
                   name: route_id

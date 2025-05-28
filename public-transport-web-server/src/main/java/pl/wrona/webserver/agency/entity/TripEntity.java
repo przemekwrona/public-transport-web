@@ -55,9 +55,17 @@ public class TripEntity {
 
     private String variantDescription;
 
-    private String origin;
+    @Column(name = "origin_stop_id")
+    private String originStopId;
 
-    private String destination;
+    @Column(name = "origin_stop_name")
+    private String originStopName;
+
+    @Column(name = "destination_stop_id")
+    private String destinationStopId;
+
+    @Column(name = "destination_stop_name")
+    private String destinationStopName;
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
     private Set<StopTimeEntity> stopTimes;

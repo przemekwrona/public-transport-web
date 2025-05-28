@@ -28,7 +28,7 @@ public class TripQueryService {
 
         List<Trips> tripsResponse = tripSet.keySet().stream()
                 .map(route -> new Trips()
-                        .route(RouteMapper.map(route))
+                        .route(RouteMapper.map(route, Map.of()))
                         .trips(tripSet.get(route).stream()
                                 .map(trip -> TripMapper.map(route, trip))
                                 .sorted(Comparator
