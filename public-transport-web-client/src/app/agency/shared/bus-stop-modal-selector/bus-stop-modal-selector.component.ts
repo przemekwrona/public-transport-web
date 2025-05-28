@@ -75,8 +75,6 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
                     selectedStop.stopLat = lastClickedStop.lat;
                     selectedStop.stopLon = lastClickedStop.lon;
 
-                    console.log(selectedStop);
-
                     this.closeModal(selectedStop);
 
                 }));
@@ -98,10 +96,10 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
 
     private initMap(): Map {
         const map: Map = L.map('map-stops', {
-            center: [50.613531, 20.743607],
+            center: [this.data.stopLat || 52.2321, this.data.stopLon || 20.0559],
             // center: [52.2321, 20.0559],
             // zoom: 7,
-            zoom: 14,
+            zoom: 17,
             zoomControl: false
         });
 

@@ -3,7 +3,7 @@
     <input type="text"
            class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
            [(ngModel)]="stopNamePrefix"
-           (ngModelChange)="onWrite(stopNamePrefix)"
+           (ngModelChange)="onWrite()"
            placeholder=""/>
     <a (click)="openDialog()" class="btn btn-outline btn-icon px-1 py-3" target="_blank">
         Wybierz z mapy&nbsp;<fa-icon [icon]="faMap"></fa-icon>
