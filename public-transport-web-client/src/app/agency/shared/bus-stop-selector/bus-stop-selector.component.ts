@@ -43,20 +43,14 @@ export class BusStopSelectorComponent {
      */
     @Output() busStopIdChange: EventEmitter<BusStopSelectorData> = new EventEmitter<BusStopSelectorData>();
 
-
-    @ViewChild('toggleInput') toggleButton: ElementRef;
-    @ViewChild('menu') menu: ElementRef;
-
     busStops: Stop[] = [];
     showOptions = false;
-    stopNamePrefix = '';
 
     constructor(private renderer: Renderer2, private stopsService: StopsService) {
     }
 
     onSelect(option: Stop) {
         this.showOptions = false;
-        this.stopNamePrefix = option.name;
 
         const busStopSelectorData: BusStopSelectorData = {} as BusStopSelectorData;
         busStopSelectorData.stopId = option.id;
@@ -67,8 +61,8 @@ export class BusStopSelectorComponent {
     }
 
     onWrite(): void {
-        if (this.stopNamePrefix.length >= 3) {
-            this.stopsService.findStopsByStopName(this.stopNamePrefix).subscribe((response: StopsResponse) => {
+        if (this.busStopId.stopName.length >= 3) {
+            this.stopsService.findStopsByStopName(this.busStopId.stopName).subscribe((response: StopsResponse) => {
                 this.busStops = response.stops
                 this.showOptions = true;
             });
@@ -84,7 +78,6 @@ export class BusStopSelectorComponent {
 
         dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopSelectorData | undefined) => {
             if (busStopSelectorData !== undefined) {
-                this.stopNamePrefix = busStopSelectorData.stopName;
                 this.busStopIdChange.emit(busStopSelectorData);
             }
         });
