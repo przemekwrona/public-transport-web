@@ -7,6 +7,8 @@ import org.igeolab.iot.pt.server.api.model.LoginAppUserResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -23,7 +25,7 @@ import pl.wrona.webserver.security.AppUserService;
 @Sql({"/sql/init.sql"})
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class BaseIntegrationTest {
+public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
 
     @LocalServerPort
     private Integer port;
@@ -45,16 +47,9 @@ public class BaseIntegrationTest {
 
     @BeforeAll
     static void setup() {
-//        if (!postgres.isRunning()) {
-        postgres.start();
-//        }
-    }
-
-    @AfterAll
-    static void afterAll() {
-//        if (postgres.isRunning()) {
-        postgres.stop();
-//        }
+        if (!postgres.isRunning()) {
+            postgres.start();
+        }
     }
 
     @BeforeEach
@@ -65,4 +60,15 @@ public class BaseIntegrationTest {
         authHeader = new Header("Authorization", "Bearer %s".formatted(loginResponse.getToken()));
     }
 
+    @Override
+    public void beforeAll(ExtensionContext extensionContext) throws Exception {
+
+    }
+
+    @Override
+    public void close() throws Throwable {
+        if (postgres.isRunning()) {
+            postgres.stop();
+        }
+    }
 }

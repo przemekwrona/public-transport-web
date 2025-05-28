@@ -773,7 +773,7 @@ components:
     TripMode:
       type: string
       enum:
-        - MAIN
+        - FRONT
         - BACK
 
     TripId:
@@ -801,10 +801,10 @@ components:
           type: boolean
         description:
           type: string
-        origin:
-          type: string
-        destination:
-          type: string
+        originStop:
+          $ref: '#/components/schemas/Stop'
+        destinationStop:
+          $ref: '#/components/schemas/Stop'
         via:
           type: string
 

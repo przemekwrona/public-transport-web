@@ -30,8 +30,13 @@ public class RouteService {
         RouteEntity unsavedRouteEntity = new RouteEntity();
         unsavedRouteEntity.setName(route.getName());
         unsavedRouteEntity.setLine(route.getLine());
-        unsavedRouteEntity.setOrigin(route.getOrigin());
-        unsavedRouteEntity.setDestination(route.getDestination());
+
+        unsavedRouteEntity.setOriginStopId(route.getOriginStop().getId());
+        unsavedRouteEntity.setOriginStopName(stopService.findStopByIdsIn(List.of(route.getOriginStop().getId())).get(0).getName());
+
+        unsavedRouteEntity.setDestinationStopId(route.getDestinationStop().getId());
+        unsavedRouteEntity.setDestinationStopName(stopService.findStopByIdsIn(List.of(route.getDestinationStop().getId())).get(0).getName());
+
         unsavedRouteEntity.setVia(route.getVia());
         unsavedRouteEntity.setGoogle(route.getGoogle());
         unsavedRouteEntity.setActive(route.getActive());
@@ -50,8 +55,16 @@ public class RouteService {
     }
 
     public Routes getRoutes() {
-        var items = getRoutesEntities().stream()
-                .map(RouteMapper::map).toList();
+        var routes = getRoutesEntities();
+        var stopsIds = routes.stream()
+                .map(routeEntity -> List.of(routeEntity.getOriginStopId(), routeEntity.getDestinationStopId()))
+                .flatMap(List::stream)
+                .toList();
+
+
+        var items = routes.stream()
+                .map(route -> RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds)))
+                .toList();
 
         return new Routes().items(items);
     }
