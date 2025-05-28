@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.StopsResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+
 @Service
 @AllArgsConstructor
 public class BusStopService {
@@ -22,6 +24,7 @@ public class BusStopService {
     public StopsResponse findStopsByStopName(String stopName) {
         var stops = busStopRepository.findBusStopByNameStartsWith(stopName).stream()
                 .map(BusStopMapper::apply)
+                .sorted(Comparator.comparingInt(stop -> stop.getName().length()))
                 .toList();
 
         return new StopsResponse()
