@@ -1,0 +1,4 @@
+=== BDOT10k
+
+BDOT10k (Baza Danych Obiektów Topograficznych w skali 1:10 000) to oficjalna baza danych przestrzennych tworzona i udostępniana w Polsce przez Główny Urząd Geodezji i Kartografii (GUGiK).
+Zawiera szczegółowe dane topograficzne, takie jak: sieć dróg i kolei, budynki i inne obiekty antropogeniczne, pokrycie terenu (lasy, pola, wody), sieć hydrograficzna, ukształtowanie terenu, obiekty użyteczności publicznej itp.

@@ -1,0 +1,8 @@
+# Example
+This is example documentation
+
+== Stops Sources
+
+=== Open Street Map
+
+WARNING: Includes can be tricky!
