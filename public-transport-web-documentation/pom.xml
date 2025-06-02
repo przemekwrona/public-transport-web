@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.asciidoctor.maven</groupId>
+    <artifactId>asciidoc-to-html-example</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>AsciiDoc to HTML Maven Example</name>
+    <description>An example project that demonstrates how to convert AsciiDoc to HTML5 using the Asciidoctor Maven
+        plugin.
+    </description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <asciidoctor.maven.plugin.version>3.2.0</asciidoctor.maven.plugin.version>
+        <asciidoctorj.version>3.0.0</asciidoctorj.version>
+        <jruby.version>9.4.12.0</jruby.version>
+    </properties>
+
+    <build>
+        <defaultGoal>process-resources</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>output-html</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html</backend>
+                            <sourceDirectory>${project.basedir}/src/docs/user</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-user</outputDirectory>
+                            <attributes>
+                                <toc/>
+                                <linkcss>false</linkcss>
+                                <source-highlighter>coderay</source-highlighter>
+                            </attributes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>output-docbook</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html</backend>
+                            <sourceDirectory>${project.basedir}/src/docs/technical</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-technical</outputDirectory>
+                            <attributes>
+                                <toc/>
+                                <linkcss>false</linkcss>
+                                <source-highlighter>coderay</source-highlighter>
+                            </attributes>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectory>src/docs</sourceDirectory>
+                    <standalone>true</standalone>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
