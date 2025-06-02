@@ -1,0 +1,46 @@
+=== Open Street Map
+
+==== Pobranie Danych
+Jednym ze źródeł przystanków jest OpenStreetMap (OSM).
+Dane pochodzą z otwartego źródła i są dostępne pod adresem: https://download.geofabrik.de[https://download.geofabrik.de]
+Następnie należy wybrać Europę i wskazać plik w formacie `.osm.pbf` dla Polski.
+
+[NOTE]
+====
+Surowe dane OSM są przechowywane zazwyczaj w plikach .osm, ale możesz się spotkać z plikami .bz2 i .pbf.
+Są to zasadniczo pliki .osm, które zostały skompresowane, aby oszczędzać miejsce, a które mogą być szczególnie przydatne przy pracy z dużą ilością danych.
+====
+
+==== Eksport danych z pliku PBF za pomocą osmconvert
+Aby wyeksportować interesujące nas dane z pliku .pbf, należy skorzystać z biblioteki osmconvert.
+Różne sposoby jej użycia zostały opisane w dokumentacji dostępnej pod adresem: https://wiki.openstreetmap.org/wiki/Osmconvert[Osmconvert]
+
+Aby zainstalować osmconvert na komputerze z systemem macOS, wykonaj następujące polecenie w terminalu:
+
+.Instalacja osmium-tool
+[source,bash]
+----
+brew install osmium-tool
+----
+
+WARNING: Polecenie to instaluje narzędzie osmium-tool, które zawiera również osmconvert.
+
+Dane, które są dla nas interesujące, to obiekty typu node, które reprezentują przystanki autobusowe.
+Aby uzyskać informacje o wartościach tagów, można skorzystać z dwóch opcji:
+
+1. Zalogować się na stronie https://www.openstreetmap.org a następnie przejść do edycji, kliknąć na przystanek i sprawdzić metadane.
+2. Przejrzeć dokumentację na stronie https://wiki.openstreetmap.org i znaleźć odpowiednie tagi dla przystanku autobusowego. Przykładowe tagi znajdują się w tabeli poniżej.
+
+.Table Lista przykładowych tagów reprezentujących przystanek autobusowy.
+|===
+|Geotag |Documentation
+
+|highway=bus_stop
+|https://wiki.openstreetmap.org/wiki/Tag:highway=bus_stop
+
+|public_transport=platform
+|https://wiki.openstreetmap.org/wiki/Pl:Tag:public_transport=platform
+
+|===
+
+Po instalacji osmconvert aby wyeksportować odpowienie taki należy wykonać polecenie
