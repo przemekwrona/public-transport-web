@@ -63,11 +63,36 @@
                             </attributes>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>output-pdf</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>pdf</backend>
+                            <sourceDirectory>${project.basedir}/src/docs/technical</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-technical</outputDirectory>
+
+<!--                            <sourceDirectory>src/docs/asciidoc</sourceDirectory>-->
+<!--                            <outputDirectory>${project.build.directory}/generated-docs</outputDirectory>-->
+                            <attributes>
+                                <doctype>book</doctype>
+                            </attributes>
+                        </configuration>
+                    </execution>
                 </executions>
-                <configuration>
-                    <sourceDirectory>src/docs</sourceDirectory>
-                    <standalone>true</standalone>
-                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-pdf</artifactId>
+                        <version>1.6.0</version> <!-- or latest -->
+                    </dependency>
+                </dependencies>
+<!--                <configuration>-->
+<!--                    <sourceDirectory>src/docs</sourceDirectory>-->
+<!--                    <standalone>true</standalone>-->
+<!--                </configuration>-->
             </plugin>
         </plugins>
     </build>
