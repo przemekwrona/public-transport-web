@@ -232,6 +232,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
             this.tripsService.create(tripDetailsRequest).subscribe(() => {
+                this.router.navigate(['/agency/trips'], {queryParams: {line: this.state.line, name: this.state.name}}).then();
             });
         } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
             this.tripsService.update(tripDetailsRequest).subscribe(() => {
