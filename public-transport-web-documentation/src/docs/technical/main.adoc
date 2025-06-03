@@ -1,5 +1,7 @@
-# Hello
-This is exmaple documentation
+= Instrukcja Obsługi
+Dział Techniczny
+:doctype: book
+:title-page-background-image: image::images/city-map-routes.png[fit=none,pdfwidth=68%,position=bottom left]
 
 == Przystanki Autobusowe
 
