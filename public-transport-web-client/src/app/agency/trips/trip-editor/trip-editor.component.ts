@@ -19,6 +19,7 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {debounceTime, map, Subject} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {routes} from "../../../app.routes";
+import {ViewportScroller} from "@angular/common";
 
 @Component({
     selector: 'app-trip-editor',
@@ -53,7 +54,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public $tripDetails: TripsDetails = {trip: {}};
     public $tripVariants: Trips = {};
 
-    constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private _route: ActivatedRoute) {
+    constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
     }
 
@@ -172,6 +173,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.$tripDetails.trip.stops.push(stopTime);
 
                         this.measureDistance();
+
+                        this._viewportScroller.scrollToAnchor('map');
 
                     })) || []
 
