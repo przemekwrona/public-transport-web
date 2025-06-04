@@ -2,7 +2,7 @@
 
 Jednym ze źródeł przystanków jest OpenStreetMap (OSM).
 Dane pochodzą z otwartego źródła i są dostępne pod adresem: https://download.geofabrik.de[https://download.geofabrik.de]
-Następnie należy wybrać Europę i wskazać plik w formacie `.osm.pbf` dla Polski.
+Po przejściu na stronę internetową pojawi się lista z kontynentami, dla których dostępne są dane. Należy przejść do interesującego nas kontynentu i pobrać dane dla konkretnego państwa — w naszym przypadku jest to Europa | Polska. Następnie należy wybrać plik w formacie `.osm.pbf`.
 
 [NOTE]
 ====
@@ -30,4 +30,20 @@ Aby uzyskać informacje o wartościach tagów, można skorzystać z dwóch opcji
 1. Zalogować się na stronie https://www.openstreetmap.org a następnie przejść do edycji, kliknąć na przystanek i sprawdzić metadane.
 2. Przejrzeć dokumentację na stronie https://wiki.openstreetmap.org i znaleźć odpowiednie tagi dla przystanku autobusowego. Przykładowe tagi opisujące przystanek autobusowy wraz z odnośnikiem do dokumentacji to: link:https://wiki.openstreetmap.org/wiki/Tag:highway=bus_stop[highway&#61;bus_stop] oraz link:https://wiki.openstreetmap.org/wiki/Pl:Tag:public_transport=platform[public_transport&#61;platform].
 
-Po instalacji osmconvert aby wyeksportować odpowienie taki należy wykonać polecenie
+Polecenie poniżej wykorzystuje narzędzie osmium do filtrowania danych OSM w pliku poland-latest.osm.pbf, wybierając tylko te obiekty, które zawierają tag highway=bus_stop lub public_transport=platform.
+Wynik jest zapisywany do pliku bus-stops.osm.pbf.
+Rezulatem jest plik z przystankami autobusowaymi.
+
+[source,bash]
+----
+osmium tags-filter -o bus-stops.osm.pbf poland-latest.osm.pbf /highway=bus_stop /public_transport=platform
+----
+
+.Wskazanie pliku w QGIS w celu załadowania danych z pliku w formacie PBF
+image::images/qgis-load-pbf-file.png[QGIS loaf PBF]
+
+Po wczytaniu pliku PBF należy wyeksportować metatagi, które są niezbędne do zasilenia tabeli z przystankami autobusowymi. Należą do nich: name, osm_id oraz współrzędne x i y.
+Kliknij na warstwę z przystankami autobusowymi, a następnie wybierz: `Export` > `Save Features As...`.
+Skonfiguruj odpowiednio sposób eksportu do pliku CSV.
+Poniżej przedstawiamy listę kluczowych parametrów, które należy ustawić.
+
