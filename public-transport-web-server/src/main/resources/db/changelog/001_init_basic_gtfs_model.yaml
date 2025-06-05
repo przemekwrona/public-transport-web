@@ -49,15 +49,31 @@ databaseChangeLog:
       id: create-table-bdot10k-stops
       author: pwrona
       changes:
+        - createSequence:
+            sequenceName: stops_id_seq
+            startValue: 1
+            incrementBy: 1
+
         - createTable:
             tableName: stop
             columns:
               - column:
-                  name: bdot10k_id
-                  type: varchar(60)
+                  name: stop_id
+                  type: integer
+                  defaultValueSequenceNext: stops_id_seq
                   constraints:
                     primaryKey: true
                     nullable: false
+              - column:
+                  name: bdot10k_id
+                  type: varchar(60)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: osm_id
+                  type: varchar(60)
+                  constraints:
+                    nullable: true
               - column:
                   name: name
                   type: varchar(150)
@@ -66,12 +82,26 @@ databaseChangeLog:
               - column:
                   name: lon
                   type: float
+                  constraints:
+                    nullable: false
               - column:
                   name: lat
                   type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_osm
+                  type: boolean
+              - column:
+                  name: is_bdot10k
+                  type: boolean
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
 
         - createIndex:
-            indexName: idx_stop
+            indexName: idx_stop_localization
             tableName: stop
             columns:
               - column:
@@ -81,10 +111,10 @@ databaseChangeLog:
 
         - loadData:
             tableName: stop
-            file: stops/bus_stops.csv
+            file: stops/bdot10k_bus_stops.csv
             separator: ;
             encoding: UTF-8
-            usePreparedStatements:  true
+            usePreparedStatements: true
             columns:
               - column:
                   header: X
@@ -102,6 +132,42 @@ databaseChangeLog:
                   header: NAZWA
                   name: name
                   type: STRING
+
+        - loadData:
+            tableName: stop
+            file: stops/osm_bus_stops.csv
+            separator: ;
+            encoding: UTF-8
+            usePreparedStatements: true
+            columns:
+              - column:
+                  header: X
+                  name: lon
+                  type: NUMERIC
+              - column:
+                  header: Y
+                  name: lat
+                  type: NUMERIC
+              - column:
+                  header: osm_id
+                  name: osm_id
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: name
+                  type: STRING
+
+        - sql:
+            sql: UPDATE stop SET is_bdot10k = true WHERE bdot10k_id IS NOT NULL;
+
+        - sql:
+            sql: UPDATE stop SET is_bdot10k = false WHERE bdot10k_id IS NULL;
+
+        - sql:
+            sql: UPDATE stop SET is_osm = true WHERE stop.osm_id IS NOT NULL;
+
+        - sql:
+            sql: UPDATE stop SET is_osm = false WHERE stop.osm_id IS NULL;
 
   - changeSet:
       id: create-agency-table
@@ -348,11 +414,11 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: stop_id
-                  type: varchar(60)
+                  type: int
                   constraints:
                     nullable: false
                     foreignKeyName: fk_stop_time_stop
-                    references: stop(bdot10k_id)
+                    references: stop(stop_id)
 
         - addForeignKeyConstraint:
             constraintName: fk_stop_time_trip
@@ -360,7 +426,7 @@ databaseChangeLog:
             baseColumnNames: trip_id
             referencedTableName: trip
             referencedColumnNames: trip_id
-            onDelete:  CASCADE
+            onDelete: CASCADE
 
   - changeSet:
       id: insert-example-data

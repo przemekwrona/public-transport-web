@@ -170,11 +170,11 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: stop_id
-                  type: varchar(60)
+                  type: int
                   constraints:
                     nullable: false
                     foreignKeyName: fk_brigade_stop_time_stop
-                    references: stop(bdot10k_id)
+                    references: stop(stop_id)
 
         - addForeignKeyConstraint:
             constraintName: fk_brigade_stop_time_brigade_trip

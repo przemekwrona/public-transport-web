@@ -744,6 +744,11 @@ components:
       type: object
       properties:
         id:
+          type: integer
+          format: int64
+        bdot10kId:
+          type: string
+        osmId:
           type: string
         name:
           type: string
@@ -753,6 +758,10 @@ components:
         lat:
           type: number
           format: float
+        isOsm:
+          type: boolean
+        isBdot10k:
+          type: boolean
 
     StopsResponse:
       type: object
@@ -828,7 +837,8 @@ components:
       type: object
       properties:
         stopId:
-          type: string
+          type: integer
+          format: int64
         stopName:
           type: string
         lon:
