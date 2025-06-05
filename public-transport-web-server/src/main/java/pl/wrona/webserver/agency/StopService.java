@@ -16,11 +16,11 @@ public class StopService {
 
     private final StopRepository stopRepository;
 
-    public List<StopEntity> findStopByIdsIn(List<String> stopIds) {
+    public List<StopEntity> findStopByIdsIn(List<Long> stopIds) {
         return stopRepository.findAllByStopIdIn(stopIds);
     }
 
-    public Map<String, StopEntity> mapStopByIdsIn(List<String> stopIds) {
+    public Map<Long, StopEntity> mapStopByIdsIn(List<Long> stopIds) {
         return findStopByIdsIn(stopIds).stream()
                 .collect(Collectors.toMap(StopEntity::getStopId, Function.identity()));
     }

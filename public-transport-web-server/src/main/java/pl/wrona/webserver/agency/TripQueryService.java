@@ -29,12 +29,12 @@ public class TripQueryService {
                 .collect(Collectors.groupingBy(TripEntity::getRoute, Collectors.toSet()));
 
 
-        List<String> stopsIds = tripSet.keySet().stream()
+        List<Long> stopsIds = tripSet.keySet().stream()
                 .map(routeEntity -> List.of(routeEntity.getOriginStopId(), routeEntity.getDestinationStopId()))
                 .flatMap(List::stream)
                 .toList();
 
-        Map<String, StopEntity> stopDictionary = this.stopService.mapStopByIdsIn(stopsIds);
+        Map<Long, StopEntity> stopDictionary = this.stopService.mapStopByIdsIn(stopsIds);
 
         List<Trips> tripsResponse = tripSet.keySet().stream()
                 .map(route -> new Trips()

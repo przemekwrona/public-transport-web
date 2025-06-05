@@ -11,7 +11,7 @@ import java.util.Optional;
 @UtilityClass
 public class RouteMapper {
 
-    public org.igeolab.iot.pt.server.api.model.Route map(RouteEntity routeEntity, Map<String, StopEntity> stops) {
+    public org.igeolab.iot.pt.server.api.model.Route map(RouteEntity routeEntity, Map<Long, StopEntity> stops) {
         return Optional.ofNullable(routeEntity)
                 .map(routeOptional -> new org.igeolab.iot.pt.server.api.model.Route()
                         .name(routeEntity.getName())

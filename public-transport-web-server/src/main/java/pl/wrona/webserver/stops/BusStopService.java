@@ -5,6 +5,7 @@ import org.igeolab.iot.pt.server.api.model.StopsResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -14,6 +15,7 @@ public class BusStopService {
 
     public StopsResponse findBusStop(float maxLat, float minLon, float minLat, float maxLon) {
         var stops = busStopRepository.findAllByArea(maxLat, minLon, minLat, maxLon).stream()
+                .filter(Objects::nonNull)
                 .map(BusStopMapper::apply)
                 .toList();
 

@@ -10,7 +10,7 @@ public class StopHandler {
     public static Stop handle(Agency agency, StopEntity stopEntity) {
         var agencyAndId = new AgencyAndId();
         agencyAndId.setAgencyId(agency.getAgencyCode());
-        agencyAndId.setId(stopEntity.getStopId());
+        agencyAndId.setId(stopEntity.getStopId().toString());
 
         Stop stop = new Stop();
         stop.setId(agencyAndId);
