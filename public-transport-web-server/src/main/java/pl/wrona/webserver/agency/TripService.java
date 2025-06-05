@@ -40,11 +40,11 @@ public class TripService {
     @Transactional
     public Status createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
         Trip trip = createTripDetailsRequest.getTrip().getTrip();
-        List<String> stopIds = trip.getStops().stream()
+        List<Long> stopIds = trip.getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
-        Map<String, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
+        Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         var route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
 
         TripEntity tripEntity = TripMapper.map(trip);
@@ -97,11 +97,11 @@ public class TripService {
         var tripId = updateTripDetailsRequest.getTripId();
         var trip = updateTripDetailsRequest.getTrip().getTrip();
 
-        List<String> stopIds = trip.getStops().stream()
+        List<Long> stopIds = trip.getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
-        Map<String, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
+        Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
         TripEntity updatedTrip = TripMapper.update(tripEntity, trip);

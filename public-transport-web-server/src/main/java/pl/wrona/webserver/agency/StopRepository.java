@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface StopRepository extends JpaRepository<StopEntity, String> {
 
-    List<StopEntity> findAllByStopIdIn(List<String> bdot10kId);
+    List<StopEntity> findAllByStopIdIn(List<Long> stopIds);
 
     @Query("""
             SELECT s FROM Agency a 

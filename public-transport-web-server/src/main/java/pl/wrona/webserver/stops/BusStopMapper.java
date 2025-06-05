@@ -6,9 +6,13 @@ public class BusStopMapper {
 
     public static Stop apply(BusStop stop) {
         return new Stop()
-                .id(stop.getBdot10kId())
+                .id(stop.getStopId())
+                .bdot10kId(stop.getBdot10kId())
+                .osmId(stop.getOsmId())
                 .name(stop.getName())
-                .lon(stop.getLon())
-                .lat(stop.getLat());
+                .lon((float) stop.getLon())
+                .lat((float) stop.getLat())
+                .isBdot10k(stop.isBdot10k())
+                .isOsm(stop.isOsm());
     }
 }

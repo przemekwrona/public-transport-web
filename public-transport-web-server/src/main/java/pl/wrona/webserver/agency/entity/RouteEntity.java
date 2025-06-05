@@ -34,13 +34,13 @@ public class RouteEntity {
     private String line;
 
     @Column(name = "origin_stop_id")
-    private String originStopId;
+    private Long originStopId;
 
     @Column(name = "origin_stop_name")
     private String originStopName;
 
     @Column(name = "destination_stop_id")
-    private String destinationStopId;
+    private Long destinationStopId;
 
     @Column(name = "destination_stop_name")
     private String destinationStopName;
