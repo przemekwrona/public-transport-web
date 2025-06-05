@@ -16,8 +16,13 @@ interface StopMarker extends L.Marker {
     styleUrl: './stops.component.scss'
 })
 export class StopsComponent implements OnInit, AfterViewInit {
-    private ICON = L.divIcon({
+    private ICON_BDOT = L.divIcon({
         html: `<div style="background-color: #0096FF; padding: 1px 0 0 1px; width: 20px; height: 20px; border-radius: 2px; color: whitesmoke"><img src="assets/bus-solid.svg"></div>`,
+        className: 'stop-marker'
+    });
+
+    private ICON_OSM = L.divIcon({
+        html: `<div style="background-color: #191970; padding: 1px 0 0 1px; width: 20px; height: 20px; border-radius: 2px; color: whitesmoke"><img src="assets/bus-solid.svg"></div>`,
         className: 'stop-marker'
     })
 
@@ -76,7 +81,10 @@ export class StopsComponent implements OnInit, AfterViewInit {
             const bounds = map.getBounds();
             this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
                 const stopMarkers: StopMarker[] = response.stops?.map(stop => {
-                    const stopMarker: StopMarker = L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON, title: stop.name}) as StopMarker
+                    const stopMarker: StopMarker = stop.isBdot10k
+                        ? L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON_BDOT, title: stop.name}) as StopMarker
+                        : L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON_OSM, title: stop.name}) as StopMarker;
+
                     stopMarker.id = stop.id;
                     return stopMarker;
                 }) || []
