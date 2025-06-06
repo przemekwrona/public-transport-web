@@ -18,7 +18,7 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadeService brigadeService;
 
     @Override
-    public ResponseEntity<GetBrigadeResponse> brigadesGet() {
+    public ResponseEntity<GetBrigadeResponse> getBrigades() {
         return ResponseEntity.ok(brigadeService.findBrigades());
     }
 

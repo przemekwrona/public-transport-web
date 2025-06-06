@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.AgencyService;
 import pl.wrona.webserver.exception.BusinessException;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,13 +33,18 @@ public class CalendarService {
     public Status createCalendar(CalendarPayload calendarPayload) {
         var calendarBody = calendarPayload.getBody();
 
-        var existsByCalendarName = this.existsByCalendarName(calendarBody.getCalendarName());
+        var calendarIdPrefix = "%s/%s/%s".formatted(calendarBody.getDesignation(),
+                calendarBody.getStartDate().format(DateTimeFormatter.BASIC_ISO_DATE),
+                calendarBody.getEndDate().format(DateTimeFormatter.BASIC_ISO_DATE));
 
-        if (existsByCalendarName) {
-            throw new BusinessException("1000", "Calendar with name %s already exists. Select another one.".formatted(calendarBody.getCalendarName()));
-        }
+        var lastSavedCalendarNumber = this.findCalendarStartsWith(calendarIdPrefix).stream()
+                .map(CalendarEntity::getCalendarName)
+                .map(calendarName -> calendarName.substring(calendarIdPrefix.length() + 1))
+                .map(Long::valueOf).max(Comparator.naturalOrder())
+                .orElse(0L);
 
         var calendarEntity = CalendarEntityMapper.apply(calendarBody, agencyService.getLoggedAgency());
+        calendarEntity.setCalendarName("%s/%s".formatted(calendarIdPrefix, lastSavedCalendarNumber + 1));
         CalendarEntity savedCalendar = calendarRepository.save(calendarEntity);
 
         Set<CalendarDatesEntity> calendarDates = CalendarDatesEntityMapper.apply(calendarBody, savedCalendar);
@@ -97,5 +104,9 @@ public class CalendarService {
 
     public boolean existsByCalendarName(String calendarName) {
         return this.calendarRepository.existsByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarName);
+    }
+
+    public List<CalendarEntity> findCalendarStartsWith(String calendarName) {
+        return this.calendarRepository.findAllByAgencyAndCalendarNameStartingWith(agencyService.getLoggedAgency(), calendarName);
     }
 }
