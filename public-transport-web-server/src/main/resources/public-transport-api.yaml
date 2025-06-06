@@ -127,6 +127,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+    delete:
+      tags:
+        - brigade
+      summary: Delete brigade
+      operationId: deleteBrigade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrigadeDeleteBody'
+      responses:
+        200:
+          description: DELETED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
   /brigades/details:
     post:
       tags:
@@ -953,6 +971,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BrigadeTrip'
+
+    BrigadeDeleteBody:
+      type: object
+      properties:
+        brigadeName:
+          type: string
 
     BrigadePatchBody:
       type: object

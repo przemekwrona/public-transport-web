@@ -3,6 +3,7 @@ package pl.wrona.webserver.agency.brigade;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.BrigadeApi;
 import org.igeolab.iot.pt.server.api.model.BrigadeBody;
+import org.igeolab.iot.pt.server.api.model.BrigadeDeleteBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
@@ -25,6 +26,11 @@ public class BrigadeController implements BrigadeApi {
     @Override
     public ResponseEntity<Status> createBrigade(BrigadeBody createBrigadeRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(brigadeService.createBrigade(createBrigadeRequest));
+    }
+
+    @Override
+    public ResponseEntity<Status> deleteBrigade(BrigadeDeleteBody brigadeDeleteBody) {
+        return ResponseEntity.status(HttpStatus.OK).body(brigadeService.deleteBrigade(brigadeDeleteBody));
     }
 
     @Override
