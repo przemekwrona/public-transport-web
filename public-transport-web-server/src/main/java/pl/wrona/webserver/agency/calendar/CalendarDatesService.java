@@ -14,7 +14,7 @@ public class CalendarDatesService {
 
     private final CalendarDatesRepository calendarDatesRepository;
 
-    public Map<Long, List<CalendarDatesEntity>> findAllByAgency(Agency agency) {
+    public Map<Long, List<CalendarDatesEntity>> mapAllByAgency(Agency agency) {
         return calendarDatesRepository.findAllByAgency(agency).stream()
                 .collect(Collectors.groupingBy(calendarDates -> calendarDates.getCalendarDatesId().getServiceId()));
     }
