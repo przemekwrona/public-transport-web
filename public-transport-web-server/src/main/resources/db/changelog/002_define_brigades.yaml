@@ -125,6 +125,7 @@ databaseChangeLog:
                   constraints:
                     foreignKeyName: fk_brigade_trip_brigade
                     references: brigade(brigade_id)
+                    deleteCascade: true
                     nullable: false
 
         - createSequence:

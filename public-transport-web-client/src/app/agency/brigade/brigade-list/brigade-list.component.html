@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
-                    <button class="btn btn-sm btn-dark shrink-0">Usuń</button>
+                    <button (click)="deleteBrigadeByName(brigade?.brigadeName)" class="btn btn-sm btn-dark shrink-0">Usuń</button>
 
                     <a [routerLink]="['/agency/brigades/edit']"
                        [queryParams]="{name: brigade?.brigadeName}"

@@ -13,7 +13,7 @@ import {BrigadeModel} from "./brigade-editor.model";
 import moment, {Moment} from "moment";
 import {first, last} from "lodash";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BrigadeEditorComponentMode} from "./brigade-editor-component-mode";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -48,7 +48,7 @@ export class BrigadeEditorComponent implements OnInit {
 
     public saveError: ErrorResponse | null = null;
 
-    constructor(private brigadeService: BrigadeService, private _route: ActivatedRoute) {
+    constructor(private brigadeService: BrigadeService, private _route: ActivatedRoute, private _router: Router) {
     }
 
     ngOnInit(): void {
@@ -233,6 +233,7 @@ export class BrigadeEditorComponent implements OnInit {
         if (this.componentMode === BrigadeEditorComponentMode.CREATE) {
             this.brigadeService.saveBrigade(brigadeBody).subscribe(
                 (response) => {
+                    this._router.navigate(['/agency/brigades'])
                 },
                 (response: HttpErrorResponse) => {
                     this.saveError = response.error;
