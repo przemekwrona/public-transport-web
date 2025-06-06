@@ -10,3 +10,7 @@ databaseChangeLog:
   - include:
       file: 003_define_calendars.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 004_insert_data.yaml
+      relativeToChangelogFile: true

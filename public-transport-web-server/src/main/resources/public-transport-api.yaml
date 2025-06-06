@@ -82,6 +82,7 @@ paths:
       tags:
         - brigade
       summary: Get list of brigades
+      operationId: getBrigades
       responses:
         200:
           description: OK
@@ -982,6 +983,8 @@ components:
       type: object
       properties:
         brigadeName:
+          type: string
+        calendarDesignation:
           type: string
 
     GetBrigadeResponse:
