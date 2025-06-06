@@ -567,6 +567,7 @@ paths:
     get:
       tags:
         - gtfs
+      operationId: downloadGtfs
       responses:
         200:
           description: Gtfs
