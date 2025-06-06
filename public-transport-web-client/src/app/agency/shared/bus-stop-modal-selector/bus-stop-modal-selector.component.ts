@@ -8,7 +8,7 @@ import {find} from "lodash";
 import {StopService} from "../../stops/stop.service";
 
 interface StopMarker extends L.Marker {
-    id: string;
+    id: number;
 }
 
 @Component({

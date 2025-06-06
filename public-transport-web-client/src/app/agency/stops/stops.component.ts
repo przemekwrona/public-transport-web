@@ -7,7 +7,7 @@ import {StopService} from "./stop.service";
 import {Stop, StopsResponse} from "../../generated/public-transport";
 
 interface StopMarker extends L.Marker {
-    id: string;
+    id: number;
 }
 
 @Component({

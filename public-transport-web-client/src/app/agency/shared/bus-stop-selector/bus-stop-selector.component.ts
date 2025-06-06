@@ -1,22 +1,18 @@
 import {
-    ChangeDetectionStrategy,
     Component,
-    ElementRef,
     EventEmitter,
     inject,
     Input,
     Output,
     Renderer2,
-    ViewChild
 } from '@angular/core';
-import {StopsResponse, StopsService} from "../../../generated/public-transport";
-import {Stop} from "../../../generated";
+import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport";
 import {faMap, faBus} from "@fortawesome/free-solid-svg-icons";
 import {MatDialog} from "@angular/material/dialog";
 import {BusStopModalSelectorComponent} from "../bus-stop-modal-selector/bus-stop-modal-selector.component";
 
 export interface BusStopSelectorData {
-    stopId: string;
+    stopId: number;
     stopName: string;
     stopLon: number;
     stopLat: number;
