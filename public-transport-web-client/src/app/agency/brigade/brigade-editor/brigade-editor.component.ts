@@ -6,7 +6,7 @@ import {
     BrigadeTrip, ErrorResponse,
     GetAllTripsResponse, GetCalendarsResponse,
     Trip,
-    TripId
+    TripId, TripMode
 } from "../../../generated/public-transport";
 import {CdkDrag, CdkDragDrop, CdkDragEnter, CdkDragExit, moveItemInArray} from "@angular/cdk/drag-drop";
 import {BrigadeModel} from "./brigade-editor.model";
@@ -251,4 +251,5 @@ export class BrigadeEditorComponent implements OnInit {
 
     }
 
+    protected readonly tripModeSelectValue = TripMode;
 }
