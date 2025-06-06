@@ -13,7 +13,7 @@ public class GtfsDownloadController implements GtfsApi {
     private final GtfsDownloadService gtfsDownloadService;
 
     @Override
-    public ResponseEntity<Resource> gtfsDownloadGet() {
+    public ResponseEntity<Resource> downloadGtfs() {
         return ResponseEntity.ok(gtfsDownloadService.downloadGtfs());
     }
 }
