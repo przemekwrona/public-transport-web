@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.agency.AgencyService;
 import pl.wrona.webserver.agency.RouteService;
 import pl.wrona.webserver.agency.StopService;
+import pl.wrona.webserver.agency.calendar.CalendarDatesService;
+import pl.wrona.webserver.agency.calendar.CalendarService;
 import pl.wrona.webserver.agency.entity.Agency;
 
 import java.io.File;
@@ -24,6 +26,7 @@ public class GtfsDownloadService {
     private final StopService stopService;
 
     private final CalendarService calendarService;
+    private final CalendarDatesService calendarDatesService;
 
     public Resource downloadGtfs() {
         try {
@@ -38,6 +41,10 @@ public class GtfsDownloadService {
 
             calendarService.findActiveCalendar().stream()
                     .map(CalendarHandler::handle)
+                    .forEach(writer::handleEntity);
+
+            calendarDatesService.findAllActiveCalendarDate().stream()
+                    .map(CalendarDateHandler::handle)
                     .forEach(writer::handleEntity);
 
             routeService.getRoutesEntities().stream()

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.onebusaway.gtfs.model.calendar.ServiceDate;
 
 @Data
 @Entity
@@ -29,4 +30,8 @@ public class CalendarDatesEntity {
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false, insertable = false, updatable = false)
     private CalendarEntity calendar;
+
+    public ServiceDate getServiceDate() {
+        return new ServiceDate(calendarDatesId.getDate().getYear(), calendarDatesId.getDate().getMonthValue(), calendarDatesId.getDate().getDayOfMonth());
+    }
 }
