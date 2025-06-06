@@ -28,6 +28,13 @@ export class CalendarsEditorComponent implements OnInit {
     public days: number[] = [];
     public year: number = 2025;
 
+    public CALENDAR_SYMBOLS: { [key: string]: string } = {
+        D: 'kursuje od poniedziałku do piątku oprócz świąt',
+        C: 'kursuje w soboty, niedziele i święta',
+        6: 'kursuje w soboty',
+        7: 'kursuje w niedziele'
+    }
+
     constructor(private calendarService: CalendarService, private _route: ActivatedRoute) {
     }
 
@@ -67,6 +74,12 @@ export class CalendarsEditorComponent implements OnInit {
             this.includeDays = new Set(calendar.included)
             this.excludeDays = new Set(calendar.excluded)
         });
+    }
+
+    public onChangeDesignation(changedDesignation: string): void {
+        if (changedDesignation.length > 0) {
+            this.calendarBody.description = this.CALENDAR_SYMBOLS[changedDesignation];
+        }
     }
 
     public getDays(): number[] {

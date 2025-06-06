@@ -30,20 +30,13 @@
             39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z"
                                   stroke=""></path>
                         </svg>
-                        <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4 text-sm">
-                            {{ brigade?.brigadeName }}
-                        </div>
+                        <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4 text-sm"></div>
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <div class="flex items-center flex-wrap gap-2.5">
                             <a class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ brigade?.brigadeName }} </a>
                         </div>
                         <div class="form-info text-gray-800 font-normal">
-                            To jest tylko krótki opis brygady. Kliknij&nbsp;
-                            <a [routerLink]="['/agency/brigades/edit']"
-                               [queryParams]="{name: brigade?.brigadeName}"
-                               class="link">Pokaż Szczegóły</a>
-                            i dowiedz się więcej.
                         </div>
                     </div>
                 </div>
