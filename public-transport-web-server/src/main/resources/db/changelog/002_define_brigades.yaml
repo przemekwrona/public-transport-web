@@ -70,7 +70,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: mode
-                  type: varchar(4)
+                  type: varchar(8)
                   constraints:
                     nullable: false
               - column:

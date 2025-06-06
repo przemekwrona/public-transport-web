@@ -98,14 +98,3 @@ databaseChangeLog:
             sequenceName: service_id_seq
             startValue: 1
             incrementBy: 1
-
-        - addColumn:
-            tableName: brigade_trip
-            columns:
-              - column:
-                  name: service_id
-                  type: integer
-                  constraints:
-                    nullable: true
-                    foreignKeyName: fk_brigade_trip_calendar
-                    references: calendar(service_id)

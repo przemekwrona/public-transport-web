@@ -427,10 +427,3 @@ databaseChangeLog:
             referencedTableName: trip
             referencedColumnNames: trip_id
             onDelete: CASCADE
-
-  - changeSet:
-      id: insert-example-data
-      author: pwrona
-      changes:
-        - sqlFile:
-            path: db/init.sql
