@@ -7,13 +7,17 @@ import pl.wrona.webserver.agency.entity.RouteEntity;
 
 public class RouteHandler {
 
-    public static Route handle(Agency agency, RouteEntity entity) {
+    public static Route handle(Agency agencyEntity, RouteEntity entity) {
         Route route = new Route();
 
         var agencyAndId = new AgencyAndId();
-        agencyAndId.setAgencyId(agency.getAgencyCode());
+        agencyAndId.setAgencyId(agencyEntity.getAgencyCode());
         agencyAndId.setId(entity.getLine());
 
+        var agency = new org.onebusaway.gtfs.model.Agency();
+        agency.setId(agencyAndId.getAgencyId());
+
+        route.setAgency(agency);
         route.setId(agencyAndId);
         route.setShortName(entity.getLine());
         route.setLongName(entity.getName());
