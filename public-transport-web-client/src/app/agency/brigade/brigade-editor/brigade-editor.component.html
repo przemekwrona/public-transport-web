@@ -19,39 +19,57 @@
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 lg:gap-7.5">
         <div class="col-span-1">
             <div class="grid gap-5 lg:gap-7.5">
+
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Plan Brygady</h3>
-                    </div>
+                    <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
+                    <div class="card-body grid gap-5">
+                        <div class="w-full">
+                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                <label class="form-label max-w-56">Nazwa brygady</label>
+                                <input type="text" name="brigadeName" id="brigadeName" [(ngModel)]="brigadeName"
+                                       class="input">
+                            </div>
+                        </div>
 
-                    <div class="card-header">
-                        Nazwa brygady:
-                        <input [(ngModel)]="brigadeName">
-                    </div>
+                        <div class="text-gray-800 text-2sm">
+                            <span class="text-danger uppercase">UWAGA:</span>
+                            Nazwa wariantu nie może się powtarzać.
+                        </div>
 
-                    <div class="card-header">
-                        <select [(ngModel)]="calendarName" class="select">
-                            @for (calendar of calendarsResponse.calendars || []; track calendar) {
-                                <option [value]="calendar.calendarName">
-                                    {{ calendar.designation }} - {{ calendar.description }} ({{ calendar.calendarName }}
-                                    )
-                                </option>
-                            }
+                        <div class="w-full">
+                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                <label class="form-label max-w-56">Kalendarz</label>
+                                <div class="grow">
+                                    <select name="calendar" id="calendar" [(ngModel)]="calendarName" class="select">
+                                        @for (calendar of calendarsResponse.calendars || []; track calendar) {
+                                            <option [value]="calendar.calendarName">
+                                                {{ calendar.designation }} - {{ calendar.description }}
+                                                ({{ calendar.calendarName }}
+                                                )
+                                            </option>
+                                        }
 
-                        </select>
-                    </div>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="card-header">
-                        @if (getFirstBrigade()?.departureTime && getFirstBrigade()?.departureTime) {
-                            <h2>
-                                <span>Czas pracy: </span>
-                                <span>{{ getFirstBrigade()?.departureTime }}
-                                    -{{ getLastArrivalBrigade()?.format('HH:mm') }}</span>
-                                <span>({{ getDifferenceBetweenFirstAndLastTrip() | brigadeEditorTime }})</span>
-                            </h2>
-                        } @else {
-                            <h2>Czas Pracy: 0min</h2>
-                        }
+                        <div class="border-t border-gray-200 my-2.5"></div>
+
+                        <div class="w-full">
+                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                <label class="form-label max-w-56">Czas pracy</label>
+                                @if (getFirstBrigade()?.departureTime && getFirstBrigade()?.departureTime) {
+                                    <span>{{ getFirstBrigade()?.departureTime }}
+                                        -{{ getLastArrivalBrigade()?.format('HH:mm') }}</span>
+                                    <span>({{ getDifferenceBetweenFirstAndLastTrip() | brigadeEditorTime }})</span>
+                                } @else {
+                                    <span class="text-sm">0min</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -231,7 +249,8 @@
                     </div>
 
                     @if (saveError === null) {
-                        <button (click)="saveOrEditBrigade()" class="btn btn-success">Zapisz i wróć do listy brygad</button>
+                        <button (click)="saveOrEditBrigade()" class="btn btn-success">Zapisz i wróć do listy brygad
+                        </button>
                     }
 
                     @if (saveError !== null) {
