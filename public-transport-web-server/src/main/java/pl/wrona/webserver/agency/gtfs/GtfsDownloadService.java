@@ -37,7 +37,7 @@ public class GtfsDownloadService {
             writer.handleEntity(AgencyHandler.handle(agency));
 
             calendarService.findActiveCalendar().stream()
-                    .map(calendar -> CalendarHandler.handle(agency, calendar))
+                    .map(CalendarHandler::handle)
                     .forEach(writer::handleEntity);
 
             routeService.getRoutesEntities().stream()
