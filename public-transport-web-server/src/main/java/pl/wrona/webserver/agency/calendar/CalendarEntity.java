@@ -14,9 +14,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.onebusaway.gtfs.model.calendar.ServiceDate;
 import pl.wrona.webserver.agency.brigade.BrigadeEntity;
 import pl.wrona.webserver.agency.entity.Agency;
-import pl.wrona.webserver.agency.entity.RouteEntity;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -31,7 +31,7 @@ public class CalendarEntity {
     @Id
     @Column(name = "service_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "service_id_seq")
-    @SequenceGenerator(name = "service_id_seq", sequenceName = "service_id_seq",  allocationSize=1)
+    @SequenceGenerator(name = "service_id_seq", sequenceName = "service_id_seq", allocationSize = 1)
     private Long serviceId;
 
     @ManyToOne
@@ -60,4 +60,12 @@ public class CalendarEntity {
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Set<CalendarDatesEntity> calendarDates;
+
+    public ServiceDate getServiceStartDate() {
+        return new ServiceDate(startDate.getYear(), startDate.getMonthValue(), startDate.getDayOfMonth());
+    }
+
+    public ServiceDate getServiceEndDate() {
+        return new ServiceDate(endDate.getYear(), endDate.getMonthValue(), endDate.getDayOfMonth());
+    }
 }

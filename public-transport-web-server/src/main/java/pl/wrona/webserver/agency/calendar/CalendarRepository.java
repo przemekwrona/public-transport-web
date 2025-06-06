@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.agency.entity.Agency;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface CalendarRepository extends JpaRepository<CalendarEntity, Long> 
     boolean existsByAgencyAndCalendarName(Agency agency, String calendarName);
 
     List<CalendarEntity> findAllByAgencyAndCalendarNameStartingWith(Agency agency, String calendarName);
+
+    List<CalendarEntity> findAllByAgencyAndStartDateBeforeAndEndDateAfter(Agency agency, LocalDate startDate, LocalDate endDate);
 }

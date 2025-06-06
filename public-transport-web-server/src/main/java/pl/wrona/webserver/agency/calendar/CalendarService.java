@@ -10,8 +10,8 @@ import org.igeolab.iot.pt.server.api.model.UpdateCalendarRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.AgencyService;
-import pl.wrona.webserver.exception.BusinessException;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
@@ -102,11 +102,14 @@ public class CalendarService {
         return new Status().status(Status.StatusEnum.SUCCESS);
     }
 
-    public boolean existsByCalendarName(String calendarName) {
-        return this.calendarRepository.existsByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarName);
-    }
-
     public List<CalendarEntity> findCalendarStartsWith(String calendarName) {
         return this.calendarRepository.findAllByAgencyAndCalendarNameStartingWith(agencyService.getLoggedAgency(), calendarName);
     }
+
+    public List<CalendarEntity> findActiveCalendar() {
+        LocalDate now = LocalDate.now();
+        return this.calendarRepository.findAllByAgencyAndStartDateBeforeAndEndDateAfter(agencyService.getLoggedAgency(), now, now);
+    }
+
+
 }

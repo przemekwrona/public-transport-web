@@ -23,6 +23,8 @@ public class GtfsDownloadService {
     private final RouteService routeService;
     private final StopService stopService;
 
+    private final CalendarService calendarService;
+
     public Resource downloadGtfs() {
         try {
             Path tempDir = Files.createTempDirectory("gtfs_");
@@ -33,6 +35,10 @@ public class GtfsDownloadService {
 
             Agency agency = agencyService.getLoggedAgency();
             writer.handleEntity(AgencyHandler.handle(agency));
+
+            calendarService.findActiveCalendar().stream()
+                    .map(calendar -> CalendarHandler.handle(agency, calendar))
+                    .forEach(writer::handleEntity);
 
             routeService.getRoutesEntities().stream()
                     .map(route -> RouteHandler.handle(agency, route))
