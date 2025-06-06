@@ -70,4 +70,8 @@ public class BrigadeTripEntity {
         return "%s/%s/%s".formatted(agency.getAgencyCode(), brigade.getBrigadeNumber(), this.getTripSequence());
     }
 
+    public String getRouteId() {
+        return "%s/%s".formatted(line, name);
+    }
+
 }

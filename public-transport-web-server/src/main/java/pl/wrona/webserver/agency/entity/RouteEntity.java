@@ -26,7 +26,7 @@ public class RouteEntity {
     @Id
     @Column(name = "route_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "route_id_seq")
-    @SequenceGenerator(name = "route_id_seq", sequenceName = "route_id_seq",  allocationSize=1)
+    @SequenceGenerator(name = "route_id_seq", sequenceName = "route_id_seq", allocationSize = 1)
     private Long routeId;
 
     private String name;
@@ -59,5 +59,9 @@ public class RouteEntity {
 
     @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TripEntity> tripEntities;
+
+    public String getRouteId() {
+        return "%s/%s".formatted(line, name);
+    }
 
 }

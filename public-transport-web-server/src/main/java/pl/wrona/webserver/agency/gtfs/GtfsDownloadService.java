@@ -79,7 +79,7 @@ public class GtfsDownloadService {
 
                         Trip trip = new Trip();
                         trip.setId(agencyAndId);
-                        trip.setRoute(routesDictionary.get(brigadeTrip.getLine()));
+                        trip.setRoute(routesDictionary.get(brigadeTrip.getRouteId()));
                         trip.setServiceId(calendarDictionary.get(brigadeTrip.getBrigade().getCalendar().getCalendarName()).getServiceId());
                         return trip;
                     }).forEach(writer::handleEntity);

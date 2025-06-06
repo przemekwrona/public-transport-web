@@ -12,7 +12,7 @@ public class RouteHandler {
 
         var agencyAndId = new AgencyAndId();
         agencyAndId.setAgencyId(agencyEntity.getAgencyCode());
-        agencyAndId.setId(entity.getLine());
+        agencyAndId.setId(entity.getRouteId());
 
         var agency = new org.onebusaway.gtfs.model.Agency();
         agency.setId(agencyAndId.getAgencyId());
