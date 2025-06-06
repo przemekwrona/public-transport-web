@@ -34,8 +34,13 @@ import {ViewportScroller} from "@angular/common";
     ]
 })
 export class TripEditorComponent implements OnInit, AfterViewInit {
-    private ICON = L.divIcon({
+    private BDOT10K_STOP = L.divIcon({
         html: `<div style="background-color: #0096FF; padding: 1px 0 0 1px; width: 20px; height: 20px; border-radius: 2px; color: whitesmoke"><img src="assets/bus-solid.svg"></div>`,
+        className: 'stop-marker'
+    });
+
+    private OTP_STOP = L.divIcon({
+        html: `<div style="background-color: #00395c; padding: 1px 0 0 1px; width: 20px; height: 20px; border-radius: 2px; color: whitesmoke"><img src="assets/bus-solid.svg"></div>`,
         className: 'stop-marker'
     });
 
@@ -162,7 +167,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         if (map.getZoom() > 12) {
             const bounds = map.getBounds();
             this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
-                const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON})
+                const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: stop.isBdot10k ? this.BDOT10K_STOP: this.OTP_STOP})
                     .on('click', (event: LeafletMouseEvent) => {
                         const stopTime: StopTime = {} as StopTime;
                         stopTime.stopId = stop.id;

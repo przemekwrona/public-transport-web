@@ -9,25 +9,12 @@
                 <div class="card-body lg:py-7.5 py-5">
                     <div class="flex flex-wrap justify-between gap-5">
                         <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">Nazwa kalendarza</div>
-                            <span class="text-gray-700 text-2sm">Lorem Ipsum</span>
-                        </div>
-                        <label class="input sm:max-w-full xl:max-w-96">
-                            <i class="ki-solid ki-note"></i>
-                            <input type="text" [(ngModel)]="calendarBody.calendarName" placeholder="DP/2025/1"/>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
                             <div class="text-gray-900 text-sm font-medium">Oznaczenie na rozkładzie</div>
-                            <span class="text-gray-700 text-2sm">Lorem Ipsum</span>
                         </div>
                         <label class="input sm:max-w-full xl:max-w-96">
                             <i class="ki-solid ki-calendar"></i>
-                            <input type="text" [(ngModel)]="calendarBody.designation" placeholder="D"/>
+                            <input type="text" [(ngModel)]="calendarBody.designation"
+                                   (ngModelChange)="onChangeDesignation(calendarBody.designation)" placeholder="D"/>
                         </label>
                     </div>
                 </div>
@@ -38,7 +25,9 @@
                             <div class="text-gray-900 text-sm font-medium">
                                 Wyjaśnienie
                             </div>
-                            <span class="text-gray-700 text-2sm">Lorem Ipsum</span>
+                            <span class="text-gray-700 text-2sm">
+                                Opis który pojawi się na rozkładzie jazdy
+                            </span>
                         </div>
                         <label class="input sm:max-w-full xl:max-w-96 w-full">
                             <i class="ki-solid ki-calendar">
@@ -55,7 +44,7 @@
                             <div class="text-gray-900 text-sm font-medium">
                                 Rozkład Obowiązuje OD
                             </div>
-                            <span class="text-gray-700 text-2sm">Signature Palette Branding Element</span>
+                            <span class="text-gray-700 text-2sm">OD kiedy dany rozkład jazdy jest aktualny.</span>
                         </div>
                         <label class="sm:max-w-full xl:max-w-96 w-full">
                             <app-calendar-input [(ngModel)]="calendarBody.startDate" [showNavigation]="true"/>
@@ -69,7 +58,7 @@
                             <div class="text-gray-900 text-sm font-medium">
                                 Rozkład Obowiązuje DO
                             </div>
-                            <span class="text-gray-700 text-2sm">Signature Palette Branding Element</span>
+                            <span class="text-gray-700 text-2sm">DO kiedy dany rozkład jazdy jest aktualny.</span>
                         </div>
                         <label class="sm:max-w-full xl:max-w-96 w-full">
                             <app-calendar-input [(ngModel)]="calendarBody.endDate"/>
