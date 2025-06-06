@@ -13,7 +13,7 @@ export class GoogleMapsComponent {
     }
 
     public downloadGtfs() {
-        this.gtfsService.gtfsDownloadGet().subscribe((blob: Blob) => {
+        this.gtfsService.downloadGtfs().subscribe((blob: Blob) => {
             const a: any = document.createElement("a");
             document.body.appendChild(a);
             a.style = "display: none";
