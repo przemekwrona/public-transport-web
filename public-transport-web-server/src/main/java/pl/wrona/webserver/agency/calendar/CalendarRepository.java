@@ -15,4 +15,6 @@ public interface CalendarRepository extends JpaRepository<CalendarEntity, Long> 
     Optional<CalendarEntity> findByAgencyAndCalendarName(Agency agency, String calendarName);
 
     boolean existsByAgencyAndCalendarName(Agency agency, String calendarName);
+
+    List<CalendarEntity> findAllByAgencyAndCalendarNameStartingWith(Agency agency, String calendarName);
 }
