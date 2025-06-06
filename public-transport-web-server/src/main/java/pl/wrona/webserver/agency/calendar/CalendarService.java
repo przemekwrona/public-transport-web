@@ -55,7 +55,7 @@ public class CalendarService {
 
 
     public GetCalendarsResponse getCalendars() {
-        Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesService.mapAllByAgency(agencyService.getLoggedAgency());
+        Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesService.mapAllByAgency();
 
         var calendars = calendarRepository.findAllByAgency(agencyService.getLoggedAgency()).stream()
                 .map(calendar -> CalendarBodyMapper.apply(calendar, calendarDatesDictionary))
@@ -81,7 +81,7 @@ public class CalendarService {
     }
 
     public CalendarBody getCalendarByCalendarName(CalendarQuery calendarQuery) {
-        Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesService.mapAllByAgency(agencyService.getLoggedAgency());
+        Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesService.mapAllByAgency();
 
         return calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarQuery.getCalendarName())
                 .map(calendar -> CalendarBodyMapper.apply(calendar, calendarDatesDictionary))
