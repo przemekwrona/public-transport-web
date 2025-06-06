@@ -55,7 +55,7 @@ public class BrigadeService {
                     brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariant());
                     brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
                     brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
-                    brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), brigadeTrip.getTripSequence()));
+                    brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId());
 
                     brigadeTripEntity.setBrigade(savedBrigade);
                     brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
@@ -141,7 +141,7 @@ public class BrigadeService {
                         brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariant());
                         brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
                         brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
-                        brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), brigadeTrip.getTripSequence()));
+                        brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId());
 
                         brigadeTripEntity.setBrigade(entity);
                         brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());

@@ -66,14 +66,8 @@ public class BrigadeTripEntity {
     @Column(name = "travel_time_in_seconds")
     private int travelTimeInSeconds;
 
-    public String stringifyId(Agency agency, int stopSequence) {
-        return "%s/%s/%s/%s/%s/%s".formatted(agency.getAgencyCode(), line, name, variant, mode, stopSequence);
+    public String stringifyId() {
+        return "%s/%s/%s".formatted(brigade.getAgency().getAgencyCode(), brigade.getBrigadeNumber(), this.getTripSequence());
     }
-
-//    private int arrivalTimeInSeconds;
-//
-//    private int departureTimeInSeconds;
-//
-//    private String sourceTripId;
 
 }
