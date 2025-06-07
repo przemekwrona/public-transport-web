@@ -9,6 +9,8 @@ import {BusStopModalSelectorComponent} from "./bus-stop-modal-selector/bus-stop-
 import {
     MatDialogModule,
 } from "@angular/material/dialog";
+import {BusStopEditorComponent} from "./bus-stop-editor/bus-stop-editor.component";
+import {BusStopModalEditorComponent} from "./bus-stop-modal-editor/bus-stop-modal-editor.component";
 
 
 @NgModule({
@@ -19,12 +21,16 @@ import {
         FaIconComponent
     ],
     declarations: [
+        BusStopEditorComponent,
+        BusStopModalEditorComponent,
         BusStopModalSelectorComponent,
         BusStopSelectorComponent,
         CalendarInputComponent,
         CalendarPickerComponent
     ],
     exports: [
+        BusStopEditorComponent,
+        BusStopModalEditorComponent,
         BusStopModalSelectorComponent,
         BusStopSelectorComponent,
         CalendarInputComponent,
