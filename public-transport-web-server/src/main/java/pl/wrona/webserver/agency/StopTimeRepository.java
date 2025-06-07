@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.agency.entity.StopTimeEntity;
 import pl.wrona.webserver.agency.entity.StopTimeId;
+import pl.wrona.webserver.agency.entity.TripEntity;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public interface StopTimeRepository extends JpaRepository<StopTimeEntity, StopTi
 
     @Query("SELECT st FROM StopTimeEntity st WHERE st.stopTimeId.tripId = :tripId ORDER BY st.stopTimeId.stopSequence")
     List<StopTimeEntity> findAllByTripId(@Param("tripId") Long tripId);
+
+    List<StopTimeEntity> findAllByTrip(TripEntity trip);
 
     @Modifying
     @Query("DELETE FROM StopTimeEntity st WHERE st.stopTimeId.tripId = :tripId")

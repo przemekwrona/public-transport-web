@@ -3,6 +3,7 @@ package pl.wrona.webserver.agency;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.agency.entity.StopTimeEntity;
+import pl.wrona.webserver.agency.entity.TripEntity;
 
 import java.util.List;
 
@@ -14,5 +15,9 @@ public class StopTimeService {
 
     public List<StopTimeEntity> getAllStopTimesByTripId(Long tripId) {
         return stopTimeRepository.findAllByTripId(tripId);
+    }
+
+    public List<StopTimeEntity> getAllStopTimesByTrip(TripEntity trip) {
+        return stopTimeRepository.findAllByTrip(trip);
     }
 }

@@ -8,7 +8,7 @@ public class AgencyHandler {
         Agency agency = new Agency();
         agency.setId(agencyEntity.getAgencyCode());
         agency.setName(agencyEntity.getAgencyName());
-        agency.setUrl(agencyEntity.getAgencyUrl());
+        agency.setUrl("https://www.%s".formatted(agencyEntity.getAgencyUrl()));
         agency.setTimezone("Europe/Warsaw");
 
         return agency;
