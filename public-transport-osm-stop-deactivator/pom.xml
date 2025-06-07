@@ -5,13 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>pl.wrona</groupId>
 	<artifactId>public-transport-osm-stop-deactivator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>public-transport-osm-stop-deactivator</name>
 	<description>public-transport-osm-stop-deactivator</description>
 

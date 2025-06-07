@@ -12,6 +12,6 @@ public class OsmDeactivateCommandLine implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        osmDeactivateService.deactivateOsmStops();
     }
 }
