@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {Stop} from "../../../generated/public-transport";
 
 @Component({
-  selector: 'app-bus-stop-editor',
-  templateUrl: './bus-stop-editor.component.html',
-  styleUrl: './bus-stop-editor.component.scss'
+    selector: 'app-bus-stop-editor',
+    templateUrl: './bus-stop-editor.component.html',
+    styleUrl: './bus-stop-editor.component.scss'
 })
 export class BusStopEditorComponent {
+
+    @Input() public stop: Stop;
+
+    constructor() {
+    }
 
 }
