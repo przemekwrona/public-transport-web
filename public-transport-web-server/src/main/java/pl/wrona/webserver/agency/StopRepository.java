@@ -14,12 +14,6 @@ public interface StopRepository extends JpaRepository<StopEntity, String> {
 
     List<StopEntity> findAllByStopIdIn(List<Long> stopIds);
 
-    @Query("""
-            SELECT s FROM Agency a 
-                        JOIN a.routeEntities r 
-                        JOIN r.tripEntities t 
-                        JOIN t.stopTimes st 
-                        JOIN st.stopEntity s
-                        WHERE :agency = a""")
+    @Query("SELECT s FROM Agency a JOIN a.routeEntities r  JOIN r.tripEntities t JOIN t.stopTimes st JOIN st.stopEntity s WHERE :agency = a")
     List<StopEntity> findAllByAgency(@Param("agency") Agency agency);
 }
