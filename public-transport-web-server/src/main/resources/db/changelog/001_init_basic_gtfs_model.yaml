@@ -46,7 +46,7 @@ databaseChangeLog:
             incrementBy: 1
 
   - changeSet:
-      id: create-table-bdot10k-stops
+      id: create-table-stops
       author: pwrona
       changes:
         - createSequence:
@@ -99,6 +99,10 @@ databaseChangeLog:
                   name: is_active
                   type: boolean
                   defaultValueBoolean: true
+              - column:
+                  name: is_deactivation_checked
+                  type: boolean
+                  defaultValueBoolean: false
 
         - createIndex:
             indexName: idx_stop_localization
@@ -158,16 +162,19 @@ databaseChangeLog:
                   type: STRING
 
         - sql:
-            sql: UPDATE stop SET is_bdot10k = true WHERE bdot10k_id IS NOT NULL;
+            sql: UPDATE stop SET is_bdot10k = TRUE WHERE bdot10k_id IS NOT NULL;
 
         - sql:
-            sql: UPDATE stop SET is_bdot10k = false WHERE bdot10k_id IS NULL;
+            sql: UPDATE stop SET is_bdot10k = FALSE WHERE bdot10k_id IS NULL;
 
         - sql:
-            sql: UPDATE stop SET is_osm = true WHERE stop.osm_id IS NOT NULL;
+            sql: UPDATE stop SET is_osm = TRUE WHERE stop.osm_id IS NOT NULL;
 
         - sql:
-            sql: UPDATE stop SET is_osm = false WHERE stop.osm_id IS NULL;
+            sql: UPDATE stop SET is_osm = FALSE WHERE stop.osm_id IS NULL;
+
+        - sql:
+            sql: UPDATE stop SET is_deactivation_checked = TRUE WHERE stop.is_bdot10k = TRUE;
 
   - changeSet:
       id: create-agency-table
