@@ -30,7 +30,7 @@ export class StopsComponent implements OnInit, AfterViewInit {
     private stopMarkers: Marker[] = [];
 
     public stops: Stop[] = [];
-    public lastClickedStop: Stop;
+    public lastClickedStop: Stop = {} as Stop;
 
     constructor(private stopService: StopService) {
     }
