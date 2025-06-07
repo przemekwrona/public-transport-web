@@ -1,7 +1,10 @@
 package pl.wrona.webserver.stops;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.Status;
+import org.igeolab.iot.pt.server.api.model.StopsPatchRequest;
 import org.igeolab.iot.pt.server.api.model.StopsResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -31,5 +34,16 @@ public class BusStopService {
 
         return new StopsResponse()
                 .stops(stops);
+    }
+
+    public Status patchStop(StopsPatchRequest stopsPatchRequest) {
+        busStopRepository.findById(stopsPatchRequest.getId()).ifPresent(busStop -> {
+            busStop.setName(stopsPatchRequest.getName());
+            busStop.setActive(stopsPatchRequest.getActive());
+
+            busStopRepository.save(busStop);
+        });
+        return new Status()
+                .status(Status.StatusEnum.SUCCESS);
     }
 }

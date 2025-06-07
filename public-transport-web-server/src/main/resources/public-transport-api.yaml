@@ -289,6 +289,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StopsResponse'
+    patch:
+      tags:
+        - stops
+      summary: Edit stop name
+      operationId: patchStop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopsPatchRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
 
   /stops/search:
     get:
@@ -781,6 +798,17 @@ components:
         isOsm:
           type: boolean
         isBdot10k:
+          type: boolean
+
+    StopsPatchRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        active:
           type: boolean
 
     StopsResponse:
