@@ -27,12 +27,12 @@
                 Widoczność przystanku
             </label>
             <label class="switch">
-                <input checked="" type="checkbox"/>
+                <input checked="" type="checkbox" [(ngModel)]="active"/>
                 <span class="text-gray-800 text-sm">Aktywny</span>
             </label>
         </div>
         <div class="flex justify-end">
-            <button class="btn btn-primary">
+            <button (click)="saveStop()" class="btn btn-primary">
                 Save Changes
             </button>
         </div>

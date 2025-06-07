@@ -11,6 +11,7 @@ import {
 } from "@angular/material/dialog";
 import {BusStopEditorComponent} from "./bus-stop-editor/bus-stop-editor.component";
 import {BusStopModalEditorComponent} from "./bus-stop-modal-editor/bus-stop-modal-editor.component";
+import {StopsService} from "../../generated/public-transport";
 
 
 @NgModule({
@@ -35,6 +36,9 @@ import {BusStopModalEditorComponent} from "./bus-stop-modal-editor/bus-stop-moda
         BusStopSelectorComponent,
         CalendarInputComponent,
         CalendarPickerComponent
+    ],
+    providers: [
+        StopsService
     ]
 })
 export class SharedModule {
