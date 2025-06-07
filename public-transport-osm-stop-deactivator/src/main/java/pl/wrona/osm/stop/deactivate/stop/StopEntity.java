@@ -45,4 +45,7 @@ public class StopEntity {
     @Column(name = "is_active")
     private boolean active;
 
+    @Column(name = "is_deactivation_checked")
+    private boolean deactivatedChecked;
+
 }
