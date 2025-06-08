@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, inject, model} from '@angular/core';
+import {AfterViewInit, Component, inject, model} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {BusStopSelectorData} from "../bus-stop-selector/bus-stop-selector.component";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
@@ -15,7 +15,6 @@ interface StopMarker extends L.Marker {
     selector: 'app-bus-stop-modal-selector',
     templateUrl: './bus-stop-modal-selector.component.html',
     styleUrl: './bus-stop-modal-selector.component.scss'
-    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BusStopModalSelectorComponent implements AfterViewInit {
     private ICON = L.divIcon({
@@ -33,10 +32,6 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
     public stops: Stop[] = [];
 
     constructor(private stopService: StopService) {
-    }
-
-    onNoClick(): void {
-        this.dialogRef.close();
     }
 
     ngAfterViewInit(): void {
