@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {Stop, StopsPatchRequest, StopsService} from "../../../generated/public-transport";
+import {StopsPatchRequest, StopsService} from "../../../generated/public-transport";
 
 @Component({
     selector: 'app-bus-stop-editor',
@@ -7,8 +7,10 @@ import {Stop, StopsPatchRequest, StopsService} from "../../../generated/public-t
     styleUrl: './bus-stop-editor.component.scss'
 })
 export class BusStopEditorComponent implements OnChanges {
-
-    @Input() public stop: Stop;
+    @Input() public stopId: number;
+    @Input() public stopName: string;
+    @Input() public lon: number;
+    @Input() public lat: number;
 
     public active: boolean = true;
 
@@ -17,8 +19,8 @@ export class BusStopEditorComponent implements OnChanges {
 
     public saveStop(): void {
         const stopPatchRequest = {} as StopsPatchRequest;
-        stopPatchRequest.id = this.stop.id;
-        stopPatchRequest.name = this.stop.name;
+        stopPatchRequest.id = this.stopId;
+        stopPatchRequest.name = this.stopName;
         stopPatchRequest.active = this.active;
 
         this.stopsService.patchStop(stopPatchRequest).subscribe(() => {

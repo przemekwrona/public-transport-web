@@ -11,7 +11,7 @@
                 <label class="form-label flex items-center gap-1 max-w-56">
                     Nazwa przystanku
                 </label>
-                <input class="input" type="text" [(ngModel)]="stop.name"/>
+                <input class="input" type="text" [(ngModel)]="stopName"/>
             </div>
         </div>
         <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -19,7 +19,7 @@
                 Współrzędne Geograficzne
             </label>
             <div class="grow text-sm">
-                {{ stop.lon }},{{ stop.lat }}
+                {{ lon }},{{ lat }}
             </div>
         </div>
         <div class="flex items-center flex-wrap gap-2.5">
