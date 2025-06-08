@@ -173,8 +173,14 @@
                                     <span class="blue">{{ index + 1 }}</span>
                                     <span>{{ stopTime?.stopName }}</span>
                                 </span>
-                                <span>{{ stopTime.meters | distance | number: '1.1-1' }}
-                                    km {{ stopTime.seconds | time | number: '1.0-0' }}min</span>
+
+                                <span>
+                                    <span (click)="openDialogEditStop(stopTime)"><a
+                                            class="btn btn-sm btn-icon btn-clear btn-primary"><i
+                                            class="ki-filled ki-notepad-edit"></i></a></span>
+                                    <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
+                                    <span>km {{ stopTime.seconds | time | number: '1.0-0' }}min</span>
+                                </span>
                             </div>
                         }
                     </div>
@@ -205,7 +211,9 @@
 
                 <div class="card-body pr-2">
                     <div class="flex justify-end gap-2">
-                        <button (click)="clickCreateOrEdit()" class="btn btn-success">Zapisz Przystanki i wróć do listy wariantów</button>
+                        <button (click)="clickCreateOrEdit()" class="btn btn-success">Zapisz Przystanki i wróć do listy
+                            wariantów
+                        </button>
                     </div>
                 </div>
 

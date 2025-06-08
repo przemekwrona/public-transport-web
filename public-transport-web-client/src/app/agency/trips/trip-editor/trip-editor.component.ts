@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {findIndex, last} from "lodash";
@@ -20,6 +20,13 @@ import {debounceTime, map, Subject} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {routes} from "../../../app.routes";
 import {ViewportScroller} from "@angular/common";
+import {BusStopModalSelectorComponent} from "../../shared/bus-stop-modal-selector/bus-stop-modal-selector.component";
+import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
+import {MatDialog} from "@angular/material/dialog";
+import {
+    BusStopModalEditorComponent,
+    BusStopModalEditorData
+} from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
 
 @Component({
     selector: 'app-trip-editor',
@@ -59,7 +66,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public $tripDetails: TripsDetails = {trip: {}};
     public $tripVariants: Trips = {};
 
-    constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller) {
+    constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
     }
 
@@ -314,4 +321,22 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     protected readonly routes = routes;
+
+    openDialogEditStop(stopTime: StopTime): void {
+        const data: BusStopModalEditorData = {} as BusStopModalEditorData;
+        data.stopId = stopTime.stopId;
+        data.stopName = stopTime.stopName;
+        data.lat = stopTime.lat;
+        data.lon = stopTime.lon;
+
+        const dialogRef = this.dialog.open(BusStopModalEditorComponent, {
+            data: data,
+        });
+
+        dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopSelectorData | undefined) => {
+            if (busStopSelectorData !== undefined) {
+                // this.busStopIdChange.emit(busStopSelectorData);
+            }
+        });
+    }
 }
