@@ -62,12 +62,11 @@
                         <div class="w-full">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Kierunek wariantu</label>
-                                <div class="grow">
-                                    <select name="mode" id="mode" [(ngModel)]="$tripDetails.trip.mode" class="select">
-                                        <option [value]="tripModeSelectValue.Front">TAM</option>
-                                        <option [value]="tripModeSelectValue.Back">POWRÓT</option>
-                                    </select>
-                                </div>
+                                <select name="mode" id="mode" [(ngModel)]="$tripDetails.trip.mode"
+                                        class="select w-full">
+                                    <option [value]="tripModeSelectValue.Front">TAM</option>
+                                    <option [value]="tripModeSelectValue.Back">POWRÓT</option>
+                                </select>
                             </div>
                         </div>
 
