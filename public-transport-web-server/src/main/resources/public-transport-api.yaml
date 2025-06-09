@@ -643,6 +643,10 @@ components:
       properties:
         token:
           type: string
+        roles:
+          type: array
+          items:
+            type: string
 
     AgencyDetails:
       type: object

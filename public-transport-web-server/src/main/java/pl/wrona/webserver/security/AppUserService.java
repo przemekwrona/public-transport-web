@@ -8,6 +8,7 @@ import org.igeolab.iot.pt.server.api.model.LoginAppUserResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.config.AuthTokenUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class AppUserService {
 
     private final AppUserRepository appUserRepository;
+    private final AppRoleRepository appRoleRepository;
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final AuthTokenUtils authTokenUtils;
@@ -45,13 +49,19 @@ public class AppUserService {
                 .username(createAppUserRequest.getUsername());
     }
 
+    @Transactional
     public LoginAppUserResponse login(LoginAppUserRequest loginAppUserRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginAppUserRequest.getUsername(), loginAppUserRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         AppUser userDetails = (AppUser) authentication.getPrincipal();
 
+        List<String> roles = appRoleRepository.findAppRolesByAppUsers(Set.of(userDetails)).stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
         return new LoginAppUserResponse()
-                .token(authTokenUtils.generateJwtToken(userDetails));
+                .token(authTokenUtils.generateJwtToken(userDetails))
+                .roles(roles);
     }
 }
