@@ -16,7 +16,7 @@ export class LandingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.googleAnalyticsService.trackEvent('landing_page_view', 'User view landing page', 'page_view');
+        this.googleAnalyticsService.pageView('landing');
     }
 
     public scrollToHeader(): void {
