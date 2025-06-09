@@ -4,6 +4,7 @@ import {StopsComponent} from "./stops.component";
 import {StopService} from "../../http/stop.service";
 import {MatIconModule} from "@angular/material/icon";
 import {SharedModule} from "../shared/shared.module";
+import {AuthService} from "../../auth/auth.service";
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {SharedModule} from "../shared/shared.module";
     exports: [
         StopsComponent
     ], providers: [
-        StopService
+        StopService,
+        AuthService
     ]
 })
 export class StopsModule {
