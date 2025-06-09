@@ -41,7 +41,7 @@ public class Agency {
     private String agencyPhone;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "app_user_id", referencedColumnName = "app_user_id")
+    @JoinColumn(name = "agency_owner_id", referencedColumnName = "app_user_id")
     private AppUser appUser;
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
