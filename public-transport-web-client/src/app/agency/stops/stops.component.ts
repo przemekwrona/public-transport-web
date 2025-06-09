@@ -5,6 +5,7 @@ import {find} from "lodash";
 
 import {StopService} from "./stop.service";
 import {Stop, StopsResponse} from "../../generated/public-transport";
+import {AuthService} from "../../auth/auth.service";
 
 interface StopMarker extends L.Marker {
     id: number;
@@ -32,7 +33,11 @@ export class StopsComponent implements OnInit, AfterViewInit {
     public stops: Stop[] = [];
     public lastClickedStop: Stop = {} as Stop;
 
-    constructor(private stopService: StopService) {
+    constructor(private stopService: StopService, private authService: AuthService) {
+    }
+
+    public isAdmin(): boolean {
+        return this.authService.hasRoleSuperAdmin();
     }
 
     ngAfterViewInit(): void {
