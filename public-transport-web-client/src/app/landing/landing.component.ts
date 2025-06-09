@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import moment from "moment";
+import {GoogleAnalyticsService} from "../google-analytics.service";
 
 @Component({
     selector: 'app-landing',
@@ -11,10 +12,11 @@ export class LandingComponent implements OnInit {
 
     public now: moment.Moment = moment()
 
-    constructor(private _router: Router) {
+    constructor(private _router: Router, private googleAnalyticsService: GoogleAnalyticsService) {
     }
 
     ngOnInit(): void {
+        this.googleAnalyticsService.trackEvent('landing_page_view', 'User view landing page', 'page_view');
     }
 
     public scrollToHeader(): void {
