@@ -12,13 +12,11 @@ import {routes} from "./app.routes";
 import {AgencyModule} from "./agency/agency.module";
 import {AuthModule} from "./auth/auth.module";
 import {AddHeaderInterceptor} from "./auth/auth.interceptor";
-import {CommonModule} from "@angular/common";
 import {BASE_PATH} from "./generated/public-transport";
 
 @NgModule({
     imports: [
         BrowserModule,
-        CommonModule,
         RouterModule.forRoot(routes),
         HttpClientModule,
         BrowserAnimationsModule,
