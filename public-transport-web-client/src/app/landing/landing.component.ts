@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import moment from "moment";
 import {GoogleAnalyticsService} from "../google-analytics.service";
+import {faPhone, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-landing',
@@ -10,7 +11,8 @@ import {GoogleAnalyticsService} from "../google-analytics.service";
 })
 export class LandingComponent implements OnInit {
 
-    public now: moment.Moment = moment()
+    public now: moment.Moment = moment();
+    public faPhone: IconDefinition = faPhone;
 
     public NEW_LINE: string = '%0D%0A';
 
