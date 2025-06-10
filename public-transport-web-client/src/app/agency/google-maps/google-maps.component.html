@@ -5,9 +5,7 @@
             <h1 class="text-xl font-medium leading-none text-gray-900">
                 Google Mapy
             </h1>
-            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-                Central Hub for Personal Customization
-            </div>
+            <div class="flex items-center gap-2 text-sm font-normal text-gray-700"></div>
         </div>
         <div class="flex items-center gap-2.5">
             <a class="btn btn-sm btn-light" href="#">
@@ -31,7 +29,7 @@
                 <div class="card">
                     <div class="card-header mb-5" id="external_services_manage_api">
                         <h3 class="card-title">
-                            Public API Key
+                            Informacje Ogólne
                         </h3>
                     </div>
 
@@ -49,20 +47,18 @@
                                 </div>
                                 <div class="flex flex-col gap-1.5">
                                     <div class="flex items-center flex-wrap gap-2.5">
-                                        <a class="text-base font-medium text-gray-900 hover:text-primary-active" href="#">
+                                        <a class="text-base font-medium text-gray-900 hover:text-primary-active"
+                                           href="#">
                                             Linia autobusowa jest linią lokalną
                                         </a>
                                         <span class="badge badge-sm badge-outline badge-danger shrink-0">Ważne</span>
                                     </div>
                                     <div class="form-info text-gray-800 font-normal">
-                                        Google Mapy są produktem zarządzanym przez firmę Alphabet Inc.
-                                        Google wspiera system informacji pasażerskiej dla lini loklanych co się wiąższe z niższymi kosztami przygotowania i wyświetlania danych.
-                                        Trasy które nie są lokalne, trasy liniami ekspresowymi odbywajacymi się na trasach dalekobieżnych.
 
-                                        Warunkiem korzystania z Google Maps jest to, aby trasa linii autobusowej znajdowała się na terenie jednego województwa.
-                                        <a class="link" href="https://keenthemes.com/">keenthemes</a>
-                                        <br/>
-                                        Secure access with a unique API key for enhanced functionality.
+                                        Google Mapy są produktem zarządzanym przez firmę Alphabet Inc. który wspiera system informacji pasażerskiej.
+
+                                        Warunkiem korzystania z Google Maps jest to, aby przewozy były realizowane na regularnych trasach, istnieje możliwość zakupu bilietu u kierowcy lub na dworcu jeżeli jest to wymagana  musi być dostępny dla ogółu społeczeństwa,
+                                        a pasażerowie mogą z niego korzystać w celach ogólnych podróży.
                                     </div>
                                 </div>
                             </div>
@@ -78,45 +74,33 @@
                     <div class="card-body grid gap-7.5 py-5 lg:py-7.5">
                         <div class="flex flex-col gap-2.5">
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" name="option" type="checkbox" value="1"/>
-                                <span class="checkbox-label text-gray-800 font-medium">Linie autobusowe są liniami lokalnymi</span>
+                                <input class="checkbox checkbox-sm" name="option" type="checkbox" [defaultChecked]="false"/>
+                                <span class="checkbox-label text-gray-800 font-medium">Oświadczenie o prowadzeniu regularnych przewozów</span>
                             </label>
                             <p class="form-info leading-5 text-gray-800 font-normal">
-                                Oświadczam, że linie autobusowe, które oznaczyłem do upublicznienia w Google Maps, są liniami lokalnymi.
-                                Linia lokalna to linia, która kursuje wyłącznie na terenie jednego regionu.
+                                Oświadczam, że wszystkie trasy udostępniane przeze mnie w Google Transit są realizowane
+                                w ramach regularnych przewozów pasażerskich, tj. przewozu osób autobusami na określonych
+                                trasach, zgodnie z rozkładem jazdy i na podstawie udzielonego zezwolenia.
                             </p>
                         </div>
                         <div class="flex flex-col gap-2.5">
                             <label class="checkbox-group">
-                                <input class="checkbox checkbox-sm" name="option" type="checkbox" value="2"/>
-                                <span class="checkbox-label text-gray-800 font-medium">
-              Update existing users
-             </span>
+                                <input class="checkbox checkbox-sm" name="option" type="checkbox" [defaultChecked]="false"/>
+                                <span class="checkbox-label text-gray-800 font-medium">Oświadczenie o możliwości zakupu biletów</span>
                             </label>
                             <p class="form-info leading-5 text-gray-800 font-normal">
-                                When checked, the system will update the information for users already in the database with any new or altered details provided in the import file.
+                                Oświadczam, że w przypadku pobierania opłaty za przewóz, zapewniam możliwość zakupu
+                                biletu na pokładzie pojazdu LUB w kasie dworca autobusowego.
                             </p>
                         </div>
                         <div class="flex flex-col gap-2.5">
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" name="option" type="checkbox" value="3"/>
-                                <span class="checkbox-label text-gray-800 font-medium">
-              Send email notification on password change
-             </span>
+                                <input class="checkbox checkbox-sm" name="option" type="checkbox" [defaultChecked]="false"/>
+                                <span class="checkbox-label text-gray-800 font-medium">Oświadczenie o dostępności dla ogółu społeczeństwa</span>
                             </label>
                             <p class="form-info leading-5 text-gray-800 font-normal">
-                                This option ensures users are promptly notified via email in the event of a password change, enhancing security and keeping users informed of their account status.
-                            </p>
-                        </div>
-                        <div class="flex flex-col gap-2.5">
-                            <label class="checkbox-group">
-                                <input class="checkbox checkbox-sm" name="option" type="checkbox" value="4"/>
-                                <span class="checkbox-label text-gray-800 font-medium">
-              Include external IDs in import results
-             </span>
-                            </label>
-                            <p class="form-info leading-5 text-gray-800 font-normal">
-                                By including external IDs in the import results, administrators can more easily reconcile and track user records across different systems and databases.
+                                Oświadczam, że przewozy które realizuję są dostępne dla ogółu społeczeństwa, a pasażerowie mogą z niego korzystać w
+                                celach ogólnych podróży.
                             </p>
                         </div>
                     </div>
@@ -126,19 +110,20 @@
                         <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
                             <div class="flex flex-col items-start gap-3">
                                 <h2 class="text-1.5xl font-medium text-gray-900">
-                                    Contact Support
+                                    Kontakt ze wsparciem technicznym
                                 </h2>
                                 <p class="text-sm text-gray-800 leading-5.5 mb-2.5">
-                                    Need assistance? Contact our support team for prompt, personalized help your queries & concerns.
+                                    Potrzebujesz pomocy? Skontaktuj się z naszym zespołem wsparcia, aby uzyskać szybką, spersonalizowaną pomoc w przypadku pytań i wątpliwości.
                                 </p>
                             </div>
                             <img alt="image" class="dark:hidden max-h-[150px]" src="assets/media/illustrations/31.svg"/>
-                            <img alt="image" class="light:hidden max-h-[150px]" src="assets/media/illustrations/31-dark.svg"/>
+                            <img alt="image" class="light:hidden max-h-[150px]"
+                                 src="assets/media/illustrations/31-dark.svg"/>
                         </div>
                     </div>
                     <div class="card-footer justify-center">
                         <a class="btn btn-link" href="">
-                            Contact Support
+                            Napisz wiadomość
                         </a>
                     </div>
                 </div>
@@ -146,103 +131,6 @@
         </div>
         <div class="col-span-1">
             <div class="flex flex-col gap-5 lg:gap-7.5">
-                <div class="card">
-                    <div class="card-body py-10 flex flex-col gap-5 lg:gap-7.5">
-                        <div class="flex flex-col items-start gap-2.5">
-                            <div class="mb-2.5">
-                                <div class="relative size-[50px] shrink-0">
-                                    <svg class="w-full h-full stroke-brand-clarity fill-brand-light" fill="none" height="48" viewbox="0 0 44 48" width="44" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
-			18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937
-			39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z" fill="">
-                                        </path>
-                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
-			18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937
-			39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z" stroke="">
-                                        </path>
-                                    </svg>
-                                    <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4">
-                                        <i class="ki-filled ki-people text-1.5xl ps-px text-brand">
-                                        </i>
-                                    </div>
-                                </div>
-                            </div>
-                            <a class="text-base font-semibold text-gray-900 hover:text-primary" href="#">
-                                Streamlining Member Integration: Import Tools and Resources
-                            </a>
-                            <p class="text-sm text-gray-700">
-                                Dive into seamless member onboarding with our robust import tools. Leverage detailed walkthroughs, practical resources, and support to simplify the process.
-                            </p>
-                            <a class="btn btn-link flex-none" href="#">
-                                Learn more
-                            </a>
-                        </div>
-                        <span class="hidden [&:not(:last-child)]:block [&:not(:last-child)]:border-b border-b-gray-200">
-           </span>
-                        <div class="flex flex-col items-start gap-2.5">
-                            <div class="mb-2.5">
-                                <div class="relative size-[50px] shrink-0">
-                                    <svg class="w-full h-full stroke-brand-clarity fill-brand-light" fill="none" height="48" viewbox="0 0 44 48" width="44" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
-			18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937
-			39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z" fill="">
-                                        </path>
-                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
-			18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937
-			39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z" stroke="">
-                                        </path>
-                                    </svg>
-                                    <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4">
-                                        <i class="ki-filled ki-exit-up text-1.5xl ps-px text-brand">
-                                        </i>
-                                    </div>
-                                </div>
-                            </div>
-                            <a class="text-base font-semibold text-gray-900 hover:text-primary" href="#">
-                                Simplifying Roster Management: Bulk Upload Features
-                            </a>
-                            <p class="text-sm text-gray-700">
-                                Manage your community efficiently with our bulk member import feature. Find step-by-step instructions, helpful tips, and best practices for a smooth update.
-                            </p>
-                            <a class="btn btn-link flex-none" href="#">
-                                Learn more
-                            </a>
-                        </div>
-                        <span class="hidden [&:not(:last-child)]:block [&:not(:last-child)]:border-b border-b-gray-200">
-           </span>
-                        <div class="flex flex-col items-start gap-2.5">
-                            <div class="mb-2.5">
-                                <div class="relative size-[50px] shrink-0">
-                                    <svg class="w-full h-full stroke-brand-clarity fill-brand-light" fill="none" height="48" viewbox="0 0 44 48" width="44" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
-			18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937
-			39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z" fill="">
-                                        </path>
-                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
-			18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937
-			39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z" stroke="">
-                                        </path>
-                                    </svg>
-                                    <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4">
-                                        <i class="ki-filled ki-mouse-circle text-1.5xl ps-px text-brand">
-                                        </i>
-                                    </div>
-                                </div>
-                            </div>
-                            <a class="text-base font-semibold text-gray-900 hover:text-primary" href="#">
-                                Effortless Member Enrollment: Importation and Setup
-                            </a>
-                            <p class="text-sm text-gray-700">
-                                Initiate a hassle-free member import with our guided tools. Access comprehensive tutorials, insightful advice, and technical documentation for effortless setup.
-                            </p>
-                            <a class="btn btn-link flex-none" href="#">
-                                Learn more
-                            </a>
-                        </div>
-                        <span class="hidden [&:not(:last-child)]:block [&:not(:last-child)]:border-b border-b-gray-200">
-           </span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
