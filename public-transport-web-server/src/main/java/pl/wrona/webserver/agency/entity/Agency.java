@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -25,19 +26,19 @@ public class Agency {
     @Id
     private Long agencyId;
 
-    @Column(name="agency_code", unique = true)
+    @Column(name = "agency_code", unique = true)
     private String agencyCode;
 
-    @Column(name="agency_name")
+    @Column(name = "agency_name")
     private String agencyName;
 
-    @Column(name="agency_url")
+    @Column(name = "agency_url")
     private String agencyUrl;
 
-    @Column(name="agency_timetable_url")
+    @Column(name = "agency_timetable_url")
     private String agencyTimetableUrl;
 
-    @Column(name="agency_phone")
+    @Column(name = "agency_phone")
     private String agencyPhone;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -52,4 +53,8 @@ public class Agency {
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
     private Set<CalendarEntity> calendars;
+
+    @ManyToMany(mappedBy = "agencies")
+    private Set<AppUser> users;
+
 }

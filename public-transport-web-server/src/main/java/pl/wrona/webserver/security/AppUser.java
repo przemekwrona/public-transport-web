@@ -6,6 +6,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.wrona.webserver.agency.entity.Agency;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -46,6 +49,12 @@ public class AppUser implements UserDetails {
 
     @ManyToMany(mappedBy = "appUsers", fetch = FetchType.EAGER)
     private Set<AppRole> appRoles;
+
+    @ManyToMany
+    @JoinTable(name = "app_user_app_role",
+            joinColumns = @JoinColumn(name = "app_role_id"),
+            inverseJoinColumns = @JoinColumn(name = "app_user_id"))
+    private Set<Agency> agencies;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
