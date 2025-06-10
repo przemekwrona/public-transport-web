@@ -5,3 +5,24 @@ i.text-xl {
 div {
   scroll-behavior: smooth;
 }
+
+.call-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+  line-height: 60px;
+  font-size: 24px;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.call-button:hover {
+  background-color: #218838;
+}

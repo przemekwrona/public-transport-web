@@ -58,16 +58,16 @@
         </div>
 
         <!-- Mobile menu, show/hide based on menu state. -->
-        <div class="sm:hidden" id="mobile-menu">
-            <div class="space-y-1 px-2 pt-2 pb-3">
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a (click)="scrollToProduct()"
-                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Produkt</a>
-                <a (click)="scrollToAbout()"
-                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">O
-                    Mnie</a>
-            </div>
-        </div>
+        <!--        <div class="sm:hidden" id="mobile-menu">-->
+        <!--            <div class="space-y-1 px-2 pt-2 pb-3">-->
+        <!--                &lt;!&ndash; Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" &ndash;&gt;-->
+        <!--                <a (click)="scrollToProduct()"-->
+        <!--                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Produkt</a>-->
+        <!--                <a (click)="scrollToAbout()"-->
+        <!--                   class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">O-->
+        <!--                    Mnie</a>-->
+        <!--            </div>-->
+        <!--        </div>-->
     </nav>
 
     <div class="container max-w-screen-xl mx-auto px-4 min-h-screen">
@@ -94,7 +94,7 @@
 
                 <div class="flex">
                     <a href="mailto:biuro&#64;nastepnastacja.pl?subject={{title}}&body={{message}}"
-                       class="px-5 py-3 bg-blue-700 text-white text-sm font-semibold rounded-lg hover:bg-blue-900 transition ease-in-out duration-500 mr-5">
+                       class="w-full md:w-auto px-5 py-3 bg-blue-700 text-white text-lg font-semibold rounded-lg hover:bg-blue-900 transition ease-in-out duration-500">
                         Napisz do mnie</a>
 
                     <!--                    <button (click)="navigateToLogin()"-->
@@ -286,6 +286,11 @@
 </section>
 <!-- testimoni section //end -->
 
+<a href="tel:+48570552653" class="call-button md:hidden" title="Call Now">
+    <fa-icon [icon]="faPhone"></fa-icon>
+</a>
+
+
 <section class="pt-10 overflow-hidden bg-gray-50 dark:bg-gray-800 md:pt-0 sm:pt-16 2xl:pt-16">
     <div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div class="grid items-center grid-cols-1 md:grid-cols-2">
@@ -296,8 +301,7 @@
                     <br class="block sm:hidden"/>Przemysław Wrona
                 </h2>
                 <p class="max-w-lg mt-3 text-xl leading-relaxed text-gray-600 dark:text-gray-300 md:mt-8">
-                    Jestem naukowcem zajmującym się analizą danych telemetrycznych i lokalizacyjnych transportu
-                    publicznego.
+                    Zajmuję się analizą danych lokalizacyjnych transportu publicznego.
                     Mam 10 lat doświadczenie w tworzeniu Systemów Informatycznych oraz
                     4 lata pracy naukowej na Wydziale Matematyki i Nauk Informacyjnych Politechniki Warszawskiej.
                     Moja praca łączy wiedzę z zakresu informatyki, matematyki i analizy danych.
