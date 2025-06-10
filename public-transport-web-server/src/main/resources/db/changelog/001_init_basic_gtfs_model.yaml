@@ -80,26 +80,6 @@ databaseChangeLog:
                     foreignKeyName: fk_app_user_app_role_app_role
                     references: app_role(app_role_id)
 
-        - insert:
-            tableName: app_role
-            columns:
-              - column:
-                  name: app_role_id
-                  value: SUPER_USER
-              - column:
-                  name: description
-                  value: Role for system owner
-
-        - insert:
-            tableName: app_role
-            columns:
-              - column:
-                  name: app_role_id
-                  value: AGENCY_OWNER
-              - column:
-                  name: description
-                  value: Role for the owner of a transit agency
-
   - changeSet:
       id: create-table-stops
       author: pwrona
@@ -277,6 +257,24 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_agency_app_user
                     references: app_user(app_user_id)
+
+        - createTable:
+            tableName: app_user_agency
+            columns:
+              - column:
+                  name: app_user_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_app_user_agency_app_user
+                    references: app_user(app_user_id)
+                    nullable: false
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_app_user_agency_agency
+                    references: agency(agency_id)
+                    nullable: false
 
   - changeSet:
       id: create-route-table
