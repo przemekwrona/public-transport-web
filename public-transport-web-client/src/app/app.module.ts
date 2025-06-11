@@ -17,7 +17,7 @@ import {BASE_PATH} from "./generated/public-transport";
 @NgModule({
     imports: [
         BrowserModule,
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(routes, {useHash: true}),
         HttpClientModule,
         BrowserAnimationsModule,
         TransportModule,
@@ -31,8 +31,8 @@ import {BASE_PATH} from "./generated/public-transport";
         AppComponent
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
-        { provide: BASE_PATH, useValue: 'http://localhost:4200/api/v1' }
+        {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
+        {provide: BASE_PATH, useValue: 'http://localhost:4200/api/v1'}
     ],
     bootstrap: [
         AppComponent
