@@ -170,8 +170,8 @@
                             <div class="example-box" cdkDrag (dblclick)="remove(stopTime)"
                                  [@simpleFadeAnimation]="'in'">
                                 <span>
-                                    <span class="blue">{{ index + 1 }}</span>
-                                    <span>{{ stopTime?.stopName }}</span>
+                                    <span [ngClass]="{'blue': stopTime.bdot10k, 'dark-blue': !stopTime.bdot10k}">{{ index + 1 }}</span>
+                                    <span>{{ stopTime?.stopName }} </span>
                                 </span>
 
                                 <span>

@@ -26,45 +26,36 @@
         <div class="col-span-2">
             <div class="flex flex-col gap-5 lg:gap-7.5">
 
-                <div class="card">
-                    <div class="card-header mb-5" id="external_services_manage_api">
-                        <h3 class="card-title">
-                            Informacje Ogólne
-                        </h3>
-                    </div>
+                <div class="card-body px-0 py-0 grid gap-5 lg:gap-7.5">
+                    <p class="text-2sm text-gray-800">
+                        Pomogę Państwu być widocznym dla klientów.
+                        Dzięki aplikacji Następna Stacja możesz ładwo skonfigurować i zarządzać liniami.
+                        Przed przekazaniem rozkładu do Google musisz wiedzeić o kilu rzeczach.
+                    </p>
+                    <div class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg">
+                        <div class="flex items-center gap-4">
+                            <div class="relative size-[100px] shrink-0">
+                                <img src="assets/google_spark.gif" alt="Google Logo"/>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+<!--                                <div class="flex items-center flex-wrap gap-2.5">-->
+<!--                                    <a class="text-base font-medium text-gray-900 hover:text-primary-active"-->
+<!--                                       href="#">-->
+<!--                                        Linia autobusowa jest linią lokalną-->
+<!--                                    </a>-->
+<!--                                    <span class="badge badge-sm badge-outline badge-danger shrink-0">Ważne</span>-->
+<!--                                </div>-->
+                                <div class="form-info text-gray-800 font-normal">
 
-                    <button (click)="downloadGtfs()" class="btn btn-success">Pobierz GTFS</button>
-                    <div class="card-body lg:py-7.5 grid gap-5 lg:gap-7.5">
-                        <p class="text-2sm text-gray-800">
-                            Pomożemy Ci być widocznym dla klientów.
-                            Dzięki aplikacji Następna Stacja możesz ładwo skonfigurować i zarządzać liniami.
-                            Przed przekazaniem rozkładu do Google musisz wiedzeić o kilu rzeczach.
-                        </p>
-                        <div class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg">
-                            <div class="flex items-center gap-4">
-                                <div class="relative size-[100px] shrink-0">
-                                    <img src="assets/google_spark.gif" alt="Google Logo"/>
-                                </div>
-                                <div class="flex flex-col gap-1.5">
-                                    <div class="flex items-center flex-wrap gap-2.5">
-                                        <a class="text-base font-medium text-gray-900 hover:text-primary-active"
-                                           href="#">
-                                            Linia autobusowa jest linią lokalną
-                                        </a>
-                                        <span class="badge badge-sm badge-outline badge-danger shrink-0">Ważne</span>
-                                    </div>
-                                    <div class="form-info text-gray-800 font-normal">
+                                    Google Mapy są produktem zarządzanym przez firmę Alphabet Inc. który wspiera system informacji pasażerskiej.
 
-                                        Google Mapy są produktem zarządzanym przez firmę Alphabet Inc. który wspiera system informacji pasażerskiej.
-
-                                        Warunkiem korzystania z Google Maps jest to, aby przewozy były realizowane na regularnych trasach, istnieje możliwość zakupu bilietu u kierowcy lub na dworcu jeżeli jest to wymagana  musi być dostępny dla ogółu społeczeństwa,
-                                        a pasażerowie mogą z niego korzystać w celach ogólnych podróży.
-                                    </div>
+                                    Warunkiem korzystania z Google Maps jest to, aby przewozy były realizowane na regularnych trasach, istnieje możliwość zakupu bilietu u kierowcy lub na dworcu jeżeli jest to wymagana  musi być dostępny dla ogółu społeczeństwa,
+                                    a pasażerowie mogą z niego korzystać w celach ogólnych podróży.
                                 </div>
                             </div>
                         </div>
-                        <p class="text-2sm text-gray-800"></p>
                     </div>
+                    <p class="text-2sm text-gray-800"></p>
                 </div>
 
                 <div class="card">
@@ -105,6 +96,18 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header mb-5" id="external_services_manage_api">
+                        <h3 class="card-title">
+                            Informacje Ogólne
+                        </h3>
+                    </div>
+
+                    <button (click)="downloadGtfs()" class="btn btn-success">Pobierz GTFS</button>
+
+                </div>
+
                 <div class="card">
                     <div class="card-body px-10 py-7.5 lg:pr-12.5">
                         <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
