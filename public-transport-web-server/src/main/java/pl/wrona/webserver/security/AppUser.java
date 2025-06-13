@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,7 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
+@Table(name = "app_user")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppUser implements UserDetails {
@@ -50,10 +52,7 @@ public class AppUser implements UserDetails {
     @ManyToMany(mappedBy = "appUsers", fetch = FetchType.EAGER)
     private Set<AppRole> appRoles;
 
-    @ManyToMany
-    @JoinTable(name = "app_user_app_role",
-            joinColumns = @JoinColumn(name = "app_role_id"),
-            inverseJoinColumns = @JoinColumn(name = "app_user_id"))
+    @ManyToMany(mappedBy = "users")
     private Set<Agency> agencies;
 
     @Override

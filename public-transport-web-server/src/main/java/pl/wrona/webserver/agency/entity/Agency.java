@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -54,7 +55,10 @@ public class Agency {
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
     private Set<CalendarEntity> calendars;
 
-    @ManyToMany(mappedBy = "agencies")
+    @ManyToMany
+    @JoinTable(name = "app_user_agency",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "agency_id"))
     private Set<AppUser> users;
 
 }

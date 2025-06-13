@@ -907,6 +907,8 @@ components:
           type: integer
         seconds:
           type: integer
+        bdot10k:
+          type: boolean
 
     Trip:
       type: object

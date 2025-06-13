@@ -175,6 +175,7 @@ public class TripService {
                     .departureTime(stopTime.getDepartureSecond())
                     .seconds(stopTime.getDepartureSecond())
                     .meters(stopTime.getDistanceMeters())
+                    .bdot10k(stopTime.getStopEntity().isBdot10k())
                     .lon((float) stopTime.getStopEntity().getLon())
                     .lat((float) stopTime.getStopEntity().getLat()));
         });
