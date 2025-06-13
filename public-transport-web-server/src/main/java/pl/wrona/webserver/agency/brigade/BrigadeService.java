@@ -63,7 +63,7 @@ public class BrigadeService {
                     brigadeTripEntity.setDestination(brigadeTrip.getDestination());
                     brigadeTripEntity.setTravelTimeInSeconds(brigadeTrip.getTravelTimeInSeconds());
 
-                    int secondOfDay = LocalTime.MIN.plusSeconds(brigadeTrip.getArrivalTime()).toSecondOfDay();
+                    int secondOfDay = LocalTime.MIN.plusSeconds(brigadeTrip.getDepartureTime()).toSecondOfDay();
                     brigadeTripEntity.setDepartureTimeInSeconds(secondOfDay);
 
                     var tripId = new TripId()

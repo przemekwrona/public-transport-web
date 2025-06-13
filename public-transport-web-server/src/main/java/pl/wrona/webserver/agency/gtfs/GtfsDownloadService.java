@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -63,6 +66,7 @@ public class GtfsDownloadService {
             FeedInfo feedInfo = new FeedInfo();
             feedInfo.setPublisherName("Przemysław Wrona");
             feedInfo.setPublisherUrl("https://www.nastepnastacja.pl");
+            feedInfo.setContactUrl("https://www.nastepnastacja.pl");
             feedInfo.setStartDate(serviceDateNow);
             feedInfo.setEndDate(serviceDatePlus30Days);
             feedInfo.setLang("pl");
@@ -135,8 +139,19 @@ public class GtfsDownloadService {
                                     stopTime.setStop(stop1);
                                     stopTime.setStopSequence(stop.getStopTimeId().getStopSequence());
 
-                                    stopTime.setArrivalTime(brigadeTrip.getDepartureTimeInSeconds() + stopTime.getArrivalTime());
-                                    stopTime.setDepartureTime(brigadeTrip.getDepartureTimeInSeconds() + stopTime.getDepartureTime());
+
+                                    LocalTime arrivalTime = LocalTime.ofSecondOfDay(0)
+                                            .plusSeconds(brigadeTrip.getDepartureTimeInSeconds())
+                                            .plusSeconds(stop.getArrivalSecond())
+                                            .truncatedTo(ChronoUnit.MINUTES);
+
+                                    LocalTime departureTime = LocalTime.ofSecondOfDay(0)
+                                            .plusSeconds(brigadeTrip.getDepartureTimeInSeconds())
+                                            .plusSeconds(stop.getDepartureSecond())
+                                            .truncatedTo(ChronoUnit.MINUTES);
+
+                                    stopTime.setArrivalTime(arrivalTime.toSecondOfDay());
+                                    stopTime.setDepartureTime(departureTime.toSecondOfDay());
                                     stopTime.setTimepoint(1);
                                     return stopTime;
                                 })
