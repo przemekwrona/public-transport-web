@@ -2,3 +2,6 @@
 .angular
 node_modules/
 src/app/generated/
+metronic-v8.2.9
+metronic-v9.1.2
+*.zip
