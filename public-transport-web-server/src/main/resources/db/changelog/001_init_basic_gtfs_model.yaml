@@ -299,6 +299,7 @@ databaseChangeLog:
                   type: integer
                   constraints:
                     unique: true
+                    nullable: false
                     foreignKeyName: fk_google_agreements_agency
                     references: agency(agency_id)
               - column:
