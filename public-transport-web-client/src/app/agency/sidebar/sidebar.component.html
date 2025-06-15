@@ -22,12 +22,30 @@
              data-scrollable-wrappers="#sidebar_content" id="sidebar_scrollable">
             <div class="menu flex flex-col grow gap-0.5" data-menu="true" data-menu-accordion-expand-all="false"
                  id="sidebar_menu">
+
+                <div class="menu-item pt-2.25 pb-px">
+					<span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
+						Agencje
+					</span>
+                </div>
+                <div class="menu-item" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+                    <div [routerLink]="['/agency/profiles']"
+                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent"
+                         tabindex="0">
+                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
+                                <i class="ki-filled ki-profile-circle text-lg"></i>
+                            </span>
+                        <span class="menu-title text-sm font-semibold text-gray-700">Lista Agencji</span>
+                    </div>
+                </div>
+
                 <div class="menu-item" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
                     <div [routerLink]="['/agency/profile']"
                          class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href=""
                          tabindex="0">
-                        <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400"><i
-                                class="ki-filled ki-profile-circle text-lg"></i></span>
+                        <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
+                            <i class="ki-filled ki-profile-circle text-lg"></i>
+                        </span>
                         <span class="menu-title text-sm font-semibold text-gray-700"> Mój Profil </span>
                     </div>
                 </div>
@@ -87,7 +105,6 @@
                             </span>
                         <span class="menu-title text-sm font-semibold text-gray-700"> Mapy Google </span>
                     </div>
-
                 </div>
             </div>
         </div>
