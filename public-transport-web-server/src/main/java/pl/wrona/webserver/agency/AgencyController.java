@@ -2,6 +2,7 @@ package pl.wrona.webserver.agency;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.AgencyApi;
+import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
 import org.igeolab.iot.pt.server.api.model.AgencyDetails;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AgencyController implements AgencyApi {
 
     private final AgencyService agencyService;
+
+    @Override
+    public ResponseEntity<AgenciesAdminResponse> findAllAgencies() {
+        return ResponseEntity.ok(agencyService.findAllAgencies());
+    }
 
     @Override
     public ResponseEntity<AgencyDetails> getAgency() {

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Agency;
 import pl.wrona.webserver.security.AppUser;
+import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
+import org.igeolab.iot.pt.server.api.model.AgencyAdminDetail;
 
 @Service
 @AllArgsConstructor
@@ -53,5 +55,15 @@ public class AgencyService {
 
     public Agency findAgencyByAppUser(AppUser appUser) {
         return agencyRepository.findByAppUser(appUser);
+    }
+
+    public AgenciesAdminResponse findAllAgencies() {
+        var agencies = agencyRepository.findAll().stream().map(agency -> new AgencyAdminDetail()
+                        .agencyCode(agency.getAgencyCode())
+                        .agencyName(agency.getAgencyName()))
+                .toList();
+
+        return new AgenciesAdminResponse()
+                .agencies(agencies);
     }
 }
