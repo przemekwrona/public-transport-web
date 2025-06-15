@@ -22,8 +22,9 @@ public class GoogleAgreementsService {
         return googleAgreementsRepository.findByAgency(loggedUser.getAgencyId())
                 .map(entity -> new GoogleAgreementsResponse()
                         .repeatabilityStatement(entity.isRepeatabilityStatement())
-                        .accessibilityStatement(entity.isRepeatabilityStatement())
-                        .ticketSalesStatement(entity.isTicketSalesStatement())).orElse(new GoogleAgreementsResponse());
+                        .accessibilityStatement(entity.isAccessibilityStatement())
+                        .ticketSalesStatement(entity.isTicketSalesStatement()))
+                .orElse(new GoogleAgreementsResponse());
     }
 
     @Transactional
