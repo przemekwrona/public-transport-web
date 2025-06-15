@@ -26,6 +26,7 @@ import {calendarResolver} from "./agency/calendars/calendar-editor/calendar.reso
 import {CalendarEditorComponentMode} from "./agency/calendars/calendar-editor/calendar-editor-component-mode";
 import {brigadeGetAllCalendarsResolver} from "./agency/brigade/brigade-editor/brigade-get-all-calendars.resolver";
 import {googleAgreementsResolver} from "./agency/google-maps/google-agreements.resolver";
+import {ProfileListComponent} from "./agency/profile/profile-list/profile-list.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -35,6 +36,7 @@ export const routes: Routes = [
     {path: 'planner', component: TransportComponent},
     {
         path: 'agency', component: AgencyComponent, children: [
+            {path: 'profiles', component: ProfileListComponent},
             {path: 'profile', component: ProfileComponent},
             {path: 'stops', component: StopsComponent},
             {path: 'routes', component: RoutesComponent, resolve: { routes: RoutesResolver }},
