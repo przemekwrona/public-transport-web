@@ -27,9 +27,13 @@
                                 Informacje o Przystanku
                             </h3>
                         </div>
-                        <app-bus-stop-editor [stopId]="lastClickedStop.id" [stopName]="lastClickedStop.name"
-                                             [lon]="lastClickedStop.lon"
-                                             [lat]="lastClickedStop.lat"></app-bus-stop-editor>
+                        <div class="card-body">
+                            <app-bus-stop-editor
+                                    [stopId]="lastClickedStop.id"
+                                    [stopName]="lastClickedStop.name"
+                                    [lon]="lastClickedStop.lon"
+                                    [lat]="lastClickedStop.lat"></app-bus-stop-editor>
+                        </div>
                     </div>
                 } @else {
                     <div class="card">
