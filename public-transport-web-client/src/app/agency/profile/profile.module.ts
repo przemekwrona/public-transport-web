@@ -1,15 +1,15 @@
 import {NgModule} from '@angular/core';
-import {ProfileComponent} from "./profile.component";
 import {ProfileListComponent} from "./profile-list/profile-list.component";
+import {ProfileDetailsComponent} from "./profile-details/profile-details.component";
 
 
 @NgModule({
     imports: [
-        ProfileComponent,
+        ProfileDetailsComponent,
         ProfileListComponent
     ],
     exports: [
-        ProfileComponent,
+        ProfileDetailsComponent,
         ProfileListComponent
     ]
 })

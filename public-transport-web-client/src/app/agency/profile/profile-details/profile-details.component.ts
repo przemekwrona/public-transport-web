@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ProfileService} from "./profile.service";
-import {AgencyDetails} from "../../generated/public-transport";
+import {AgencyDetails, AgencyService} from "../../../generated/public-transport";
 import {faGlobe, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
@@ -10,8 +9,8 @@ import {TranslocoPipe} from "@jsverse/transloco";
 @Component({
     standalone: true,
     selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrl: './profile.component.scss',
+    templateUrl: './profile-details.component.html',
+    styleUrl: './profile-details.component.scss',
     imports: [
         CommonModule,
         FormsModule,
@@ -19,26 +18,26 @@ import {TranslocoPipe} from "@jsverse/transloco";
         TranslocoPipe
     ],
     providers: [
-        ProfileService
+        AgencyService
     ]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileDetailsComponent implements OnInit {
 
     public faGlobe: IconDefinition = faGlobe;
 
     public agencyDetails: AgencyDetails = {};
 
-    constructor(private profileService: ProfileService) {
+    constructor(private agencyService: AgencyService) {
     }
 
     ngOnInit(): void {
-        this.profileService.getAgencyDetails().subscribe((response: AgencyDetails) => {
+        this.agencyService.getAgency().subscribe((response: AgencyDetails) => {
             this.agencyDetails = response;
         })
     }
 
     public saveAgencyDetails() {
-        this.profileService.saveAgencyDetails(this.agencyDetails).subscribe(() => {});
+        this.agencyService.updateAgency(this.agencyDetails).subscribe(() => {});
     }
 
 }
