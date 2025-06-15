@@ -5,6 +5,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     standalone: true,
@@ -27,13 +28,13 @@ export class ProfileDetailsComponent implements OnInit {
 
     public agencyDetails: AgencyDetails = {};
 
-    constructor(private agencyService: AgencyService) {
+    constructor(private agencyService: AgencyService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
-        this.agencyService.getAgency().subscribe((response: AgencyDetails) => {
-            this.agencyDetails = response;
-        })
+        this.route.data.subscribe(data => {
+            this.agencyDetails = data['agencyDetails'];
+        });
     }
 
     public saveAgencyDetails() {

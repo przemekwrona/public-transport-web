@@ -28,6 +28,7 @@ import {googleAgreementsResolver} from "./agency/google-maps/google-agreements.r
 import {ProfileListComponent} from "./agency/profile/profile-list/profile-list.component";
 import {agenciesResolver} from "./agency/profile/profile-list/agencies.resolver";
 import {ProfileDetailsComponent} from "./agency/profile/profile-details/profile-details.component";
+import {profileDetailsResolver} from "./agency/profile/profile-details/profile-details.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -37,7 +38,7 @@ export const routes: Routes = [
     {path: 'planner', component: TransportComponent},
     {
         path: 'agency', component: AgencyComponent, children: [
-            {path: 'profile', component: ProfileDetailsComponent},
+            {path: 'profile', component: ProfileDetailsComponent, resolve: { agencyDetails: profileDetailsResolver }},
             {path: 'stops', component: StopsComponent},
             {path: 'routes', component: RoutesComponent, resolve: { routes: RoutesResolver }},
             {path: 'routes/create', component: CreateRouteComponent},

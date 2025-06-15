@@ -58,9 +58,10 @@ public class AgencyService {
     }
 
     public AgenciesAdminResponse findAllAgencies() {
-        var agencies = agencyRepository.findAll().stream().map(agency -> new AgencyAdminDetail()
-                        .agencyCode(agency.getAgencyCode())
-                        .agencyName(agency.getAgencyName()))
+        var agencies = agencyRepository.countRoutesByAgency().stream().map(groupedAgency -> new AgencyAdminDetail()
+                        .agencyCode(groupedAgency.getAgency().getAgencyCode())
+                        .agencyName(groupedAgency.getAgency().getAgencyName())
+                        .routesNo(groupedAgency.getRouteCount()))
                 .toList();
 
         return new AgenciesAdminResponse()
