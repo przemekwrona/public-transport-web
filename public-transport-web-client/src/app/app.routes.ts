@@ -4,7 +4,6 @@ import {TransportComponent} from "./transport/transport.component";
 import {AgencyComponent} from "./agency/agency.component";
 import {StopsComponent} from "./agency/stops/stops.component";
 import {RoutesComponent} from "./agency/routes/routes.component";
-import {ProfileComponent} from "./agency/profile/profile.component";
 import {SigninComponent} from "./auth/signin/signin.component";
 import {CreateRouteComponent} from "./agency/routes/create-route/create-route.component";
 import {RoutesResolver} from "./agency/routes/routes.resolver";
@@ -28,6 +27,7 @@ import {brigadeGetAllCalendarsResolver} from "./agency/brigade/brigade-editor/br
 import {googleAgreementsResolver} from "./agency/google-maps/google-agreements.resolver";
 import {ProfileListComponent} from "./agency/profile/profile-list/profile-list.component";
 import {agenciesResolver} from "./agency/profile/profile-list/agencies.resolver";
+import {ProfileDetailsComponent} from "./agency/profile/profile-details/profile-details.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -37,7 +37,7 @@ export const routes: Routes = [
     {path: 'planner', component: TransportComponent},
     {
         path: 'agency', component: AgencyComponent, children: [
-            {path: 'profile', component: ProfileComponent},
+            {path: 'profile', component: ProfileDetailsComponent},
             {path: 'stops', component: StopsComponent},
             {path: 'routes', component: RoutesComponent, resolve: { routes: RoutesResolver }},
             {path: 'routes/create', component: CreateRouteComponent},
