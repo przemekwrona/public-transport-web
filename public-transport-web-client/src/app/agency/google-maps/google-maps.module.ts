@@ -1,18 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
 import {GoogleMapsComponent} from "./google-maps.component";
-import {GtfsService} from "../../generated/public-transport";
 
 
 @NgModule({
-  declarations: [
-      GoogleMapsComponent
-  ],
-  imports: [
-    CommonModule
-  ],
-  providers: [
-    GtfsService
-  ]
+    imports: [
+        GoogleMapsComponent
+    ],
+    exports: [
+        GoogleMapsComponent
+    ]
 })
-export class GoogleMapsModule { }
+export class GoogleMapsModule {
+}
