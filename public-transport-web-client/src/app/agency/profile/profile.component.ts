@@ -5,6 +5,7 @@ import {faGlobe, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
     standalone: true,
@@ -14,7 +15,8 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     imports: [
         CommonModule,
         FormsModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        TranslocoPipe
     ],
     providers: [
         ProfileService

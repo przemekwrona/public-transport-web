@@ -13,6 +13,7 @@ import {AgencyModule} from "./agency/agency.module";
 import {AuthModule} from "./auth/auth.module";
 import {AddHeaderInterceptor} from "./auth/auth.interceptor";
 import {BASE_PATH} from "./generated/public-transport";
+import { TranslocoRootModule } from './transloco-root.module';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import {BASE_PATH} from "./generated/public-transport";
         MapModule,
         LandingModule,
         AuthModule,
-        FormsModule
+        FormsModule,
+        TranslocoRootModule
     ],
     declarations: [
         AppComponent
