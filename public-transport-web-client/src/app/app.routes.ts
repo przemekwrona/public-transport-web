@@ -25,6 +25,7 @@ import {getAllCalendarsResolver} from "./agency/calendars/calendar-list/get-all-
 import {calendarResolver} from "./agency/calendars/calendar-editor/calendar.resolver";
 import {CalendarEditorComponentMode} from "./agency/calendars/calendar-editor/calendar-editor-component-mode";
 import {brigadeGetAllCalendarsResolver} from "./agency/brigade/brigade-editor/brigade-get-all-calendars.resolver";
+import {googleAgreementsResolver} from "./agency/google-maps/google-agreements.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -47,7 +48,7 @@ export const routes: Routes = [
             {path: 'calendars', component: CalendarListComponent, resolve: { calendars: getAllCalendarsResolver }},
             {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}},
             {path: 'calendars/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
-            {path: 'google/maps', component: GoogleMapsComponent}
+            {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
         ]
     },
     {path: 'info', component: LandingComponent},

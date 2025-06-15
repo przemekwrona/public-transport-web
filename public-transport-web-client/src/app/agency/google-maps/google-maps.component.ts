@@ -1,8 +1,14 @@
-import {Component} from '@angular/core';
-import {GoogleAgreementsRequest, GoogleAgreementsService, GtfsService} from "../../generated/public-transport";
+import {Component, OnInit} from '@angular/core';
+import {
+    GoogleAgreementsRequest,
+    GoogleAgreementsResponse,
+    GoogleAgreementsService,
+    GtfsService
+} from "../../generated/public-transport";
 import moment from "moment";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     standalone: true,
@@ -18,11 +24,15 @@ import {FormsModule} from "@angular/forms";
         GoogleAgreementsService
     ]
 })
-export class GoogleMapsComponent {
+export class GoogleMapsComponent implements OnInit {
 
-    public googleAgreementsRequest: GoogleAgreementsRequest = {};
+    public googleAgreementsResponse: GoogleAgreementsResponse = {};
 
-    constructor(private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService) {
+    constructor(private route: ActivatedRoute, private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService) {
+    }
+
+    ngOnInit(): void {
+        this.googleAgreementsResponse = this.route.snapshot.data['googleAgreements'];
     }
 
     public downloadGtfs() {
@@ -43,7 +53,11 @@ export class GoogleMapsComponent {
     }
 
     public updateGoogleAgreements(): void {
-        this.googleAgreementsService.updateGoogleAgreements(this.googleAgreementsRequest).subscribe(() => {
+        const googleAgreementsRequest: GoogleAgreementsRequest = {} as GoogleAgreementsRequest;
+        googleAgreementsRequest.accessibilityStatement = this.googleAgreementsResponse.accessibilityStatement;
+        googleAgreementsRequest.repeatabilityStatement = this.googleAgreementsResponse.repeatabilityStatement;
+        googleAgreementsRequest.ticketSalesStatement = this.googleAgreementsResponse.ticketSalesStatement;
+        this.googleAgreementsService.updateGoogleAgreements(googleAgreementsRequest).subscribe(() => {
         });
     }
 
