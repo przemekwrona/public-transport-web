@@ -3,6 +3,7 @@ package pl.wrona.webserver.agency;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.GoogleAgreementsRequest;
+import org.igeolab.iot.pt.server.api.model.GoogleAgreementsResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Agency;
@@ -15,6 +16,15 @@ public class GoogleAgreementsService {
 
     private final GoogleAgreementsRepository googleAgreementsRepository;
     private final AgencyService agencyService;
+
+    public GoogleAgreementsResponse getGoogleAgreements() {
+        Agency loggedUser = agencyService.getLoggedAgency();
+        return googleAgreementsRepository.findByAgency(loggedUser.getAgencyId())
+                .map(entity -> new GoogleAgreementsResponse()
+                        .repeatabilityStatement(entity.isRepeatabilityStatement())
+                        .accessibilityStatement(entity.isRepeatabilityStatement())
+                        .ticketSalesStatement(entity.isTicketSalesStatement())).orElse(new GoogleAgreementsResponse());
+    }
 
     @Transactional
     public Status updateGoogleAgreements(GoogleAgreementsRequest googleAgreementsRequest) {

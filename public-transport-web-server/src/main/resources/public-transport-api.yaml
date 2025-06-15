@@ -78,6 +78,19 @@ paths:
                 $ref: '#/components/schemas/Status'
 
   /agreements/google:
+    get:
+      tags:
+        - google-agreements
+      summary: Get Google Agreements
+      operationId: getGoogleAgreements
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleAgreementsResponse'
+
     put:
       tags:
         - google-agreements
@@ -678,6 +691,19 @@ components:
           type: string
 
     GoogleAgreementsRequest:
+      type: object
+      properties:
+        repeatabilityStatement:
+          type: boolean
+          default: false
+        accessibilityStatement:
+          type: boolean
+          default: false
+        ticketSalesStatement:
+          type: boolean
+          default: false
+
+    GoogleAgreementsResponse:
       type: object
       properties:
         repeatabilityStatement:
