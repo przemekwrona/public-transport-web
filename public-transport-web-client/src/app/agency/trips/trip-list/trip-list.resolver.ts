@@ -1,11 +1,11 @@
-import { inject } from "@angular/core";
+import {inject} from "@angular/core";
 import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from "@angular/router";
-import { TripsService } from "../trips.service";
 import {Observable} from "rxjs";
-import {Trips} from "../../../generated/public-transport";
+import {RouteId, Trips, TripService} from "../../../generated/public-transport";
 
 export const tripsResolver: ResolveFn<Observable<Trips>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Trips> => {
     const line: string = route.queryParams['line'];
     const name: string = route.queryParams['name'];
-    return inject(TripsService).getTrips(line, name);
+    const routeId: RouteId = {line: line, name: name} as RouteId;
+    return inject(TripService).getTrips(routeId);
 }

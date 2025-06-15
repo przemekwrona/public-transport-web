@@ -1,8 +1,7 @@
 import {inject} from "@angular/core";
 import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from "@angular/router";
-import {TripsService} from "../trips.service";
 import {Observable, of} from "rxjs";
-import {TripMode, TripsDetails} from "../../../generated/public-transport";
+import {TripId, TripMode, Trips, TripsDetails, TripService} from "../../../generated/public-transport";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 
 export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TripsDetails> => {
@@ -16,6 +15,8 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
     if (tripEditorComponentMode === TripEditorComponentMode.CREATE) {
         return of({route: {line: line, name: name}, trip: {stops: [], line: line, name: name, isMainVariant: false}})
     } else {
-        return inject(TripsService).getTripsByVariant(line, name, variant, mode);
+        const tripService: TripService = inject(TripService);
+        const tripId: TripId = {line: line, name: name, variant: variant, mode: mode} as TripId;
+        return tripService.getTripByVariant(tripId);
     }
 }

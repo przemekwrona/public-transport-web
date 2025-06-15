@@ -1,7 +1,14 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, ActivatedRouteSnapshot, Data, ParamMap, Params, Router, RouterModule} from "@angular/router";
-import {Route, RouteId, Trip, Trips, UpdateRouteRequest} from "../../../generated/public-transport";
-import {TripsService} from "../trips.service";
+import {ActivatedRoute, Data, Params, Router, RouterModule} from "@angular/router";
+import {
+    Route,
+    RouteId,
+    Trip,
+    TripId,
+    Trips,
+    TripService,
+    UpdateRouteRequest
+} from "../../../generated/public-transport";
 import {faCircleXmark, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {RoutesService} from "../../routes/routes.service";
 import {remove} from "lodash";
@@ -24,7 +31,7 @@ import {TranslocoPipe} from "@jsverse/transloco";
         TranslocoPipe
     ],
     providers: [
-        TripsService,
+        TripService,
         RoutesService
     ]
 })
@@ -41,7 +48,7 @@ export class TripListComponent implements OnInit {
 
     public state: { line: string, name: string, variant: string };
 
-    constructor(private tripService: TripsService, private routeService: RoutesService, private _router: Router, private _route: ActivatedRoute) {
+    constructor(private tripService: TripService, private routeService: RoutesService, private _router: Router, private _route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -64,7 +71,8 @@ export class TripListComponent implements OnInit {
     }
 
     public deleteTrip(trip: Trip) {
-        this.tripService.delete(trip.line, trip.name, trip.variant, trip.mode).subscribe(response => {
+        const tripId: TripId = {line: trip.line, name: trip.name, variant: trip.variant, mode: trip.mode} as TripId;
+        this.tripService.deleteTripByTripId(tripId).subscribe(response => {
             remove(this.trips.trips, {line: trip.line, name: trip.name, variant: trip.variant, mode: trip.mode})
         });
     }
