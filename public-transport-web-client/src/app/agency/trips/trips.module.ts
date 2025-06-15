@@ -33,11 +33,12 @@ import {RouterModule} from "@angular/router";
         DndPlaceholderRefDirective,
         DndDraggableDirective,
         DndHandleDirective,
-        FaIconComponent
+        FaIconComponent,
+
+        TripListComponent
     ],
     declarations: [
         TripEditorComponent,
-        TripListComponent,
         DistancePipe,
         TimePipe
     ],
