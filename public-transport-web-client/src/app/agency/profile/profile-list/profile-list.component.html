@@ -1,1 +1,3 @@
-<p>profile-list works!</p>
+@for (agency of agenciesResponse.agencies; track agency.agencyCode) {
+    {{ agency.agencyName }}
+}
