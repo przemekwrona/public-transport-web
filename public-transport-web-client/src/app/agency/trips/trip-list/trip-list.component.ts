@@ -1,16 +1,32 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, ActivatedRouteSnapshot, Data, ParamMap, Params, Router} from "@angular/router";
+import {ActivatedRoute, ActivatedRouteSnapshot, Data, ParamMap, Params, Router, RouterModule} from "@angular/router";
 import {Route, RouteId, Trip, Trips, UpdateRouteRequest} from "../../../generated/public-transport";
 import {TripsService} from "../trips.service";
 import {faCircleXmark, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {RoutesService} from "../../routes/routes.service";
 import {remove} from "lodash";
 import {map} from "rxjs";
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
+    standalone: true,
     selector: 'app-trip-list',
     templateUrl: './trip-list.component.html',
-    styleUrl: './trip-list.component.scss'
+    styleUrl: './trip-list.component.scss',
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        FaIconComponent,
+        TranslocoPipe
+    ],
+    providers: [
+        TripsService,
+        RoutesService
+    ]
 })
 export class TripListComponent implements OnInit {
 

@@ -3,6 +3,15 @@
     "profile": {
       "title": "Profil Firmy",
       "subtitle": "Informacje o Firmie"
+    },
+    "trip": {
+      "listOfVariants": "Lista wariantów",
+      "addNewVariant": "Dodaj nowy wariant",
+      "deleteVariant": "Usuń wariant",
+      "variantDetails": "Szczegóły",
+      "mainVariant": "Wariant podstawowy",
+      "FRONT": "TAM",
+      "BACK": "POWRÓT"
     }
   }
 }
