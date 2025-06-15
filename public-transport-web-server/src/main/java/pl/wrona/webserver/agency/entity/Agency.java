@@ -12,6 +12,7 @@ import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.agency.GoogleAgreementEntity;
 import pl.wrona.webserver.agency.brigade.BrigadeEntity;
 import pl.wrona.webserver.agency.calendar.CalendarEntity;
 import pl.wrona.webserver.security.AppUser;
@@ -60,5 +61,9 @@ public class Agency {
             joinColumns = @JoinColumn(name = "app_user_id"),
             inverseJoinColumns = @JoinColumn(name = "agency_id"))
     private Set<AppUser> users;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "agency_id", referencedColumnName = "agency_id")
+    private GoogleAgreementEntity googleAgreement;
 
 }

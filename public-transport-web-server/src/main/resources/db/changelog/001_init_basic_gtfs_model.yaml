@@ -277,6 +277,44 @@ databaseChangeLog:
                     nullable: false
 
   - changeSet:
+      id: create-google-agreements-table
+      author: pwrona
+      changes:
+        - createSequence:
+            sequenceName: google_agreements_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: google_agreements
+            columns:
+              - column:
+                  name: google_agreement_id
+                  type: integer
+                  defaultValueSequenceNext: google_agreements_id_seq
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    unique: true
+                    foreignKeyName: fk_google_agreements_agency
+                    references: agency(agency_id)
+              - column:
+                  name: repeatability_statement
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: accessibility_statement
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: ticket_sales_statement
+                  type: boolean
+                  defaultValueBoolean: false
+
+  - changeSet:
       id: create-route-table
       author: pwrona
       changes:
