@@ -1,4 +1,7 @@
 {
+  "common": {
+    "attention": "Uwaga"
+  },
   "agency": {
     "profile": {
       "title": "Profil Firmy",
@@ -11,7 +14,12 @@
       "variantDetails": "Szczegóły",
       "mainVariant": "Wariant podstawowy",
       "FRONT": "TAM",
-      "BACK": "POWRÓT"
+      "BACK": "POWRÓT",
+      "edit": {
+        "mainVariant": "Wariant podstawowy",
+        "FRONT": "TAM",
+        "BACK": "POWRÓT"
+      }
     }
   }
 }

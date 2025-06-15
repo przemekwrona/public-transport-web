@@ -18,6 +18,7 @@ import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
 import {TripService} from "../../generated/public-transport";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 @NgModule({
     imports: [
@@ -36,7 +37,8 @@ import {TripService} from "../../generated/public-transport";
         DndHandleDirective,
         FaIconComponent,
 
-        TripListComponent
+        TripListComponent,
+        TranslocoPipe
     ],
     declarations: [
         TripEditorComponent,
