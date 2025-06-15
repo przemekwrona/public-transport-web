@@ -27,6 +27,7 @@ import {CalendarEditorComponentMode} from "./agency/calendars/calendar-editor/ca
 import {brigadeGetAllCalendarsResolver} from "./agency/brigade/brigade-editor/brigade-get-all-calendars.resolver";
 import {googleAgreementsResolver} from "./agency/google-maps/google-agreements.resolver";
 import {ProfileListComponent} from "./agency/profile/profile-list/profile-list.component";
+import {agenciesResolver} from "./agency/profile/profile-list/agencies.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -36,7 +37,6 @@ export const routes: Routes = [
     {path: 'planner', component: TransportComponent},
     {
         path: 'agency', component: AgencyComponent, children: [
-            {path: 'profiles', component: ProfileListComponent},
             {path: 'profile', component: ProfileComponent},
             {path: 'stops', component: StopsComponent},
             {path: 'routes', component: RoutesComponent, resolve: { routes: RoutesResolver }},
@@ -51,6 +51,11 @@ export const routes: Routes = [
             {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}},
             {path: 'calendars/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
             {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
+        ]
+    },
+    {
+        path: 'admin/agency', component: AgencyComponent, children: [
+            {path: 'profiles', component: ProfileListComponent, resolve: {agencies: agenciesResolver}}
         ]
     },
     {path: 'info', component: LandingComponent},
