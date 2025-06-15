@@ -19,7 +19,6 @@ import {CalendarsModule} from "./calendars/calendars.module";
 @NgModule({
     declarations: [
         AgencyComponent,
-        HeaderComponent,
         FooterComponent,
         SidebarComponent
     ],
@@ -28,6 +27,7 @@ import {CalendarsModule} from "./calendars/calendars.module";
     ],
     imports: [
         CommonModule,
+        HeaderComponent,
         ProfileModule,
         RouterModule,
         TripsModule,
