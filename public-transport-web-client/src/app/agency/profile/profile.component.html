@@ -2,9 +2,11 @@
 <div class="container-fixed">
     <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
         <div class="flex flex-col justify-center gap-2">
-            <h1 class="text-xl font-medium leading-none text-gray-900"> Profil Firmy </h1>
+            <h1 class="text-xl font-medium leading-none text-gray-900">
+                {{ 'agency.profile.title' | transloco }}
+            </h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-                Informacje o Firmie
+                {{ 'agency.profile.subtitle' | transloco }}
             </div>
         </div>
     </div>
@@ -92,7 +94,8 @@
                                        [(ngModel)]="agencyDetails.agencyUrl"
                                        class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
                                        placeholder=""/>
-                                <a class="btn btn-icon" [attr.href]="'https://' + agencyDetails.agencyUrl" target="_blank">
+                                <a class="btn btn-icon" [attr.href]="'https://' + agencyDetails.agencyUrl"
+                                   target="_blank">
                                     <fa-icon [icon]="faGlobe"></fa-icon>
                                 </a>
                             </label>
@@ -112,7 +115,9 @@
                                        [(ngModel)]="agencyDetails.agencyTimetableUrl"
                                        class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
                                        placeholder=""/>
-                                <a class="btn btn-icon" [attr.href]="'https://' + agencyDetails.agencyUrl + '/' + agencyDetails.agencyTimetableUrl" target="_blank">
+                                <a class="btn btn-icon"
+                                   [attr.href]="'https://' + agencyDetails.agencyUrl + '/' + agencyDetails.agencyTimetableUrl"
+                                   target="_blank">
                                     <fa-icon [icon]="faGlobe"></fa-icon>
                                 </a>
                             </label>
