@@ -48,15 +48,20 @@
                         </div>
 
                         <div class="text-gray-800 text-2sm">
-                            <span class="text-danger uppercase">UWAGA:</span>
+                            <span class="text-danger uppercase">{{ 'common.attention' | transloco | uppercase }}:</span>
                             Linia posiada 2 warianty podstawowe (TAM i POWRÓT).
                         </div>
 
                         <div class="w-full">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Nazwa wariantu</label>
+                                @if ($tripDetails.trip.isMainVariant) {
+                                    <input class="input" value="{{'agency.trip.edit.mainVariant' | transloco }}"
+                                           type="text" placeholder="KOZŁÓW" disabled>
+                                } @else {
                                 <input name="variant" id="variant" [(ngModel)]="$tripDetails.trip.variant" class="input"
-                                       type="text" placeholder="KOZŁÓW" [disabled]="$tripDetails.trip.isMainVariant">
+                                       type="text" placeholder="KOZŁÓW">
+                            }
                             </div>
                         </div>
                         <div class="w-full">
@@ -64,8 +69,8 @@
                                 <label class="form-label max-w-56">Kierunek wariantu</label>
                                 <select name="mode" id="mode" [(ngModel)]="$tripDetails.trip.mode"
                                         class="select w-full">
-                                    <option [value]="tripModeSelectValue.Front">TAM</option>
-                                    <option [value]="tripModeSelectValue.Back">POWRÓT</option>
+                                    <option [value]="tripModeSelectValue.Front">{{ 'agency.trip.edit.FRONT' | transloco }}</option>
+                                    <option [value]="tripModeSelectValue.Back">{{ 'agency.trip.edit.BACK' | transloco }}</option>
                                 </select>
                             </div>
                         </div>
