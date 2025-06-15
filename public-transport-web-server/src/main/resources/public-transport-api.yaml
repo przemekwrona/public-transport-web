@@ -77,6 +77,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+  /agreements/google:
+    put:
+      tags:
+        - google-agreements
+      summary: Update Google Agreements
+      operationId: updateGoogleAgreements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleAgreementsRequest'
+      responses:
+        200:
+          description: UPDATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
   /brigades:
     get:
       tags:
@@ -657,6 +676,19 @@ components:
           type: string
         agencyTimetableUrl:
           type: string
+
+    GoogleAgreementsRequest:
+      type: object
+      properties:
+        repeatabilityStatement:
+          type: boolean
+          default: false
+        accessibilityStatement:
+          type: boolean
+          default: false
+        ticketSalesStatement:
+          type: boolean
+          default: false
 
     ModeSummary:
       type: object
