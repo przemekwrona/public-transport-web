@@ -17,6 +17,7 @@ import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
+import {TripService} from "../../generated/public-transport";
 
 @NgModule({
     imports: [
@@ -47,7 +48,8 @@ import {RouterModule} from "@angular/router";
         TripListComponent
     ],
     providers: [
-        StopService
+        StopService,
+        TripService
     ]
 })
 export class TripsModule {

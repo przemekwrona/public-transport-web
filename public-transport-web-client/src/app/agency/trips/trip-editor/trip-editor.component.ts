@@ -8,11 +8,10 @@ import {
     Trip, TripId,
     TripMode,
     Trips,
-    TripsDetails,
+    TripsDetails, TripService,
     UpdateTripDetailsRequest
 } from "../../../generated/public-transport";
 import {StopService} from "../../stops/stop.service";
-import {TripsService} from "../trips.service";
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, state, style, transition, trigger} from "@angular/animations";
@@ -66,7 +65,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public $tripDetails: TripsDetails = {trip: {}};
     public $tripVariants: Trips = {};
 
-    constructor(private stopService: StopService, private tripsService: TripsService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
+    constructor(private stopService: StopService, private tripService: TripService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
     }
 
@@ -219,7 +218,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             return stopTime;
         });
 
-        this.tripsService.measureDistance(trips).subscribe(response => {
+        this.tripService.measureDistance(trips).subscribe(response => {
 
             for (const index in response.stops) {
                 const stopTime: StopTime = (response.stops || [])[Number(index)];
@@ -243,11 +242,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.trip = this.$tripDetails;
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
-            this.tripsService.create(tripDetailsRequest).subscribe(() => {
+            this.tripService.createTrip(tripDetailsRequest).subscribe(() => {
                 this.router.navigate(['/agency/trips'], {queryParams: {line: this.state.line, name: this.state.name}}).then();
             });
         } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
-            this.tripsService.update(tripDetailsRequest).subscribe(() => {
+            this.tripService.updateTrip(tripDetailsRequest).subscribe(() => {
             });
         }
 
