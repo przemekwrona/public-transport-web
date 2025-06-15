@@ -2,11 +2,23 @@ import {Component, OnInit} from '@angular/core';
 import {ProfileService} from "./profile.service";
 import {AgencyDetails} from "../../generated/public-transport";
 import {faGlobe, IconDefinition} from '@fortawesome/free-solid-svg-icons';
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @Component({
+    standalone: true,
     selector: 'app-profile',
     templateUrl: './profile.component.html',
-    styleUrl: './profile.component.scss'
+    styleUrl: './profile.component.scss',
+    imports: [
+        CommonModule,
+        FormsModule,
+        FontAwesomeModule
+    ],
+    providers: [
+        ProfileService
+    ]
 })
 export class ProfileComponent implements OnInit {
 
