@@ -711,6 +711,8 @@ components:
           type: string
         agencyName:
           type: string
+        routesNo:
+          type: integer
 
     AgenciesAdminResponse:
       type: object
