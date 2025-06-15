@@ -1,15 +1,28 @@
 import {Component} from '@angular/core';
-import {GtfsService} from "../../generated/public-transport";
+import {GoogleAgreementsRequest, GoogleAgreementsService, GtfsService} from "../../generated/public-transport";
 import moment from "moment";
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 @Component({
+    standalone: true,
     selector: 'app-google-maps',
     templateUrl: './google-maps.component.html',
-    styleUrl: './google-maps.component.scss'
+    styleUrl: './google-maps.component.scss',
+    imports: [
+        CommonModule,
+        FormsModule
+    ],
+    providers: [
+        GtfsService,
+        GoogleAgreementsService
+    ]
 })
 export class GoogleMapsComponent {
 
-    constructor(private gtfsService: GtfsService) {
+    public googleAgreementsRequest: GoogleAgreementsRequest = {};
+
+    constructor(private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService) {
     }
 
     public downloadGtfs() {
@@ -26,6 +39,11 @@ export class GoogleMapsComponent {
             a.download = `${date}.gtfs.zip`;
             a.click();
             window.URL.revokeObjectURL(url);
+        });
+    }
+
+    public updateGoogleAgreements(): void {
+        this.googleAgreementsService.updateGoogleAgreements(this.googleAgreementsRequest).subscribe(() => {
         });
     }
 

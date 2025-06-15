@@ -38,18 +38,21 @@
                                 <img src="assets/google_spark.gif" alt="Google Logo"/>
                             </div>
                             <div class="flex flex-col gap-1.5">
-<!--                                <div class="flex items-center flex-wrap gap-2.5">-->
-<!--                                    <a class="text-base font-medium text-gray-900 hover:text-primary-active"-->
-<!--                                       href="#">-->
-<!--                                        Linia autobusowa jest linią lokalną-->
-<!--                                    </a>-->
-<!--                                    <span class="badge badge-sm badge-outline badge-danger shrink-0">Ważne</span>-->
-<!--                                </div>-->
+                                <!--                                <div class="flex items-center flex-wrap gap-2.5">-->
+                                <!--                                    <a class="text-base font-medium text-gray-900 hover:text-primary-active"-->
+                                <!--                                       href="#">-->
+                                <!--                                        Linia autobusowa jest linią lokalną-->
+                                <!--                                    </a>-->
+                                <!--                                    <span class="badge badge-sm badge-outline badge-danger shrink-0">Ważne</span>-->
+                                <!--                                </div>-->
                                 <div class="form-info text-gray-800 font-normal">
 
-                                    Google Mapy są produktem zarządzanym przez firmę Alphabet Inc. który wspiera system informacji pasażerskiej.
+                                    Google Mapy są produktem zarządzanym przez firmę Alphabet Inc. który wspiera system
+                                    informacji pasażerskiej.
 
-                                    Warunkiem korzystania z Google Maps jest to, aby przewozy były realizowane na regularnych trasach, istnieje możliwość zakupu bilietu u kierowcy lub na dworcu jeżeli jest to wymagana  musi być dostępny dla ogółu społeczeństwa,
+                                    Warunkiem korzystania z Google Maps jest to, aby przewozy były realizowane na
+                                    regularnych trasach, istnieje możliwość zakupu bilietu u kierowcy lub na dworcu
+                                    jeżeli jest to wymagana musi być dostępny dla ogółu społeczeństwa,
                                     a pasażerowie mogą z niego korzystać w celach ogólnych podróży.
                                 </div>
                             </div>
@@ -65,7 +68,9 @@
                     <div class="card-body grid gap-7.5 py-5 lg:py-7.5">
                         <div class="flex flex-col gap-2.5">
                             <label class="checkbox-group">
-                                <input class="checkbox checkbox-sm" name="option" type="checkbox" [defaultChecked]="false"/>
+                                <input class="checkbox checkbox-sm" name="option" type="checkbox"
+                                       [(ngModel)]="googleAgreementsRequest.repeatabilityStatement"
+                                       [defaultChecked]="false"/>
                                 <span class="checkbox-label text-gray-800 font-medium">Oświadczenie o prowadzeniu regularnych przewozów</span>
                             </label>
                             <p class="form-info leading-5 text-gray-800 font-normal">
@@ -76,7 +81,9 @@
                         </div>
                         <div class="flex flex-col gap-2.5">
                             <label class="checkbox-group">
-                                <input class="checkbox checkbox-sm" name="option" type="checkbox" [defaultChecked]="false"/>
+                                <input class="checkbox checkbox-sm" name="option" type="checkbox"
+                                       [(ngModel)]="googleAgreementsRequest.ticketSalesStatement"
+                                       [defaultChecked]="false"/>
                                 <span class="checkbox-label text-gray-800 font-medium">Oświadczenie o możliwości zakupu biletów</span>
                             </label>
                             <p class="form-info leading-5 text-gray-800 font-normal">
@@ -86,15 +93,28 @@
                         </div>
                         <div class="flex flex-col gap-2.5">
                             <label class="checkbox-group">
-                                <input class="checkbox checkbox-sm" name="option" type="checkbox" [defaultChecked]="false"/>
+                                <input class="checkbox checkbox-sm" name="option" type="checkbox"
+                                       [(ngModel)]="googleAgreementsRequest.accessibilityStatement"
+                                       [defaultChecked]="false"/>
                                 <span class="checkbox-label text-gray-800 font-medium">Oświadczenie o dostępności dla ogółu społeczeństwa</span>
                             </label>
                             <p class="form-info leading-5 text-gray-800 font-normal">
-                                Oświadczam, że przewozy które realizuję są dostępne dla ogółu społeczeństwa, a pasażerowie mogą z niego korzystać w
+                                Oświadczam, że przewozy które realizuję są dostępne dla ogółu społeczeństwa, a
+                                pasażerowie mogą z niego korzystać w
                                 celach ogólnych podróży.
                             </p>
                         </div>
+
+                        <div class="border-t border-gray-200 my-0.5"></div>
+
+                        <div class="flex justify-end">
+                            <button (click)="updateGoogleAgreements()" class="btn btn-success">
+                                Zapisz Oświadczenia
+                            </button>
+                        </div>
                     </div>
+
+
                 </div>
 
                 <div class="card">
@@ -116,7 +136,8 @@
                                     Kontakt ze wsparciem technicznym
                                 </h2>
                                 <p class="text-sm text-gray-800 leading-5.5 mb-2.5">
-                                    Potrzebujesz pomocy? Skontaktuj się z naszym zespołem wsparcia, aby uzyskać szybką, spersonalizowaną pomoc w przypadku pytań i wątpliwości.
+                                    Potrzebujesz pomocy? Skontaktuj się z naszym zespołem wsparcia, aby uzyskać szybką,
+                                    spersonalizowaną pomoc w przypadku pytań i wątpliwości.
                                 </p>
                             </div>
                             <img alt="image" class="dark:hidden max-h-[150px]" src="assets/media/illustrations/31.svg"/>
