@@ -23,6 +23,8 @@
         <spring-cloud.version>2023.0.1</spring-cloud.version>
         <java.version>17</java.version>
 
+        <itext.version>7.2.5</itext.version>
+
         <lucene-spatial-extras.version>9.12.0</lucene-spatial-extras.version>
     </properties>
 
@@ -118,6 +120,14 @@
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
             <version>${jackson-databind-nullable.version}</version>
+        </dependency>
+
+        <!-- iText 7 PDF -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>${itext.version}</version>
+            <type>pom</type>
         </dependency>
 
         <dependency>
@@ -286,7 +296,29 @@
                             </configOptions>
                         </configuration>
                     </execution>
-
+                    <execution>
+                        <id>public-transport-pdf-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/public-transport-pdf-api.yaml</inputSpec>
+                            <configHelp>false</configHelp>
+                            <generatorName>spring</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <configOptions>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <apiPackage>org.igeolab.iot.pt.server.pdf.api</apiPackage>
+                                <modelPackage>org.igeolab.iot.pt.server.pdf.api.model</modelPackage>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <useTags>true</useTags>
+                            </configOptions>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
