@@ -1,7 +1,16 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {StopsPatchRequest, StopsService} from "../../../generated/public-transport";
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 @Component({
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule
+    ],
+    providers: [
+    ],
     selector: 'app-bus-stop-editor',
     templateUrl: './bus-stop-editor.component.html',
     styleUrl: './bus-stop-editor.component.scss'
