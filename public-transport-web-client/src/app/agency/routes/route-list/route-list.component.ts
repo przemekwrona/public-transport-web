@@ -1,15 +1,20 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {StopService} from "../stops/stop.service";
-import {Route, Routes, Stop} from "../../generated/public-transport";
+import {StopService} from "../../stops/stop.service";
+import {Route, Routes, Stop} from "../../../generated/public-transport";
 import {ActivatedRoute, Router} from "@angular/router";
+import {CommonModule} from "@angular/common";
 
 @Component({
+    standalone: true,
+    imports: [
+        CommonModule
+    ],
     selector: 'app-routes',
-    templateUrl: './routes.component.html',
-    styleUrl: './routes.component.scss',
+    templateUrl: './route-list.component.html',
+    styleUrl: './route-list.component.scss',
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class RoutesComponent implements OnInit {
+export class RouteListComponent implements OnInit {
     public stops: Stop[] = [];
 
     public routes: Routes = {};

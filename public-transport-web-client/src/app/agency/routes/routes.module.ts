@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {RoutesComponent} from "./routes.component";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {FieldComponent} from "./field/field.component";
 import {MatIconModule} from "@angular/material/icon";
@@ -9,16 +8,16 @@ import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import {MatDialogModule} from "@angular/material/dialog";
+import {RouteListComponent} from "./route-list/route-list.component";
 
 @NgModule({
     declarations: [
         CreateRouteComponent,
-        RoutesComponent,
         FieldComponent
     ],
     exports: [
         CreateRouteComponent,
-        RoutesComponent
+        RouteListComponent
     ],
     imports: [
         CommonModule,
@@ -27,7 +26,8 @@ import {MatDialogModule} from "@angular/material/dialog";
         SharedModule,
         MatExpansionModule,
         MatIconModule,
-        MatDialogModule
+        MatDialogModule,
+        RouteListComponent
     ]
 })
 export class RoutesModule {
