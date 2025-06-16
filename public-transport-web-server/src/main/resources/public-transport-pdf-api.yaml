@@ -1,0 +1,29 @@
+openapi: 3.0.0
+info:
+  title: Open Tip Planner API
+  description: Open Tip Planner API
+  version: 1.0.0
+paths:
+  /pdf/trip:
+    get:
+      tags:
+        - pdf
+      summary: Download trip
+      operationId: downloadTripPdf
+      parameters:
+        - in: query
+          name: line
+          schema:
+            type: string
+        - in: query
+          name: name
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
