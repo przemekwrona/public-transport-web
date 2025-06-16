@@ -1,5 +1,6 @@
 import {Component, inject, model, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {StopsPatchRequest} from "../../../generated/public-transport";
 
 export interface BusStopModalEditorData {
     stopId: number;
@@ -21,8 +22,15 @@ export class BusStopModalEditorComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    closeModal(selectedStop: BusStopModalEditorData) {
-        this.dialogRef.close(selectedStop);
+    forceCloseModal() {
+        this.dialogRef.close();
+    }
+
+    closeModal(event: StopsPatchRequest) {
+        const busStop: BusStopModalEditorData = {} as BusStopModalEditorData;
+        busStop.stopId = event.id;
+        busStop.stopName = event.name;
+        this.dialogRef.close(busStop);
     }
 
 }
