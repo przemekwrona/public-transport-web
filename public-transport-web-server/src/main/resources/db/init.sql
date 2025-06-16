@@ -14,7 +14,7 @@ INSERT INTO app_user_agency(app_user_id, agency_id)
 VALUES (1, 1);
 
 INSERT INTO route (route_id, name, line, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
-VALUES (1, 'Chmielnik - Kije', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'KIJE  / 0157 (kościół)  / 02', null, 1);
+VALUES (1, 'Chmielnik - Kije', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, 1);
 
 INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
 VALUES (1, 'MAIN', 'FRONT', 'KIJE', null, null, 45, 13382, 1065, true, null, 'Chmielnik', null, 'KIJE', 1);
@@ -23,30 +23,30 @@ INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, va
 VALUES (2, 'MAIN', 'BACK', 'Chmielnik', null, null, 45, 13417, 1068, true, null, 'KIJE', null, 'Chmielnik', 1);
 
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 1, 0, 0, 0, 142902);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 2, 166, 166, 2087, 278666);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 3, 287, 287, 3609, 142201);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 4, 395, 395, 4969, 143073);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 5, 566, 566, 7109, 145581);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 6, 633, 633, 7953, 145418);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 7, 708, 708, 8897, 278661);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 8, 763, 763, 9587, 278663);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 9, 844, 844, 10603, 278640);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 10, 913, 913, 11474, 278642);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 11, 987, 987, 12405, 145528);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 12, 1065, 1065, 13382, 145543);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 2, 278, 278, 2087, 234100);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 3, 480, 480, 3609, 142201);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 4, 661, 661, 4969, 143073);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 5, 946, 946, 7109, 145581);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 6, 1058, 1058, 7953, 145418);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 7, 1184, 1184, 8898, 145434);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 8, 1276, 1276, 9588, 145643);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 9, 1411, 1411, 10605, 145448);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 10, 1527, 1527, 11475, 145638);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 11, 1651, 1651, 12407, 145528);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 12, 1781, 1781, 13384, 145543);
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 1, 0, 0, 0, 145543);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 2, 10, 10, 129, 145417);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 3, 91, 91, 1146, 145416);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 4, 160, 160, 2018, 145642);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 5, 230, 230, 2894, 145449);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 6, 317, 317, 3990, 145437);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 7, 363, 363, 4573, 278660);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 8, 441, 441, 5553, 145653);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 9, 509, 509, 6412, 145582);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 10, 687, 687, 8640, 142804);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 11, 792, 792, 9953, 141951);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 12, 913, 913, 11472, 278665);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 13, 1068, 1068, 13417, 141875);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 2, 17, 17, 129, 145417);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 3, 152, 152, 1146, 145416);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 4, 268, 268, 2018, 145642);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 5, 384, 384, 2894, 145449);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 6, 530, 530, 3990, 145437);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 7, 607, 607, 4574, 145419);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 8, 737, 737, 5553, 145653);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 9, 851, 851, 6412, 145582);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 10, 1148, 1148, 8640, 142804);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 11, 1323, 1323, 9953, 141951);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 12, 1525, 1525, 11472, 200981);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 13, 1784, 1784, 13417, 141875);
 
 INSERT INTO calendar (service_id, agency_id, calendar_name, designation, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_date, end_date) VALUES (1, 1, 'D/20250101/20251231/1', 'D', 'kursuje od poniedziałku do piątku oprócz świąt', true, true, true, true, true, false, false, '2025-01-01', '2025-12-31');
 
