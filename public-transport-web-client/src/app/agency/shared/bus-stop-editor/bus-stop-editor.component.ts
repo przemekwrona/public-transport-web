@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {StopsPatchRequest, StopsService} from "../../../generated/public-transport";
 
 @Component({
@@ -12,6 +12,8 @@ export class BusStopEditorComponent implements OnChanges {
     @Input() public lon: number;
     @Input() public lat: number;
 
+    @Output() public onSaved = new EventEmitter<StopsPatchRequest>();
+
     public active: boolean = true;
 
     constructor(private stopsService: StopsService) {
@@ -24,6 +26,7 @@ export class BusStopEditorComponent implements OnChanges {
         stopPatchRequest.active = this.active;
 
         this.stopsService.patchStop(stopPatchRequest).subscribe(() => {
+            this.onSaved.emit(stopPatchRequest);
         });
     }
 
