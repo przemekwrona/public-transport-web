@@ -19,11 +19,12 @@ import {StopsService} from "../../generated/public-transport";
         CommonModule,
         FormsModule,
         MatDialogModule,
-        FaIconComponent
+        FaIconComponent,
+
+        BusStopEditorComponent,
+        BusStopModalEditorComponent
     ],
     declarations: [
-        BusStopEditorComponent,
-        BusStopModalEditorComponent,
         BusStopModalSelectorComponent,
         BusStopSelectorComponent,
         CalendarInputComponent,

@@ -1,6 +1,8 @@
 import {Component, inject, model, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {StopsPatchRequest} from "../../../generated/public-transport";
+import {CommonModule} from "@angular/common";
+import {BusStopEditorComponent} from "../bus-stop-editor/bus-stop-editor.component";
 
 export interface BusStopModalEditorData {
     stopId: number;
@@ -10,6 +12,12 @@ export interface BusStopModalEditorData {
 }
 
 @Component({
+    standalone: true,
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        BusStopEditorComponent
+    ],
     selector: 'app-bus-stop-modal-editor',
     templateUrl: './bus-stop-modal-editor.component.html',
     styleUrl: './bus-stop-modal-editor.component.scss'
