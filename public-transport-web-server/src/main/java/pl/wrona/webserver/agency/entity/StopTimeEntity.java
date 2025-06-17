@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Data
 @Builder
 @Entity
@@ -32,4 +34,8 @@ public class StopTimeEntity {
     private int arrivalSecond;
     private int departureSecond;
     private int distanceMeters;
+
+    public LocalTime getDepartureTime(int secondsOfDay) {
+        return LocalTime.ofSecondOfDay(secondsOfDay).plusSeconds(departureSecond);
+    }
 }

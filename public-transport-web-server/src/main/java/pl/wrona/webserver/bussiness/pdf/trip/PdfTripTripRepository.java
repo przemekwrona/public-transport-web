@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 interface PdfTripTripRepository extends JpaRepository<TripEntity, Long> {
 
-    @Query("SELECT t FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name")
+    @Query("SELECT t FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name GROUP BY t.tripId")
     List<TripEntity> findAllByRoute(@Param("line") String line, @Param("name") String name);
 }
