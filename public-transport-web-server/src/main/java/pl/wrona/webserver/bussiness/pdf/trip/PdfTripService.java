@@ -57,11 +57,11 @@ public class PdfTripService {
             var stopTimeByStop = stopTimes.stream().collect(Collectors.groupingBy(StopTimeEntity::getStopEntity));
 
             List<Float> columnWidths = brigadeTrips.stream()
-                    .map(a -> 20F)
+                    .map(i -> 30F)
                     .collect(Collectors.toCollection(ArrayList::new));
 
             // Adjust the last column to fill remaining space
-            columnWidths.add(600F - columnWidths.size() * 20F);
+            columnWidths.add(600F - columnWidths.size() * 30F);
 
             // Sort in descending order
             List<Float> sorted = columnWidths.stream()
@@ -80,15 +80,16 @@ public class PdfTripService {
             table.addHeaderCell(new Cell().add(new Paragraph("Przystanek")));
 
             brigadeTrips.forEach(b -> {
-                table.addHeaderCell(new Cell().add(new Paragraph("D")));
+                table.addHeaderCell(new Cell().add(new Paragraph("D").setTextAlignment(TextAlignment.CENTER)));
             });
 
             stopTimes.forEach(stopTime -> {
                 // Add rows
-                table.addCell(stopTime.getStopEntity().getName());
+                table.addCell(new Cell().add(new Paragraph(stopTime.getStopEntity().getName()).setTextAlignment(TextAlignment.LEFT)));
 
                 for (BrigadeTripEntity brigadeTrip : brigadeTrips) {
-                    table.addCell(stopTime.getDepartureTime(brigadeTrip.getDepartureTimeInSeconds()).format(HHMM));
+                    table.addCell(stopTime.getDepartureTime(brigadeTrip.getDepartureTimeInSeconds()).format(HHMM))
+                            .setTextAlignment(TextAlignment.CENTER);
                 }
             });
 
