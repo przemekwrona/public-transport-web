@@ -43,7 +43,7 @@ export class RouteListComponent implements OnInit {
             console.log(response);
             const link = document.createElement('a');
             link.href = URL.createObjectURL(response);
-            link.download = `linia-${route.line}-${route.name}-plan.pdf`;
+            link.download = `linia-${route.line}-${route.name}-plan.pdf`.replaceAll(' ', '_');
             link.click();
         });
     }
