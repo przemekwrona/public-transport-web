@@ -1,13 +1,16 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {StopService} from "../../stops/stop.service";
 import {Route, Routes, Stop} from "../../../generated/public-transport";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
+import {PdfService} from "../../../generated/public-transport-pdf";
 
 @Component({
     standalone: true,
     imports: [
         CommonModule
+    ],
+    providers: [
+        PdfService
     ],
     selector: 'app-routes',
     templateUrl: './route-list.component.html',
@@ -19,7 +22,7 @@ export class RouteListComponent implements OnInit {
 
     public routes: Routes = {};
 
-    constructor(private stopService: StopService, private _router: Router, private route: ActivatedRoute) {
+    constructor(private pdfService: PdfService, private _router: Router, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -27,12 +30,22 @@ export class RouteListComponent implements OnInit {
     }
 
     public clickAddRoute(): void {
-        this._router.navigate(['/agency/routes/create']);
+        this._router.navigate(['/agency/routes/create']).then();
     }
 
     public openRoute(route: Route) {
         const state = {line: route.line, name: route.name};
-        this._router.navigate(['/agency/trips'], {queryParams: state})
+        this._router.navigate(['/agency/trips'], {queryParams: state}).then();
+    }
+
+    public downloadPdf(route: Route): void {
+        this.pdfService.downloadTripPdf(route.line, route.name).subscribe((response: Blob) => {
+            console.log(response);
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(response);
+            link.download = `linia-${route.line}-${route.name}-plan.pdf`;
+            link.click();
+        });
     }
 
 }
