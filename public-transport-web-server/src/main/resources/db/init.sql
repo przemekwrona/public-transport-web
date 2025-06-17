@@ -17,23 +17,11 @@ INSERT INTO route (route_id, name, line, active, google, description, origin_sto
 VALUES (1, 'Chmielnik - Kije', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, 1);
 
 INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
-VALUES (1, 'MAIN', 'FRONT', 'KIJE', null, null, 45, 13382, 1065, true, null, 'Chmielnik', null, 'KIJE', 1);
+VALUES (1, 'MAIN', 'FRONT', 'Kije', null, null, 27, 13382, 1065, true, null, 'Chmielnik', null, 'Kije', 1);
 
 INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
-VALUES (2, 'MAIN', 'BACK', 'Chmielnik', null, null, 45, 13417, 1068, true, null, 'KIJE', null, 'Chmielnik', 1);
+VALUES (2, 'MAIN', 'BACK', 'Chmielnik', null, null, 27, 13417, 1068, true, null, 'Kije', null, 'Chmielnik', 1);
 
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 1, 0, 0, 0, 142902);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 2, 278, 278, 2087, 234100);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 3, 480, 480, 3609, 142201);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 4, 661, 661, 4969, 143073);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 5, 946, 946, 7109, 145581);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 6, 1058, 1058, 7953, 145418);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 7, 1184, 1184, 8898, 145434);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 8, 1276, 1276, 9588, 145643);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 9, 1411, 1411, 10605, 145448);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 10, 1527, 1527, 11475, 145638);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 11, 1651, 1651, 12407, 145528);
-INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 12, 1781, 1781, 13384, 145543);
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 1, 0, 0, 0, 145543);
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 2, 17, 17, 129, 145417);
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 3, 152, 152, 1146, 145416);
@@ -47,6 +35,18 @@ INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second,
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 11, 1323, 1323, 9953, 141951);
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 12, 1525, 1525, 11472, 200981);
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 13, 1784, 1784, 13417, 141875);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 1, 0, 0, 0, 142902);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 2, 278, 278, 2087, 234100);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 3, 480, 480, 3609, 142201);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 4, 661, 661, 4969, 143073);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 5, 946, 946, 7109, 145581);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 6, 1058, 1058, 7953, 145418);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 7, 1184, 1184, 8898, 145434);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 8, 1276, 1276, 9588, 145643);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 9, 1411, 1411, 10605, 145448);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 10, 1527, 1527, 11475, 145638);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 11, 1651, 1651, 12407, 145528);
+INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (1, 12, 1781, 1781, 13384, 145543);
 
 INSERT INTO calendar (service_id, agency_id, calendar_name, designation, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday, start_date, end_date) VALUES (1, 1, 'D/20250101/20251231/1', 'D', 'kursuje od poniedziałku do piątku oprócz świąt', true, true, true, true, true, false, false, '2025-01-01', '2025-12-31');
 
@@ -58,3 +58,20 @@ INSERT INTO calendar_dates (service_id, date, exception_type) VALUES (1, '2025-0
 INSERT INTO calendar_dates (service_id, date, exception_type) VALUES (1, '2025-12-25', 'REMOVED');
 INSERT INTO calendar_dates (service_id, date, exception_type) VALUES (1, '2025-01-01', 'REMOVED');
 INSERT INTO calendar_dates (service_id, date, exception_type) VALUES (1, '2025-05-02', 'REMOVED');
+
+INSERT INTO brigade (brigade_id, brigade_number, agency_id, service_id) VALUES (1, 'DP/KIJE-CHMIELNIK/1', 1, 1);
+
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/1', 'L1', 'Chmielnik - Kije', 'MAIN', 'BACK', 1, 2, 19200, null, null, null, null, null, 1784, null, 'KIJE', 'Chmielnik', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/2', 'L1', 'Chmielnik - Kije', 'MAIN', 'FRONT', 2, 1, 21300, null, null, null, null, null, 1781, null, 'Chmielnik', 'KIJE', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/3', 'L1', 'Chmielnik - Kije', 'MAIN', 'BACK', 3, 2, 25200, null, null, null, null, null, 1784, null, 'KIJE', 'Chmielnik', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/4', 'L1', 'Chmielnik - Kije', 'MAIN', 'FRONT', 4, 1, 27000, null, null, null, null, null, 1781, null, 'Chmielnik', 'KIJE', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/5', 'L1', 'Chmielnik - Kije', 'MAIN', 'BACK', 5, 2, 30600, null, null, null, null, null, 1784, null, 'KIJE', 'Chmielnik', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/6', 'L1', 'Chmielnik - Kije', 'MAIN', 'FRONT', 6, 1, 32400, null, null, null, null, null, 1781, null, 'Chmielnik', 'KIJE', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/7', 'L1', 'Chmielnik - Kije', 'MAIN', 'BACK', 7, 2, 34200, null, null, null, null, null, 1784, null, 'KIJE', 'Chmielnik', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/8', 'L1', 'Chmielnik - Kije', 'MAIN', 'FRONT', 8, 1, 36000, null, null, null, null, null, 1781, null, 'Chmielnik', 'Kije', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/9', 'L1', 'Chmielnik - Kije', 'MAIN', 'BACK', 9, 2, 54300, null, null, null, null, null, 1784, null, 'KIJE', 'Chmielnik', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/10', 'L1', 'Chmielnik - Kije', 'MAIN', 'FRONT', 10, 1, 56100, null, null, null, null, null, 1781, null, 'Chmielnik', 'Kije', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/11', 'L1', 'Chmielnik - Kije', 'MAIN', 'BACK', 11, 2, 57600, null, null, null, null, null, 1784, null, 'KIJE', 'Chmielnik', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/12', 'L1', 'Chmielnik - Kije', 'MAIN', 'FRONT', 12, 1, 59400, null, null, null, null, null, 1781, null, 'Chmielnik', 'Kije', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/13', 'L1', 'Chmielnik - Kije', 'MAIN', 'BACK', 13, 2, 61200, null, null, null, null, null, 1784, null, 'KIJE', 'Chmielnik', 1);
+INSERT INTO brigade_trip (brigade_trip_id, line, name, variant, mode, trip_sequence, root_trip_id, departure_time_in_second, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin, destination, brigade_id) VALUES ('NEOBUS/DP/KIJE-CHMIELNIK/1/14', 'L1', 'Chmielnik - Kije', 'MAIN', 'BACK', 14, 2, 63000, null, null, null, null, null, 1784, null, 'KIJE', 'Chmielnik', 1);
