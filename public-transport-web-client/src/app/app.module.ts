@@ -14,6 +14,7 @@ import {AuthModule} from "./auth/auth.module";
 import {AddHeaderInterceptor} from "./auth/auth.interceptor";
 import {BASE_PATH} from "./generated/public-transport";
 import { TranslocoRootModule } from './transloco-root.module';
+import {BASE_PATH_PDF_API} from "./generated/public-transport-pdf";
 
 @NgModule({
     imports: [
@@ -34,7 +35,8 @@ import { TranslocoRootModule } from './transloco-root.module';
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
-        {provide: BASE_PATH, useValue: 'http://localhost:4200/api/v1'}
+        {provide: BASE_PATH, useValue: 'http://localhost:4200/api/v1'},
+        {provide: BASE_PATH_PDF_API, useValue: 'http://localhost:4200/api/v1'}
     ],
     bootstrap: [
         AppComponent
