@@ -8,6 +8,7 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.AreaBreakType;
+import com.itextpdf.layout.properties.TextAlignment;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.BrigadeTrip;
 import org.igeolab.iot.pt.server.api.model.StopTime;
