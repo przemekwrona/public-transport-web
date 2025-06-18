@@ -91,6 +91,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/AgenciesAdminResponse'
 
+    post:
+      tags:
+        - agency
+      summary: Create new account
+      operationId: createNewAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyAdminCreateAccountRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
   /agreements/google:
     get:
       tags:
@@ -721,6 +739,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AgencyAdminDetail'
+
+    AgencyAdminCreateAccountRequest:
+      type: object
+      properties:
+        companyName:
+          type: string
+        companyCode:
+          type: string
+        accountName:
+          type: string
+        accountPassword:
+          type: string
 
     GoogleAgreementsRequest:
       type: object
