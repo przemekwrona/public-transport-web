@@ -29,6 +29,7 @@ import {ProfileListComponent} from "./agency/profile/profile-list/profile-list.c
 import {agenciesResolver} from "./agency/profile/profile-list/agencies.resolver";
 import {ProfileDetailsComponent} from "./agency/profile/profile-details/profile-details.component";
 import {profileDetailsResolver} from "./agency/profile/profile-details/profile-details.resolver";
+import {CreateProfileComponent} from "./agency/profile/create-profile/create-profile.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -56,7 +57,9 @@ export const routes: Routes = [
     },
     {
         path: 'admin/agency', component: AgencyComponent, children: [
-            {path: 'profiles', component: ProfileListComponent, resolve: {agencies: agenciesResolver}}
+            {path: 'profiles', component: ProfileListComponent, resolve: {agencies: agenciesResolver}},
+            {path: 'create', component: CreateProfileComponent },
+
         ]
     },
     {path: 'info', component: LandingComponent},
