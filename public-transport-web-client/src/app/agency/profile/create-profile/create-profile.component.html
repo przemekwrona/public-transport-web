@@ -32,7 +32,21 @@
                                 <span class="text-gray-700 text-2sm">Nazwa firmy w CEIDG</span>
                             </div>
                             <label class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text"/>
+                                <input type="text" id="companyName" name="companyName"
+                                       [(ngModel)]="agency.companyName"/>
+                            </label>
+                        </div>
+
+                        <div class="my-7.5"></div>
+
+                        <div class="flex flex-wrap justify-between gap-5">
+                            <div class="flex flex-col">
+                                <div class="text-gray-900 text-sm font-medium">Identyfikator Firmy</div>
+                                <span class="text-gray-700 text-2sm">Kod techniczny nadawany manualnie</span>
+                            </div>
+                            <label class="input sm:max-w-full xl:max-w-96 w-full">
+                                <input type="text" id="companyCode" name="companyCode"
+                                       [(ngModel)]="agency.companyCode"/>
                             </label>
                         </div>
 
@@ -44,7 +58,7 @@
                                 <span class="text-gray-700 text-2sm">Numer Identyfikacji Podatkowej</span>
                             </div>
                             <label class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text"/>
+                                <input type="text" id="nip" name="nip"/>
                             </label>
                         </div>
 
@@ -98,7 +112,8 @@
                                 <div class="text-gray-900 text-sm font-medium">Nazwa Konta</div>
                             </div>
                             <label class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text" value="#BA35A0"/>
+                                <input type="text" id="accountName" name="accountName"
+                                       [(ngModel)]="agency.accountName"/>
                             </label>
                         </div>
 
@@ -109,7 +124,8 @@
                                 <div class="text-gray-900 text-sm font-medium">Hasło</div>
                             </div>
                             <label class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text" value="#BA35A0"/>
+                                <input type="text" id="accountPassword" name="accountPassword"
+                                       [(ngModel)]="agency.accountPassword"/>
                             </label>
                         </div>
 
@@ -120,13 +136,14 @@
                                 <div class="text-gray-900 text-sm font-medium">Powtórz hasło</div>
                             </div>
                             <label class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text" value="#BA35A0"/>
+                                <input type="text" id="repeatedPassword" name="repeatedPassword"
+                                       [(ngModel)]="repeatedPassword"/>
                             </label>
                         </div>
 
                         <div class="border-t border-gray-200 my-7.5"></div>
                         <div class="flex justify-end">
-                            <button class="btn btn-primary">
+                            <button (click)="createProfile()" class="btn btn-primary">
                                 Dodaj Nowe Konto
                             </button>
                         </div>
