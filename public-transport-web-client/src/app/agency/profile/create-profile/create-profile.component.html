@@ -51,7 +51,7 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Identyfikator Firmy</div>
-                                    @if (this.validityCheckRequired('companyName')) {
+                                    @if (this.validityCheckRequired('companyCode')) {
                                         <span class="text-red-700 text-2sm">Nadaj unikalny kod techniczny</span>
                                     } @else {
                                         <span class="text-gray-700 text-2sm">Kod techniczny nadawany manualnie</span>
@@ -67,7 +67,7 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">NIP</div>
-                                    @if (this.validityCheckRequired('companyName')) {
+                                    @if (this.validityCheckRequired('taxIdentificationNumber')) {
                                         <span class="text-red-700 text-2sm">Podaj NIP firmy</span>
                                     } @else {
                                         <span class="text-gray-700 text-2sm">Numer Identyfikacji Podatkowej</span>
@@ -83,7 +83,7 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Logo Firmy</div>
-                                    <span class="text-gray-700 text-2sm">Emblematic Corporate Identity Symbol</span>
+                                    <span class="text-gray-700 text-2sm">Logo firmy</span>
                                 </div>
                                 <div class="flex flex-wrap sm:flex-nowrap gap-5 lg:gap-7.5 max-w-96 w-full">
                                     <div class="flex bg-center w-full p-5 lg:p-7 bg-no-repeat bg-[length:550px] border border-gray-300 rounded-xl border-dashed branding-bg">
@@ -126,8 +126,13 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Nazwa Konta</div>
+                                    @if (this.validityCheckRequired('accountName')) {
+                                        <span class="text-red-700 text-2sm">Podaj nazwę konta</span>
+                                    } @else {
+                                        <span class="text-gray-700 text-2sm">Unikalna nazwa nie występująca w systemie</span>
+                                    }
                                 </div>
-                                <label class="input sm:max-w-full xl:max-w-96 w-full">
+                                <label [ngClass]="{'border-red-700': validityCheck('accountName')}" class="input sm:max-w-full xl:max-w-96 w-full">
                                     <input type="text" formControlName="accountName"/>
                                 </label>
                             </div>
@@ -137,8 +142,13 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Hasło</div>
+                                    @if (this.validityCheckRequired('accountPassword')) {
+                                        <span class="text-red-700 text-2sm">Podaj hasło</span>
+                                    } @else {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    }
                                 </div>
-                                <label class="input sm:max-w-full xl:max-w-96 w-full">
+                                <label [ngClass]="{'border-red-700': validityCheck('accountPassword')}" class="input sm:max-w-full xl:max-w-96 w-full">
                                     <input type="text" formControlName="accountPassword"/>
                                 </label>
                             </div>
@@ -148,8 +158,13 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Powtórz hasło</div>
+                                    @if (this.validityCheckRequired('repeatedPassword')) {
+                                        <span class="text-red-700 text-2sm">Powtórz hasło</span>
+                                    } @else {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    }
                                 </div>
-                                <label class="input sm:max-w-full xl:max-w-96 w-full">
+                                <label [ngClass]="{'border-red-700': validityCheck('repeatedPassword')}" class="input sm:max-w-full xl:max-w-96 w-full">
                                     <input type="text" formControlName="repeatedPassword"/>
                                 </label>
                             </div>
