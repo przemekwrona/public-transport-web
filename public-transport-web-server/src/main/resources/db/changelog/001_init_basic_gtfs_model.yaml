@@ -3,12 +3,18 @@ databaseChangeLog:
       id: create-table-app-user
       author: pwrona
       changes:
+        - createSequence:
+            sequenceName: app_user_id_seq
+            startValue: 1
+            incrementBy: 1
+
         - createTable:
             tableName: app_user
             columns:
               - column:
                   name: app_user_id
                   type: integer
+                  defaultValueSequenceNext: app_user_id_seq
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -39,11 +45,6 @@ databaseChangeLog:
               - column:
                   name: enabled
                   type: boolean
-
-        - createSequence:
-            sequenceName: app_user_id_seq
-            startValue: 1
-            incrementBy: 1
 
   - changeSet:
       id: create-table-app-role
@@ -215,18 +216,24 @@ databaseChangeLog:
       id: create-agency-table
       author: pwrona
       changes:
+        - createSequence:
+            sequenceName: agency_id_seq
+            startValue: 1
+            incrementBy: 1
+
         - createTable:
             tableName: agency
             columns:
               - column:
                   name: agency_id
                   type: integer
+                  defaultValueSequenceNext: agency_id_seq
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: agency_code
-                  type: varchar(10)
+                  type: varchar(15)
                   constraints:
                     nullable: false
                     unique: true
@@ -239,17 +246,17 @@ databaseChangeLog:
                   name: agency_url
                   type: varchar(50)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: agency_timetable_url
                   type: varchar(50)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: agency_phone
                   type: varchar(50)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: agency_owner_id
                   type: integer

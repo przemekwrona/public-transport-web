@@ -23,12 +23,10 @@ export class CreateProfileComponent {
 
     public agency: AgencyAdminCreateAccountRequest = {} as AgencyAdminCreateAccountRequest;
 
-    public repeatedPassword: string = '';
-
     constructor(private fb: FormBuilder, private agencyService: AgencyService) {
         this.createProfileForm = this.fb.group({
             companyName: ['', [Validators.required, Validators.minLength(3)]],
-            companyCode: ['', [Validators.required, Validators.minLength(3)]],
+            companyCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
             taxIdentificationNumber: ['', [Validators.required, Validators.minLength(3)]],
             accountName: ['', [Validators.required, Validators.minLength(3)]],
             accountPassword: ['', [Validators.required]],
@@ -38,7 +36,13 @@ export class CreateProfileComponent {
 
     public createProfile(): void {
         if (this.createProfileForm.valid) {
-            this.agencyService.createNewAccount(this.agency).subscribe(response => {
+            const agency: AgencyAdminCreateAccountRequest = {} as AgencyAdminCreateAccountRequest;
+            agency.companyName = this.createProfileForm.get('companyName').value;
+            agency.companyCode = this.createProfileForm.get('companyCode').value;
+            agency.accountName = this.createProfileForm.get('accountName').value;
+            agency.accountPassword = this.createProfileForm.get('accountPassword').value;
+
+            this.agencyService.createNewAccount(agency).subscribe(response => {
             });
         } else {
             this.createProfileForm.markAllAsTouched();
@@ -53,6 +57,11 @@ export class CreateProfileComponent {
     public validityCheckRequired(fieldName: string): boolean {
         return this.validityCheck(fieldName)
             && this.createProfileForm.get(fieldName)?.errors?.['required'];
+    }
+
+    public validityCheckMaxLength(fieldName: string): boolean {
+        return this.validityCheck(fieldName)
+            && this.createProfileForm.get(fieldName)?.errors?.['maxlength'];
     }
 
     public validityCheckMinLength(fieldName: string): boolean {
