@@ -3,12 +3,15 @@ package pl.wrona.webserver.agency.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +21,7 @@ import pl.wrona.webserver.agency.brigade.BrigadeEntity;
 import pl.wrona.webserver.agency.calendar.CalendarEntity;
 import pl.wrona.webserver.security.AppUser;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,6 +33,8 @@ public class Agency {
 
     @Id
     @Column(name = "agency_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_id_seq")
+    @SequenceGenerator(name = "app_user_id_seq", sequenceName = "app_user_id_seq", allocationSize = 1)
     private Long agencyId;
 
     @Column(name = "agency_code", unique = true)
@@ -61,9 +67,9 @@ public class Agency {
 
     @ManyToMany
     @JoinTable(name = "app_user_agency",
-            joinColumns = @JoinColumn(name = "app_user_id"),
-            inverseJoinColumns = @JoinColumn(name = "agency_id"))
-    private Set<AppUser> users;
+            joinColumns = @JoinColumn(name = "agency_id"),
+            inverseJoinColumns = @JoinColumn(name = "app_user_id"))
+    private Set<AppUser> users = new HashSet<>();
 
     @OneToOne(mappedBy = "agency", cascade = CascadeType.ALL)
     private GoogleAgreementEntity googleAgreement;

@@ -53,6 +53,8 @@
                                     <div class="text-gray-900 text-sm font-medium">Identyfikator Firmy</div>
                                     @if (this.validityCheckRequired('companyCode')) {
                                         <span class="text-red-700 text-2sm">Nadaj unikalny kod techniczny</span>
+                                    } @else if (this.validityCheckMaxLength('companyCode')) {
+                                        <span class="text-red-700 text-2sm">Maksymalna długość znaków 15</span>
                                     } @else {
                                         <span class="text-gray-700 text-2sm">Kod techniczny nadawany manualnie</span>
                                     }
