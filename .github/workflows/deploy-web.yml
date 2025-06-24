@@ -28,6 +28,7 @@ jobs:
 
       - name: 🔨 Build Project
         run: |
+          cd public-transport-web-client
           npm install
           npm run build
 
