@@ -32,6 +32,7 @@ jobs:
           npm install
           npm run public-transport-api:generate
           npm run public-transport-pdf-api:generate
+          ls -lh
           npm run public-transport-pdf-api:sed
           npm run build
 
