@@ -11,7 +11,7 @@
     "generate-gbfs": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/gbfs-api.yaml -g typescript-angular -o ./src/app/generated/gbfs",
     "public-transport-api:generate": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/public-transport-api.yaml -g typescript-angular -o ./src/app/generated/public-transport",
     "public-transport-pdf-api:generate": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/public-transport-pdf-api.yaml -g typescript-angular -o ./src/app/generated/public-transport-pdf",
-    "public-transport-pdf-api:sed": "sed -i -e 's/BASE_PATH/BASE_PATH_PDF_API/g' ./src/app/generated/public-transport-pdf/*.ts & sed -i -e 's/BASE_PATH/BASE_PATH_PDF_API/g' ./src/app/generated/public-transport-pdf/**/*.ts",
+    "public-transport-pdf-api:sed": "sed -i -e 's/BASE_PATH/BASE_PATH_PDF_API/g' ./src/app/generated/public-transport-pdf/{*,**/*}.ts",
 
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
