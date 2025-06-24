@@ -14,7 +14,7 @@ on:
   pull_request:
 
 env:
-  MODULE: public-transport-web-client
+  WEB_MODULE_NAME: public-transport-web-client
 
 jobs:
   web-deploy:
@@ -24,11 +24,6 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      - name: 🔨 Navigate to WEB module
-        run: |
-          cd ${{ env.MODULE }}
-          ls -lh
-
       - name: Use Node.js 24
         uses: actions/setup-node@v2
         with:
@@ -36,6 +31,7 @@ jobs:
 
       - name: 🔨 Build Project
         run: |
+          cd ${{ env.WEB_MODULE_NAME }}
           ls -lh
           npm install
           npm run generate
