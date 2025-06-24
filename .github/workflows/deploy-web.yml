@@ -6,12 +6,11 @@ on:
       environment:
         description: 'Choose where you want to publish the build'
         required: true
-        default: prod
+        default: 'prod'
         type: choice
         options:
           - dev
           - prod
-  pull_request:
 
 env:
   WEB_MODULE_NAME: public-transport-web-client
