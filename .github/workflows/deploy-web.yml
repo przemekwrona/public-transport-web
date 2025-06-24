@@ -33,7 +33,7 @@ jobs:
           npm run public-transport-api:generate
           npm run public-transport-pdf-api:generate
           ls -lh
-          ls ./src/app/generated/public-transport-pdf -lh
+          ls ./src/app/generated/public-transport-pdf -la
           npm run public-transport-pdf-api:sed
           npm run build
 
