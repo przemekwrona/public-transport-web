@@ -36,7 +36,6 @@ jobs:
           npm run generate
           npm run public-transport-api:generate
           npm run public-transport-pdf-api:generate
-          chmod 777 -R ./src/app/generated/public-transport-pdf
           npm run public-transport-pdf-api:sed
           npm run public-transport-pdf-api:sed:recursive
           npm run build
@@ -44,6 +43,6 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.samkirkland.com
-          username: myFtpUserName
-          password: ${{ secrets.password }}
+          server: ${{ secrets.FTP_SERVER_NAME }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
