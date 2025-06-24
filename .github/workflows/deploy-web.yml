@@ -32,14 +32,13 @@ jobs:
       - name: 🔨 Build Project
         run: |
           cd ${{ env.WEB_MODULE_NAME }}
-          ls -lh
           npm install
           npm run generate
           npm run public-transport-api:generate
           npm run public-transport-pdf-api:generate
           chmod 777 -R ./src/app/generated/public-transport-pdf
-          shopt -s globstar nullglob
           npm run public-transport-pdf-api:sed
+          npm run public-transport-pdf-api:sed:recursive
           npm run build
 
       - name: 📂 Sync files
