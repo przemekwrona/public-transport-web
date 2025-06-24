@@ -38,6 +38,8 @@ jobs:
           npm run public-transport-api:generate
           npm run public-transport-pdf-api:generate
           chmod 777 -R ./src/app/generated/public-transport-pdf
+          ls ./src/app/generated/public-transport-pdf -la
+          man sed
           npm run public-transport-pdf-api:sed
           npm run build
 
