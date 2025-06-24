@@ -3,7 +3,7 @@ name: 🚀 Deploy website
 on:
   workflow_dispatch:
     inputs:
-      env:
+      environment:
         description: 'Choose where you want to publish the build'
         required: true
         default: prod
@@ -20,6 +20,7 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
