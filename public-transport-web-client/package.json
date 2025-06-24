@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build --ssr=false",
     "build:prod": "ng build --ssr=false --output-path ../public-transport-web-server/src/main/resources/static",
-    "generate": "npm run generate-api & npm run generate-gbfs & npm run generate-public-transport-api & npm run public-transport-pdf-api:generate",
+    "generate": "npm run generate-api & npm run generate-gbfs & npm run public-transport-api:generate & npm run public-transport-pdf-api:generate",
     "generate-api": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/otp-api.yaml -g typescript-angular -o ./src/app/generated",
     "generate-gbfs": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/gbfs-api.yaml -g typescript-angular -o ./src/app/generated/gbfs",
     "public-transport-api:generate": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/public-transport-api.yaml -g typescript-angular -o ./src/app/generated/public-transport",
