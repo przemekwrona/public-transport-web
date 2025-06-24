@@ -1,15 +1,17 @@
 name: 🚀 Deploy website
 
-workflow_dispatch:
-  inputs:
-    env:
-      description: 'Choose where you want to publish the build'
-      required: true
-      default: prod
-      type: choice
-      options:
-        - dev
-        - prod
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Choose where you want to publish the build'
+        required: true
+        default: prod
+        type: choice
+        options:
+          - dev
+          - prod
+  pull_request:
 
 jobs:
   web-deploy:
