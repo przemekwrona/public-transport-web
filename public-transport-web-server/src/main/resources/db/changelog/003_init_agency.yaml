@@ -1,218 +1,5 @@
 databaseChangeLog:
   - changeSet:
-      id: create-table-app-user
-      author: pwrona
-      changes:
-        - createSequence:
-            sequenceName: app_user_id_seq
-            startValue: 1
-            incrementBy: 1
-
-        - createTable:
-            tableName: app_user
-            columns:
-              - column:
-                  name: app_user_id
-                  type: integer
-                  defaultValueSequenceNext: app_user_id_seq
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: username
-                  type: varchar(30)
-              - column:
-                  name: email
-                  type: varchar(30)
-              - column:
-                  name: password
-                  type: varchar(60)
-              - column:
-                  name: created_at
-                  type: datetime
-              - column:
-                  name: updated_at
-                  type: datetime
-              - column:
-                  name: account_non_expired
-                  type: boolean
-              - column:
-                  name: account_non_locked
-                  type: boolean
-              - column:
-                  name: credentials_non_expired
-                  type: boolean
-              - column:
-                  name: enabled
-                  type: boolean
-
-  - changeSet:
-      id: create-table-app-role
-      author: pwrona
-      changes:
-        - createTable:
-            tableName: app_role
-            columns:
-              - column:
-                  name: app_role_id
-                  type: varchar(15)
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: description
-                  type: varchar(255)
-
-        - createTable:
-            tableName: app_user_app_role
-            columns:
-              - column:
-                  name: app_user_id
-                  type: integer
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_app_user_app_role_app_user
-                    references: app_user(app_user_id)
-              - column:
-                  name: app_role_id
-                  type: varchar(15)
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_app_user_app_role_app_role
-                    references: app_role(app_role_id)
-
-  - changeSet:
-      id: create-table-stops
-      author: pwrona
-      changes:
-        - createSequence:
-            sequenceName: stops_id_seq
-            startValue: 1
-            incrementBy: 1
-
-        - createTable:
-            tableName: stop
-            columns:
-              - column:
-                  name: stop_id
-                  type: integer
-                  defaultValueSequenceNext: stops_id_seq
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: bdot10k_id
-                  type: varchar(60)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: osm_id
-                  type: varchar(60)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: name
-                  type: varchar(150)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: lon
-                  type: float
-                  constraints:
-                    nullable: false
-              - column:
-                  name: lat
-                  type: float
-                  constraints:
-                    nullable: false
-              - column:
-                  name: is_osm
-                  type: boolean
-              - column:
-                  name: is_bdot10k
-                  type: boolean
-              - column:
-                  name: is_active
-                  type: boolean
-                  defaultValueBoolean: true
-              - column:
-                  name: is_deactivation_checked
-                  type: boolean
-                  defaultValueBoolean: false
-
-        - createIndex:
-            indexName: idx_stop_localization
-            tableName: stop
-            columns:
-              - column:
-                  name: lon
-              - column:
-                  name: lat
-
-        - loadData:
-            tableName: stop
-            file: stops/bdot10k_bus_stops.csv
-            separator: ;
-            encoding: UTF-8
-            usePreparedStatements: true
-            columns:
-              - column:
-                  header: X
-                  name: lon
-                  type: NUMERIC
-              - column:
-                  header: Y
-                  name: lat
-                  type: NUMERIC
-              - column:
-                  header: LOKALNYID
-                  name: bdot10k_id
-                  type: STRING
-              - column:
-                  header: NAZWA
-                  name: name
-                  type: STRING
-
-        - loadData:
-            tableName: stop
-            file: stops/osm_bus_stops_limited.csv
-            separator: ;
-            encoding: UTF-8
-            usePreparedStatements: true
-            columns:
-              - column:
-                  header: X
-                  name: lon
-                  type: NUMERIC
-              - column:
-                  header: Y
-                  name: lat
-                  type: NUMERIC
-              - column:
-                  header: osm_id
-                  name: osm_id
-                  type: STRING
-              - column:
-                  header: NAZWA
-                  name: name
-                  type: STRING
-
-        - sql:
-            sql: UPDATE stop SET is_bdot10k = TRUE WHERE bdot10k_id IS NOT NULL;
-
-        - sql:
-            sql: UPDATE stop SET is_bdot10k = FALSE WHERE bdot10k_id IS NULL;
-
-        - sql:
-            sql: UPDATE stop SET is_osm = TRUE WHERE stop.osm_id IS NOT NULL;
-
-        - sql:
-            sql: UPDATE stop SET is_osm = FALSE WHERE stop.osm_id IS NULL;
-
-        - sql:
-            sql: UPDATE stop SET is_deactivation_checked = TRUE WHERE stop.is_bdot10k = TRUE;
-
-  - changeSet:
       id: create-agency-table
       author: pwrona
       changes:
@@ -326,12 +113,18 @@ databaseChangeLog:
       id: create-route-table
       author: pwrona
       changes:
+        - createSequence:
+            sequenceName: route_id_seq
+            startValue: 1
+            incrementBy: 1
+
         - createTable:
             tableName: route
             columns:
               - column:
                   name: route_id
                   type: integer
+                  defaultValueSequenceNext: route_id_seq
                   constraints:
                     primaryKey: true
                     primaryKeyName: pk_route
@@ -379,11 +172,6 @@ databaseChangeLog:
                   constraints:
                     foreignKeyName: fk_route_agency
                     references: agency(agency_id)
-
-        - createSequence:
-            sequenceName: route_id_seq
-            startValue: 1
-            incrementBy: 1
 
         - createIndex:
             indexName: idx_route_name_line
