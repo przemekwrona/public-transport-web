@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+        }
+
+        h1, h2, h3 {
+            color: black;
+        }
+
+        .info {
+            margin: 10px 0;
+        }
+
+        .flex-container {
+            /*display: flex;*/
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+        }
+
+        @page {
+            size: A4 landscape;
+        }
+
+        /* General table styling */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        /* Header row */
+        .table-header {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        /* Table cells */
+        .table-cell {
+            border: 1px solid #ddd;
+            padding: 4px;
+        }
+
+        /* Row hover effect */
+        .table-row:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Zebra striping */
+        .table-striped tr:nth-child(even) {
+            background-color: #f7f7f7;
+        }
+
+        /* Bordered version */
+        .table-bordered td,
+        .table-bordered th {
+            border: 1px solid #ccc;
+        }
+
+        /* Responsive (overflow scroll on small screens) */
+        .table-responsive {
+            overflow-x: auto;
+            display: block;
+            width: 100%;
+        }
+
+        /* Centered text */
+        .text-center {
+            text-align: center;
+        }
+
+        /* Right aligned text */
+        .text-right {
+            text-align: right;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+    </style>
+</head>
+<body>
+<div class="table-responsive" th:each="timetable: ${timetables}">
+    <div class="flex-container">
+        <div class="info text-left" style="flex-grow: 1" th:text="${companyName}">NEOBUS POLSKA Czurczak Spółka Komandytowa</div>
+        <div class="info text-right" style="flex-grow: 8">Przygotowano: <span th:text="${#temporals.format(now, 'yyyy-MM-dd HH:mm')}">2025-07-2212:34</span></div>
+    </div>
+    <h2 class="info text-center">
+        <span>Linia: </span>
+        <span th:text="${timetable.line}">L1</span>
+        <span th:text="${timetable.origin}">Chmielnik</span>
+        <span>-</span>
+        <span th:text="${timetable.destination}">Kije</span>
+    </h2>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-header">
+        <tr>
+            <th class="table-cell">Przystanek</th>
+            <th class="table-cell text-center" th:each="departure: ${timetable.stops[0].departures}"
+                th:text="${departure.designation}"/>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="table-row" th:each="stop: ${timetable.stops}">
+            <td class="table-cell" th:text="${stop.stopName}"/>
+            <td class="table-cell" th:each="departure : ${stop.departures}" th:text="${departure.departureTime}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+</div>
+</body>
+</html>
