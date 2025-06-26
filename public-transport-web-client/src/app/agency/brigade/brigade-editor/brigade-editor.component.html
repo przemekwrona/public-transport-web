@@ -14,73 +14,6 @@
 </div>
 
 <!-- Container -->
-<div class="container-fixed">
-    <!-- begin: grid -->
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 lg:gap-7.5">
-        <div class="col-span-1">
-            <div class="grid gap-5 lg:gap-7.5">
-
-                <div class="card">
-                    <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
-                    <div class="card-body grid gap-5">
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Nazwa brygady</label>
-                                <input type="text" name="brigadeName" id="brigadeName" [(ngModel)]="brigadeName"
-                                       class="input">
-                            </div>
-                        </div>
-
-                        <div class="text-gray-800 text-2sm">
-                            <span class="text-danger uppercase">UWAGA:</span>
-                            Nazwa wariantu nie może się powtarzać.
-                        </div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Kalendarz</label>
-                                <div class="grow">
-                                    <select name="calendar" id="calendar" [(ngModel)]="calendarName" class="select">
-                                        @for (calendar of calendarsResponse.calendars || []; track calendar) {
-                                            <option [value]="calendar.calendarName">
-                                                {{ calendar.designation }} - {{ calendar.description }}
-                                                ({{ calendar.calendarName }}
-                                                )
-                                            </option>
-                                        }
-
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-gray-200 my-2.5"></div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Czas pracy</label>
-                                @if (getFirstBrigade()?.departureTime && getFirstBrigade()?.departureTime) {
-                                    <span>{{ getFirstBrigade()?.departureTime }}
-                                        -{{ getLastArrivalBrigade()?.format('HH:mm') }}</span>
-                                    <span>({{ getDifferenceBetweenFirstAndLastTrip() | brigadeEditorTime }})</span>
-                                } @else {
-                                    <span class="text-sm">0min</span>
-                                }
-                            </div>
-                        </div>
-                        <div class="flex justify-end">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end: grid -->
-</div>
-
-<!-- End of Container -->
-
-<!-- Container -->
 <div cdkDropListGroup class="container-fixed">
     <!-- begin: grid -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
@@ -265,6 +198,59 @@
         <div class="col-span-2">
             <div class="flex flex-col gap-5 lg:gap-7.5">
                 <div class="flex flex-col gap-5 lg:gap-7.5">
+
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
+                        <div class="card-body grid gap-5">
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Nazwa brygady</label>
+                                    <input type="text" name="brigadeName" id="brigadeName" [(ngModel)]="brigadeName"
+                                           class="input">
+                                </div>
+                            </div>
+
+                            <div class="text-gray-800 text-2sm">
+                                <span class="text-danger uppercase">UWAGA:</span>
+                                Nazwa wariantu nie może się powtarzać.
+                            </div>
+
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Kalendarz</label>
+                                    <div class="grow">
+                                        <select name="calendar" id="calendar" [(ngModel)]="calendarName" class="select">
+                                            @for (calendar of calendarsResponse.calendars || []; track calendar) {
+                                                <option [value]="calendar.calendarName">
+                                                    {{ calendar.designation }} - {{ calendar.description }}
+                                                    ({{ calendar.calendarName }}
+                                                    )
+                                                </option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 my-2.5"></div>
+
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Czas pracy</label>
+                                    @if (getFirstBrigade()?.departureTime && getFirstBrigade()?.departureTime) {
+                                        <span>{{ getFirstBrigade()?.departureTime }}
+                                            -{{ getLastArrivalBrigade()?.format('HH:mm') }}</span>
+                                        <span>({{ getDifferenceBetweenFirstAndLastTrip() | brigadeEditorTime }})</span>
+                                    } @else {
+                                    <span class="text-sm">0min</span>
+                                }
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                            </div>
+                        </div>
+                    </div>
 
                     @for (trip of tripsResponse?.lines || []; track trip) {
                         <div class="card">
