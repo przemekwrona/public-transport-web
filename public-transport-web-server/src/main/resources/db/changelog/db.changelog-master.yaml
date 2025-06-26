@@ -1,16 +1,24 @@
 databaseChangeLog:
   - include:
-      file: 001_init_basic_gtfs_model.yaml
+      file: 001_init_security.yaml
       relativeToChangelogFile: true
 
   - include:
-      file: 002_define_brigades.yaml
+      file: 002_init_stops.yaml
       relativeToChangelogFile: true
 
   - include:
-      file: 003_define_calendars.yaml
+      file: 003_init_agency.yaml
       relativeToChangelogFile: true
 
   - include:
-      file: 004_insert_data.yaml
+      file: 004_init_brigades.yaml
+      relativeToChangelogFile: true
+
+  - include:
+      file: 005_init_calendars.yaml
+      relativeToChangelogFile: true
+
+  - include:
+      file: 006_insert_data.yaml
       relativeToChangelogFile: true
