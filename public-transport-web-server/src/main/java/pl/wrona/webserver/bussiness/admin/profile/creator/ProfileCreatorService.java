@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Agency;
 import pl.wrona.webserver.client.geoapify.Feature;
 import pl.wrona.webserver.client.geoapify.GeoapifyService;
+import pl.wrona.webserver.client.geoapify.Geometry;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -46,8 +48,10 @@ public class ProfileCreatorService {
         agency.setFlatNumber(agencyAdminCreateAccountRequest.getFlatNumber());
         agency.setPostalCode(agencyAdminCreateAccountRequest.getPostalCode());
         agency.setPostalCity(agencyAdminCreateAccountRequest.getPostalCity());
-        agency.setLatitude(addressFeature.geometry().coordinates().get(1));
-        agency.setLongitude(addressFeature.geometry().coordinates().get(0));
+        Optional.of(addressFeature).map(Feature::geometry).map(Geometry::coordinates).ifPresent(cords -> {
+            agency.setLatitude(cords.get(1));
+            agency.setLongitude(cords.get(0));
+        });
         agency.setUsers(agencyVisibility);
         agency.setCreatedAt(LocalDateTime.now());
 
