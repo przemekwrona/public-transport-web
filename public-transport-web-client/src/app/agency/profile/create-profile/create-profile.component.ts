@@ -29,6 +29,8 @@ export class CreateProfileComponent {
             companyCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
             taxIdentificationNumber: ['', [Validators.required, Validators.minLength(3)]],
             accountName: ['', [Validators.required, Validators.minLength(3)]],
+            houseNumber: ['', [Validators.required]],
+            flatNumber: ['', []],
             postalCode: ['', [Validators.required, Validators.minLength(4)]],
             postalCity: ['', [Validators.required]],
             accountPassword: ['', [Validators.required]],
@@ -42,6 +44,8 @@ export class CreateProfileComponent {
             agency.companyName = this.createProfileForm.get('companyName').value;
             agency.companyCode = this.createProfileForm.get('companyCode').value;
 
+            agency.houseNumber = this.createProfileForm.get('houseNumber').value;
+            agency.flatNumber = this.createProfileForm.get('flatNumber').value;
             agency.postalCode = this.createProfileForm.get('postalCode').value;
             agency.postalCity = this.createProfileForm.get('postalCity').value;
 
