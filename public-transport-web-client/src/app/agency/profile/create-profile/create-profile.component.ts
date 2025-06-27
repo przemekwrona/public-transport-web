@@ -29,6 +29,7 @@ export class CreateProfileComponent {
             companyCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
             taxIdentificationNumber: ['', [Validators.required, Validators.minLength(3)]],
             accountName: ['', [Validators.required, Validators.minLength(3)]],
+            street: ['', [Validators.required]],
             houseNumber: ['', [Validators.required]],
             flatNumber: ['', []],
             postalCode: ['', [Validators.required, Validators.minLength(4)]],
@@ -43,6 +44,7 @@ export class CreateProfileComponent {
             const agency: AgencyAdminCreateAccountRequest = {} as AgencyAdminCreateAccountRequest;
             agency.companyName = this.createProfileForm.get('companyName').value;
             agency.companyCode = this.createProfileForm.get('companyCode').value;
+            agency.taxNumber = this.createProfileForm.get('taxNumber').value;
 
             agency.houseNumber = this.createProfileForm.get('houseNumber').value;
             agency.flatNumber = this.createProfileForm.get('flatNumber').value;
