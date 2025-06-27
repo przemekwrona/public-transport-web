@@ -1,0 +1,143 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "datasource": {
+          "sourcename": "openstreetmap",
+          "attribution": "© OpenStreetMap contributors",
+          "license": "Open Database License",
+          "url": "https://www.openstreetmap.org/copyright"
+        },
+        "country": "Poland",
+        "country_code": "pl",
+        "state": "Masovian Voivodeship",
+        "city": "Warsaw",
+        "postcode": "01-106",
+        "district": "Osiedle Sowińskiego",
+        "suburb": "Wola",
+        "quarter": "Ulrychów",
+        "street": "Nakielska",
+        "housenumber": "3",
+        "iso3166_2": "PL-14",
+        "lon": 20.9383168,
+        "lat": 52.230207,
+        "result_type": "building",
+        "formatted": "Nakielska 3, 01-106 Warsaw, Poland",
+        "address_line1": "Nakielska 3",
+        "address_line2": "01-106 Warsaw, Poland",
+        "timezone": {
+          "name": "Europe/Warsaw",
+          "offset_STD": "+01:00",
+          "offset_STD_seconds": 3600,
+          "offset_DST": "+02:00",
+          "offset_DST_seconds": 7200,
+          "abbreviation_STD": "CET",
+          "abbreviation_DST": "CEST"
+        },
+        "plus_code": "9G426WJQ+38",
+        "plus_code_short": "6WJQ+38 Warsaw, Masovian Voivodeship, Poland",
+        "rank": {
+          "importance": 0.00000999999999995449,
+          "popularity": 8.457243668189067,
+          "confidence": 0.9,
+          "confidence_city_level": 1,
+          "confidence_street_level": 1,
+          "confidence_building_level": 1,
+          "match_type": "full_match"
+        },
+        "place_id": "519149a18735f0344059b727486c771d4a40f00103f9016d91932002000000c00203"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.9383168,
+          52.230207
+        ]
+      },
+      "bbox": [
+        20.9382668,
+        52.230157,
+        20.9383668,
+        52.230257
+      ]
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "datasource": {
+          "sourcename": "openstreetmap",
+          "attribution": "© OpenStreetMap contributors",
+          "license": "Open Database License",
+          "url": "https://www.openstreetmap.org/copyright"
+        },
+        "name": "Onninen Express",
+        "country": "Poland",
+        "country_code": "pl",
+        "state": "Masovian Voivodeship",
+        "city": "Warsaw",
+        "postcode": "01-106",
+        "district": "Osiedle Sowińskiego",
+        "suburb": "Wola",
+        "quarter": "Ulrychów",
+        "street": "Nakielska",
+        "housenumber": "3",
+        "retail": "no",
+        "iso3166_2": "PL-14",
+        "lon": 20.9389281,
+        "lat": 52.2296317,
+        "result_type": "amenity",
+        "formatted": "Onninen Express, Nakielska 3, 01-106 Warsaw, Poland",
+        "address_line1": "Onninen Express",
+        "address_line2": "Nakielska 3, 01-106 Warsaw, Poland",
+        "category": "commercial.supermarket",
+        "timezone": {
+          "name": "Europe/Warsaw",
+          "offset_STD": "+01:00",
+          "offset_STD_seconds": 3600,
+          "offset_DST": "+02:00",
+          "offset_DST_seconds": 7200,
+          "abbreviation_STD": "CET",
+          "abbreviation_DST": "CEST"
+        },
+        "plus_code": "9G426WHQ+VH",
+        "plus_code_short": "6WHQ+VH Warsaw, Masovian Voivodeship, Poland",
+        "rank": {
+          "importance": 0.00000999999999995449,
+          "popularity": 8.404303658054898,
+          "confidence": 0.8,
+          "confidence_city_level": 1,
+          "confidence_street_level": 1,
+          "confidence_building_level": 1,
+          "match_type": "inner_part"
+        },
+        "place_id": "51a0cb8a975df0344059fccf5092641d4a40f00103f9016069cfe302000000c0020192030f4f6e6e696e656e2045787072657373"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.9389281,
+          52.2296317
+        ]
+      },
+      "bbox": [
+        20.9388781,
+        52.2295817,
+        20.9389781,
+        52.2296817
+      ]
+    }
+  ],
+  "query": {
+    "text": "Nakielska 3/1; 01-106 Warszawa; Polska",
+    "parsed": {
+      "housenumber": "3",
+      "street": "nakielska",
+      "postcode": "01-106",
+      "city": "warszawa",
+      "country": "polska",
+      "expected_type": "building"
+    }
+  }
+}
