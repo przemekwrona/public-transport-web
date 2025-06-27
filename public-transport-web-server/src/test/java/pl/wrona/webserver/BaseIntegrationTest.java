@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -24,9 +23,9 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.wrona.webserver.security.AppUserService;
 
-@Profile("test")
-@Sql({"/sql/init.sql"})
+@ActiveProfiles("test")
 @Testcontainers
+@Sql({"/sql/init.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = { WireMockConfig.class })
 public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {

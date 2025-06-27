@@ -7,4 +7,6 @@ import java.util.Set;
 public interface AppRoleRepository extends JpaRepository<AppRole, String> {
 
     Set<AppRole> findAppRolesByAppUsers(Set<AppUser> appUsers);
+
+    Set<AppRole> findAppRolesByRoleIsIn(Set<String> roles);
 }

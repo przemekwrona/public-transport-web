@@ -47,22 +47,22 @@ public class Agency {
     @Column(name = "agency_url")
     private String agencyUrl;
 
-    @Column(name = "texNumber")
+    @Column(name = "tax_number")
     private String texNumber;
 
     @Column(name = "street")
     private String street;
 
-    @Column(name = "houseNumber")
+    @Column(name = "house_number")
     private String houseNumber;
 
-    @Column(name = "flatNumber")
+    @Column(name = "flat_number")
     private String flatNumber;
 
-    @Column(name = "postalCode")
+    @Column(name = "postal_code")
     private String postalCode;
 
-    @Column(name = "postalCity")
+    @Column(name = "postal_city")
     private String postalCity;
 
     @Column(name = "created_at")
