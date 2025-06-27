@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/v1/geocode/search",
+    "queryParameters": {
+      "text": {
+        "equalTo": "Nakielska 3/1; 01-106 Warszawa; Polska"
+      },
+      "apiKey": {
+        "equalTo": "geoapify-api-key"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "geocode-01-106-warsaw-response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
