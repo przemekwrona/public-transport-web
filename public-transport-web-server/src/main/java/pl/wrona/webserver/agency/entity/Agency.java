@@ -21,6 +21,7 @@ import pl.wrona.webserver.agency.brigade.BrigadeEntity;
 import pl.wrona.webserver.agency.calendar.CalendarEntity;
 import pl.wrona.webserver.security.AppUser;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,6 +46,30 @@ public class Agency {
 
     @Column(name = "agency_url")
     private String agencyUrl;
+
+    @Column(name = "texNumber")
+    private String texNumber;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "houseNumber")
+    private String houseNumber;
+
+    @Column(name = "flatNumber")
+    private String flatNumber;
+
+    @Column(name = "postalCode")
+    private String postalCode;
+
+    @Column(name = "postalCity")
+    private String postalCity;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Column(name = "agency_timetable_url")
     private String agencyTimetableUrl;

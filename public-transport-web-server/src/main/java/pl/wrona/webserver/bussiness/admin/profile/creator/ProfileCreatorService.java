@@ -4,14 +4,12 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Agency;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -34,7 +32,14 @@ public class ProfileCreatorService {
         agency.setAgencyName(agencyAdminCreateAccountRequest.getCompanyName());
         agency.setAgencyCode(agencyAdminCreateAccountRequest.getCompanyCode());
         agency.setAppUser(savedAppUser);
+        agency.setTexNumber(agencyAdminCreateAccountRequest.getTaxNumber());
+        agency.setStreet(agencyAdminCreateAccountRequest.getStreet());
+        agency.setHouseNumber(agencyAdminCreateAccountRequest.getHouseNumber());
+        agency.setFlatNumber(agencyAdminCreateAccountRequest.getFlatNumber());
+        agency.setPostalCode(agencyAdminCreateAccountRequest.getPostalCode());
+        agency.setPostalCity(agencyAdminCreateAccountRequest.getPostalCity());
         agency.setUsers(Set.of(savedAppUser));
+        agency.setCreatedAt(LocalDateTime.now());
 //        agency.getUsers().addAll(superUsers);
 
         Agency savedAgency = profileCreatorAgencyRepository.save(agency);
