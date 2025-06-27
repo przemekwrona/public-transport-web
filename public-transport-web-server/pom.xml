@@ -123,14 +123,6 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
 
-        <!-- iText 7 PDF -->
-<!--        <dependency>-->
-<!--            <groupId>com.itextpdf</groupId>-->
-<!--            <artifactId>itext7-core</artifactId>-->
-<!--            <version>${itext.version}</version>-->
-<!--            <type>pom</type>-->
-<!--        </dependency>-->
-
         <!-- Open HTML to PDF -->
         <dependency>
             <groupId>com.openhtmltopdf</groupId>
