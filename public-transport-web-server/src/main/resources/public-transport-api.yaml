@@ -747,6 +747,18 @@ components:
           type: string
         companyCode:
           type: string
+        taxNumber:
+          type: string
+        street:
+          type: string
+        houseNumber:
+          type: string
+        flatNumber:
+          type: string
+        postalCity:
+          type: string
+        postalCode:
+          type: string
         accountName:
           type: string
         accountPassword:
