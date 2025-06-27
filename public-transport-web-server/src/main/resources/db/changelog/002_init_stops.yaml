@@ -61,7 +61,7 @@ databaseChangeLog:
   - changeSet:
       id: insert-stops
       author: pwrona
-      context: "!test"
+      context: "local,dev,qa,prod"
       changes:
         - createIndex:
             indexName: idx_stop_localization

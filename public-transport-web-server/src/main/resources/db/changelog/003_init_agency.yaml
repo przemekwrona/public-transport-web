@@ -48,19 +48,19 @@ databaseChangeLog:
                   name: street
                   type: varchar(30)
               - column:
-                  name: houseNumber
+                  name: house_number
                   type: varchar(5)
               - column:
-                  name: flatNumber
+                  name: flat_number
                   type: varchar(5)
               - column:
-                  name: postalCode
+                  name: postal_code
                   type: varchar(5)
               - column:
-                  name: postalCity
+                  name: postal_city
                   type: varchar(30)
               - column:
-                  name: taxNumber
+                  name: tax_number
                   type: varchar(15)
               - column:
                   name: created_at

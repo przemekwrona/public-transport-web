@@ -1,5 +1,6 @@
 package pl.wrona.webserver.security;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -49,7 +50,7 @@ public class AppUser implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
 
-    @ManyToMany(mappedBy = "appUsers", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "appUsers", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<AppRole> appRoles;
 
     @ManyToMany(mappedBy = "users")

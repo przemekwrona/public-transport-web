@@ -21,6 +21,8 @@ databaseChangeLog:
               - column:
                   name: username
                   type: varchar(30)
+                  constraints:
+                    unique: true
               - column:
                   name: email
                   type: varchar(30)

@@ -10,6 +10,7 @@ import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -24,9 +25,11 @@ public class ProfileCreatorService {
 
     @Transactional
     public Status createNewAccount(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
-        Set<AppUser> superUsers = findSuperUsers();
-
         AppUser savedAppUser = createAppUser(agencyAdminCreateAccountRequest);
+
+        Set<AppUser> superUsers = findSuperUsers();
+        Set<AppUser> agencyVisibility = new HashSet<>(superUsers);
+        agencyVisibility.add(savedAppUser);
 
         Agency agency = new Agency();
         agency.setAgencyName(agencyAdminCreateAccountRequest.getCompanyName());
@@ -38,9 +41,8 @@ public class ProfileCreatorService {
         agency.setFlatNumber(agencyAdminCreateAccountRequest.getFlatNumber());
         agency.setPostalCode(agencyAdminCreateAccountRequest.getPostalCode());
         agency.setPostalCity(agencyAdminCreateAccountRequest.getPostalCity());
-        agency.setUsers(Set.of(savedAppUser));
+        agency.setUsers(agencyVisibility);
         agency.setCreatedAt(LocalDateTime.now());
-//        agency.getUsers().addAll(superUsers);
 
         Agency savedAgency = profileCreatorAgencyRepository.save(agency);
 
@@ -52,7 +54,7 @@ public class ProfileCreatorService {
         return profileCreatorAppUserRepository.findByAppRolesIsIn(superUserRoles);
     }
 
-    public AppUser createAppUser(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
+    private AppUser createAppUser(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
         Set<AppRole> defaultAgencyRole = profileCreatorAppRolesRepository.findAllByRoleIsIn(Set.of("AGENCY_OWNER"));
 
         AppUser appUser = new AppUser();
@@ -62,6 +64,6 @@ public class ProfileCreatorService {
         appUser.setPassword(agencyAdminCreateAccountRequest.getAccountPassword());
         appUser.setAppRoles(defaultAgencyRole);
 
-        return profileCreatorAppUserRepository.saveAndFlush(appUser);
+        return profileCreatorAppUserRepository.save(appUser);
     }
 }

@@ -2,6 +2,7 @@ package pl.wrona.webserver.security;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -30,7 +31,7 @@ public class AppRole implements GrantedAuthority {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "app_user_app_role",
             joinColumns = @JoinColumn(name = "app_role_id"),
             inverseJoinColumns = @JoinColumn(name = "app_user_id"))
