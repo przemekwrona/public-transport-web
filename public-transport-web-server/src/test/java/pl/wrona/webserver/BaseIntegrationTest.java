@@ -1,5 +1,6 @@
 package pl.wrona.webserver;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import org.igeolab.iot.pt.server.api.model.LoginAppUserRequest;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
@@ -25,6 +28,7 @@ import pl.wrona.webserver.security.AppUserService;
 @Sql({"/sql/init.sql"})
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = { WireMockConfig.class })
 public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
 
     @LocalServerPort
@@ -32,6 +36,9 @@ public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.
 
     @Container
     public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
+
+    @Autowired
+    protected WireMockServer mockGeoapifyClient;
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
