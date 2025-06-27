@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
+@use '@angular/material' as mat;
+
 // Main style
 @tailwind base;
 @tailwind components;
@@ -22,7 +24,6 @@
   padding-bottom: 0.75rem;
 }
 
-//@use '@angular/material' as mat;
 //$dark-primary-text: rgba(black, 0.87);
 //$light-primary-text: white;
 //
@@ -132,6 +133,35 @@ html {
 .user-access-bg {
   background-image: url('assets/media/images/2600x1200/bg-5.png');
 }
+
 .dark .user-access-bg {
   background-image: url('assets/media/images/2600x1200/bg-5-dark.png');
 }
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  .snackbar-error {
+    @include mat.snack-bar-overrides((
+            button-color: #991b1b,
+            supporting-text-color: #991b1b,
+            container-color: #fef2f2
+    ));
+  }
+
+  .snackbar-success {
+    @include mat.snack-bar-overrides((
+            button-color: #065f46,
+            supporting-text-color: #065f46,
+            container-color: #ecfdf5
+    ));
+  }
+
+  .snackbar-info {
+    @include mat.snack-bar-overrides((
+            button-color: #1e40af,
+            supporting-text-color: #1e40af,
+            container-color: #eff6ff
+    ));
+  }
+}
+
