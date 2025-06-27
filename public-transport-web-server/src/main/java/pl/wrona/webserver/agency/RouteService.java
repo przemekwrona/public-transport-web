@@ -69,4 +69,7 @@ public class RouteService {
         return new Routes().items(items);
     }
 
+    public RouteEntity getRouteByLineAndName(String line, String name) {
+        return this.routeRepository.findByAgencyCodeAndRouteId(agencyService.getLoggedAgency(), line, name);
+    }
 }

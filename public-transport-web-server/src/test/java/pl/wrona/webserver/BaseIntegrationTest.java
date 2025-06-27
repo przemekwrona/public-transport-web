@@ -56,7 +56,7 @@ public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.
     void setUp() {
         RestAssured.baseURI = "http://localhost:" + port;
 
-        LoginAppUserResponse loginResponse = appUserService.login(new LoginAppUserRequest().username("user").password("welcome1"));
+        LoginAppUserResponse loginResponse = appUserService.login(new LoginAppUserRequest().username("pwrona").password("welcome1"));
         authHeader = new Header("Authorization", "Bearer %s".formatted(loginResponse.getToken()));
     }
 
