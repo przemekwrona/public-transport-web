@@ -65,6 +65,12 @@ public class Agency {
     @Column(name = "postal_city")
     private String postalCity;
 
+    @Column(name = "latitude")
+    private double latitude;
+
+    @Column(name = "longitude")
+    private double longitude;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

@@ -6,6 +6,8 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Agency;
+import pl.wrona.webserver.client.geoapify.Feature;
+import pl.wrona.webserver.client.geoapify.GeoapifyService;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
 
@@ -22,9 +24,12 @@ public class ProfileCreatorService {
     private final ProfileCreatorAppUserRepository profileCreatorAppUserRepository;
     private final ProfileCreatorAgencyRepository profileCreatorAgencyRepository;
     private final ProfileCreatorAppRolesRepository profileCreatorAppRolesRepository;
+    private final GeoapifyService geoapifyService;
 
     @Transactional
     public Status createNewAccount(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
+        Feature addressFeature = geoapifyService.mostProbableAddress(agencyAdminCreateAccountRequest.getStreet(), agencyAdminCreateAccountRequest.getHouseNumber(), agencyAdminCreateAccountRequest.getFlatNumber(), agencyAdminCreateAccountRequest.getPostalCode(), agencyAdminCreateAccountRequest.getPostalCity());
+
         AppUser savedAppUser = createAppUser(agencyAdminCreateAccountRequest);
 
         Set<AppUser> superUsers = findSuperUsers();
@@ -41,6 +46,8 @@ public class ProfileCreatorService {
         agency.setFlatNumber(agencyAdminCreateAccountRequest.getFlatNumber());
         agency.setPostalCode(agencyAdminCreateAccountRequest.getPostalCode());
         agency.setPostalCity(agencyAdminCreateAccountRequest.getPostalCity());
+        agency.setLatitude(addressFeature.geometry().coordinates().get(1));
+        agency.setLongitude(addressFeature.geometry().coordinates().get(0));
         agency.setUsers(agencyVisibility);
         agency.setCreatedAt(LocalDateTime.now());
 
