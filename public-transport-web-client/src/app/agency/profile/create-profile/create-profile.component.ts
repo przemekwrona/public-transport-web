@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {RouterModule} from "@angular/router";
+import {Router, RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {AgencyAdminCreateAccountRequest, AgencyService} from "../../../generated/public-transport";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
     selector: 'app-create-profile',
@@ -23,7 +24,7 @@ export class CreateProfileComponent {
 
     public agency: AgencyAdminCreateAccountRequest = {} as AgencyAdminCreateAccountRequest;
 
-    constructor(private fb: FormBuilder, private agencyService: AgencyService) {
+    constructor(private fb: FormBuilder, private agencyService: AgencyService, private notificationService: NotificationService, private router: Router) {
         this.createProfileForm = this.fb.group({
             companyName: ['', [Validators.required, Validators.minLength(3)]],
             companyCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
@@ -56,8 +57,11 @@ export class CreateProfileComponent {
             agency.accountPassword = this.createProfileForm.get('accountPassword').value;
 
             this.agencyService.createNewAccount(agency).subscribe(response => {
+                this.notificationService.showSuccess('Konto zostało utworzone');
+                this.router.navigate(['/admin/agency/profiles']).then(() => {});
             });
         } else {
+            this.notificationService.showError('Formularz został błędnie uzupełniony');
             this.createProfileForm.markAllAsTouched();
         }
     }
