@@ -24,4 +24,12 @@ public class GeoapifyService {
                 .max(Comparator.comparing(feature -> feature.properties().rank().confidence()))
                 .orElse(null);
     }
+
+    public Feature mostProbableAddress(String street, String houseNumber, String flatNumber, String postalCode, String postalCity) {
+        String address = flatNumber == null || flatNumber.trim().isEmpty()
+                ? "%s %s; %s %s; Polska".formatted(street, houseNumber, postalCode, postalCity)
+                : "%s %s/%s; %s %s; Polska".formatted(street, houseNumber, flatNumber, postalCode, postalCity);
+
+        return mostProbableAddress(address);
+    }
 }

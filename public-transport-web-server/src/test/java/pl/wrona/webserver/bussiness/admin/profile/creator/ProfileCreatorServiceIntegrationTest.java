@@ -46,7 +46,7 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
                 .street("Nakielska")
                 .houseNumber("3")
                 .flatNumber("1")
-                .postalCode("01106")
+                .postalCode("01-106")
                 .postalCity("Warszawa");
 
         // when
@@ -63,8 +63,10 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
         assertThat(createdAgency.getStreet()).isEqualTo("Nakielska");
         assertThat(createdAgency.getHouseNumber()).isEqualTo("3");
         assertThat(createdAgency.getFlatNumber()).isEqualTo("1");
-        assertThat(createdAgency.getPostalCode()).isEqualTo("01106");
+        assertThat(createdAgency.getPostalCode()).isEqualTo("01-106");
         assertThat(createdAgency.getPostalCity()).isEqualTo("Warszawa");
+        assertThat(createdAgency.getLongitude()).isEqualTo(20.9383168);
+        assertThat(createdAgency.getLatitude()).isEqualTo(52.230207);
         assertThat(createdAgency.getUsers().stream().map(AppUser::getUsername).toList()).hasSize(2).hasSameElementsAs(List.of("jkowalski", "pwrona"));
 
         Set<AppRole> createdUserAppRoles = appRoleRepository.findAppRolesByRoleIsIn(Set.of("AGENCY_OWNER"));
