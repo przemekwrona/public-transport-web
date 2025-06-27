@@ -44,8 +44,9 @@ export class CreateProfileComponent {
             const agency: AgencyAdminCreateAccountRequest = {} as AgencyAdminCreateAccountRequest;
             agency.companyName = this.createProfileForm.get('companyName').value;
             agency.companyCode = this.createProfileForm.get('companyCode').value;
-            agency.taxNumber = this.createProfileForm.get('taxNumber').value;
+            agency.taxNumber = this.createProfileForm.get('taxIdentificationNumber').value;
 
+            agency.street = this.createProfileForm.get('street').value;
             agency.houseNumber = this.createProfileForm.get('houseNumber').value;
             agency.flatNumber = this.createProfileForm.get('flatNumber').value;
             agency.postalCode = this.createProfileForm.get('postalCode').value;
