@@ -116,13 +116,96 @@
                                                href="html/demo1/network/user-cards/mini-cards.html">
                                                 Click or Drag & Drop
                                             </a>
-                                            <span class="text-2xs text-gray-700 text-nowrap">
-            SVG,PNG, JPG (max. 800x400)
-           </span>
+                                            <span class="text-2xs text-gray-700 text-nowrap">SVG,PNG, JPG (max. 800x400)</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="border-t border-gray-200 my-7.5"></div>
+
+                            <h1>Adres prowadzonej działalności gospodarczej</h1>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Ulica/Miejscowość</div>
+                                    @if (this.validityCheckRequired('taxIdentificationNumber')) {
+                                        <span class="text-red-700 text-2sm">Podaj Kod pocztowy</span>
+                                    } @else {
+                                    <span class="text-gray-700 text-2sm">Kod pocztowy</span>
+                                }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('taxIdentificationNumber')}" class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="taxIdentificationNumber"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Numer domu</div>
+                                    @if (this.validityCheckRequired('taxIdentificationNumber')) {
+                                        <span class="text-red-700 text-2sm">Podaj Kod pocztowy</span>
+                                    } @else {
+                                    <span class="text-gray-700 text-2sm">Kod pocztowy</span>
+                                }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('taxIdentificationNumber')}" class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="taxIdentificationNumber"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Numer mieszkania</div>
+                                    @if (this.validityCheckRequired('taxIdentificationNumber')) {
+                                        <span class="text-red-700 text-2sm">Podaj Kod pocztowy</span>
+                                    } @else {
+                                    <span class="text-gray-700 text-2sm">Kod pocztowy</span>
+                                }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('taxIdentificationNumber')}" class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="taxIdentificationNumber"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Kod pocztowy</div>
+                                    @if (this.validityCheckRequired('postalCode')) {
+                                        <span class="text-red-700 text-2sm">Podaj Kod pocztowy</span>
+                                    } @else {
+                                    <span class="text-gray-700 text-2sm">Kod pocztowy</span>
+                                }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('postalCode')}" class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="postalCode"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Miasto</div>
+                                    @if (this.validityCheckRequired('postalCity')) {
+                                        <span class="text-red-700 text-2sm">Podaj Miasto</span>
+                                    } @else {
+                                    <span class="text-gray-700 text-2sm">Miasto</span>
+                                }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('postalCity')}" class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="postalCity"/>
+                                </label>
+                            </div>
+
                             <div class="border-t border-gray-200 my-7.5"></div>
 
                             <div class="flex flex-wrap justify-between gap-5">
