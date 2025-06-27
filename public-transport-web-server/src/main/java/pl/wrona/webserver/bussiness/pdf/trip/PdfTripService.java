@@ -1,33 +1,49 @@
 package pl.wrona.webserver.bussiness.pdf.trip;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.AreaBreak;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.properties.AreaBreakType;
-import com.itextpdf.layout.properties.TextAlignment;
+//import com.itextpdf.io.font.FontProgramFactory;
+//import com.itextpdf.kernel.font.PdfFontFactory;
+//import com.itextpdf.kernel.geom.PageSize;
+//import com.itextpdf.kernel.pdf.PdfDocument;
+//import com.itextpdf.kernel.pdf.PdfWriter;
+//import com.itextpdf.layout.element.AreaBreak;
+//import com.itextpdf.layout.element.Cell;
+//import com.itextpdf.layout.element.Paragraph;
+//import com.itextpdf.layout.element.Table;
+//import com.itextpdf.layout.properties.AreaBreakType;
+//import com.itextpdf.layout.properties.TextAlignment;
+//import com.itextpdf.styledxmlparser.jsoup.Jsoup;
+//import com.itextpdf.styledxmlparser.jsoup.nodes.Document;
+
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.BrigadeTrip;
-import org.igeolab.iot.pt.server.api.model.StopTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import pl.wrona.webserver.agency.AgencyService;
+import pl.wrona.webserver.agency.RouteService;
 import pl.wrona.webserver.agency.StopTimeService;
+import pl.wrona.webserver.agency.TripService;
 import pl.wrona.webserver.agency.brigade.BrigadeTripEntity;
 import pl.wrona.webserver.agency.entity.StopTimeEntity;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import static com.itextpdf.kernel.pdf.PdfName.BaseFont;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import pl.wrona.webserver.agency.entity.TripEntity;
+import pl.wrona.webserver.agency.entity.TripVariantMode;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class PdfTripService {
@@ -36,88 +52,75 @@ public class PdfTripService {
 
     private final PdfTripTripRepository pdfTripTripRepository;
     private final PdfTripStopTimeRepository pdfTripStopTimeRepository;
+    private final RouteService routeService;
     private final PdfTripBrigadeTripRepository pdfTripBrigadeTripRepository;
     private final StopTimeService stopTimeService;
+    private final TemplateEngine templateEngine;
+    private final ResourceLoader resourceLoader;
+    private final AgencyService agencyService;
 
-    public Resource downloadTripPdf(String line, String name) {
-        // Create output stream
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    public Map<String, Object> routeVariables(String line, String name) {
+        Map<String, Object> variables = new HashMap<>();
 
-        // Initialize PDF writer with byte stream
-        PdfWriter writer = new PdfWriter(byteArrayOutputStream);
-        PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
+        var timetables = pdfTripTripRepository.findAllByRoute(line, name).stream()
+                .map(mode -> processTimetable(mode.getLine(), mode.getName(), mode.getMode()))
+                .toList();
 
-        document.setFontSize(8);
+        var agency = this.agencyService.getLoggedAgency();
 
-        pdfTripTripRepository.findAllByRoute(line, name).forEach(trip -> {
-            var brigadeTrips = pdfTripBrigadeTripRepository.findByRootTrip(trip);
-            var firstBrigadeTrip = brigadeTrips.get(0);
+        variables.put("timetables", timetables);
+        variables.put("now", LocalDateTime.now());
+        variables.put("companyName", agency.getAgencyName());
 
-            var stopTimes = stopTimeService.getAllStopTimesByTrip(firstBrigadeTrip.getRootTrip());
-            var stopTimeByStop = stopTimes.stream().collect(Collectors.groupingBy(StopTimeEntity::getStopEntity));
-
-            List<Float> columnWidths = brigadeTrips.stream()
-                    .map(i -> 30F)
-                    .collect(Collectors.toCollection(ArrayList::new));
-
-            // Adjust the last column to fill remaining space
-            columnWidths.add(600F - columnWidths.size() * 30F);
-
-            // Sort in descending order
-            List<Float> sorted = columnWidths.stream()
-                    .sorted(Collections.reverseOrder())
-                    .toList();
-
-            // Convert to float[]
-            float[] columnWidthsArray = new float[sorted.size()];
-            for (int i = 0; i < sorted.size(); i++) {
-                columnWidthsArray[i] = sorted.get(i);
-            }
-
-            Table table = new Table(columnWidthsArray);
-
-            // Add table headers
-            table.addHeaderCell(new Cell().add(new Paragraph("Przystanek")));
-
-            brigadeTrips.forEach(b -> {
-                table.addHeaderCell(new Cell().add(new Paragraph("D").setTextAlignment(TextAlignment.CENTER)));
-            });
-
-            stopTimes.forEach(stopTime -> {
-                // Add rows
-                table.addCell(new Cell().add(new Paragraph(stopTime.getStopEntity().getName()).setTextAlignment(TextAlignment.LEFT)));
-
-                for (BrigadeTripEntity brigadeTrip : brigadeTrips) {
-                    table.addCell(stopTime.getDepartureTime(brigadeTrip.getDepartureTimeInSeconds()).format(HHMM))
-                            .setTextAlignment(TextAlignment.CENTER);
-                }
-            });
-
-            document.add(new Paragraph("%s: %s-%s".formatted("", trip.getOriginStopName(), trip.getDestinationStopName())));
-
-            // Add table to document
-            document.add(table);
-
-            document.add(new Paragraph("%s: %s".formatted("D", "kursuje od poniedziałku do piątku")));
-
-            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-        });
-
-
-        // Close document (important!)
-        document.close();
-
-        // Get PDF as byte array
-        byte[] pdfBytes = byteArrayOutputStream.toByteArray();
-
-        // Optional: Do something with the PDF bytes
-        System.out.println("PDF generated. Size in bytes: " + pdfBytes.length);
-
-//        PdfTripBuilder pdfTripBuilder = new PdfTripBuilder();
-
-        return new ByteArrayResource(pdfBytes);
+        return variables;
     }
 
+    private PdfTripTimetable processTimetable(String line, String name, TripVariantMode mode) {
 
+        List<TripEntity> trips = pdfTripTripRepository.findAllByRoute(line, name, mode);
+
+        TripEntity mainTrip = trips.stream().filter(TripEntity::isMainVariant).findFirst().orElse(new TripEntity());
+
+        PdfTripTimetable timetable = new PdfTripTimetable(line, name, mainTrip.getOriginStopName(), mainTrip.getDestinationStopName(), new ArrayList<>(), new LinkedHashMap<>());
+
+        for (TripEntity trip : trips) {
+            for (BrigadeTripEntity brigadeTrip : pdfTripBrigadeTripRepository.findByRootTrip(trip)) {
+                stopTimeService.getAllStopTimesByTrip(brigadeTrip.getRootTrip())
+                        .forEach(stopTime -> {
+                            PdfStopDeparture pdfDeparture = new PdfStopDeparture(stopTime.getStopEntity().getStopId(), stopTime.getStopEntity().getName(), new ArrayList<>());
+                            timetable.putStopIfAbsent(pdfDeparture);
+                        });
+
+                stopTimeService.getAllStopTimesByTrip(brigadeTrip.getRootTrip()).stream()
+                        .map((StopTimeEntity stopTime) -> new PdfDeparture(stopTime.getStopEntity().getStopId(),
+                                stopTime.getStopEntity().getName(),
+                                stopTime.getStopTimeId().getStopSequence(),
+                                brigadeTrip.getBrigade().getCalendar().getDesignation(),
+                                LocalTime.ofSecondOfDay(brigadeTrip.getDepartureTimeInSeconds()).plusSeconds(stopTime.getDepartureSecond()).format(HHMM)))
+                        .forEach(timetable::putDeparture);
+            }
+        }
+
+        return timetable;
+    }
+
+    public Resource downloadTripPdf(String line, String name) {
+        Context context = new Context();
+        context.setVariables(routeVariables(line, name));
+        String html = templateEngine.process("line/route-timetable.html", context);
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
+            builder.useFont(resourceLoader.getResource("classpath:/templates/Roboto-Light.ttf").getFile(), "Roboto");
+
+            builder.withHtmlContent(html, null);
+            builder.toStream(outputStream);
+            builder.run();
+
+            return new ByteArrayResource(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating PDF", e);
+        }
+    }
 }

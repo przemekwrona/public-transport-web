@@ -24,6 +24,7 @@
         <java.version>17</java.version>
 
         <itext.version>7.2.5</itext.version>
+        <openhtmltopdf.version>1.0.10</openhtmltopdf.version>
 
         <lucene-spatial-extras.version>9.12.0</lucene-spatial-extras.version>
     </properties>
@@ -123,11 +124,34 @@
         </dependency>
 
         <!-- iText 7 PDF -->
+<!--        <dependency>-->
+<!--            <groupId>com.itextpdf</groupId>-->
+<!--            <artifactId>itext7-core</artifactId>-->
+<!--            <version>${itext.version}</version>-->
+<!--            <type>pom</type>-->
+<!--        </dependency>-->
+
+        <!-- Open HTML to PDF -->
         <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itext7-core</artifactId>
-            <version>${itext.version}</version>
-            <type>pom</type>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-core</artifactId>
+            <version>${openhtmltopdf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-pdfbox</artifactId>
+            <version>${openhtmltopdf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-slf4j</artifactId>
+            <version>${openhtmltopdf.version}</version>
+        </dependency>
+
+        <!-- Thymeleaf -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
         <dependency>
