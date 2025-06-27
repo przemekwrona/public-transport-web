@@ -66,10 +66,10 @@ public class Agency {
     private String postalCity;
 
     @Column(name = "latitude")
-    private double latitude;
+    private Double latitude;
 
     @Column(name = "longitude")
-    private double longitude;
+    private Double longitude;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
