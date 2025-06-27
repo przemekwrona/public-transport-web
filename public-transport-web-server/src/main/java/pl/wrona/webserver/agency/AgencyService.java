@@ -12,6 +12,9 @@ import pl.wrona.webserver.security.AppUser;
 import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminDetail;
 
+import java.time.ZoneOffset;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class AgencyService {
@@ -61,6 +64,7 @@ public class AgencyService {
         var agencies = agencyRepository.countRoutesByAgency().stream().map(groupedAgency -> new AgencyAdminDetail()
                         .agencyCode(groupedAgency.getAgency().getAgencyCode())
                         .agencyName(groupedAgency.getAgency().getAgencyName())
+                        .createdAt(Optional.of(groupedAgency.getAgency()).map(Agency::getCreatedAt).map(createdAt -> createdAt.atOffset(ZoneOffset.UTC)).orElse(null))
                         .routesNo(groupedAgency.getRouteCount()))
                 .toList();
 

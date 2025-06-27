@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.admin.profile.creator;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Agency;
@@ -27,6 +28,7 @@ public class ProfileCreatorService {
     private final ProfileCreatorAgencyRepository profileCreatorAgencyRepository;
     private final ProfileCreatorAppRolesRepository profileCreatorAppRolesRepository;
     private final GeoapifyService geoapifyService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Status createNewAccount(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
@@ -72,8 +74,12 @@ public class ProfileCreatorService {
         appUser.setCreatedAt(LocalDateTime.now());
         appUser.setUpdatedAt(LocalDateTime.now());
         appUser.setUsername(agencyAdminCreateAccountRequest.getAccountName());
-        appUser.setPassword(agencyAdminCreateAccountRequest.getAccountPassword());
+        appUser.setPassword(passwordEncoder.encode(agencyAdminCreateAccountRequest.getAccountPassword()));
         appUser.setAppRoles(defaultAgencyRole);
+        appUser.setAccountNonExpired(true);
+        appUser.setAccountNonLocked(true);
+        appUser.setEnabled(true);
+        appUser.setCredentialsNonExpired(true);
 
         return profileCreatorAppUserRepository.save(appUser);
     }

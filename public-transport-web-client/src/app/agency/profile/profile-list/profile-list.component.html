@@ -33,14 +33,6 @@
                             Members
                         </h3>
                         <div class="flex items-center gap-5">
-                            <div class="flex items-center gap-2">
-                                <label class="switch switch-sm">
-              <span class="switch-label">
-               Enforce 2FA
-              </span>
-                                    <input name="check" type="checkbox" value="1"/>
-                                </label>
-                            </div>
                             <div class="menu" data-menu="true">
                                 <div class="menu-item" data-menu-item-offset="0, 10px"
                                      data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown"
@@ -109,9 +101,7 @@
                                                 <div class="menu-item">
                                                     <a class="menu-link"
                                                        href="html/demo1/account/home/settings-sidebar.html">
-                   <span class="menu-title">
-                    Excel
-                   </span>
+                                                        <span class="menu-title">Excel</span>
                                                     </a>
                                                 </div>
                                             </div>
@@ -119,13 +109,8 @@
                                         <div class="menu-item">
                                             <a class="menu-link"
                                                href="html/demo1/account/security/privacy-settings.html">
-                 <span class="menu-icon">
-                  <i class="ki-filled ki-setting-3">
-                  </i>
-                 </span>
-                                                <span class="menu-title">
-                  Settings
-                 </span>
+                                                <span class="menu-icon"><i class="ki-filled ki-setting-3"></i></span>
+                                                <span class="menu-title">Settings</span>
                                             </a>
                                         </div>
                                     </div>
@@ -141,13 +126,10 @@
                                     <th class="text-start font-medium min-w-52">
                                         Name
                                     </th>
-                                    <th class="text-end font-medium min-w-36">
-                                        Role
-                                    </th>
                                     <th class="text-end font-medium min-w-32">
                                         2FA
                                     </th>
-                                    <th class="text-end font-medium min-w-20">
+                                    <th class="text-end font-medium min-w-32">
                                         Joined
                                     </th>
                                     <th class="min-w-16">
@@ -169,13 +151,10 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <span class="badge badge-sm badge-outline">Project Member</span>
-                                        </td>
-                                        <td class="text-end">
                                             <span class="badge badge-sm badge-outline badge-danger">Disabled</span>
                                         </td>
                                         <td class="text-end text-gray-700 text-sm">
-                                            Today
+                                            {{ agency?.createdAt | date:'yyyy-MMM-dd' }}
                                         </td>
                                         <td class="text-end">
                                             <div class="menu inline-flex" data-menu="true">
@@ -192,61 +171,34 @@
                                                          data-menu-dismiss="true">
                                                         <div class="menu-item">
                                                             <a class="menu-link" href="#">
-                    <span class="menu-icon">
-                     <i class="ki-filled ki-search-list">
-                     </i>
-                    </span>
-                                                                <span class="menu-title">
-                     View
-                    </span>
+                                                                <span class="menu-icon"><i class="ki-filled ki-search-list"></i></span>
+                                                                <span class="menu-title">View</span>
                                                             </a>
                                                         </div>
                                                         <div class="menu-item">
                                                             <a class="menu-link" href="#">
-                    <span class="menu-icon">
-                     <i class="ki-filled ki-file-up">
-                     </i>
-                    </span>
-                                                                <span class="menu-title">
-                     Export
-                    </span>
+                                                                <span class="menu-icon"><i class="ki-filled ki-file-up"></i></span>
+                                                                <span class="menu-title">Export</span>
                                                             </a>
                                                         </div>
-                                                        <div class="menu-separator">
-                                                        </div>
+                                                        <div class="menu-separator"></div>
                                                         <div class="menu-item">
                                                             <a class="menu-link" href="#">
-                    <span class="menu-icon">
-                     <i class="ki-filled ki-pencil">
-                     </i>
-                    </span>
-                                                                <span class="menu-title">
-                     Edit
-                    </span>
+                                                                <span class="menu-icon"><i class="ki-filled ki-pencil"></i></span>
+                                                                <span class="menu-title">Edit</span>
                                                             </a>
                                                         </div>
                                                         <div class="menu-item">
                                                             <a class="menu-link" href="#">
-                    <span class="menu-icon">
-                     <i class="ki-filled ki-copy">
-                     </i>
-                    </span>
-                                                                <span class="menu-title">
-                     Make a copy
-                    </span>
+                                                                <span class="menu-icon"><i class="ki-filled ki-copy"></i></span>
+                                                                <span class="menu-title">Make a copy</span>
                                                             </a>
                                                         </div>
-                                                        <div class="menu-separator">
-                                                        </div>
+                                                        <div class="menu-separator"></div>
                                                         <div class="menu-item">
                                                             <a class="menu-link" href="#">
-                    <span class="menu-icon">
-                     <i class="ki-filled ki-trash">
-                     </i>
-                    </span>
-                                                                <span class="menu-title">
-                     Remove
-                    </span>
+                                                                <span class="menu-icon"><i class="ki-filled ki-trash"></i></span>
+                                                                <span class="menu-title">Remove</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -260,9 +212,7 @@
                         </div>
                     </div>
                     <div class="card-footer justify-center">
-                        <a class="btn btn-link" href="">
-                            View 64 more
-                        </a>
+                        <a class="btn btn-link" href=""><!-- View 64 more--></a>
                     </div>
                 </div>
             </div>
