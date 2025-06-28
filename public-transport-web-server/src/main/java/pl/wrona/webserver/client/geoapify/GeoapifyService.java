@@ -36,7 +36,7 @@ public class GeoapifyService {
         return mostProbableAddress(address);
     }
 
-    public RoutingResponse route(String waypoints) {
-        return this.geoapifyClient.routing(waypoints, "drive", geoapifyApiKey).getBody();
+    public RoutingResponse route(String waypoints, int maxSpeed) {
+        return this.geoapifyClient.routing(waypoints, "bus", maxSpeed, geoapifyApiKey).getBody();
     }
 }
