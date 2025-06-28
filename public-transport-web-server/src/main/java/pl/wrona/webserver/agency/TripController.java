@@ -6,7 +6,6 @@ import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
-import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.igeolab.iot.pt.server.api.model.Trips;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
@@ -14,6 +13,7 @@ import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import pl.wrona.webserver.bussiness.trip.measure.TripDistanceMeasureService;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -23,6 +23,7 @@ public class TripController implements TripApi {
 
     private final TripService tripService;
     private final TripQueryService tripQueryService;
+    private final TripDistanceMeasureService tripDistanceMeasureService;
 
     @Override
     public ResponseEntity<Status> createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
@@ -52,10 +53,5 @@ public class TripController implements TripApi {
     @Override
     public ResponseEntity<GetAllTripsResponse> getTripsByLineOrName(String filter) {
         return ResponseEntity.ok(tripQueryService.getTripsByLineOrName(filter));
-    }
-
-    @Override
-    public ResponseEntity<Trip> measureDistance(Trip trips) {
-        return ResponseEntity.ok(tripService.measureDistance(trips));
     }
 }
