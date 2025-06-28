@@ -3,8 +3,7 @@ import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {find} from "lodash";
 
-import {StopService} from "./stop.service";
-import {CenterPoint, Stop, StopsResponse} from "../../generated/public-transport";
+import {CenterPoint, Stop, StopsResponse, StopsService} from "../../generated/public-transport";
 import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 
@@ -34,7 +33,7 @@ export class StopsComponent implements OnInit, AfterViewInit {
     public stops: Stop[] = [];
     public lastClickedStop: Stop = {} as Stop;
 
-    constructor(private stopService: StopService, private authService: AuthService, private route: ActivatedRoute) {
+    constructor(private stopsService: StopsService, private authService: AuthService, private route: ActivatedRoute) {
     }
 
     public isAdmin(): boolean {
@@ -84,7 +83,7 @@ export class StopsComponent implements OnInit, AfterViewInit {
     private reloadStops(map: Map) {
         if (map.getZoom() > 11) {
             const bounds = map.getBounds();
-            this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
+            this.stopsService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
                 const stopMarkers: StopMarker[] = response.stops?.map(stop => {
                     const stopMarker: StopMarker = stop.isBdot10k
                         ? L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON_BDOT, title: stop.name}) as StopMarker
