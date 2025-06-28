@@ -3,6 +3,9 @@ package pl.wrona.webserver.client.geoapify;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.client.geoapify.geocode.Feature;
+import pl.wrona.webserver.client.geoapify.geocode.GeoResponse;
+import pl.wrona.webserver.client.geoapify.routing.RoutingResponse;
 
 import java.util.Comparator;
 
@@ -31,5 +34,9 @@ public class GeoapifyService {
                 : "%s %s/%s; %s %s; Polska".formatted(street, houseNumber, flatNumber, postalCode, postalCity);
 
         return mostProbableAddress(address);
+    }
+
+    public RoutingResponse route(String waypoints) {
+        return this.geoapifyClient.routing(waypoints, "drive", geoapifyApiKey).getBody();
     }
 }
