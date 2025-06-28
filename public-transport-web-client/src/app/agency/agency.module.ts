@@ -20,13 +20,14 @@ import {CalendarsModule} from "./calendars/calendars.module";
     declarations: [
         AgencyComponent,
         FooterComponent,
-        SidebarComponent
     ],
     exports: [
-        AgencyComponent
+        AgencyComponent,
+        SidebarComponent
     ],
     imports: [
         CommonModule,
+        SidebarComponent,
         HeaderComponent,
         ProfileModule,
         RouterModule,
