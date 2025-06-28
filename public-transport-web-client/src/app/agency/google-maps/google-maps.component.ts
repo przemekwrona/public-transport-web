@@ -9,6 +9,7 @@ import moment from "moment";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
     standalone: true,
@@ -21,14 +22,15 @@ import {ActivatedRoute} from "@angular/router";
     ],
     providers: [
         GtfsService,
-        GoogleAgreementsService
+        GoogleAgreementsService,
+        AuthService
     ]
 })
 export class GoogleMapsComponent implements OnInit {
 
     public googleAgreementsResponse: GoogleAgreementsResponse = {};
 
-    constructor(private route: ActivatedRoute, private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService) {
+    constructor(private route: ActivatedRoute, private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService, private authService: AuthService) {
     }
 
     ngOnInit(): void {
@@ -59,6 +61,10 @@ export class GoogleMapsComponent implements OnInit {
         googleAgreementsRequest.ticketSalesStatement = this.googleAgreementsResponse.ticketSalesStatement;
         this.googleAgreementsService.updateGoogleAgreements(googleAgreementsRequest).subscribe(() => {
         });
+    }
+
+    public isAdmin(): boolean {
+        return this.authService.hasRoleSuperAdmin();
     }
 
 }
