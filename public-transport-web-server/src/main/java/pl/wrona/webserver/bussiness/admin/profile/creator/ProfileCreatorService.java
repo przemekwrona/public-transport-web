@@ -7,9 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.agency.entity.Agency;
-import pl.wrona.webserver.client.geoapify.Feature;
+import pl.wrona.webserver.client.geoapify.geocode.Feature;
 import pl.wrona.webserver.client.geoapify.GeoapifyService;
-import pl.wrona.webserver.client.geoapify.Geometry;
+import pl.wrona.webserver.client.geoapify.geocode.Geometry;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
 
