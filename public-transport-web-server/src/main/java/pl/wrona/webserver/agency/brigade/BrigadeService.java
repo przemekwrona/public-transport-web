@@ -111,7 +111,7 @@ public class BrigadeService {
     }
 
     public GetBrigadeResponse findBrigades() {
-        var brigades = brigadeRepository.findAll().stream()
+        var brigades = brigadeRepository.findAllByAgency(agencyService.getLoggedAgency()).stream()
                 .map(brigadeEntity -> new GetBrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
                         .calendarDesignation(brigadeEntity.getCalendar().getDesignation())
