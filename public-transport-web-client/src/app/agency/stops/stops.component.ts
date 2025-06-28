@@ -6,12 +6,21 @@ import {find} from "lodash";
 import {CenterPoint, Stop, StopsResponse, StopsService} from "../../generated/public-transport";
 import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
+import {CommonModule} from "@angular/common";
+import {BusStopModalEditorComponent} from "../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
+import {SharedModule} from "../shared/shared.module";
 
 interface StopMarker extends L.Marker {
     id: number;
 }
 
 @Component({
+    standalone: true,
+    imports: [
+        CommonModule,
+        SharedModule,
+        BusStopModalEditorComponent
+    ],
     selector: 'app-stops',
     templateUrl: './stops.component.html',
     styleUrl: './stops.component.scss'
@@ -86,8 +95,14 @@ export class StopsComponent implements OnInit, AfterViewInit {
             this.stopsService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
                 const stopMarkers: StopMarker[] = response.stops?.map(stop => {
                     const stopMarker: StopMarker = stop.isBdot10k
-                        ? L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON_BDOT, title: stop.name}) as StopMarker
-                        : L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: this.ICON_OSM, title: stop.name}) as StopMarker;
+                        ? L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {
+                            icon: this.ICON_BDOT,
+                            title: stop.name
+                        }) as StopMarker
+                        : L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {
+                            icon: this.ICON_OSM,
+                            title: stop.name
+                        }) as StopMarker;
 
                     stopMarker.id = stop.id;
                     return stopMarker;

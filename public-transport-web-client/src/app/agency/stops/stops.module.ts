@@ -10,13 +10,13 @@ import {BusStopModalEditorComponent} from "../shared/bus-stop-modal-editor/bus-s
 
 @NgModule({
     imports: [
+        StopsComponent,
         CommonModule,
         SharedModule,
         MatIconModule,
         BusStopModalEditorComponent
     ],
     declarations: [
-        StopsComponent
     ],
     exports: [
         StopsComponent
