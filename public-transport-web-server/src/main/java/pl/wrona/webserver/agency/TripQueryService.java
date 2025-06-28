@@ -23,11 +23,11 @@ public class TripQueryService {
 
     private TripRepository tripRepository;
     private StopService stopService;
+    private AgencyService agencyService;
 
     public GetAllTripsResponse getTripsByLineOrName(String lineOrName) {
-        Map<RouteEntity, Set<TripEntity>> tripSet = tripRepository.findByLineOrNameContainingIgnoreCase(lineOrName).stream()
+        Map<RouteEntity, Set<TripEntity>> tripSet = tripRepository.findByLineOrNameContainingIgnoreCase(lineOrName, agencyService.getLoggedAgency()).stream()
                 .collect(Collectors.groupingBy(TripEntity::getRoute, Collectors.toSet()));
-
 
         List<Long> stopsIds = tripSet.keySet().stream()
                 .map(routeEntity -> List.of(routeEntity.getOriginStopId(), routeEntity.getDestinationStopId()))
