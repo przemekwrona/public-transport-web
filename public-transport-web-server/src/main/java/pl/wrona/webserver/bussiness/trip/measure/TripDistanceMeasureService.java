@@ -76,7 +76,7 @@ public class TripDistanceMeasureService {
                 .map(stop -> "%s,%s".formatted(stop.getLat(), stop.getLon()))
                 .collect(Collectors.joining("|"));
 
-        RoutingResponse routing = geoapifyService.route(waypoints);
+        RoutingResponse routing = geoapifyService.route(waypoints, trips.getCommunicationVelocity());
         Feature feature = routing.features().stream().findFirst().orElse(null);
         List<Leg> legs = Optional.ofNullable(feature).map(Feature::properties).map(Properties::legs).orElse(List.of());
 
