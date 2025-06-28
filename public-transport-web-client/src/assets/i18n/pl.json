@@ -2,6 +2,9 @@
   "common": {
     "attention": "Uwaga"
   },
+  "header": {
+    "logout": "Wyloguj się"
+  },
   "agency": {
     "profile": {
       "title": "Profil Firmy",
