@@ -3,8 +3,8 @@ package pl.wrona.webserver.client;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.wrona.webserver.BaseIntegrationTest;
-import pl.wrona.webserver.client.geoapify.Feature;
-import pl.wrona.webserver.client.geoapify.GeoResponse;
+import pl.wrona.webserver.client.geoapify.geocode.Feature;
+import pl.wrona.webserver.client.geoapify.geocode.GeoResponse;
 import pl.wrona.webserver.client.geoapify.GeoapifyService;
 
 import static org.assertj.core.api.Assertions.assertThat;
