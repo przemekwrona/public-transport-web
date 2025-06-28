@@ -3583,44 +3583,9 @@
                                         <a class="menu-link h-10" href="#">
 											<span class="menu-icon">
 												<img alt="" class="inline-block size-4 rounded-full"
-                                                     src="assets/media/flags/spain.svg"/>
+                                                     src="assets/media/flags/poland.svg"/>
 											</span>
-                                            <span class="menu-title">
-												Spanish
-											</span>
-                                        </a>
-                                    </div>
-                                    <div class="menu-item">
-                                        <a class="menu-link h-10" href="#">
-											<span class="menu-icon">
-												<img alt="" class="inline-block size-4 rounded-full"
-                                                     src="assets/media/flags/germany.svg"/>
-											</span>
-                                            <span class="menu-title">
-												German
-											</span>
-                                        </a>
-                                    </div>
-                                    <div class="menu-item">
-                                        <a class="menu-link h-10" href="#">
-											<span class="menu-icon">
-												<img alt="" class="inline-block size-4 rounded-full"
-                                                     src="assets/media/flags/japan.svg"/>
-											</span>
-                                            <span class="menu-title">
-												Japanese
-											</span>
-                                        </a>
-                                    </div>
-                                    <div class="menu-item">
-                                        <a class="menu-link h-10" href="#">
-											<span class="menu-icon">
-												<img alt="" class="inline-block size-4 rounded-full"
-                                                     src="assets/media/flags/france.svg"/>
-											</span>
-                                            <span class="menu-title">
-												French
-											</span>
+                                            <span class="menu-title">Polski</span>
                                         </a>
                                     </div>
                                 </div>
@@ -3645,9 +3610,8 @@
                                 </div>
                             </div>
                             <div class="menu-item px-4 py-1.5">
-                                <a class="btn btn-sm btn-light justify-center"
-                                   href="html/demo1/authentication/classic/sign-in.html">
-                                    Log out
+                                <a (click)="logout()" class="btn btn-sm btn-light justify-center">
+                                    {{ 'header.logout' | transloco }}
                                 </a>
                             </div>
                         </div>
