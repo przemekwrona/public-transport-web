@@ -18,8 +18,10 @@ interface StopMarker extends L.Marker {
     standalone: true,
     imports: [
         CommonModule,
-        SharedModule,
-        BusStopModalEditorComponent
+        SharedModule
+    ],
+    providers: [
+        AuthService
     ],
     selector: 'app-stops',
     templateUrl: './stops.component.html',
