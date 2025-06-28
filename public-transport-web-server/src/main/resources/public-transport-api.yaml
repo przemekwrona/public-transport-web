@@ -390,7 +390,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StopsResponse'
-  
+
+  /agecny/address/center-point:
+    get:
+      tags:
+        - stops
+      summary: Return center point of stop
+      operationId: centerMap
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CenterPoint'
+
   /routes:
     post:
       tags:
@@ -1258,6 +1272,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CalendarBody'
+
+    CenterPoint:
+      type: object
+      properties:
+        zoom:
+          type: integer
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
 
     Status:
       type: object

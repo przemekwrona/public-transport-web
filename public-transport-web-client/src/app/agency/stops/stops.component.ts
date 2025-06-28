@@ -4,8 +4,9 @@ import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map
 import {find} from "lodash";
 
 import {StopService} from "./stop.service";
-import {Stop, StopsResponse} from "../../generated/public-transport";
+import {CenterPoint, Stop, StopsResponse} from "../../generated/public-transport";
 import {AuthService} from "../../auth/auth.service";
+import {ActivatedRoute} from "@angular/router";
 
 interface StopMarker extends L.Marker {
     id: number;
@@ -33,7 +34,7 @@ export class StopsComponent implements OnInit, AfterViewInit {
     public stops: Stop[] = [];
     public lastClickedStop: Stop = {} as Stop;
 
-    constructor(private stopService: StopService, private authService: AuthService) {
+    constructor(private stopService: StopService, private authService: AuthService, private route: ActivatedRoute) {
     }
 
     public isAdmin(): boolean {
@@ -51,11 +52,10 @@ export class StopsComponent implements OnInit, AfterViewInit {
     }
 
     private initMap(): Map {
+        const centerPoint: CenterPoint = this.route.snapshot.data['centerPoint'];
         const map: Map = L.map('map-stops', {
-            center: [50.613531, 20.743607],
-            // center: [52.2321, 20.0559],
-            // zoom: 7,
-            zoom: 14,
+            center: [centerPoint.latitude, centerPoint.longitude],
+            zoom: centerPoint.zoom,
             zoomControl: false
         });
 
