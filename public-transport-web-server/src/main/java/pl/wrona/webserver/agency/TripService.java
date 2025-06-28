@@ -1,8 +1,6 @@
 package pl.wrona.webserver.agency;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.lucene.util.SloppyMath;
 import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
@@ -22,7 +20,6 @@ import pl.wrona.webserver.agency.mapper.RouteMapper;
 import pl.wrona.webserver.agency.mapper.TripMapper;
 import pl.wrona.webserver.agency.mapper.TripModeMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -186,66 +183,6 @@ public class TripService {
                 .trip(tripResponse);
     }
 
-    public Trip measureDistance(Trip trips) {
-        int meters = 0;
-        int seconds = 0;
-
-        List<StopTime> stopTimes = new ArrayList<>();
-
-        for (Pair<StopTime, StopTime> pairStopTime : pairConsecutiveElements(trips.getStops())) {
-            if (pairStopTime.getLeft() == null) {
-                stopTimes.add(new StopTime()
-                        .stopId(pairStopTime.getRight().getStopId())
-                        .stopName(pairStopTime.getRight().getStopName())
-                        .lon(pairStopTime.getRight().getLon())
-                        .lat(pairStopTime.getRight().getLat())
-                        .meters(0)
-                        .seconds(0));
-            } else {
-                int haversinMeters = (int) SloppyMath.haversinMeters(pairStopTime.getLeft().getLat(),
-                        pairStopTime.getLeft().getLon(),
-                        pairStopTime.getRight().getLat(),
-                        pairStopTime.getRight().getLon());
-
-                meters = meters + haversinMeters;
-
-                // Communication speed 45km/h
-                int velocityKmPerH = Optional.ofNullable(trips.getCommunicationVelocity()).orElse(45);
-                double velocityMetersPerSec = (velocityKmPerH * 1000.0) / 3600.0d;
-                seconds = seconds + (int) (((double) haversinMeters) / velocityMetersPerSec);
-
-                stopTimes.add(new StopTime()
-                        .stopId(pairStopTime.getRight().getStopId())
-                        .stopName(pairStopTime.getRight().getStopName())
-                        .lon(pairStopTime.getRight().getLon())
-                        .lat(pairStopTime.getRight().getLat())
-                        .meters(meters)
-                        .arrivalTime(seconds)
-                        .departureTime(seconds)
-                        .seconds(seconds));
-            }
-
-        }
-
-        return new Trip()
-                .line(trips.getLine())
-                .variant(trips.getVariant())
-                .headsign(trips.getHeadsign())
-                .stops(stopTimes);
-    }
-
-    public static List<Pair<StopTime, StopTime>> pairConsecutiveElements(List<StopTime> elements) {
-        List<Pair<StopTime, StopTime>> pairedElements = new ArrayList<>();
-        if (elements.isEmpty()) {
-            return List.of();
-        }
-        pairedElements.add(Pair.of(null, elements.get(0)));
-
-        for (int i = 0; i < elements.size() - 1; i++) {
-            pairedElements.add(Pair.of(elements.get(i), elements.get(i + 1)));
-        }
-        return pairedElements;
-    }
 
     public TripEntity findByTripId(TripId tripId) {
         return tripRepository.findByLineAndNameAndVariantAndMode(tripId.getLine(), tripId.getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));

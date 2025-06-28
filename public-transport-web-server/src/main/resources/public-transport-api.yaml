@@ -574,7 +574,7 @@ paths:
   /trips/measure-distance:
     post:
       tags:
-        - trip
+        - trip-distance-measures
       summary: Measure distance between stops
       operationId: measureDistance
       requestBody:
