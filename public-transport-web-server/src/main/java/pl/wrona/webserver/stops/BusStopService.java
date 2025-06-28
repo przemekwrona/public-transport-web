@@ -1,11 +1,13 @@
 package pl.wrona.webserver.stops;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.CenterPoint;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopsPatchRequest;
 import org.igeolab.iot.pt.server.api.model.StopsResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.agency.AgencyService;
+import pl.wrona.webserver.agency.entity.Agency;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -15,6 +17,7 @@ import java.util.Objects;
 public class BusStopService {
 
     private final BusStopRepository busStopRepository;
+    private final AgencyService agencyService;
 
     public StopsResponse findBusStop(float maxLat, float minLon, float minLat, float maxLon) {
         var stops = busStopRepository.findAllByArea(maxLat, minLon, minLat, maxLon).stream()
@@ -45,5 +48,13 @@ public class BusStopService {
         });
         return new Status()
                 .status(Status.StatusEnum.SUCCESS);
+    }
+
+    public CenterPoint centerMap() {
+        Agency agency = agencyService.getLoggedAgency();
+        return new CenterPoint()
+                .latitude(agency.getLatitude())
+                .longitude(agency.getLongitude())
+                .zoom(14);
     }
 }

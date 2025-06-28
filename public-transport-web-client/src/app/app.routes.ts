@@ -30,6 +30,7 @@ import {agenciesResolver} from "./agency/profile/profile-list/agencies.resolver"
 import {ProfileDetailsComponent} from "./agency/profile/profile-details/profile-details.component";
 import {profileDetailsResolver} from "./agency/profile/profile-details/profile-details.resolver";
 import {CreateProfileComponent} from "./agency/profile/create-profile/create-profile.component";
+import {centerPointResolver} from "./agency/stops/center-point.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -40,7 +41,7 @@ export const routes: Routes = [
     {
         path: 'agency', component: AgencyComponent, children: [
             {path: 'profile', component: ProfileDetailsComponent, resolve: { agencyDetails: profileDetailsResolver }},
-            {path: 'stops', component: StopsComponent},
+            {path: 'stops', component: StopsComponent, resolve: { centerPoint: centerPointResolver }},
             {path: 'routes', component: RouteListComponent, resolve: { routes: RoutesResolver }},
             {path: 'routes/create', component: CreateRouteComponent},
             {path: 'trips', component: TripListComponent, resolve: {trips: tripsResolver}},
