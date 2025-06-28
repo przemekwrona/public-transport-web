@@ -28,7 +28,7 @@ export class AuthService {
     }
 
     getRoles(): string[] {
-        return JSON.parse(sessionStorage.getItem(AuthService.SESSION_STORAGE_ROLES_KEY));
+        return JSON.parse(sessionStorage.getItem(AuthService.SESSION_STORAGE_ROLES_KEY)) || [];
     }
 
     hasRoleSuperAdmin(): boolean {
