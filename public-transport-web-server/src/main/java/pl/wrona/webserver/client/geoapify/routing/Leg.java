@@ -1,0 +1,9 @@
+package pl.wrona.webserver.client.geoapify.routing;
+
+import java.util.List;
+
+public record Leg(
+        double distance,
+        double time,
+        List<Step> steps
+) {}

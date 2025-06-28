@@ -1,4 +1,4 @@
-package pl.wrona.webserver.client.geoapify;
+package pl.wrona.webserver.client.geoapify.geocode;
 
 public record Timezone(
         String name,

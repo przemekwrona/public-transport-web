@@ -1,4 +1,4 @@
-package pl.wrona.webserver.client.geoapify;
+package pl.wrona.webserver.client.geoapify.geocode;
 
 import java.util.List;
 
