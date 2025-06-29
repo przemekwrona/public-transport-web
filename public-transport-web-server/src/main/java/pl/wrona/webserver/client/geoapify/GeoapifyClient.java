@@ -16,5 +16,5 @@ public interface GeoapifyClient {
     ResponseEntity<GeoResponse> geocode(@RequestParam("text") String text, @RequestParam("apiKey") String apiKey);
 
     @GetMapping("/v1/routing")
-    ResponseEntity<RoutingResponse> routing(@RequestParam("waypoints") String waypoints, @RequestParam("mode") String mode, @RequestParam("max_speed") int maxSped, @RequestParam("apiKey") String apiKey);
+    ResponseEntity<RoutingResponse> routing(@RequestParam("waypoints") String waypoints, @RequestParam("mode") String mode, @RequestParam("type") String type, @RequestParam("avoid") String avoid, @RequestParam("max_speed") int maxSped, @RequestParam("apiKey") String apiKey);
 }
