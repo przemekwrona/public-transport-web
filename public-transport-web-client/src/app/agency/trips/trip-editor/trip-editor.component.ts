@@ -18,7 +18,6 @@ import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {debounceTime, map, Subject} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
-import {routes} from "../../../app.routes";
 import {ViewportScroller} from "@angular/common";
 import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -26,6 +25,7 @@ import {
     BusStopModalEditorComponent,
     BusStopModalEditorData
 } from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
+import {find} from "lodash";
 
 @Component({
     selector: 'app-trip-editor',
@@ -342,7 +342,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopSelectorData | undefined) => {
             if (busStopSelectorData !== undefined) {
-                // this.busStopIdChange.emit(busStopSelectorData);
+                const stopTime: StopTime = find(this.$tripDetails.trip.stops, {stopId: busStopSelectorData.stopId});
+                stopTime.stopName = busStopSelectorData.stopName;
             }
         });
     }
