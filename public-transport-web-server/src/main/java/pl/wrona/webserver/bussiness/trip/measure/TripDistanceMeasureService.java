@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.trip.measure;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.lucene.util.SloppyMath;
+import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import pl.wrona.webserver.client.geoapify.routing.Properties;
 import pl.wrona.webserver.client.geoapify.routing.RoutingResponse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,11 +66,18 @@ public class TripDistanceMeasureService {
 
         }
 
+        List<Point2D> geometry = stopTimes.stream()
+                .map(stopTime -> new Point2D()
+                        .lat(stopTime.getLat())
+                        .lon(stopTime.getLon()))
+                .toList();
+
         return new Trip()
                 .line(trips.getLine())
                 .variant(trips.getVariant())
                 .headsign(trips.getHeadsign())
-                .stops(stopTimes);
+                .stops(stopTimes)
+                .geometry(geometry);
     }
 
     public Trip measureDistance(Trip trips) {
@@ -108,11 +117,19 @@ public class TripDistanceMeasureService {
 
         }
 
+        List<Point2D> geometry = feature.geometry().coordinates().stream()
+                .flatMap(Collection::stream)
+                .map((List<Double> cords) -> new Point2D()
+                        .lon(cords.get(0).floatValue())
+                        .lat(cords.get(1).floatValue()))
+                .toList();
+
         return new Trip()
                 .line(trips.getLine())
                 .variant(trips.getVariant())
                 .headsign(trips.getHeadsign())
-                .stops(stopTimes);
+                .stops(stopTimes)
+                .geometry(geometry);
     }
 
     private static List<Pair<StopTime, StopTime>> pairConsecutiveElements(List<StopTime> elements) {

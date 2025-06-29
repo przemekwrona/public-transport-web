@@ -571,6 +571,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/TripsDetails'
 
+  /trips/approximate-distance:
+    post:
+      tags:
+        - trip-distance-measures
+      summary: Approximate distance between stops
+      operationId: approximateDistance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trip'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+
   /trips/measure-distance:
     post:
       tags:
@@ -1092,6 +1112,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StopTime'
+        geometry:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point2D'
 
     CreateTripDetailsRequest:
       type: object
@@ -1284,6 +1308,16 @@ components:
         longitude:
           type: number
           format: double
+
+    Point2D:
+      type: object
+      properties:
+        lon:
+          type: number
+          format: float
+        lat:
+          type: number
+          format: float
 
     Status:
       type: object
