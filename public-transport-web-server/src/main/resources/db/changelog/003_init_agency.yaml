@@ -275,6 +275,9 @@ databaseChangeLog:
                   name: destination_stop_name
                   type: varchar(30)
               - column:
+                  name: geometry
+                  type: text
+              - column:
                   name: route_id
                   type: integer
                   constraints:
