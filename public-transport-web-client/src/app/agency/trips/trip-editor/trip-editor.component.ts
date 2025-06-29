@@ -20,14 +20,12 @@ import {debounceTime, map, Subject} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {routes} from "../../../app.routes";
 import {ViewportScroller} from "@angular/common";
-import {BusStopModalSelectorComponent} from "../../shared/bus-stop-modal-selector/bus-stop-modal-selector.component";
 import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
 import {MatDialog} from "@angular/material/dialog";
 import {
     BusStopModalEditorComponent,
     BusStopModalEditorData
 } from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
-import zoom = control.zoom;
 
 @Component({
     selector: 'app-trip-editor',
@@ -101,8 +99,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         stopTime.lat = tripVariants.route.originStop.lat;
 
                         this.$tripDetails.trip.stops.push(stopTime);
-
-                        this.approximateDistance();
                     } else if (this.$tripVariants.trips.length == 1 && this.$tripVariants.trips[0].isMainVariant && this.$tripVariants.trips[0].mode === TripMode.Front) {
                         this.$tripDetails.trip.isMainVariant = true;
                         this.$tripDetails.trip.variant = "MAIN";
@@ -118,8 +114,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         stopTime.lat = tripVariants.route.destinationStop.lat;
 
                         this.$tripDetails.trip.stops.push(stopTime);
-
-                        this.approximateDistance();
                     }
                 }
             });
@@ -132,9 +126,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
             this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
         }
-
-        this.approximateDistance(true);
-
+        this.drawPolyline(this.$tripDetails.trip.geometry || []);
+        this.zoomPolyline();
         this.reloadStops(this.map);
         this.onZoomEnd(this.map);
         this.onMoveEnd(this.map);
@@ -305,19 +298,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             }
 
             this.drawPolyline(response.geometry);
+            this.$tripDetails.trip.geometry = response.geometry;
         });
 
-    }
-
-    public addBrake() {
-        // const lastStop = last(this.stopTimes);
-        // const stopTime: StopTime = {} as StopTime;
-        // stopTime.stopId = lastStop.stopId + '-break';
-        // stopTime.stopName = lastStop.stopName;
-        // stopTime.lon = lastStop.lon;
-        // stopTime.lat = lastStop.lat;
-        //
-        // this.stopTimes.push(stopTime);
     }
 
     public onCommunicationVelocityChange(value: number): void {
@@ -345,8 +328,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
 
     }
-
-    protected readonly routes = routes;
 
     openDialogEditStop(stopTime: StopTime): void {
         const data: BusStopModalEditorData = {} as BusStopModalEditorData;

@@ -1,7 +1,10 @@
 package pl.wrona.webserver.agency;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
+import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
@@ -33,6 +36,7 @@ public class TripService {
     private final RouteQueryService routeQueryService;
     private final StopService stopService;
     private final StopTimeRepository stopTimeRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public Status createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
@@ -176,6 +180,20 @@ public class TripService {
                     .lon((float) stopTime.getStopEntity().getLon())
                     .lat((float) stopTime.getStopEntity().getLat()));
         });
+
+        if (tripEntity.getGeometry() != null) {
+            try {
+                List<Point2D> geometry = objectMapper.readValue(tripEntity.getGeometry(), new TypeReference<List<List<Float>>>() {
+                        }).stream()
+                        .map((List<Float> point) -> new Point2D()
+                                .lat(point.get(0))
+                                .lon(point.get(1)))
+                        .toList();
+
+                tripResponse.setGeometry(geometry);
+            } catch (Exception exception) {
+            }
+        }
 
         var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());
         return new TripsDetails()

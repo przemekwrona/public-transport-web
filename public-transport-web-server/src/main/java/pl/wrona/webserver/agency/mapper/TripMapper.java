@@ -1,11 +1,14 @@
 package pl.wrona.webserver.agency.mapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripMode;
 import pl.wrona.webserver.agency.entity.RouteEntity;
 import pl.wrona.webserver.agency.entity.TripEntity;
 import pl.wrona.webserver.agency.entity.TripVariantMode;
+
+import java.util.List;
 
 @UtilityClass
 public class TripMapper {
@@ -29,6 +32,16 @@ public class TripMapper {
         tripEntity.setOriginStopName(trip.getOrigin());
         tripEntity.setDestinationStopName(trip.getDestination());
         tripEntity.setMainVariant(trip.getIsMainVariant());
+
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<List<Float>> geometry = trip.getGeometry().stream()
+                    .map(point -> List.of(point.getLat(), point.getLon()))
+                    .toList();
+            tripEntity.setGeometry(objectMapper.writeValueAsString(geometry));
+        } catch (Exception e) {
+        }
         return tripEntity;
     }
 
