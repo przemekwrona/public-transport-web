@@ -13,6 +13,11 @@ public class TripDistanceMeasureController implements TripDistanceMeasuresApi {
     private final TripDistanceMeasureService tripDistanceMeasureService;
 
     @Override
+    public ResponseEntity<Trip> approximateDistance(Trip trip) {
+        return ResponseEntity.ok(tripDistanceMeasureService.approximateDistance(trip));
+    }
+
+    @Override
     public ResponseEntity<Trip> measureDistance(Trip trip) {
         return ResponseEntity.ok(tripDistanceMeasureService.measureDistance(trip));
     }
