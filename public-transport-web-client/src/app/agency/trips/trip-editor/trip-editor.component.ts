@@ -1,11 +1,12 @@
 import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import * as L from "leaflet";
-import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
+import {control, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {findIndex, last} from "lodash";
 import {
+    Point2D,
     Stop,
     StopTime,
-    Trip, TripId,
+    Trip, TripDistanceMeasuresService, TripId,
     TripMode,
     Trips,
     TripsDetails, TripService,
@@ -26,6 +27,7 @@ import {
     BusStopModalEditorComponent,
     BusStopModalEditorData
 } from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
+import zoom = control.zoom;
 
 @Component({
     selector: 'app-trip-editor',
@@ -65,8 +67,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public $tripDetails: TripsDetails = {trip: {}};
     public $tripVariants: Trips = {};
 
-    constructor(private stopService: StopService, private tripService: TripService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
-        this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.measureDistance());
+    constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
+        this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
     ngOnInit(): void {
@@ -100,7 +102,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                         this.$tripDetails.trip.stops.push(stopTime);
 
-                        this.measureDistance();
+                        this.approximateDistance();
                     } else if (this.$tripVariants.trips.length == 1 && this.$tripVariants.trips[0].isMainVariant && this.$tripVariants.trips[0].mode === TripMode.Front) {
                         this.$tripDetails.trip.isMainVariant = true;
                         this.$tripDetails.trip.variant = "MAIN";
@@ -117,7 +119,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                         this.$tripDetails.trip.stops.push(stopTime);
 
-                        this.measureDistance();
+                        this.approximateDistance();
                     }
                 }
             });
@@ -131,8 +133,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
         }
 
-        this.drawPolyline();
-        this.zoomPolyline();
+        this.approximateDistance(true);
 
         this.reloadStops(this.map);
         this.onZoomEnd(this.map);
@@ -173,7 +174,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         if (map.getZoom() > 12) {
             const bounds = map.getBounds();
             this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
-                const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: stop.isBdot10k ? this.BDOT10K_STOP: this.OTP_STOP})
+                const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: stop.isBdot10k ? this.BDOT10K_STOP : this.OTP_STOP})
                     .on('click', (event: LeafletMouseEvent) => {
                         const stopTime: StopTime = {} as StopTime;
                         stopTime.stopId = stop.id;
@@ -183,7 +184,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                         this.$tripDetails.trip.stops.push(stopTime);
 
-                        this.measureDistance();
+                        this.approximateDistance();
 
                         this._viewportScroller.scrollToAnchor('map');
 
@@ -202,7 +203,26 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
     }
 
-    private measureDistance() {
+    private approximateDistance(zoom: boolean = false) {
+        const trips = this.buildTripsRequest();
+
+        this.tripDistanceMeasuresService.approximateDistance(trips).subscribe(response => {
+            for (const index in response.stops) {
+                const stopTime: StopTime = (response.stops || [])[Number(index)];
+                this.$tripDetails.trip.stops[Number(index)].meters = stopTime.meters;
+                this.$tripDetails.trip.stops[Number(index)].seconds = stopTime.seconds;
+            }
+
+            this.drawPolyline(response.geometry);
+
+            if (zoom) {
+                this.zoomPolyline();
+            }
+
+        });
+    }
+
+    private buildTripsRequest() {
         const trips: Trip = {};
         trips.line = this.state.line || '';
         trips.headsign = '';
@@ -217,17 +237,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
             return stopTime;
         });
-
-        this.tripService.measureDistance(trips).subscribe(response => {
-
-            for (const index in response.stops) {
-                const stopTime: StopTime = (response.stops || [])[Number(index)];
-                this.$tripDetails.trip.stops[Number(index)].meters = stopTime.meters;
-                this.$tripDetails.trip.stops[Number(index)].seconds = stopTime.seconds;
-            }
-
-            this.drawPolyline();
-        });
+        return trips;
     }
 
     public clickCreateOrEdit() {
@@ -243,7 +253,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
             this.tripService.createTrip(tripDetailsRequest).subscribe(() => {
-                this.router.navigate(['/agency/trips'], {queryParams: {line: this.state.line, name: this.state.name}}).then();
+                this.router.navigate(['/agency/trips'], {
+                    queryParams: {
+                        line: this.state.line,
+                        name: this.state.name
+                    }
+                }).then();
             });
         } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
             this.tripService.updateTrip(tripDetailsRequest).subscribe(() => {
@@ -252,8 +267,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     }
 
-    public drawPolyline() {
-        const latLngPoints = (this.$tripDetails?.trip?.stops || []).map(stopTime => new L.LatLng(stopTime.lat || 0.0, stopTime.lon || 0.0));
+    public drawPolyline(geometry: Point2D[]) {
+        const latLngPoints = (geometry || []).map(stopTime => new L.LatLng(stopTime.lat || 0.0, stopTime.lon || 0.0));
         const polyline = L.polyline(latLngPoints, {
             color: '#416AB6',
             weight: 8,
@@ -263,7 +278,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         if (this.routePolyline == null) {
             this.routePolyline = polyline;
-
         } else {
             this.routePolyline.removeFrom(this.map);
             this.routePolyline = polyline;
@@ -273,13 +287,26 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public drop(event: CdkDragDrop<string[]>) {
         moveItemInArray(this.$tripDetails.trip.stops, event.previousIndex, event.currentIndex);
-        this.measureDistance();
+        this.approximateDistance();
     }
 
     public remove(stopTime: StopTime) {
         const index = findIndex(this.$tripDetails.trip.stops, {stopId: stopTime.stopId});
         this.$tripDetails.trip.stops.splice(index, 1);
-        this.drawPolyline();
+        // this.drawPolyline();
+    }
+
+    public measureDistance(): void {
+        this.tripDistanceMeasuresService.measureDistance(this.buildTripsRequest()).subscribe(response => {
+            for (const index in response.stops) {
+                const stopTime: StopTime = (response.stops || [])[Number(index)];
+                this.$tripDetails.trip.stops[Number(index)].meters = stopTime.meters;
+                this.$tripDetails.trip.stops[Number(index)].seconds = stopTime.seconds;
+            }
+
+            this.drawPolyline(response.geometry);
+        });
+
     }
 
     public addBrake() {
