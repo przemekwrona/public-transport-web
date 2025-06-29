@@ -37,6 +37,6 @@ public class GeoapifyService {
     }
 
     public RoutingResponse route(String waypoints, int maxSpeed) {
-        return this.geoapifyClient.routing(waypoints, "bus", maxSpeed, geoapifyApiKey).getBody();
+        return this.geoapifyClient.routing(waypoints, "drive", "short", "ferries", maxSpeed, geoapifyApiKey).getBody();
     }
 }
