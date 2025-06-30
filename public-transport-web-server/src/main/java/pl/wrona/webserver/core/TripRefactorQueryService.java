@@ -7,7 +7,7 @@ import org.igeolab.iot.pt.server.api.model.Trips;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
-import pl.wrona.webserver.core.entity.TripEntity;
+import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.core.mapper.TripMapper;
 

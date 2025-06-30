@@ -2,8 +2,8 @@ package pl.wrona.webserver.core;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.core.entity.StopTimeEntity;
-import pl.wrona.webserver.core.entity.TripEntity;
+import pl.wrona.webserver.core.agency.StopTimeEntity;
+import pl.wrona.webserver.core.agency.TripEntity;
 
 import java.util.List;
 

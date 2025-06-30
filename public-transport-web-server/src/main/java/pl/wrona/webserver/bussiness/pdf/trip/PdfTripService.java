@@ -26,7 +26,7 @@ import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.RouteService;
 import pl.wrona.webserver.core.StopTimeService;
 import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
-import pl.wrona.webserver.core.entity.StopTimeEntity;
+import pl.wrona.webserver.core.agency.StopTimeEntity;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
@@ -39,8 +39,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
-import pl.wrona.webserver.core.entity.TripEntity;
-import pl.wrona.webserver.core.entity.TripVariantMode;
+import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 
 @Slf4j
 @Service

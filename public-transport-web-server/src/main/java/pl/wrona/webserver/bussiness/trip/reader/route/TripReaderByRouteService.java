@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.agency.RouteQueryService;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.core.mapper.TripMapper;
 
@@ -23,7 +23,7 @@ public class TripReaderByRouteService {
     private final StopService stopService;
 
     public Trips getTrips(RouteId routeId) {
-        Agency loggedAppUser = agencyService.getLoggedAgency();
+        AgencyEntity loggedAppUser = agencyService.getLoggedAgency();
 
         var route = routeQueryService.findRouteByNameAndLine(routeId.getLine(), routeId.getName());
 

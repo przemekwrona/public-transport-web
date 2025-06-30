@@ -15,7 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 @Entity
 @Table(name = "google_agreements")
@@ -34,7 +34,7 @@ public class GoogleAgreementEntity {
 
     @OneToOne
     @JoinColumn(name = "agency_id", referencedColumnName = "agency_id")
-    private Agency agency;
+    private AgencyEntity agencyEntity;
 
     @Column(name = "repeatability_statement")
     private boolean repeatabilityStatement;

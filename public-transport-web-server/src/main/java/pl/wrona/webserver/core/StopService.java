@@ -2,7 +2,7 @@ package pl.wrona.webserver.core;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class StopService {
                 .collect(Collectors.toMap(StopEntity::getStopId, Function.identity()));
     }
 
-    public List<StopEntity> findAllStops(Agency agency) {
-        return stopRepository.findAllByAgency(agency);
+    public List<StopEntity> findAllStops(AgencyEntity agencyEntity) {
+        return stopRepository.findAllByAgency(agencyEntity);
     }
 }

@@ -2,14 +2,14 @@ package pl.wrona.webserver.core.gtfs;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.Stop;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 
 public class StopHandler {
 
-    public static Stop handle(Agency agency, StopEntity stopEntity) {
+    public static Stop handle(AgencyEntity agencyEntity, StopEntity stopEntity) {
         var agencyAndId = new AgencyAndId();
-        agencyAndId.setAgencyId(agency.getAgencyCode());
+        agencyAndId.setAgencyId(agencyEntity.getAgencyCode());
         agencyAndId.setId(stopEntity.getStopId().toString());
 
         Stop stop = new Stop();

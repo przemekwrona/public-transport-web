@@ -6,7 +6,7 @@ import org.igeolab.iot.pt.server.api.model.GoogleAgreementsRequest;
 import org.igeolab.iot.pt.server.api.model.GoogleAgreementsResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ public class GoogleAgreementsService {
     private final AgencyService agencyService;
 
     public GoogleAgreementsResponse getGoogleAgreements() {
-        Agency loggedUser = agencyService.getLoggedAgency();
+        AgencyEntity loggedUser = agencyService.getLoggedAgency();
         return googleAgreementsRepository.findByAgency(loggedUser.getAgencyId())
                 .map(entity -> new GoogleAgreementsResponse()
                         .repeatabilityStatement(entity.isRepeatabilityStatement())
@@ -29,7 +29,7 @@ public class GoogleAgreementsService {
 
     @Transactional
     public Status updateGoogleAgreements(GoogleAgreementsRequest googleAgreementsRequest) {
-        Agency loggedUser = agencyService.getLoggedAgency();
+        AgencyEntity loggedUser = agencyService.getLoggedAgency();
 
         Optional<GoogleAgreementsRequest> request = Optional.ofNullable(googleAgreementsRequest);
 
@@ -41,7 +41,7 @@ public class GoogleAgreementsService {
                     return entity;
                 })
                 .orElse(GoogleAgreementEntity.builder()
-                        .agency(loggedUser)
+                        .agencyEntity(loggedUser)
                         .repeatabilityStatement(request.map(GoogleAgreementsRequest::getRepeatabilityStatement).orElse(false))
                         .accessibilityStatement(request.map(GoogleAgreementsRequest::getAccessibilityStatement).orElse(false))
                         .ticketSalesStatement(request.map(GoogleAgreementsRequest::getTicketSalesStatement).orElse(false))

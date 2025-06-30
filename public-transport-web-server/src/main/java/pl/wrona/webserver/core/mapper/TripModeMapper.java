@@ -2,7 +2,7 @@ package pl.wrona.webserver.core.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.igeolab.iot.pt.server.api.model.TripMode;
-import pl.wrona.webserver.core.entity.TripVariantMode;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 
 @UtilityClass
 public class TripModeMapper {

@@ -1,9 +1,7 @@
-package pl.wrona.webserver.core.entity;
+package pl.wrona.webserver.core.agency;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

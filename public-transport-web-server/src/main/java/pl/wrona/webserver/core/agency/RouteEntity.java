@@ -14,8 +14,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.wrona.webserver.core.entity.Agency;
-import pl.wrona.webserver.core.entity.TripEntity;
 
 import java.util.Set;
 
@@ -57,7 +55,7 @@ public class RouteEntity {
 
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
-    private Agency agency;
+    private AgencyEntity agencyEntity;
 
     @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TripEntity> tripEntities;

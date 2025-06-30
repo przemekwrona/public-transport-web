@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.core.agency.StopTimeEntity;
 
 import java.util.List;
 

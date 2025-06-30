@@ -43,7 +43,7 @@ public class BrigadeService {
         brigadeEntity.setBrigadeNumber(request.getBrigadeName());
         brigadeEntity.setCalendar(calendarService.findCalendarByCalendarName(request.getCalendarName()).orElse(null));
 
-        brigadeEntity.setAgency(agencyService.getLoggedAgency());
+        brigadeEntity.setAgencyEntity(agencyService.getLoggedAgency());
 
         var savedBrigade = brigadeRepository.save(brigadeEntity);
 

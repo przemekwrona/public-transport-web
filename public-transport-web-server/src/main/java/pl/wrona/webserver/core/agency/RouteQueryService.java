@@ -5,7 +5,6 @@ import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.entity.Agency;
 
 @Service
 @AllArgsConstructor
@@ -16,8 +15,8 @@ public class RouteQueryService {
 
     @Transactional
     public RouteEntity findRouteByNameAndLine(String name, String line) {
-        Agency agency = this.agencyService.getLoggedAgency();
-        return this.routeQueryRepository.findByAgencyCodeAndRouteId(agency, name, line);
+        AgencyEntity agencyEntity = this.agencyService.getLoggedAgency();
+        return this.routeQueryRepository.findByAgencyCodeAndRouteId(agencyEntity, name, line);
     }
 
     @Transactional

@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core.entity;
+package pl.wrona.webserver.core.agency;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.wrona.webserver.core.agency.RouteEntity;
 
 import java.util.Set;
 

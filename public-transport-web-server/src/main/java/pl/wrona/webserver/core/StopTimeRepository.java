@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pl.wrona.webserver.core.entity.StopTimeEntity;
-import pl.wrona.webserver.core.entity.StopTimeId;
-import pl.wrona.webserver.core.entity.TripEntity;
+import pl.wrona.webserver.core.agency.StopTimeEntity;
+import pl.wrona.webserver.core.agency.StopTimeId;
+import pl.wrona.webserver.core.agency.TripEntity;
 
 import java.util.List;
 

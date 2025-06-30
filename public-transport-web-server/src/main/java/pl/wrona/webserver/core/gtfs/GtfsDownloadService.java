@@ -19,7 +19,7 @@ import pl.wrona.webserver.core.StopTimeService;
 import pl.wrona.webserver.core.brigade.BrigadeTripService;
 import pl.wrona.webserver.core.calendar.CalendarDatesService;
 import pl.wrona.webserver.core.calendar.CalendarService;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,8 +72,8 @@ public class GtfsDownloadService {
 
             writer.handleEntity(feedInfo);
 
-            Agency agency = agencyService.getLoggedAgency();
-            writer.handleEntity(AgencyHandler.handle(agency));
+            AgencyEntity agencyEntity = agencyService.getLoggedAgency();
+            writer.handleEntity(AgencyHandler.handle(agencyEntity));
 
             var calendars = calendarService.findActiveCalendar().stream()
                     .map(CalendarHandler::handle)
@@ -88,8 +88,8 @@ public class GtfsDownloadService {
                     .map(CalendarDateHandler::handle)
                     .forEach(writer::handleEntity);
 
-            var stops = stopService.findAllStops(agency).stream()
-                    .map(stop -> StopHandler.handle(agency, stop))
+            var stops = stopService.findAllStops(agencyEntity).stream()
+                    .map(stop -> StopHandler.handle(agencyEntity, stop))
                     .toList();
 
             stops.forEach(writer::handleEntity);
@@ -97,7 +97,7 @@ public class GtfsDownloadService {
             var stopDictionary = stops.stream().collect(Collectors.toMap(stop -> Long.parseLong(stop.getId().getId()), Function.identity()));
 
             var routes = routeService.getRoutesEntities().stream()
-                    .map(route -> RouteHandler.handle(agency, route))
+                    .map(route -> RouteHandler.handle(agencyEntity, route))
                     .toList();
 
             routes.forEach(writer::handleEntity);
@@ -108,7 +108,7 @@ public class GtfsDownloadService {
             var trips = brigadeTripService.findAllBrigadeTripsForActiveCalendar().stream()
                     .map(brigadeTrip -> {
                         AgencyAndId agencyAndId = new AgencyAndId();
-                        agencyAndId.setAgencyId(agency.getAgencyCode());
+                        agencyAndId.setAgencyId(agencyEntity.getAgencyCode());
                         agencyAndId.setId(brigadeTrip.getBrigade().getBrigadeNumber() + "/" + brigadeTrip.getTripSequence());
 
                         Trip trip = new Trip();
@@ -168,7 +168,7 @@ public class GtfsDownloadService {
             return new ByteArrayResource(Files.readAllBytes(zippedGtfs.toPath())) {
                 @Override
                 public String getFilename() {
-                    return "%s.gtfs.zip".formatted(agency.getAgencyCode());
+                    return "%s.gtfs.zip".formatted(agencyEntity.getAgencyCode());
                 }
             };
         } catch (IOException e) {

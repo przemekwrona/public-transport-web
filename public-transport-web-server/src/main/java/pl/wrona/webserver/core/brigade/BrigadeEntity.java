@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.util.Set;
 
@@ -34,7 +34,7 @@ public class BrigadeEntity {
 
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
-    private Agency agency;
+    private AgencyEntity agencyEntity;
 
     @ManyToOne
     @JoinColumn(name = "service_id")
