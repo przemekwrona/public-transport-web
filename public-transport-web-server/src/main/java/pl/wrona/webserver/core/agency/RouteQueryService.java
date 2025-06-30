@@ -13,12 +13,18 @@ public class RouteQueryService {
     private final AgencyService agencyService;
     private final RouteQueryRepository routeQueryRepository;
 
+    public RouteEntity findRouteByAgencyCodeAndLineAndName(String agencyCode, String line, String name) {
+        return this.routeQueryRepository.findByAgencyCodeAndLineAndName(agencyCode, line, name);
+    }
+
+    @Deprecated
     @Transactional
     public RouteEntity findRouteByNameAndLine(String name, String line) {
         AgencyEntity agencyEntity = this.agencyService.getLoggedAgency();
         return this.routeQueryRepository.findByAgencyCodeAndRouteId(agencyEntity, name, line);
     }
 
+    @Deprecated
     @Transactional
     public RouteEntity findRouteByNameAndLine(RouteId routeId) {
         return findRouteByNameAndLine(routeId.getName(), routeId.getLine());
