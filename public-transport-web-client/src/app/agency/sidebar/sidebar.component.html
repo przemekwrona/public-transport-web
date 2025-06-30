@@ -30,14 +30,26 @@
                 </div>
 
                 @if (isAdmin()) {
-                    <div class="menu-item" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+                    <div class="menu-item">
                         <div [routerLink]="['/admin/agency/profiles']"
-                             class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent"
-                             tabindex="0">
+                             class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
                             <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
                                 <i class="ki-filled ki-profile-circle text-lg"></i>
                             </span>
                             <span class="menu-title text-sm font-semibold text-gray-700">Lista Agencji</span>
+                            <span class="badge badge-sm badge-outline badge-danger">Admin</span>
+                        </div>
+                    </div>
+                }
+
+                @if (isAdmin()) {
+                    <div class="menu-item">
+                        <div [routerLink]="['/admin/agency/users']"
+                             class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
+                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
+                                <i class="ki-filled ki-profile-circle text-lg"></i>
+                            </span>
+                            <span class="menu-title text-sm font-semibold text-gray-700">Użytkownicy</span>
                             <span class="badge badge-sm badge-outline badge-danger">Admin</span>
                         </div>
                     </div>

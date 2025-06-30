@@ -1,0 +1,136 @@
+<!-- Container -->
+<div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+        <div class="flex flex-col justify-center gap-2">
+            <h1 class="text-xl font-medium leading-none text-gray-900">
+                Użytkownicy
+            </h1>
+            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
+            </div>
+        </div>
+        <div class="flex items-center gap-2.5">
+<!--            <a [routerLink]="['/admin/agency/create']" class="btn btn-sm btn-primary" href="#">-->
+<!--                Dodaj nową Agencję-->
+<!--            </a>-->
+        </div>
+    </div>
+</div>
+<!-- End of Container -->
+
+<!-- Container -->
+<div class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
+        <div class="col-span-2">
+            <div class="flex flex-col gap-5 lg:gap-7.5">
+                <div class="card min-w-full">
+                    <div class="card-header">
+                        <h3 class="card-title">Użytkownicy</h3>
+                    </div>
+                    <div class="card-table scrollable-x-auto">
+                        <div class="scrollable-auto">
+                            <table class="table align-middle text-2sm text-gray-600">
+                                <tbody>
+                                <tr class="bg-gray-100">
+                                    <th class="text-start font-medium min-w-52">
+                                        Nazwa użytkownika
+                                    </th>
+                                    <th class="text-end font-medium min-w-32">
+                                        Email
+                                    </th>
+                                    <th class="text-end font-medium min-w-32">
+                                        Data dołączenia
+                                    </th>
+                                    <th class="min-w-16">
+                                    </th>
+                                </tr>
+
+<!--                                    @for (agency of agenciesResponse.agencies; track agency.agencyCode) {-->
+<!--                                        <tr>-->
+<!--                                            <td>-->
+<!--                                                <div class="flex items-center grow gap-2.5">-->
+<!--                                                    <img alt="" class="rounded-full size-9 shrink-0"-->
+<!--                                                         src="assets/media/avatars/300-3.png"/>-->
+<!--                                                    <div class="flex flex-col">-->
+<!--                                                        <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">-->
+<!--                                                            {{ agency.agencyName }}-->
+<!--                                                        </a>-->
+<!--                                                        <span class="text-xs font-normal text-gray-600">{{agency.routesNo}} connections</span>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </td>-->
+<!--                                            <td class="text-end">-->
+<!--                                                <span class="badge badge-sm badge-outline badge-danger">Disabled</span>-->
+<!--                                            </td>-->
+<!--                                            <td class="text-end text-gray-700 text-sm">-->
+<!--                                                {{ agency?.createdAt | date:'yyyy-MMM-dd' }}-->
+<!--                                            </td>-->
+<!--                                            <td class="text-end">-->
+<!--                                                <div class="menu inline-flex" data-menu="true">-->
+<!--                                                    <div class="menu-item" data-menu-item-offset="0, 10px"-->
+<!--                                                         data-menu-item-placement="bottom-end"-->
+<!--                                                         data-menu-item-placement-rtl="bottom-start"-->
+<!--                                                         data-menu-item-toggle="dropdown"-->
+<!--                                                         data-menu-item-trigger="click|lg:click">-->
+<!--                                                        <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">-->
+<!--                                                            <i class="ki-filled ki-dots-vertical">-->
+<!--                                                            </i>-->
+<!--                                                        </button>-->
+<!--                                                        <div class="menu-dropdown menu-default w-full max-w-[175px]"-->
+<!--                                                             data-menu-dismiss="true">-->
+<!--                                                            <div class="menu-item">-->
+<!--                                                                <a class="menu-link" href="#">-->
+<!--                                                                    <span class="menu-icon"><i class="ki-filled ki-search-list"></i></span>-->
+<!--                                                                    <span class="menu-title">View</span>-->
+<!--                                                                </a>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="menu-item">-->
+<!--                                                                <a class="menu-link" href="#">-->
+<!--                                                                    <span class="menu-icon"><i class="ki-filled ki-file-up"></i></span>-->
+<!--                                                                    <span class="menu-title">Export</span>-->
+<!--                                                                </a>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="menu-separator"></div>-->
+<!--                                                            <div class="menu-item">-->
+<!--                                                                <a class="menu-link" href="#">-->
+<!--                                                                    <span class="menu-icon"><i class="ki-filled ki-pencil"></i></span>-->
+<!--                                                                    <span class="menu-title">Edit</span>-->
+<!--                                                                </a>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="menu-item">-->
+<!--                                                                <a class="menu-link" href="#">-->
+<!--                                                                    <span class="menu-icon"><i class="ki-filled ki-copy"></i></span>-->
+<!--                                                                    <span class="menu-title">Make a copy</span>-->
+<!--                                                                </a>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="menu-separator"></div>-->
+<!--                                                            <div class="menu-item">-->
+<!--                                                                <a class="menu-link" href="#">-->
+<!--                                                                    <span class="menu-icon"><i class="ki-filled ki-trash"></i></span>-->
+<!--                                                                    <span class="menu-title">Remove</span>-->
+<!--                                                                </a>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                    }-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer justify-center">
+                        <a class="btn btn-link" href=""><!-- View 64 more--></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-1">
+            <div class="flex flex-col gap-5 lg:gap-7.5">
+            </div>
+        </div>
+    </div>
+    <!-- end: grid -->
+</div>
+<!-- End of Container -->

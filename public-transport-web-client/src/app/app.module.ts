@@ -15,6 +15,7 @@ import {AddHeaderInterceptor} from "./auth/auth.interceptor";
 import {BASE_PATH} from "./generated/public-transport";
 import { TranslocoRootModule } from './transloco-root.module';
 import {BASE_PATH_PDF_API} from "./generated/public-transport-pdf";
+import {UserListComponent} from "./agency/user/user-list/user-list.component";
 
 @NgModule({
     imports: [
@@ -28,7 +29,8 @@ import {BASE_PATH_PDF_API} from "./generated/public-transport-pdf";
         LandingModule,
         AuthModule,
         FormsModule,
-        TranslocoRootModule
+        TranslocoRootModule,
+        UserListComponent
     ],
     declarations: [
         AppComponent
