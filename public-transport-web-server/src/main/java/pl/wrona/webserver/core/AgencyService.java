@@ -75,7 +75,7 @@ public class AgencyService {
         var agencies = agencyRepository.countRoutesByAgency().stream().map(groupedAgency -> new AgencyAdminDetail()
                         .agencyCode(groupedAgency.getAgency().getAgencyCode())
                         .agencyName(groupedAgency.getAgency().getAgencyName())
-                        .createdAt(Optional.of(groupedAgency.getAgency()).map(AgencyEntity::getCreatedAt).map(createdAt -> createdAt.atOffset(ZoneOffset.UTC)).orElse(null))
+                        .createdAt(Optional.of(groupedAgency.getAgency()).map(AgencyEntity::getCreatedAt).orElse(null))
                         .routesNo(groupedAgency.getRouteCount()))
                 .toList();
 
