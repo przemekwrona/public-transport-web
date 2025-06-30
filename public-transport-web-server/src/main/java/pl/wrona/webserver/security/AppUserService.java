@@ -28,6 +28,7 @@ public class AppUserService {
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final AuthTokenUtils authTokenUtils;
+    private final AgencyOwnerRepository agencyOwnerRepository;
 
     @Transactional
     public CreateAppUserResponse createUser(CreateAppUserRequest createAppUserRequest) {
@@ -60,8 +61,11 @@ public class AppUserService {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
+        var agency = agencyOwnerRepository.findAllByAppUser(userDetails);
+
         return new LoginAppUserResponse()
                 .token(authTokenUtils.generateJwtToken(userDetails))
-                .roles(roles);
+                .roles(roles)
+                .instance(agency.getAgencyCode());
     }
 }
