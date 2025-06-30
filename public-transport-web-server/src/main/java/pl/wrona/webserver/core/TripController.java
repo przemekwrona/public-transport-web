@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.TripApi;
 import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
-import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.TripId;
-import org.igeolab.iot.pt.server.api.model.Trips;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,6 @@ public class TripController implements TripApi {
 
     private final TripService tripService;
     private final TripRefactorQueryService tripRefactorQueryService;
-    private final TripReaderByRouteService tripReaderByRouteService;
 
     @Override
     public ResponseEntity<Status> createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
@@ -43,11 +40,6 @@ public class TripController implements TripApi {
     @Override
     public ResponseEntity<TripsDetails> getTripByVariant(TripId tripId) {
         return ResponseEntity.ok(tripService.getTripByVariant(tripId));
-    }
-
-    @Override
-    public ResponseEntity<Trips> getTrips(RouteId routeId) {
-        return ResponseEntity.ok(tripReaderByRouteService.getTrips(routeId));
     }
 
     @Override
