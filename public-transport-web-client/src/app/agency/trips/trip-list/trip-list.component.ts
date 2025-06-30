@@ -1,11 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Data, Params, Router, RouterModule} from "@angular/router";
 import {
-    Route,
+    Route, RouteDetails,
     RouteId,
     Trip,
     TripId,
-    Trips,
     TripService,
     UpdateRouteRequest
 } from "../../../generated/public-transport";
@@ -44,7 +43,7 @@ export class TripListComponent implements OnInit {
     public faCircleXmark: IconDefinition = faCircleXmark;
 
     public params: Params;
-    public trips: Trips = {route: {line: '', name: ''}};
+    public trips: RouteDetails = {route: {line: '', name: ''}};
 
     public state: { line: string, name: string, variant: string };
 
