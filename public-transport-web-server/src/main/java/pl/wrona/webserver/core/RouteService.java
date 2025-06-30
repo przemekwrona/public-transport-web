@@ -41,7 +41,7 @@ public class RouteService {
         unsavedRouteEntity.setVia(route.getVia());
         unsavedRouteEntity.setGoogle(route.getGoogle());
         unsavedRouteEntity.setActive(route.getActive());
-        unsavedRouteEntity.setAgencyEntity(agencyService.findAgencyByAppUser(appUser));
+        unsavedRouteEntity.setAgency(agencyService.findAgencyByAppUser(appUser));
 
         routeQueryRepository.save(unsavedRouteEntity);
 

@@ -36,7 +36,7 @@ public class CalendarEntity {
 
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
-    private AgencyEntity agencyEntity;
+    private AgencyEntity agency;
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Set<BrigadeEntity> brigadeEntities;

@@ -41,7 +41,7 @@ public class GoogleAgreementsService {
                     return entity;
                 })
                 .orElse(GoogleAgreementEntity.builder()
-                        .agencyEntity(loggedUser)
+                        .agency(loggedUser)
                         .repeatabilityStatement(request.map(GoogleAgreementsRequest::getRepeatabilityStatement).orElse(false))
                         .accessibilityStatement(request.map(GoogleAgreementsRequest::getAccessibilityStatement).orElse(false))
                         .ticketSalesStatement(request.map(GoogleAgreementsRequest::getTicketSalesStatement).orElse(false))

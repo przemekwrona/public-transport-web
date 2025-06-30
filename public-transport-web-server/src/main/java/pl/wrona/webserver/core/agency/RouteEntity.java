@@ -55,7 +55,7 @@ public class RouteEntity {
 
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
-    private AgencyEntity agencyEntity;
+    private AgencyEntity agency;
 
     @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TripEntity> tripEntities;

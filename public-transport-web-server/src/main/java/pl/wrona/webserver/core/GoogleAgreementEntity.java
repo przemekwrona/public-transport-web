@@ -34,7 +34,7 @@ public class GoogleAgreementEntity {
 
     @OneToOne
     @JoinColumn(name = "agency_id", referencedColumnName = "agency_id")
-    private AgencyEntity agencyEntity;
+    private AgencyEntity agency;
 
     @Column(name = "repeatability_statement")
     private boolean repeatabilityStatement;
