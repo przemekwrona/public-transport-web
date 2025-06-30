@@ -20,7 +20,7 @@ public class RouteController implements RouteApi {
 
     @Override
     public ResponseEntity<Status> createRoute(String agency, Route route) {
-        return ResponseEntity.accepted().body(routeService.createRoute(route));
+        return ResponseEntity.accepted().body(routeService.createRoute(agency, route));
     }
 
     @Override

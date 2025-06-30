@@ -1,6 +1,7 @@
 package pl.wrona.webserver.core;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Routes;
@@ -8,7 +9,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.bussiness.route.creator.RouteCreatorService;
 import pl.wrona.webserver.bussiness.route.pagination.RoutePaginationService;
 import pl.wrona.webserver.bussiness.trip.reader.route.TripReaderByRouteService;
 import pl.wrona.webserver.core.agency.RouteQueryRepository;
@@ -23,43 +24,22 @@ import java.util.List;
 public class RouteService {
 
     private final RouteQueryRepository routeQueryRepository;
-    private final TripService tripService;
     private final AgencyService agencyService;
-    private final StopService stopService;
 
+    private final RouteCreatorService routeCreatorService;
     private final RoutePaginationService routePaginationService;
     private final TripReaderByRouteService tripReaderByRouteService;
-
-    @Transactional
-    public Status createRoute(org.igeolab.iot.pt.server.api.model.Route route) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = (AppUser) authentication.getPrincipal();
-
-        RouteEntity unsavedRouteEntity = new RouteEntity();
-        unsavedRouteEntity.setName(route.getName());
-        unsavedRouteEntity.setLine(route.getLine());
-
-        unsavedRouteEntity.setOriginStopId(route.getOriginStop().getId());
-        unsavedRouteEntity.setOriginStopName(stopService.findStopByIdsIn(List.of(route.getOriginStop().getId())).get(0).getName());
-
-        unsavedRouteEntity.setDestinationStopId(route.getDestinationStop().getId());
-        unsavedRouteEntity.setDestinationStopName(stopService.findStopByIdsIn(List.of(route.getDestinationStop().getId())).get(0).getName());
-
-        unsavedRouteEntity.setVia(route.getVia());
-        unsavedRouteEntity.setGoogle(route.getGoogle());
-        unsavedRouteEntity.setActive(route.getActive());
-        unsavedRouteEntity.setAgency(agencyService.findAgencyByAppUser(appUser));
-
-        routeQueryRepository.save(unsavedRouteEntity);
-
-        return new Status().status(Status.StatusEnum.CREATED);
-    }
 
     public List<RouteEntity> getRoutesEntities() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
         return routeQueryRepository.findAllByAgencyOrderByLineAscNameAsc(agencyService.findAgencyByAppUser(appUser));
+    }
+
+    @PreAgencyAuthorize
+    public Status createRoute(String instance, Route route) {
+        return routeCreatorService.createRoute(instance, route);
     }
 
     @PreAgencyAuthorize

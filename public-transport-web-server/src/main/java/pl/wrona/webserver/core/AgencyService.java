@@ -21,6 +21,11 @@ public class AgencyService {
 
     private final AgencyRepository agencyRepository;
 
+    public AgencyEntity findAgencyByAgencyCode(String agencyCode) {
+        return agencyRepository.findByAgencyCodeEquals(agencyCode);
+    }
+
+    @Deprecated
     @Transactional(readOnly = true)
     public AgencyEntity getLoggedAgency() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
