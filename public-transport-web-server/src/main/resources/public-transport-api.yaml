@@ -772,6 +772,20 @@ components:
         instance:
           type: string
 
+    AgencyAddress:
+      type: object
+      properties:
+        street:
+          type: string
+        houseNumber:
+          type: string
+        flatNumber:
+          type: string
+        postalCode:
+          type: string
+        postalCity:
+          type: string
+
     AgencyDetails:
       type: object
       properties:
@@ -781,6 +795,8 @@ components:
           type: string
         agencyTimetableUrl:
           type: string
+        agencyAddress:
+          $ref: '#/components/schemas/AgencyAddress'
 
     AgencyAdminDetail:
       type: object

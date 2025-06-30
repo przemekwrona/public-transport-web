@@ -1,9 +1,8 @@
 INSERT INTO agency (agency_code, agency_name, agency_url, agency_timetable_url, agency_phone, agency_owner_id)
-VALUES ('NEOBUS', 'NEOBUS POLSKA Czurczak Spółka Komandytowa', 'neobus.pl', 'rozklad-jazdy', '510038116', (SELECT app_user_id FROM app_user WHERE username = 'pwrona'));
+VALUES ('NS', 'NASTEPNA STACJA Przemysław Wrona', 'nastepnastacja.pl', '', '510038116', (SELECT app_user_id FROM app_user WHERE username = 'pwrona'));
 
 INSERT INTO app_user_agency(app_user_id, agency_id)
-VALUES ((SELECT app_user_id FROM app_user WHERE username = 'pwrona'),
-        (SELECT agency_id FROM agency WHERE agency_code = 'NEOBUS'));
+VALUES ((SELECT app_user_id FROM app_user WHERE username = 'pwrona'), (SELECT agency_id FROM agency WHERE agency_code = 'NS'));
 
 INSERT INTO route (name, line, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
 VALUES ('Chmielnik - Kije', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, (SELECT agency_id FROM agency WHERE agency_code = 'NEOBUS'));
