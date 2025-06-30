@@ -221,12 +221,18 @@ databaseChangeLog:
       id: create-trip-table
       author: pwrona
       changes:
+        - createSequence:
+            sequenceName: trip_id_seq
+            startValue: 1
+            incrementBy: 1
+
         - createTable:
             tableName: trip
             columns:
               - column:
                   name: trip_id
                   type: integer
+                  defaultValueSequenceNext: trip_id_seq
                   constraints:
                     primaryKey: true
                     primaryKeyName: pk_trip
@@ -284,11 +290,6 @@ databaseChangeLog:
                     foreignKeyName: fk_trip_route
                     references: route(route_id)
                     nullable: false
-
-        - createSequence:
-            sequenceName: trip_id_seq
-            startValue: 1
-            incrementBy: 1
 
         - createIndex:
             clustered: true

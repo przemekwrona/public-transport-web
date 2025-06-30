@@ -108,7 +108,7 @@ public class TripDistanceMeasureService {
                     .seconds((int) seconds)
             );
 
-            if (i < legs.size() - 1) {
+            if (i < legs.size()) {
                 Leg leg = legs.get(i);
 
                 meters += leg.distance();

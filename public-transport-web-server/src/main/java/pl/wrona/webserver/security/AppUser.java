@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.wrona.webserver.agency.entity.Agency;
+import pl.wrona.webserver.core.entity.Agency;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
