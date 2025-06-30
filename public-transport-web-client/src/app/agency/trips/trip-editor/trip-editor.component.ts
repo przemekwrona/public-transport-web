@@ -3,12 +3,11 @@ import * as L from "leaflet";
 import {control, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {findIndex, last} from "lodash";
 import {
-    Point2D,
+    Point2D, RouteDetails,
     Stop,
     StopTime,
     Trip, TripDistanceMeasuresService, TripId,
     TripMode,
-    Trips,
     TripsDetails, TripService,
     UpdateTripDetailsRequest
 } from "../../../generated/public-transport";
@@ -63,7 +62,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public tripEditorComponentMode: TripEditorComponentMode;
 
     public $tripDetails: TripsDetails = {trip: {}};
-    public $tripVariants: Trips = {};
+    public $tripVariants: RouteDetails = {};
 
     constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
@@ -80,7 +79,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => {
             this.$tripDetails = tripDetails;
 
-            this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: Trips) => {
+            this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: RouteDetails) => {
                 this.$tripVariants = tripVariants;
 
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
