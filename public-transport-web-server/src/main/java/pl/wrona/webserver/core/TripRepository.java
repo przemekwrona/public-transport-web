@@ -15,8 +15,6 @@ import java.util.List;
 @Repository
 public interface TripRepository extends JpaRepository<TripEntity, Long> {
 
-    TripEntity findFirstByRouteOrderByVariantName(RouteEntity routeEntity);
-
     List<TripEntity> findAllByRoute(RouteEntity routeEntity);
 
     @Query("SELECT t FROM TripEntity t WHERE t.route.agency = :agency AND t.route.line LIKE CONCAT(:lineOrName,'%') OR t.route.name = CONCAT(:lineOrName,'%')")
