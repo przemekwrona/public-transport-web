@@ -68,4 +68,9 @@ public class AppUserService {
                 .roles(roles)
                 .instance(agency.getAgencyCode());
     }
+
+    public AppUser getLoggedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (AppUser) authentication.getPrincipal();
+    }
 }

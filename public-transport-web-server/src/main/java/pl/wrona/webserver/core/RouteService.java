@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.bussiness.route.pagination.RoutePaginationService;
 import pl.wrona.webserver.core.agency.RouteQueryRepository;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.mapper.RouteMapper;
@@ -24,6 +25,7 @@ public class RouteService {
     private final TripService tripService;
     private final AgencyService agencyService;
     private final StopService stopService;
+    private final RoutePaginationService routePaginationService;
 
     @Transactional
     public Status createRoute(org.igeolab.iot.pt.server.api.model.Route route) {
@@ -59,21 +61,7 @@ public class RouteService {
 
     @PreAgencyAuthorize
     public Routes getRoutes(String instance) {
-        var routes = getRoutesEntities();
-        var stopsIds = routes.stream()
-                .map(routeEntity -> List.of(routeEntity.getOriginStopId(), routeEntity.getDestinationStopId()))
-                .flatMap(List::stream)
-                .toList();
-
-
-        var items = routes.stream()
-                .map(route -> RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds)))
-                .toList();
-
-        return new Routes().items(items);
+        return routePaginationService.getRoutes(instance);
     }
 
-    public RouteEntity getRouteByLineAndName(String line, String name) {
-        return this.routeQueryRepository.findByAgencyCodeAndRouteId(agencyService.getLoggedAgency(), line, name);
-    }
 }
