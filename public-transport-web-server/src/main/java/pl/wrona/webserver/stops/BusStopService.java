@@ -6,8 +6,8 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopsPatchRequest;
 import org.igeolab.iot.pt.server.api.model.StopsResponse;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.agency.AgencyService;
-import pl.wrona.webserver.agency.entity.Agency;
+import pl.wrona.webserver.core.AgencyService;
+import pl.wrona.webserver.core.entity.Agency;
 
 import java.util.Comparator;
 import java.util.Objects;

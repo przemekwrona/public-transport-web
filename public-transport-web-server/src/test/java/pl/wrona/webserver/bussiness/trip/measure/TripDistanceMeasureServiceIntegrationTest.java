@@ -67,6 +67,18 @@ class TripDistanceMeasureServiceIntegrationTest extends BaseIntegrationTest {
         assertThat(results.getStops().get(3).getDepartureTime()).isEqualTo(298);
         assertThat(results.getStops().get(3).getSeconds()).isEqualTo(298);
         assertThat(results.getStops().get(3).getMeters()).isEqualTo(5050);
+
+        assertThat(results.getStops().get(10).getStopName()).isEqualTo("Lipnik / DK78 / 02");
+        assertThat(results.getStops().get(10).getArrivalTime()).isEqualTo(1123);
+        assertThat(results.getStops().get(10).getDepartureTime()).isEqualTo(1123);
+        assertThat(results.getStops().get(10).getSeconds()).isEqualTo(1123);
+        assertThat(results.getStops().get(10).getMeters()).isEqualTo(14775);
+
+        assertThat(results.getStops().get(11).getStopName()).isEqualTo("Kije Kościół");
+        assertThat(results.getStops().get(11).getArrivalTime()).isEqualTo(1227);
+        assertThat(results.getStops().get(11).getDepartureTime()).isEqualTo(1227);
+        assertThat(results.getStops().get(11).getSeconds()).isEqualTo(1227);
+        assertThat(results.getStops().get(11).getMeters()).isEqualTo(16485);
     }
 
 }

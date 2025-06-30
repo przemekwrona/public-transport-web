@@ -7,7 +7,6 @@ import {CenterPoint, Stop, StopsResponse, StopsService} from "../../generated/pu
 import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {CommonModule} from "@angular/common";
-import {BusStopModalEditorComponent} from "../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
 import {SharedModule} from "../shared/shared.module";
 
 interface StopMarker extends L.Marker {
@@ -64,7 +63,7 @@ export class StopsComponent implements OnInit, AfterViewInit {
     private initMap(): Map {
         const centerPoint: CenterPoint = this.route.snapshot.data['centerPoint'];
         const map: Map = L.map('map-stops', {
-            center: [centerPoint.latitude, centerPoint.longitude],
+            center: [centerPoint.latitude || 52.23043289212839, centerPoint.longitude || 21.01070162462291],
             zoom: centerPoint.zoom,
             zoomControl: false
         });
