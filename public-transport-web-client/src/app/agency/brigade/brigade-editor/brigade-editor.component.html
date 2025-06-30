@@ -24,8 +24,7 @@
                         <h3 class="card-title">Plan Brygady</h3>
                     </div>
 
-                    <div cdkDropList (cdkDropListDropped)="drop($event)" class="pb-7.5">
-
+                    <div cdkDropList (cdkDropListDropped)="drop($event)" class="pb-7.5 poem">
                         @for (brigadeItem of brigadeItems || []; track brigadeItem; let brigadeIndex = $index) {
                             <div cdkDrag [@fadeBrigadeAnimation]="'in'">
                                 <!--begin:: Alert-->
