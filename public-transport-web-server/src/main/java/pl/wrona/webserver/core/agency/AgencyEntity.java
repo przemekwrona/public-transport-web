@@ -89,13 +89,13 @@ public class AgencyEntity {
     @JoinColumn(name = "agency_owner_id", referencedColumnName = "app_user_id")
     private AppUser appUser;
 
-    @OneToMany(mappedBy = "agencyEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
     private Set<RouteEntity> routeEntities;
 
-    @OneToMany(mappedBy = "agencyEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
     private Set<BrigadeEntity> brigades;
 
-    @OneToMany(mappedBy = "agencyEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
     private Set<CalendarEntity> calendars;
 
     @ManyToMany
@@ -104,7 +104,7 @@ public class AgencyEntity {
             inverseJoinColumns = @JoinColumn(name = "app_user_id"))
     private Set<AppUser> users = new HashSet<>();
 
-    @OneToOne(mappedBy = "agencyEntity", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "agency", cascade = CascadeType.ALL)
     private GoogleAgreementEntity googleAgreement;
 
 }

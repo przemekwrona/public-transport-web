@@ -10,7 +10,7 @@ public class CalendarEntityMapper {
     }
 
     public static CalendarEntity apply(CalendarEntity calendarEntity, CalendarBody calendarBody, AgencyEntity agencyEntity) {
-        calendarEntity.setAgencyEntity(agencyEntity);
+        calendarEntity.setAgency(agencyEntity);
 
         calendarEntity.setCalendarName(calendarBody.getCalendarName());
         calendarEntity.setDesignation(calendarBody.getDesignation());

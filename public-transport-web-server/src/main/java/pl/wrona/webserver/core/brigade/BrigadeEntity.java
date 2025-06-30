@@ -34,7 +34,7 @@ public class BrigadeEntity {
 
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
-    private AgencyEntity agencyEntity;
+    private AgencyEntity agency;
 
     @ManyToOne
     @JoinColumn(name = "service_id")
