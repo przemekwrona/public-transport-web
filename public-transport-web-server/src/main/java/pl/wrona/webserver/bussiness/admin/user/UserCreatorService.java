@@ -18,7 +18,7 @@ public class UserCreatorService {
                 .map(user -> new AppUser()
                         .username(user.getUsername())
                         .email(user.getEmail())
-                        .createdAt(null))
+                        .createdAt(user.getCreatedAt()))
                 .forEach(appUsersResponse::addUsersItem);
 
         return appUsersResponse;
