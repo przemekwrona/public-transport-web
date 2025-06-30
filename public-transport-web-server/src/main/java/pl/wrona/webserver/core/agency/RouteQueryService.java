@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class RouteQueryService {
@@ -15,6 +17,10 @@ public class RouteQueryService {
 
     public RouteEntity findRouteByAgencyCodeAndLineAndName(String agencyCode, String line, String name) {
         return this.routeQueryRepository.findByAgencyCodeAndLineAndName(agencyCode, line, name);
+    }
+
+    public List<RouteEntity> findRouteByAgencyCode(String agencyCode) {
+        return this.routeQueryRepository.findByAgencyCode(agencyCode);
     }
 
     @Deprecated

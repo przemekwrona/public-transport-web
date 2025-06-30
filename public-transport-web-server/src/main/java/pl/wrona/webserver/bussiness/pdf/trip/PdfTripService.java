@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.RouteService;
 import pl.wrona.webserver.core.StopTimeService;
 import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
@@ -51,7 +50,6 @@ public class PdfTripService {
 
     private final PdfTripTripRepository pdfTripTripRepository;
     private final PdfTripStopTimeRepository pdfTripStopTimeRepository;
-    private final RouteService routeService;
     private final PdfTripBrigadeTripRepository pdfTripBrigadeTripRepository;
     private final StopTimeService stopTimeService;
     private final TemplateEngine templateEngine;
