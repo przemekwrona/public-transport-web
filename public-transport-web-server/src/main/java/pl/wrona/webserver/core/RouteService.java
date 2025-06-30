@@ -3,6 +3,7 @@ package pl.wrona.webserver.core;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.Routes;
 import org.igeolab.iot.pt.server.api.model.Status;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import pl.wrona.webserver.core.agency.RouteQueryRepository;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.security.AppUser;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 
@@ -55,7 +57,8 @@ public class RouteService {
         return routeQueryRepository.findAllByAgencyOrderByLineAscNameAsc(agencyService.findAgencyByAppUser(appUser));
     }
 
-    public Routes getRoutes() {
+    @PreAgencyAuthorize
+    public Routes getRoutes(String instance) {
         var routes = getRoutesEntities();
         var stopsIds = routes.stream()
                 .map(routeEntity -> List.of(routeEntity.getOriginStopId(), routeEntity.getDestinationStopId()))

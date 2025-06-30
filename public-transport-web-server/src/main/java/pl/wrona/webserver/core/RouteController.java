@@ -23,7 +23,7 @@ public class RouteController implements RouteApi {
 
     @Override
     public ResponseEntity<Routes> getRoutes(String agency) {
-        return ResponseEntity.ok(routeService.getRoutes());
+        return ResponseEntity.ok(routeService.getRoutes(agency));
     }
 
     @Override

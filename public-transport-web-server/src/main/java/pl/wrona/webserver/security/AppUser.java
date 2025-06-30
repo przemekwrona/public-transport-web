@@ -53,7 +53,7 @@ public class AppUser implements UserDetails {
     @ManyToMany(mappedBy = "appUsers", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<AppRole> appRoles;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private Set<AgencyEntity> agencies;
 
     @Override
