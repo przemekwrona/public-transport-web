@@ -10,6 +10,7 @@ export class AuthService {
 
     static SESSION_STORAGE_AUTH_TOKEN_KEY = 'token';
     static SESSION_STORAGE_ROLES_KEY = 'roles';
+    static SESSION_STORAGE_INSTANCE_KEY = 'instance';
 
     constructor(private httpClient: HttpClient) {
     }
@@ -19,16 +20,22 @@ export class AuthService {
             .pipe(tap((response: LoginAppUserResponse) => {
                 sessionStorage.setItem(AuthService.SESSION_STORAGE_AUTH_TOKEN_KEY, response.token || '');
                 sessionStorage.setItem(AuthService.SESSION_STORAGE_ROLES_KEY, JSON.stringify(response.roles) || '[]');
+                sessionStorage.setItem(AuthService.SESSION_STORAGE_INSTANCE_KEY, response.instance || '');
             }));
     }
 
     logout(): void {
         sessionStorage.setItem(AuthService.SESSION_STORAGE_AUTH_TOKEN_KEY, '');
         sessionStorage.setItem(AuthService.SESSION_STORAGE_ROLES_KEY, '[]');
+        sessionStorage.setItem(AuthService.SESSION_STORAGE_INSTANCE_KEY, '');
     }
 
     getRoles(): string[] {
         return JSON.parse(sessionStorage.getItem(AuthService.SESSION_STORAGE_ROLES_KEY)) || [];
+    }
+
+    getInstance(): string {
+        return sessionStorage.getItem(AuthService.SESSION_STORAGE_INSTANCE_KEY) || '';
     }
 
     hasRoleSuperAdmin(): boolean {

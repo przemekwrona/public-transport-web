@@ -2,9 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { ResolveFn } from '@angular/router';
 
 import { getAllCalendarsResolver } from './get-all-calendars.resolver';
+import {GetCalendarsResponse} from "../../../generated/public-transport";
 
 describe('getAllCalendarsResolver', () => {
-  const executeResolver: ResolveFn<boolean> = (...resolverParameters) => 
+  const executeResolver: ResolveFn<GetCalendarsResponse> = (...resolverParameters) =>
       TestBed.runInInjectionContext(() => getAllCalendarsResolver(...resolverParameters));
 
   beforeEach(() => {
