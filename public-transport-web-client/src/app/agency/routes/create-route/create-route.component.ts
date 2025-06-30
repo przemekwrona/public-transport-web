@@ -1,8 +1,9 @@
-import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
-import {RoutesService} from "../routes.service";
-import {Route, Status, Stop} from "../../../generated/public-transport";
+import {Component} from '@angular/core';
+import {Route, RouteService, Status, Stop} from "../../../generated/public-transport";
 import {Router} from "@angular/router";
 import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
+import {AuthService} from "../../../auth/auth.service";
+import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
     selector: 'app-create-route',
@@ -19,10 +20,10 @@ export class CreateRouteComponent {
     public origin: BusStopSelectorData = {} as BusStopSelectorData;
     public destination: BusStopSelectorData = {} as BusStopSelectorData;
 
-    constructor(private routeService: RoutesService, private _router: Router) {
+    constructor(private _router: Router, private routeService: RouteService, private authService: AuthService, private notificationService: NotificationService) {
     }
 
-    public createRoute(): void {
+    public createRouteAndNavigateToCreateNewTrip(): void {
         const originStop: Stop = {} as Stop;
         originStop.id = this.origin.stopId;
         originStop.name = this.origin.stopName
@@ -34,7 +35,8 @@ export class CreateRouteComponent {
         this.route.originStop = originStop;
         this.route.destinationStop = destinationStop;
 
-        this.routeService.createRoute(this.route).subscribe((status: Status) => {
+        this.routeService.createRoute(this.authService.getInstance(), this.route).subscribe((status: Status) => {
+            this.notificationService.showSuccess(`Linia ${this.route.line} (${this.route.name}) została pomyślnie utworzona`);
             this._router.navigate(['/agency/trips/create'], {
                 queryParams: {
                     line: this.route.line,

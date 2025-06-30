@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface AgencyRepository extends JpaRepository<AgencyEntity, Long> {
 
-    List<AgencyEntity> findAllByAgencyCodeEndingWith(String suffix);
-
     AgencyEntity findByAgencyCodeEquals(String agencyCode);
 
     AgencyEntity findByAppUser(AppUser appUser);
