@@ -3,6 +3,8 @@ package pl.wrona.webserver.core;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.RouteApi;
 import org.igeolab.iot.pt.server.api.model.Route;
+import org.igeolab.iot.pt.server.api.model.RouteDetails;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Routes;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.UpdateRouteRequest;
@@ -19,6 +21,11 @@ public class RouteController implements RouteApi {
     @Override
     public ResponseEntity<Status> createRoute(String agency, Route route) {
         return ResponseEntity.accepted().body(routeService.createRoute(route));
+    }
+
+    @Override
+    public ResponseEntity<RouteDetails> getRouteDetails(String agency, RouteId routeId) {
+        return ResponseEntity.ok(routeService.getRouteDetails(agency, routeId));
     }
 
     @Override

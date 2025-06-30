@@ -1,17 +1,18 @@
 package pl.wrona.webserver.core;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.RouteDetails;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Routes;
 import org.igeolab.iot.pt.server.api.model.Status;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.pagination.RoutePaginationService;
+import pl.wrona.webserver.bussiness.trip.reader.route.TripReaderByRouteService;
 import pl.wrona.webserver.core.agency.RouteQueryRepository;
 import pl.wrona.webserver.core.agency.RouteEntity;
-import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.security.AppUser;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -25,7 +26,9 @@ public class RouteService {
     private final TripService tripService;
     private final AgencyService agencyService;
     private final StopService stopService;
+
     private final RoutePaginationService routePaginationService;
+    private final TripReaderByRouteService tripReaderByRouteService;
 
     @Transactional
     public Status createRoute(org.igeolab.iot.pt.server.api.model.Route route) {
@@ -62,6 +65,11 @@ public class RouteService {
     @PreAgencyAuthorize
     public Routes getRoutes(String instance) {
         return routePaginationService.getRoutes(instance);
+    }
+
+    @PreAgencyAuthorize
+    public RouteDetails getRouteDetails(String instance, RouteId routeId) {
+        return tripReaderByRouteService.getRouteDetails(instance, routeId);
     }
 
 }
