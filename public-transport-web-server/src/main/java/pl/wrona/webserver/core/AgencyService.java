@@ -1,6 +1,7 @@
 package pl.wrona.webserver.core;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.AgencyAddress;
 import org.igeolab.iot.pt.server.api.model.AgencyDetails;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.security.core.Authentication;
@@ -39,10 +40,19 @@ public class AgencyService {
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
         AgencyEntity agencyEntity = agencyRepository.findByAppUser(appUser);
+
+        AgencyAddress agencyAddress  = new AgencyAddress();
+        agencyAddress.street(agencyEntity.getStreet());
+        agencyAddress.houseNumber(agencyEntity.getHouseNumber());
+        agencyAddress.flatNumber(agencyEntity.getFlatNumber());
+        agencyAddress.postalCode(agencyEntity.getPostalCode());
+        agencyAddress.postalCity(agencyEntity.getPostalCity());
+
         return new AgencyDetails()
                 .agencyName(agencyEntity.getAgencyName())
                 .agencyUrl(agencyEntity.getAgencyUrl())
-                .agencyTimetableUrl(agencyEntity.getAgencyTimetableUrl());
+                .agencyTimetableUrl(agencyEntity.getAgencyTimetableUrl())
+                .agencyAddress(agencyAddress);
     }
 
     @Transactional
@@ -59,10 +69,6 @@ public class AgencyService {
 
         return new Status()
                 .status(Status.StatusEnum.SUCCESS);
-    }
-
-    public AgencyEntity findAgencyByAppUser(AppUser appUser) {
-        return agencyRepository.findByAppUser(appUser);
     }
 
     public AgenciesAdminResponse findAllAgencies() {
