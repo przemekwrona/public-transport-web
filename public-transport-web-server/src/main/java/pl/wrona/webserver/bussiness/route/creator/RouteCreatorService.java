@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.agency.RouteEntity;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class RouteCreatorService {
     private final RouteCreatorRepository routeCreatorRepository;
 
     @Transactional
+    @PreAgencyAuthorize
     public Status createRoute(String instance, Route route) {
         var stopDictionary = stopService.mapStopByIdsIn(List.of(route.getOriginStop().getId(), route.getDestinationStop().getId()));
 

@@ -13,9 +13,9 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.RouteService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeService;
+import pl.wrona.webserver.core.agency.RouteQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeTripService;
 import pl.wrona.webserver.core.calendar.CalendarDatesService;
 import pl.wrona.webserver.core.calendar.CalendarService;
@@ -39,7 +39,8 @@ import java.util.stream.Collectors;
 public class GtfsDownloadService {
 
     private final AgencyService agencyService;
-    private final RouteService routeService;
+//    private final RouteService routeService;
+    private final RouteQueryService routeQueryService;
     private final BrigadeTripService brigadeTripService;
     private final StopService stopService;
     private final StopTimeService stopTimeService;
@@ -96,7 +97,7 @@ public class GtfsDownloadService {
 
             var stopDictionary = stops.stream().collect(Collectors.toMap(stop -> Long.parseLong(stop.getId().getId()), Function.identity()));
 
-            var routes = routeService.getRoutesEntities().stream()
+            var routes = routeQueryService.findRouteByAgencyCode(agencyEntity.getAgencyCode()).stream()
                     .map(route -> RouteHandler.handle(agencyEntity, route))
                     .toList();
 

@@ -25,6 +25,7 @@ public class StopService {
                 .collect(Collectors.toMap(StopEntity::getStopId, Function.identity()));
     }
 
+    @Deprecated
     public List<StopEntity> findAllStops(AgencyEntity agencyEntity) {
         return stopRepository.findAllByAgency(agencyEntity);
     }

@@ -9,6 +9,7 @@ import pl.wrona.webserver.core.agency.RouteQueryService;
 import pl.wrona.webserver.core.agency.TripQueryService;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.core.mapper.TripMapper;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class TripReaderByRouteService {
     private final TripQueryService tripQueryService;
     private final StopService stopService;
 
+    @PreAgencyAuthorize
     public RouteDetails getRouteDetails(String instance, RouteId routeId) {
         var route = routeQueryService.findRouteByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName());
         var trips = tripQueryService.findByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName()).stream()
