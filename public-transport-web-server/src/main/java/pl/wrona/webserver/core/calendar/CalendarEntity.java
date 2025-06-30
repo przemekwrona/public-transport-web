@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.onebusaway.gtfs.model.calendar.ServiceDate;
 import pl.wrona.webserver.core.brigade.BrigadeEntity;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -36,7 +36,7 @@ public class CalendarEntity {
 
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
-    private Agency agency;
+    private AgencyEntity agencyEntity;
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Set<BrigadeEntity> brigadeEntities;

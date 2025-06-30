@@ -1,8 +1,8 @@
 package pl.wrona.webserver.core;
 
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 public interface AgencyRouteCount {
-    Agency getAgency();
+    AgencyEntity getAgency();
     Integer getRouteCount();
 }

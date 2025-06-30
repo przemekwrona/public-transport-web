@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripMode;
-import pl.wrona.webserver.core.entity.TripEntity;
-import pl.wrona.webserver.core.entity.TripVariantMode;
+import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 
 import java.util.List;
 

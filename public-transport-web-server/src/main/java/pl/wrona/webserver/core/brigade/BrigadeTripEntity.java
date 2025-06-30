@@ -12,8 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.TripMode;
-import pl.wrona.webserver.core.entity.Agency;
-import pl.wrona.webserver.core.entity.TripEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.agency.TripEntity;
 
 @Data
 @Entity
@@ -64,8 +64,8 @@ public class BrigadeTripEntity {
     @Column(name = "travel_time_in_seconds")
     private int travelTimeInSeconds;
 
-    public String stringifyId(Agency agency, BrigadeEntity brigade) {
-        return "%s/%s/%s".formatted(agency.getAgencyCode(), brigade.getBrigadeNumber(), this.getTripSequence());
+    public String stringifyId(AgencyEntity agencyEntity, BrigadeEntity brigade) {
+        return "%s/%s/%s".formatted(agencyEntity.getAgencyCode(), brigade.getBrigadeNumber(), this.getTripSequence());
     }
 
     public String getRouteId() {

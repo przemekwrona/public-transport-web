@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -54,7 +54,7 @@ public class AppUser implements UserDetails {
     private Set<AppRole> appRoles;
 
     @ManyToMany(mappedBy = "users")
-    private Set<Agency> agencies;
+    private Set<AgencyEntity> agencies;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

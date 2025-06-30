@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.RouteEntity;
-import pl.wrona.webserver.core.entity.TripEntity;
-import pl.wrona.webserver.core.entity.TripVariantMode;
+import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface TripRepository extends JpaRepository<TripEntity, Long> {
     List<TripEntity> findAllByRoute(RouteEntity routeEntity);
 
     @Query("SELECT t FROM TripEntity t WHERE t.route.agency = :agency AND t.route.line LIKE CONCAT(:lineOrName,'%') OR t.route.name = CONCAT(:lineOrName,'%')")
-    List<TripEntity> findByLineOrNameContainingIgnoreCase(@Param("lineOrName") String lineOrName, @Param("agency") Agency agency);
+    List<TripEntity> findByLineOrNameContainingIgnoreCase(@Param("lineOrName") String lineOrName, @Param("agency") AgencyEntity agencyEntity);
 
     @Override
     void delete(TripEntity entity);

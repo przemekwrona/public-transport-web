@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +17,7 @@ public interface BrigadeTripRepository extends JpaRepository<BrigadeTripEntity, 
     List<BrigadeTripEntity> findAllByBrigadeName(@Param("brigadeName") String brigadeName);
 
     @Query("SELECT bt FROM BrigadeTripEntity bt WHERE bt.brigade.agency = :agency AND bt.brigade.calendar.startDate <= :date AND bt.brigade.calendar.endDate >= :date")
-    List<BrigadeTripEntity> findAllByAgencyAndActiveCalendar(@Param("agency") Agency agency, @Param("date") LocalDate date);
+    List<BrigadeTripEntity> findAllByAgencyAndActiveCalendar(@Param("agency") AgencyEntity agencyEntity, @Param("date") LocalDate date);
 
     @Modifying
     void deleteAllByBrigade(BrigadeEntity brigade);

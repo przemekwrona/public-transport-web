@@ -7,7 +7,7 @@ import org.igeolab.iot.pt.server.api.model.StopsPatchRequest;
 import org.igeolab.iot.pt.server.api.model.StopsResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -51,10 +51,10 @@ public class BusStopService {
     }
 
     public CenterPoint centerMap() {
-        Agency agency = agencyService.getLoggedAgency();
+        AgencyEntity agencyEntity = agencyService.getLoggedAgency();
         return new CenterPoint()
-                .latitude(agency.getLatitude())
-                .longitude(agency.getLongitude())
+                .latitude(agencyEntity.getLatitude())
+                .longitude(agencyEntity.getLongitude())
                 .zoom(14);
     }
 }

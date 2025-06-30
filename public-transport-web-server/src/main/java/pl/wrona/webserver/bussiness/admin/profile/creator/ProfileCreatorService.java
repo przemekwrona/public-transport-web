@@ -6,7 +6,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.client.geoapify.geocode.Feature;
 import pl.wrona.webserver.client.geoapify.GeoapifyService;
 import pl.wrona.webserver.client.geoapify.geocode.Geometry;
@@ -40,24 +40,24 @@ public class ProfileCreatorService {
         Set<AppUser> agencyVisibility = new HashSet<>(superUsers);
         agencyVisibility.add(savedAppUser);
 
-        Agency agency = new Agency();
-        agency.setAgencyName(agencyAdminCreateAccountRequest.getCompanyName());
-        agency.setAgencyCode(agencyAdminCreateAccountRequest.getCompanyCode());
-        agency.setAppUser(savedAppUser);
-        agency.setTexNumber(agencyAdminCreateAccountRequest.getTaxNumber());
-        agency.setStreet(agencyAdminCreateAccountRequest.getStreet());
-        agency.setHouseNumber(agencyAdminCreateAccountRequest.getHouseNumber());
-        agency.setFlatNumber(agencyAdminCreateAccountRequest.getFlatNumber());
-        agency.setPostalCode(agencyAdminCreateAccountRequest.getPostalCode());
-        agency.setPostalCity(agencyAdminCreateAccountRequest.getPostalCity());
+        AgencyEntity agencyEntity = new AgencyEntity();
+        agencyEntity.setAgencyName(agencyAdminCreateAccountRequest.getCompanyName());
+        agencyEntity.setAgencyCode(agencyAdminCreateAccountRequest.getCompanyCode());
+        agencyEntity.setAppUser(savedAppUser);
+        agencyEntity.setTexNumber(agencyAdminCreateAccountRequest.getTaxNumber());
+        agencyEntity.setStreet(agencyAdminCreateAccountRequest.getStreet());
+        agencyEntity.setHouseNumber(agencyAdminCreateAccountRequest.getHouseNumber());
+        agencyEntity.setFlatNumber(agencyAdminCreateAccountRequest.getFlatNumber());
+        agencyEntity.setPostalCode(agencyAdminCreateAccountRequest.getPostalCode());
+        agencyEntity.setPostalCity(agencyAdminCreateAccountRequest.getPostalCity());
         Optional.of(addressFeature).map(Feature::geometry).map(Geometry::coordinates).ifPresent(cords -> {
-            agency.setLatitude(cords.get(1));
-            agency.setLongitude(cords.get(0));
+            agencyEntity.setLatitude(cords.get(1));
+            agencyEntity.setLongitude(cords.get(0));
         });
-        agency.setUsers(agencyVisibility);
-        agency.setCreatedAt(LocalDateTime.now());
+        agencyEntity.setUsers(agencyVisibility);
+        agencyEntity.setCreatedAt(LocalDateTime.now());
 
-        Agency savedAgency = profileCreatorAgencyRepository.save(agency);
+        AgencyEntity savedAgencyEntity = profileCreatorAgencyRepository.save(agencyEntity);
 
         return new Status().status(Status.StatusEnum.CREATED);
     }

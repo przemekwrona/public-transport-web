@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.security.AppUser;
 import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminDetail;
@@ -22,7 +22,7 @@ public class AgencyService {
     private final AgencyRepository agencyRepository;
 
     @Transactional(readOnly = true)
-    public Agency getLoggedAgency() {
+    public AgencyEntity getLoggedAgency() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
@@ -33,11 +33,11 @@ public class AgencyService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        Agency agency = agencyRepository.findByAppUser(appUser);
+        AgencyEntity agencyEntity = agencyRepository.findByAppUser(appUser);
         return new AgencyDetails()
-                .agencyName(agency.getAgencyName())
-                .agencyUrl(agency.getAgencyUrl())
-                .agencyTimetableUrl(agency.getAgencyTimetableUrl());
+                .agencyName(agencyEntity.getAgencyName())
+                .agencyUrl(agencyEntity.getAgencyUrl())
+                .agencyTimetableUrl(agencyEntity.getAgencyTimetableUrl());
     }
 
     @Transactional
@@ -45,18 +45,18 @@ public class AgencyService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        Agency agency = agencyRepository.findByAppUser(appUser);
-        agency.setAgencyName(agencyDetails.getAgencyName());
-        agency.setAgencyUrl(agencyDetails.getAgencyUrl());
-        agency.setAgencyTimetableUrl(agencyDetails.getAgencyTimetableUrl());
+        AgencyEntity agencyEntity = agencyRepository.findByAppUser(appUser);
+        agencyEntity.setAgencyName(agencyDetails.getAgencyName());
+        agencyEntity.setAgencyUrl(agencyDetails.getAgencyUrl());
+        agencyEntity.setAgencyTimetableUrl(agencyDetails.getAgencyTimetableUrl());
 
-        agencyRepository.save(agency);
+        agencyRepository.save(agencyEntity);
 
         return new Status()
                 .status(Status.StatusEnum.SUCCESS);
     }
 
-    public Agency findAgencyByAppUser(AppUser appUser) {
+    public AgencyEntity findAgencyByAppUser(AppUser appUser) {
         return agencyRepository.findByAppUser(appUser);
     }
 
@@ -64,7 +64,7 @@ public class AgencyService {
         var agencies = agencyRepository.countRoutesByAgency().stream().map(groupedAgency -> new AgencyAdminDetail()
                         .agencyCode(groupedAgency.getAgency().getAgencyCode())
                         .agencyName(groupedAgency.getAgency().getAgencyName())
-                        .createdAt(Optional.of(groupedAgency.getAgency()).map(Agency::getCreatedAt).map(createdAt -> createdAt.atOffset(ZoneOffset.UTC)).orElse(null))
+                        .createdAt(Optional.of(groupedAgency.getAgency()).map(AgencyEntity::getCreatedAt).map(createdAt -> createdAt.atOffset(ZoneOffset.UTC)).orElse(null))
                         .routesNo(groupedAgency.getRouteCount()))
                 .toList();
 

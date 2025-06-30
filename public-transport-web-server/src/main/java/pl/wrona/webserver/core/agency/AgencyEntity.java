@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core.entity;
+package pl.wrona.webserver.core.agency;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,12 +12,12 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.wrona.webserver.core.GoogleAgreementEntity;
-import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEntity;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
 import pl.wrona.webserver.security.AppUser;
@@ -29,9 +29,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Table(name = "agency")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Agency {
+public class AgencyEntity {
 
     @Id
     @Column(name = "agency_id")
@@ -88,13 +89,13 @@ public class Agency {
     @JoinColumn(name = "agency_owner_id", referencedColumnName = "app_user_id")
     private AppUser appUser;
 
-    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agencyEntity", cascade = CascadeType.ALL)
     private Set<RouteEntity> routeEntities;
 
-    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agencyEntity", cascade = CascadeType.ALL)
     private Set<BrigadeEntity> brigades;
 
-    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agencyEntity", cascade = CascadeType.ALL)
     private Set<CalendarEntity> calendars;
 
     @ManyToMany
@@ -103,7 +104,7 @@ public class Agency {
             inverseJoinColumns = @JoinColumn(name = "app_user_id"))
     private Set<AppUser> users = new HashSet<>();
 
-    @OneToOne(mappedBy = "agency", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "agencyEntity", cascade = CascadeType.ALL)
     private GoogleAgreementEntity googleAgreement;
 
 }

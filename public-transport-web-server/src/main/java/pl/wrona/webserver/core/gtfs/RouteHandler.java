@@ -2,12 +2,12 @@ package pl.wrona.webserver.core.gtfs;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.Route;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.RouteEntity;
 
 public class RouteHandler {
 
-    public static Route handle(Agency agencyEntity, RouteEntity entity) {
+    public static Route handle(AgencyEntity agencyEntity, RouteEntity entity) {
         Route route = new Route();
 
         var agencyAndId = new AgencyAndId();

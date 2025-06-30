@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.BaseIntegrationTest;
 import pl.wrona.webserver.core.AgencyRepository;
-import pl.wrona.webserver.core.entity.Agency;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppRoleRepository;
 import pl.wrona.webserver.security.AppUser;
@@ -55,19 +55,19 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
         // then
         assertThat(status).isNotNull().isEqualTo(new Status().status(Status.StatusEnum.CREATED));
 
-        Agency createdAgency = agencyRepository.findByAgencyCodeEquals(agencyCode);
-        assertThat(createdAgency).isNotNull();
-        assertThat(createdAgency.getAgencyName()).isEqualTo("Następna Stacja");
-        assertThat(createdAgency.getAgencyCode()).isEqualTo("NS");
-        assertThat(createdAgency.getTexNumber()).isEqualTo("5267791688");
-        assertThat(createdAgency.getStreet()).isEqualTo("Nakielska");
-        assertThat(createdAgency.getHouseNumber()).isEqualTo("3");
-        assertThat(createdAgency.getFlatNumber()).isEqualTo("1");
-        assertThat(createdAgency.getPostalCode()).isEqualTo("01-106");
-        assertThat(createdAgency.getPostalCity()).isEqualTo("Warszawa");
-        assertThat(createdAgency.getLongitude()).isEqualTo(20.9383168);
-        assertThat(createdAgency.getLatitude()).isEqualTo(52.230207);
-        assertThat(createdAgency.getUsers().stream().map(AppUser::getUsername).toList()).hasSize(2).hasSameElementsAs(List.of("jkowalski", "pwrona"));
+        AgencyEntity createdAgencyEntity = agencyRepository.findByAgencyCodeEquals(agencyCode);
+        assertThat(createdAgencyEntity).isNotNull();
+        assertThat(createdAgencyEntity.getAgencyName()).isEqualTo("Następna Stacja");
+        assertThat(createdAgencyEntity.getAgencyCode()).isEqualTo("NS");
+        assertThat(createdAgencyEntity.getTexNumber()).isEqualTo("5267791688");
+        assertThat(createdAgencyEntity.getStreet()).isEqualTo("Nakielska");
+        assertThat(createdAgencyEntity.getHouseNumber()).isEqualTo("3");
+        assertThat(createdAgencyEntity.getFlatNumber()).isEqualTo("1");
+        assertThat(createdAgencyEntity.getPostalCode()).isEqualTo("01-106");
+        assertThat(createdAgencyEntity.getPostalCity()).isEqualTo("Warszawa");
+        assertThat(createdAgencyEntity.getLongitude()).isEqualTo(20.9383168);
+        assertThat(createdAgencyEntity.getLatitude()).isEqualTo(52.230207);
+        assertThat(createdAgencyEntity.getUsers().stream().map(AppUser::getUsername).toList()).hasSize(2).hasSameElementsAs(List.of("jkowalski", "pwrona"));
 
         Set<AppRole> createdUserAppRoles = appRoleRepository.findAppRolesByRoleIsIn(Set.of("AGENCY_OWNER"));
         AppUser appUser = appUserRepository.findByUsername("jkowalski").orElse(null);
