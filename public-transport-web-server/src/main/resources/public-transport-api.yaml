@@ -405,12 +405,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/CenterPoint'
 
-  /routes:
+  /agency/{agency}/routes:
     post:
       tags:
         - route
       summary: Create new route in agency
       operationId: createRoute
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -430,6 +436,12 @@ paths:
         - route
       summary: Update route by RouteId
       operationId: updateRoute
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -449,6 +461,12 @@ paths:
         - route
       summary: Return list of routes
       operationId: getRoutes
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Created
@@ -745,6 +763,8 @@ components:
           type: array
           items:
             type: string
+        instance:
+          type: string
 
     AgencyDetails:
       type: object

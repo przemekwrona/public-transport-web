@@ -17,17 +17,17 @@ public class RouteController implements RouteApi {
     private final RouteCommandService routeCommandService;
 
     @Override
-    public ResponseEntity<Status> createRoute(Route route) {
+    public ResponseEntity<Status> createRoute(String agency, Route route) {
         return ResponseEntity.accepted().body(routeService.createRoute(route));
     }
 
     @Override
-    public ResponseEntity<Routes> getRoutes() {
+    public ResponseEntity<Routes> getRoutes(String agency) {
         return ResponseEntity.ok(routeService.getRoutes());
     }
 
     @Override
-    public ResponseEntity<Status> updateRoute(UpdateRouteRequest updateRouteRequest) {
+    public ResponseEntity<Status> updateRoute(String agency, UpdateRouteRequest updateRouteRequest) {
         return ResponseEntity.ok(routeCommandService.updateRoute(updateRouteRequest));
     }
 }
