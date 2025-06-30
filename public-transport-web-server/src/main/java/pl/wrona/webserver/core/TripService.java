@@ -5,12 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.Point2D;
-import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
-import org.igeolab.iot.pt.server.api.model.Trips;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.stereotype.Service;
@@ -142,20 +140,6 @@ public class TripService {
 
         return new Status()
                 .status(Status.StatusEnum.SUCCESS);
-    }
-
-    public Trips getTrips(RouteId routeId) {
-        var route = routeQueryService.findRouteByNameAndLine(routeId.getName(), routeId.getLine());
-        List<TripEntity> trips = tripRepository.findAllByRoute(route);
-        List<Trip> tripsResponse = trips.stream()
-                .map(trip -> TripMapper.map(trip))
-                .toList();
-
-        var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());
-
-        return new Trips()
-                .route(RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds)))
-                .trips(tripsResponse);
     }
 
     public TripsDetails getTripByVariant(TripId tripId) {
