@@ -1,8 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: insert-example-data
-      author: pwrona
-      context: local
-      changes:
-        - sqlFile:
-            path: db/init.sql

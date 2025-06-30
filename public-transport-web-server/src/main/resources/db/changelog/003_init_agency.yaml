@@ -355,3 +355,10 @@ databaseChangeLog:
             referencedTableName: trip
             referencedColumnNames: trip_id
             onDelete: CASCADE
+
+  - changeSet:
+      id: init-user
+      author: pwrona
+      changes:
+        - sqlFile:
+            path: db/init_user.sql
