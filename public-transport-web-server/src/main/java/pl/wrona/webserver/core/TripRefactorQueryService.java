@@ -2,8 +2,8 @@ package pl.wrona.webserver.core;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
+import org.igeolab.iot.pt.server.api.model.RouteDetails;
 import org.igeolab.iot.pt.server.api.model.Trip;
-import org.igeolab.iot.pt.server.api.model.Trips;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
@@ -36,8 +36,8 @@ public class TripRefactorQueryService {
 
         Map<Long, StopEntity> stopDictionary = this.stopService.mapStopByIdsIn(stopsIds);
 
-        List<Trips> tripsResponse = tripSet.keySet().stream()
-                .map(route -> new Trips()
+        List<RouteDetails> tripsResponse = tripSet.keySet().stream()
+                .map(route -> new RouteDetails()
                         .route(RouteMapper.map(route, stopDictionary))
                         .trips(tripSet.get(route).stream()
                                 .map(trip -> TripMapper.map(trip))
@@ -46,8 +46,8 @@ public class TripRefactorQueryService {
                                         .thenComparing(Trip::getName))
                                 .toList()))
                 .sorted(Comparator
-                        .comparing((Trips trip) -> trip.getRoute().getLine())
-                        .thenComparing((Trips trip) -> trip.getRoute().getName()))
+                        .comparing((RouteDetails trip) -> trip.getRoute().getLine())
+                        .thenComparing((RouteDetails trip) -> trip.getRoute().getName()))
                 .toList();
 
         return new GetAllTripsResponse()
