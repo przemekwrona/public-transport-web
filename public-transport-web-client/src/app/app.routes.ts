@@ -62,7 +62,7 @@ export const routes: Routes = [
         path: 'admin/agency', component: AgencyComponent, children: [
             {path: 'profiles', component: ProfileListComponent, resolve: {agencies: agenciesResolver}},
             {path: 'create', component: CreateProfileComponent },
-            {path: 'users', component: UserListComponent, resolve: { agencyDetails: usersResolver }}
+            {path: 'users', component: UserListComponent, resolve: { users: usersResolver }}
         ]
     },
     {path: 'info', component: LandingComponent},
