@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {DatePipe} from "@angular/common";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterModule} from "@angular/router";
 import {AppUsersResponse} from "../../../generated/public-transport";
 
 @Component({
     selector: 'app-user-list',
     standalone: true,
     imports: [
-        DatePipe
+        DatePipe,
+        RouterModule
     ],
     templateUrl: './user-list.component.html',
     styleUrl: './user-list.component.scss'

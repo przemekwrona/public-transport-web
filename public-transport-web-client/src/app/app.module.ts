@@ -16,6 +16,7 @@ import {BASE_PATH} from "./generated/public-transport";
 import { TranslocoRootModule } from './transloco-root.module';
 import {BASE_PATH_PDF_API} from "./generated/public-transport-pdf";
 import {UserListComponent} from "./agency/user/user-list/user-list.component";
+import {CreateUserComponent} from "./agency/user/create-user/create-user.component";
 
 @NgModule({
     imports: [
@@ -30,7 +31,8 @@ import {UserListComponent} from "./agency/user/user-list/user-list.component";
         AuthModule,
         FormsModule,
         TranslocoRootModule,
-        UserListComponent
+        UserListComponent,
+        CreateUserComponent
     ],
     declarations: [
         AppComponent
