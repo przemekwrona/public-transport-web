@@ -10,7 +10,7 @@ import {AppUsersResponse} from "../../../generated/public-transport";
         DatePipe
     ],
     templateUrl: './user-list.component.html',
-    styleUrl: './user-list.component.css'
+    styleUrl: './user-list.component.scss'
 })
 export class UserListComponent implements OnInit {
 
