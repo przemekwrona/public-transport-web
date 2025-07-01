@@ -5,6 +5,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.UpdateRouteRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.bussiness.route.LineNameCleaner;
 import pl.wrona.webserver.core.agency.RouteQueryService;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -21,7 +22,7 @@ public class RouteUpdaterService {
     public Status updateRoute(String instance, UpdateRouteRequest updateRouteRequest) {
         var route = routeQueryService.findRouteByAgencyCodeAndLineAndName(instance, updateRouteRequest.getRouteId().getLine(), updateRouteRequest.getRouteId().getName());
         route.setLine(updateRouteRequest.getRoute().getLine());
-        route.setName(updateRouteRequest.getRoute().getName());
+        route.setName(LineNameCleaner.clean(updateRouteRequest.getRoute().getName()));
         route.setGoogle(updateRouteRequest.getRoute().getGoogle());
         route.setActive(updateRouteRequest.getRoute().getActive());
         route.setDescription(updateRouteRequest.getRoute().getDescription());
