@@ -5,6 +5,7 @@ import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.bussiness.route.LineNameCleaner;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.agency.RouteEntity;
@@ -26,8 +27,9 @@ public class RouteCreatorService {
         var stopDictionary = stopService.mapStopByIdsIn(List.of(route.getOriginStop().getId(), route.getDestinationStop().getId()));
 
         RouteEntity unsavedRouteEntity = new RouteEntity();
-        unsavedRouteEntity.setName(route.getName());
+
         unsavedRouteEntity.setLine(route.getLine());
+        unsavedRouteEntity.setName(LineNameCleaner.clean(route.getName()));
 
         unsavedRouteEntity.setOriginStopId(route.getOriginStop().getId());
         unsavedRouteEntity.setOriginStopName(stopDictionary.get(route.getOriginStop().getId()).getName());
@@ -46,4 +48,6 @@ public class RouteCreatorService {
 
         return new Status().status(Status.StatusEnum.CREATED);
     }
+
+
 }
