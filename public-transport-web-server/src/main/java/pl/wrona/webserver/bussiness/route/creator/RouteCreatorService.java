@@ -30,6 +30,7 @@ public class RouteCreatorService {
 
         unsavedRouteEntity.setLine(route.getLine());
         unsavedRouteEntity.setName(LineNameCleaner.clean(route.getName()));
+        unsavedRouteEntity.setOriginName(route.getName());
 
         unsavedRouteEntity.setOriginStopId(route.getOriginStop().getId());
         unsavedRouteEntity.setOriginStopName(stopDictionary.get(route.getOriginStop().getId()).getName());

@@ -1,11 +1,11 @@
-INSERT INTO agency (agency_code, agency_name, agency_url, agency_timetable_url, agency_phone, agency_owner_id)
-VALUES ('NS', 'NASTEPNA STACJA Przemysław Wrona', 'nastepnastacja.pl', '', '510038116', (SELECT app_user_id FROM app_user WHERE username = 'pwrona'));
+INSERT INTO agency (agency_code, agency_name, agency_url, agency_timetable_url, agency_phone, created_at, street, house_number, flat_number, postal_code, postal_city, agency_owner_id)
+VALUES ('NS', 'NASTEPNA STACJA Przemysław Wrona', 'nastepnastacja.pl', '', '510038116', now(), 'NAKIELSKA', '5', '38', '01106', 'WARSZAWA', (SELECT app_user_id FROM app_user WHERE username = 'pwrona'));
 
 INSERT INTO app_user_agency(app_user_id, agency_id)
 VALUES ((SELECT app_user_id FROM app_user WHERE username = 'pwrona'), (SELECT agency_id FROM agency WHERE agency_code = 'NS'));
 
-INSERT INTO route (name, line, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
-VALUES ('Chmielnik - Kije', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, (SELECT agency_id FROM agency WHERE agency_code = 'NEOBUS'));
+INSERT INTO route (origin_name, name, line, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
+VALUES ('Chmielnik - Kije', 'CHMIELNIK-KIJE', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, (SELECT agency_id FROM agency WHERE agency_code = 'NEOBUS'));
 
 INSERT INTO trip (variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
 VALUES ('MAIN', 'FRONT', 'Kije', null, null, 27, 13382, 1781, true, null, 'Chmielnik', null, 'Kije', (SELECT route_id FROM route WHERE line = 'L1' AND name = 'Chmielnik - Kije'));

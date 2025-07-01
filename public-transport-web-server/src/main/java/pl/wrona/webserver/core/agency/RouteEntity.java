@@ -31,6 +31,9 @@ public class RouteEntity {
 
     private String name;
 
+    @Column(name = "origin_name")
+    private String originName;
+
     private String line;
 
     @Column(name = "origin_stop_id")
