@@ -46,4 +46,8 @@ export class AuthService {
         return this.getRoles().includes('AGENCY_OWNER');
     }
 
+    setInstance(instance: string): void {
+        sessionStorage.setItem(AuthService.SESSION_STORAGE_INSTANCE_KEY, instance || '');
+    }
+
 }
