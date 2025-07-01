@@ -1,7 +1,9 @@
 package pl.wrona.webserver.bussiness.route.creator;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.ModificationRouteResponse;
 import org.igeolab.iot.pt.server.api.model.Route;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,7 @@ public class RouteCreatorService {
 
     @Transactional
     @PreAgencyAuthorize
-    public Status createRoute(String instance, Route route) {
+    public ModificationRouteResponse createRoute(String instance, Route route) {
         var stopDictionary = stopService.mapStopByIdsIn(List.of(route.getOriginStop().getId(), route.getDestinationStop().getId()));
 
         RouteEntity unsavedRouteEntity = new RouteEntity();
@@ -45,9 +47,14 @@ public class RouteCreatorService {
 
         unsavedRouteEntity.setAgency(agencyService.findAgencyByAgencyCode(instance));
 
-        routeCreatorRepository.save(unsavedRouteEntity);
+        RouteEntity savedRoute = routeCreatorRepository.save(unsavedRouteEntity);
 
-        return new Status().status(Status.StatusEnum.CREATED);
+        return new ModificationRouteResponse()
+                .status(new Status()
+                        .status(Status.StatusEnum.CREATED))
+                .routeId(new RouteId()
+                        .line(savedRoute.getLine())
+                        .name(savedRoute.getName()));
     }
 
 

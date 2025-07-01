@@ -20,14 +20,14 @@ export class NotificationService {
     }
 
     showSuccess(message: string) {
-        this.showNotification(message, 'Sukces', 'snackbar-success')
+        this.showNotification(message, '', 'snackbar-success')
     }
 
     showError(message: string) {
-        this.showNotification(message, 'Błąd', 'snackbar-error')
+        this.showNotification(message, '', 'snackbar-error')
     }
 
     showInfo(message: string) {
-        this.showNotification(message, 'Info', 'snackbar-info')
+        this.showNotification(message, '', 'snackbar-info')
     }
 }
