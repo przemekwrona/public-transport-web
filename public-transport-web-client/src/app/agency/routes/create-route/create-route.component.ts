@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Route, RouteService, Status, Stop} from "../../../generated/public-transport";
+import {ModificationRouteResponse, Route, RouteService, Status, Stop} from "../../../generated/public-transport";
 import {Router} from "@angular/router";
 import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
 import {AuthService} from "../../../auth/auth.service";
@@ -35,12 +35,12 @@ export class CreateRouteComponent {
         this.route.originStop = originStop;
         this.route.destinationStop = destinationStop;
 
-        this.routeService.createRoute(this.authService.getInstance(), this.route).subscribe((status: Status) => {
+        this.routeService.createRoute(this.authService.getInstance(), this.route).subscribe((response: ModificationRouteResponse) => {
             this.notificationService.showSuccess(`Linia ${this.route.line} (${this.route.name}) została pomyślnie utworzona`);
             this._router.navigate(['/agency/trips/create'], {
                 queryParams: {
-                    line: this.route.line,
-                    name: this.route.name
+                    line: response.routeId.line,
+                    name: response.routeId.name
                 }
             }).then();
         });

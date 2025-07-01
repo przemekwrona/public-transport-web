@@ -442,8 +442,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Status'
-
+                $ref: '#/components/schemas/ModificationRouteResponse'
+    delete:
+      tags:
+        - route
+      summary: Delete route by ID
+      operationId: deleteRoute
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteId'
+        required: true
+      responses:
+        200:
+          description: DELETED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModificationRouteResponse'
     put:
       tags:
         - route
@@ -1108,6 +1131,14 @@ components:
           $ref: '#/components/schemas/RouteId'
         route:
           $ref: '#/components/schemas/Route'
+
+    ModificationRouteResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        routeId:
+          $ref: '#/components/schemas/RouteId'
 
     StopTime:
       type: object
