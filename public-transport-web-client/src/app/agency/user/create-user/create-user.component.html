@@ -1,1 +1,105 @@
-<p>create-user works!</p>
+<!-- Container -->
+<div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+        <div class="flex flex-col justify-center gap-2">
+            <h1 class="text-xl font-medium leading-none text-gray-900">
+                Dodawanie nowego użytkownika
+            </h1>
+            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
+                Skonfiguruj nowego użytkownia
+            </div>
+        </div>
+        <div class="flex items-center gap-2.5">
+            <a [routerLink]="['/admin/users']" class="btn btn-sm btn-light">Wróć do listy użytków</a>
+        </div>
+    </div>
+</div>
+<!-- End of Container -->
+<!-- Container -->
+<div class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
+        <div class="col-span-2">
+
+            <div class="flex flex-col gap-5 lg:gap-7.5">
+                <div class="card min-w-full">
+                    <div class="card-header gap-2">
+                        <h3 class="card-title">Dane użytkownika</h3>
+                    </div>
+                    <div class="card-body lg:py-7.5 py-5">
+
+                        <form [formGroup]="createUserForm" (ngSubmit)="createUser()">
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Nazwa
+                                        Konta
+                                    </div>
+                                    @if (this.validityCheckRequired('accountName')) {
+                                        <span class="text-red-700 text-2sm">Podaj nazwę konta</span>
+                                    } @else {
+                                        <span class="text-gray-700 text-2sm">Unikalna nazwa nie występująca w systemie</span>
+                                    }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('accountName')}"
+                                       class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="accountName"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Hasło
+                                    </div>
+                                    @if (this.validityCheckRequired('accountPassword')) {
+                                        <span class="text-red-700 text-2sm">Podaj hasło</span>
+                                    } @else {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('accountPassword')}"
+                                       class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="accountPassword"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Powtórz
+                                        hasło
+                                    </div>
+                                    @if (this.validityCheckRequired('repeatedPassword')) {
+                                        <span class="text-red-700 text-2sm">Powtórz hasło</span>
+                                    } @else {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('repeatedPassword')}"
+                                       class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="repeatedPassword"/>
+                                </label>
+                            </div>
+
+                            <div class="border-t border-gray-200 my-7.5"></div>
+
+                            <div class="flex justify-end">
+                                <button type="submit" class="btn btn-success">
+                                    Dodaj Nowego Użytkownika
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-1">
+            <div class="flex flex-col gap-5 lg:gap-7.5">
+            </div>
+        </div>
+    </div>
+    <!-- end: grid -->
+</div>
+<!-- End of Container -->
