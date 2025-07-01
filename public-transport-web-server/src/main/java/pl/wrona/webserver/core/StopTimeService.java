@@ -13,10 +13,6 @@ public class StopTimeService {
 
     private final StopTimeRepository stopTimeRepository;
 
-    public List<StopTimeEntity> getAllStopTimesByTripId(Long tripId) {
-        return stopTimeRepository.findAllByTripId(tripId);
-    }
-
     public List<StopTimeEntity> getAllStopTimesByTrip(TripEntity trip) {
         return stopTimeRepository.findAllByTrip(trip);
     }
