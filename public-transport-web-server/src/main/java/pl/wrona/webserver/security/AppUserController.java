@@ -16,11 +16,6 @@ public class AppUserController implements AuthApi {
     private final AppUserService appUserService;
 
     @Override
-    public ResponseEntity<CreateAppUserResponse> createUser(CreateAppUserRequest createAppUserRequest) {
-        return ResponseEntity.accepted().body(appUserService.createUser(createAppUserRequest));
-    }
-
-    @Override
     public ResponseEntity<LoginAppUserResponse> login(LoginAppUserRequest loginAppUserRequest) {
         return ResponseEntity.ok(appUserService.login(loginAppUserRequest));
     }

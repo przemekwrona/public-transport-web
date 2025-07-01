@@ -32,27 +32,28 @@ public class AgencyService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        return agencyRepository.findByAppUser(appUser);
+        return agencyRepository.findByAppUser(appUser).orElse(null);
     }
 
     public AgencyDetails getAgency() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        AgencyEntity agencyEntity = agencyRepository.findByAppUser(appUser);
+        return agencyRepository.findByAppUser(appUser).map(agencyEntity -> {
+            AgencyAddress agencyAddress = new AgencyAddress();
+            agencyAddress.street(agencyEntity.getStreet());
+            agencyAddress.houseNumber(agencyEntity.getHouseNumber());
+            agencyAddress.flatNumber(agencyEntity.getFlatNumber());
+            agencyAddress.postalCode(agencyEntity.getPostalCode());
+            agencyAddress.postalCity(agencyEntity.getPostalCity());
 
-        AgencyAddress agencyAddress  = new AgencyAddress();
-        agencyAddress.street(agencyEntity.getStreet());
-        agencyAddress.houseNumber(agencyEntity.getHouseNumber());
-        agencyAddress.flatNumber(agencyEntity.getFlatNumber());
-        agencyAddress.postalCode(agencyEntity.getPostalCode());
-        agencyAddress.postalCity(agencyEntity.getPostalCity());
+            return new AgencyDetails()
+                    .agencyName(agencyEntity.getAgencyName())
+                    .agencyUrl(agencyEntity.getAgencyUrl())
+                    .agencyTimetableUrl(agencyEntity.getAgencyTimetableUrl())
+                    .agencyAddress(agencyAddress);
 
-        return new AgencyDetails()
-                .agencyName(agencyEntity.getAgencyName())
-                .agencyUrl(agencyEntity.getAgencyUrl())
-                .agencyTimetableUrl(agencyEntity.getAgencyTimetableUrl())
-                .agencyAddress(agencyAddress);
+        }).orElse(null);
     }
 
     @Transactional
@@ -60,12 +61,13 @@ public class AgencyService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        AgencyEntity agencyEntity = agencyRepository.findByAppUser(appUser);
-        agencyEntity.setAgencyName(agencyDetails.getAgencyName());
-        agencyEntity.setAgencyUrl(agencyDetails.getAgencyUrl());
-        agencyEntity.setAgencyTimetableUrl(agencyDetails.getAgencyTimetableUrl());
+        agencyRepository.findByAppUser(appUser).ifPresent(agencyEntity -> {
+            agencyEntity.setAgencyName(agencyDetails.getAgencyName());
+            agencyEntity.setAgencyUrl(agencyDetails.getAgencyUrl());
+            agencyEntity.setAgencyTimetableUrl(agencyDetails.getAgencyTimetableUrl());
 
-        agencyRepository.save(agencyEntity);
+            agencyRepository.save(agencyEntity);
+        });
 
         return new Status()
                 .status(Status.StatusEnum.SUCCESS);

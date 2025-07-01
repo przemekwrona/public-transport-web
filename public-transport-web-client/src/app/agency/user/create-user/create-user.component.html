@@ -50,6 +50,25 @@
 
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">
+                                        Email
+                                    </div>
+                                    @if (this.validityCheckRequired('accountEmail')) {
+                                        <span class="text-red-700 text-2sm">Podaj nazwę email</span>
+                                    } @else {
+                                        <span class="text-gray-700 text-2sm">Adres email użytkownika</span>
+                                    }
+                                </div>
+                                <label [ngClass]="{'border-red-700': validityCheck('accountEmail')}"
+                                       class="input sm:max-w-full xl:max-w-96 w-full">
+                                    <input type="text" formControlName="accountEmail"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Hasło
                                     </div>
                                     @if (this.validityCheckRequired('accountPassword')) {
