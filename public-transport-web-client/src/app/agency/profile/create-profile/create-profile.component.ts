@@ -34,9 +34,7 @@ export class CreateProfileComponent {
             houseNumber: ['', [Validators.required]],
             flatNumber: ['', []],
             postalCode: ['', [Validators.required, Validators.minLength(4)]],
-            postalCity: ['', [Validators.required]],
-            accountPassword: ['', [Validators.required]],
-            repeatedPassword: ['', [Validators.required]]
+            postalCity: ['', [Validators.required]]
         });
     }
 
@@ -47,14 +45,13 @@ export class CreateProfileComponent {
             agency.companyCode = this.createProfileForm.get('companyCode').value;
             agency.taxNumber = this.createProfileForm.get('taxIdentificationNumber').value;
 
+            agency.accountName = this.createProfileForm.get('accountName').value;
+
             agency.street = this.createProfileForm.get('street').value;
             agency.houseNumber = this.createProfileForm.get('houseNumber').value;
             agency.flatNumber = this.createProfileForm.get('flatNumber').value;
             agency.postalCode = this.createProfileForm.get('postalCode').value;
             agency.postalCity = this.createProfileForm.get('postalCity').value;
-
-            agency.accountName = this.createProfileForm.get('accountName').value;
-            agency.accountPassword = this.createProfileForm.get('accountPassword').value;
 
             this.agencyService.createNewAccount(agency).subscribe(response => {
                 this.notificationService.showSuccess('Konto zostało utworzone');
