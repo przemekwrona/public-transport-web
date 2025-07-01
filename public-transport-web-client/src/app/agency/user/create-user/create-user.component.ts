@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RouterModule} from "@angular/router";
+import {ActivatedRoute, Route, Router, RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
+import {CreateAppUserRequest, UsersService} from "../../../generated/public-transport";
+import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
     selector: 'app-create-user',
@@ -19,9 +21,10 @@ export class CreateUserComponent {
 
     public createUserForm: FormGroup;
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private userService: UsersService, private notificationService: NotificationService, private router: Router) {
         this.createUserForm = this.fb.group({
             accountName: ['', [Validators.required]],
+            accountEmail: ['', [Validators.required]],
             accountPassword: ['', [Validators.required]],
             repeatedPassword: ['', [Validators.required]]
         });
@@ -38,7 +41,15 @@ export class CreateUserComponent {
     }
 
     public createUser(): void {
+        const createAppUserRequest: CreateAppUserRequest = {} as CreateAppUserRequest;
+        createAppUserRequest.username = this.createUserForm.controls['accountName'].value;
+        createAppUserRequest.email = this.createUserForm.controls['accountEmail'].value;
+        createAppUserRequest.password = this.createUserForm.controls['accountPassword'].value;
 
+        this.userService.createUser(createAppUserRequest).subscribe(response => {
+            this.notificationService.showSuccess(`Użytkownik ${createAppUserRequest.username} został utworzony`);
+            this.router.navigate(['/admin/users']).then(() => {});
+        })
     }
 
 }

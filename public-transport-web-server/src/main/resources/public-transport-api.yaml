@@ -4,26 +4,6 @@ info:
   description: Open Tip Planner API
   version: 1.0.0
 paths:
-  /users:
-    post:
-      tags:
-        - auth
-      summary: Create new user in system
-      operationId: createUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateAppUserRequest'
-        required: true
-      responses:
-        201:
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateAppUserResponse'
-
   /auth/login:
     post:
       tags:
@@ -121,6 +101,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppUsersResponse'
+    post:
+      tags:
+        - users
+      summary: Create new user in system
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAppUserRequest'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAppUserResponse'
 
   /agreements/google:
     get:

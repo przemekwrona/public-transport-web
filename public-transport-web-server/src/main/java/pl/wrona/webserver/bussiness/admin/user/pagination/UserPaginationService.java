@@ -1,4 +1,4 @@
-package pl.wrona.webserver.bussiness.admin.user;
+package pl.wrona.webserver.bussiness.admin.user.pagination;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.AppUser;
@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class UserCreatorService {
+public class UserPaginationService {
 
-    private final UserCreatorRepository userCreatorRepository;
+    private final UserPaginationRepository userPaginationRepository;
 
     public AppUsersResponse findAllAppUsers() {
         AppUsersResponse appUsersResponse = new AppUsersResponse();
 
-        userCreatorRepository.findAll().stream()
+        userPaginationRepository.findAll().stream()
                 .map(user -> new AppUser()
                         .username(user.getUsername())
                         .email(user.getEmail())
