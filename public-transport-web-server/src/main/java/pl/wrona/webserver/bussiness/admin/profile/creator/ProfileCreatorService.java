@@ -28,22 +28,20 @@ public class ProfileCreatorService {
     private final ProfileCreatorAgencyRepository profileCreatorAgencyRepository;
     private final ProfileCreatorAppRolesRepository profileCreatorAppRolesRepository;
     private final GeoapifyService geoapifyService;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Status createNewAccount(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
         Feature addressFeature = geoapifyService.mostProbableAddress(agencyAdminCreateAccountRequest.getStreet(), agencyAdminCreateAccountRequest.getHouseNumber(), agencyAdminCreateAccountRequest.getFlatNumber(), agencyAdminCreateAccountRequest.getPostalCode(), agencyAdminCreateAccountRequest.getPostalCity());
 
-        AppUser savedAppUser = createAppUser(agencyAdminCreateAccountRequest);
-
+        AppUser user = profileCreatorAppUserRepository.findAppUsersByUsername(agencyAdminCreateAccountRequest.getAccountName());
         Set<AppUser> superUsers = findSuperUsers();
         Set<AppUser> agencyVisibility = new HashSet<>(superUsers);
-        agencyVisibility.add(savedAppUser);
+        agencyVisibility.add(user);
 
         AgencyEntity agencyEntity = new AgencyEntity();
         agencyEntity.setAgencyName(agencyAdminCreateAccountRequest.getCompanyName());
         agencyEntity.setAgencyCode(agencyAdminCreateAccountRequest.getCompanyCode());
-        agencyEntity.setAppUser(savedAppUser);
+        agencyEntity.setAppUser(user);
         agencyEntity.setTexNumber(agencyAdminCreateAccountRequest.getTaxNumber());
         agencyEntity.setStreet(agencyAdminCreateAccountRequest.getStreet());
         agencyEntity.setHouseNumber(agencyAdminCreateAccountRequest.getHouseNumber());
@@ -67,20 +65,4 @@ public class ProfileCreatorService {
         return profileCreatorAppUserRepository.findByAppRolesIsIn(superUserRoles);
     }
 
-    private AppUser createAppUser(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
-        Set<AppRole> defaultAgencyRole = profileCreatorAppRolesRepository.findAllByRoleIsIn(Set.of("AGENCY_OWNER"));
-
-        AppUser appUser = new AppUser();
-        appUser.setCreatedAt(LocalDateTime.now());
-        appUser.setUpdatedAt(LocalDateTime.now());
-        appUser.setUsername(agencyAdminCreateAccountRequest.getAccountName());
-        appUser.setPassword(passwordEncoder.encode(agencyAdminCreateAccountRequest.getAccountPassword()));
-        appUser.setAppRoles(defaultAgencyRole);
-        appUser.setAccountNonExpired(true);
-        appUser.setAccountNonLocked(true);
-        appUser.setEnabled(true);
-        appUser.setCredentialsNonExpired(true);
-
-        return profileCreatorAppUserRepository.save(appUser);
-    }
 }

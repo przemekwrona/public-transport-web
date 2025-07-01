@@ -23,14 +23,28 @@ INSERT INTO stop (stop_id, bdot10k_id, osm_id, name, lon, lat, is_osm, is_bdot10
 INSERT INTO stop (stop_id, bdot10k_id, osm_id, name, lon, lat, is_osm, is_bdot10k, is_active, is_deactivation_checked) VALUES (145638, 'c76b4652-0064-11ee-9e41-e454e883742c', null, '', 20.5956015269461, 50.6093283815884, false, true, true, true);
 INSERT INTO stop (stop_id, bdot10k_id, osm_id, name, lon, lat, is_osm, is_bdot10k, is_active, is_deactivation_checked) VALUES (145528, 'ebeedf01-0078-11ee-a750-e454e883742c', null, 'LIPNIK  / 78 / 02', 20.5832580328691, 50.6063448140229, false, true, true, true);
 
-INSERT INTO app_role (app_role_id, description) VALUES ('SUPER_USER', 'Role for system owner');
-INSERT INTO app_role (app_role_id, description) VALUES ('AGENCY_OWNER', 'Role for the owner of a transit agency');
-
 INSERT INTO app_user (username, email, password, created_at, updated_at, account_non_expired, account_non_locked, credentials_non_expired, enabled)
-VALUES ( 'pwrona', 'pwrona@igeolab.pl', '$2a$10$yPoPJ9H4MAm5PP/.hIU/uebkqnFMiTGHb3/I.AMqpkDILHdwxi456', '2025-01-04 11:36:40.937926', '2025-01-04 11:36:40.937949', true, true, true, true);
+VALUES ( 'jkowalski', 'jkowalski@ns.pl', '$2a$10$yPoPJ9H4MAm5PP/.hIU/uebkqnFMiTGHb3/I.AMqpkDILHdwxi456', '2025-01-04 11:36:40.937926', '2025-01-04 11:36:40.937949', true, true, true, true);
 
 INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES (1, 'SUPER_USER');
 INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES (1, 'AGENCY_OWNER');
+
+INSERT INTO agency (agency_code, agency_name, agency_url, agency_timetable_url, agency_phone, agency_owner_id)
+VALUES ('NEOBUS', 'NEOBUS POLSKA Czurczak Spółka Komandytowa', 'neobus.pl', 'rozklad-jazdy', '510038116', 1);
+
+INSERT INTO app_user_agency(app_user_id, agency_id)
+VALUES (1, 1);
+
+INSERT INTO route (route_id, name, line, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
+VALUES (1, 'Chmielnik - Kije', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, 1);
+
+INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
+VALUES (1, 'MAIN', 'FRONT', 'Kije', null, null, 27, 13382, 1781, true, null, 'Chmielnik', null, 'Kije', 1);
+
+INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
+VALUES (2, 'MAIN', 'BACK', 'Chmielnik', null, null, 27, 13417, 1784, true, null, 'Kije', null, 'Chmielnik', 1);
+
+INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), 'AGENCY_OWNER');
 
 INSERT INTO agency (agency_code, agency_name, agency_url, agency_timetable_url, agency_phone, agency_owner_id)
 VALUES ('NEOBUS', 'NEOBUS POLSKA Czurczak Spółka Komandytowa', 'neobus.pl', 'rozklad-jazdy', '510038116', 1);
