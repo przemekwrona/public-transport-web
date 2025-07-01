@@ -165,6 +165,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: origin_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
                   name: line
                   type: varchar(10)
                   constraints:
