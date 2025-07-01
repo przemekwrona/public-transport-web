@@ -16,7 +16,7 @@
     <modules>
         <module>public-transport-web-e2e</module>
         <module>public-transport-web-server</module>
-        <module>public-transport-osm-stop-deactivator</module>
+        <!--        <module>public-transport-osm-stop-deactivator</module>-->
     </modules>
 
 </project>
