@@ -33,6 +33,7 @@ import {CreateProfileComponent} from "./agency/profile/create-profile/create-pro
 import {centerPointResolver} from "./agency/stops/center-point.resolver";
 import {UserListComponent} from "./agency/user/user-list/user-list.component";
 import {usersResolver} from "./agency/user/user-list/users.resolver";
+import {CreateUserComponent} from "./agency/user/create-user/create-user.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -61,8 +62,13 @@ export const routes: Routes = [
     {
         path: 'admin/agency', component: AgencyComponent, children: [
             {path: 'profiles', component: ProfileListComponent, resolve: {agencies: agenciesResolver}},
-            {path: 'create', component: CreateProfileComponent },
-            {path: 'users', component: UserListComponent, resolve: { users: usersResolver }}
+            {path: 'create', component: CreateProfileComponent }
+        ]
+    },
+    {
+        path: 'admin', component: AgencyComponent, children: [
+            {path: 'users', component: UserListComponent, resolve: {users: usersResolver}},
+            {path: 'users/create', component: CreateUserComponent}
         ]
     },
     {path: 'info', component: LandingComponent},
