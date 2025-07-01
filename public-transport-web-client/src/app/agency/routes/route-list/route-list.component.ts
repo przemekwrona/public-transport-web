@@ -3,6 +3,7 @@ import {Route, Routes, Stop} from "../../../generated/public-transport";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {PdfService} from "../../../generated/public-transport-pdf";
+import {size} from "lodash";
 
 @Component({
     standalone: true,
@@ -46,6 +47,10 @@ export class RouteListComponent implements OnInit {
             link.download = `linia-${route.line}-${route.name}-plan.pdf`.replaceAll(' ', '_');
             link.click();
         });
+    }
+
+    public hasRoutes(): boolean {
+        return size(this.routes.items) !== 0;
     }
 
 }
