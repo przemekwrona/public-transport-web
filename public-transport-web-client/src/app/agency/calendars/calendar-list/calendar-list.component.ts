@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {CalendarQuery, CalendarService, GetCalendarsResponse, Status} from "../../../generated/public-transport";
+import {size} from "lodash";
 
 @Component({
     selector: 'app-calendars',
@@ -29,5 +30,9 @@ export class CalendarListComponent implements OnInit {
 
     public hasElements(array: any[]): boolean {
         return array.length !== 0;
+    }
+
+    public hasCalendar(): boolean {
+        return size(this.calendarsResponse.calendars) > 0;
     }
 }
