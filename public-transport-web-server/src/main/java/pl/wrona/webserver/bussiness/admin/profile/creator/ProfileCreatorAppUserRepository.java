@@ -11,4 +11,6 @@ import java.util.Set;
 public interface ProfileCreatorAppUserRepository extends JpaRepository<AppUser, Long> {
 
     Set<AppUser> findByAppRolesIsIn(Set<AppRole> appRoles);
+
+    AppUser findAppUsersByUsername(String username);
 }

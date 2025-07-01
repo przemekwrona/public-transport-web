@@ -33,16 +33,15 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
     private ProfileCreatorService profileCreatorService;
 
     @Test
-    @Transactional
     void shouldCreateProfile() {
         // given
+        var appUsername = "jkowalski";
         var agencyCode = "NS";
         var createAgencyRequest = new AgencyAdminCreateAccountRequest()
                 .companyName("Następna Stacja")
                 .companyCode(agencyCode)
                 .taxNumber("5267791688")
-                .accountName("jkowalski")
-                .accountPassword("welcome1")
+                .accountName(appUsername)
                 .street("Nakielska")
                 .houseNumber("3")
                 .flatNumber("1")
@@ -67,12 +66,12 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
         assertThat(createdAgencyEntity.getPostalCity()).isEqualTo("Warszawa");
         assertThat(createdAgencyEntity.getLongitude()).isEqualTo(20.9383168);
         assertThat(createdAgencyEntity.getLatitude()).isEqualTo(52.230207);
-        assertThat(createdAgencyEntity.getUsers().stream().map(AppUser::getUsername).toList()).hasSize(2).hasSameElementsAs(List.of("jkowalski", "pwrona"));
+        assertThat(createdAgencyEntity.getUsers().stream().map(AppUser::getUsername).toList()).hasSize(2).hasSameElementsAs(List.of(appUsername, "pwrona"));
 
         Set<AppRole> createdUserAppRoles = appRoleRepository.findAppRolesByRoleIsIn(Set.of("AGENCY_OWNER"));
-        AppUser appUser = appUserRepository.findByUsername("jkowalski").orElse(null);
+        AppUser appUser = appUserRepository.findByUsername(appUsername).orElse(null);
         assertThat(appUser).isNotNull();
-        assertThat(appUser.getUsername()).isEqualTo("jkowalski");
+        assertThat(appUser.getUsername()).isEqualTo(appUsername);
         assertThat(appUser.getAppRoles()).hasSize(1).hasSameElementsAs(createdUserAppRoles);
     }
 

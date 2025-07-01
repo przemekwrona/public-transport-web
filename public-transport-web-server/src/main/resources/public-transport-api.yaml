@@ -874,8 +874,6 @@ components:
           type: string
         accountName:
           type: string
-        accountPassword:
-          type: string
 
     GoogleAgreementsRequest:
       type: object
