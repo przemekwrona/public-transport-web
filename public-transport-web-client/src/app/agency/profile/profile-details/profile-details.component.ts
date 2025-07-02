@@ -6,6 +6,7 @@ import {FormsModule} from "@angular/forms";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {ActivatedRoute} from "@angular/router";
+import {AuthService} from "../../../auth/auth.service";
 
 @Component({
     standalone: true,
@@ -28,7 +29,7 @@ export class ProfileDetailsComponent implements OnInit {
 
     public agencyDetails: AgencyDetails = {};
 
-    constructor(private agencyService: AgencyService, private route: ActivatedRoute) {
+    constructor(private agencyService: AgencyService, private route: ActivatedRoute, private authService: AuthService) {
     }
 
     ngOnInit(): void {
@@ -38,7 +39,7 @@ export class ProfileDetailsComponent implements OnInit {
     }
 
     public saveAgencyDetails() {
-        this.agencyService.updateAgency(this.agencyDetails).subscribe(() => {});
+        this.agencyService.updateAgency(this.authService.getInstance(), this.agencyDetails).subscribe(() => {});
     }
 
 }

@@ -24,39 +24,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/LoginAppUserResponse'
 
-  /agency:
-    get:
-      tags:
-        - agency
-      summary: Return agency details
-      operationId: getAgency
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AgencyDetails'
-
-    put:
-      tags:
-        - agency
-      summary: Update agency details
-      operationId: updateAgency
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AgencyDetails'
-        required: true
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-
   /admin/agencies:
     get:
       tags:
@@ -119,6 +86,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateAppUserResponse'
+
+  /agency/{agency}:
+    get:
+      tags:
+        - agency
+      summary: Return agency details
+      operationId: getAgency
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyDetails'
+
+    put:
+      tags:
+        - agency
+      summary: Update agency details
+      operationId: updateAgency
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyDetails'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
 
   /agreements/google:
     get:
