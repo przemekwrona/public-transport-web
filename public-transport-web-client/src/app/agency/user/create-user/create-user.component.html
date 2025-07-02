@@ -55,6 +55,10 @@
                                     </div>
                                     @if (this.validityCheckRequired('accountEmail')) {
                                         <span class="text-red-700 text-2sm">Podaj nazwę email</span>
+                                    } @else if (this.validityCheckEmail('accountEmail')) {
+                                        <span class="text-red-700 text-2sm">Niepoprawny format email</span>
+                                    } @else if (this.validityCheckExistence('accountEmail')) {
+                                        <span class="text-red-700 text-2sm">Email został juz zarejestrowany</span>
                                     } @else {
                                         <span class="text-gray-700 text-2sm">Adres email użytkownika</span>
                                     }
@@ -73,13 +77,15 @@
                                     </div>
                                     @if (this.validityCheckRequired('accountPassword')) {
                                         <span class="text-red-700 text-2sm">Podaj hasło</span>
+                                    } @else if (this.validityCheckPasswordMismatch('repeatedPassword')) {
+                                        <span class="text-red-700 text-2sm">Podałeś różne hasła</span>
                                     } @else {
                                         <span class="text-gray-700 text-2sm"></span>
                                     }
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('accountPassword')}"
+                                <label [ngClass]="{'border-red-700': validityCheck('accountPassword') || validityCheckPasswordMismatch('repeatedPassword')}"
                                        class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="accountPassword"/>
+                                    <input type="password" formControlName="accountPassword"/>
                                 </label>
                             </div>
 
@@ -92,13 +98,15 @@
                                     </div>
                                     @if (this.validityCheckRequired('repeatedPassword')) {
                                         <span class="text-red-700 text-2sm">Powtórz hasło</span>
+                                    } @else if (this.validityCheckPasswordMismatch('repeatedPassword')) {
+                                        <span class="text-red-700 text-2sm">Podałeś różne hasła</span>
                                     } @else {
                                         <span class="text-gray-700 text-2sm"></span>
                                     }
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('repeatedPassword')}"
+                                <label [ngClass]="{'border-red-700': validityCheck('repeatedPassword') || validityCheckPasswordMismatch('repeatedPassword')}"
                                        class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="repeatedPassword"/>
+                                    <input type="password" formControlName="repeatedPassword"/>
                                 </label>
                             </div>
 
