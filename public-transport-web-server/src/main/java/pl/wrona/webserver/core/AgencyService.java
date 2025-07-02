@@ -35,44 +35,6 @@ public class AgencyService {
         return agencyRepository.findByAppUser(appUser).orElse(null);
     }
 
-    public AgencyDetails getAgency() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = (AppUser) authentication.getPrincipal();
-
-        return agencyRepository.findByAppUser(appUser).map(agencyEntity -> {
-            AgencyAddress agencyAddress = new AgencyAddress();
-            agencyAddress.street(agencyEntity.getStreet());
-            agencyAddress.houseNumber(agencyEntity.getHouseNumber());
-            agencyAddress.flatNumber(agencyEntity.getFlatNumber());
-            agencyAddress.postalCode(agencyEntity.getPostalCode());
-            agencyAddress.postalCity(agencyEntity.getPostalCity());
-
-            return new AgencyDetails()
-                    .agencyName(agencyEntity.getAgencyName())
-                    .agencyUrl(agencyEntity.getAgencyUrl())
-                    .agencyTimetableUrl(agencyEntity.getAgencyTimetableUrl())
-                    .agencyAddress(agencyAddress);
-
-        }).orElse(null);
-    }
-
-    @Transactional
-    public Status updateAgency(AgencyDetails agencyDetails) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = (AppUser) authentication.getPrincipal();
-
-        agencyRepository.findByAppUser(appUser).ifPresent(agencyEntity -> {
-            agencyEntity.setAgencyName(agencyDetails.getAgencyName());
-            agencyEntity.setAgencyUrl(agencyDetails.getAgencyUrl());
-            agencyEntity.setAgencyTimetableUrl(agencyDetails.getAgencyTimetableUrl());
-
-            agencyRepository.save(agencyEntity);
-        });
-
-        return new Status()
-                .status(Status.StatusEnum.SUCCESS);
-    }
-
     public AgenciesAdminResponse findAllAgencies() {
         var agencies = agencyRepository.countRoutesByAgency().stream().map(groupedAgency -> new AgencyAdminDetail()
                         .agencyCode(groupedAgency.getAgency().getAgencyCode())

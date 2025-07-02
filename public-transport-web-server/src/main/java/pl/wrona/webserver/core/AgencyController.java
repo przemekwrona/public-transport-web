@@ -9,6 +9,8 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.admin.profile.creator.ProfileCreatorService;
+import pl.wrona.webserver.bussiness.agency.details.AgencyDetailsService;
+import pl.wrona.webserver.bussiness.agency.updater.AgencyUpdaterService;
 
 @RestController
 @AllArgsConstructor
@@ -16,6 +18,8 @@ public class AgencyController implements AgencyApi {
 
     private final AgencyService agencyService;
     private final ProfileCreatorService profileCreatorService;
+    private final AgencyDetailsService agencyDetailsService;
+    private final AgencyUpdaterService agencyUpdaterService;
 
     @Override
     public ResponseEntity<Status> createNewAccount(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
@@ -28,12 +32,12 @@ public class AgencyController implements AgencyApi {
     }
 
     @Override
-    public ResponseEntity<AgencyDetails> getAgency() {
-        return ResponseEntity.ok(agencyService.getAgency());
+    public ResponseEntity<AgencyDetails> getAgency(String agency) {
+        return ResponseEntity.ok(agencyDetailsService.getAgency(agency));
     }
 
     @Override
-    public ResponseEntity<Status> updateAgency(AgencyDetails agencyDetails) {
-        return ResponseEntity.ok(agencyService.updateAgency(agencyDetails));
+    public ResponseEntity<Status> updateAgency(String agency, AgencyDetails agencyDetails) {
+        return ResponseEntity.ok(agencyUpdaterService.updateAgency(agency, agencyDetails));
     }
 }
