@@ -1,9 +1,11 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ActivatedRoute, Route, Router, RouterModule} from "@angular/router";
+import {Router, RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {CreateAppUserRequest, UsersService} from "../../../generated/public-transport";
 import {NotificationService} from "../../../shared/notification.service";
+import {emailExistenceValidator} from "./email-existence.validator";
+import {matchPasswordValidator} from "./match-password.validator";
 
 @Component({
     selector: 'app-create-user',
@@ -24,9 +26,11 @@ export class CreateUserComponent {
     constructor(private fb: FormBuilder, private userService: UsersService, private notificationService: NotificationService, private router: Router) {
         this.createUserForm = this.fb.group({
             accountName: ['', [Validators.required]],
-            accountEmail: ['', [Validators.required]],
+            accountEmail: ['', [Validators.required, Validators.email, emailExistenceValidator()]],
             accountPassword: ['', [Validators.required]],
             repeatedPassword: ['', [Validators.required]]
+        }, {
+            validators: matchPasswordValidator('accountPassword', 'repeatedPassword')
         });
     }
 
@@ -38,6 +42,21 @@ export class CreateUserComponent {
     public validityCheckRequired(fieldName: string): boolean {
         return this.validityCheck(fieldName)
             && this.createUserForm.get(fieldName)?.errors?.['required'];
+    }
+
+    public validityCheckEmail(fieldName: string): boolean {
+        return this.validityCheck(fieldName)
+            && this.createUserForm.get(fieldName)?.errors?.['email'];
+    }
+
+    public validityCheckExistence(fieldName: string): boolean {
+        return this.validityCheck(fieldName)
+            && this.createUserForm.get(fieldName)?.errors?.['exists'];
+    }
+
+    public validityCheckPasswordMismatch(fieldName: string): boolean {
+        return this.createUserForm.get(fieldName)?.touched
+            && this.createUserForm.errors?.['passwordMismatch'];
     }
 
     public createUser(): void {
