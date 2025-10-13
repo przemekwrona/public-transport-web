@@ -5,7 +5,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import org.igeolab.iot.pt.server.api.model.LoginAppUserRequest;
 import org.igeolab.iot.pt.server.api.model.LoginAppUserResponse;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -34,7 +33,10 @@ public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.
     private Integer port;
 
     @Container
-    public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
+    public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:14-alpine")
+            .withDatabaseName("next_stop_db")
+            .withUsername("test")
+            .withPassword("welcome1");
 
     @Autowired
     protected WireMockServer mockGeoapifyClient;
