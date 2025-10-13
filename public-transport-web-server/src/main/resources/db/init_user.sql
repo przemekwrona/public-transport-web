@@ -6,3 +6,8 @@ VALUES ( 'pwrona', 'biuro@nastepnastacja.pl', '$2a$10$yPoPJ9H4MAm5PP/.hIU/uebkqn
 
 INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'pwrona'), 'SUPER_USER');
 INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'pwrona'), 'AGENCY_OWNER');
+
+INSERT INTO agency(agency_code, agency_name, agency_url, agency_timetable_url, street, house_number, flat_number, postal_code, postal_city, latitude, longitude, created_at, updated_at, agency_owner_id)
+VALUES ('NEXTSTOP', 'Następna Stacja', 'nastepnastacja.pl','','Nakielska', '5', '', '01106', 'WARSZAWA', 52.232512, 20.935926,now(), now(), (SELECT app_user_id FROM app_user WHERE username = 'pwrona'));
+
+INSERT INTO app_user_agency(app_user_id, agency_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'pwrona'), (SELECT agency_id FROM agency WHERE agency_code = 'NEXTSTOP'));
