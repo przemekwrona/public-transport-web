@@ -39,8 +39,8 @@ import {CreateUserComponent} from "./agency/user/create-user/create-user.compone
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
-        {provide: BASE_PATH, useValue: 'http://localhost:4200/api/v1'},
-        {provide: BASE_PATH_PDF_API, useValue: 'http://localhost:4200/api/v1'}
+        {provide: BASE_PATH, useValue: 'http://localhost:8080/api/v1'},
+        {provide: BASE_PATH_PDF_API, useValue: 'http://localhost:8080/api/v1'}
     ],
     bootstrap: [
         AppComponent
