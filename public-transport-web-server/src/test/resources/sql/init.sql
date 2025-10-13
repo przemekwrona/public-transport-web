@@ -26,17 +26,17 @@ INSERT INTO stop (stop_id, bdot10k_id, osm_id, name, lon, lat, is_osm, is_bdot10
 INSERT INTO app_user (username, email, password, created_at, updated_at, account_non_expired, account_non_locked, credentials_non_expired, enabled)
 VALUES ( 'jkowalski', 'jkowalski@ns.pl', '$2a$10$yPoPJ9H4MAm5PP/.hIU/uebkqnFMiTGHb3/I.AMqpkDILHdwxi456', '2025-01-04 11:36:40.937926', '2025-01-04 11:36:40.937949', true, true, true, true);
 
-INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES (1, 'SUPER_USER');
-INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES (1, 'AGENCY_OWNER');
+INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), 'SUPER_USER');
+INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), 'AGENCY_OWNER');
 
 INSERT INTO agency (agency_code, agency_name, agency_url, agency_timetable_url, agency_phone, agency_owner_id)
-VALUES ('NEOBUS', 'NEOBUS POLSKA Czurczak Spółka Komandytowa', 'neobus.pl', 'rozklad-jazdy', '510038116', 1);
+VALUES ('NEOBUS', 'NEOBUS POLSKA Czurczak Spółka Komandytowa', 'neobus.pl', 'rozklad-jazdy', '510038116', (SELECT app_user_id FROM app_user WHERE username = 'jkowalski'));
 
 INSERT INTO app_user_agency(app_user_id, agency_id)
-VALUES (1, 1);
+VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), (SELECT agency_id FROM agency WHERE agency_code = 'NEOBUS'));
 
-INSERT INTO route (route_id, name, line, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
-VALUES (1, 'Chmielnik - Kije', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, 1);
+INSERT INTO route (route_id, name, line, origin_name, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
+VALUES (1, 'Chmielnik - Kije', 'L1', 'Chmielnik',true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, 1);
 
 INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
 VALUES (1, 'MAIN', 'FRONT', 'Kije', null, null, 27, 13382, 1781, true, null, 'Chmielnik', null, 'Kije', 1);
@@ -45,21 +45,6 @@ INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, va
 VALUES (2, 'MAIN', 'BACK', 'Chmielnik', null, null, 27, 13417, 1784, true, null, 'Kije', null, 'Chmielnik', 1);
 
 INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), 'AGENCY_OWNER');
-
-INSERT INTO agency (agency_code, agency_name, agency_url, agency_timetable_url, agency_phone, agency_owner_id)
-VALUES ('NEOBUS', 'NEOBUS POLSKA Czurczak Spółka Komandytowa', 'neobus.pl', 'rozklad-jazdy', '510038116', 1);
-
-INSERT INTO app_user_agency(app_user_id, agency_id)
-VALUES (1, 1);
-
-INSERT INTO route (route_id, name, line, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
-VALUES (1, 'Chmielnik - Kije', 'L1', true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, 1);
-
-INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
-VALUES (1, 'MAIN', 'FRONT', 'Kije', null, null, 27, 13382, 1781, true, null, 'Chmielnik', null, 'Kije', 1);
-
-INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
-VALUES (2, 'MAIN', 'BACK', 'Chmielnik', null, null, 27, 13417, 1784, true, null, 'Kije', null, 'Chmielnik', 1);
 
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 1, 0, 0, 0, 145543);
 INSERT INTO stop_time (trip_id, stop_sequence, arrival_second, departure_second, distance_meters, stop_id) VALUES (2, 2, 17, 17, 129, 145417);
