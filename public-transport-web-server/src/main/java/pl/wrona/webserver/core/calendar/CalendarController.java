@@ -10,10 +10,12 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.UpdateCalendarRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("${webserver.context.path}")
 public class CalendarController implements CalendarApi {
 
     private final CalendarService calendarService;

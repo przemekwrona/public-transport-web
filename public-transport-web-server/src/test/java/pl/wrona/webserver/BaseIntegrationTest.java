@@ -24,7 +24,7 @@ import pl.wrona.webserver.security.AppUserService;
 
 @ActiveProfiles("test")
 @Testcontainers
-@Sql({"/sql/init.sql"})
+@Sql(value = {"/sql/init.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = { WireMockConfig.class })
 public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {

@@ -7,6 +7,7 @@ import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.AgencyDetails;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.admin.profile.creator.ProfileCreatorService;
 import pl.wrona.webserver.bussiness.agency.details.AgencyDetailsService;
@@ -14,6 +15,7 @@ import pl.wrona.webserver.bussiness.agency.updater.AgencyUpdaterService;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("${webserver.context.path}")
 public class AgencyController implements AgencyApi {
 
     private final AgencyService agencyService;

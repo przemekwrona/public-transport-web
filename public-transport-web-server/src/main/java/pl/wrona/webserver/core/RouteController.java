@@ -10,6 +10,7 @@ import org.igeolab.iot.pt.server.api.model.Routes;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.UpdateRouteRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.route.creator.RouteCreatorService;
 import pl.wrona.webserver.bussiness.route.deletion.RouteDeletionService;
@@ -19,6 +20,7 @@ import pl.wrona.webserver.bussiness.trip.reader.route.TripReaderByRouteService;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("${webserver.context.path}")
 public class RouteController implements RouteApi {
 
     private final RouteCreatorService routeCreatorService;

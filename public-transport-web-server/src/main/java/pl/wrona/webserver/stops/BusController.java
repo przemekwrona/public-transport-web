@@ -7,10 +7,12 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopsPatchRequest;
 import org.igeolab.iot.pt.server.api.model.StopsResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("${webserver.context.path}")
 public class BusController implements StopsApi {
 
     private final BusStopService busStopService;
