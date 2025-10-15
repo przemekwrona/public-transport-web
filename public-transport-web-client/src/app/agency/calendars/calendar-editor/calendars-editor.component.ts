@@ -9,6 +9,7 @@ import {
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute} from "@angular/router";
 import {CalendarEditorComponentMode} from "./calendar-editor-component-mode";
+import {LoginService} from "../../../auth/login.service";
 
 @Component({
     selector: 'app-calendars-editor',
@@ -35,7 +36,7 @@ export class CalendarsEditorComponent implements OnInit {
         7: 'kursuje w niedziele'
     }
 
-    constructor(private calendarService: CalendarService, private _route: ActivatedRoute) {
+    constructor(private calendarService: CalendarService, private loginService: LoginService, private _route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -155,7 +156,7 @@ export class CalendarsEditorComponent implements OnInit {
         payload.body.included = [...this.includeDays];
         payload.body.excluded = [...this.excludeDays];
 
-        this.calendarService.createCalendar(payload).subscribe(status => {
+        this.calendarService.createCalendar(this.loginService.getInstance(), payload).subscribe(status => {
         });
     }
 
@@ -170,7 +171,7 @@ export class CalendarsEditorComponent implements OnInit {
         request.body = this.calendarBody;
         request.calendarName = this.queryCalendarName;
 
-        this.calendarService.updateCalendar(request).subscribe(status => {
+        this.calendarService.updateCalendar(this.loginService.getInstance(), request).subscribe(status => {
         });
     }
 
