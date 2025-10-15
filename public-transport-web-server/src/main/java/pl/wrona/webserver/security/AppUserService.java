@@ -44,7 +44,7 @@ public class AppUserService {
         return new LoginAppUserResponse()
                 .token(authTokenUtils.generateJwtToken(userDetails))
                 .roles(roles)
-                .instance(Optional.ofNullable(agency).map(AgencyEntity::getAgencyCode).orElse(null));
+                .instance(Optional.ofNullable(agency).map(AgencyEntity::getAgencyCode).orElse("NONE"));
     }
 
 }
