@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {CalendarQuery, CalendarService, GetCalendarsResponse, Status} from "../../../generated/public-transport-api";
 import {size} from "lodash";
+import {LoginService} from "../../../auth/login.service";
 
 @Component({
     selector: 'app-calendars',
@@ -12,7 +13,7 @@ export class CalendarListComponent implements OnInit {
 
     public calendarsResponse: GetCalendarsResponse;
 
-    constructor(private calendarService: CalendarService, private route: ActivatedRoute) {
+    constructor(private calendarService: CalendarService, private loginService: LoginService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -22,8 +23,8 @@ export class CalendarListComponent implements OnInit {
     public deleteByCalendarName(calendarName: string) {
         const query: CalendarQuery = {};
         query.calendarName = calendarName;
-        this.calendarService.deleteCalendarByCalendarName(query).subscribe((response: Status) => {
-            this.calendarService.getCalendars()
+        this.calendarService.deleteCalendarByCalendarName(this.loginService.getInstance(), query).subscribe((response: Status) => {
+            this.calendarService.getCalendars(this.loginService.getInstance())
                 .subscribe((calendarResponse: GetCalendarsResponse) => this.calendarsResponse = calendarResponse);
         });
     }
