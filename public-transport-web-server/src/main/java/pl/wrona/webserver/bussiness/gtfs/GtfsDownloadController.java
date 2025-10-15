@@ -1,10 +1,11 @@
-package pl.wrona.webserver.core.gtfs;
+package pl.wrona.webserver.bussiness.gtfs;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.GtfsApi;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import pl.wrona.webserver.bussiness.gtfs.download.GtfsDownloadService;
 
 @RestController
 @AllArgsConstructor
