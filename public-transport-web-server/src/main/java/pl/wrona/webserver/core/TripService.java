@@ -38,54 +38,6 @@ public class TripService {
     private final ObjectMapper objectMapper;
 
     @Transactional
-    public Status createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
-        Trip trip = createTripDetailsRequest.getTrip().getTrip();
-        List<Long> stopIds = trip.getStops().stream()
-                .map(StopTime::getStopId)
-                .toList();
-
-        Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        var route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
-
-        TripEntity tripEntity = TripMapper.map(trip);
-        tripEntity.setRoute(route);
-        var lastStop = trip.getStops().stream()
-                .reduce((first, second) -> second);
-
-
-        tripEntity.setDistanceInMeters(lastStop.map(StopTime::getMeters).orElse(0));
-        tripEntity.setTravelTimeInSeconds(lastStop.map(StopTime::getSeconds).orElse(0));
-
-        TripEntity savedTrip = tripRepository.save(tripEntity);
-
-        StopTime[] stopTimes = trip.getStops().toArray(StopTime[]::new);
-
-        List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
-                .mapToObj(i -> {
-                    StopTime stopTime = stopTimes[i];
-
-                    StopTimeEntity entity = new StopTimeEntity();
-
-                    StopTimeId stopTimeId = new StopTimeId();
-                    stopTimeId.setTripId(savedTrip.getTripId());
-                    stopTimeId.setStopSequence(i + 1);
-                    entity.setStopTimeId(stopTimeId);
-
-                    entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
-                    entity.setArrivalSecond(stopTime.getSeconds());
-                    entity.setDepartureSecond(stopTime.getSeconds());
-                    entity.setDistanceMeters(stopTime.getMeters());
-
-                    return entity;
-                }).toList();
-
-        stopTimeRepository.saveAll(entities);
-
-        return new Status()
-                .status(Status.StatusEnum.CREATED);
-    }
-
-    @Transactional
     public Status deleteTripByTripId(TripId tripId) {
         TripEntity deleteTrip = tripRepository.findByLineAndNameAndVariantAndMode(tripId.getLine(), tripId.getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
         tripRepository.delete(deleteTrip);
