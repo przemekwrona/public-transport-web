@@ -301,7 +301,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/public-transport-api.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/public-transport-api.yaml</inputSpec>
                             <configHelp>false</configHelp>
                             <generatorName>spring</generatorName>
                             <generateApiTests>false</generateApiTests>
@@ -330,7 +330,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/public-transport-pdf-api.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/public-transport-pdf-api.yaml</inputSpec>
                             <configHelp>false</configHelp>
                             <generatorName>spring</generatorName>
                             <generateApiTests>false</generateApiTests>
