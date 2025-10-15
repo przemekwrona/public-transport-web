@@ -11,5 +11,5 @@ export const calendarResolver: ResolveFn<Observable<CalendarBody>> = (route, sta
     const query: CalendarQuery = {};
     query.calendarName = route.queryParams['name'];
 
-    return calendarsService.getCalendarByCalendarName(query);
+    return calendarsService.getCalendarByCalendarName(loginService.getInstance(), query);
 };
