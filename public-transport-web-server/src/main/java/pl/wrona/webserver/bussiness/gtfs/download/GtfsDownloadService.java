@@ -48,7 +48,7 @@ public class GtfsDownloadService {
     private final CalendarService calendarService;
     private final CalendarDatesService calendarDatesService;
 
-    public Resource downloadGtfs() {
+    public Resource downloadGtfs(String agency) {
         try {
             Path tempDir = Files.createTempDirectory("gtfs_");
             File tempFile = tempDir.toFile();

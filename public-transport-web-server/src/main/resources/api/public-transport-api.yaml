@@ -796,11 +796,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/CalendarBody'
 
-  /gtfs/download:
+  /agency/{agency}/gtfs/download:
     get:
       tags:
         - gtfs
       operationId: downloadGtfs
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Gtfs
