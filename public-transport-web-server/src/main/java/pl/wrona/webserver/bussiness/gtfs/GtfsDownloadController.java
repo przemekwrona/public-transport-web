@@ -15,6 +15,6 @@ public class GtfsDownloadController implements GtfsApi {
 
     @Override
     public ResponseEntity<Resource> downloadGtfs(String agency) {
-        return ResponseEntity.ok(gtfsDownloadService.downloadGtfs());
+        return ResponseEntity.ok(gtfsDownloadService.downloadGtfs(agency));
     }
 }
