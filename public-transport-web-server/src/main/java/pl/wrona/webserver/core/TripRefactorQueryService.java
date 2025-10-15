@@ -40,7 +40,7 @@ public class TripRefactorQueryService {
                 .map(route -> new RouteDetails()
                         .route(RouteMapper.map(route, stopDictionary))
                         .trips(tripSet.get(route).stream()
-                                .map(trip -> TripMapper.map(trip))
+                                .map(TripMapper::map)
                                 .sorted(Comparator
                                         .comparing(Trip::getIsMainVariant).reversed()
                                         .thenComparing(Trip::getName))
