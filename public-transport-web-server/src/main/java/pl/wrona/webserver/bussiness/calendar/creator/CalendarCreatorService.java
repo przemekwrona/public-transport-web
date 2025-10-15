@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
-import pl.wrona.webserver.core.calendar.CalendarDatesEntityMapper;
+import pl.wrona.webserver.bussiness.calendar.mapper.CalendarDatesEntityMapper;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
-import pl.wrona.webserver.core.calendar.CalendarEntityMapper;
+import pl.wrona.webserver.bussiness.calendar.mapper.CalendarEntityMapper;
 import pl.wrona.webserver.core.calendar.CalendarRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 

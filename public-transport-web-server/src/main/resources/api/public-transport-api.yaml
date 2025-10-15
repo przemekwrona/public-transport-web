@@ -772,11 +772,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
-  /calendar/details:
+  /agency/{agency}/calendar/details:
     post:
       tags:
         - calendar
       operationId: getCalendarByCalendarName
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:

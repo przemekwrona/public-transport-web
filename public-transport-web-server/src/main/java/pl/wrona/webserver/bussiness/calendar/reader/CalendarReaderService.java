@@ -1,10 +1,12 @@
 package pl.wrona.webserver.bussiness.calendar.reader;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.CalendarBody;
+import org.igeolab.iot.pt.server.api.model.CalendarQuery;
 import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.calendar.CalendarBodyMapper;
+import pl.wrona.webserver.bussiness.calendar.mapper.CalendarBodyMapper;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.core.calendar.CalendarRepository;
@@ -34,6 +36,17 @@ public class CalendarReaderService {
 
         return new GetCalendarsResponse()
                 .calendars(calendars);
+    }
+
+    @PreAgencyAuthorize
+    public CalendarBody getCalendarByCalendarName(String instance, CalendarQuery calendarQuery) {
+        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
+        Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesRepository.findAllByAgency(agencyEntity).stream()
+                .collect(Collectors.groupingBy(calendarDates -> calendarDates.getCalendarDatesId().getServiceId()));
+
+        return calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarQuery.getCalendarName())
+                .map(calendar -> CalendarBodyMapper.apply(calendar, calendarDatesDictionary))
+                .orElseThrow();
     }
 
 }

@@ -23,11 +23,10 @@ import pl.wrona.webserver.core.calendar.CalendarService;
 @RequestMapping("${webserver.context.path}")
 public class CalendarController implements CalendarApi {
 
-    private final CalendarService calendarService;
     private final CalendarCreatorService calendarCreatorService;
     private final CalendarReaderService calendarReaderService;
-    private final CalendarDeletionService calendarDeletionService;
     private final CalendarUpdaterService calendarUpdaterService;
+    private final CalendarDeletionService calendarDeletionService;
 
     @Override
     public ResponseEntity<Status> createCalendar(String agency, CalendarPayload calendarPayload) {
@@ -40,8 +39,8 @@ public class CalendarController implements CalendarApi {
     }
 
     @Override
-    public ResponseEntity<CalendarBody> getCalendarByCalendarName(CalendarQuery calendarQuery) {
-        return ResponseEntity.status(HttpStatus.OK).body(calendarService.getCalendarByCalendarName(calendarQuery));
+    public ResponseEntity<CalendarBody> getCalendarByCalendarName(String agency, CalendarQuery calendarQuery) {
+        return ResponseEntity.status(HttpStatus.OK).body(calendarReaderService.getCalendarByCalendarName(agency, calendarQuery));
     }
 
     @Override
@@ -53,6 +52,5 @@ public class CalendarController implements CalendarApi {
     public ResponseEntity<Status> updateCalendar(String agency, UpdateCalendarRequest updateCalendarRequest) {
         return ResponseEntity.ok(calendarUpdaterService.updateCalendar(agency, updateCalendarRequest));
     }
-
 
 }
