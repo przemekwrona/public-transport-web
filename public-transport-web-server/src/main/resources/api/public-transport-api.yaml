@@ -681,12 +681,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Trip'
 
-  /calendar:
+  /agency/{agency}/calendar:
     post:
       tags:
         - calendar
       summary: Create new Calendar
       operationId: createCalendar
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -704,6 +710,12 @@ paths:
         - calendar
       summary: Update a Calendar by calendar name
       operationId: updateCalendar
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -721,6 +733,12 @@ paths:
         - calendar
       summary: Return active calendars
       operationId: getCalendars
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -734,6 +752,12 @@ paths:
         - calendar
       summary: Delete calendar by calendarName
       operationId: deleteCalendarByCalendarName
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
