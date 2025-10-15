@@ -4,12 +4,12 @@ import {
     GoogleAgreementsResponse,
     GoogleAgreementsService,
     GtfsService
-} from "../../generated/public-transport";
+} from "../../generated/public-transport-api";
 import moment from "moment";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
-import {AuthService} from "../../auth/auth.service";
+import {LoginService} from "../../auth/login.service";
 
 @Component({
     standalone: true,
@@ -23,14 +23,14 @@ import {AuthService} from "../../auth/auth.service";
     providers: [
         GtfsService,
         GoogleAgreementsService,
-        AuthService
+        LoginService
     ]
 })
 export class GoogleMapsComponent implements OnInit {
 
     public googleAgreementsResponse: GoogleAgreementsResponse = {};
 
-    constructor(private route: ActivatedRoute, private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService, private authService: AuthService) {
+    constructor(private route: ActivatedRoute, private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService, private authService: LoginService) {
     }
 
     ngOnInit(): void {

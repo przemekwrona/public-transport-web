@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {ModificationRouteResponse, Route, RouteService, Status, Stop} from "../../../generated/public-transport";
+import {ModificationRouteResponse, Route, RouteService, Status, Stop} from "../../../generated/public-transport-api";
 import {Router} from "@angular/router";
 import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
-import {AuthService} from "../../../auth/auth.service";
+import {LoginService} from "../../../auth/login.service";
 import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
@@ -20,7 +20,7 @@ export class CreateRouteComponent {
     public origin: BusStopSelectorData = {} as BusStopSelectorData;
     public destination: BusStopSelectorData = {} as BusStopSelectorData;
 
-    constructor(private _router: Router, private routeService: RouteService, private authService: AuthService, private notificationService: NotificationService) {
+    constructor(private _router: Router, private routeService: RouteService, private authService: LoginService, private notificationService: NotificationService) {
     }
 
     public createRouteAndNavigateToCreateNewTrip(): void {

@@ -11,7 +11,7 @@ import {
 } from "@angular/material/dialog";
 import {BusStopEditorComponent} from "./bus-stop-editor/bus-stop-editor.component";
 import {BusStopModalEditorComponent} from "./bus-stop-modal-editor/bus-stop-modal-editor.component";
-import {StopsService} from "../../generated/public-transport";
+import {StopsService} from "../../generated/public-transport-api";
 
 
 @NgModule({

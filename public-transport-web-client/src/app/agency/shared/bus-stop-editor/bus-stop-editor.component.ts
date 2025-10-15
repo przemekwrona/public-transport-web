@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {StopsPatchRequest, StopsService} from "../../../generated/public-transport";
+import {StopsPatchRequest, StopsService} from "../../../generated/public-transport-api";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 

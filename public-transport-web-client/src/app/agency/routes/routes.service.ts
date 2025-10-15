@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
-import {Route, Routes, Status, UpdateRouteRequest} from "../../generated/public-transport";
+import {Route, Routes, Status, UpdateRouteRequest} from "../../generated/public-transport-api";
 import {HttpClient} from "@angular/common/http";
 
 @Injectable({

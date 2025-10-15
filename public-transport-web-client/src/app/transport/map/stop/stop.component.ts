@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {interval, Subscription} from "rxjs";
 import moment from "moment";
-import {Route, Stop, StopDetails} from "../../../generated";
+import {Route, Stop, StopDetails} from "../../../generated/public-transport-planner-api";
 
 @Component({
   selector: 'app-stop',

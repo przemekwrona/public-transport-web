@@ -5,7 +5,7 @@ import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {CalendarListComponent} from "./calendar-list/calendar-list.component";
 import {RouterModule} from "@angular/router";
-import {CalendarService} from "../../generated/public-transport";
+import {CalendarService} from "../../generated/public-transport-api";
 
 @NgModule({
     imports: [

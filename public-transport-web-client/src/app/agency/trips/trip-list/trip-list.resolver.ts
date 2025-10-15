@@ -5,15 +5,15 @@ import {
     RouteDetails,
     RouteId,
     RouteService
-} from "../../../generated/public-transport";
-import {AuthService} from "../../../auth/auth.service";
+} from "../../../generated/public-transport-api";
+import {LoginService} from "../../../auth/login.service";
 
 export const tripsResolver: ResolveFn<Observable<RouteDetails>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<RouteDetails> => {
     const line: string = route.queryParams['line'];
     const name: string = route.queryParams['name'];
     const routeId: RouteId = {line: line, name: name} as RouteId;
 
-    const authService: AuthService = inject(AuthService);
+    const authService: LoginService = inject(LoginService);
     const routeService: RouteService = inject(RouteService);
 
     return routeService.getRouteDetails(authService.getInstance(), routeId);

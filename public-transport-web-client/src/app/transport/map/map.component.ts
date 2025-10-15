@@ -7,7 +7,7 @@ import {TripService} from "../../http/trip.service";
 import {DepartureMetadata} from "./timetable-content/timetable-content.component";
 import {OtpPoint} from "./otp/otp.component";
 import {OtpService} from "../../http/otp.service";
-import {Route, Stop, StopDetails, StopTime} from "../../generated";
+import {Route, Stop, StopDetails, StopTime} from "../../generated/public-transport-planner-api";
 import moment from "moment";
 import {interval, Observable, timer} from "rxjs";
 import {MapService} from "./service/map.service";

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import moment from 'moment';
 import {DepartureMetadata} from "../timetable-content/timetable-content.component";
-import {Route, Stop, StopTime} from "../../../generated";
+import {Route, Stop, StopTime} from "../../../generated/public-transport-planner-api";
 
 
 @Component({

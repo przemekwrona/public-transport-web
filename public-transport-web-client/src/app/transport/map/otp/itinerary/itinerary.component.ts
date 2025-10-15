@@ -4,7 +4,7 @@ import {DivIcon, LatLng, LatLngBounds, Map, Marker, Polyline, PolyUtil} from "le
 import moment from "moment";
 import {decode, encode} from "@googlemaps/polyline-codec";
 
-import {Itinerary, Leg} from "../../../../generated";
+import {Itinerary, Leg} from "../../../../generated/public-transport-planner-api";
 
 
 @Component({

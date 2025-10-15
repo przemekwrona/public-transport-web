@@ -1,4 +1,4 @@
-import {TripMode} from "../../../generated/public-transport";
+import {TripMode} from "../../../generated/public-transport-api";
 
 export class BrigadeModel {
     line: string = '';

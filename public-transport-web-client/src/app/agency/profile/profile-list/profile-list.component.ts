@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
-import {AgenciesAdminResponse, AgencyAdminDetail} from "../../../generated/public-transport";
-import {AuthService} from "../../../auth/auth.service";
+import {AgenciesAdminResponse, AgencyAdminDetail} from "../../../generated/public-transport-api";
+import {LoginService} from "../../../auth/login.service";
 
 @Component({
     selector: 'app-profile-list',
@@ -18,7 +18,7 @@ export class ProfileListComponent implements OnInit {
 
     public agenciesResponse: AgenciesAdminResponse = {} as AgenciesAdminResponse;
 
-    constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router) {
+    constructor(private route: ActivatedRoute, private authService: LoginService, private router: Router) {
     }
 
     ngOnInit(): void {

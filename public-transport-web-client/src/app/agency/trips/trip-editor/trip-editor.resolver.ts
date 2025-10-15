@@ -1,7 +1,7 @@
 import {inject} from "@angular/core";
 import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from "@angular/router";
 import {Observable, of} from "rxjs";
-import {TripId, TripMode, TripsDetails, TripService} from "../../../generated/public-transport";
+import {TripId, TripMode, TripsDetails, TripService} from "../../../generated/public-transport-api";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 
 export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TripsDetails> => {

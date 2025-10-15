@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {AuthService} from "../auth.service";
-import {LoginAppUserRequest, LoginAppUserResponse} from "../../generated/public-transport";
+import {LoginService} from "../login.service";
+import {LoginAppUserRequest, LoginAppUserResponse} from "../../generated/public-transport-api";
 import {Router} from "@angular/router";
 
 @Component({
@@ -12,7 +12,7 @@ export class SigninComponent {
 
     public loginAppUserRequest: LoginAppUserRequest = {};
 
-    constructor(private authService: AuthService, private router: Router) {
+    constructor(private authService: LoginService, private router: Router) {
     }
 
     public login() {

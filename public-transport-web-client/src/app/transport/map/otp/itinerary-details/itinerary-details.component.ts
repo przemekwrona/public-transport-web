@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import {Map, Polyline, PolyUtil} from "leaflet";
-import {Itinerary, Leg, TripPoint} from "../../../../generated";
+import {Itinerary, Leg, TripPoint} from "../../../../generated/public-transport-planner-api";
 
 @Component({
   selector: 'app-itinerary-details',

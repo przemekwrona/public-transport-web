@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ResolveFn } from '@angular/router';
 
 import { centerPointResolver } from './center-point.resolver';
-import {CenterPoint} from "../../generated/public-transport";
+import {CenterPoint} from "../../generated/public-transport-api";
 
 describe('centerPointResolver', () => {
   const executeResolver: ResolveFn<CenterPoint> = (...resolverParameters) =>

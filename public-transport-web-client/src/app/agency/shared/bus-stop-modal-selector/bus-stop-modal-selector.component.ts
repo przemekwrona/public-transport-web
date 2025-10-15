@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {BusStopSelectorData} from "../bus-stop-selector/bus-stop-selector.component";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
 import * as L from "leaflet";
-import {Stop, StopsResponse} from "../../../generated/public-transport";
+import {Stop, StopsResponse} from "../../../generated/public-transport-api";
 import {find} from "lodash";
 import {StopService} from "../../stops/stop.service";
 

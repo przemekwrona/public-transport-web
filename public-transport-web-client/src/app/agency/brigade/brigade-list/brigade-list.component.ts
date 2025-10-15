@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {BrigadeDeleteBody, BrigadeService, GetBrigadeResponse} from "../../../generated/public-transport";
+import {BrigadeDeleteBody, BrigadeService, GetBrigadeResponse} from "../../../generated/public-transport-api";
 import {size} from "lodash";
 
 @Component({

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router, RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
-import {CreateAppUserRequest, UsersService} from "../../../generated/public-transport";
+import {CreateAppUserRequest, UsersService} from "../../../generated/public-transport-api";
 import {NotificationService} from "../../../shared/notification.service";
 import {emailExistenceValidator} from "./email-existence.validator";
 import {matchPasswordValidator} from "./match-password.validator";

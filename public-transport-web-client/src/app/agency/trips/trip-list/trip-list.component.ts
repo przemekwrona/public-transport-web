@@ -7,7 +7,7 @@ import {
     TripId,
     TripService,
     UpdateRouteRequest
-} from "../../../generated/public-transport";
+} from "../../../generated/public-transport-api";
 import {faCircleXmark, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {RoutesService} from "../../routes/routes.service";
 import {remove} from "lodash";

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Route, Stop, StopDetails} from "../../../generated";
+import {Route, Stop, StopDetails} from "../../../generated/public-transport-planner-api";
 
 @Component({
     selector: 'app-routes',

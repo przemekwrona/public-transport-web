@@ -3,7 +3,7 @@ import { ResolveFn } from '@angular/router';
 
 import { calendarResolver } from './calendar.resolver';
 import {Observable} from "rxjs";
-import {CalendarBody} from "../../../generated/public-transport";
+import {CalendarBody} from "../../../generated/public-transport-api";
 
 describe('calendarResolver', () => {
   const executeResolver: ResolveFn<Observable<CalendarBody>> = (...resolverParameters) =>

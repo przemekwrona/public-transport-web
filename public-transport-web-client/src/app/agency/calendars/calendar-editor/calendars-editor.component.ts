@@ -6,7 +6,7 @@ import {
     CalendarPayload,
     CalendarService,
     UpdateCalendarRequest
-} from "../../../generated/public-transport";
+} from "../../../generated/public-transport-api";
 import {ActivatedRoute} from "@angular/router";
 import {CalendarEditorComponentMode} from "./calendar-editor-component-mode";
 

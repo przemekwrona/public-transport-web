@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MapService} from './map.service';
-import {Itinerary, RoutesResponse} from "../../../generated";
+import {Itinerary, RoutesResponse} from "../../../generated/public-transport-planner-api";
 import {DivIcon, FitBoundsOptions, LatLng, LatLngBounds, Marker, Polyline} from "leaflet";
 import * as L from "leaflet";
 import {decode} from "@googlemaps/polyline-codec";

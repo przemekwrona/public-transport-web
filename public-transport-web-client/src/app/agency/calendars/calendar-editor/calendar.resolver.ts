@@ -1,6 +1,6 @@
 import {ResolveFn} from '@angular/router';
 import {inject} from "@angular/core";
-import {CalendarBody, CalendarQuery, CalendarService} from "../../../generated/public-transport";
+import {CalendarBody, CalendarQuery, CalendarService} from "../../../generated/public-transport-api";
 import {Observable} from "rxjs";
 
 export const calendarResolver: ResolveFn<Observable<CalendarBody>> = (route, state) => {

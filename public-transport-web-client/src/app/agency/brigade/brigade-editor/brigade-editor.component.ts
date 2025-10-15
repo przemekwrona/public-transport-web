@@ -7,7 +7,7 @@ import {
     GetAllTripsResponse, GetCalendarsResponse,
     Trip,
     TripId, TripMode
-} from "../../../generated/public-transport";
+} from "../../../generated/public-transport-api";
 import {CdkDrag, CdkDragDrop, CdkDragEnter, CdkDragExit, moveItemInArray} from "@angular/cdk/drag-drop";
 import {BrigadeModel} from "./brigade-editor.model";
 import moment, {Moment} from "moment";
