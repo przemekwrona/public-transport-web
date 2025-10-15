@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {StopsResponse, StopsService} from "../../generated/public-transport";
+import {StopsResponse, StopsService} from "../../generated/public-transport-api";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 

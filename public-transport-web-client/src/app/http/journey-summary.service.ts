@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import moment from "moment";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {JourneySummaryResponse} from "../generated/public-transport";
+import {JourneySummaryResponse} from "../generated/public-transport-api";
 
 @Injectable({
   providedIn: 'root'

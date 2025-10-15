@@ -10,7 +10,7 @@ import {
     TripMode,
     TripsDetails, TripService,
     UpdateTripDetailsRequest
-} from "../../../generated/public-transport";
+} from "../../../generated/public-transport-api";
 import {StopService} from "../../stops/stop.service";
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";

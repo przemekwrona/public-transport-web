@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {interval, Subscription} from "rxjs";
 import moment from 'moment';
 import {Departure} from "../../../http/timetable.service";
-import {Pattern, Route, Stop, StopTime, Time} from "../../../generated";
+import {Pattern, Route, Stop, StopTime, Time} from "../../../generated/public-transport-planner-api";
 
 export class TimeTuple {
     time: Time;

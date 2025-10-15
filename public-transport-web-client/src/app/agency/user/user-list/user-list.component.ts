@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DatePipe} from "@angular/common";
 import {ActivatedRoute, RouterModule} from "@angular/router";
-import {AppUsersResponse} from "../../../generated/public-transport";
+import {AppUsersResponse} from "../../../generated/public-transport-api";
 
 @Component({
     selector: 'app-user-list',

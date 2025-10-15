@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, HostBinding, OnInit} from '@angular/core';
-import {Routes} from "../generated/public-transport";
+import {Routes} from "../generated/public-transport-api";
 import KTComponents from "../../metronic/core";
 import KTLayout from '../../metronic/app/layouts/demo1';
 

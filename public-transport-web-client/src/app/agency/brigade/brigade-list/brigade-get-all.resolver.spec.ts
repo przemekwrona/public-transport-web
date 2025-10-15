@@ -3,7 +3,7 @@ import { ResolveFn } from '@angular/router';
 
 import { brigadeGetAllResolver } from './brigade-get-all.resolver';
 import {Observable} from "rxjs";
-import {GetBrigadeResponse} from "../../../generated/public-transport";
+import {GetBrigadeResponse} from "../../../generated/public-transport-api";
 
 describe('brigadeGetAllResolver', () => {
   const executeResolver: ResolveFn<Observable<GetBrigadeResponse>> = (...resolverParameters) =>

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import moment from "moment";
-import {Pattern, StopTime, Time} from "../../../generated";
+import {Pattern, StopTime, Time} from "../../../generated/public-transport-planner-api";
 
 export class DepartureMetadata {
     tripId: string;

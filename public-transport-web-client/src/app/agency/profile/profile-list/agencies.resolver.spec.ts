@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ResolveFn } from '@angular/router';
 
 import { agenciesResolver } from './agencies.resolver';
-import {AgenciesAdminResponse} from "../../../generated/public-transport";
+import {AgenciesAdminResponse} from "../../../generated/public-transport-api";
 
 describe('profilesResolver', () => {
   const executeResolver: ResolveFn<AgenciesAdminResponse> = (...resolverParameters) =>

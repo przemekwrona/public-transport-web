@@ -9,7 +9,7 @@ import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import {MatDialogModule} from "@angular/material/dialog";
 import {RouteListComponent} from "./route-list/route-list.component";
-import {PdfService} from "../../generated/public-transport-pdf";
+import {PdfService} from "../../generated/public-transport-pdf-api";
 
 @NgModule({
     declarations: [

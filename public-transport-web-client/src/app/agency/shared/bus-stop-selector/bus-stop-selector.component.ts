@@ -6,7 +6,7 @@ import {
     Output,
     Renderer2,
 } from '@angular/core';
-import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport";
+import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport-api";
 import {faMap, faBus} from "@fortawesome/free-solid-svg-icons";
 import {MatDialog} from "@angular/material/dialog";
 import {BusStopModalSelectorComponent} from "../bus-stop-modal-selector/bus-stop-modal-selector.component";

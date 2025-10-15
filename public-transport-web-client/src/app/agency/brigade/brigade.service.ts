@@ -7,7 +7,7 @@ import {
     GetAllTripsResponse,
     GetBrigadeResponse,
     Status
-} from "../../generated/public-transport";
+} from "../../generated/public-transport-api";
 
 @Injectable({
     providedIn: 'root'

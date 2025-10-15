@@ -1,5 +1,5 @@
 import {Component, HostBinding} from '@angular/core';
-import {AuthService} from "../../auth/auth.service";
+import {LoginService} from "../../auth/login.service";
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
 
@@ -10,7 +10,7 @@ import {RouterModule} from "@angular/router";
         RouterModule
     ],
     providers: [
-        AuthService
+        LoginService
     ],
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
@@ -23,7 +23,7 @@ export class SidebarComponent {
     @HostBinding('attr.data-drawer-enable') drawerEnable = 'true|lg:false';
     @HostBinding('attr.id') id = 'sidebar';
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: LoginService) {
     }
 
     public isAdmin(): boolean {

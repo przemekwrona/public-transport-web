@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Route, RouteId, Routes, RouteService, Status, Stop} from "../../../generated/public-transport";
+import {Route, RouteId, Routes, RouteService, Status, Stop} from "../../../generated/public-transport-api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
-import {PdfService} from "../../../generated/public-transport-pdf";
-import {AuthService} from "../../../auth/auth.service";
+import {PdfService} from "../../../generated/public-transport-pdf-api";
+import {LoginService} from "../../../auth/login.service";
 import {NotificationService} from "../../../shared/notification.service";
 import {size} from "lodash";
 
@@ -25,7 +25,7 @@ export class RouteListComponent implements OnInit {
 
     public routes: Routes = {};
 
-    constructor(private pdfService: PdfService, private routeService: RouteService, private authService: AuthService, private notificationService: NotificationService, private _router: Router, private route: ActivatedRoute) {
+    constructor(private pdfService: PdfService, private routeService: RouteService, private authService: LoginService, private notificationService: NotificationService, private _router: Router, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {

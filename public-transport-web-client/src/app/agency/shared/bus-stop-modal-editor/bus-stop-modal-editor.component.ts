@@ -1,6 +1,6 @@
 import {Component, inject, model, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {StopsPatchRequest} from "../../../generated/public-transport";
+import {StopsPatchRequest} from "../../../generated/public-transport-api";
 import {CommonModule} from "@angular/common";
 import {BusStopEditorComponent} from "../bus-stop-editor/bus-stop-editor.component";
 

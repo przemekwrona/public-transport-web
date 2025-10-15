@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {CalendarQuery, CalendarService, GetCalendarsResponse, Status} from "../../../generated/public-transport";
+import {CalendarQuery, CalendarService, GetCalendarsResponse, Status} from "../../../generated/public-transport-api";
 import {size} from "lodash";
 
 @Component({

@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import {Injectable} from "@angular/core";
 import {catchError, Observable, of, tap, throwError} from "rxjs";
-import {AuthService} from "./auth.service";
+import {LoginService} from "./login.service";
 import {Router} from "@angular/router";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -23,10 +23,14 @@ export class AddHeaderInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // Get token
-        const token: string = sessionStorage.getItem(AuthService.SESSION_STORAGE_AUTH_TOKEN_KEY) || '';
+        const token: string = sessionStorage.getItem(LoginService.SESSION_STORAGE_AUTH_TOKEN_KEY) || '';
 
         // Clone the request to add the new header
-        const clonedRequest = req.clone({headers: req.headers.append('Authorization', `Bearer ${token}`)});
+        console.log(req);
+        const clonedRequest = req.clone({
+            // url: `/api/v1${req.url}`,
+            headers: req.headers.append('Authorization', `Bearer ${token}`)
+        });
 
         // Pass the cloned request instead of the original request to the next handle
         return next.handle(clonedRequest)

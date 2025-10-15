@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {JourneySummaryResponse} from "../../../../generated/public-transport";
+import {JourneySummaryResponse} from "../../../../generated/public-transport-api";
 
 @Component({
     selector: 'app-summary-journey',

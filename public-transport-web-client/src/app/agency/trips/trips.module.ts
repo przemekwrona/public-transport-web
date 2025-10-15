@@ -17,7 +17,7 @@ import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
-import {TripService} from "../../generated/public-transport";
+import {TripService} from "../../generated/public-transport-api";
 import {TranslocoPipe} from "@jsverse/transloco";
 
 @NgModule({

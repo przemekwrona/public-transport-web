@@ -4,7 +4,7 @@ import {DivIcon, LatLng, LatLngBounds, Map, Marker, polyline, Polyline} from "le
 import {OtpService} from "../../../http/otp.service";
 import moment from "moment";
 import {decode} from "@googlemaps/polyline-codec";
-import {Itinerary, Leg, RoutesResponse} from "../../../generated";
+import {Itinerary, Leg, RoutesResponse} from "../../../generated/public-transport-planner-api";
 import {ItineraryManagerService} from "../service/itinerary-manager.service";
 import {JourneySummaryService} from "../../../http/journey-summary.service";
 import {MatDialog} from "@angular/material/dialog";

@@ -1,10 +1,10 @@
 import { ResolveFn } from '@angular/router';
-import {AgencyDetails, AgencyService} from "../../../generated/public-transport";
+import {AgencyDetails, AgencyService} from "../../../generated/public-transport-api";
 import {inject} from "@angular/core";
-import {AuthService} from "../../../auth/auth.service";
+import {LoginService} from "../../../auth/login.service";
 
 export const profileDetailsResolver: ResolveFn<AgencyDetails> = (route, state) => {
-  const authService: AuthService = inject(AuthService);
+  const authService: LoginService = inject(LoginService);
   const agencyService: AgencyService = inject(AgencyService);
 
   return agencyService.getAgency(authService.getInstance());

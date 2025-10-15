@@ -3,8 +3,8 @@ import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {find} from "lodash";
 
-import {CenterPoint, Stop, StopsResponse, StopsService} from "../../generated/public-transport";
-import {AuthService} from "../../auth/auth.service";
+import {CenterPoint, Stop, StopsResponse, StopsService} from "../../generated/public-transport-api";
+import {LoginService} from "../../auth/login.service";
 import {ActivatedRoute} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
@@ -20,7 +20,7 @@ interface StopMarker extends L.Marker {
         SharedModule
     ],
     providers: [
-        AuthService
+        LoginService
     ],
     selector: 'app-stops',
     templateUrl: './stops.component.html',
@@ -43,7 +43,7 @@ export class StopsComponent implements OnInit, AfterViewInit {
     public stops: Stop[] = [];
     public lastClickedStop: Stop = {} as Stop;
 
-    constructor(private stopsService: StopsService, private authService: AuthService, private route: ActivatedRoute) {
+    constructor(private stopsService: StopsService, private authService: LoginService, private route: ActivatedRoute) {
     }
 
     public isAdmin(): boolean {

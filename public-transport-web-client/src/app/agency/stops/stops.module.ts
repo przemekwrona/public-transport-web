@@ -4,7 +4,7 @@ import {StopsComponent} from "./stops.component";
 import {StopService} from "../../http/stop.service";
 import {MatIconModule} from "@angular/material/icon";
 import {SharedModule} from "../shared/shared.module";
-import {AuthService} from "../../auth/auth.service";
+import {LoginService} from "../../auth/login.service";
 import {BusStopModalEditorComponent} from "../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
 
 
@@ -22,7 +22,7 @@ import {BusStopModalEditorComponent} from "../shared/bus-stop-modal-editor/bus-s
         StopsComponent
     ], providers: [
         StopService,
-        AuthService
+        LoginService
     ]
 })
 export class StopsModule {

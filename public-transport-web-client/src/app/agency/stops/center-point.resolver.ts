@@ -1,5 +1,5 @@
 import {ResolveFn} from '@angular/router';
-import {CenterPoint, StopsService} from "../../generated/public-transport";
+import {CenterPoint, StopsService} from "../../generated/public-transport-api";
 import {inject} from "@angular/core";
 import {Observable} from "rxjs";
 

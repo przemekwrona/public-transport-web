@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router, RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
-import {AgencyAdminCreateAccountRequest, AgencyService} from "../../../generated/public-transport";
+import {AgencyAdminCreateAccountRequest, AgencyService} from "../../../generated/public-transport-api";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NotificationService} from "../../../shared/notification.service";
 

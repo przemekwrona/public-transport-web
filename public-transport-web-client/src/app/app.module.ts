@@ -12,9 +12,9 @@ import {routes} from "./app.routes";
 import {AgencyModule} from "./agency/agency.module";
 import {AuthModule} from "./auth/auth.module";
 import {AddHeaderInterceptor} from "./auth/auth.interceptor";
-import {BASE_PATH} from "./generated/public-transport";
+import {BASE_PATH as API_BASE_PATH} from "./generated/public-transport-api";
 import { TranslocoRootModule } from './transloco-root.module';
-import {BASE_PATH_PDF_API} from "./generated/public-transport-pdf";
+import {BASE_PATH as PDF_BASE_PATH} from "./generated/public-transport-pdf-api";
 import {UserListComponent} from "./agency/user/user-list/user-list.component";
 import {CreateUserComponent} from "./agency/user/create-user/create-user.component";
 
@@ -39,8 +39,8 @@ import {CreateUserComponent} from "./agency/user/create-user/create-user.compone
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
-        {provide: BASE_PATH, useValue: 'http://localhost:8080/api/v1'},
-        {provide: BASE_PATH_PDF_API, useValue: 'http://localhost:8080/api/v1'}
+        {provide: API_BASE_PATH, useValue: '/api/v1'},
+        {provide: PDF_BASE_PATH, useValue: '/api/v1'}
     ],
     bootstrap: [
         AppComponent

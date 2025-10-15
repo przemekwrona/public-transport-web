@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import moment from "moment";
-import {RoutesResponse, Stop, StopDetails, Route, StopTime} from "../generated";
+import {RoutesResponse, Stop, StopDetails, Route, StopTime} from "../generated/public-transport-planner-api";
 
 @Injectable({
   providedIn: 'root'

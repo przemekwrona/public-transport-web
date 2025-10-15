@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {AgencyDetails, AgencyService} from "../../../generated/public-transport";
+import {AgencyDetails, AgencyService} from "../../../generated/public-transport-api";
 import {faGlobe, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {ActivatedRoute} from "@angular/router";
-import {AuthService} from "../../../auth/auth.service";
+import {LoginService} from "../../../auth/login.service";
 
 @Component({
     standalone: true,
@@ -29,7 +29,7 @@ export class ProfileDetailsComponent implements OnInit {
 
     public agencyDetails: AgencyDetails = {};
 
-    constructor(private agencyService: AgencyService, private route: ActivatedRoute, private authService: AuthService) {
+    constructor(private agencyService: AgencyService, private route: ActivatedRoute, private authService: LoginService) {
     }
 
     ngOnInit(): void {
