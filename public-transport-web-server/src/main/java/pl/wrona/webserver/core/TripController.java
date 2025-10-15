@@ -10,13 +10,14 @@ import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.wrona.webserver.bussiness.trip.reader.route.TripReaderByRouteService;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("${webserver.context.path}")
 public class TripController implements TripApi {
 
     private final TripService tripService;
