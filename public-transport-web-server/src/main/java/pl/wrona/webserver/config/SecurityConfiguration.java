@@ -3,6 +3,7 @@ package pl.wrona.webserver.config;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -29,11 +30,14 @@ public class SecurityConfiguration {
     private final AuthTokenEntryPoint authTokenEntryPoint;
 
     private static final String[] WHITE_LIST_URL = {
+            "/",
+            "/index.html",
+            "*.js",
+            "*.css",
+            "/assets/**",
+            "/media/**",
             "/actuator",
-            "/actuator/health",
-            "/users",
-            "/auth/login",
-            "/stops"
+            "/actuator/health"
     };
 
     @Bean
@@ -60,10 +64,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req -> req.requestMatchers(WHITE_LIST_URL)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers(WHITE_LIST_URL).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authTokenEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
