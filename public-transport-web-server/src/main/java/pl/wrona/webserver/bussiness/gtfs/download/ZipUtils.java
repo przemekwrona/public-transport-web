@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core.gtfs;
+package pl.wrona.webserver.bussiness.gtfs.download;
 
 import java.io.File;
 import java.io.FileInputStream;

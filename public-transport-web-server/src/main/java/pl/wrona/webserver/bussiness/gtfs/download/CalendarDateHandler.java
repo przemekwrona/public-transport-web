@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core.gtfs;
+package pl.wrona.webserver.bussiness.gtfs.download;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.ServiceCalendarDate;

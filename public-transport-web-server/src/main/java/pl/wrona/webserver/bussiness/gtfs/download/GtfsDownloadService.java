@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core.gtfs;
+package pl.wrona.webserver.bussiness.gtfs.download;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
