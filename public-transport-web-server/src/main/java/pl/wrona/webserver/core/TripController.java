@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.wrona.webserver.bussiness.trip.creator.TripCreatorService;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -22,10 +23,11 @@ public class TripController implements TripApi {
 
     private final TripService tripService;
     private final TripRefactorQueryService tripRefactorQueryService;
+    private final TripCreatorService tripCreatorService;
 
     @Override
     public ResponseEntity<Status> createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
-        return ResponseEntity.status(CREATED).body(tripService.createTrip(createTripDetailsRequest));
+        return ResponseEntity.status(CREATED).body(tripCreatorService.createTrip(createTripDetailsRequest));
     }
 
     @Override
