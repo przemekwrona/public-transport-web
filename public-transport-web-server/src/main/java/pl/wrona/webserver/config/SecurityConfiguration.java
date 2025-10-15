@@ -31,11 +31,10 @@ public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
             "/",
-            "/index.html",
-            "*.js",
-            "*.css",
+            "/browser/index.html",
+            "/*.css",
+            "/*.js",
             "/assets/**",
-            "/media/**",
             "/actuator",
             "/actuator/health"
     };
