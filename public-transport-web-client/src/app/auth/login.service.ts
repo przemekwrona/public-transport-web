@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {AuthService, LoginAppUserRequest, LoginAppUserResponse} from "../generated/public-transport-api";
+import {AgencyStorageService} from "./agency-storage.service";
 
 @Injectable({
     providedIn: 'root'
@@ -10,9 +11,8 @@ export class LoginService {
 
     static SESSION_STORAGE_AUTH_TOKEN_KEY = 'token';
     static SESSION_STORAGE_ROLES_KEY = 'roles';
-    static SESSION_STORAGE_INSTANCE_KEY = 'instance';
 
-    constructor(private httpClient: HttpClient, private authService: AuthService) {
+    constructor(private httpClient: HttpClient, private authService: AuthService, private agencyStorageService: AgencyStorageService) {
     }
 
     login(loginCredentials: LoginAppUserRequest): Observable<LoginAppUserResponse> {
@@ -20,22 +20,26 @@ export class LoginService {
             .pipe(tap((response: LoginAppUserResponse) => {
                 sessionStorage.setItem(LoginService.SESSION_STORAGE_AUTH_TOKEN_KEY, response.token || '');
                 sessionStorage.setItem(LoginService.SESSION_STORAGE_ROLES_KEY, JSON.stringify(response.roles) || '[]');
-                sessionStorage.setItem(LoginService.SESSION_STORAGE_INSTANCE_KEY, response.instance || '');
+                this.agencyStorageService.setInstance(response.instance);
             }));
     }
 
     logout(): void {
         sessionStorage.setItem(LoginService.SESSION_STORAGE_AUTH_TOKEN_KEY, '');
         sessionStorage.setItem(LoginService.SESSION_STORAGE_ROLES_KEY, '[]');
-        sessionStorage.setItem(LoginService.SESSION_STORAGE_INSTANCE_KEY, '');
+        this.agencyStorageService.setInstance('');
     }
 
     getRoles(): string[] {
         return JSON.parse(sessionStorage.getItem(LoginService.SESSION_STORAGE_ROLES_KEY)) || [];
     }
 
+    public setInstance(instance: string): void {
+        this.agencyStorageService.setInstance(instance);
+    }
+
     getInstance(): string {
-        return sessionStorage.getItem(LoginService.SESSION_STORAGE_INSTANCE_KEY) || '';
+        return this.agencyStorageService.getInstance();
     }
 
     hasRoleSuperAdmin(): boolean {
@@ -44,10 +48,6 @@ export class LoginService {
 
     hasRoleAgencyOwner(): boolean {
         return this.getRoles().includes('AGENCY_OWNER');
-    }
-
-    setInstance(instance: string): void {
-        sessionStorage.setItem(LoginService.SESSION_STORAGE_INSTANCE_KEY, instance || '');
     }
 
 }
