@@ -2,6 +2,7 @@ import {Component, HostBinding} from '@angular/core';
 import {LoginService} from "../../auth/login.service";
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
+import {AgencyStorageService} from "../../auth/agency-storage.service";
 
 @Component({
     standalone: true,
@@ -23,10 +24,14 @@ export class SidebarComponent {
     @HostBinding('attr.data-drawer-enable') drawerEnable = 'true|lg:false';
     @HostBinding('attr.id') id = 'sidebar';
 
-    constructor(private authService: LoginService) {
+    constructor(private authService: LoginService, private agencyStorageService: AgencyStorageService) {
     }
 
     public isAdmin(): boolean {
         return this.authService.hasRoleSuperAdmin();
+    }
+
+    public getAgencyName(): string {
+        return this.agencyStorageService.getInstance();
     }
 }
