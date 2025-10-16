@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.GtfsApi;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.gtfs.download.GtfsDownloadService;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("${webserver.context.path}")
 public class GtfsDownloadController implements GtfsApi {
 
     private final GtfsDownloadService gtfsDownloadService;
