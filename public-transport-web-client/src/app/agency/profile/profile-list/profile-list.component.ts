@@ -3,6 +3,7 @@ import {CommonModule} from "@angular/common";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {AgenciesAdminResponse, AgencyAdminDetail} from "../../../generated/public-transport-api";
 import {LoginService} from "../../../auth/login.service";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     selector: 'app-profile-list',
@@ -18,7 +19,7 @@ export class ProfileListComponent implements OnInit {
 
     public agenciesResponse: AgenciesAdminResponse = {} as AgenciesAdminResponse;
 
-    constructor(private route: ActivatedRoute, private authService: LoginService, private router: Router) {
+    constructor(private route: ActivatedRoute, private authService: LoginService, private agencyStorageService: AgencyStorageService, private router: Router) {
     }
 
     ngOnInit(): void {
@@ -28,7 +29,7 @@ export class ProfileListComponent implements OnInit {
     }
 
     public showAgency(agency: AgencyAdminDetail): void {
-        this.authService.setInstance(agency.agencyCode);
+        this.agencyStorageService.setInstance(agency.agencyCode);
         this.router.navigate(['/agency/profile']).then(()=>{});
     }
 

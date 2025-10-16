@@ -34,10 +34,6 @@ export class LoginService {
         return JSON.parse(sessionStorage.getItem(LoginService.SESSION_STORAGE_ROLES_KEY)) || [];
     }
 
-    public setInstance(instance: string): void {
-        this.agencyStorageService.setInstance(instance);
-    }
-
     getInstance(): string {
         return this.agencyStorageService.getInstance();
     }

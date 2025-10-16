@@ -10,6 +10,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {LoginService} from "../../auth/login.service";
+import {AgencyStorageService} from "../../auth/agency-storage.service";
 
 @Component({
     standalone: true,
@@ -30,7 +31,7 @@ export class GoogleMapsComponent implements OnInit {
 
     public googleAgreementsResponse: GoogleAgreementsResponse = {};
 
-    constructor(private route: ActivatedRoute, private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService, private authService: LoginService) {
+    constructor(private route: ActivatedRoute, private gtfsService: GtfsService, private googleAgreementsService: GoogleAgreementsService, private authService: LoginService, private agencyStorageService: AgencyStorageService,) {
     }
 
     ngOnInit(): void {
@@ -38,7 +39,7 @@ export class GoogleMapsComponent implements OnInit {
     }
 
     public downloadGtfs() {
-        this.gtfsService.downloadGtfs().subscribe((blob: Blob) => {
+        this.gtfsService.downloadGtfs(this.agencyStorageService.getInstance()).subscribe((blob: Blob) => {
             const a: any = document.createElement("a");
             document.body.appendChild(a);
             a.style = "display: none";
