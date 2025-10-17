@@ -16,6 +16,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     standalone: true,
@@ -47,7 +48,7 @@ export class TripListComponent implements OnInit {
 
     public state: { line: string, name: string, variant: string };
 
-    constructor(private tripService: TripService, private routeService: RoutesService, private _router: Router, private _route: ActivatedRoute) {
+    constructor(private tripService: TripService, private agencyStorageService: AgencyStorageService, private routeService: RoutesService, private _router: Router, private _route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -71,7 +72,7 @@ export class TripListComponent implements OnInit {
 
     public deleteTrip(trip: Trip) {
         const tripId: TripId = {line: trip.line, name: trip.name, variant: trip.variant, mode: trip.mode} as TripId;
-        this.tripService.deleteTripByTripId(tripId).subscribe(response => {
+        this.tripService.deleteTripByTripId(this.agencyStorageService.getInstance(), tripId).subscribe(response => {
             remove(this.trips.trips, {line: trip.line, name: trip.name, variant: trip.variant, mode: trip.mode})
         });
     }

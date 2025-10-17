@@ -25,6 +25,7 @@ import {
     BusStopModalEditorData
 } from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
 import {find} from "lodash";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     selector: 'app-trip-editor',
@@ -64,7 +65,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public $tripDetails: TripsDetails = {trip: {}};
     public $tripVariants: RouteDetails = {};
 
-    constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
+    constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
@@ -244,7 +245,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.trip = this.$tripDetails;
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
-            this.tripService.createTrip(tripDetailsRequest).subscribe(() => {
+            this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe(() => {
                 this.router.navigate(['/agency/trips'], {
                     queryParams: {
                         line: this.state.line,
@@ -253,7 +254,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 }).then();
             });
         } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
-            this.tripService.updateTrip(tripDetailsRequest).subscribe(() => {
+            this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe(() => {
             });
         }
 

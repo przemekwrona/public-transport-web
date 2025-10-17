@@ -26,17 +26,17 @@ public class TripController implements TripApi {
     private final TripCreatorService tripCreatorService;
 
     @Override
-    public ResponseEntity<Status> createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
+    public ResponseEntity<Status> createTrip(String agency, CreateTripDetailsRequest createTripDetailsRequest) {
         return ResponseEntity.status(CREATED).body(tripCreatorService.createTrip(createTripDetailsRequest));
     }
 
     @Override
-    public ResponseEntity<Status> deleteTripByTripId(TripId tripId) {
+    public ResponseEntity<Status> deleteTripByTripId(String agency, TripId tripId) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(tripService.deleteTripByTripId(tripId));
     }
 
     @Override
-    public ResponseEntity<Status> updateTrip(UpdateTripDetailsRequest updateTripDetailsRequest) {
+    public ResponseEntity<Status> updateTrip(String agency, UpdateTripDetailsRequest updateTripDetailsRequest) {
         return ResponseEntity.status(CREATED).body(tripService.updateTrip(updateTripDetailsRequest));
     }
 
@@ -46,7 +46,7 @@ public class TripController implements TripApi {
     }
 
     @Override
-    public ResponseEntity<GetAllTripsResponse> getTripsByLineOrName(String filter) {
+    public ResponseEntity<GetAllTripsResponse> getTripsByLineOrName(String agency, String filter) {
         return ResponseEntity.ok(tripRefactorQueryService.getTripsByLineOrName(filter));
     }
 }

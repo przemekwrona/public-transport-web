@@ -546,13 +546,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/RouteDetails'
 
-  /trips:
+  /agency/{agency}/trips:
     get:
       tags:
         - trip
       summary: Return all trips by filter line
       operationId: getTripsByLineOrName
       parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
         - name: filter
           in: query
           required: false
@@ -572,6 +577,12 @@ paths:
         - trip
       summary: Create new version of trip and assign to route
       operationId: createTrip
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -590,6 +601,12 @@ paths:
         - trip
       summary: Update trip's stops list and headsign
       operationId: updateTrip
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -608,6 +625,12 @@ paths:
         - trip
       summary: Delete trip by tripId
       operationId: deleteTripByTripId
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
