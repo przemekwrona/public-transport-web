@@ -41,6 +41,9 @@ public class TripEntity {
     @Enumerated(EnumType.STRING)
     private TripVariantMode mode;
 
+    @Enumerated(EnumType.STRING)
+    private TripTrafficMode trafficMode;
+
     private String headsign;
 
     private int communicationVelocity;

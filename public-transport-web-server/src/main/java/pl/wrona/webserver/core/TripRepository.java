@@ -15,19 +15,10 @@ import java.util.List;
 @Repository
 public interface TripRepository extends JpaRepository<TripEntity, Long> {
 
-    List<TripEntity> findAllByRoute(RouteEntity routeEntity);
-
     @Query("SELECT t FROM TripEntity t WHERE t.route.agency = :agency AND t.route.line LIKE CONCAT(:lineOrName,'%') OR t.route.name = CONCAT(:lineOrName,'%')")
     List<TripEntity> findByLineOrNameContainingIgnoreCase(@Param("lineOrName") String lineOrName, @Param("agency") AgencyEntity agencyEntity);
 
-    @Override
-    void delete(TripEntity entity);
-
     TripEntity findAllByRouteAndVariantNameAndMode(RouteEntity routeEntity, String variantName, TripVariantMode mode);
-
-    @Modifying
-    @Query("DELETE FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variantName = :variantName AND t.mode = :mode")
-    void deleteByLineAndNameAndVariantAndMode(@Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("mode") TripVariantMode mode);
 
     @Query("SELECT t FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variantName = :variantName AND t.mode = :mode")
     TripEntity findByLineAndNameAndVariantAndMode(@Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("mode") TripVariantMode mode);

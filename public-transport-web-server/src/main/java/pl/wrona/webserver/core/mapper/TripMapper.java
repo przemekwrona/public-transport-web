@@ -2,9 +2,11 @@ package pl.wrona.webserver.core.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
+import org.igeolab.iot.pt.server.api.model.TrafficMode;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripMode;
 import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 
 import java.util.List;
@@ -26,6 +28,13 @@ public class TripMapper {
         } else if (TripMode.BACK.equals(trip.getMode())) {
             tripEntity.setMode(TripVariantMode.BACK);
         }
+
+        if (TrafficMode.NORMAL.equals(trip.getTrafficMode())) {
+            tripEntity.setTrafficMode(TripTrafficMode.NORMAL);
+        } else if (TrafficMode.TRAFFIC.equals(trip.getTrafficMode())) {
+            tripEntity.setTrafficMode(TripTrafficMode.TRAFFIC);
+        }
+
         tripEntity.setHeadsign(trip.getHeadsign());
         tripEntity.setCommunicationVelocity(trip.getCommunicationVelocity());
         tripEntity.setOriginStopName(trip.getOrigin());

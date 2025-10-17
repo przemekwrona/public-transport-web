@@ -27,7 +27,7 @@ public class TripController implements TripApi {
 
     @Override
     public ResponseEntity<Status> createTrip(String agency, CreateTripDetailsRequest createTripDetailsRequest) {
-        return ResponseEntity.status(CREATED).body(tripCreatorService.createTrip(createTripDetailsRequest));
+        return ResponseEntity.status(CREATED).body(tripCreatorService.createTrip(agency, createTripDetailsRequest));
     }
 
     @Override
