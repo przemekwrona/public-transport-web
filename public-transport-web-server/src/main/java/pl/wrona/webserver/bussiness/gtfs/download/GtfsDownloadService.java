@@ -2,6 +2,7 @@ package pl.wrona.webserver.bussiness.gtfs.download;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.FeedInfo;
 import org.onebusaway.gtfs.model.Stop;
@@ -14,11 +15,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
-import pl.wrona.webserver.core.StopTimeService;
-import pl.wrona.webserver.core.agency.RouteQueryService;
-import pl.wrona.webserver.core.brigade.BrigadeTripService;
+import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
 import pl.wrona.webserver.core.calendar.CalendarDatesService;
-import pl.wrona.webserver.core.calendar.CalendarService;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.io.File;
@@ -29,7 +27,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,14 +36,14 @@ import java.util.stream.Collectors;
 public class GtfsDownloadService {
 
     private final AgencyService agencyService;
-//    private final RouteService routeService;
-    private final RouteQueryService routeQueryService;
-    private final BrigadeTripService brigadeTripService;
     private final StopService stopService;
-    private final StopTimeService stopTimeService;
 
-    private final CalendarService calendarService;
     private final CalendarDatesService calendarDatesService;
+
+    private final GtfsCalendarService gtfsCalendarService;
+    private final GtfsRouteService gtfsRouteService;
+    private final GtfsBrigadeTripService gtfsBrigadeTripService;
+    private final GtfsStopTimeService gtfsStopTimeService;
 
     public Resource downloadGtfs(String agency) {
         try {
@@ -59,36 +56,29 @@ public class GtfsDownloadService {
             LocalDate now = LocalDate.now();
             LocalDate nowPlus30Days = LocalDate.now().plusDays(30);
 
-            ServiceDate serviceDateNow = new ServiceDate(now.getYear(), now.getMonthValue(), now.getDayOfMonth());
-            ServiceDate serviceDatePlus30Days = new ServiceDate(nowPlus30Days.getYear(), nowPlus30Days.getMonthValue(), nowPlus30Days.getDayOfMonth());
+            // handle FeedInfo
+            writer.handleEntity(getFeedInfo(now, nowPlus30Days));
 
-            FeedInfo feedInfo = new FeedInfo();
-            feedInfo.setPublisherName("Przemysław Wrona");
-            feedInfo.setPublisherUrl("https://www.nastepnastacja.pl");
-            feedInfo.setContactUrl("https://www.nastepnastacja.pl");
-            feedInfo.setStartDate(serviceDateNow);
-            feedInfo.setEndDate(serviceDatePlus30Days);
-            feedInfo.setLang("pl");
-            feedInfo.setVersion("1.0.0");
-
-            writer.handleEntity(feedInfo);
-
-            AgencyEntity agencyEntity = agencyService.getLoggedAgency();
+            // hande Agency
+            AgencyEntity agencyEntity = agencyService.findAgencyByAgencyCode(agency);
             writer.handleEntity(AgencyHandler.handle(agencyEntity));
 
-            var calendars = calendarService.findActiveCalendar().stream()
-                    .map(CalendarHandler::handle)
+            // handle Calendar
+            var activeCalendars = gtfsCalendarService.getActiveCalendars(agency);
+            var calendars = activeCalendars
+                    .stream().map(CalendarHandler::handle)
                     .toList();
-
             calendars.forEach(writer::handleEntity);
 
             var calendarDictionary = calendars.stream()
                     .collect(Collectors.toMap(calendar -> calendar.getServiceId().getId(), Function.identity()));
 
+            // handle Calendar Date
             calendarDatesService.findAllActiveCalendarDate().stream()
                     .map(CalendarDateHandler::handle)
                     .forEach(writer::handleEntity);
 
+            // handle Stops
             var stops = stopService.findAllStops(agencyEntity).stream()
                     .map(stop -> StopHandler.handle(agencyEntity, stop))
                     .toList();
@@ -97,7 +87,8 @@ public class GtfsDownloadService {
 
             var stopDictionary = stops.stream().collect(Collectors.toMap(stop -> Long.parseLong(stop.getId().getId()), Function.identity()));
 
-            var routes = routeQueryService.findRouteByAgencyCode(agencyEntity.getAgencyCode()).stream()
+            // handle Routes
+            var routes = gtfsRouteService.findAllRoutes(agencyEntity).stream()
                     .map(route -> RouteHandler.handle(agencyEntity, route))
                     .toList();
 
@@ -106,11 +97,13 @@ public class GtfsDownloadService {
             var routesDictionary = routes.stream()
                     .collect(Collectors.toMap(route -> route.getId().getId(), Function.identity()));
 
-            var trips = brigadeTripService.findAllBrigadeTripsForActiveCalendar().stream()
+            // handle Trips
+            var brigadeTripEntities = gtfsBrigadeTripService.findAllByAgencyAndActiveCalendars(agencyEntity, activeCalendars);
+            var brigadeTrips = brigadeTripEntities.stream()
                     .map(brigadeTrip -> {
                         AgencyAndId agencyAndId = new AgencyAndId();
                         agencyAndId.setAgencyId(agencyEntity.getAgencyCode());
-                        agencyAndId.setId(brigadeTrip.getBrigade().getBrigadeNumber() + "/" + brigadeTrip.getTripSequence());
+                        agencyAndId.setId(getTripId(brigadeTrip));
 
                         Trip trip = new Trip();
                         trip.setId(agencyAndId);
@@ -119,49 +112,46 @@ public class GtfsDownloadService {
                         return trip;
                     }).toList();
 
-            var tripDictionary = trips.stream().collect(Collectors.toMap(trip -> trip.getId().getId(), Function.identity()));
+            var tripDictionary = brigadeTrips.stream().collect(Collectors.toMap(trip -> trip.getId().getId(), Function.identity()));
 
-            trips.forEach(writer::handleEntity);
+            brigadeTrips.forEach(writer::handleEntity);
 
-            List<StopTime> a = brigadeTripService.findAllBrigadeTripsForActiveCalendar().stream()
-                    .map(brigadeTrip -> {
-                        String tripId = "%s/%s".formatted(brigadeTrip.getBrigade().getBrigadeNumber(), brigadeTrip.getTripSequence());
-
-                        return stopTimeService.getAllStopTimesByTrip(brigadeTrip.getRootTrip()).stream()
-                                .map(stop -> {
-                                    StopTime stopTime = new StopTime();
-                                    stopTime.setTrip(tripDictionary.get(tripId));
-
-                                    Long idd = stop.getStopEntity().getStopId();
-                                    Stop stop1 = stopDictionary.get(idd);
-
-                                    stopTime.setStop(stop1);
-                                    stopTime.setStopSequence(stop.getStopTimeId().getStopSequence());
-
-
-                                    LocalTime arrivalTime = LocalTime.ofSecondOfDay(0)
-                                            .plusSeconds(brigadeTrip.getDepartureTimeInSeconds())
-                                            .plusSeconds(stop.getArrivalSecond())
-                                            .truncatedTo(ChronoUnit.MINUTES);
-
-                                    LocalTime departureTime = LocalTime.ofSecondOfDay(0)
-                                            .plusSeconds(brigadeTrip.getDepartureTimeInSeconds())
-                                            .plusSeconds(stop.getDepartureSecond())
-                                            .truncatedTo(ChronoUnit.MINUTES);
-
-                                    stopTime.setArrivalTime(arrivalTime.toSecondOfDay());
-                                    stopTime.setDepartureTime(departureTime.toSecondOfDay());
-                                    stopTime.setTimepoint(1);
-                                    return stopTime;
-                                })
-                                .toList();
-
-                    })
+            // handle StopTimes
+            var stopTimes = brigadeTripEntities.stream()
+                    .map(brigadeTrip -> gtfsStopTimeService.findAllByBrigadeTrip(brigadeTrip).stream()
+                            .map(stopTime -> Pair.of(brigadeTrip, stopTime))
+                            .toList())
                     .flatMap(Collection::stream)
+                    .map(pair -> {
+                        var brigadeTripEntity = pair.getLeft();
+                        var stopTimeEntity = pair.getRight();
+
+                        StopTime stopTime = new StopTime();
+                        stopTime.setTrip(tripDictionary.get(getTripId(brigadeTripEntity)));
+
+                        Stop stop = stopDictionary.get(stopTimeEntity.getStopEntity().getStopId());
+
+                        stopTime.setStop(stop);
+                        stopTime.setStopSequence(stopTimeEntity.getStopTimeId().getStopSequence());
+
+                        LocalTime arrivalTime = LocalTime.ofSecondOfDay(0)
+                                .plusSeconds(brigadeTripEntity.getDepartureTimeInSeconds())
+                                .plusSeconds(stopTimeEntity.getArrivalSecond())
+                                .truncatedTo(ChronoUnit.MINUTES);
+
+                        LocalTime departureTime = LocalTime.ofSecondOfDay(0)
+                                .plusSeconds(brigadeTripEntity.getDepartureTimeInSeconds())
+                                .plusSeconds(stopTimeEntity.getDepartureSecond())
+                                .truncatedTo(ChronoUnit.MINUTES);
+
+                        stopTime.setArrivalTime(arrivalTime.toSecondOfDay());
+                        stopTime.setDepartureTime(departureTime.toSecondOfDay());
+                        stopTime.setTimepoint(1);
+                        return stopTime;
+                    })
                     .toList();
 
-            a.forEach(writer::handleEntity);
-
+            stopTimes.forEach(writer::handleEntity);
             writer.close();
 
             File zippedGtfs = ZipUtils.zip(tempFile);
@@ -176,5 +166,24 @@ public class GtfsDownloadService {
         }
 
         return null;
+    }
+
+    private static String getTripId(BrigadeTripEntity brigadeTrip) {
+        return brigadeTrip.getBrigade().getBrigadeNumber() + "/" + brigadeTrip.getTripSequence();
+    }
+
+    private static FeedInfo getFeedInfo(LocalDate now, LocalDate nowPlus30Days) {
+        ServiceDate serviceDateNow = new ServiceDate(now.getYear(), now.getMonthValue(), now.getDayOfMonth());
+        ServiceDate serviceDatePlus30Days = new ServiceDate(nowPlus30Days.getYear(), nowPlus30Days.getMonthValue(), nowPlus30Days.getDayOfMonth());
+
+        FeedInfo feedInfo = new FeedInfo();
+        feedInfo.setPublisherName("Przemysław Wrona");
+        feedInfo.setPublisherUrl("https://www.nastepnastacja.pl");
+        feedInfo.setContactUrl("https://www.nastepnastacja.pl");
+        feedInfo.setStartDate(serviceDateNow);
+        feedInfo.setEndDate(serviceDatePlus30Days);
+        feedInfo.setLang("pl");
+        feedInfo.setVersion("1.0.0");
+        return feedInfo;
     }
 }
