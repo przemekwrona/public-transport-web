@@ -22,8 +22,4 @@ public class CalendarDatesService {
                 .collect(Collectors.groupingBy(calendarDates -> calendarDates.getCalendarDatesId().getServiceId()));
     }
 
-    public List<CalendarDatesEntity> findAllActiveCalendarDate() {
-        LocalDate now = LocalDate.now();
-        return calendarDatesRepository.findActiveCalendarDate(agencyService.getLoggedAgency(), now, now);
-    }
 }

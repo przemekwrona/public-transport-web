@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
-import pl.wrona.webserver.core.calendar.CalendarDatesService;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.io.File;
@@ -37,8 +36,6 @@ public class GtfsDownloadService {
 
     private final AgencyService agencyService;
     private final StopService stopService;
-
-    private final CalendarDatesService calendarDatesService;
 
     private final GtfsCalendarService gtfsCalendarService;
     private final GtfsRouteService gtfsRouteService;
@@ -64,7 +61,7 @@ public class GtfsDownloadService {
             writer.handleEntity(AgencyHandler.handle(agencyEntity));
 
             // handle Calendar
-            var activeCalendars = gtfsCalendarService.getActiveCalendars(agency);
+            var activeCalendars = gtfsCalendarService.findAllActiveCalendarDate(agency);
             var calendars = activeCalendars
                     .stream().map(CalendarHandler::handle)
                     .toList();
@@ -74,7 +71,7 @@ public class GtfsDownloadService {
                     .collect(Collectors.toMap(calendar -> calendar.getServiceId().getId(), Function.identity()));
 
             // handle Calendar Date
-            calendarDatesService.findAllActiveCalendarDate().stream()
+            gtfsCalendarService.findAllActiveCalendarDate(activeCalendars).stream()
                     .map(CalendarDateHandler::handle)
                     .forEach(writer::handleEntity);
 
