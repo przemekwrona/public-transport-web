@@ -253,6 +253,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: traffic_mode
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
                   name: headsign
                   type: varchar(30)
               - column:

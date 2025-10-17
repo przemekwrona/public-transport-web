@@ -7,15 +7,16 @@ import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.core.TripRepository;
-import pl.wrona.webserver.core.agency.RouteQueryService;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 import java.util.Map;
@@ -24,25 +25,28 @@ import java.util.stream.IntStream;
 @Service
 @AllArgsConstructor
 public class TripCreatorService {
-
+    private final AgencyService agencyService;
     private final StopService stopService;
-    private final RouteQueryService routeQueryService;
+    private final TripCreatorRouteService tripCreatorRouteService;
     private final TripRepository tripRepository;
     private final StopTimeRepository stopTimeRepository;
 
     @Transactional
-    public Status createTrip(CreateTripDetailsRequest createTripDetailsRequest) {
-        Trip trip = createTripDetailsRequest.getTrip().getTrip();
-        List<Long> stopIds = trip.getStops().stream()
+    @PreAgencyAuthorize
+    public Status createTrip(String instance, CreateTripDetailsRequest createTripDetailsRequest) {
+        Trip tripRequest = createTripDetailsRequest.getTrip().getTrip();
+        List<Long> stopIds = tripRequest.getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        var route = routeQueryService.findRouteByNameAndLine(trip.getName(), trip.getLine());
 
-        TripEntity tripEntity = TripMapper.map(trip);
+        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
+        var route = tripCreatorRouteService.findRouteByAgencyAndNameAndLine(agencyEntity, tripRequest.getName(), tripRequest.getLine());
+
+        TripEntity tripEntity = TripMapper.map(tripRequest);
         tripEntity.setRoute(route);
-        var lastStop = trip.getStops().stream()
+        var lastStop = tripRequest.getStops().stream()
                 .reduce((first, second) -> second);
 
 
@@ -51,7 +55,7 @@ public class TripCreatorService {
 
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
-        StopTime[] stopTimes = trip.getStops().toArray(StopTime[]::new);
+        StopTime[] stopTimes = tripRequest.getStops().toArray(StopTime[]::new);
 
         List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
                 .mapToObj(i -> {

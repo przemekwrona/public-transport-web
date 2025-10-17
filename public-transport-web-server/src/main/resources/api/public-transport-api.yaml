@@ -1145,6 +1145,12 @@ components:
         line:
           type: string
 
+    TrafficMode:
+      type: string
+      enum:
+        - NORMAL
+        - TRAFFIC
+
     TripMode:
       type: string
       enum:
@@ -1243,6 +1249,8 @@ components:
           type: string
         mode:
           $ref: '#/components/schemas/TripMode'
+        trafficMode:
+          $ref: '#/components/schemas/TrafficMode'
         headsign:
           type: string
         communicationVelocity:
