@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
 
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class TripEntity {
     @Id
     @Column(name = "trip_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trip_id_seq")
-    @SequenceGenerator(name = "trip_id_seq", sequenceName = "trip_id_seq",  allocationSize=1)
+    @SequenceGenerator(name = "trip_id_seq", sequenceName = "trip_id_seq", allocationSize = 1)
     private Long tripId;
 
     @Column(name = "variant_name")
@@ -69,6 +70,9 @@ public class TripEntity {
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
     private Set<StopTimeEntity> stopTimes;
+
+    @OneToMany(mappedBy = "rootTrip", cascade = CascadeType.REMOVE)
+    private Set<BrigadeTripEntity> brigadeTrips;
 
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "route_id")
