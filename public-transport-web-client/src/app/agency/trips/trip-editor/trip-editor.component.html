@@ -59,11 +59,13 @@
                                     <input class="input" value="{{'agency.trip.edit.mainVariant' | transloco }}"
                                            type="text" placeholder="KOZŁÓW" disabled>
                                 } @else {
-                                <input name="variant" id="variant" [(ngModel)]="$tripDetails.trip.variant" class="input"
-                                       type="text" placeholder="KOZŁÓW">
-                            }
+                                    <input name="variant" id="variant" [(ngModel)]="$tripDetails.trip.variant"
+                                           class="input"
+                                           type="text" placeholder="KOZŁÓW">
+                                }
                             </div>
                         </div>
+
                         <div class="w-full">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Kierunek wariantu</label>
@@ -72,6 +74,45 @@
                                     <option [value]="tripModeSelectValue.Front">{{ 'agency.trip.edit.FRONT' | transloco }}</option>
                                     <option [value]="tripModeSelectValue.Back">{{ 'agency.trip.edit.BACK' | transloco }}</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
+                            <div class="grid gap-7">
+                                <label class="form-label max-w-56">Ruch panujący na drodze</label>
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+                                    <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
+                                        <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
+                                            <div class="flex items-center h-11">
+                                                <img alt="" class="w-12" src="assets/media/svg/bus-svgrepo-com.svg"/>
+                                            </div>
+                                            <span class="text-md font-medium text-gray-900">Normalny ruch</span>
+                                            <input class="appearance-none" name="sso_option" type="radio"
+                                                   [value]="trafficModeSelectValue.Normal"
+                                                   [(ngModel)]="$tripDetails.trip.trafficMode"/>
+                                        </div>
+                                    </label>
+                                    <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
+                                        <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
+                                            <div class="flex items-center h-11">
+                                                <img alt="" class="w-12" src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
+                                            </div>
+                                            <span class="text-md font-medium text-gray-900">Jazda w korku</span>
+                                            <input class="appearance-none" name="sso_option" type="radio"
+                                                   [value]="trafficModeSelectValue.Traffic"
+                                                   [(ngModel)]="$tripDetails.trip.trafficMode"/>
+                                        </div>
+                                    </label>
+                                </div>
+                                <style>
+                                    .sso-active:has(:checked) {
+                                        background-image: url('assets/media/images/2600x1600/bg-1.png');
+                                    }
+
+                                    .dark .sso-active:has(:checked) {
+                                        background-image: url('assets/media/images/2600x1600/bg-1-dark.png');
+                                    }
+                                </style>
                             </div>
                         </div>
 
@@ -195,9 +236,9 @@
                             <button (click)="measureDistance()" class="btn btn-secondary px-3">
                                 <i class="ki-filled ki-arrows-circle"></i>
                             </button>
-<!--                            <button (click)="addBrake()" class="btn btn-secondary pr-2">-->
-<!--                                Dodaj postój na przystanku-->
-<!--                            </button>-->
+                            <!--                            <button (click)="addBrake()" class="btn btn-secondary pr-2">-->
+                            <!--                                Dodaj postój na przystanku-->
+                            <!--                            </button>-->
                         </div>
                     </div>
                 </div>
