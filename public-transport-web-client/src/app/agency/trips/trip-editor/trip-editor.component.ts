@@ -5,7 +5,7 @@ import {findIndex, last} from "lodash";
 import {
     Point2D, RouteDetails,
     Stop,
-    StopTime,
+    StopTime, TrafficMode,
     Trip, TripDistanceMeasuresService, TripId,
     TripMode,
     TripsDetails, TripService,
@@ -62,6 +62,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public tripModeSelectValue = TripMode;
     public tripEditorComponentMode: TripEditorComponentMode;
 
+    public trafficModeSelectValue = TrafficMode
+
     public $tripDetails: TripsDetails = {trip: {}};
     public $tripVariants: RouteDetails = {};
 
@@ -88,6 +90,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.$tripDetails.trip.isMainVariant = true;
                         this.$tripDetails.trip.variant = "MAIN";
                         this.$tripDetails.trip.mode = TripMode.Front;
+                        this.$tripDetails.trip.trafficMode = TrafficMode.Normal;
                         this.$tripDetails.trip.origin = tripVariants.route.originStop.name;
                         this.$tripDetails.trip.destination = tripVariants.route.destinationStop.name;
                         this.$tripDetails.trip.headsign = tripVariants.route.destinationStop.name;
@@ -103,6 +106,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.$tripDetails.trip.isMainVariant = true;
                         this.$tripDetails.trip.variant = "MAIN";
                         this.$tripDetails.trip.mode = TripMode.Back;
+                        this.$tripDetails.trip.trafficMode = TrafficMode.Normal;
                         this.$tripDetails.trip.origin = tripVariants.route.destinationStop.name;
                         this.$tripDetails.trip.destination = tripVariants.route.originStop.name;
                         this.$tripDetails.trip.headsign = tripVariants.route.originStop.name;
