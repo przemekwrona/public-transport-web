@@ -235,11 +235,19 @@
                                 </span>
 
                                 <span>
-                                    <span (click)="openDialogEditStop(stopTime)"><a
-                                            class="btn btn-sm btn-icon btn-clear btn-primary"><i
-                                            class="ki-filled ki-notepad-edit"></i></a></span>
+                                    <span (click)="openDialogEditStop(stopTime)">
+                                        <a class="btn btn-sm btn-icon btn-clear btn-primary">
+                                            <i class="ki-filled ki-notepad-edit"></i>
+                                        </a>
+                                    </span>
                                     <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
                                     <span>km {{ stopTime.seconds | time | number: '1.0-0' }}min</span>
+
+                                    @if (isManual) {
+                                        <span class="ml-1">
+                                            <input type="number" [(ngModel)]="stopTime.seconds" class="input inline w-16 h-7"/>
+                                        </span>
+                                    }
                                 </span>
                             </div>
                         }
