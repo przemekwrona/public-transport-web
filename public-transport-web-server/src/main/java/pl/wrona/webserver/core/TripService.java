@@ -3,11 +3,9 @@ package pl.wrona.webserver.core;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
-import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
@@ -99,7 +97,7 @@ public class TripService {
         var tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
 
         var tripResponse = Optional.ofNullable(tripEntity)
-                .map(trip -> TripMapper.map(trip))
+                .map(TripMapper::map)
                 .orElse(null);
 
         List<StopTimeEntity> stopTimes = tripEntity != null

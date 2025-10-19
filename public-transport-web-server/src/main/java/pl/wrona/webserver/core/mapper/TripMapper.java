@@ -10,6 +10,7 @@ import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 
 import java.util.List;
+import java.util.Optional;
 
 @UtilityClass
 public class TripMapper {
@@ -64,6 +65,13 @@ public class TripMapper {
                 .travelTimeInSeconds(trip.getTravelTimeInSeconds())
                 .distanceInMeters(trip.getDistanceInMeters())
                 .mode(TripModeMapper.map(trip.getMode()))
+                .trafficMode(Optional.of(trip.getTrafficMode())
+                        .map(mode -> switch (mode) {
+                            case NORMAL -> TrafficMode.NORMAL;
+                            case TRAFFIC -> TrafficMode.TRAFFIC;
+                            default -> null;
+                        })
+                        .orElse(null))
                 .origin(trip.getOriginStopName())
                 .destination(trip.getDestinationStopName())
                 .isMainVariant(trip.isMainVariant())
