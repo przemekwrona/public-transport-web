@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import * as L from "leaflet";
 import {control, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
-import {findIndex, last} from "lodash";
+import {findIndex, last, round} from "lodash";
 import {
     Point2D, RouteDetails,
     Stop,
@@ -26,6 +26,7 @@ import {
 } from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
 import {find} from "lodash";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import {StopTimeModel} from "./stop-time.model";
 
 @Component({
     selector: 'app-trip-editor',
@@ -67,6 +68,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public $tripDetails: TripsDetails = {trip: {}};
     public $tripVariants: RouteDetails = {};
 
+    public stopTimes: StopTimeModel[] = [];
     public isManual: boolean = false;
 
     constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
@@ -83,6 +85,20 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => {
             this.$tripDetails = tripDetails;
+
+            this.$tripDetails.trip.stops.forEach((stopVa: StopTime) => {
+                const stopTimeModel: StopTimeModel = {} as StopTimeModel;
+                stopTimeModel.stopId = stopVa.stopId;
+                stopTimeModel.stopName = stopVa.stopName;
+                stopTimeModel.lon = stopVa.lon;
+                stopTimeModel.lat = stopVa.lat;
+                stopTimeModel.meters = stopVa.meters;
+                stopTimeModel.seconds = stopVa.seconds;
+                stopTimeModel.bdot10k = stopVa.bdot10k;
+                stopTimeModel.minutes = round(stopVa.seconds / 60);
+
+                this.stopTimes.push(stopTimeModel);
+            })
 
             this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: RouteDetails) => {
                 this.$tripVariants = tripVariants;
@@ -104,6 +120,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         stopTime.lat = tripVariants.route.originStop.lat;
 
                         this.$tripDetails.trip.stops.push(stopTime);
+
+                        const stopTimeModel: StopTimeModel = {} as StopTimeModel;
+                        stopTimeModel.stopId = tripVariants.route.originStop.id;
+                        stopTimeModel.stopName = tripVariants.route.originStop.name;
+                        stopTimeModel.lon = tripVariants.route.originStop.lon;
+                        stopTimeModel.lat = tripVariants.route.originStop.lat;
+                        this.stopTimes.push(stopTimeModel);
+
                     } else if (this.$tripVariants.trips.length == 1 && this.$tripVariants.trips[0].isMainVariant && this.$tripVariants.trips[0].mode === TripMode.Front) {
                         this.$tripDetails.trip.isMainVariant = true;
                         this.$tripDetails.trip.variant = "MAIN";
@@ -120,6 +144,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         stopTime.lat = tripVariants.route.destinationStop.lat;
 
                         this.$tripDetails.trip.stops.push(stopTime);
+
+                        const stopTimeModel: StopTimeModel = {} as StopTimeModel;
+                        stopTimeModel.stopId = tripVariants.route.originStop.id;
+                        stopTimeModel.stopName = tripVariants.route.originStop.name;
+                        stopTimeModel.lon = tripVariants.route.originStop.lon;
+                        stopTimeModel.lat = tripVariants.route.originStop.lat;
+                        this.stopTimes.push(stopTimeModel);
                     }
                 }
             });
