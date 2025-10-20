@@ -95,7 +95,8 @@
                                     <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
                                         <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                             <div class="flex items-center h-11">
-                                                <img alt="" class="w-12" src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
+                                                <img alt="" class="w-12"
+                                                     src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
                                             </div>
                                             <span class="text-md font-medium text-gray-900">Jazda w korku</span>
                                             <input class="appearance-none" name="sso_option" type="radio"
@@ -184,7 +185,7 @@
                                     Prędkość komunikacyjna
                                 </td>
                                 <td class="py-2 text-center">
-                                    <div class="input-group">
+                                    <div class="input-group w-32">
                                         <input type="number" name="velocity" id="velocity"
                                                [(ngModel)]="$tripDetails.trip.communicationVelocity"
                                                (ngModelChange)="onCommunicationVelocityChange($event)" class="input"
@@ -226,7 +227,7 @@
 
                     <!--<div class="card-body">-->
                     <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-                        @for (stopTime of $tripDetails.trip.stops; track stopTime; let index = $index) {
+                        @for (stopTime of stopTimes; track stopTime; let index = $index) {
                             <div class="example-box" cdkDrag (dblclick)="remove(stopTime)"
                                  [@simpleFadeAnimation]="'in'">
                                 <span>
@@ -241,12 +242,15 @@
                                         </a>
                                     </span>
                                     <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
-                                    <span>km {{ stopTime.seconds | time | number: '1.0-0' }}min</span>
+                                    <span>km ({{ stopTime.seconds | time | number: '1.0-0' }} min)</span>
 
                                     @if (isManual) {
-                                        <span class="ml-1">
-                                            <input type="number" [(ngModel)]="stopTime.seconds" class="input inline w-16 h-7"/>
-                                        </span>
+                                        <div class="inline-block">
+                                            <div class="input-group mx-1">
+                                                <input type="number" [(ngModel)]="stopTime.minutes" class="input w-14 h-7.5"/>
+                                                <span class="btn btn-secondary h-7.5 px-1">min</span>
+                                            </div>
+                                        </div>
                                     }
                                 </span>
                             </div>
