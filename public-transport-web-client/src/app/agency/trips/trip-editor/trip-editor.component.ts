@@ -1,14 +1,19 @@
-import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as L from "leaflet";
-import {control, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
-import {findIndex, last, round} from "lodash";
+import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
+import {find, findIndex, last, round} from "lodash";
 import {
-    Point2D, RouteDetails,
+    Point2D,
+    RouteDetails,
     Stop,
-    StopTime, TrafficMode,
-    Trip, TripDistanceMeasuresService, TripId,
+    StopTime,
+    TrafficMode,
+    Trip,
+    TripDistanceMeasuresService,
+    TripId,
     TripMode,
-    TripsDetails, TripService,
+    TripsDetails,
+    TripService,
     UpdateTripDetailsRequest
 } from "../../../generated/public-transport-api";
 import {StopService} from "../../stops/stop.service";
@@ -24,7 +29,6 @@ import {
     BusStopModalEditorComponent,
     BusStopModalEditorData
 } from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
-import {find} from "lodash";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {StopTimeModel} from "./stop-time.model";
 
@@ -69,6 +73,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public $tripVariants: RouteDetails = {};
 
     public stopTimes: StopTimeModel[] = [];
+    public historicalStopTimes: StopTimeModel[] = [];
     public isManual: boolean = false;
 
     constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
@@ -98,6 +103,20 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 stopTimeModel.minutes = round(stopVa.seconds / 60);
 
                 this.stopTimes.push(stopTimeModel);
+            });
+
+            this.$tripDetails.trip.stops.forEach((stopTime: StopTime) => {
+                const historicalStopTime: StopTimeModel = {} as StopTimeModel;
+                historicalStopTime.stopId = stopTime.stopId;
+                historicalStopTime.stopName = stopTime.stopName;
+                historicalStopTime.lon = stopTime.lon;
+                historicalStopTime.lat = stopTime.lat;
+                historicalStopTime.meters = stopTime.meters;
+                historicalStopTime.seconds = stopTime.seconds;
+                historicalStopTime.bdot10k = stopTime.bdot10k;
+                historicalStopTime.minutes = round(stopTime.seconds / 60);
+
+                this.historicalStopTimes.push(historicalStopTime);
             })
 
             this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: RouteDetails) => {
@@ -168,6 +187,30 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.reloadStops(this.map);
         this.onZoomEnd(this.map);
         this.onMoveEnd(this.map);
+    }
+
+    public onChangeDeparture(currentStopTime: StopTimeModel, no: number): void {
+        const historicalStopTime: StopTimeModel = this.historicalStopTimes[no];
+        const timeDifference: number = currentStopTime.minutes - historicalStopTime.minutes;
+
+        this.stopTimes.forEach((value: StopTimeModel, index: number) => {
+            if (no < index) {
+                value.minutes = value.minutes + timeDifference;
+            }
+        });
+
+        this.historicalStopTimes = this.stopTimes.map(stopTime => {
+            const updatedHistoricalStopTime = {} as StopTimeModel;
+            updatedHistoricalStopTime.stopId = stopTime.stopId;
+            updatedHistoricalStopTime.stopName = stopTime.stopName;
+            updatedHistoricalStopTime.lon = stopTime.lon;
+            updatedHistoricalStopTime.lat = stopTime.lat;
+            updatedHistoricalStopTime.meters = stopTime.meters;
+            updatedHistoricalStopTime.seconds = stopTime.seconds;
+            updatedHistoricalStopTime.bdot10k = stopTime.bdot10k;
+            updatedHistoricalStopTime.minutes = stopTime.minutes;
+            return updatedHistoricalStopTime;
+        });
     }
 
     private initMap(): Map {
