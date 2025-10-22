@@ -21,7 +21,7 @@ class TripDistanceMeasureServiceIntegrationTest extends BaseIntegrationTest {
         Trip trip = new Trip()
                 .line("L1")
                 .headsign("")
-                .communicationVelocity(27)
+                .calculatedCommunicationVelocity(27)
                 .stops(List.of(
                         new StopTime().stopId(142902L).stopName("Chmielnik").lon(20.751886f).lat(50.614586f),
                         new StopTime().stopId(234100L).stopName("Przededworze").lon(20.722895f).lat(50.610844f),
@@ -45,39 +45,27 @@ class TripDistanceMeasureServiceIntegrationTest extends BaseIntegrationTest {
         assertThat(results.getStops()).hasSize(12);
 
         assertThat(results.getStops().get(0).getStopName()).isEqualTo("Chmielnik");
-        assertThat(results.getStops().get(0).getArrivalTime()).isEqualTo(0);
-        assertThat(results.getStops().get(0).getDepartureTime()).isEqualTo(0);
         assertThat(results.getStops().get(0).getMeters()).isEqualTo(0);
-        assertThat(results.getStops().get(0).getSeconds()).isEqualTo(0);
+        assertThat(results.getStops().get(0).getCalculatedSeconds()).isEqualTo(0);
 
         assertThat(results.getStops().get(1).getStopName()).isEqualTo("Przededworze");
-        assertThat(results.getStops().get(1).getArrivalTime()).isEqualTo(161);
-        assertThat(results.getStops().get(1).getDepartureTime()).isEqualTo(161);
-        assertThat(results.getStops().get(1).getSeconds()).isEqualTo(161);
+        assertThat(results.getStops().get(1).getCalculatedSeconds()).isEqualTo(161);
         assertThat(results.getStops().get(1).getMeters()).isEqualTo(2166);
 
         assertThat(results.getStops().get(2).getStopName()).isEqualTo("Jasień");
-        assertThat(results.getStops().get(2).getArrivalTime()).isEqualTo(242);
-        assertThat(results.getStops().get(2).getDepartureTime()).isEqualTo(242);
-        assertThat(results.getStops().get(2).getSeconds()).isEqualTo(242);
+        assertThat(results.getStops().get(2).getCalculatedSeconds()).isEqualTo(242);
         assertThat(results.getStops().get(2).getMeters()).isEqualTo(3689);
 
         assertThat(results.getStops().get(3).getStopName()).isEqualTo("Holendry");
-        assertThat(results.getStops().get(3).getArrivalTime()).isEqualTo(298);
-        assertThat(results.getStops().get(3).getDepartureTime()).isEqualTo(298);
-        assertThat(results.getStops().get(3).getSeconds()).isEqualTo(298);
+        assertThat(results.getStops().get(3).getCalculatedSeconds()).isEqualTo(298);
         assertThat(results.getStops().get(3).getMeters()).isEqualTo(5050);
 
         assertThat(results.getStops().get(10).getStopName()).isEqualTo("Lipnik / DK78 / 02");
-        assertThat(results.getStops().get(10).getArrivalTime()).isEqualTo(1123);
-        assertThat(results.getStops().get(10).getDepartureTime()).isEqualTo(1123);
-        assertThat(results.getStops().get(10).getSeconds()).isEqualTo(1123);
+        assertThat(results.getStops().get(10).getCalculatedSeconds()).isEqualTo(1123);
         assertThat(results.getStops().get(10).getMeters()).isEqualTo(14775);
 
         assertThat(results.getStops().get(11).getStopName()).isEqualTo("Kije Kościół");
-        assertThat(results.getStops().get(11).getArrivalTime()).isEqualTo(1227);
-        assertThat(results.getStops().get(11).getDepartureTime()).isEqualTo(1227);
-        assertThat(results.getStops().get(11).getSeconds()).isEqualTo(1227);
+        assertThat(results.getStops().get(11).getCalculatedSeconds()).isEqualTo(1227);
         assertThat(results.getStops().get(11).getMeters()).isEqualTo(16485);
     }
 

@@ -59,8 +59,6 @@ public class TripDistanceMeasureService {
                         .lon(pairStopTime.getRight().getLon())
                         .lat(pairStopTime.getRight().getLat())
                         .meters(meters)
-                        .calculatedArrivalTime(seconds)
-                        .calculatedDepartureTime(seconds)
                         .calculatedSeconds(seconds));
             }
 
@@ -103,8 +101,6 @@ public class TripDistanceMeasureService {
                     .lon(stopTime.getLon())
                     .lat(stopTime.getLat())
                     .meters((int) meters)
-                    .calculatedArrivalTime((int) seconds)
-                    .calculatedDepartureTime((int) seconds)
                     .calculatedSeconds((int) seconds)
             );
 

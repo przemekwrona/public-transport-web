@@ -1227,14 +1227,6 @@ components:
         lat:
           type: number
           format: float
-        calculatedArrivalTime:
-          type: integer
-        calculatedDepartureTime:
-          type: integer
-        customizedArrivalTime:
-          type: integer
-        customizedDepartureTime:
-          type: integer
         meters:
           type: integer
         calculatedSeconds:
