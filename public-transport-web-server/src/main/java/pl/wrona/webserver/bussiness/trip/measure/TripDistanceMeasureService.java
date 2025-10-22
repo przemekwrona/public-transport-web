@@ -39,7 +39,7 @@ public class TripDistanceMeasureService {
                         .lon(pairStopTime.getRight().getLon())
                         .lat(pairStopTime.getRight().getLat())
                         .meters(0)
-                        .seconds(0));
+                        .calculatedSeconds(0));
             } else {
                 int haversinMeters = (int) SloppyMath.haversinMeters(pairStopTime.getLeft().getLat(),
                         pairStopTime.getLeft().getLon(),
@@ -49,7 +49,7 @@ public class TripDistanceMeasureService {
                 meters = meters + haversinMeters;
 
                 // Communication speed 45km/h
-                int velocityKmPerH = Optional.ofNullable(trips.getCommunicationVelocity()).orElse(45);
+                int velocityKmPerH = Optional.ofNullable(trips.getCalculatedCommunicationVelocity()).orElse(45);
                 double velocityMetersPerSec = (velocityKmPerH * 1000.0) / 3600.0d;
                 seconds = seconds + (int) (((double) haversinMeters) / velocityMetersPerSec);
 
@@ -59,9 +59,9 @@ public class TripDistanceMeasureService {
                         .lon(pairStopTime.getRight().getLon())
                         .lat(pairStopTime.getRight().getLat())
                         .meters(meters)
-                        .arrivalTime(seconds)
-                        .departureTime(seconds)
-                        .seconds(seconds));
+                        .calculatedArrivalTime(seconds)
+                        .calculatedDepartureTime(seconds)
+                        .calculatedSeconds(seconds));
             }
 
         }
@@ -85,7 +85,7 @@ public class TripDistanceMeasureService {
                 .map(stop -> "%s,%s".formatted(stop.getLat(), stop.getLon()))
                 .collect(Collectors.joining("|"));
 
-        RoutingResponse routing = geoapifyService.route(waypoints, trips.getCommunicationVelocity());
+        RoutingResponse routing = geoapifyService.route(waypoints, trips.getCalculatedCommunicationVelocity());
         Feature feature = routing.features().stream().findFirst().orElse(null);
         List<Leg> legs = Optional.ofNullable(feature).map(Feature::properties).map(Properties::legs).orElse(List.of());
 
@@ -103,9 +103,9 @@ public class TripDistanceMeasureService {
                     .lon(stopTime.getLon())
                     .lat(stopTime.getLat())
                     .meters((int) meters)
-                    .arrivalTime((int) seconds)
-                    .departureTime((int) seconds)
-                    .seconds((int) seconds)
+                    .calculatedArrivalTime((int) seconds)
+                    .calculatedDepartureTime((int) seconds)
+                    .calculatedSeconds((int) seconds)
             );
 
             if (i < legs.size()) {

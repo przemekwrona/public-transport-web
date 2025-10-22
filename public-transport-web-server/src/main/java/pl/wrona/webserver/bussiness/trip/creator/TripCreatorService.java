@@ -51,7 +51,7 @@ public class TripCreatorService {
 
 
         tripEntity.setDistanceInMeters(lastStop.map(StopTime::getMeters).orElse(0));
-        tripEntity.setTravelTimeInSeconds(lastStop.map(StopTime::getSeconds).orElse(0));
+        tripEntity.setTravelTimeInSeconds(lastStop.map(StopTime::getCalculatedSeconds).orElse(0));
 
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
@@ -69,8 +69,8 @@ public class TripCreatorService {
                     entity.setStopTimeId(stopTimeId);
 
                     entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
-                    entity.setCalculatedArrivalSecond(stopTime.getSeconds());
-                    entity.setCalculatedDepartureSecond(stopTime.getSeconds());
+                    entity.setCalculatedArrivalSecond(stopTime.getCalculatedArrivalTime());
+                    entity.setCalculatedDepartureSecond(stopTime.getCalculatedDepartureTime());
                     entity.setCustomizedArrivalSecond(0);
                     entity.setCustomizedDepartureSecond(0);
                     entity.setDistanceMeters(stopTime.getMeters());

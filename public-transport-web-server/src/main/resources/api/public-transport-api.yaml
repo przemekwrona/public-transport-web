@@ -1227,13 +1227,19 @@ components:
         lat:
           type: number
           format: float
-        arrivalTime:
+        calculatedArrivalTime:
           type: integer
-        departureTime:
+        calculatedDepartureTime:
+          type: integer
+        customizedArrivalTime:
+          type: integer
+        customizedDepartureTime:
           type: integer
         meters:
           type: integer
-        seconds:
+        calculatedSeconds:
+          type: integer
+        customizedSeconds:
           type: integer
         bdot10k:
           type: boolean
@@ -1253,7 +1259,7 @@ components:
           $ref: '#/components/schemas/TrafficMode'
         headsign:
           type: string
-        communicationVelocity:
+        calculatedCommunicationVelocity:
           type: integer
         distanceInMeters:
           type: integer

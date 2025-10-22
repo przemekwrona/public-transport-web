@@ -187,7 +187,7 @@
                                 <td class="py-2 text-center">
                                     <div class="input-group w-32">
                                         <input type="number" name="velocity" id="velocity"
-                                               [(ngModel)]="$tripDetails.trip.communicationVelocity"
+                                               [(ngModel)]="$tripDetails.trip.calculatedCommunicationVelocity"
                                                (ngModelChange)="onCommunicationVelocityChange($event)" class="input"
                                                placeholder="45">
                                         <span class="btn btn-secondary">km/h</span>
@@ -198,7 +198,7 @@
                                 <td class="py-3">Dystans (Czas przejazdu)</td>
                                 <td class="py-3 text-gray-700 text-2sm font-normal">
                                     {{ getLastStop()?.meters | distance | number: '1.1-1' }} km
-                                    ({{ getLastStop()?.seconds | time | number: '1.0-0' }} min)
+                                    ({{ getLastStop()?.calculatedSeconds | time | number: '1.0-0' }} min)
                                 </td>
                             </tr>
                         </table>
