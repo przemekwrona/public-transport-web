@@ -98,7 +98,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 stopTimeModel.lon = stopVa.lon;
                 stopTimeModel.lat = stopVa.lat;
                 stopTimeModel.meters = stopVa.meters;
-                stopTimeModel.seconds = stopVa.calculatedSeconds;
+                stopTimeModel.calculatedSeconds = stopVa.calculatedSeconds;
                 stopTimeModel.bdot10k = stopVa.bdot10k;
                 stopTimeModel.minutes = round(stopVa.calculatedSeconds / 60);
 
@@ -112,7 +112,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 historicalStopTime.lon = stopTime.lon;
                 historicalStopTime.lat = stopTime.lat;
                 historicalStopTime.meters = stopTime.meters;
-                historicalStopTime.seconds = stopTime.calculatedSeconds;
+                historicalStopTime.calculatedSeconds = stopTime.calculatedSeconds;
                 historicalStopTime.bdot10k = stopTime.bdot10k;
                 historicalStopTime.minutes = round(stopTime.calculatedSeconds / 60);
 
@@ -206,7 +206,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             updatedHistoricalStopTime.lon = stopTime.lon;
             updatedHistoricalStopTime.lat = stopTime.lat;
             updatedHistoricalStopTime.meters = stopTime.meters;
-            updatedHistoricalStopTime.seconds = stopTime.seconds;
+            updatedHistoricalStopTime.calculatedSeconds = stopTime.calculatedSeconds;
             updatedHistoricalStopTime.bdot10k = stopTime.bdot10k;
             updatedHistoricalStopTime.minutes = stopTime.minutes;
             return updatedHistoricalStopTime;
@@ -302,7 +302,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         trips.headsign = '';
         trips.calculatedCommunicationVelocity = this.$tripDetails.trip.calculatedCommunicationVelocity;
 
-        trips.stops = this.$tripDetails.trip.stops.map(stop => {
+        trips.stops = this.stopTimes.map((stop: StopTimeModel): StopTime => {
             const stopTime: StopTime = {};
             stopTime.stopId = stop.stopId;
             stopTime.stopName = stop.stopName;
@@ -324,6 +324,18 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const tripDetailsRequest: UpdateTripDetailsRequest = {};
         tripDetailsRequest.tripId = tripId;
         tripDetailsRequest.trip = this.$tripDetails;
+        tripDetailsRequest.trip.trip.stops = this.stopTimes.map(a => {
+            const stopTime: StopTime = {};
+            stopTime.stopId = a.stopId;
+            stopTime.stopName = a.stopName;
+            stopTime.lat = a.lat;
+            stopTime.lon = a.lon;
+            stopTime.calculatedSeconds = a.calculatedSeconds;
+            stopTime.customizedSeconds = a.minutes * 60;
+            stopTime.meters = a.meters;
+
+            return stopTime;
+        });
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
             this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe(() => {
@@ -365,9 +377,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public remove(stopTime: StopTime) {
-        const index = findIndex(this.$tripDetails.trip.stops, {stopId: stopTime.stopId});
-        this.$tripDetails.trip.stops.splice(index, 1);
-        // this.drawPolyline();
+        const index = findIndex(this.stopTimes, {stopId: stopTime.stopId});
+        this.stopTimes.splice(index, 1);
+        this.measureDistance();
     }
 
     public measureDistance(): void {
