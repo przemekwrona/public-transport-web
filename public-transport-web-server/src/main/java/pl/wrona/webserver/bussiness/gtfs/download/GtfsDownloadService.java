@@ -133,12 +133,12 @@ public class GtfsDownloadService {
 
                         LocalTime arrivalTime = LocalTime.ofSecondOfDay(0)
                                 .plusSeconds(brigadeTripEntity.getDepartureTimeInSeconds())
-                                .plusSeconds(stopTimeEntity.getArrivalSecond())
+                                .plusSeconds(stopTimeEntity.getCustomizedArrivalSecond())
                                 .truncatedTo(ChronoUnit.MINUTES);
 
                         LocalTime departureTime = LocalTime.ofSecondOfDay(0)
                                 .plusSeconds(brigadeTripEntity.getDepartureTimeInSeconds())
-                                .plusSeconds(stopTimeEntity.getDepartureSecond())
+                                .plusSeconds(stopTimeEntity.getCustomizedDepartureSecond())
                                 .truncatedTo(ChronoUnit.MINUTES);
 
                         stopTime.setArrivalTime(arrivalTime.toSecondOfDay());

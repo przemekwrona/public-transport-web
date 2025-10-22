@@ -37,7 +37,7 @@ public class TripMapper {
         }
 
         tripEntity.setHeadsign(trip.getHeadsign());
-        tripEntity.setCalculatedCommunicationVelocity(trip.getCommunicationVelocity());
+        tripEntity.setCalculatedCommunicationVelocity(trip.getCalculatedCommunicationVelocity());
         tripEntity.setOriginStopName(trip.getOrigin());
         tripEntity.setDestinationStopName(trip.getDestination());
         tripEntity.setMainVariant(trip.getIsMainVariant());
@@ -59,7 +59,7 @@ public class TripMapper {
                 .name(trip.getRoute().getName())
                 .line(trip.getRoute().getLine())
                 .variant(trip.getVariantName())
-                .communicationVelocity(trip.getCalculatedCommunicationVelocity())
+                .calculatedCommunicationVelocity(trip.getCalculatedCommunicationVelocity())
                 .variantDesignation(trip.getVariantDesignation())
                 .variantDescription(trip.getVariantDescription())
                 .travelTimeInSeconds(trip.getTravelTimeInSeconds())

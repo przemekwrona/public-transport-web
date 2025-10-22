@@ -58,7 +58,7 @@ public class TripService {
         Optional<StopTime> lastStopOptional = trip.getStops().stream().reduce((first, second) -> second);
         lastStopOptional.ifPresent(lastStop -> {
             updatedTrip.setDistanceInMeters(lastStop.getMeters());
-            updatedTrip.setTravelTimeInSeconds(lastStop.getSeconds());
+            updatedTrip.setTravelTimeInSeconds(lastStop.getCustomizedSeconds());
         });
 
 
@@ -78,8 +78,8 @@ public class TripService {
                     entity.setStopTimeId(stopTimeId);
 
                     entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
-                    entity.setCalculatedArrivalSecond(stopTime.getSeconds());
-                    entity.setCalculatedDepartureSecond(stopTime.getSeconds());
+                    entity.setCalculatedArrivalSecond(stopTime.getCalculatedArrivalTime());
+                    entity.setCalculatedDepartureSecond(stopTime.getCalculatedDepartureTime());
                     entity.setDistanceMeters(stopTime.getMeters());
 
                     return entity;
@@ -107,9 +107,10 @@ public class TripService {
             tripResponse.addStopsItem(new StopTime()
                     .stopId(stopTime.getStopEntity().getStopId())
                     .stopName(stopTime.getStopEntity().getName())
-                    .arrivalTime(stopTime.getCalculatedArrivalSecond())
-                    .departureTime(stopTime.getCalculatedDepartureSecond())
-                    .seconds(stopTime.getTimeSeconds())
+                    .calculatedArrivalTime(stopTime.getCalculatedArrivalSecond())
+                    .calculatedDepartureTime(stopTime.getCalculatedDepartureSecond())
+                    .calculatedSeconds(stopTime.getTimeSeconds())
+                    .customizedSeconds(stopTime.getTimeSeconds())
                     .meters(stopTime.getDistanceMeters())
                     .bdot10k(stopTime.getStopEntity().isBdot10k())
                     .lon((float) stopTime.getStopEntity().getLon())

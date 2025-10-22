@@ -98,9 +98,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 stopTimeModel.lon = stopVa.lon;
                 stopTimeModel.lat = stopVa.lat;
                 stopTimeModel.meters = stopVa.meters;
-                stopTimeModel.seconds = stopVa.seconds;
+                stopTimeModel.seconds = stopVa.calculatedSeconds;
                 stopTimeModel.bdot10k = stopVa.bdot10k;
-                stopTimeModel.minutes = round(stopVa.seconds / 60);
+                stopTimeModel.minutes = round(stopVa.calculatedSeconds / 60);
 
                 this.stopTimes.push(stopTimeModel);
             });
@@ -112,9 +112,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 historicalStopTime.lon = stopTime.lon;
                 historicalStopTime.lat = stopTime.lat;
                 historicalStopTime.meters = stopTime.meters;
-                historicalStopTime.seconds = stopTime.seconds;
+                historicalStopTime.seconds = stopTime.calculatedSeconds;
                 historicalStopTime.bdot10k = stopTime.bdot10k;
-                historicalStopTime.minutes = round(stopTime.seconds / 60);
+                historicalStopTime.minutes = round(stopTime.calculatedSeconds / 60);
 
                 this.historicalStopTimes.push(historicalStopTime);
             })
@@ -174,7 +174,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 }
             });
         });
-        this.$tripDetails.trip.communicationVelocity = this.$tripDetails.trip.communicationVelocity || 45;
+        this.$tripDetails.trip.calculatedCommunicationVelocity = this.$tripDetails.trip.calculatedCommunicationVelocity || 45;
     }
 
     ngAfterViewInit(): void {
@@ -256,6 +256,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         stopTime.lat = stop.lat;
 
                         this.$tripDetails.trip.stops.push(stopTime);
+                        this.stopTimes.push(stopTime);
 
                         this.approximateDistance();
 
@@ -283,7 +284,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             for (const index in response.stops) {
                 const stopTime: StopTime = (response.stops || [])[Number(index)];
                 this.$tripDetails.trip.stops[Number(index)].meters = stopTime.meters;
-                this.$tripDetails.trip.stops[Number(index)].seconds = stopTime.seconds;
+                this.$tripDetails.trip.stops[Number(index)].calculatedSeconds = stopTime.calculatedSeconds;
             }
 
             this.drawPolyline(response.geometry);
@@ -299,7 +300,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const trips: Trip = {};
         trips.line = this.state.line || '';
         trips.headsign = '';
-        trips.communicationVelocity = this.$tripDetails.trip.communicationVelocity;
+        trips.calculatedCommunicationVelocity = this.$tripDetails.trip.calculatedCommunicationVelocity;
 
         trips.stops = this.$tripDetails.trip.stops.map(stop => {
             const stopTime: StopTime = {};
@@ -374,7 +375,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             for (const index in response.stops) {
                 const stopTime: StopTime = (response.stops || [])[Number(index)];
                 this.$tripDetails.trip.stops[Number(index)].meters = stopTime.meters;
-                this.$tripDetails.trip.stops[Number(index)].seconds = stopTime.seconds;
+                this.$tripDetails.trip.stops[Number(index)].calculatedSeconds = stopTime.calculatedSeconds;
             }
 
             this.drawPolyline(response.geometry);
