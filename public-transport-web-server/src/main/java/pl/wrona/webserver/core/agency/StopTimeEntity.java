@@ -32,11 +32,15 @@ public class StopTimeEntity {
     @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false, nullable = false)
     private TripEntity trip;
 
-    private int arrivalSecond;
-    private int departureSecond;
+    private int calculatedArrivalSecond;
+    private int calculatedDepartureSecond;
+
+    private int customizedArrivalSecond;
+    private int customizedDepartureSecond;
+
+    private int timeSeconds;
+    private int breakSeconds;
+
     private int distanceMeters;
 
-    public LocalTime getDepartureTime(int secondsOfDay) {
-        return LocalTime.ofSecondOfDay(secondsOfDay).plusSeconds(departureSecond);
-    }
 }

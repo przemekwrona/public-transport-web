@@ -46,7 +46,8 @@ public class TripEntity {
 
     private String headsign;
 
-    private int communicationVelocity;
+    private int calculatedCommunicationVelocity;
+    private int customizedCommunicationVelocity;
 
     private int distanceInMeters;
 

@@ -267,7 +267,10 @@ databaseChangeLog:
                   name: variant_description
                   type: varchar(255)
               - column:
-                  name: communication_velocity
+                  name: calculated_communication_velocity
+                  type: int
+              - column:
+                  name: customized_communication_velocity
                   type: int
               - column:
                   name: distance_in_meters
@@ -336,17 +339,37 @@ databaseChangeLog:
                     primaryKeyName: pk_stop_time
                     nullable: false
               - column:
-                  name: arrival_second
+                  name: calculated_arrival_second
                   type: int
                   constraints:
                     nullable: false
               - column:
-                  name: departure_second
+                  name: calculated_departure_second
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customized_arrival_second
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customized_departure_second
                   type: int
                   constraints:
                     nullable: false
               - column:
                   name: distance_meters
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_seconds
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: break_seconds
                   type: int
                   constraints:
                     nullable: false
