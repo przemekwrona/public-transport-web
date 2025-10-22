@@ -6,7 +6,7 @@ import {
     BrigadeTrip, ErrorResponse,
     GetAllTripsResponse, GetCalendarsResponse,
     Trip,
-    TripId, TripMode
+    TripId, TripMode, TripService
 } from "../../../generated/public-transport-api";
 import {CdkDrag, CdkDragDrop, CdkDragEnter, CdkDragExit, moveItemInArray} from "@angular/cdk/drag-drop";
 import {BrigadeModel} from "./brigade-editor.model";
@@ -16,6 +16,7 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BrigadeEditorComponentMode} from "./brigade-editor-component-mode";
 import {HttpErrorResponse} from "@angular/common/http";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     selector: 'app-brigade-editor',
@@ -48,11 +49,11 @@ export class BrigadeEditorComponent implements OnInit {
 
     public saveError: ErrorResponse | null = null;
 
-    constructor(private brigadeService: BrigadeService, private _route: ActivatedRoute, private _router: Router) {
+    constructor(private brigadeService: BrigadeService, private tripService: TripService, private agencyStorageService: AgencyStorageService, private _route: ActivatedRoute, private _router: Router) {
     }
 
     ngOnInit(): void {
-        this.brigadeService.getRoutes('').subscribe((response: GetAllTripsResponse) => response === null ? {
+        this.tripService.getTripsByLineOrName(this.agencyStorageService.getInstance(), '').subscribe((response: GetAllTripsResponse) => response === null ? {
             filter: '',
             lines: []
         } : this.tripsResponse = response);
