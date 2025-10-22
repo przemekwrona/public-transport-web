@@ -26,7 +26,6 @@ export class AddHeaderInterceptor implements HttpInterceptor {
         const token: string = sessionStorage.getItem(LoginService.SESSION_STORAGE_AUTH_TOKEN_KEY) || '';
 
         // Clone the request to add the new header
-        console.log(req);
         const clonedRequest = req.clone({
             // url: `/api/v1${req.url}`,
             headers: req.headers.append('Authorization', `Bearer ${token}`)
