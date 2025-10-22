@@ -242,7 +242,7 @@
                                         </a>
                                     </span>
                                     <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
-                                    <span>km ({{ stopTime.seconds | time | number: '1.0-0' }} min)</span>
+                                    <span>km ({{ stopTime.calculatedSeconds | time | number: '1.0-0' }} min)</span>
 
                                     @if (isManual) {
                                         <div class="inline-block">
