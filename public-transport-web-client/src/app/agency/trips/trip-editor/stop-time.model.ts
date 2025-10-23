@@ -7,6 +7,6 @@ export interface StopTimeModel {
     departureTime?: number;
     meters?: number;
     calculatedSeconds?: number;
-    minutes?: number;
+    customizedMinutes?: number;
     bdot10k?: boolean;
 }

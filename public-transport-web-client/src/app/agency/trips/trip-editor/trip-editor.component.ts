@@ -100,7 +100,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 stopTimeModel.meters = stopVa.meters;
                 stopTimeModel.calculatedSeconds = stopVa.calculatedSeconds;
                 stopTimeModel.bdot10k = stopVa.bdot10k;
-                stopTimeModel.minutes = round(stopVa.calculatedSeconds / 60);
+                stopTimeModel.customizedMinutes = round(stopVa.calculatedSeconds / 60);
 
                 this.stopTimes.push(stopTimeModel);
             });
@@ -114,7 +114,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 historicalStopTime.meters = stopTime.meters;
                 historicalStopTime.calculatedSeconds = stopTime.calculatedSeconds;
                 historicalStopTime.bdot10k = stopTime.bdot10k;
-                historicalStopTime.minutes = round(stopTime.calculatedSeconds / 60);
+                historicalStopTime.customizedMinutes = round(stopTime.calculatedSeconds / 60);
 
                 this.historicalStopTimes.push(historicalStopTime);
             })
@@ -191,11 +191,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public onChangeDeparture(currentStopTime: StopTimeModel, no: number): void {
         const historicalStopTime: StopTimeModel = this.historicalStopTimes[no];
-        const timeDifference: number = currentStopTime.minutes - historicalStopTime.minutes;
+        const timeDifference: number = currentStopTime.customizedMinutes - historicalStopTime.customizedMinutes;
 
         this.stopTimes.forEach((value: StopTimeModel, index: number) => {
             if (no < index) {
-                value.minutes = value.minutes + timeDifference;
+                value.customizedMinutes = value.customizedMinutes + timeDifference;
             }
         });
 
@@ -207,8 +207,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             updatedHistoricalStopTime.lat = stopTime.lat;
             updatedHistoricalStopTime.meters = stopTime.meters;
             updatedHistoricalStopTime.calculatedSeconds = stopTime.calculatedSeconds;
+            updatedHistoricalStopTime.customizedMinutes = stopTime.customizedMinutes;
             updatedHistoricalStopTime.bdot10k = stopTime.bdot10k;
-            updatedHistoricalStopTime.minutes = stopTime.minutes;
             return updatedHistoricalStopTime;
         });
     }
@@ -249,13 +249,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
                 const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: stop.isBdot10k ? this.BDOT10K_STOP : this.OTP_STOP})
                     .on('click', (event: LeafletMouseEvent) => {
-                        const stopTime: StopTime = {} as StopTime;
+                        const stopTime: StopTimeModel = {} as StopTimeModel;
                         stopTime.stopId = stop.id;
                         stopTime.stopName = stop.name;
                         stopTime.lon = stop.lon;
                         stopTime.lat = stop.lat;
+                        stopTime.calculatedSeconds = 0;
+                        stopTime.customizedMinutes = 0;
 
-                        this.$tripDetails.trip.stops.push(stopTime);
                         this.stopTimes.push(stopTime);
 
                         this.approximateDistance();
@@ -283,9 +284,26 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.tripDistanceMeasuresService.approximateDistance(trips).subscribe(response => {
             for (const index in response.stops) {
                 const stopTime: StopTime = (response.stops || [])[Number(index)];
-                this.$tripDetails.trip.stops[Number(index)].meters = stopTime.meters;
-                this.$tripDetails.trip.stops[Number(index)].calculatedSeconds = stopTime.calculatedSeconds;
+                this.stopTimes[Number(index)].meters = stopTime.meters;
+                this.stopTimes[Number(index)].calculatedSeconds = stopTime.calculatedSeconds;
+                if (this.stopTimes[Number(index)].customizedMinutes == 0) {
+                    this.stopTimes[Number(index)].customizedMinutes = Math.ceil(stopTime.calculatedSeconds / 60);
+                }
             }
+
+            this.historicalStopTimes = this.stopTimes.map((stopTime: StopTimeModel) => {
+                const historicalStopTime: StopTimeModel = {} as StopTimeModel;
+                historicalStopTime.stopId = stopTime.stopId;
+                historicalStopTime.stopName = stopTime.stopName;
+                historicalStopTime.lon = stopTime.lon;
+                historicalStopTime.lat = stopTime.lat;
+                historicalStopTime.meters = stopTime.meters;
+                historicalStopTime.calculatedSeconds = stopTime.calculatedSeconds;
+                historicalStopTime.bdot10k = stopTime.bdot10k;
+                historicalStopTime.customizedMinutes = round(stopTime.calculatedSeconds / 60);
+
+                return historicalStopTime;
+            });
 
             this.drawPolyline(response.geometry);
 
@@ -331,7 +349,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             stopTime.lat = a.lat;
             stopTime.lon = a.lon;
             stopTime.calculatedSeconds = a.calculatedSeconds;
-            stopTime.customizedSeconds = a.minutes * 60;
+            stopTime.customizedSeconds = a.customizedMinutes * 60;
             stopTime.meters = a.meters;
 
             return stopTime;
@@ -386,8 +404,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.tripDistanceMeasuresService.measureDistance(this.buildTripsRequest()).subscribe(response => {
             for (const index in response.stops) {
                 const stopTime: StopTime = (response.stops || [])[Number(index)];
-                this.$tripDetails.trip.stops[Number(index)].meters = stopTime.meters;
-                this.$tripDetails.trip.stops[Number(index)].calculatedSeconds = stopTime.calculatedSeconds;
+                this.stopTimes[Number(index)].meters = stopTime.meters;
+                this.stopTimes[Number(index)].calculatedSeconds = stopTime.calculatedSeconds;
+                if (this.stopTimes[Number(index)].customizedMinutes == 0) {
+                    this.stopTimes[Number(index)].customizedMinutes = Math.ceil(stopTime.calculatedSeconds / 60);
+                }
             }
 
             this.drawPolyline(response.geometry);

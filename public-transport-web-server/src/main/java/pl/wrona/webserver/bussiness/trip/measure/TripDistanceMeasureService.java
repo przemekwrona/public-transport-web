@@ -101,8 +101,7 @@ public class TripDistanceMeasureService {
                     .lon(stopTime.getLon())
                     .lat(stopTime.getLat())
                     .meters((int) meters)
-                    .calculatedSeconds((int) seconds)
-            );
+                    .calculatedSeconds((int) seconds));
 
             if (i < legs.size()) {
                 Leg leg = legs.get(i);

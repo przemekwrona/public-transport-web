@@ -32,7 +32,8 @@ public class StopTimeEntity {
     @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false, nullable = false)
     private TripEntity trip;
 
-    private int timeSeconds;
+    private int calculatedTimeSeconds;
+    private int customizedTimeSeconds;
     private int breakSeconds;
 
     private int distanceMeters;

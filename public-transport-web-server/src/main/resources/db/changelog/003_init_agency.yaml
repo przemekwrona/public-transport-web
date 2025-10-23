@@ -339,32 +339,17 @@ databaseChangeLog:
                     primaryKeyName: pk_stop_time
                     nullable: false
               - column:
-                  name: calculated_arrival_second
-                  type: int
-                  constraints:
-                    nullable: false
-              - column:
-                  name: calculated_departure_second
-                  type: int
-                  constraints:
-                    nullable: false
-              - column:
-                  name: customized_arrival_second
-                  type: int
-                  constraints:
-                    nullable: false
-              - column:
-                  name: customized_departure_second
-                  type: int
-                  constraints:
-                    nullable: false
-              - column:
                   name: distance_meters
                   type: int
                   constraints:
                     nullable: false
               - column:
-                  name: time_seconds
+                  name: calculated_time_seconds
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customized_time_seconds
                   type: int
                   constraints:
                     nullable: false
