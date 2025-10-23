@@ -69,7 +69,7 @@ public class TripCreatorService {
                     entity.setStopTimeId(stopTimeId);
 
                     entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
-                    entity.setTimeSeconds(stopTime.getCalculatedSeconds());
+                    entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
                     entity.setDistanceMeters(stopTime.getMeters());
 
                     return entity;

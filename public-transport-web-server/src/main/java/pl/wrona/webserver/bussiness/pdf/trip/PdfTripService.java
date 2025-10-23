@@ -93,7 +93,7 @@ public class PdfTripService {
                                 stopTime.getStopEntity().getName(),
                                 stopTime.getStopTimeId().getStopSequence(),
                                 brigadeTrip.getBrigade().getCalendar().getDesignation(),
-                                LocalTime.ofSecondOfDay(brigadeTrip.getDepartureTimeInSeconds()).plusSeconds(stopTime.getCalculatedDepartureSecond()).format(HHMM)))
+                                LocalTime.ofSecondOfDay(brigadeTrip.getDepartureTimeInSeconds()).plusSeconds(stopTime.getCalculatedTimeSeconds()).format(HHMM)))
                         .forEach(timetable::putDeparture);
             }
         }
