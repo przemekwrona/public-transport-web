@@ -1,1 +1,57 @@
-<p>timetable-list works!</p>
+<div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+        <div class="flex flex-col justify-center gap-2">
+            <h1 class="text-xl font-medium leading-none text-gray-900">Generator Rozkładów jazdy i Brygad</h1>
+            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
+                Rozkład jazdy to szczegółowy plan funkcjonowania środka transportu, który określa: Trasę przejazdu
+                (linię komunikacyjną), Punkty zatrzymania (stacje, przystanki) oraz Dokładne godziny przyjazdu i/lub
+                odjazdu z tych punktów w określonym dniu, tygodniu lub sezonie.
+            </div>
+        </div>
+        <div class="flex items-center gap-2.5">
+            <!--            <a [routerLink]="['/agency/brigades/create']" class="btn btn-sm btn-primary">Dodaj nową brygadę</a>-->
+        </div>
+    </div>
+</div>
+
+<div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+
+        @if (hasTimetables()) {
+        } @else {
+            <!-- Container -->
+            <div class="card w-full">
+                <div class="card-body flex flex-col items-center gap-2.5 py-7.5">
+                    <div class="flex justify-center p-7.5 py-9">
+                        <img alt="image" class="dark:hidden max-h-[230px]" src="assets/media/illustrations/22.svg"/>
+                        <img alt="image" class="light:hidden max-h-[230px]"
+                             src="assets/media/illustrations/22-dark.svg"/>
+                    </div>
+                    <div class="flex flex-col gap-5 lg:gap-7.5">
+                        <div class="flex flex-col gap-3 text-center">
+                            <h2 class="text-1.5xl font-semibold text-gray-900">
+                                Nie dodałeś Rozkładu Jazdy
+                            </h2>
+                            <p class="text-sm text-gray-800">
+                                Wygląda na to że jeszcze nie dodałeś Rozkładu Jazdy
+                                <br/>
+                                Kliknij poniżej Dodaj Nową Rozkładu Jazdy
+                            </p>
+                        </div>
+                        <div class="flex justify-center mb-5">
+                            <!--                            <a [routerLink]="['/agency/brigades/create']" class="btn btn-primary">-->
+                            <!--                                Dodaj Nową Brygadę-->
+                            <!--                            </a>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Container -->
+        }
+
+        <p class="text-2sm text-gray-800">
+            Odblokuj pełne możliwości aplikacji i zacznij publikować rozkłady jazdy w Google Maps, docierając do
+            jeszcze większej liczby pasażerów!
+        </p>
+    </div>
+</div>
