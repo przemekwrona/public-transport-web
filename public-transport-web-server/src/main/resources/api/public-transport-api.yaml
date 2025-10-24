@@ -890,6 +890,12 @@ components:
           type: string
         postalCity:
           type: string
+        lon:
+          type: number
+          format: float
+        lat:
+          type: number
+          format: float
 
     AgencyDetails:
       type: object
