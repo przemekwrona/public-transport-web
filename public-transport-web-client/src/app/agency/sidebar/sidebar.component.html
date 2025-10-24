@@ -94,18 +94,17 @@
                         <span class="menu-title text-sm font-semibold text-gray-700"> Linie </span>
                     </div>
 
-                    <div [routerLink]="['/agency/routes']"
-                         data-testid="line"
+                    <div [routerLink]="['/agency/timetables']" data-testid="timetables"
                          class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
                             <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
                                 <i class="ki-filled ki-calendar-2 text-lg"></i>
                             </span>
                         <span class="menu-title text-sm font-semibold text-gray-700"> Rozkład Jazdy </span>
+                        <span class="badge badge-sm badge-outline badge-info">Beta</span>
                     </div>
 
                     <div [routerLink]="['/agency/brigades']"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent"
-                         href="" tabindex="0">
+                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
                             <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
                                 <i class="ki-filled ki-notepad-edit text-lg"></i>
                             </span>
@@ -113,8 +112,7 @@
                     </div>
 
                     <div [routerLink]="['/agency/calendars']"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent"
-                         href="" tabindex="0">
+                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
                             <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
                                 <i class="ki-filled ki-calendar text-lg"></i>
                             </span>
