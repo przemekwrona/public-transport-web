@@ -10,6 +10,7 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 @EnableFeignClients
 @EnableCaching
 @EnableJpaRepositories
+@EnableScheduling
 public class PublicTransportWebServerApplication {
 
     @Bean
