@@ -5,7 +5,6 @@ import org.igeolab.iot.pt.server.api.model.AgencyAddress;
 import org.igeolab.iot.pt.server.api.model.AgencyDetails;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.AgencyRepository;
-import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -26,6 +25,8 @@ public class AgencyDetailsService {
         agencyAddress.flatNumber(agencyEntity.getFlatNumber());
         agencyAddress.postalCode(agencyEntity.getPostalCode());
         agencyAddress.postalCity(agencyEntity.getPostalCity());
+        agencyAddress.lon(agencyEntity.getLongitude().floatValue());
+        agencyAddress.lat(agencyEntity.getLatitude().floatValue());
 
         return new AgencyDetails()
                 .agencyName(agencyEntity.getAgencyName())
