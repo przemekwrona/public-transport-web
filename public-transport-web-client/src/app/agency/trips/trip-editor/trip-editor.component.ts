@@ -132,19 +132,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.$tripDetails.trip.destination = tripVariants.route.destinationStop.name;
                         this.$tripDetails.trip.headsign = tripVariants.route.destinationStop.name;
 
-                        const stopTime: StopTime = {} as StopTime;
-                        stopTime.stopId = tripVariants.route.originStop.id;
-                        stopTime.stopName = tripVariants.route.originStop.name;
-                        stopTime.lon = tripVariants.route.originStop.lon;
-                        stopTime.lat = tripVariants.route.originStop.lat;
-
-                        this.$tripDetails.trip.stops.push(stopTime);
-
                         const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                         stopTimeModel.stopId = tripVariants.route.originStop.id;
                         stopTimeModel.stopName = tripVariants.route.originStop.name;
                         stopTimeModel.lon = tripVariants.route.originStop.lon;
                         stopTimeModel.lat = tripVariants.route.originStop.lat;
+                        stopTimeModel.calculatedSeconds = 0;
+                        stopTimeModel.customizedMinutes = 0;
                         this.stopTimes.push(stopTimeModel);
 
                     } else if (this.$tripVariants.trips.length == 1 && this.$tripVariants.trips[0].isMainVariant && this.$tripVariants.trips[0].mode === TripMode.Front) {
@@ -156,19 +150,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.$tripDetails.trip.destination = tripVariants.route.originStop.name;
                         this.$tripDetails.trip.headsign = tripVariants.route.originStop.name;
 
-                        const stopTime: StopTime = {} as StopTime;
-                        stopTime.stopId = tripVariants.route.destinationStop.id;
-                        stopTime.stopName = tripVariants.route.destinationStop.name;
-                        stopTime.lon = tripVariants.route.destinationStop.lon;
-                        stopTime.lat = tripVariants.route.destinationStop.lat;
-
-                        this.$tripDetails.trip.stops.push(stopTime);
-
                         const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                         stopTimeModel.stopId = tripVariants.route.originStop.id;
                         stopTimeModel.stopName = tripVariants.route.originStop.name;
                         stopTimeModel.lon = tripVariants.route.originStop.lon;
                         stopTimeModel.lat = tripVariants.route.originStop.lat;
+                        stopTimeModel.calculatedSeconds = 0;
+                        stopTimeModel.customizedMinutes = 0;
                         this.stopTimes.push(stopTimeModel);
                     }
                 }
