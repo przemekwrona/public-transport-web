@@ -227,6 +227,9 @@
 
                     <!--<div class="card-body">-->
                     <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                        <span class="badge badge-sm badge-outline badge-danger w-full">
+                            <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
+                        </span>
                         @for (stopTime of stopTimes; track stopTime; let index = $index) {
                             <div class="example-box" cdkDrag (dblclick)="remove(stopTime)"
                                  [@simpleFadeAnimation]="'in'">
@@ -247,7 +250,9 @@
                                     @if (isManual) {
                                         <div class="inline-block">
                                             <div class="input-group mx-1">
-                                                <input type="number" [(ngModel)]="stopTime.customizedMinutes" (ngModelChange)="onChangeDeparture(stopTime, index)" class="input w-14 h-7.5"/>
+                                                <input type="number" [(ngModel)]="stopTime.customizedMinutes"
+                                                       (ngModelChange)="onChangeDeparture(stopTime, index)"
+                                                       class="input w-14 h-7.5"/>
                                                 <span class="btn btn-secondary h-7.5 px-1">min</span>
                                             </div>
                                         </div>
@@ -255,8 +260,12 @@
                                 </span>
                             </div>
                         }
+                        <span class="badge badge-sm badge-outline badge-danger w-full">
+                            <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
+                        </span>
                     </div>
                     <!--</div>-->
+
                     <div class="card-body pr-2">
                         <div class="flex justify-end gap-2">
                             <button (click)="measureDistance()" class="btn btn-secondary px-3">
@@ -276,6 +285,11 @@
                         </h3>
                         <a (click)="zoomPolyline()" class="btn btn-link">Zoom</a>
                     </div>
+                    <span class="badge badge-sm badge-outline badge-danger w-full">
+                        <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$" (onTime)="refreshMap()"></app-count-down>
+                    </span>
+
+
                     <!--<div style="display: grid" class="card-body p-5 lg:p-7.5 lg:pb-7">-->
                     <div style="display: grid">
                         <div class="map-container">

@@ -19,6 +19,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
 import {TripService} from "../../generated/public-transport-api";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {CountDownComponent} from "./trip-editor/count-down/count-down.component";
 
 @NgModule({
     imports: [
@@ -38,7 +39,8 @@ import {TranslocoPipe} from "@jsverse/transloco";
         FaIconComponent,
 
         TripListComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        CountDownComponent
     ],
     declarations: [
         TripEditorComponent,
