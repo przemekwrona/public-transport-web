@@ -19,6 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -84,5 +85,11 @@ public class TripEntity {
 
     @Column(name = "geometry")
     private String geometry;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
 }

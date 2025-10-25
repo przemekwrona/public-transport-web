@@ -9,6 +9,8 @@ import pl.wrona.webserver.bussiness.route.LineNameCleaner;
 import pl.wrona.webserver.core.agency.RouteQueryService;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
+import java.time.LocalDateTime;
+
 @Service
 @AllArgsConstructor
 public class RouteUpdaterService {
@@ -26,6 +28,7 @@ public class RouteUpdaterService {
         route.setGoogle(updateRouteRequest.getRoute().getGoogle());
         route.setActive(updateRouteRequest.getRoute().getActive());
         route.setDescription(updateRouteRequest.getRoute().getDescription());
+        route.setUpdatedAt(LocalDateTime.now());
 
         var savedRoute = routeUpdatedRepository.save(route);
 
