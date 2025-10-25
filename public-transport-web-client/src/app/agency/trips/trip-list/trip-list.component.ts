@@ -17,6 +17,7 @@ import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import moment from "moment";
 
 @Component({
     standalone: true,
@@ -114,6 +115,12 @@ export class TripListComponent implements OnInit {
         if (this.variants) {
             this.variants.nativeElement.scrollIntoView({behavior: 'smooth'});
         }
+    }
+
+    public isCreatedOrUpdated(trip: Trip): boolean {
+        const twoMinutesAgo = moment().subtract(2, 'minutes');
+        return moment(trip.createdAt).isAfter(twoMinutesAgo)
+            || moment(trip.updatedAt).isAfter(twoMinutesAgo)
     }
 
 }
