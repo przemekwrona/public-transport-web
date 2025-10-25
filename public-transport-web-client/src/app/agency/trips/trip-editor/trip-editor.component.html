@@ -239,8 +239,7 @@
                         </span>
 
                         @for (stopTime of stopTimes; track stopTime; let index = $index) {
-                            <div class="example-box" cdkDrag (dblclick)="remove(stopTime)"
-                                 [@simpleFadeAnimation]="'in'">
+                            <div class="example-box" cdkDrag [@simpleFadeAnimation]="'in'">
                                 <span>
                                     <span [ngClass]="{'blue': stopTime.bdot10k, 'dark-blue': !stopTime.bdot10k}">{{ index + 1 }}</span>
                                     <span>{{ stopTime?.stopName }} </span>
@@ -265,6 +264,11 @@
                                             </div>
                                         </div>
                                     }
+                                    <span (click)="remove(stopTime)">
+                                        <a class="btn btn-sm btn-icon btn-clear btn-danger">
+                                            <i class="ki-filled ki-cross-square"></i>
+                                        </a>
+                                    </span>
                                 </span>
                             </div>
                         }
