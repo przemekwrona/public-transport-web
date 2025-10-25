@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {find, findIndex, last, round} from "lodash";
@@ -20,7 +20,7 @@ import {StopService} from "../../stops/stop.service";
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {debounceTime, map, Subject} from "rxjs";
+import {debounceTime, map, Observable, Subject} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {ViewportScroller} from "@angular/common";
 import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
@@ -75,6 +75,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public stopTimes: StopTimeModel[] = [];
     public historicalStopTimes: StopTimeModel[] = [];
     public isManual: boolean = false;
+
+    public forceRefreshSubject: Subject<boolean> = new Subject();
+    public forceRefresh$: Observable<boolean> = this.forceRefreshSubject.asObservable();
 
     constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
@@ -247,6 +250,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                         this.stopTimes.push(stopTime);
 
+                        this.resetCountDown();
+
                         this.approximateDistance();
 
                         this._viewportScroller.scrollToAnchor('map');
@@ -264,6 +269,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.stopMarkers.forEach(marker => marker.removeFrom(map));
             this.stopMarkers = [];
         }
+    }
+
+    private resetCountDown(): void {
+        this.forceRefreshSubject.next(true);
     }
 
     private approximateDistance(zoom: boolean = false) {
@@ -448,5 +457,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 stopTime.stopName = busStopSelectorData.stopName;
             }
         });
+    }
+
+    public refreshMap(): void {
+        this.measureDistance();
     }
 }
