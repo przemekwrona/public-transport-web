@@ -18,6 +18,7 @@ import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -46,6 +47,11 @@ public class TripCreatorService {
 
         TripEntity tripEntity = TripMapper.map(tripRequest);
         tripEntity.setRoute(route);
+
+        LocalDateTime now = LocalDateTime.now();
+        tripEntity.setCreatedAt(now);
+        tripEntity.setUpdatedAt(now);
+
         var lastStop = tripRequest.getStops().stream()
                 .reduce((first, second) -> second);
 

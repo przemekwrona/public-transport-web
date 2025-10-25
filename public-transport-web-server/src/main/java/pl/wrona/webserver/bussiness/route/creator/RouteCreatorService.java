@@ -13,6 +13,7 @@ import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -44,6 +45,10 @@ public class RouteCreatorService {
         unsavedRouteEntity.setGoogle(route.getGoogle());
         unsavedRouteEntity.setActive(route.getActive());
 
+        LocalDateTime now = LocalDateTime.now();
+
+        unsavedRouteEntity.setCreatedAt(now);
+        unsavedRouteEntity.setUpdatedAt(now);
 
         unsavedRouteEntity.setAgency(agencyService.findAgencyByAgencyCode(instance));
 

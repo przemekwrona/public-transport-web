@@ -9,6 +9,7 @@ import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,7 @@ public class TripMapper {
         tripEntity.setOriginStopName(trip.getOrigin());
         tripEntity.setDestinationStopName(trip.getDestination());
         tripEntity.setMainVariant(trip.getIsMainVariant());
+        tripEntity.setUpdatedAt(LocalDateTime.now());
 
 
         try {
@@ -75,6 +77,8 @@ public class TripMapper {
                 .origin(trip.getOriginStopName())
                 .destination(trip.getDestinationStopName())
                 .isMainVariant(trip.isMainVariant())
-                .headsign(trip.getHeadsign());
+                .headsign(trip.getHeadsign())
+                .createdAt(trip.getCreatedAt())
+                .updatedAt(trip.getUpdatedAt());
     }
 }
