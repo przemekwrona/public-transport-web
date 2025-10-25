@@ -415,8 +415,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public drop(event: CdkDragDrop<string[]>) {
-        moveItemInArray(this.$tripDetails.trip.stops, event.previousIndex, event.currentIndex);
+        moveItemInArray(this.stopTimes, event.previousIndex, event.currentIndex);
         this.approximateDistance();
+        this.forceRefreshIn10seconds();
     }
 
     public remove(stopTime: StopTime) {
@@ -444,6 +445,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public onCommunicationVelocityChange(value: number): void {
         this.communicationVelocitySubject.next(value);
+        this.forceRefreshIn10seconds();
     }
 
     public getLastStop(): StopTime {
