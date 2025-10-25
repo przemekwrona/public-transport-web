@@ -31,6 +31,7 @@ import {
 } from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {StopTimeModel} from "./stop-time.model";
+import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
     selector: 'app-trip-editor',
@@ -102,7 +103,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public isRefreshExpanded: boolean = false;
     public isRefreshingExpanded: boolean = false;
 
-    constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
+    constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
@@ -373,6 +374,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
             this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe(() => {
+                this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została utworzona`);
                 this.router.navigate(['/agency/trips'], {
                     queryParams: {
                         line: this.state.line,
@@ -382,6 +384,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             });
         } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
             this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe(() => {
+                this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została zaktualizowana`);
+                this.router.navigate(['/agency/trips'], {
+                    queryParams: {
+                        line: this.state.line,
+                        name: this.state.name
+                    }
+                }).then();
             });
         }
 
