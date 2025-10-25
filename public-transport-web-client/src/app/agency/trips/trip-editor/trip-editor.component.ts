@@ -41,6 +41,26 @@ import {StopTimeModel} from "./stop-time.model";
             state('in', style({opacity: 1})),
             transition(':enter', [style({opacity: 0}), animate(500)]),
             transition(':leave', animate(500, style({opacity: 0})))
+        ]),
+        trigger('heightCollapse', [
+            // 1. Define the 'collapsed' state (the target style is 0 height)
+            state('collapsed', style({
+                height: '0',
+                opacity: '0',
+                paddingTop: '0',
+                paddingBottom: '0'
+            })),
+
+            // 2. Define the 'expanded' state (the target style is the auto height)
+            state('expanded', style({
+                height: '*', // <-- The key: '*' calculates the content's natural height
+                opacity: '1',
+            })),
+
+            // 3. Define the transition timing
+            transition('collapsed <=> expanded', [
+                animate('400ms ease-in-out') // 400 milliseconds transition time
+            ])
         ])
     ]
 })
@@ -78,6 +98,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public forceRefreshSubject: Subject<boolean> = new Subject();
     public forceRefresh$: Observable<boolean> = this.forceRefreshSubject.asObservable();
+
+    public isRefreshExpanded: boolean = false;
+    public isRefreshingExpanded: boolean = false;
 
     constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
@@ -272,6 +295,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private resetCountDown(): void {
+        this.isRefreshingExpanded = true;
+        this.isRefreshExpanded = false;
         this.forceRefreshSubject.next(true);
     }
 
@@ -461,5 +486,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public refreshMap(): void {
         this.measureDistance();
+        this.isRefreshingExpanded = false;
+        this.isRefreshExpanded = true;
     }
 }
