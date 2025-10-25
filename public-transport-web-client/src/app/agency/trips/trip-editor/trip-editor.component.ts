@@ -273,7 +273,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                         this.stopTimes.push(stopTime);
 
-                        this.resetCountDown();
+                        this.forceRefreshIn10seconds();
 
                         this.approximateDistance();
 
@@ -292,12 +292,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.stopMarkers.forEach(marker => marker.removeFrom(map));
             this.stopMarkers = [];
         }
-    }
-
-    private resetCountDown(): void {
-        this.isRefreshingExpanded = true;
-        this.isRefreshExpanded = false;
-        this.forceRefreshSubject.next(true);
     }
 
     private approximateDistance(zoom: boolean = false) {
@@ -419,7 +413,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public remove(stopTime: StopTime) {
         const index = findIndex(this.stopTimes, {stopId: stopTime.stopId});
         this.stopTimes.splice(index, 1);
-        this.measureDistance();
+        this.forceRefreshIn10seconds();
     }
 
     public measureDistance(): void {
@@ -488,5 +482,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.measureDistance();
         this.isRefreshingExpanded = false;
         this.isRefreshExpanded = true;
+    }
+
+    private forceRefreshIn10seconds() {
+        this.isRefreshingExpanded = true;
+        this.isRefreshExpanded = false;
+        this.forceRefreshSubject.next(true);
     }
 }
