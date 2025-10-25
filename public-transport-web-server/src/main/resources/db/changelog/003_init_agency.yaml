@@ -202,6 +202,12 @@ databaseChangeLog:
                   name: via
                   type: varchar(250)
               - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: updated_at
+                  type: datetime
+              - column:
                   name: agency_id
                   type: integer
                   constraints:
@@ -296,6 +302,12 @@ databaseChangeLog:
               - column:
                   name: geometry
                   type: text
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: updated_at
+                  type: datetime
               - column:
                   name: route_id
                   type: integer
