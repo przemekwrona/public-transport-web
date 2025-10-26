@@ -34,17 +34,4 @@ jobs:
           cd ${{ env.WEB_MODULE_NAME }}
           npm install
           npm run generate
-          npm run public-transport-api:generate
-          npm run public-transport-pdf-api:generate
-          npm run public-transport-pdf-api:sed
-          npm run public-transport-pdf-api:sed:recursive
-          npm run build
-
-      - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER_NAME }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./${{ env.WEB_MODULE_NAME }}/build/browser/
-          server-dir: ./www/
+          npm run build:prod
