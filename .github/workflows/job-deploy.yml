@@ -29,35 +29,35 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
-        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.DOCKER_TAG }} .
+#      - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
+#        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.DOCKER_TAG }} .
+#
+#      - name: Tag Image
+#        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
+#
+#      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+#        run: doctl registry login --expiry-seconds 1200
+#
+#      - name: Deploy docker image
+#        run: docker push ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
+#
+#      - name: Clear registry
+#        run: doctl registry garbage-collection start --include-untagged-manifests igeolab --force
 
-      - name: Tag Image
-        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
-
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 1200
-
-      - name: Deploy docker image
-        run: docker push ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
-
-      - name: Clear registry
-        run: doctl registry garbage-collection start --include-untagged-manifests igeolab --force
-
-  k8s:
-    runs-on: ubuntu-latest
-    needs: [ docker ]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
+#  k8s:
+#    runs-on: ubuntu-latest
+#    needs: [ docker ]
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Install doctl
+#        uses: digitalocean/action-doctl@v2
+#        with:
+#          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+#
+#      - name: Save DigitalOcean kubeconfig with short-lived credentials
+#        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.K8S_CLUSTER }}
 
 #      - name: Deploy to DigitalOcean Kubernetes
 #        run: kubectl apply -f ${{ inputs.artifact }}/k8s/config/deployment.yaml
