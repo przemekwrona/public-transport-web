@@ -24,3 +24,4 @@ jobs:
     with:
       artifact: public-transport-web-server
       version: 1.0.0
+      environment: prod
