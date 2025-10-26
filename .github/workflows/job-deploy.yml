@@ -11,7 +11,7 @@ on:
         description: 'Choose where you want to publish the build'
 
 env:
-  DOCKER_REGISTRY: registry.digitalocean.com/igeolab
+  DOCKER_REGISTRY: registry.digitalocean.com/public-transport-registry
   K8S_CLUSTER: iot-public-transport
   DOCKER_TAG: igeolab/${{ inputs.artifact }}:${{ inputs.version }}
 
@@ -34,20 +34,20 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-#      - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
-#        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.DOCKER_TAG }} .
-#
-#      - name: Tag Image
-#        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
-#
-#      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-#        run: doctl registry login --expiry-seconds 1200
-#
-#      - name: Deploy docker image
-#        run: docker push ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
-#
-#      - name: Clear registry
-#        run: doctl registry garbage-collection start --include-untagged-manifests igeolab --force
+      - name: Build docker ${{ inputs.artifact }}:${{ inputs.version }}
+        run: cd ${{ inputs.artifact }} && docker build -t ${{ env.DOCKER_TAG }} .
+
+      - name: Tag Image
+        run: docker tag ${{ env.DOCKER_TAG }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 1200
+
+      - name: Deploy docker image
+        run: docker push ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_TAG }}
+
+      - name: Clear registry
+        run: doctl registry garbage-collection start --include-untagged-manifests igeolab --force
 
 #  k8s:
 #    runs-on: ubuntu-latest
