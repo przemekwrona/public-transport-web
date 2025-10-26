@@ -118,7 +118,7 @@ export class TripListComponent implements OnInit {
     }
 
     public isCreatedOrUpdated(trip: Trip): boolean {
-        const twoMinutesAgo = moment().subtract(2, 'minutes');
+        const twoMinutesAgo = moment().subtract(1, 'minute');
         return moment(trip.createdAt).isAfter(twoMinutesAgo)
             || moment(trip.updatedAt).isAfter(twoMinutesAgo)
     }
