@@ -6,13 +6,9 @@ on:
       version:
         type: string
       environment:
-        description: 'Choose where you want to publish the build'
+        type: string
         required: true
-        default: 'prod'
-        type: choice
-        options:
-          - dev
-          - prod
+        description: 'Choose where you want to publish the build'
 
 env:
   DOCKER_REGISTRY: registry.digitalocean.com/igeolab
