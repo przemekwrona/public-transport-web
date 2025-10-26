@@ -21,6 +21,9 @@ services:
     environment:
       PROFILE: dev-docker
       JAVA_OPTS: -Xmx1G
+      DB_URL: jdbc:postgresql://localhost:5432/public_transport_db
+      DB_USER: user
+      DB_PASSWORD: welcome1
     depends_on:
       - app-db
 
