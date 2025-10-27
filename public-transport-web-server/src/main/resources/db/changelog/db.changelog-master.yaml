@@ -18,3 +18,7 @@ databaseChangeLog:
   - include:
       file: 005_init_calendars.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 006_load_stops.yaml
+      relativeToChangelogFile: true
