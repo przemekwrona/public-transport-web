@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {StopsComponent} from "./stops.component";
-import {StopService} from "../../http/stop.service";
 import {MatIconModule} from "@angular/material/icon";
 import {SharedModule} from "../shared/shared.module";
 import {LoginService} from "../../auth/login.service";
 import {BusStopModalEditorComponent} from "../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
+import {StopsService} from "../../generated/public-transport-api";
 
 
 @NgModule({
@@ -21,7 +21,7 @@ import {BusStopModalEditorComponent} from "../shared/bus-stop-modal-editor/bus-s
     exports: [
         StopsComponent
     ], providers: [
-        StopService,
+        StopsService,
         LoginService
     ]
 })
