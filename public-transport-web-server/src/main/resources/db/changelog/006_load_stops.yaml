@@ -138,131 +138,131 @@ databaseChangeLog:
                   name: name
                   type: STRING
 
-#  - changeSet:
-#      id: load bdot10k 1/3
-#      author: pwrona
-#      context: "local,dev,qa,prod"
-#      changes:
-#        - loadData:
-#            tableName: stop
-#            file: db/stops/bdot10k/50000.csv
-#            separator: ;
-#            encoding: UTF-8
-#            usePreparedStatements: true
-#            columns:
-#              - column:
-#                  header: X
-#                  name: lon
-#                  type: NUMERIC
-#              - column:
-#                  header: Y
-#                  name: lat
-#                  type: NUMERIC
-#              - column:
-#                  header: LOKALNYID
-#                  name: bdot10k_id
-#                  type: STRING
-#              - column:
-#                  header: NAZWA
-#                  name: name
-#                  type: STRING
-#
-#        - loadData:
-#            tableName: stop
-#            file: db/stops/bdot10k/60000.csv
-#            separator: ;
-#            encoding: UTF-8
-#            usePreparedStatements: true
-#            columns:
-#              - column:
-#                  header: X
-#                  name: lon
-#                  type: NUMERIC
-#              - column:
-#                  header: Y
-#                  name: lat
-#                  type: NUMERIC
-#              - column:
-#                  header: LOKALNYID
-#                  name: bdot10k_id
-#                  type: STRING
-#              - column:
-#                  header: NAZWA
-#                  name: name
-#                  type: STRING
-#
-#        - loadData:
-#            tableName: stop
-#            file: db/stops/bdot10k/70000.csv
-#            separator: ;
-#            encoding: UTF-8
-#            usePreparedStatements: true
-#            columns:
-#              - column:
-#                  header: X
-#                  name: lon
-#                  type: NUMERIC
-#              - column:
-#                  header: Y
-#                  name: lat
-#                  type: NUMERIC
-#              - column:
-#                  header: LOKALNYID
-#                  name: bdot10k_id
-#                  type: STRING
-#              - column:
-#                  header: NAZWA
-#                  name: name
-#                  type: STRING
-#
-#        - loadData:
-#            tableName: stop
-#            file: db/stops/bdot10k/80000.csv
-#            separator: ;
-#            encoding: UTF-8
-#            usePreparedStatements: true
-#            columns:
-#              - column:
-#                  header: X
-#                  name: lon
-#                  type: NUMERIC
-#              - column:
-#                  header: Y
-#                  name: lat
-#                  type: NUMERIC
-#              - column:
-#                  header: LOKALNYID
-#                  name: bdot10k_id
-#                  type: STRING
-#              - column:
-#                  header: NAZWA
-#                  name: name
-#                  type: STRING
-#
-#        - loadData:
-#            tableName: stop
-#            file: db/stops/bdot10k/90000.csv
-#            separator: ;
-#            encoding: UTF-8
-#            usePreparedStatements: true
-#            columns:
-#              - column:
-#                  header: X
-#                  name: lon
-#                  type: NUMERIC
-#              - column:
-#                  header: Y
-#                  name: lat
-#                  type: NUMERIC
-#              - column:
-#                  header: LOKALNYID
-#                  name: bdot10k_id
-#                  type: STRING
-#              - column:
-#                  header: NAZWA
-#                  name: name
-#                  type: STRING
-#
+  - changeSet:
+      id: load bdot10k 1/3
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
+        - loadData:
+            tableName: stop
+            file: db/stops/bdot10k/50000.csv
+            separator: ;
+            encoding: UTF-8
+            usePreparedStatements: true
+            columns:
+              - column:
+                  header: X
+                  name: lon
+                  type: NUMERIC
+              - column:
+                  header: Y
+                  name: lat
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: bdot10k_id
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: name
+                  type: STRING
+
+        - loadData:
+            tableName: stop
+            file: db/stops/bdot10k/60000.csv
+            separator: ;
+            encoding: UTF-8
+            usePreparedStatements: true
+            columns:
+              - column:
+                  header: X
+                  name: lon
+                  type: NUMERIC
+              - column:
+                  header: Y
+                  name: lat
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: bdot10k_id
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: name
+                  type: STRING
+
+        - loadData:
+            tableName: stop
+            file: db/stops/bdot10k/70000.csv
+            separator: ;
+            encoding: UTF-8
+            usePreparedStatements: true
+            columns:
+              - column:
+                  header: X
+                  name: lon
+                  type: NUMERIC
+              - column:
+                  header: Y
+                  name: lat
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: bdot10k_id
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: name
+                  type: STRING
+
+        - loadData:
+            tableName: stop
+            file: db/stops/bdot10k/80000.csv
+            separator: ;
+            encoding: UTF-8
+            usePreparedStatements: true
+            columns:
+              - column:
+                  header: X
+                  name: lon
+                  type: NUMERIC
+              - column:
+                  header: Y
+                  name: lat
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: bdot10k_id
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: name
+                  type: STRING
+
+        - loadData:
+            tableName: stop
+            file: db/stops/bdot10k/90000.csv
+            separator: ;
+            encoding: UTF-8
+            usePreparedStatements: true
+            columns:
+              - column:
+                  header: X
+                  name: lon
+                  type: NUMERIC
+              - column:
+                  header: Y
+                  name: lat
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: bdot10k_id
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: name
+                  type: STRING
+
 #  - changeSet:
 #      id: load bdot10k 2/3
 #      author: pwrona
