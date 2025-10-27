@@ -24,4 +24,8 @@ export class GoogleAnalyticsService {
     public pageView(pageTitle: string): void {
         gtag('event', 'page_view', {'page_title': pageTitle});
     }
+
+    public userLogin(username: string): void {
+        this.trackEvent('user_login', 'LOGIN_TO_SERVICE', `{'username': ${username}`)
+    }
 }
