@@ -643,22 +643,22 @@ databaseChangeLog:
                   name: name
                   type: STRING
 
-#  - changeSet:
-#      id: set bdot10k and osm flags
-#      author: pwrona
-#      context: "local,dev,qa,prod"
-#      changes:
-#        - sql:
-#            sql: UPDATE stop SET is_bdot10k = TRUE WHERE bdot10k_id IS NOT NULL;
-#
-#        - sql:
-#            sql: UPDATE stop SET is_bdot10k = FALSE WHERE bdot10k_id IS NULL;
-#
-#        - sql:
-#            sql: UPDATE stop SET is_osm = TRUE WHERE stop.osm_id IS NOT NULL;
-#
-#        - sql:
-#            sql: UPDATE stop SET is_osm = FALSE WHERE stop.osm_id IS NULL;
-#
-#        - sql:
-#            sql: UPDATE stop SET is_deactivation_checked = TRUE WHERE stop.is_bdot10k = TRUE;
+  - changeSet:
+      id: set bdot10k and osm flags
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
+        - sql:
+            sql: UPDATE stop SET is_bdot10k = TRUE WHERE bdot10k_id IS NOT NULL;
+
+        - sql:
+            sql: UPDATE stop SET is_bdot10k = FALSE WHERE bdot10k_id IS NULL;
+
+        - sql:
+            sql: UPDATE stop SET is_osm = TRUE WHERE stop.osm_id IS NOT NULL;
+
+        - sql:
+            sql: UPDATE stop SET is_osm = FALSE WHERE stop.osm_id IS NULL;
+
+        - sql:
+            sql: UPDATE stop SET is_deactivation_checked = TRUE WHERE stop.is_bdot10k = TRUE;
