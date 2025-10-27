@@ -1,7 +1,7 @@
 /osm-stop-loader
 /public-transport-osm-stop-deactivator
+/public-transport-web-client
 /public-transport-web-documentation
 /public-transport-web-e2e
 
-/public-transport-web-client/node_modules
 /public-transport-web-server/node
