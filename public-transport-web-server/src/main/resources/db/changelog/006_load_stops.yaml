@@ -13,6 +13,11 @@ databaseChangeLog:
               - column:
                   name: lat
 
+  - changeSet:
+      id: load bdot10k 0/3
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
         - loadData:
             tableName: stop
             file: db/stops/bdot10k/0.csv
@@ -133,6 +138,11 @@ databaseChangeLog:
                   name: name
                   type: STRING
 
+  - changeSet:
+      id: load bdot10k 1/3
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
         - loadData:
             tableName: stop
             file: db/stops/bdot10k/50000.csv
@@ -253,6 +263,11 @@ databaseChangeLog:
                   name: name
                   type: STRING
 
+  - changeSet:
+      id: load bdot10k 2/3
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
         - loadData:
             tableName: stop
             file: db/stops/bdot10k/100000.csv
@@ -373,6 +388,11 @@ databaseChangeLog:
                   name: name
                   type: STRING
 
+  - changeSet:
+      id: load bdot10k 3/3
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
         - loadData:
             tableName: stop
             file: db/stops/bdot10k/150000.csv
@@ -469,6 +489,11 @@ databaseChangeLog:
                   name: name
                   type: STRING
 
+  - changeSet:
+      id: load osm 0/1
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
         - loadData:
             tableName: stop
             file: db/stops/osm/0.csv
@@ -589,6 +614,11 @@ databaseChangeLog:
                   name: name
                   type: STRING
 
+  - changeSet:
+      id: load osm 1/1
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
         - loadData:
             tableName: stop
             file: db/stops/osm/50000.csv
