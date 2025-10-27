@@ -78,7 +78,7 @@
                 </executions>
                 <configuration>
                     <!-- Base directory for the plugin to run commands -->
-                    <workingDirectory>${frontend-src-dir}</workingDirectory>
+                    <!-- <workingDirectory>${frontend-src-dir}</workingDirectory>-->
                 </configuration>
             </plugin>
         </plugins>
