@@ -35,6 +35,7 @@ public class SecurityConfiguration {
             "/*.css",
             "/*.js",
             "/assets/**",
+            "/media/**",
             "/actuator",
             "/actuator/health"
     };
