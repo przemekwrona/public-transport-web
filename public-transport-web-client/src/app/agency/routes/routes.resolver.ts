@@ -1,9 +1,7 @@
-import {Resolve, ResolveFn} from '@angular/router';
+import {Resolve} from '@angular/router';
 import {Observable} from "rxjs";
-import {inject, Injectable} from "@angular/core";
-import {RoutesService} from "./routes.service";
+import {Injectable} from "@angular/core";
 import {Routes, RouteService} from "../../generated/public-transport-api";
-import {BrigadeService} from "../brigade/brigade.service";
 import {LoginService} from "../../auth/login.service";
 
 @Injectable({
