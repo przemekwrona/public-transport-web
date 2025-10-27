@@ -3,9 +3,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {BusStopSelectorData} from "../bus-stop-selector/bus-stop-selector.component";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
 import * as L from "leaflet";
-import {Stop, StopsResponse} from "../../../generated/public-transport-api";
+import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport-api";
 import {find} from "lodash";
-import {StopService} from "../../stops/stop.service";
 
 interface StopMarker extends L.Marker {
     id: number;
@@ -31,7 +30,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
     private stopMarkers: Marker[] = [];
     public stops: Stop[] = [];
 
-    constructor(private stopService: StopService) {
+    constructor(private stopsService: StopsService) {
     }
 
     ngAfterViewInit(): void {
@@ -52,7 +51,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
     private reloadStops(map: Map) {
         if (map.getZoom() > 11) {
             const bounds = map.getBounds();
-            this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
+            this.stopsService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
                 const stopMarkers: StopMarker[] = response.stops?.map(stop => {
                     const stopMarker: StopMarker = L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {
                         icon: this.ICON,

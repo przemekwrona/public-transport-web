@@ -5,7 +5,7 @@ import {find, findIndex, last, round} from "lodash";
 import {
     Point2D,
     RouteDetails,
-    Stop,
+    Stop, StopsService,
     StopTime,
     TrafficMode,
     Trip,
@@ -16,7 +16,6 @@ import {
     TripService,
     UpdateTripDetailsRequest
 } from "../../../generated/public-transport-api";
-import {StopService} from "../../stops/stop.service";
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, state, style, transition, trigger} from "@angular/animations";
@@ -103,7 +102,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public isRefreshExpanded: boolean = false;
     public isRefreshingExpanded: boolean = false;
 
-    constructor(private stopService: StopService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService) {
+    constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
@@ -261,7 +260,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private reloadStops(map: Map) {
         if (map.getZoom() > 12) {
             const bounds = map.getBounds();
-            this.stopService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
+            this.stopsService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
                 const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: stop.isBdot10k ? this.BDOT10K_STOP : this.OTP_STOP})
                     .on('click', (event: LeafletMouseEvent) => {
                         const stopTime: StopTimeModel = {} as StopTimeModel;
