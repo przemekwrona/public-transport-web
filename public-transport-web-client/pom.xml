@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pl.wrona</groupId>
+    <artifactId>public-transport-web-client</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>public-transport-web-client</name>
+    <description>public-transport-web-client</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Directory containing package.json and the frontend source -->
+        <frontend-src-dir>src/main/resources/static</frontend-src-dir>
+        <node.version>v24.5.0</node.version>
+        <npm.version>11.5.1</npm.version>
+    </properties>
+
+    <!-- ... Other dependencies and plugins ... -->
+
+    <build>
+        <plugins>
+            <!-- 1. The Frontend Maven Plugin -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.15.0</version>
+                <executions>
+
+                    <!-- Setup: Install Node and NPM -->
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <npmVersion>${npm.version}</npmVersion>
+                        </configuration>
+                    </execution>
+
+                    <!-- Install: Run 'npm install' -->
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+
+                    <!-- c. Generate: Run 'npm run generate' -->
+                    <execution>
+                        <id>npm run generate</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run generate</arguments>
+                        </configuration>
+                    </execution>
+
+                    <!-- c. Build: Run 'npm run build' -->
+                    <execution>
+                        <id>npm run build:prod</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build:prod</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Base directory for the plugin to run commands -->
+                    <workingDirectory>${frontend-src-dir}</workingDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
