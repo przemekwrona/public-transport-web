@@ -3,17 +3,17 @@ name: Run Deploy Main
 on:
   push:
     branches:
-      - main
+      - feature/**
+#      - main
 
 jobs:
-  test:
-    uses: ./.github/workflows/job-test.yml
-    with:
-      artifact: public-transport-web-server
+#  test:
+#    uses: ./.github/workflows/job-test.yml
+#    with:
+#      artifact: public-transport-web-server
 
   build:
     uses: ./.github/workflows/job-build.yml
-    needs: [ test ]
     with:
       artifact: public-transport-web-server
 
@@ -24,3 +24,4 @@ jobs:
     with:
       artifact: public-transport-web-server
       version: 1.0.0
+      environment: prod

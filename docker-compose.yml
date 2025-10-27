@@ -7,7 +7,7 @@ services:
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_DB: stops_db
+      POSTGRES_DB: public_transport_db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: welcome1
 
@@ -21,6 +21,10 @@ services:
     environment:
       PROFILE: dev-docker
       JAVA_OPTS: -Xmx1G
+      GEOAPIFY_KEY: geoapi_key
+      SPRING_DB_URL: jdbc:postgresql://app-db:5432/public_transport_db
+      SPRING_DB_USER: user
+      SPRING_DB_PASSWORD: welcome1
     depends_on:
       - app-db
 
