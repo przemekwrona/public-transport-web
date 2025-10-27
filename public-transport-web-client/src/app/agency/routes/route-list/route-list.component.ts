@@ -6,6 +6,7 @@ import {PdfService} from "../../../generated/public-transport-pdf-api";
 import {LoginService} from "../../../auth/login.service";
 import {NotificationService} from "../../../shared/notification.service";
 import {size} from "lodash";
+import {GoogleAnalyticsService} from "../../../google-analytics.service";
 
 @Component({
     standalone: true,
@@ -25,20 +26,21 @@ export class RouteListComponent implements OnInit {
 
     public routes: Routes = {};
 
-    constructor(private pdfService: PdfService, private routeService: RouteService, private authService: LoginService, private notificationService: NotificationService, private _router: Router, private route: ActivatedRoute) {
+    constructor(private pdfService: PdfService, private routeService: RouteService, private authService: LoginService, private notificationService: NotificationService, private router: Router, private route: ActivatedRoute, private googleAnalyticsService: GoogleAnalyticsService) {
     }
 
     ngOnInit(): void {
         this.routes = this.route.snapshot.data['routes'];
+        this.googleAnalyticsService.pageView(this.router.url);
     }
 
     public clickAddRoute(): void {
-        this._router.navigate(['/agency/routes/create']).then();
+        this.router.navigate(['/agency/routes/create']).then();
     }
 
     public openRoute(route: Route) {
         const state = {line: route.line, name: route.name};
-        this._router.navigate(['/agency/trips'], {queryParams: state}).then();
+        this.router.navigate(['/agency/trips'], {queryParams: state}).then();
     }
 
     public downloadPdf(route: Route): void {

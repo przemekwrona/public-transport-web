@@ -5,8 +5,9 @@ import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {TranslocoPipe} from "@jsverse/transloco";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {LoginService} from "../../../auth/login.service";
+import {GoogleAnalyticsService} from "../../../google-analytics.service";
 
 @Component({
     standalone: true,
@@ -29,13 +30,14 @@ export class ProfileDetailsComponent implements OnInit {
 
     public agencyDetails: AgencyDetails = {};
 
-    constructor(private agencyService: AgencyService, private route: ActivatedRoute, private authService: LoginService) {
+    constructor(private agencyService: AgencyService, private router: Router, private route: ActivatedRoute, private authService: LoginService, private googleAnalyticsService: GoogleAnalyticsService) {
     }
 
     ngOnInit(): void {
         this.route.data.subscribe(data => {
             this.agencyDetails = data['agencyDetails'];
         });
+        this.googleAnalyticsService.pageView(this.router.url)
     }
 
     public saveAgencyDetails() {

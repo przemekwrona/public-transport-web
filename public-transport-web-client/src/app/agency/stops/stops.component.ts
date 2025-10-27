@@ -5,9 +5,10 @@ import {find} from "lodash";
 
 import {CenterPoint, Stop, StopsResponse, StopsService} from "../../generated/public-transport-api";
 import {LoginService} from "../../auth/login.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
+import {GoogleAnalyticsService} from "../../google-analytics.service";
 
 interface StopMarker extends L.Marker {
     id: number;
@@ -43,7 +44,7 @@ export class StopsComponent implements OnInit, AfterViewInit {
     public stops: Stop[] = [];
     public lastClickedStop: Stop = {} as Stop;
 
-    constructor(private stopsService: StopsService, private authService: LoginService, private route: ActivatedRoute) {
+    constructor(private stopsService: StopsService, private authService: LoginService, private router: Router, private route: ActivatedRoute, private googleAnalyticsService: GoogleAnalyticsService) {
     }
 
     public isAdmin(): boolean {
@@ -58,6 +59,7 @@ export class StopsComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.googleAnalyticsService.pageView(this.router.url);
     }
 
     private initMap(): Map {
