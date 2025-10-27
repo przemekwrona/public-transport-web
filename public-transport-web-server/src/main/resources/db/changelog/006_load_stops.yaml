@@ -614,35 +614,40 @@ databaseChangeLog:
                   name: name
                   type: STRING
 
+  - changeSet:
+      id: load osm 1/1
+      author: pwrona
+      context: "local,dev,qa,prod"
+      changes:
+        - loadData:
+            tableName: stop
+            file: db/stops/osm/50000.csv
+            separator: ;
+            encoding: UTF-8
+            usePreparedStatements: true
+            columns:
+              - column:
+                  header: X
+                  name: lon
+                  type: NUMERIC
+              - column:
+                  header: Y
+                  name: lat
+                  type: NUMERIC
+              - column:
+                  header: osm_id
+                  name: osm_id
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: name
+                  type: STRING
+
 #  - changeSet:
-#      id: load osm 1/1
+#      id: set bdot10k and osm flags
 #      author: pwrona
 #      context: "local,dev,qa,prod"
 #      changes:
-#        - loadData:
-#            tableName: stop
-#            file: db/stops/osm/50000.csv
-#            separator: ;
-#            encoding: UTF-8
-#            usePreparedStatements: true
-#            columns:
-#              - column:
-#                  header: X
-#                  name: lon
-#                  type: NUMERIC
-#              - column:
-#                  header: Y
-#                  name: lat
-#                  type: NUMERIC
-#              - column:
-#                  header: osm_id
-#                  name: osm_id
-#                  type: STRING
-#              - column:
-#                  header: NAZWA
-#                  name: name
-#                  type: STRING
-#
 #        - sql:
 #            sql: UPDATE stop SET is_bdot10k = TRUE WHERE bdot10k_id IS NOT NULL;
 #
