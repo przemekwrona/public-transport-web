@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {SigninComponent} from "./signin/signin.component";
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import {RouterLink} from "@angular/router";
     imports: [
         CommonModule,
         FormsModule,
-        RouterLink
+        RouterLink,
+        TranslocoPipe
     ]
 })
 export class AuthModule {

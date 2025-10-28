@@ -5,6 +5,18 @@
   "header": {
     "logout": "Wyloguj się"
   },
+  "signin": {
+    "header": "Logowanie do Systemu",
+    "undo": "Wróć na stronę główną",
+    "usernameLabel": "Nazwa użytkownika",
+    "usernamePlaceholder": "Podaj nazwę użytkownika",
+    "passwordLabel": "Hasło",
+    "passwordPlaceholder": "Wprowadź hasło",
+    "loginButton": "Zaloguj się",
+    "notification": {
+      "lackOfAccount": "Nie masz konta? Skontaktuj się z zespołem Następna Stacja mailowo w celu jego założenia. Napisz na adres biuro@nastepnastacja.pl"
+    }
+  },
   "agency": {
     "profile": {
       "title": "Profil Firmy",
