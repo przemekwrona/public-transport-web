@@ -188,7 +188,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 }
             });
         });
-        this.$tripDetails.trip.calculatedCommunicationVelocity = this.$tripDetails.trip.calculatedCommunicationVelocity || 45;
+        this.$tripDetails.trip.calculatedCommunicationVelocity = this.$tripDetails.trip.calculatedCommunicationVelocity || 30;
     }
 
     ngAfterViewInit(): void {
