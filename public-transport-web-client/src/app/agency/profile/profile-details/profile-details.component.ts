@@ -8,6 +8,7 @@ import {TranslocoPipe} from "@jsverse/transloco";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LoginService} from "../../../auth/login.service";
 import {GoogleAnalyticsService} from "../../../google-analytics.service";
+import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 
 @Component({
     standalone: true,
@@ -18,10 +19,12 @@ import {GoogleAnalyticsService} from "../../../google-analytics.service";
         CommonModule,
         FormsModule,
         FontAwesomeModule,
-        TranslocoPipe
+        TranslocoPipe,
+        NgxMaskDirective
     ],
     providers: [
-        AgencyService
+        AgencyService,
+        provideNgxMask()
     ]
 })
 export class ProfileDetailsComponent implements OnInit {
