@@ -10,7 +10,6 @@
     "generate:api": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/api/public-transport-api.yaml -g typescript-angular -o ./src/app/generated/public-transport-api",
     "generate:pdf:api": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/api/public-transport-pdf-api.yaml -g typescript-angular -o ./src/app/generated/public-transport-pdf-api",
     "generate:planner:api": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/api/public-transport-planner-api.yaml -g typescript-angular -o ./src/app/generated/public-transport-planner-api",
-
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "mock:server": "mockserver -p 3000 -m mock"
@@ -43,6 +42,7 @@
     "moment": "^2.30.1",
     "ngx-drag-drop": "^18.0.0",
     "ngx-gauge": "^10.0.0",
+    "ngx-mask": "^20.0.3",
     "ngx-sortable": "^2.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
