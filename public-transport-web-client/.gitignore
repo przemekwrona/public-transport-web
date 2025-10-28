@@ -1,6 +1,7 @@
 .DS_Store
 .angular
 node_modules/
+node/
 build/
 src/app/generated/
 metronic-v8.2.9
