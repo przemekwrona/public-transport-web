@@ -24,237 +24,294 @@
                     <div class="card-header gap-2">
                         <h3 class="card-title">Informacje Podstawowe</h3>
                     </div>
-                    <div class="card-body lg:py-7.5 py-5">
-                        <div class="flex flex-wrap justify-between gap-5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Logo Firmy</div>
-                                <span class="text-gray-700 text-2sm">Logo firmy</span>
-                            </div>
-                            <div class="flex flex-wrap sm:flex-nowrap gap-5 lg:gap-7.5 max-w-96 w-full">
-                                <img alt="" class="h-[35px] mt-2"
-                                     src="/static/metronic/tailwind/dist/assets/media/brand-logos/hex-lab.svg">
-                                <div class="flex bg-center w-full p-5 lg:p-7 bg-no-repeat bg-[length:550px] border border-gray-300 rounded-xl border-dashed branding-bg">
-                                    <div class="flex flex-col place-items-center place-content-center text-center rounded-xl w-full">
-                                        <div class="flex items-center mb-2.5">
-                                            <div class="relative size-11 shrink-0">
-                                                <svg class="w-full h-full stroke-brand-clarity fill-light" fill="none"
-                                                     height="48" viewBox="0 0 44 48" width="44"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
+                    <form [formGroup]="modelForm" (ngSubmit)="saveAgencyDetails(modelForm)">
+                        <div class="card-body lg:py-7.5 py-5">
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Logo Firmy</div>
+                                    <span class="text-gray-700 text-2sm">Logo firmy</span>
+                                </div>
+                                <div class="flex flex-wrap sm:flex-nowrap gap-5 lg:gap-7.5 max-w-96 w-full">
+                                    <img alt="" class="h-[35px] mt-2"
+                                         src="/static/metronic/tailwind/dist/assets/media/brand-logos/hex-lab.svg">
+                                    <div class="flex bg-center w-full p-5 lg:p-7 bg-no-repeat bg-[length:550px] border border-gray-300 rounded-xl border-dashed branding-bg">
+                                        <div class="flex flex-col place-items-center place-content-center text-center rounded-xl w-full">
+                                            <div class="flex items-center mb-2.5">
+                                                <div class="relative size-11 shrink-0">
+                                                    <svg class="w-full h-full stroke-brand-clarity fill-light"
+                                                         fill="none"
+                                                         height="48" viewBox="0 0 44 48" width="44"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
 										18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937
 										39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z"
-                                                          fill="">
-                                                    </path>
-                                                    <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
+                                                              fill="">
+                                                        </path>
+                                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
 										18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937
 										39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z"
-                                                          stroke="" stroke-opacity="0.2">
-                                                    </path>
-                                                </svg>
-                                                <div class="absolute leading-none left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4">
-                                                    <i class="ki-filled ki-picture text-xl ps-px text-brand">
-                                                    </i>
+                                                              stroke="" stroke-opacity="0.2">
+                                                        </path>
+                                                    </svg>
+                                                    <div class="absolute leading-none left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4">
+                                                        <i class="ki-filled ki-picture text-xl ps-px text-brand">
+                                                        </i>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <a class="text-gray-900 text-xs font-medium hover:text-primary-active mb-px"
+                                               href="/metronic/tailwind/demo1/network/user-cards/mini-cards">
+                                                Click or Drag &amp; Drop
+                                            </a>
+                                            <span class="text-2xs text-gray-700 text-nowrap">SVG,PNG, JPG (max. 800x400)</span>
                                         </div>
-                                        <a class="text-gray-900 text-xs font-medium hover:text-primary-active mb-px"
-                                           href="/metronic/tailwind/demo1/network/user-cards/mini-cards">
-                                            Click or Drag &amp; Drop
-                                        </a>
-                                        <span class="text-2xs text-gray-700 text-nowrap">SVG,PNG, JPG (max. 800x400)</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="border-t border-gray-200 my-7.5"></div>
-                        <div class="flex flex-wrap justify-between gap-5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Nazwa firmy</div>
-                                <span class="text-gray-700 text-2sm">Nazwa firmy z CEIDG</span>
-                            </div>
-                            <label for="companyName" class="input sm:max-w-full xl:max-w-96 w-full"
-                                   data-dashlane-label="true">
-                                <input type="text" name="companyName" id="companyName"
-                                       [(ngModel)]="agencyDetails.agencyName"
-                                       class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                       placeholder="Testral Przemysław Wrona"/>
-                            </label>
-                        </div>
-
-                        <div class="border-t border-gray-200 my-7.5"></div>
-
-                        <h2>Adres prowadzenia działalności gosodarczej</h2>
-
-                        <div class="my-7.5"></div>
-
-                        <div class="flex flex-wrap justify-between gap-5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Ulica</div>
-                                <span class="text-gray-700 text-2sm"></span>
-                            </div>
-                            <label for="street" class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text" name="street" id="street"
-                                       [(ngModel)]="agencyDetails.agencyAddress.street"
-                                       class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                       placeholder="Krakowska"/>
-                            </label>
-                        </div>
-
-                        <div class="my-7.5"></div>
-
-                        <div class="flex flex-wrap justify-between gap-5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Numer domu</div>
-                                <span class="text-gray-700 text-2sm"></span>
-                            </div>
-                            <label for="houseNumber" class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text" name="houseNumber" id="houseNumber"
-                                       [(ngModel)]="agencyDetails.agencyAddress.houseNumber"
-                                       class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                       placeholder="3"/>
-                            </label>
-                        </div>
-
-                        <div class="my-7.5"></div>
-
-                        <div class="flex flex-wrap justify-between gap-5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Numer mieszkania</div>
-                                <span class="text-gray-700 text-2sm"></span>
-                            </div>
-                            <label for="flatNumber" class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text" name="flatNumber" id="flatNumber"
-                                       [(ngModel)]="agencyDetails.agencyAddress.flatNumber"
-                                       class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                       placeholder="3"/>
-                            </label>
-                        </div>
-
-                        <div class="my-7.5"></div>
-
-                        <div class="flex flex-wrap justify-between gap-5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Kod pocztowy</div>
-                                <span class="text-gray-700 text-2sm"></span>
-                            </div>
-                            <label for="postalCode" class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text" name="postalCode" id="postalCode"
-                                       [(ngModel)]="agencyDetails.agencyAddress.postalCode" mask="99-999"
-                                       class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                       placeholder="3"/>
-                            </label>
-                        </div>
-
-                        <div class="my-7.5"></div>
-
-                        <div class="flex flex-wrap justify-between gap-5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Miasto</div>
-                                <span class="text-gray-700 text-2sm"></span>
-                            </div>
-                            <label for="postalCity" class="input sm:max-w-full xl:max-w-96 w-full">
-                                <input type="text" name="postalCity" id="postalCity"
-                                       [(ngModel)]="agencyDetails.agencyAddress.postalCity"
-                                       class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                       placeholder="3"/>
-                            </label>
-                        </div>
-
-
-                        <div class="border-t border-gray-200 my-7.5"></div>
-
-                        <div class="flex flex-wrap justify-between gap-5 my-7.5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Strona internetowa</div>
-                                <span class="text-gray-700 text-2sm">Adres URL</span>
-                            </div>
-                            <label for="companyName" class="input sm:max-w-full xl:max-w-96 w-full"
-                                   data-dashlane-label="true">
-                                <div class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">https://</div>
-                                <input type="text" name="agencyUrl" id="agencyUrl"
-                                       [(ngModel)]="agencyDetails.agencyUrl"
-                                       class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                       placeholder=""/>
-                                <a class="btn btn-icon" [attr.href]="'https://' + agencyDetails.agencyUrl"
-                                   target="_blank">
-                                    <fa-icon [icon]="faGlobe"></fa-icon>
-                                </a>
-                            </label>
-                        </div>
-
-                        <div class="flex flex-wrap justify-between gap-5 my-7.5">
-                            <div class="flex flex-col">
-                                <div class="text-gray-900 text-sm font-medium">Rozkład jazdy</div>
-                                <span class="text-gray-700 text-2sm">Adres URL rozkładu jazdy</span>
-                            </div>
-                            <label for="agencyTimetableUrl" class="input sm:max-w-full xl:max-w-96 w-full"
-                                   data-dashlane-label="true">
-                                <div class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">
-                                    https://{{ agencyDetails.agencyUrl }}/
+                            <div class="border-t border-gray-200 my-7.5"></div>
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Nazwa firmy</div>
+                                    @if (validControl('agencyName')) {
+                                        <span class="text-gray-700 text-2sm">Nazwa firmy z CEIDG</span>
+                                    } @else {
+                                        @if (modelForm.controls['agencyName'].errors['required']) {
+                                            <span class="text-danger text-2sm">Nazwa firmy jest wymagana</span>
+                                        }
+                                        @if (modelForm.controls['agencyName'].errors['minlength']) {
+                                            <span class="text-danger text-2sm">Nazwa firmy ma mniej niż 3 znaki</span>
+                                        }
+                                    }
                                 </div>
-                                <input type="text" name="agencyTimetableUrl" id="agencyTimetableUrl"
-                                       [(ngModel)]="agencyDetails.agencyTimetableUrl"
-                                       class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                       placeholder=""/>
-                                <a class="btn btn-icon"
-                                   [attr.href]="'https://' + agencyDetails.agencyUrl + '/' + agencyDetails.agencyTimetableUrl"
-                                   target="_blank">
-                                    <fa-icon [icon]="faGlobe"></fa-icon>
-                                </a>
-                            </label>
-                        </div>
+                                <label for="agencyName" class="input sm:max-w-full xl:max-w-96 w-full"
+                                       [ngClass]="{'border-danger': !validControl('agencyName')}">
+                                    <input type="text" name="agencyName" id="agencyName"
+                                           formControlName="agencyName"
+                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                           placeholder="Podaj nazwę firmy"/>
+                                </label>
+                            </div>
 
-                        <div class="border-t border-gray-200 my-7.5">
+
+                            <div class="border-t border-gray-200 my-7.5"></div>
+
+                            <h2>Adres prowadzenia działalności gosodarczej</h2>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Ulica</div>
+                                    @if (validControl('street')) {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    } @else {
+                                        @if (modelForm.controls['street'].errors['required']) {
+                                            <span class="text-danger text-2sm">Ulica jest wymagana</span>
+                                        }
+                                        @if (modelForm.controls['street'].errors['minlength']) {
+                                            <span class="text-danger text-2sm">Ulica ma mniej niż 3 znaki</span>
+                                        }
+                                    }
+                                </div>
+                                <label for="street" class="input sm:max-w-full xl:max-w-96 w-full"
+                                       [ngClass]="{'border-danger': !validControl('street')}">
+                                    <input type="text" name="street" id="street"
+                                           formControlName="street"
+                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                           placeholder="Podaj ulicę"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Numer domu</div>
+                                    @if (validControl('houseNumber')) {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    } @else {
+                                        @if (modelForm.controls['houseNumber'].errors['required']) {
+                                            <span class="text-danger text-2sm">Numer domu jest wymagany</span>
+                                        }
+                                    }
+                                </div>
+                                <label for="houseNumber" class="input sm:max-w-full xl:max-w-96 w-full"
+                                       [ngClass]="{'border-danger': !validControl('houseNumber')}">
+                                    <input type="text" name="houseNumber" id="houseNumber"
+                                           formControlName="houseNumber"
+                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                           placeholder="Podaj numer domu"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Numer mieszkania</div>
+                                    @if (validControl('flatNumber')) {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    } @else {
+                                        @if (modelForm.controls['flatNumber'].errors['required']) {
+                                            <span class="text-danger text-2sm">Numer mieszkania jest wymagany</span>
+                                        }
+                                    }
+                                </div>
+                                <label for="flatNumber" class="input sm:max-w-full xl:max-w-96 w-full"
+                                       [ngClass]="{'border-danger': !validControl('flatNumber')}">
+                                    <input type="text" name="flatNumber" id="flatNumber"
+                                           formControlName="flatNumber"
+                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                           placeholder="Podaj numer mieszkania"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Kod pocztowy</div>
+                                    @if (validControl('postalCode')) {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    } @else {
+                                        @if (modelForm.controls['postalCode'].errors['required']) {
+                                            <span class="text-danger text-2sm">Kod pocztowy jest wymagany</span>
+                                        }
+
+                                        @if (modelForm.controls['postalCode'].errors['minlength']) {
+                                            <span class="text-danger text-2sm">Kod pocztowy wymaga 5 znaków</span>
+                                        }
+                                    }
+                                </div>
+
+                                <label for="postalCode" class="input sm:max-w-full xl:max-w-96 w-full"
+                                       [ngClass]="{'border-danger': !validControl('postalCode')}">
+                                    <input type="text" name="postalCode" id="postalCode"
+                                           formControlName="postalCode" mask="99-999"
+                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                           placeholder="Kod pocztowy"/>
+                                </label>
+                            </div>
+
+                            <div class="my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Miasto</div>
+                                    @if (validControl('postalCity')) {
+                                        <span class="text-gray-700 text-2sm"></span>
+                                    } @else {
+                                        @if (modelForm.controls['postalCity'].errors['required']) {
+                                            <span class="text-danger text-2sm">Miasto jest wymagane</span>
+                                        }
+                                    }
+                                </div>
+                                <label for="postalCity" class="input sm:max-w-full xl:max-w-96 w-full"
+                                       [ngClass]="{'border-danger': !validControl('postalCity')}">
+                                    <input type="text" name="postalCity" id="postalCity"
+                                           formControlName="postalCity"
+                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                           placeholder="Miasto"/>
+                                </label>
+                            </div>
+
+                            <div class="border-t border-gray-200 my-7.5"></div>
+
+                            <div class="flex flex-wrap justify-between gap-5 my-7.5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Strona internetowa</div>
+                                    <span class="text-gray-700 text-2sm">Adres URL</span>
+                                </div>
+                                <label for="agencyUrl" class="input sm:max-w-full xl:max-w-96 w-full"
+                                       [ngClass]="{'border-danger': !validControl('agencyUrl')}">
+                                    <div class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">https://
+                                    </div>
+                                    <input type="text" name="agencyUrl" id="agencyUrl"
+                                           formControlName="agencyUrl"
+                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                           placeholder=""/>
+                                    <a class="btn btn-icon"
+                                       [attr.href]="'https://www.' + modelForm.controls['agencyUrl'].value"
+                                       target="_blank">
+                                        <fa-icon [icon]="faGlobe"></fa-icon>
+                                    </a>
+                                </label>
+                            </div>
+
+                            <div class="flex flex-wrap justify-between gap-5 my-7.5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 text-sm font-medium">Rozkład jazdy</div>
+                                    <span class="text-gray-700 text-2sm">Adres URL rozkładu jazdy</span>
+                                </div>
+                                <label for="agencyTimetableUrl" class="input sm:max-w-full xl:max-w-96 w-full"
+                                       [ngClass]="{'border-danger': !validControl('agencyTimetableUrl')}">
+                                    <div class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">
+                                        https://{{ modelForm.controls['agencyUrl'].value }}/
+                                    </div>
+                                    <input type="text" name="agencyTimetableUrl" id="agencyTimetableUrl"
+                                           formControlName="agencyTimetableUrl"
+                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                           placeholder=""/>
+                                    <a class="btn btn-icon"
+                                       [attr.href]="'https://www.' + modelForm.controls['agencyUrl'].value + '/' + modelForm.controls['agencyTimetableUrl'].value"
+                                       target="_blank">
+                                        <fa-icon [icon]="faGlobe"></fa-icon>
+                                    </a>
+                                </label>
+                            </div>
+
+                            <div class="border-t border-gray-200 my-7.5"></div>
+                            <div class="flex justify-end">
+                                <button (click)="saveAgencyDetails(modelForm)" class="btn btn-success">
+                                    Zapisz Informacje Podstawowe
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex justify-end">
-                            <button (click)="saveAgencyDetails()" class="btn btn-success">
-                                Zapisz Informacje Podstawowe
-                            </button>
-                        </div>
-                    </div>
+                    </form>
+
                 </div>
             </div>
         </div>
         <div class="col-span-1">
-<!--            <div class="flex flex-col gap-5 lg:gap-7.5">-->
-<!--                <div class="card">-->
-<!--                    <div class="card-body py-10 flex flex-col gap-5 lg:gap-7.5">-->
-<!--                        <div class="flex flex-col items-start gap-2.5">-->
-<!--                            <div class="mb-2.5">-->
-<!--                                <div class="relative size-[50px] shrink-0">-->
-<!--                                    <svg class="w-full h-full stroke-brand-clarity fill-brand-light" fill="none"-->
-<!--                                         height="48" viewBox="0 0 44 48" width="44" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506-->
-<!--			18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937-->
-<!--			39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z"-->
-<!--                                              fill="">-->
-<!--                                        </path>-->
-<!--                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506-->
-<!--			18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937-->
-<!--			39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z"-->
-<!--                                              stroke="">-->
-<!--                                        </path>-->
-<!--                                    </svg>-->
-<!--                                    <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4">-->
-<!--                                        <i class="ki-filled ki-note-2 text-1.5xl ps-px text-brand">-->
-<!--                                        </i>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <a class="text-base font-semibold text-gray-900 hover:text-primary" href="#">-->
-<!--                                Instrukcja osbługi dla użytkownika-->
-<!--                            </a>-->
-<!--                            <p class="text-sm text-gray-700">-->
-<!--                                Poznaj możliwośći systemu-->
-<!--                            </p>-->
-<!--                            <a class="btn btn-link flex-none" href="#">-->
-<!--                                Pobierz i Dowiedz się więcej-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                        <span class="hidden [&amp;:not(:last-child)]:block [&amp;:not(:last-child)]:border-b border-b-gray-200"></span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div class="flex flex-col gap-5 lg:gap-7.5">-->
+            <!--                <div class="card">-->
+            <!--                    <div class="card-body py-10 flex flex-col gap-5 lg:gap-7.5">-->
+            <!--                        <div class="flex flex-col items-start gap-2.5">-->
+            <!--                            <div class="mb-2.5">-->
+            <!--                                <div class="relative size-[50px] shrink-0">-->
+            <!--                                    <svg class="w-full h-full stroke-brand-clarity fill-brand-light" fill="none"-->
+            <!--                                         height="48" viewBox="0 0 44 48" width="44" xmlns="http://www.w3.org/2000/svg">-->
+            <!--                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506-->
+            <!--			18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937-->
+            <!--			39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z"-->
+            <!--                                              fill="">-->
+            <!--                                        </path>-->
+            <!--                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506-->
+            <!--			18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937-->
+            <!--			39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z"-->
+            <!--                                              stroke="">-->
+            <!--                                        </path>-->
+            <!--                                    </svg>-->
+            <!--                                    <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4">-->
+            <!--                                        <i class="ki-filled ki-note-2 text-1.5xl ps-px text-brand">-->
+            <!--                                        </i>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <a class="text-base font-semibold text-gray-900 hover:text-primary" href="#">-->
+            <!--                                Instrukcja osbługi dla użytkownika-->
+            <!--                            </a>-->
+            <!--                            <p class="text-sm text-gray-700">-->
+            <!--                                Poznaj możliwośći systemu-->
+            <!--                            </p>-->
+            <!--                            <a class="btn btn-link flex-none" href="#">-->
+            <!--                                Pobierz i Dowiedz się więcej-->
+            <!--                            </a>-->
+            <!--                        </div>-->
+            <!--                        <span class="hidden [&amp;:not(:last-child)]:block [&amp;:not(:last-child)]:border-b border-b-gray-200"></span>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
         </div>
     </div>
     <!-- end: grid -->
