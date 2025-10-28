@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
-import {find, findIndex, last, round} from "lodash";
+import {find, findIndex, last, round, size} from "lodash";
 import {
     Point2D,
     RouteDetails,
@@ -443,8 +443,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public onCommunicationVelocityChange(value: number): void {
-        this.communicationVelocitySubject.next(value);
-        this.forceRefreshIn10seconds();
+        if (size(this.stopTimes) > 1) {
+            this.communicationVelocitySubject.next(value);
+            this.forceRefreshIn10seconds();
+        }
     }
 
     public getLastStop(): StopTime {
