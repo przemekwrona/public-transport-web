@@ -4,13 +4,13 @@
             <form class="card-body flex flex-col gap-5" id="sign_in_form" method="get">
                 <div class="text-center mb-2.5">
                     <h3 class="text-lg font-medium text-gray-900 leading-none mb-2.5">
-                        Sign in
+                        Logowanie do Systemu
                     </h3>
                     <div class="flex items-center justify-center font-medium">
-<!--                        <span class="text-2sm text-gray-700 me-1.5">Need an account?</span>-->
-<!--                        <a class="text-2sm link" href="html/demo2/authentication/branded/sign-up.html">-->
-<!--                            Sign up-->
-<!--                        </a>-->
+                        <!--                        <span class="text-2sm text-gray-700 me-1.5">Need an account?</span>-->
+                        <!--                        <a class="text-2sm link" href="html/demo2/authentication/branded/sign-up.html">-->
+                        <!--                            Sign up-->
+                        <!--                        </a>-->
                     </div>
                 </div>
                 <!--                <div class="grid grid-cols-2 gap-2.5">-->
@@ -29,14 +29,14 @@
                 <!--                    <span class="border-t border-gray-200 w-full"></span>-->
                 <!--                </div>-->
                 <div class="flex flex-col gap-1">
-                    <label class="form-label font-normal text-gray-900">Email</label>
+                    <label class="form-label font-normal text-gray-900">Nazwa użytkownika</label>
                     <input type="email" name="email" id="email" [(ngModel)]="loginAppUserRequest.username"
-                           autocomplete="email" required class="input" placeholder="Wpisz email"/>
+                           autocomplete="email" required class="input" placeholder="Podaj nazwę użytkownika"/>
                 </div>
                 <div class="flex flex-col gap-1">
                     <div class="flex items-center justify-between gap-1">
                         <label class="form-label font-normal text-gray-900">
-                            Password
+                            Hasło
                         </label>
                         <!--                        <a class="text-2sm link shrink-0" href="html/demo2/authentication/branded/reset-password/enter-email.html">-->
                         <!--                            Forgot Password?-->
@@ -47,20 +47,21 @@
                             Nie masz konta? Skontaktuj się z zespołem Następna Stacja mailowo w celu jego założenia. Napisz na adres biuro&#64;nastepnastacja.pl
                         </span>
                     </div>
-                    <div class="input" data-toggle-password="true">
-                        <input type="password" name="password" id="password" [(ngModel)]="loginAppUserRequest.password"
-                               autocomplete="current-password" required placeholder="Enter Password"/>
-                        <button class="btn btn-icon" data-toggle-password-trigger="true" type="button">
+                    <div class="input" data-toggle-password="true" (mouseleave)="setPasswordInputPassword()">
+                        <input type="{{passwordInputType}}" name="password" id="password"
+                               [(ngModel)]="loginAppUserRequest.password"
+                               autocomplete="current-password" required placeholder="Wprowadź hasło"/>
+                        <button class="btn btn-icon" type="button" (click)="revertPasswordTypeInput()">
                             <i class="ki-filled ki-eye text-gray-500 toggle-password-active:hidden"></i>
                             <i class="ki-filled ki-eye-slash text-gray-500 hidden toggle-password-active:block"></i>
                         </button>
                     </div>
                 </div>
-<!--                <label class="checkbox-group">-->
-<!--                    <input class="checkbox checkbox-sm" name="check" type="checkbox" value="1"/>-->
-<!--                    <span class="checkbox-label">Remember me</span>-->
-<!--                </label>-->
-                <button type="submit" (click)="login()" class="btn btn-primary flex justify-center grow">Sign In
+                <!--                <label class="checkbox-group">-->
+                <!--                    <input class="checkbox checkbox-sm" name="check" type="checkbox" value="1"/>-->
+                <!--                    <span class="checkbox-label">Remember me</span>-->
+                <!--                </label>-->
+                <button type="submit" (click)="login()" class="btn btn-primary flex justify-center grow">Zaloguj się
                 </button>
             </form>
         </div>
