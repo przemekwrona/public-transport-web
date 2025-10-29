@@ -48,6 +48,6 @@ public class TripController implements TripApi {
 
     @Override
     public ResponseEntity<GetAllTripsResponse> getTripsByLineOrName(String agency, String filter) {
-        return ResponseEntity.ok(tripPaginationService.getTripsByLineOrName(filter));
+        return ResponseEntity.ok(tripPaginationService.getTripsByLineOrName(agency, filter));
     }
 }
