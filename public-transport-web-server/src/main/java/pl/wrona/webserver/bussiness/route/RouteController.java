@@ -47,7 +47,6 @@ public class RouteController implements RouteApi {
     @Override
     public ResponseEntity<RouteDetails> getRouteDetails(String agency, RouteId routeId) {
         return ResponseEntity.ok(routeDetailsService.getRouteDetails(agency, routeId));
-//        return null;
     }
 
     @Override
