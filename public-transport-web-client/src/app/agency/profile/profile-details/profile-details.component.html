@@ -262,13 +262,17 @@
 
                             <div class="border-t border-gray-200 my-7.5"></div>
                             <div class="flex justify-end">
-                                <button (click)="saveAgencyDetails(modelForm)" class="btn btn-success">
+                                <button (click)="saveAgencyDetails(modelForm)" class="btn btn-success"
+                                        [disabled]="isAgencyDetailsSaving">
                                     Zapisz Informacje Podstawowe
+
+                                    @if (isAgencyDetailsSaving) {
+                                        <fa-icon [icon]="faSpinner" [animation]="'spin'"/>
+                                    }
                                 </button>
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
