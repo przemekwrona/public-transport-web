@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core;
+package pl.wrona.webserver.bussiness.route;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.RouteApi;
