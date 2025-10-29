@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.client.geoapify.GeoapifyService;
 import pl.wrona.webserver.client.geoapify.geocode.GeoResponse;
-import pl.wrona.webserver.bussiness.trip.core.AgencyRepository;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.AgencyRepository;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.Optional;

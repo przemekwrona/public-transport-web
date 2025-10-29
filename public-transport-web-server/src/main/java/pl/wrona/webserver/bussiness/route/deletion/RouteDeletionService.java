@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.RouteCommandService;
 import pl.wrona.webserver.bussiness.trip.TripCommandService;
-import pl.wrona.webserver.bussiness.trip.TripService;
-import pl.wrona.webserver.bussiness.trip.core.agency.RouteEntity;
+import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 

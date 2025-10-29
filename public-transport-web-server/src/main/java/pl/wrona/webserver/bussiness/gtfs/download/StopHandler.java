@@ -2,8 +2,8 @@ package pl.wrona.webserver.bussiness.gtfs.download;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.Stop;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
-import pl.wrona.webserver.bussiness.trip.core.entity.StopEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.entity.StopEntity;
 
 public class StopHandler {
 

@@ -2,9 +2,9 @@ package pl.wrona.webserver.bussiness.gtfs.download;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
-import pl.wrona.webserver.bussiness.trip.core.brigade.BrigadeTripEntity;
-import pl.wrona.webserver.bussiness.trip.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
+import pl.wrona.webserver.core.calendar.CalendarEntity;
 
 import java.util.List;
 

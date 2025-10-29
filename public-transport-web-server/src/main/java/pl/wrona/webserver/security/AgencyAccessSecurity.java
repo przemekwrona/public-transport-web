@@ -3,7 +3,7 @@ package pl.wrona.webserver.security;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.util.stream.Collectors;
 

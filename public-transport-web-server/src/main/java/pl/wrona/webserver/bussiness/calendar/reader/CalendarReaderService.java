@@ -5,11 +5,11 @@ import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import org.igeolab.iot.pt.server.api.model.CalendarQuery;
 import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.bussiness.trip.core.AgencyService;
+import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.bussiness.calendar.mapper.CalendarBodyMapper;
-import pl.wrona.webserver.bussiness.trip.core.calendar.CalendarDatesEntity;
-import pl.wrona.webserver.bussiness.trip.core.calendar.CalendarDatesRepository;
-import pl.wrona.webserver.bussiness.trip.core.calendar.CalendarRepository;
+import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
+import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
+import pl.wrona.webserver.core.calendar.CalendarRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;

@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.bussiness.trip.core.AgencyService;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
-import pl.wrona.webserver.bussiness.trip.core.agency.RouteEntity;
+import pl.wrona.webserver.core.AgencyService;
+import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.agency.RouteEntity;
 
 import java.util.Map;
 import java.util.function.Function;

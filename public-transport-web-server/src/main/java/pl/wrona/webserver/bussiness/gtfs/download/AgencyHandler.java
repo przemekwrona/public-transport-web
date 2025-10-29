@@ -1,7 +1,7 @@
 package pl.wrona.webserver.bussiness.gtfs.download;
 
 import org.onebusaway.gtfs.model.Agency;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 public class AgencyHandler {
 
