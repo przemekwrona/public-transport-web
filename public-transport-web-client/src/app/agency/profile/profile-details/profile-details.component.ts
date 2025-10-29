@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AgencyAddress, AgencyDetails, AgencyService} from "../../../generated/public-transport-api";
-import {faGlobe, IconDefinition} from '@fortawesome/free-solid-svg-icons';
+import {faGlobe, faSpinner, fas, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {CommonModule} from "@angular/common";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
@@ -32,10 +32,12 @@ import {NotificationService} from "../../../shared/notification.service";
 export class ProfileDetailsComponent implements OnInit {
 
     public faGlobe: IconDefinition = faGlobe;
+    public faSpinner: IconDefinition = faSpinner;
 
     public modelForm: FormGroup;
 
     public isSubmitted: boolean = false;
+    public isAgencyDetailsSaving = false;
 
 
     constructor(private agencyService: AgencyService, private router: Router, private route: ActivatedRoute, private authService: LoginService, private googleAnalyticsService: GoogleAnalyticsService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
@@ -68,22 +70,28 @@ export class ProfileDetailsComponent implements OnInit {
     public saveAgencyDetails(modelForm: FormGroup) {
         this.isSubmitted = true;
         if (modelForm.valid) {
-            const agencyDetails: AgencyDetails = {} as AgencyDetails;
-            agencyDetails.agencyName = this.modelForm.controls['agencyName'].value;
+            if (this.isAgencyDetailsSaving === false) {
+                this.isAgencyDetailsSaving = true;
+                const agencyDetails: AgencyDetails = {} as AgencyDetails;
+                agencyDetails.agencyName = this.modelForm.controls['agencyName'].value;
 
-            agencyDetails.agencyAddress = {} as AgencyAddress;
-            agencyDetails.agencyAddress.street = this.modelForm.controls['street'].value;
-            agencyDetails.agencyAddress.houseNumber = this.modelForm.controls['houseNumber'].value;
-            agencyDetails.agencyAddress.flatNumber = this.modelForm.controls['flatNumber'].value;
-            agencyDetails.agencyAddress.postalCode = this.modelForm.controls['postalCode'].value;
-            agencyDetails.agencyAddress.postalCity = this.modelForm.controls['postalCity'].value;
+                agencyDetails.agencyAddress = {} as AgencyAddress;
+                agencyDetails.agencyAddress.street = this.modelForm.controls['street'].value;
+                agencyDetails.agencyAddress.houseNumber = this.modelForm.controls['houseNumber'].value;
+                agencyDetails.agencyAddress.flatNumber = this.modelForm.controls['flatNumber'].value;
+                agencyDetails.agencyAddress.postalCode = this.modelForm.controls['postalCode'].value;
+                agencyDetails.agencyAddress.postalCity = this.modelForm.controls['postalCity'].value;
 
-            agencyDetails.agencyUrl = this.modelForm.controls['agencyUrl'].value;
-            agencyDetails.agencyTimetableUrl = this.modelForm.controls['agencyTimetableUrl'].value;
+                agencyDetails.agencyUrl = this.modelForm.controls['agencyUrl'].value;
+                agencyDetails.agencyTimetableUrl = this.modelForm.controls['agencyTimetableUrl'].value;
 
-            this.agencyService.updateAgency(this.authService.getInstance(), agencyDetails).subscribe(() => {
-                this.notificationService.showSuccess('Dane zostały zaktualizowane');
-            });
+                this.agencyService.updateAgency(this.authService.getInstance(), agencyDetails).subscribe(() => {
+                    this.notificationService.showSuccess('Dane zostały zaktualizowane');
+                }, error => {
+                }, () => {
+                    this.isAgencyDetailsSaving = false;
+                });
+            }
         } else {
             this.notificationService.showError('Formularz zawiera błędy');
         }
