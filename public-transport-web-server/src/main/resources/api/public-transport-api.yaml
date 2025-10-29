@@ -1194,6 +1194,8 @@ components:
           $ref: '#/components/schemas/Stop'
         via:
           type: string
+        matchAnyBrigade:
+          type: boolean
 
     Routes:
       type: object
