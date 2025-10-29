@@ -5,7 +5,6 @@ import org.igeolab.iot.pt.server.api.model.Routes;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.core.StopService;
-import pl.wrona.webserver.bussiness.route.RouteQueryRepository;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -15,13 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 public class RoutePaginationService {
 
-    private final RouteQueryRepository routeQueryRepository;
     private final RouteQueryService routeQueryService;
     private final StopService stopService;
 
     @PreAgencyAuthorize
     public Routes getRoutes(String instance) {
-        var routes = routeQueryRepository.findByAgencyCode(instance);
+        var routes = routeQueryService.findByAgencyCode(instance);
 
         var stopsIds = routes.stream()
                 .map(routeEntity -> List.of(routeEntity.getOriginStopId(), routeEntity.getDestinationStopId()))

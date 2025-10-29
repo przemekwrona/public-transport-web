@@ -98,7 +98,7 @@ public class TripService {
         var tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
 
         var tripResponse = Optional.ofNullable(tripEntity)
-                .map(TripMapper::map)
+                .map(trip -> TripMapper.map(trip, Map.of()))
                 .orElse(null);
 
         List<StopTimeEntity> stopTimes = tripEntity != null

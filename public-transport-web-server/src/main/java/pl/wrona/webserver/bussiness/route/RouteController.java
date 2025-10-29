@@ -16,7 +16,7 @@ import pl.wrona.webserver.bussiness.route.creator.RouteCreatorService;
 import pl.wrona.webserver.bussiness.route.deletion.RouteDeletionService;
 import pl.wrona.webserver.bussiness.route.pagination.RoutePaginationService;
 import pl.wrona.webserver.bussiness.route.updater.RouteUpdaterService;
-import pl.wrona.webserver.bussiness.trip.reader.route.TripReaderByRouteService;
+import pl.wrona.webserver.bussiness.route.details.RouteDetailsService;
 
 @RestController
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public class RouteController implements RouteApi {
 
     private final RouteCreatorService routeCreatorService;
     private final RoutePaginationService routePaginationService;
-    private final TripReaderByRouteService tripReaderByRouteService;
+    private final RouteDetailsService routeDetailsService;
     private final RouteUpdaterService routeUpdaterService;
     private final RouteDeletionService routeDeletionService;
 
@@ -40,13 +40,14 @@ public class RouteController implements RouteApi {
     }
 
     @Override
-    public ResponseEntity<RouteDetails> getRouteDetails(String agency, RouteId routeId) {
-        return ResponseEntity.ok(tripReaderByRouteService.getRouteDetails(agency, routeId));
+    public ResponseEntity<Routes> getRoutes(String agency) {
+        return ResponseEntity.ok(routePaginationService.getRoutes(agency));
     }
 
     @Override
-    public ResponseEntity<Routes> getRoutes(String agency) {
-        return ResponseEntity.ok(routePaginationService.getRoutes(agency));
+    public ResponseEntity<RouteDetails> getRouteDetails(String agency, RouteId routeId) {
+        return ResponseEntity.ok(routeDetailsService.getRouteDetails(agency, routeId));
+//        return null;
     }
 
     @Override
