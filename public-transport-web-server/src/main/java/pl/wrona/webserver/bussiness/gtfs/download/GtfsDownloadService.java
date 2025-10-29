@@ -13,10 +13,10 @@ import org.onebusaway.gtfs.serialization.GtfsWriter;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.StopService;
-import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
-import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.bussiness.trip.core.AgencyService;
+import pl.wrona.webserver.bussiness.trip.core.StopService;
+import pl.wrona.webserver.bussiness.trip.core.brigade.BrigadeTripEntity;
+import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
 
 import java.io.File;
 import java.io.IOException;

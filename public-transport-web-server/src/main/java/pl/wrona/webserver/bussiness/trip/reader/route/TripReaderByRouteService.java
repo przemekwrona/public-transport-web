@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.core.StopService;
-import pl.wrona.webserver.core.agency.RouteQueryService;
-import pl.wrona.webserver.core.agency.TripQueryService;
-import pl.wrona.webserver.core.mapper.RouteMapper;
-import pl.wrona.webserver.core.mapper.TripMapper;
+import pl.wrona.webserver.bussiness.trip.core.StopService;
+import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.bussiness.trip.core.agency.TripQueryService;
+import pl.wrona.webserver.bussiness.trip.core.mapper.RouteMapper;
+import pl.wrona.webserver.bussiness.trip.core.mapper.TripMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +33,7 @@ public class TripReaderByRouteService {
         var stopDictionary = stopService.mapStopByIdsIn(stopsIds);
 
         return new RouteDetails()
-                .route(RouteMapper.map(route, stopDictionary))
+                .route(RouteMapper.map(route, stopDictionary, Map.of()))
                 .trips(trips);
     }
 }

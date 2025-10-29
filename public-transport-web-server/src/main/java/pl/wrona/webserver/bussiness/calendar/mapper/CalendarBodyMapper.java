@@ -1,9 +1,9 @@
 package pl.wrona.webserver.bussiness.calendar.mapper;
 
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
-import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
-import pl.wrona.webserver.core.calendar.ExceptionType;
+import pl.wrona.webserver.bussiness.trip.core.calendar.CalendarDatesEntity;
+import pl.wrona.webserver.bussiness.trip.core.calendar.CalendarEntity;
+import pl.wrona.webserver.bussiness.trip.core.calendar.ExceptionType;
 
 import java.time.LocalDate;
 import java.util.List;
