@@ -2,7 +2,7 @@ package pl.wrona.webserver.bussiness.gtfs.download;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.ServiceCalendar;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.bussiness.trip.core.calendar.CalendarEntity;
 
 public class CalendarHandler {
 

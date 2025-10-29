@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.AgencyAddress;
 import org.igeolab.iot.pt.server.api.model.AgencyDetails;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.core.AgencyRepository;
-import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.bussiness.trip.core.AgencyRepository;
+import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 @Service

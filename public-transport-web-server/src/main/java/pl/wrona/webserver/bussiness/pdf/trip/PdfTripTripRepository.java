@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pl.wrona.webserver.core.agency.TripEntity;
-import pl.wrona.webserver.core.agency.TripVariantMode;
+import pl.wrona.webserver.bussiness.trip.core.agency.TripEntity;
+import pl.wrona.webserver.bussiness.trip.core.agency.TripVariantMode;
 
 import java.util.List;
 

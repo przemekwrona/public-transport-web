@@ -22,10 +22,10 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.StopTimeService;
-import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
-import pl.wrona.webserver.core.agency.StopTimeEntity;
+import pl.wrona.webserver.bussiness.trip.core.AgencyService;
+import pl.wrona.webserver.bussiness.trip.core.StopTimeService;
+import pl.wrona.webserver.bussiness.trip.core.brigade.BrigadeTripEntity;
+import pl.wrona.webserver.bussiness.trip.core.agency.StopTimeEntity;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
@@ -38,8 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
-import pl.wrona.webserver.core.agency.TripEntity;
-import pl.wrona.webserver.core.agency.TripVariantMode;
+import pl.wrona.webserver.bussiness.trip.core.agency.TripEntity;
+import pl.wrona.webserver.bussiness.trip.core.agency.TripVariantMode;
 
 @Slf4j
 @Service

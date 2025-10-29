@@ -8,9 +8,9 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.LineNameCleaner;
-import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.StopService;
-import pl.wrona.webserver.core.agency.RouteEntity;
+import pl.wrona.webserver.bussiness.trip.core.AgencyService;
+import pl.wrona.webserver.bussiness.trip.core.StopService;
+import pl.wrona.webserver.bussiness.trip.core.agency.RouteEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalDateTime;

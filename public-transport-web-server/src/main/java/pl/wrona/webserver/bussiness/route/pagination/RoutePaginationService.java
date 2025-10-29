@@ -3,9 +3,10 @@ package pl.wrona.webserver.bussiness.route.pagination;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.Routes;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.core.StopService;
-import pl.wrona.webserver.core.agency.RouteQueryRepository;
-import pl.wrona.webserver.core.mapper.RouteMapper;
+import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.bussiness.trip.core.StopService;
+import pl.wrona.webserver.bussiness.route.RouteQueryRepository;
+import pl.wrona.webserver.bussiness.trip.core.mapper.RouteMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 public class RoutePaginationService {
 
     private final RouteQueryRepository routeQueryRepository;
+    private final RouteQueryService routeQueryService;
     private final StopService stopService;
 
     @PreAgencyAuthorize
@@ -26,8 +28,10 @@ public class RoutePaginationService {
                 .flatMap(List::stream)
                 .toList();
 
+        var routesWithBrigades = routeQueryService.findByExistsBrigade(instance);
+
         var items = routes.stream()
-                .map(route -> RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds)))
+                .map(route -> RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds), routesWithBrigades))
                 .toList();
 
         return new Routes()

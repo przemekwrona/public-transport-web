@@ -1,7 +1,7 @@
 package pl.wrona.webserver.bussiness.pdf.trip;
 
-import pl.wrona.webserver.core.agency.StopTimeEntity;
-import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.bussiness.trip.core.agency.StopTimeEntity;
+import pl.wrona.webserver.bussiness.trip.core.agency.TripEntity;
 
 import java.util.List;
 

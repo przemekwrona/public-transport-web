@@ -6,7 +6,7 @@ import org.igeolab.iot.pt.server.api.model.UpdateRouteRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.LineNameCleaner;
-import pl.wrona.webserver.core.agency.RouteQueryService;
+import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalDateTime;
