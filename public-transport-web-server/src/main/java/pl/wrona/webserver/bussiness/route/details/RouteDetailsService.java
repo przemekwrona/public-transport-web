@@ -1,4 +1,4 @@
-package pl.wrona.webserver.bussiness.trip.reader.route;
+package pl.wrona.webserver.bussiness.route.details;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
-public class TripReaderByRouteService {
+public class RouteDetailsService {
 
     private final RouteQueryService routeQueryService;
     private final TripQueryService tripQueryService;
@@ -25,8 +25,10 @@ public class TripReaderByRouteService {
     @PreAgencyAuthorize
     public RouteDetails getRouteDetails(String instance, RouteId routeId) {
         var route = routeQueryService.findRouteByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName());
+        var tripWithBrigades = tripQueryService.mapByExistsBrigade(instance);
+
         var trips = tripQueryService.findByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName()).stream()
-                .map(TripMapper::map)
+                .map(tripEntity -> TripMapper.map(tripEntity, tripWithBrigades))
                 .toList();
 
         var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());

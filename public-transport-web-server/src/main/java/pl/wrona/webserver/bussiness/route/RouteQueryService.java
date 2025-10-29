@@ -8,6 +8,7 @@ import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.RouteEntity;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,6 +19,10 @@ public class RouteQueryService {
 
     private final AgencyService agencyService;
     private final RouteQueryRepository routeQueryRepository;
+
+    public List<RouteEntity> findByAgencyCode(String agencyCode) {
+        return this.routeQueryRepository.findByAgencyCode(agencyCode);
+    }
 
     public RouteEntity findRouteByAgencyCodeAndLineAndName(String agencyCode, String line, String name) {
         return this.routeQueryRepository.findByAgencyCodeAndLineAndName(agencyCode, line, name);

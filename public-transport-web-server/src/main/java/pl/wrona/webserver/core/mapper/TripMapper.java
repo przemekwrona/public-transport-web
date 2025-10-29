@@ -11,6 +11,7 @@ import pl.wrona.webserver.core.agency.TripVariantMode;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @UtilityClass
@@ -56,7 +57,7 @@ public class TripMapper {
         return tripEntity;
     }
 
-    public Trip map(TripEntity trip) {
+    public Trip map(TripEntity trip, Map<Long, TripEntity> tripWithBrigades) {
         return new Trip()
                 .name(trip.getRoute().getName())
                 .line(trip.getRoute().getLine())
@@ -79,6 +80,7 @@ public class TripMapper {
                 .isMainVariant(trip.isMainVariant())
                 .headsign(trip.getHeadsign())
                 .createdAt(trip.getCreatedAt())
-                .updatedAt(trip.getUpdatedAt());
+                .updatedAt(trip.getUpdatedAt())
+                .matchAnyBrigade(tripWithBrigades.containsKey(trip.getTripId()));
     }
 }

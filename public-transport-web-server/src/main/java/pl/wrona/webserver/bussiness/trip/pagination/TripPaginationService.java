@@ -50,7 +50,7 @@ public class TripPaginationService {
                 .map(route -> new RouteDetails()
                         .route(RouteMapper.map(route, stopDictionary, Map.of()))
                         .trips(tripSet.get(route).stream()
-                                .map(TripMapper::map)
+                                .map(trip -> TripMapper.map(trip, Map.of()))
                                 .sorted(Comparator
                                         .comparing(Trip::getIsMainVariant).reversed()
                                         .thenComparing(Trip::getName))
