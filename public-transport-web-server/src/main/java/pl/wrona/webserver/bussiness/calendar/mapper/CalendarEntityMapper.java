@@ -1,8 +1,8 @@
 package pl.wrona.webserver.bussiness.calendar.mapper;
 
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
-import pl.wrona.webserver.bussiness.trip.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.calendar.CalendarEntity;
 
 public class CalendarEntityMapper {
 

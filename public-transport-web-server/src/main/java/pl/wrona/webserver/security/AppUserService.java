@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.config.AuthTokenUtils;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package pl.wrona.webserver.bussiness.pdf.trip;
 
-import pl.wrona.webserver.bussiness.trip.core.agency.TripVariantMode;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 
 public interface TripMode {
 

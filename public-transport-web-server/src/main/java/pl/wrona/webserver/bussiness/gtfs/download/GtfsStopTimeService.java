@@ -2,8 +2,8 @@ package pl.wrona.webserver.bussiness.gtfs.download;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.bussiness.trip.core.agency.StopTimeEntity;
-import pl.wrona.webserver.bussiness.trip.core.brigade.BrigadeTripEntity;
+import pl.wrona.webserver.core.agency.StopTimeEntity;
+import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
 
 import java.util.List;
 

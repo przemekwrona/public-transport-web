@@ -2,8 +2,8 @@ package pl.wrona.webserver.bussiness.gtfs.download;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.Route;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
-import pl.wrona.webserver.bussiness.trip.core.agency.RouteEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.agency.RouteEntity;
 
 public class RouteHandler {
 

@@ -2,8 +2,8 @@ package pl.wrona.webserver.bussiness.trip.creator;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.bussiness.trip.core.agency.AgencyEntity;
-import pl.wrona.webserver.bussiness.trip.core.agency.RouteEntity;
+import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.agency.RouteEntity;
 
 @Service
 @AllArgsConstructor
