@@ -1,10 +1,11 @@
-package pl.wrona.webserver.bussiness.trip;
+package pl.wrona.webserver.bussiness.trip.pagination;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.bussiness.trip.TripRepository;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.agency.RouteEntity;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class TripRefactorQueryService {
+public class TripPaginationService {
 
     private TripRepository tripRepository;
     private StopService stopService;

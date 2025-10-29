@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.trip.creator.TripCreatorService;
+import pl.wrona.webserver.bussiness.trip.pagination.TripPaginationService;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -22,7 +23,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class TripController implements TripApi {
 
     private final TripService tripService;
-    private final TripRefactorQueryService tripRefactorQueryService;
+    private final TripPaginationService tripPaginationService;
     private final TripCreatorService tripCreatorService;
 
     @Override
@@ -47,6 +48,6 @@ public class TripController implements TripApi {
 
     @Override
     public ResponseEntity<GetAllTripsResponse> getTripsByLineOrName(String agency, String filter) {
-        return ResponseEntity.ok(tripRefactorQueryService.getTripsByLineOrName(filter));
+        return ResponseEntity.ok(tripPaginationService.getTripsByLineOrName(filter));
     }
 }
