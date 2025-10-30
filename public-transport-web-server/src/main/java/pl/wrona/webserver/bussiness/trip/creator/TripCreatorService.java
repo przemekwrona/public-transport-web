@@ -7,6 +7,7 @@ import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
@@ -16,6 +17,9 @@ import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
+import pl.wrona.webserver.core.mapper.TripModeMapper;
+import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
+import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalDateTime;
@@ -31,10 +35,21 @@ public class TripCreatorService {
     private final TripCreatorRouteService tripCreatorRouteService;
     private final TripRepository tripRepository;
     private final StopTimeRepository stopTimeRepository;
+    private final TripQueryService tripQueryService;
 
     @Transactional
     @PreAgencyAuthorize
     public Status createTrip(String instance, CreateTripDetailsRequest createTripDetailsRequest) {
+        boolean uniqueTripIndexExists = tripQueryService.existsUniqueTripIndex(instance,
+                createTripDetailsRequest.getTrip().getRoute().getLine(),
+                createTripDetailsRequest.getTrip().getRoute().getName(),
+                TripModeMapper.map(createTripDetailsRequest.getTrip().getTrip().getMode()),
+                TripTrafficModeMapper.map(createTripDetailsRequest.getTrip().getTrip().getTrafficMode()));
+
+        if (uniqueTripIndexExists) {
+            throw new BusinessException("ERROR:202510300047", "Trip index already exists");
+        }
+
         Trip tripRequest = createTripDetailsRequest.getTrip().getTrip();
         List<Long> stopIds = tripRequest.getStops().stream()
                 .map(StopTime::getStopId)
