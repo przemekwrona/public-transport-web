@@ -1174,6 +1174,8 @@ components:
           type: string
         mode:
           $ref: '#/components/schemas/TripMode'
+        trafficMode:
+          $ref: '#/components/schemas/TrafficMode'
 
     Route:
       type: object
