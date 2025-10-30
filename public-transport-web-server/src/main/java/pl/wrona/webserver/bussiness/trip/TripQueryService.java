@@ -1,10 +1,13 @@
 package pl.wrona.webserver.bussiness.trip;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
+import pl.wrona.webserver.core.mapper.TripModeMapper;
+import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +24,10 @@ public class TripQueryService {
         return tripQueryRepository.findByAgencyCodeAndLineAndName(agencyCode, line, name);
     }
 
+    public TripEntity findByAgencyCodeAndTripId(String instance, TripId tripId) {
+        return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getLine(), tripId.getName(), TripModeMapper.map(tripId.getMode()), TripTrafficModeMapper.map(tripId.getTrafficMode()));
+    }
+
     public boolean existsUniqueTripIndex(String agencyCode, String line, String name, TripVariantMode tripMode, TripTrafficMode trafficMode) {
         return tripQueryRepository.existsTripUniqueIndex(agencyCode, line, name, tripMode, trafficMode);
     }
@@ -29,12 +36,12 @@ public class TripQueryService {
         return tripQueryRepository.findByExistsBrigade(agency);
     }
 
-    public boolean existsTripInBrigade(TripEntity trip) {
-        return tripQueryRepository.existsTripInBrigade(trip);
-    }
-
     public Map<Long, TripEntity> mapByExistsBrigade(String agency) {
         return findByExistsBrigade(agency).stream()
                 .collect(Collectors.toMap(TripEntity::getTripId, Function.identity()));
+    }
+
+    public boolean existsTripInBrigade(TripEntity trip) {
+        return tripQueryRepository.existsTripInBrigade(trip);
     }
 }
