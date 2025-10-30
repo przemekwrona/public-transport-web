@@ -22,3 +22,7 @@ databaseChangeLog:
   - include:
       file: 006_load_stops.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 007_fixes_after_first_deploy.yaml
+      relativeToChangelogFile: true
