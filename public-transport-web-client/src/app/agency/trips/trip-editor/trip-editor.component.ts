@@ -3,6 +3,7 @@ import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {find, findIndex, last, round, size} from "lodash";
 import {
+    ErrorResponse,
     Point2D,
     RouteDetails,
     Stop, StopsService,
@@ -31,6 +32,7 @@ import {
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {StopTimeModel} from "./stop-time.model";
 import {NotificationService} from "../../../shared/notification.service";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
     selector: 'app-trip-editor',
@@ -372,24 +374,36 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
-            this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe(() => {
-                this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została utworzona`);
-                this.router.navigate(['/agency/trips'], {
-                    queryParams: {
-                        line: this.state.line,
-                        name: this.state.name
-                    }
-                }).then();
+            this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
+                next: () => {
+                    this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została utworzona`);
+                    this.router.navigate(['/agency/trips'], {
+                        queryParams: {
+                            line: this.state.line,
+                            name: this.state.name
+                        }
+                    }).then();
+                },
+                error: (response: HttpErrorResponse) => {
+                    const payload: ErrorResponse = response.error;
+                    this.notificationService.showError(`${payload.errorCode}`);
+                }
             });
         } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
-            this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe(() => {
-                this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została zaktualizowana`);
-                this.router.navigate(['/agency/trips'], {
-                    queryParams: {
-                        line: this.state.line,
-                        name: this.state.name
-                    }
-                }).then();
+            this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
+                next: () => {
+                    this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została zaktualizowana`);
+                    this.router.navigate(['/agency/trips'], {
+                        queryParams: {
+                            line: this.state.line,
+                            name: this.state.name
+                        }
+                    }).then();
+                },
+                error: (response: HttpErrorResponse) => {
+                    const payload: ErrorResponse = response.error;
+                    console.log(payload);
+                }
             });
         }
 
