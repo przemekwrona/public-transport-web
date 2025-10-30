@@ -38,13 +38,6 @@ public class TripService {
     private final ObjectMapper objectMapper;
 
     @Transactional
-    public Status deleteTripByTripId(TripId tripId) {
-        TripEntity deleteTrip = tripRepository.findByLineAndNameAndVariantAndMode(tripId.getLine(), tripId.getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
-        tripRepository.delete(deleteTrip);
-        return new Status().status(Status.StatusEnum.DELETED);
-    }
-
-    @Transactional
     public Status updateTrip(UpdateTripDetailsRequest updateTripDetailsRequest) {
         var tripId = updateTripDetailsRequest.getTripId();
         var trip = updateTripDetailsRequest.getTrip().getTrip();
