@@ -7,8 +7,8 @@ import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
-import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.bussiness.trip.TripRepository;
@@ -30,12 +30,11 @@ import java.util.stream.IntStream;
 @Service
 @AllArgsConstructor
 public class TripCreatorService {
-    private final AgencyService agencyService;
     private final StopService stopService;
-    private final TripCreatorRouteService tripCreatorRouteService;
     private final TripRepository tripRepository;
     private final StopTimeRepository stopTimeRepository;
     private final TripQueryService tripQueryService;
+    private final RouteQueryService routeQueryService;
 
     @Transactional
     @PreAgencyAuthorize
@@ -57,8 +56,7 @@ public class TripCreatorService {
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
 
-        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        var route = tripCreatorRouteService.findRouteByAgencyAndNameAndLine(agencyEntity, tripRequest.getName(), tripRequest.getLine());
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, createTripDetailsRequest.getTripId().getRouteId());
 
         TripEntity tripEntity = TripMapper.map(tripRequest);
         tripEntity.setRoute(route);
@@ -69,7 +67,6 @@ public class TripCreatorService {
 
         var lastStop = tripRequest.getStops().stream()
                 .reduce((first, second) -> second);
-
 
         tripEntity.setDistanceInMeters(lastStop.map(StopTime::getMeters).orElse(0));
         tripEntity.setTravelTimeInSeconds(lastStop.map(StopTime::getCalculatedSeconds).orElse(0));
