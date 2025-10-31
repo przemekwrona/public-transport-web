@@ -55,7 +55,6 @@ export class TripListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
         this._route.data.pipe(map((data: Data) => data['trips'])).subscribe(trips => this.trips = trips);
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,

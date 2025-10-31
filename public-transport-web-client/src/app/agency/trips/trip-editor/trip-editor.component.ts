@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import * as L from "leaflet";
-import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
+import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline, Popup} from "leaflet";
 import {find, findIndex, last, round, size} from "lodash";
 import {
     ErrorResponse,
@@ -81,6 +81,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private map: Map;
     private stopMarkers: Marker[] = [];
     private routePolyline: Polyline;
+    private popup: Popup;
 
     private communicationVelocitySubject = new Subject<number>();
     private previousVariantName = '';
@@ -301,6 +302,18 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                         this._viewportScroller.scrollToAnchor('map');
 
+                    })
+                    .on('mouseover', (event: LeafletMouseEvent) => {
+                        this.popup = L.popup()
+                            .setLatLng(event.latlng)
+                            .setContent(stop.name)
+                            .openOn(map);
+                    })
+                    .on('mouseout', (event: LeafletMouseEvent) => {
+                        if(this.popup) {
+                            this.popup.closePopup();
+                            this.popup.removeFrom(map);
+                        }
                     })) || []
 
                 stopMarkers.forEach(marker => marker.addTo(map));
