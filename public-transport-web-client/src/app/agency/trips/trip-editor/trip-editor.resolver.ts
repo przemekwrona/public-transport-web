@@ -1,8 +1,9 @@
 import {inject} from "@angular/core";
 import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from "@angular/router";
 import {Observable, of} from "rxjs";
-import {TripId, TripMode, TripsDetails, TripService} from "../../../generated/public-transport-api";
+import {RouteId, TripId, TripMode, TripsDetails, TripService} from "../../../generated/public-transport-api";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TripsDetails> => {
     const line: string = route.queryParams['line'];
@@ -10,13 +11,16 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
     const variant: string = route.queryParams['variant'];
     const mode: TripMode = route.queryParams['mode'];
 
+    const agencyStorageService: AgencyStorageService = inject(AgencyStorageService);
+
     const tripEditorComponentMode: TripEditorComponentMode = route.data['mode'];
 
     if (tripEditorComponentMode === TripEditorComponentMode.CREATE) {
         return of({route: {line: line, name: name}, trip: {stops: [], line: line, name: name, isMainVariant: false}})
     } else {
         const tripService: TripService = inject(TripService);
-        const tripId: TripId = {line: line, name: name, variant: variant, mode: mode} as TripId;
-        return tripService.getTripByVariant(tripId);
+        const routeId: RouteId = {line: line, name: name} as RouteId;
+        const tripId: TripId = {routeId: routeId, variant: variant, mode: mode} as TripId;
+        return tripService.getTripByVariant(agencyStorageService.getInstance(), tripId);
     }
 }

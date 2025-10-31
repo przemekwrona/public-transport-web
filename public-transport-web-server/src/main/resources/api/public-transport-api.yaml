@@ -645,12 +645,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
-  /trips/variant-details:
+  /agency/{agency}/trips/variant-details:
     post:
       tags:
         - trip
       summary: Return details of trip for indicated variant but user and assigned to agency
       operationId: getTripByVariant
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
