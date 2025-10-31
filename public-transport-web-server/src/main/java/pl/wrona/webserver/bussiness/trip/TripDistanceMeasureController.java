@@ -2,7 +2,7 @@ package pl.wrona.webserver.bussiness.trip;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.TripDistanceMeasuresApi;
-import org.igeolab.iot.pt.server.api.model.Trip;
+import org.igeolab.iot.pt.server.api.model.TripMeasure;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +16,12 @@ public class TripDistanceMeasureController implements TripDistanceMeasuresApi {
     private final TripDistanceMeasureService tripDistanceMeasureService;
 
     @Override
-    public ResponseEntity<Trip> approximateDistance(Trip trip) {
-        return ResponseEntity.ok(tripDistanceMeasureService.approximateDistance(trip));
+    public ResponseEntity<TripMeasure> approximateDistance(TripMeasure tripMeasure) {
+        return ResponseEntity.ok(tripDistanceMeasureService.approximateDistance(tripMeasure));
     }
 
     @Override
-    public ResponseEntity<Trip> measureDistance(Trip trip) {
-        return ResponseEntity.ok(tripDistanceMeasureService.measureDistance(trip));
+    public ResponseEntity<TripMeasure> measureDistance(TripMeasure tripMeasure) {
+        return ResponseEntity.ok(tripDistanceMeasureService.measureDistance(tripMeasure));
     }
 }

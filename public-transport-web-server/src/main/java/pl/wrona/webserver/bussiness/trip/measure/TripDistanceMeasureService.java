@@ -4,17 +4,22 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.lucene.util.SloppyMath;
 import org.igeolab.iot.pt.server.api.model.Point2D;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
+import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripMeasure;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.client.geoapify.GeoapifyService;
 import pl.wrona.webserver.client.geoapify.routing.Feature;
+import pl.wrona.webserver.client.geoapify.routing.Geometry;
 import pl.wrona.webserver.client.geoapify.routing.Leg;
 import pl.wrona.webserver.client.geoapify.routing.Properties;
 import pl.wrona.webserver.client.geoapify.routing.RoutingResponse;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,13 +30,13 @@ public class TripDistanceMeasureService {
 
     private final GeoapifyService geoapifyService;
 
-    public Trip approximateDistance(Trip trips) {
+    public TripMeasure approximateDistance(TripMeasure tripMeasure) {
         int meters = 0;
         int seconds = 0;
 
         List<StopTime> stopTimes = new ArrayList<>();
 
-        for (Pair<StopTime, StopTime> pairStopTime : pairConsecutiveElements(trips.getStops())) {
+        for (Pair<StopTime, StopTime> pairStopTime : pairConsecutiveElements(tripMeasure.getStops())) {
             if (pairStopTime.getLeft() == null) {
                 stopTimes.add(new StopTime()
                         .stopId(pairStopTime.getRight().getStopId())
@@ -49,7 +54,7 @@ public class TripDistanceMeasureService {
                 meters = meters + haversinMeters;
 
                 // Communication speed 45km/h
-                int velocityKmPerH = Optional.ofNullable(trips.getCalculatedCommunicationVelocity()).orElse(45);
+                int velocityKmPerH = Optional.ofNullable(tripMeasure.getVelocity()).orElse(45);
                 double velocityMetersPerSec = (velocityKmPerH * 1000.0) / 3600.0d;
                 seconds = seconds + (int) (((double) haversinMeters) / velocityMetersPerSec);
 
@@ -70,30 +75,36 @@ public class TripDistanceMeasureService {
                         .lon(stopTime.getLon()))
                 .toList();
 
-        return new Trip()
-                .line(trips.getLine())
-                .variant(trips.getVariant())
-                .headsign(trips.getHeadsign())
+        return new TripMeasure()
+                .tripId(new TripId()
+                        .routeId(new RouteId()
+                                .line(tripMeasure.getTripId().getRouteId().getLine())
+                                .name(tripMeasure.getTripId().getRouteId().getName()))
+                        .mode(tripMeasure.getTripId().getMode())
+                        .trafficMode(tripMeasure.getTripId().getTrafficMode()))
                 .stops(stopTimes)
+                .distanceInMeters(meters)
+                .travelTimeInSeconds(seconds)
+                .velocity(tripMeasure.getVelocity())
                 .geometry(geometry);
     }
 
-    public Trip measureDistance(Trip trips) {
-        String waypoints = trips.getStops().stream()
+    public TripMeasure measureDistance(TripMeasure tripMeasure) {
+        String waypoints = tripMeasure.getStops().stream()
                 .map(stop -> "%s,%s".formatted(stop.getLat(), stop.getLon()))
                 .collect(Collectors.joining("|"));
 
-        RoutingResponse routing = geoapifyService.route(waypoints, trips.getCalculatedCommunicationVelocity());
+        RoutingResponse routing = geoapifyService.route(waypoints, tripMeasure.getVelocity());
         Feature feature = routing.features().stream().findFirst().orElse(null);
         List<Leg> legs = Optional.ofNullable(feature).map(Feature::properties).map(Properties::legs).orElse(List.of());
 
-        List<StopTime> stopTimes = new ArrayList<>(trips.getStops().size());
+        List<StopTime> stopTimes = new ArrayList<>(tripMeasure.getStops().size());
 
         double meters = 0;
         double seconds = 0;
 
-        for (int i = 0; i < trips.getStops().size(); i++) {
-            StopTime stopTime = trips.getStops().get(i);
+        for (int i = 0; i < tripMeasure.getStops().size(); i++) {
+            StopTime stopTime = tripMeasure.getStops().get(i);
 
             stopTimes.add(new StopTime()
                     .stopId(stopTime.getStopId())
@@ -109,21 +120,29 @@ public class TripDistanceMeasureService {
                 meters += leg.distance();
                 seconds += leg.time();
             }
-
         }
 
-        List<Point2D> geometry = feature.geometry().coordinates().stream()
+        List<Point2D> geometry = Optional.ofNullable(feature)
+                .map(Feature::geometry)
+                .map(Geometry::coordinates)
+                .orElse(Collections.emptyList()).stream()
                 .flatMap(Collection::stream)
                 .map((List<Double> cords) -> new Point2D()
                         .lon(cords.get(0).floatValue())
                         .lat(cords.get(1).floatValue()))
                 .toList();
 
-        return new Trip()
-                .line(trips.getLine())
-                .variant(trips.getVariant())
-                .headsign(trips.getHeadsign())
+        return new TripMeasure()
+                .tripId(new TripId()
+                        .routeId(new RouteId()
+                                .line(tripMeasure.getTripId().getRouteId().getLine())
+                                .name(tripMeasure.getTripId().getRouteId().getName()))
+                        .variant(tripMeasure.getTripId().getVariant())
+                        .trafficMode(tripMeasure.getTripId().getTrafficMode()))
                 .stops(stopTimes)
+                .distanceInMeters((int) meters)
+                .travelTimeInSeconds((int) seconds)
+                .velocity(tripMeasure.getVelocity())
                 .geometry(geometry);
     }
 

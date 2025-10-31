@@ -9,9 +9,8 @@ import {
     Stop, StopsService,
     StopTime,
     TrafficMode,
-    Trip,
     TripDistanceMeasuresService,
-    TripId,
+    TripId, TripMeasure,
     TripMode,
     TripsDetails,
     TripService,
@@ -86,7 +85,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private communicationVelocitySubject = new Subject<number>();
     private previousVariantName = '';
 
-    public state: { name: string, line: string, variant: string, mode: TripMode };
+    public state: { name: string, line: string, variant: string, mode: TripMode, trafficMode: TrafficMode };
 
     public tripModeSelectValue = TripMode;
     public tripEditorComponentMode: TripEditorComponentMode;
@@ -310,7 +309,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                             .openOn(map);
                     })
                     .on('mouseout', (event: LeafletMouseEvent) => {
-                        if(this.popup) {
+                        if (this.popup) {
                             this.popup.closePopup();
                             this.popup.removeFrom(map);
                         }
@@ -330,7 +329,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private approximateDistance(zoom: boolean = false) {
-        const trips = this.buildTripsRequest();
+        const trips: TripMeasure = this.buildTripsMeasureRequest();
 
         this.tripDistanceMeasuresService.approximateDistance(trips).subscribe(response => {
             for (const index in response.stops) {
@@ -361,26 +360,31 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             if (zoom) {
                 this.zoomPolyline();
             }
-
         });
     }
 
-    private buildTripsRequest() {
-        const trips: Trip = {};
-        trips.line = this.state.line || '';
-        trips.headsign = '';
-        trips.calculatedCommunicationVelocity = this.$tripDetails.trip.calculatedCommunicationVelocity;
-
-        trips.stops = this.stopTimes.map((stop: StopTimeModel): StopTime => {
+    private buildTripsMeasureRequest(): TripMeasure {
+        const tripId: TripId = {
+            routeId: {
+                line: this.state.line,
+                name: this.state.name
+            },
+            mode: this.state.mode,
+            trafficMode: this.state.trafficMode
+        };
+        const tripMeasure: TripMeasure = {
+            tripId: tripId,
+            velocity: this.$tripDetails.trip.calculatedCommunicationVelocity
+        };
+        tripMeasure.stops = this.stopTimes.map((stop: StopTimeModel): StopTime => {
             const stopTime: StopTime = {};
             stopTime.stopId = stop.stopId;
             stopTime.stopName = stop.stopName;
             stopTime.lon = stop.lon;
             stopTime.lat = stop.lat;
-
             return stopTime;
         });
-        return trips;
+        return tripMeasure;
     }
 
     public clickCreateOrEdit() {
@@ -476,7 +480,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public measureDistance(): void {
-        this.tripDistanceMeasuresService.measureDistance(this.buildTripsRequest()).subscribe(response => {
+        this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest()).subscribe(response => {
             for (const index in response.stops) {
                 const stopTime: StopTime = (response.stops || [])[Number(index)];
                 this.stopTimes[Number(index)].meters = stopTime.meters;

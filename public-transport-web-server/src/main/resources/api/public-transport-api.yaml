@@ -680,7 +680,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Trip'
+              $ref: '#/components/schemas/TripMeasure'
         required: true
       responses:
         200:
@@ -688,7 +688,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trip'
+                $ref: '#/components/schemas/TripMeasure'
 
   /trips/measure-distance:
     post:
@@ -700,7 +700,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Trip'
+              $ref: '#/components/schemas/TripMeasure'
         required: true
       responses:
         200:
@@ -708,7 +708,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trip'
+                $ref: '#/components/schemas/TripMeasure'
 
   /agency/{agency}/calendar:
     post:
@@ -1307,6 +1307,26 @@ components:
           $ref: '#/components/schemas/TripId'
         trip:
           $ref: '#/components/schemas/TripsDetails'
+
+    TripMeasure:
+      type: object
+      properties:
+        tripId:
+          $ref: '#/components/schemas/TripId'
+        velocity:
+          type: integer
+        distanceInMeters:
+          type: integer
+        travelTimeInSeconds:
+          type: integer
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/StopTime'
+        geometry:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point2D'
 
     UpdateTripDetailsRequest:
       type: object
