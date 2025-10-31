@@ -21,6 +21,7 @@ import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripModeMapper;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,8 @@ public class TripService {
     private final ObjectMapper objectMapper;
 
     @Transactional
-    public Status updateTrip(UpdateTripDetailsRequest updateTripDetailsRequest) {
+    @PreAgencyAuthorize
+    public Status updateTrip(String instance, UpdateTripDetailsRequest updateTripDetailsRequest) {
         var tripId = updateTripDetailsRequest.getTripId();
         var trip = updateTripDetailsRequest.getTrip().getTrip();
 
@@ -47,7 +49,7 @@ public class TripService {
                 .toList();
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        var route = routeQueryService.findRouteByNameAndLine(tripId.getRouteId().getName(), tripId.getRouteId().getLine());
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, tripId.getRouteId());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
         TripEntity updatedTrip = TripMapper.update(tripEntity, trip);
         Optional<StopTime> lastStopOptional = trip.getStops().stream().reduce((first, second) -> second);
@@ -86,8 +88,9 @@ public class TripService {
                 .status(Status.StatusEnum.SUCCESS);
     }
 
-    public TripsDetails getTripByVariant(TripId tripId) {
-        var route = routeQueryService.findRouteByNameAndLine(tripId.getRouteId().getName(), tripId.getRouteId().getLine());
+    @PreAgencyAuthorize
+    public TripsDetails getTripByVariant(String instance, TripId tripId) {
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, tripId.getRouteId());
         var tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
 
         var tripResponse = Optional.ofNullable(tripEntity)
