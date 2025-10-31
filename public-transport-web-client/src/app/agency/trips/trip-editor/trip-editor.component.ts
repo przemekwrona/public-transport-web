@@ -304,7 +304,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                     })
                     .on('mouseover', (event: LeafletMouseEvent) => {
-                        this.popup = L.popup()
+                        this.popup = L.popup({closeButton: false})
                             .setLatLng(event.latlng)
                             .setContent(stop.name)
                             .openOn(map);
