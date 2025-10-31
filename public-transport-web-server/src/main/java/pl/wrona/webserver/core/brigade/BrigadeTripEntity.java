@@ -11,9 +11,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.TripMode;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 
 @Data
 @Entity
@@ -33,7 +33,7 @@ public class BrigadeTripEntity {
     private String variant;
 
     @Enumerated(value = EnumType.STRING)
-    private TripMode mode;
+    private TripVariantMode mode;
 
     @Column(name = "trip_sequence")
     private int tripSequence;

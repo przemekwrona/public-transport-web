@@ -5,7 +5,7 @@ import {find, findIndex, last, round, size} from "lodash";
 import {
     ErrorResponse,
     Point2D,
-    RouteDetails,
+    RouteDetails, RouteId,
     Stop, StopsService,
     StopTime,
     TrafficMode,
@@ -274,8 +274,27 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         stopTime.calculatedSeconds = 0;
                         stopTime.customizedMinutes = 0;
 
-                        this.stopTimes.push(stopTime);
+                        const orderedStops: StopTimeModel[] = this.stopTimes
+                            .map((stop: StopTimeModel) => {
+                                const distance: number = haversine(
+                                    {latitude: stopTime.lat, longitude: stopTime.lon},
+                                    {latitude: stop.lat, longitude: stop.lon});
+                                return {stopTime: stop, distance: distance};
+                            }).sort((current: { stopTime: StopTimeModel, distance: number }, prev: {
+                                stopTime: StopTimeModel,
+                                distance: number
+                            }): number => {
+                                return current.distance - prev.distance;
+                            })
+                            .map((stop: { stopTime: StopTimeModel, distance: number }) => stop.stopTime);
 
+                        console.log(this.stopTimes.indexOf(orderedStops[0]));
+                        console.log(this.stopTimes.indexOf(orderedStops[1]));
+
+
+                        this.stopTimes.splice(this.stopTimes.indexOf(orderedStops[0]), 0, stopTime);
+
+                        // this.stopTimes.push(stopTime);
                         this.forceRefreshIn10seconds();
 
                         this.approximateDistance();
@@ -352,9 +371,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public clickCreateOrEdit() {
+        const routeId: RouteId = {};
+        routeId.name = this.state.name;
+        routeId.line = this.state.line;
+
         const tripId: TripId = {};
-        tripId.line = this.state.line;
-        tripId.name = this.state.name;
+        tripId.routeId = routeId;
         tripId.variant = this.state.variant;
         tripId.mode = this.state.mode;
 

@@ -47,7 +47,7 @@ public class TripService {
                 .toList();
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
+        var route = routeQueryService.findRouteByNameAndLine(tripId.getRouteId().getName(), tripId.getRouteId().getLine());
         TripEntity tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
         TripEntity updatedTrip = TripMapper.update(tripEntity, trip);
         Optional<StopTime> lastStopOptional = trip.getStops().stream().reduce((first, second) -> second);
@@ -87,7 +87,7 @@ public class TripService {
     }
 
     public TripsDetails getTripByVariant(TripId tripId) {
-        var route = routeQueryService.findRouteByNameAndLine(tripId.getName(), tripId.getLine());
+        var route = routeQueryService.findRouteByNameAndLine(tripId.getRouteId().getName(), tripId.getRouteId().getLine());
         var tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
 
         var tripResponse = Optional.ofNullable(tripEntity)
@@ -130,6 +130,6 @@ public class TripService {
     }
 
     public TripEntity findByTripId(TripId tripId) {
-        return tripRepository.findByLineAndNameAndVariantAndMode(tripId.getLine(), tripId.getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
+        return tripRepository.findByLineAndNameAndVariantAndMode(tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
     }
 }

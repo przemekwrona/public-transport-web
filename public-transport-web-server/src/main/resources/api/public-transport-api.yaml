@@ -1166,10 +1166,8 @@ components:
     TripId:
       type: object
       properties:
-        name:
-          type: string
-        line:
-          type: string
+        routeId:
+          $ref: '#/components/schemas/RouteId'
         variant:
           type: string
         mode:

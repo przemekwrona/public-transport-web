@@ -25,7 +25,7 @@ public class TripQueryService {
     }
 
     public TripEntity findByAgencyCodeAndTripId(String instance, TripId tripId) {
-        return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getLine(), tripId.getName(), TripModeMapper.map(tripId.getMode()), TripTrafficModeMapper.map(tripId.getTrafficMode()));
+        return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), TripModeMapper.map(tripId.getMode()), TripTrafficModeMapper.map(tripId.getTrafficMode()));
     }
 
     public boolean existsUniqueTripIndex(String agencyCode, String line, String name, TripVariantMode tripMode, TripTrafficMode trafficMode) {
