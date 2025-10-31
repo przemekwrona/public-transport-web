@@ -2,14 +2,13 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Data, Params, Router, RouterModule} from "@angular/router";
 import {
     Route, RouteDetails,
-    RouteId,
+    RouteId, RouteService,
     Trip,
     TripId,
     TripService,
     UpdateRouteRequest
 } from "../../../generated/public-transport-api";
 import {faCircleXmark, IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {RoutesService} from "../../routes/routes.service";
 import {remove} from "lodash";
 import {map} from "rxjs";
 import {CommonModule} from "@angular/common";
@@ -33,7 +32,7 @@ import moment from "moment";
     ],
     providers: [
         TripService,
-        RoutesService
+        RouteService
     ]
 })
 export class TripListComponent implements OnInit {
@@ -49,7 +48,7 @@ export class TripListComponent implements OnInit {
 
     public state: { line: string, name: string, variant: string };
 
-    constructor(private tripService: TripService, private agencyStorageService: AgencyStorageService, private routeService: RoutesService, private _router: Router, private _route: ActivatedRoute) {
+    constructor(private tripService: TripService, private agencyStorageService: AgencyStorageService, private routeService: RouteService, private _router: Router, private _route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -101,7 +100,7 @@ export class TripListComponent implements OnInit {
             route: route
         }
 
-        this.routeService.updateRoute(updateRouteRequest).subscribe((response) => {
+        this.routeService.updateRoute(this.agencyStorageService.getInstance(), updateRouteRequest).subscribe((response) => {
         });
     }
 
