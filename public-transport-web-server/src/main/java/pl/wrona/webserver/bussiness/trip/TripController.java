@@ -44,8 +44,8 @@ public class TripController implements TripApi {
     }
 
     @Override
-    public ResponseEntity<TripsDetails> getTripByVariant(TripId tripId) {
-        return ResponseEntity.ok(tripService.getTripByVariant("", tripId));
+    public ResponseEntity<TripsDetails> getTripByVariant(String agency, TripId tripId) {
+        return ResponseEntity.ok(tripService.getTripByVariant(agency, tripId));
     }
 
     @Override
