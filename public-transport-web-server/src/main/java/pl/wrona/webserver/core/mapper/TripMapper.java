@@ -26,25 +26,16 @@ public class TripMapper {
         tripEntity.setVariantDesignation(trip.getVariantDesignation());
         tripEntity.setVariantDescription(trip.getVariantDescription());
 
-        if (TripMode.FRONT.equals(trip.getMode())) {
-            tripEntity.setMode(TripVariantMode.FRONT);
-        } else if (TripMode.BACK.equals(trip.getMode())) {
-            tripEntity.setMode(TripVariantMode.BACK);
-        }
-
-        if (TrafficMode.NORMAL.equals(trip.getTrafficMode())) {
-            tripEntity.setTrafficMode(TripTrafficMode.NORMAL);
-        } else if (TrafficMode.TRAFFIC.equals(trip.getTrafficMode())) {
-            tripEntity.setTrafficMode(TripTrafficMode.TRAFFIC);
-        }
+        tripEntity.setMode(TripModeMapper.map(trip.getMode()));
+        tripEntity.setTrafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()));
 
         tripEntity.setHeadsign(trip.getHeadsign());
+        tripEntity.setCustomizedCommunicationVelocity(trip.getCustomizedCommunicationVelocity());
         tripEntity.setCalculatedCommunicationVelocity(trip.getCalculatedCommunicationVelocity());
         tripEntity.setOriginStopName(trip.getOrigin());
         tripEntity.setDestinationStopName(trip.getDestination());
         tripEntity.setMainVariant(trip.getIsMainVariant());
         tripEntity.setUpdatedAt(LocalDateTime.now());
-
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -68,13 +59,7 @@ public class TripMapper {
                 .travelTimeInSeconds(trip.getTravelTimeInSeconds())
                 .distanceInMeters(trip.getDistanceInMeters())
                 .mode(TripModeMapper.map(trip.getMode()))
-                .trafficMode(Optional.of(trip.getTrafficMode())
-                        .map(mode -> switch (mode) {
-                            case NORMAL -> TrafficMode.NORMAL;
-                            case TRAFFIC -> TrafficMode.TRAFFIC;
-                            default -> null;
-                        })
-                        .orElse(null))
+                .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()))
                 .origin(trip.getOriginStopName())
                 .destination(trip.getDestinationStopName())
                 .isMainVariant(trip.isMainVariant())
