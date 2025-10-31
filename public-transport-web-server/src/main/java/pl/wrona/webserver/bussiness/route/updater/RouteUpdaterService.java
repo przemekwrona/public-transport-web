@@ -6,6 +6,7 @@ import org.igeolab.iot.pt.server.api.model.UpdateRouteRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.LineNameCleaner;
+import pl.wrona.webserver.bussiness.route.RouteCommandService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -16,13 +17,12 @@ import java.time.LocalDateTime;
 public class RouteUpdaterService {
 
     private final RouteQueryService routeQueryService;
-    private final RouteUpdatedRepository routeUpdatedRepository;
-
+    private final RouteCommandService routeCommandService;
 
     @Transactional
     @PreAgencyAuthorize
     public Status updateRoute(String instance, UpdateRouteRequest updateRouteRequest) {
-        var route = routeQueryService.findRouteByAgencyCodeAndLineAndName(instance, updateRouteRequest.getRouteId().getLine(), updateRouteRequest.getRouteId().getName());
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, updateRouteRequest.getRouteId());
         route.setLine(updateRouteRequest.getRoute().getLine());
         route.setName(LineNameCleaner.clean(updateRouteRequest.getRoute().getName()));
         route.setGoogle(updateRouteRequest.getRoute().getGoogle());
@@ -30,7 +30,7 @@ public class RouteUpdaterService {
         route.setDescription(updateRouteRequest.getRoute().getDescription());
         route.setUpdatedAt(LocalDateTime.now());
 
-        var savedRoute = routeUpdatedRepository.save(route);
+        var savedRoute = routeCommandService.updateRoute(route);
 
         return new Status()
                 .status(Status.StatusEnum.SUCCESS);

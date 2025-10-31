@@ -24,8 +24,8 @@ public class RouteQueryService {
         return this.routeQueryRepository.findByAgencyCode(agencyCode);
     }
 
-    public RouteEntity findRouteByAgencyCodeAndLineAndName(String agencyCode, String line, String name) {
-        return this.routeQueryRepository.findByAgencyCodeAndLineAndName(agencyCode, line, name);
+    public RouteEntity findRouteByAgencyCodeAndRouteId(String agencyCode, RouteId routeId) {
+        return this.routeQueryRepository.findByAgencyCodeAndLineAndName(agencyCode, routeId.getLine(), routeId.getName());
     }
 
     @Deprecated
@@ -33,12 +33,6 @@ public class RouteQueryService {
     public RouteEntity findRouteByNameAndLine(String name, String line) {
         AgencyEntity agencyEntity = this.agencyService.getLoggedAgency();
         return this.routeQueryRepository.findByAgencyCodeAndRouteId(agencyEntity, name, line);
-    }
-
-    @Deprecated
-    @Transactional
-    public RouteEntity findRouteByNameAndLine(RouteId routeId) {
-        return findRouteByNameAndLine(routeId.getName(), routeId.getLine());
     }
 
     public Map<Long, RouteEntity> findByExistsBrigade(String agencyCode) {
