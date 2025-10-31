@@ -99,7 +99,11 @@
                         <div class="flex justify-end w-full gap-2.5">
                             <button [routerLink]="['/agency/routes']" class="btn btn-secondary">Wróć do listy linii
                             </button>
-                            <button (click)="saveBasicInfo()" class="btn btn-success">Zapisz Informacje Podstawowe
+                            <button (click)="saveBasicInfo()" [disabled]="isUpdatingBasicInformation" class="btn btn-success">
+                                Zapisz Informacje Podstawowe
+                                @if (isUpdatingBasicInformation) {
+                                    <fa-icon [icon]="faSpinner" [animation]="'spin'"/>
+                                }
                             </button>
                         </div>
                     </div>
