@@ -33,6 +33,7 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {StopTimeModel} from "./stop-time.model";
 import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
+import haversine from 'haversine-distance'
 
 @Component({
     selector: 'app-trip-editor',
