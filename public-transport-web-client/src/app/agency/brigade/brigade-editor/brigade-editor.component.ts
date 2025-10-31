@@ -4,7 +4,7 @@ import {
     BrigadeBody, BrigadePatchBody,
     BrigadePayload,
     BrigadeTrip, ErrorResponse,
-    GetAllTripsResponse, GetCalendarsResponse,
+    GetAllTripsResponse, GetCalendarsResponse, RouteId,
     Trip,
     TripId, TripMode, TripService
 } from "../../../generated/public-transport-api";
@@ -67,8 +67,8 @@ export class BrigadeEditorComponent implements OnInit {
             this.brigadeItems = data['brigade'];
             this.brigadeItems = (data['brigade']?.trips || []).map((trip: BrigadeTrip) => {
                 const brigadeModel: BrigadeModel = {} as BrigadeModel;
-                brigadeModel.line = trip.tripId.line;
-                brigadeModel.name = trip.tripId.name;
+                brigadeModel.line = trip.tripId.routeId.line;
+                brigadeModel.name = trip.tripId.routeId.name;
                 brigadeModel.variant = trip.tripId.variant;
                 brigadeModel.mode = trip.tripId.mode;
 
@@ -211,9 +211,12 @@ export class BrigadeEditorComponent implements OnInit {
 
         let tripSequence: number = 0;
         brigadeBody.trips = this.brigadeItems.map(brigadeBody => {
+            const routeId: RouteId = {};
+            routeId.line = brigadeBody.line;
+            routeId.name = brigadeBody.name;
+
             let tripId: TripId = {};
-            tripId.line = brigadeBody.line;
-            tripId.name = brigadeBody.name;
+            tripId.routeId = routeId;
             tripId.mode = brigadeBody.mode;
             tripId.variant = brigadeBody.variant;
 

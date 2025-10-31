@@ -8,6 +8,7 @@ import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.BrigadeTrip;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeBody;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.bussiness.trip.TripService;
 import pl.wrona.webserver.core.calendar.CalendarService;
+import pl.wrona.webserver.core.mapper.TripMapper;
+import pl.wrona.webserver.core.mapper.TripModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
 
 import java.time.LocalTime;
@@ -51,10 +54,10 @@ public class BrigadeService {
                 .map(brigadeTrip -> {
                     var brigadeTripEntity = new BrigadeTripEntity();
 
-                    brigadeTripEntity.setLine(brigadeTrip.getTripId().getLine());
-                    brigadeTripEntity.setName(brigadeTrip.getTripId().getName());
+                    brigadeTripEntity.setLine(brigadeTrip.getTripId().getRouteId().getLine());
+                    brigadeTripEntity.setName(brigadeTrip.getTripId().getRouteId().getName());
                     brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariant());
-                    brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
+                    brigadeTripEntity.setMode(TripModeMapper.map(brigadeTrip.getTripId().getMode()));
                     brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
                     brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), savedBrigade));
 
@@ -67,8 +70,9 @@ public class BrigadeService {
                     brigadeTripEntity.setDepartureTimeInSeconds(secondOfDay);
 
                     var tripId = new TripId()
-                            .line(brigadeTrip.getTripId().getLine())
-                            .name(brigadeTrip.getTripId().getName())
+                            .routeId(new RouteId()
+                                    .line(brigadeTrip.getTripId().getRouteId().getLine())
+                                    .name(brigadeTrip.getTripId().getRouteId().getName()))
                             .variant(brigadeTrip.getTripId().getVariant())
                             .mode(brigadeTrip.getTripId().getMode());
 
@@ -90,10 +94,11 @@ public class BrigadeService {
         List<BrigadeTrip> trips = brigadeTripRepository.findAllByBrigadeName(brigadePayload.getBrigadeName()).stream()
                 .map(brigade -> new BrigadeTrip()
                         .tripId(new TripId()
-                                .line(brigade.getLine())
-                                .name(brigade.getName())
+                                .routeId(new RouteId()
+                                        .line(brigade.getLine())
+                                        .name(brigade.getName()))
                                 .variant(brigade.getVariant())
-                                .mode(brigade.getMode()))
+                                .mode(TripModeMapper.map(brigade.getMode())))
                         .tripSequence(brigade.getTripSequence())
                         .origin(brigade.getOrigin())
                         .destination(brigade.getDestination())
@@ -138,10 +143,10 @@ public class BrigadeService {
                     .map(brigadeTrip -> {
                         var brigadeTripEntity = new BrigadeTripEntity();
 
-                        brigadeTripEntity.setLine(brigadeTrip.getTripId().getLine());
-                        brigadeTripEntity.setName(brigadeTrip.getTripId().getName());
+                        brigadeTripEntity.setLine(brigadeTrip.getTripId().getRouteId().getLine());
+                        brigadeTripEntity.setName(brigadeTrip.getTripId().getRouteId().getName());
                         brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariant());
-                        brigadeTripEntity.setMode(brigadeTrip.getTripId().getMode());
+                        brigadeTripEntity.setMode(TripModeMapper.map(brigadeTrip.getTripId().getMode()));
                         brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
                         brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), entity));
 
@@ -157,8 +162,9 @@ public class BrigadeService {
 //                        brigadeTripEntity.set(arrivalTime);
 
                         var tripId = new TripId()
-                                .line(brigadeTrip.getTripId().getLine())
-                                .name(brigadeTrip.getTripId().getName())
+                                .routeId(new RouteId()
+                                        .line(brigadeTrip.getTripId().getRouteId().getLine())
+                                        .name(brigadeTrip.getTripId().getRouteId().getName()))
                                 .variant(brigadeTrip.getTripId().getVariant())
                                 .mode(brigadeTrip.getTripId().getMode());
 
