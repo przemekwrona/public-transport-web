@@ -12,4 +12,8 @@ public class RouteCommandService {
     public void deleteByRoute(RouteEntity routeEntity) {
         this.routeCommandRepository.delete(routeEntity);
     }
+
+    public RouteEntity updateRoute(RouteEntity routeEntity) {
+        return this.routeCommandRepository.save(routeEntity);
+    }
 }

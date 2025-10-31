@@ -24,7 +24,7 @@ public class RouteDetailsService {
 
     @PreAgencyAuthorize
     public RouteDetails getRouteDetails(String instance, RouteId routeId) {
-        var route = routeQueryService.findRouteByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName());
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, routeId);
         var tripWithBrigades = tripQueryService.mapByExistsBrigade(instance);
 
         var trips = tripQueryService.findByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName()).stream()
