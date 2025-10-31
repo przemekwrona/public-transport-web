@@ -1,7 +1,9 @@
 package pl.wrona.webserver.bussiness.trip.measure;
 
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
-import org.igeolab.iot.pt.server.api.model.Trip;
+import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripMeasure;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.wrona.webserver.BaseIntegrationTest;
@@ -18,10 +20,12 @@ class TripDistanceMeasureServiceIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldCalculateRealDistance() {
         // given
-        Trip trip = new Trip()
-                .line("L1")
-                .headsign("")
-                .calculatedCommunicationVelocity(27)
+        TripMeasure trip = new TripMeasure()
+                .tripId(new TripId()
+                        .routeId(new RouteId()
+                                .line("L1")
+                                .name("")))
+                .velocity(27)
                 .stops(List.of(
                         new StopTime().stopId(142902L).stopName("Chmielnik").lon(20.751886f).lat(50.614586f),
                         new StopTime().stopId(234100L).stopName("Przededworze").lon(20.722895f).lat(50.610844f),
@@ -38,7 +42,7 @@ class TripDistanceMeasureServiceIntegrationTest extends BaseIntegrationTest {
                 ));
 
         // when
-        Trip results = tripDistanceMeasureService.measureDistance(trip);
+        TripMeasure results = tripDistanceMeasureService.measureDistance(trip);
 
         // then
         assertThat(results).isNotNull();
