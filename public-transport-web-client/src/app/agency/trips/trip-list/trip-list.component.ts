@@ -8,7 +8,7 @@ import {
     TripService,
     UpdateRouteRequest
 } from "../../../generated/public-transport-api";
-import {faCircleXmark, IconDefinition} from '@fortawesome/free-solid-svg-icons';
+import {faCircleXmark, faSpinner, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {remove} from "lodash";
 import {map} from "rxjs";
 import {CommonModule} from "@angular/common";
@@ -40,6 +40,7 @@ export class TripListComponent implements OnInit {
     @ViewChild('noVariants') noVariants!: ElementRef;
     @ViewChild('variants') variants!: ElementRef;
 
+    protected readonly faSpinner = faSpinner;
 
     public faCircleXmark: IconDefinition = faCircleXmark;
 
@@ -47,6 +48,8 @@ export class TripListComponent implements OnInit {
     public trips: RouteDetails = {route: {line: '', name: ''}};
 
     public state: { line: string, name: string, variant: string };
+
+    public isUpdatingBasicInformation: boolean = false;
 
     constructor(private tripService: TripService, private agencyStorageService: AgencyStorageService, private routeService: RouteService, private _router: Router, private _route: ActivatedRoute) {
     }
@@ -82,6 +85,8 @@ export class TripListComponent implements OnInit {
     }
 
     public saveBasicInfo(): void {
+        this.isUpdatingBasicInformation = true;
+
         const routeId: RouteId = {
             line: this.state.line,
             name: this.state.name
@@ -100,8 +105,9 @@ export class TripListComponent implements OnInit {
             route: route
         }
 
-        this.routeService.updateRoute(this.agencyStorageService.getInstance(), updateRouteRequest).subscribe((response) => {
-        });
+        this.routeService.updateRoute(this.agencyStorageService.getInstance(), updateRouteRequest).subscribe({
+            next: (response) => {},
+            complete: () => this.isUpdatingBasicInformation = false});
     }
 
     public scrollNoVariants(): void {
@@ -121,5 +127,4 @@ export class TripListComponent implements OnInit {
         return moment(trip.createdAt).isAfter(twoMinutesAgo)
             || moment(trip.updatedAt).isAfter(twoMinutesAgo)
     }
-
 }
