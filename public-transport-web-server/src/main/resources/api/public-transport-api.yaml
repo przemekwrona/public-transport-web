@@ -1283,14 +1283,6 @@ components:
           type: string
         destination:
           type: string
-        stops:
-          type: array
-          items:
-            $ref: '#/components/schemas/StopTime'
-        geometry:
-          type: array
-          items:
-            $ref: '#/components/schemas/Point2D'
         createdAt:
           type: string
           format: date-time
@@ -1365,6 +1357,14 @@ components:
           type: string
         headsign:
           type: string
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/StopTime'
+        geometry:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point2D'
         isCustomized:
           type: boolean
         item:

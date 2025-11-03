@@ -38,7 +38,7 @@ public class TripMapper {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<List<Float>> geometry = trip.getGeometry().stream()
+            List<List<Float>> geometry = tripsDetails.getGeometry().stream()
                     .map(point -> List.of(point.getLat(), point.getLon()))
                     .toList();
             tripEntity.setGeometry(objectMapper.writeValueAsString(geometry));

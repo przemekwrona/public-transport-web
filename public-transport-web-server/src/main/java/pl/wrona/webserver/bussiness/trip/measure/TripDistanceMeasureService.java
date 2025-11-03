@@ -53,10 +53,16 @@ public class TripDistanceMeasureService {
 
                 meters = meters + haversinMeters;
 
-                // Communication speed 45km/h
-                int velocityKmPerH = Optional.ofNullable(tripMeasure.getVelocity()).orElse(45);
-                double velocityMetersPerSec = (velocityKmPerH * 1000.0) / 3600.0d;
-                seconds = seconds + (int) (((double) haversinMeters) / velocityMetersPerSec);
+                int defaultVelocityKph = 30;
+                int velocityKph = Optional.ofNullable(tripMeasure.getVelocity()).orElse(defaultVelocityKph);
+
+                // Convert km/h to m/s using a clear constant
+                final double METERS_PER_SECOND_PER_KMPH = 1000.0 / 3600.0;
+                double velocityMps = velocityKph * METERS_PER_SECOND_PER_KMPH;
+
+                // Compute total seconds (rounded up to nearest minute)
+                seconds += (int) Math.round(haversinMeters / velocityMps);
+                seconds += seconds % 60;
 
                 stopTimes.add(new StopTime()
                         .stopId(pairStopTime.getRight().getStopId())

@@ -39,14 +39,14 @@ public class TripUpdaterService {
         var tripDetails = updateTripDetailsRequest.getBody();
         var trip = tripDetails.getItem();
 
-        List<Long> stopIds = trip.getStops().stream()
+        List<Long> stopIds = tripDetails.getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         TripEntity tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
-        Optional<StopTime> lastStopOptional = trip.getStops().stream().reduce((first, second) -> second);
+        Optional<StopTime> lastStopOptional = tripDetails.getStops().stream().reduce((first, second) -> second);
         lastStopOptional.ifPresent(lastStop -> {
 //            updatedTrip.setDistanceInMeters(lastStop.getMeters());
             updatedTrip.setTravelTimeInSeconds(lastStop.getCalculatedSeconds());
@@ -55,7 +55,7 @@ public class TripUpdaterService {
 
         stopTimeCommandService.deleteByTripId(updatedTrip.getTripId());
 
-        StopTime[] stopTimes = trip.getStops().toArray(StopTime[]::new);
+        StopTime[] stopTimes = tripDetails.getStops().toArray(StopTime[]::new);
 
         List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
                 .mapToObj(i -> {

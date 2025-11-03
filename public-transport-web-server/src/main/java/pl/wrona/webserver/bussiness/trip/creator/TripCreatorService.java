@@ -50,7 +50,7 @@ public class TripCreatorService {
         }
 
         TripsDetails tripRequest = createTripDetailsRequest.getBody();
-        List<Long> stopIds = tripRequest.getItem().getStops().stream()
+        List<Long> stopIds = tripRequest.getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
@@ -65,7 +65,7 @@ public class TripCreatorService {
         tripEntity.setCreatedAt(now);
         tripEntity.setUpdatedAt(now);
 
-        var lastStop = tripRequest.getItem().getStops().stream()
+        var lastStop = tripRequest.getStops().stream()
                 .reduce((first, second) -> second);
 
         tripEntity.setDistanceInMeters(lastStop.map(StopTime::getMeters).orElse(0));
@@ -73,7 +73,7 @@ public class TripCreatorService {
 
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
-        StopTime[] stopTimes = tripRequest.getItem().getStops().toArray(StopTime[]::new);
+        StopTime[] stopTimes = tripRequest.getStops().toArray(StopTime[]::new);
 
         List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
                 .mapToObj(i -> {

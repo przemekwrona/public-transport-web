@@ -120,7 +120,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => {
             this.$tripDetails = tripDetails;
 
-            this.$tripDetails.item.stops.forEach((stopTime: StopTime) => {
+            this.$tripDetails.stops.forEach((stopTime: StopTime) => {
                 const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                 stopTimeModel.stopId = stopTime.stopId;
                 stopTimeModel.stopName = stopTime.stopName;
@@ -134,7 +134,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 this.stopTimes.push(stopTimeModel);
             });
 
-            this.$tripDetails.item.stops.forEach((stopTime: StopTime) => {
+            this.$tripDetails.stops.forEach((stopTime: StopTime) => {
                 const historicalStopTime: StopTimeModel = {} as StopTimeModel;
                 historicalStopTime.stopId = stopTime.stopId;
                 historicalStopTime.stopName = stopTime.stopName;
@@ -199,7 +199,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
             this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
         }
-        this.drawPolyline(this.$tripDetails.item.geometry || []);
+        this.drawPolyline(this.$tripDetails.geometry || []);
         this.zoomPolyline();
         this.reloadStops(this.map);
         this.onZoomEnd(this.map);
@@ -401,15 +401,15 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const tripDetailsRequest: UpdateTripDetailsRequest = {};
         tripDetailsRequest.tripId = tripId;
         tripDetailsRequest.body = this.$tripDetails;
-        tripDetailsRequest.body.item.stops = this.stopTimes.map(a => {
+        tripDetailsRequest.body.stops = this.stopTimes.map(stopTimeModel => {
             const stopTime: StopTime = {};
-            stopTime.stopId = a.stopId;
-            stopTime.stopName = a.stopName;
-            stopTime.lat = a.lat;
-            stopTime.lon = a.lon;
-            stopTime.calculatedSeconds = a.calculatedSeconds;
-            stopTime.customizedSeconds = a.customizedMinutes * 60;
-            stopTime.meters = a.meters;
+            stopTime.stopId = stopTimeModel.stopId;
+            stopTime.stopName = stopTimeModel.stopName;
+            stopTime.lat = stopTimeModel.lat;
+            stopTime.lon = stopTimeModel.lon;
+            stopTime.calculatedSeconds = stopTimeModel.calculatedSeconds;
+            stopTime.customizedSeconds = this.$tripDetails.isCustomized ? stopTimeModel.customizedMinutes * 60 : stopTimeModel.calculatedSeconds;
+            stopTime.meters = stopTimeModel.meters;
 
             return stopTime;
         });
@@ -492,7 +492,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             }
 
             this.drawPolyline(response.geometry);
-            this.$tripDetails.item.geometry = response.geometry;
+            this.$tripDetails.geometry = response.geometry;
         });
 
     }
@@ -505,7 +505,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public getLastStop(): StopTime {
-        return last(this.$tripDetails.item.stops);
+        return last(this.$tripDetails.stops);
     }
 
     public zoomPolyline(): void {
@@ -539,7 +539,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopSelectorData | undefined) => {
             if (busStopSelectorData !== undefined) {
-                const stopTime: StopTime = find(this.$tripDetails.item.stops, {stopId: busStopSelectorData.stopId});
+                const stopTime: StopTime = find(this.$tripDetails.stops, {stopId: busStopSelectorData.stopId});
                 stopTime.stopName = busStopSelectorData.stopName;
             }
         });
