@@ -68,7 +68,7 @@ export class TripListComponent implements OnInit {
     }
 
     public editTrip(trip: Trip) {
-        const queryParams = {name: trip.name, line: trip.line, variant: trip.variant, mode: trip.mode};
+        const queryParams = {name: trip.name, line: trip.line, variant: trip.variant, mode: trip.mode, trafficMode: trip.trafficMode};
         this._router.navigate(['/agency/trips/edit'], {queryParams: queryParams});
     }
 

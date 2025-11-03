@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.trip.creator.TripCreatorService;
 import pl.wrona.webserver.bussiness.trip.deletion.TripDeletionService;
+import pl.wrona.webserver.bussiness.trip.details.TripDetailsService;
 import pl.wrona.webserver.bussiness.trip.pagination.TripPaginationService;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -27,6 +28,7 @@ public class TripController implements TripApi {
     private final TripPaginationService tripPaginationService;
     private final TripCreatorService tripCreatorService;
     private final TripDeletionService tripDeletionService;
+    private final TripDetailsService tripDetailsService;
 
     @Override
     public ResponseEntity<Status> createTrip(String agency, CreateTripDetailsRequest createTripDetailsRequest) {
@@ -45,7 +47,7 @@ public class TripController implements TripApi {
 
     @Override
     public ResponseEntity<TripsDetails> getTripByVariant(String agency, TripId tripId) {
-        return ResponseEntity.ok(tripService.getTripByVariant(agency, tripId));
+        return ResponseEntity.ok(tripDetailsService.getTripByTripId(agency, tripId));
     }
 
     @Override

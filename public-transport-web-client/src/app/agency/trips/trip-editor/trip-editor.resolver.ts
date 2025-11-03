@@ -17,6 +17,7 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
     const name: string = route.queryParams['name'];
     const variant: string = route.queryParams['variant'];
     const mode: TripMode = route.queryParams['mode'];
+    const trafficMode: TrafficMode = route.queryParams['trafficMode'];
 
     const agencyStorageService: AgencyStorageService = inject(AgencyStorageService);
 
@@ -29,7 +30,7 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
     } else {
         const tripService: TripService = inject(TripService);
         const routeId: RouteId = {line: line, name: name} as RouteId;
-        const tripId: TripId = {routeId: routeId, variant: variant, mode: mode} as TripId;
+        const tripId: TripId = {routeId: routeId, variant: variant, mode: mode, trafficMode: trafficMode} as TripId;
         return tripService.getTripByVariant(agencyStorageService.getInstance(), tripId);
     }
 }
