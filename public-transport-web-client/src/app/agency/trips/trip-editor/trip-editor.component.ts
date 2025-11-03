@@ -92,7 +92,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public trafficModeSelectValue = TrafficMode
 
-    public $tripDetails: TripsDetails = {trip: {}};
+    public $tripDetails: TripsDetails = {item: {}};
     public $tripVariants: RouteDetails = {};
 
     public stopTimes: StopTimeModel[] = [];
@@ -115,12 +115,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             line: string,
             name: string,
             variant: string,
-            mode: TripMode
+            mode: TripMode,
+            trafficMode: TrafficMode
         });
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => {
             this.$tripDetails = tripDetails;
 
-            this.$tripDetails.trip.stops.forEach((stopVa: StopTime) => {
+            this.$tripDetails.item.stops.forEach((stopVa: StopTime) => {
                 const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                 stopTimeModel.stopId = stopVa.stopId;
                 stopTimeModel.stopName = stopVa.stopName;
@@ -134,7 +135,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 this.stopTimes.push(stopTimeModel);
             });
 
-            this.$tripDetails.trip.stops.forEach((stopTime: StopTime) => {
+            this.$tripDetails.item.stops.forEach((stopTime: StopTime) => {
                 const historicalStopTime: StopTimeModel = {} as StopTimeModel;
                 historicalStopTime.stopId = stopTime.stopId;
                 historicalStopTime.stopName = stopTime.stopName;
@@ -153,13 +154,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
                     if (this.$tripVariants?.trips.length || 0 == 0) {
-                        this.$tripDetails.trip.isMainVariant = true;
-                        this.$tripDetails.trip.variant = "MAIN";
-                        this.$tripDetails.trip.mode = TripMode.Front;
-                        this.$tripDetails.trip.trafficMode = TrafficMode.Normal;
-                        this.$tripDetails.trip.origin = tripVariants.route.originStop.name;
-                        this.$tripDetails.trip.destination = tripVariants.route.destinationStop.name;
-                        this.$tripDetails.trip.headsign = tripVariants.route.destinationStop.name;
+                        this.$tripDetails.item.isMainVariant = true;
+                        this.$tripDetails.item.variant = "MAIN";
+                        this.$tripDetails.item.mode = TripMode.Front;
+                        this.$tripDetails.item.trafficMode = TrafficMode.Normal;
+                        this.$tripDetails.item.origin = tripVariants.route.originStop.name;
+                        this.$tripDetails.item.destination = tripVariants.route.destinationStop.name;
+                        this.$tripDetails.item.headsign = tripVariants.route.destinationStop.name;
 
                         const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                         stopTimeModel.stopId = tripVariants.route.originStop.id;
@@ -171,13 +172,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.stopTimes.push(stopTimeModel);
 
                     } else if (this.$tripVariants.trips.length == 1 && this.$tripVariants.trips[0].isMainVariant && this.$tripVariants.trips[0].mode === TripMode.Front) {
-                        this.$tripDetails.trip.isMainVariant = true;
-                        this.$tripDetails.trip.variant = "MAIN";
-                        this.$tripDetails.trip.mode = TripMode.Back;
-                        this.$tripDetails.trip.trafficMode = TrafficMode.Normal;
-                        this.$tripDetails.trip.origin = tripVariants.route.destinationStop.name;
-                        this.$tripDetails.trip.destination = tripVariants.route.originStop.name;
-                        this.$tripDetails.trip.headsign = tripVariants.route.originStop.name;
+                        this.$tripDetails.item.isMainVariant = true;
+                        this.$tripDetails.item.variant = "MAIN";
+                        this.$tripDetails.item.mode = TripMode.Back;
+                        this.$tripDetails.item.trafficMode = TrafficMode.Normal;
+                        this.$tripDetails.item.origin = tripVariants.route.destinationStop.name;
+                        this.$tripDetails.item.destination = tripVariants.route.originStop.name;
+                        this.$tripDetails.item.headsign = tripVariants.route.originStop.name;
 
                         const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                         stopTimeModel.stopId = tripVariants.route.originStop.id;
@@ -191,7 +192,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 }
             });
         });
-        this.$tripDetails.trip.calculatedCommunicationVelocity = this.$tripDetails.trip.calculatedCommunicationVelocity || 30;
+        this.$tripDetails.item.calculatedCommunicationVelocity = this.$tripDetails.item.calculatedCommunicationVelocity || 30;
     }
 
     ngAfterViewInit(): void {
@@ -199,7 +200,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
             this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
         }
-        this.drawPolyline(this.$tripDetails.trip.geometry || []);
+        this.drawPolyline(this.$tripDetails.item.geometry || []);
         this.zoomPolyline();
         this.reloadStops(this.map);
         this.onZoomEnd(this.map);
@@ -374,7 +375,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         };
         const tripMeasure: TripMeasure = {
             tripId: tripId,
-            velocity: this.$tripDetails.trip.calculatedCommunicationVelocity
+            velocity: this.$tripDetails.item.calculatedCommunicationVelocity
         };
         tripMeasure.stops = this.stopTimes.map((stop: StopTimeModel): StopTime => {
             const stopTime: StopTime = {};
@@ -399,8 +400,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         const tripDetailsRequest: UpdateTripDetailsRequest = {};
         tripDetailsRequest.tripId = tripId;
-        tripDetailsRequest.trip = this.$tripDetails;
-        tripDetailsRequest.trip.trip.stops = this.stopTimes.map(a => {
+        tripDetailsRequest.body = this.$tripDetails;
+        tripDetailsRequest.body.item.stops = this.stopTimes.map(a => {
             const stopTime: StopTime = {};
             stopTime.stopId = a.stopId;
             stopTime.stopName = a.stopName;
@@ -491,7 +492,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             }
 
             this.drawPolyline(response.geometry);
-            this.$tripDetails.trip.geometry = response.geometry;
+            this.$tripDetails.item.geometry = response.geometry;
         });
 
     }
@@ -504,7 +505,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public getLastStop(): StopTime {
-        return last(this.$tripDetails.trip.stops);
+        return last(this.$tripDetails.item.stops);
     }
 
     public zoomPolyline(): void {
@@ -514,13 +515,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public clickIsMainVariant(): void {
-        if (this.$tripDetails.trip.isMainVariant) {
-            this.$tripDetails.trip.variant = this.previousVariantName;
+        if (this.$tripDetails.item.isMainVariant) {
+            this.$tripDetails.item.variant = this.previousVariantName;
         } else {
-            this.previousVariantName = this.$tripDetails.trip.variant;
-            this.$tripDetails.trip.variant = 'MAIN';
-            this.$tripDetails.trip.variantDesignation = '';
-            this.$tripDetails.trip.variantDescription = '';
+            this.previousVariantName = this.$tripDetails.item.variant;
+            this.$tripDetails.item.variant = 'MAIN';
+            this.$tripDetails.item.variantDesignation = '';
+            this.$tripDetails.item.variantDescription = '';
         }
 
     }
@@ -538,7 +539,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopSelectorData | undefined) => {
             if (busStopSelectorData !== undefined) {
-                const stopTime: StopTime = find(this.$tripDetails.trip.stops, {stopId: busStopSelectorData.stopId});
+                const stopTime: StopTime = find(this.$tripDetails.item.stops, {stopId: busStopSelectorData.stopId});
                 stopTime.stopName = busStopSelectorData.stopName;
             }
         });

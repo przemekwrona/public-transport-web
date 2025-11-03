@@ -42,7 +42,7 @@
                             </div>
                             <div class="flex items-center gap-5">
                                 <label class="switch switch-sm">
-                                    <input type="checkbox" [(ngModel)]="$tripDetails.trip.isMainVariant"
+                                    <input type="checkbox" [(ngModel)]="$tripDetails.item.isMainVariant"
                                            (click)="clickIsMainVariant()"></label>
                             </div>
                         </div>
@@ -55,11 +55,11 @@
                         <div class="w-full">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Nazwa wariantu</label>
-                                @if ($tripDetails.trip.isMainVariant) {
+                                @if ($tripDetails.item.isMainVariant) {
                                     <input class="input" value="{{'agency.trip.edit.mainVariant' | transloco }}"
                                            type="text" placeholder="KOZŁÓW" disabled>
                                 } @else {
-                                    <input name="variant" id="variant" [(ngModel)]="$tripDetails.trip.variant"
+                                    <input name="variant" id="variant" [(ngModel)]="$tripDetails.item.variant"
                                            class="input"
                                            type="text" placeholder="KOZŁÓW">
                                 }
@@ -69,7 +69,7 @@
                         <div class="w-full">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Kierunek wariantu</label>
-                                <select name="mode" id="mode" [(ngModel)]="$tripDetails.trip.mode"
+                                <select name="mode" id="mode" [(ngModel)]="$tripDetails.item.mode"
                                         class="select w-full">
                                     <option [value]="tripModeSelectValue.Front">{{ 'agency.trip.edit.FRONT' | transloco }}</option>
                                     <option [value]="tripModeSelectValue.Back">{{ 'agency.trip.edit.BACK' | transloco }}</option>
@@ -89,7 +89,7 @@
                                             <span class="text-md font-medium text-gray-900">Normalny ruch</span>
                                             <input class="appearance-none" name="sso_option" type="radio"
                                                    [value]="trafficModeSelectValue.Normal"
-                                                   [(ngModel)]="$tripDetails.trip.trafficMode"/>
+                                                   [(ngModel)]="$tripDetails.item.trafficMode"/>
                                         </div>
                                     </label>
                                     <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
@@ -101,7 +101,7 @@
                                             <span class="text-md font-medium text-gray-900">Jazda w korku</span>
                                             <input class="appearance-none" name="sso_option" type="radio"
                                                    [value]="trafficModeSelectValue.Traffic"
-                                                   [(ngModel)]="$tripDetails.trip.trafficMode"/>
+                                                   [(ngModel)]="$tripDetails.item.trafficMode"/>
                                         </div>
                                     </label>
                                 </div>
@@ -117,22 +117,22 @@
                             </div>
                         </div>
 
-                        <div class="border-t border-gray-200 my-2.5" *ngIf="!$tripDetails.trip.isMainVariant"></div>
+                        <div class="border-t border-gray-200 my-2.5" *ngIf="!$tripDetails.item.isMainVariant"></div>
 
-                        <div class="w-full" *ngIf="!$tripDetails.trip.isMainVariant">
+                        <div class="w-full" *ngIf="!$tripDetails.item.isMainVariant">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Symbol jakim oznaczysz kurs na rozkładzie
                                     jazdy</label>
                                 <input name="variantDesignation" id="variantDesignation"
-                                       [(ngModel)]="$tripDetails.trip.variantDesignation" class="input"
+                                       [(ngModel)]="$tripDetails.item.variantDesignation" class="input"
                                        type="text" placeholder="W">
                             </div>
                         </div>
-                        <div class="w-full" *ngIf="!$tripDetails.trip.isMainVariant">
+                        <div class="w-full" *ngIf="!$tripDetails.item.isMainVariant">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Opis oznaczenia</label>
                                 <input name="variantDescription" id="variantDescription"
-                                       [(ngModel)]="$tripDetails.trip.variantDescription" class="input"
+                                       [(ngModel)]="$tripDetails.item.variantDescription" class="input"
                                        type="text" placeholder="Kurs skrócony do miejscowości Wrocław">
                             </div>
                         </div>
@@ -142,7 +142,7 @@
                         <div class="w-full">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Przystanek początkowy</label>
-                                <input name="origin" id="origin" [(ngModel)]="$tripDetails.trip.origin" class="input"
+                                <input name="origin" id="origin" [(ngModel)]="$tripDetails.item.origin" class="input"
                                        type="text" placeholder="KOZŁÓW">
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Przystanek końcowy</label>
                                 <input name="destination" id="destination"
-                                       [(ngModel)]="$tripDetails.trip.destination" class="input"
+                                       [(ngModel)]="$tripDetails.item.destination" class="input"
                                        type="text" placeholder="KOZŁÓW">
                             </div>
                         </div>
@@ -160,7 +160,7 @@
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label max-w-56">Kierunek na tablicy czołowej</label>
                                 <input type="text" name="headsign" id="headsign"
-                                       [(ngModel)]="$tripDetails.trip.headsign" class="input">
+                                       [(ngModel)]="$tripDetails.item.headsign" class="input">
                             </div>
                         </div>
                         <div class="flex justify-end">
@@ -187,7 +187,7 @@
                                 <td class="py-2 text-center">
                                     <div class="input-group w-32">
                                         <input type="number" name="velocity" id="velocity"
-                                               [(ngModel)]="$tripDetails.trip.calculatedCommunicationVelocity"
+                                               [(ngModel)]="$tripDetails.item.calculatedCommunicationVelocity"
                                                (ngModelChange)="onCommunicationVelocityChange($event)" class="input"
                                                placeholder="45">
                                         <span class="btn btn-secondary">km/h</span>

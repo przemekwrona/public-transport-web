@@ -40,23 +40,23 @@ public class TripCreatorService {
     @PreAgencyAuthorize
     public Status createTrip(String instance, CreateTripDetailsRequest createTripDetailsRequest) {
         boolean uniqueTripIndexExists = tripQueryService.existsUniqueTripIndex(instance,
-                createTripDetailsRequest.getTrip().getRoute().getLine(),
-                createTripDetailsRequest.getTrip().getRoute().getName(),
-                TripModeMapper.map(createTripDetailsRequest.getTrip().getTrip().getMode()),
-                TripTrafficModeMapper.map(createTripDetailsRequest.getTrip().getTrip().getTrafficMode()));
+                createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),
+                createTripDetailsRequest.getBody().getTripId().getRouteId().getName(),
+                TripModeMapper.map(createTripDetailsRequest.getBody().getItem().getMode()),
+                TripTrafficModeMapper.map(createTripDetailsRequest.getBody().getItem().getTrafficMode()));
 
         if (uniqueTripIndexExists) {
             throw new BusinessException("ERROR:202510300047", "Trip index already exists");
         }
 
-        Trip tripRequest = createTripDetailsRequest.getTrip().getTrip();
+        Trip tripRequest = createTripDetailsRequest.getBody().getItem();
         List<Long> stopIds = tripRequest.getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
 
-        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, createTripDetailsRequest.getTripId().getRouteId());
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, createTripDetailsRequest.getBody().getTripId().getRouteId());
 
         TripEntity tripEntity = TripMapper.map(tripRequest);
         tripEntity.setRoute(route);
