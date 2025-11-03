@@ -1,8 +1,11 @@
 package pl.wrona.webserver.agency;
 
 import io.restassured.http.ContentType;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
+import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.junit.jupiter.api.Test;
 import pl.wrona.webserver.BaseIntegrationTest;
 
@@ -15,10 +18,12 @@ class TripEntityControllerIntegrationTest extends BaseIntegrationTest {
     void shouldCreateRouteAndReturnStatus201() {
         with().contentType(ContentType.JSON)
                 .header(authHeader)
-                .body(new Trip()
-                        .name("CHMIELNIK - PIERZCHNICA")
-                        .line("202")
-                        .headsign("PIERZCHNICA")
+                .body(new TripsDetails()
+                        .tripId(new TripId().routeId(new RouteId()
+                                .name("CHMIELNIK - PIERZCHNICA")
+                                .line("202")))
+                        .item(new Trip()
+                                .headsign("PIERZCHNICA"))
                         .addStopsItem(new StopTime()
                                 .stopId(10033L)
                                 .meters(0)

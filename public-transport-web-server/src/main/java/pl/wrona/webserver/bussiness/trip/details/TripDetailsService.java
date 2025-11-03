@@ -14,8 +14,10 @@ import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripModeMapper;
+import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,14 +26,12 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TripDetailsService {
 
-    private final RouteQueryService routeQueryService;
     private final TripQueryService tripQueryService;
     private final StopTimeRepository stopTimeRepository;
     private final ObjectMapper objectMapper;
 
     @PreAgencyAuthorize
     public TripsDetails getTripByTripId(String instance, TripId tripId) {
-        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, tripId.getRouteId());
         var tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
 
         var tripResponse = Optional.ofNullable(tripEntity)
@@ -41,34 +41,34 @@ public class TripDetailsService {
         List<StopTimeEntity> stopTimes = tripEntity != null
                 ? stopTimeRepository.findAllByTripId(tripEntity.getTripId()) : List.of();
 
-        stopTimes.forEach((StopTimeEntity stopTime) -> {
-            tripResponse.addStopsItem(new StopTime()
-                    .stopId(stopTime.getStopEntity().getStopId())
-                    .stopName(stopTime.getStopEntity().getName())
-                    .calculatedSeconds(stopTime.getCalculatedTimeSeconds())
-                    .customizedSeconds(stopTime.getCustomizedTimeSeconds())
-                    .meters(stopTime.getDistanceMeters())
-                    .bdot10k(stopTime.getStopEntity().isBdot10k())
-                    .lon((float) stopTime.getStopEntity().getLon())
-                    .lat((float) stopTime.getStopEntity().getLat()));
-        });
+        List<StopTime> stops = stopTimes.stream().map((StopTimeEntity stopTime) -> new StopTime()
+                .stopId(stopTime.getStopEntity().getStopId())
+                .stopName(stopTime.getStopEntity().getName())
+                .calculatedSeconds(stopTime.getCalculatedTimeSeconds())
+                .customizedSeconds(stopTime.getCustomizedTimeSeconds())
+                .meters(stopTime.getDistanceMeters())
+                .bdot10k(stopTime.getStopEntity().isBdot10k())
+                .lon((float) stopTime.getStopEntity().getLon())
+                .lat((float) stopTime.getStopEntity().getLat())).toList();
+
+        List<Point2D> geometry = new ArrayList<>();
 
         if (tripEntity.getGeometry() != null) {
             try {
-                List<Point2D> geometry = objectMapper.readValue(tripEntity.getGeometry(), new TypeReference<List<List<Float>>>() {
+                geometry = objectMapper.readValue(tripEntity.getGeometry(), new TypeReference<List<List<Float>>>() {
                         }).stream()
                         .map((List<Float> point) -> new Point2D()
                                 .lat(point.get(0))
                                 .lon(point.get(1)))
                         .toList();
-
-                tripResponse.setGeometry(geometry);
             } catch (Exception exception) {
+                throw new BusinessException("ERROR:202511031624", exception.getMessage());
             }
         }
 
-        var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());
         return new TripsDetails()
+                .stops(stops)
+                .geometry(geometry)
                 .isCustomized(tripEntity.isCustomized())
                 .item(tripResponse);
     }
