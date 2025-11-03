@@ -1303,9 +1303,7 @@ components:
     CreateTripDetailsRequest:
       type: object
       properties:
-        tripId:
-          $ref: '#/components/schemas/TripId'
-        trip:
+        body:
           $ref: '#/components/schemas/TripsDetails'
 
     TripMeasure:
@@ -1333,7 +1331,7 @@ components:
       properties:
         tripId:
           $ref: '#/components/schemas/TripId'
-        trip:
+        body:
           $ref: '#/components/schemas/TripsDetails'
 
     GetAllTripsResponse:
@@ -1359,9 +1357,15 @@ components:
     TripsDetails:
       type: object
       properties:
-        route:
-          $ref: '#/components/schemas/Route'
-        trip:
+        tripId:
+          $ref: '#/components/schemas/TripId'
+        firstStop:
+          type: string
+        lastStop:
+          type: string
+        headsign:
+          type: string
+        item:
           $ref: '#/components/schemas/Trip'
 
     BrigadePayload:

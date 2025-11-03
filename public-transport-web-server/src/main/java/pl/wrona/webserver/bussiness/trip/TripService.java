@@ -42,7 +42,7 @@ public class TripService {
     @PreAgencyAuthorize
     public Status updateTrip(String instance, UpdateTripDetailsRequest updateTripDetailsRequest) {
         var tripId = updateTripDetailsRequest.getTripId();
-        var trip = updateTripDetailsRequest.getTrip().getTrip();
+        var trip = updateTripDetailsRequest.getBody().getItem();
 
         List<Long> stopIds = trip.getStops().stream()
                 .map(StopTime::getStopId)
@@ -128,8 +128,7 @@ public class TripService {
 
         var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());
         return new TripsDetails()
-                .route(RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds), Map.of()))
-                .trip(tripResponse);
+                .item(tripResponse);
     }
 
     public TripEntity findByTripId(TripId tripId) {
