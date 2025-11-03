@@ -1365,6 +1365,8 @@ components:
           type: string
         headsign:
           type: string
+        isCustomized:
+          type: boolean
         item:
           $ref: '#/components/schemas/Trip'
 

@@ -88,49 +88,6 @@ public class TripService {
                 .status(Status.StatusEnum.SUCCESS);
     }
 
-    @PreAgencyAuthorize
-    public TripsDetails getTripByVariant(String instance, TripId tripId) {
-        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, tripId.getRouteId());
-        var tripEntity = tripRepository.findAllByRouteAndVariantNameAndMode(route, tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
-
-        var tripResponse = Optional.ofNullable(tripEntity)
-                .map(trip -> TripMapper.map(trip, Map.of()))
-                .orElse(null);
-
-        List<StopTimeEntity> stopTimes = tripEntity != null
-                ? stopTimeRepository.findAllByTripId(tripEntity.getTripId()) : List.of();
-
-        stopTimes.forEach((StopTimeEntity stopTime) -> {
-            tripResponse.addStopsItem(new StopTime()
-                    .stopId(stopTime.getStopEntity().getStopId())
-                    .stopName(stopTime.getStopEntity().getName())
-                    .calculatedSeconds(stopTime.getCalculatedTimeSeconds())
-                    .customizedSeconds(stopTime.getCustomizedTimeSeconds())
-                    .meters(stopTime.getDistanceMeters())
-                    .bdot10k(stopTime.getStopEntity().isBdot10k())
-                    .lon((float) stopTime.getStopEntity().getLon())
-                    .lat((float) stopTime.getStopEntity().getLat()));
-        });
-
-        if (tripEntity.getGeometry() != null) {
-            try {
-                List<Point2D> geometry = objectMapper.readValue(tripEntity.getGeometry(), new TypeReference<List<List<Float>>>() {
-                        }).stream()
-                        .map((List<Float> point) -> new Point2D()
-                                .lat(point.get(0))
-                                .lon(point.get(1)))
-                        .toList();
-
-                tripResponse.setGeometry(geometry);
-            } catch (Exception exception) {
-            }
-        }
-
-        var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());
-        return new TripsDetails()
-                .item(tripResponse);
-    }
-
     public TripEntity findByTripId(TripId tripId) {
         return tripRepository.findByLineAndNameAndVariantAndMode(tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
     }
