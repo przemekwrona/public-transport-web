@@ -16,6 +16,7 @@ import pl.wrona.webserver.bussiness.trip.creator.TripCreatorService;
 import pl.wrona.webserver.bussiness.trip.deletion.TripDeletionService;
 import pl.wrona.webserver.bussiness.trip.details.TripDetailsService;
 import pl.wrona.webserver.bussiness.trip.pagination.TripPaginationService;
+import pl.wrona.webserver.bussiness.trip.updater.TripUpdaterService;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -24,11 +25,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("${webserver.context.path}")
 public class TripController implements TripApi {
 
-    private final TripService tripService;
     private final TripPaginationService tripPaginationService;
     private final TripCreatorService tripCreatorService;
     private final TripDeletionService tripDeletionService;
     private final TripDetailsService tripDetailsService;
+    private final TripUpdaterService tripUpdaterService;
 
     @Override
     public ResponseEntity<Status> createTrip(String agency, CreateTripDetailsRequest createTripDetailsRequest) {
@@ -42,7 +43,7 @@ public class TripController implements TripApi {
 
     @Override
     public ResponseEntity<Status> updateTrip(String agency, UpdateTripDetailsRequest updateTripDetailsRequest) {
-        return ResponseEntity.status(CREATED).body(tripService.updateTrip(agency, updateTripDetailsRequest));
+        return ResponseEntity.status(CREATED).body(tripUpdaterService.updateTrip(agency, updateTripDetailsRequest));
     }
 
     @Override

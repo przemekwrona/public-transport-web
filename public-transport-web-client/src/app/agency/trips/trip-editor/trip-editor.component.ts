@@ -97,7 +97,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public stopTimes: StopTimeModel[] = [];
     public historicalStopTimes: StopTimeModel[] = [];
-    public isManual: boolean = false;
 
     public forceRefreshSubject: Subject<boolean> = new Subject();
     public forceRefresh$: Observable<boolean> = this.forceRefreshSubject.asObservable();
@@ -397,6 +396,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripId.routeId = routeId;
         tripId.variant = this.state.variant;
         tripId.mode = this.state.mode;
+        tripId.trafficMode = this.state.trafficMode;
 
         const tripDetailsRequest: UpdateTripDetailsRequest = {};
         tripDetailsRequest.tripId = tripId;

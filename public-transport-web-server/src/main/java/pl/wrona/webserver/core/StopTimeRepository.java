@@ -18,8 +18,4 @@ public interface StopTimeRepository extends JpaRepository<StopTimeEntity, StopTi
     List<StopTimeEntity> findAllByTripId(@Param("tripId") Long tripId);
 
     List<StopTimeEntity> findAllByTrip(TripEntity trip);
-
-    @Modifying
-    @Query("DELETE FROM StopTimeEntity st WHERE st.stopTimeId.tripId = :tripId")
-    void deleteByTripId(@Param("tripId") Long tripId);
 }
