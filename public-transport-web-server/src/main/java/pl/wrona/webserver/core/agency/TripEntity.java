@@ -57,6 +57,9 @@ public class TripEntity {
     @Column(name = "is_main_variant")
     private boolean mainVariant;
 
+    @Column(name = "is_customized")
+    private boolean customized;
+
     private String variantDesignation;
 
     private String variantDescription;
