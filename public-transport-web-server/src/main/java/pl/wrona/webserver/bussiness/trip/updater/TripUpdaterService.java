@@ -71,6 +71,7 @@ public class TripUpdaterService {
                     entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
                     entity.setDistanceMeters(stopTime.getMeters());
                     entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
+                    entity.setCustomizedTimeSeconds(stopTime.getCustomizedSeconds());
 
                     return entity;
                 }).toList();

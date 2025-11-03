@@ -68,12 +68,23 @@ export class TripListComponent implements OnInit {
     }
 
     public editTrip(trip: Trip) {
-        const queryParams = {name: trip.name, line: trip.line, variant: trip.variant, mode: trip.mode, trafficMode: trip.trafficMode};
+        const queryParams = {
+            name: trip.name,
+            line: trip.line,
+            variant: trip.variant,
+            mode: trip.mode,
+            trafficMode: trip.trafficMode
+        };
         this._router.navigate(['/agency/trips/edit'], {queryParams: queryParams});
     }
 
     public deleteTrip(trip: Trip) {
-        const tripId: TripId = {line: trip.line, name: trip.name, variant: trip.variant, mode: trip.mode} as TripId;
+        const tripId: TripId = {
+            routeId: {line: trip.line, name: trip.name},
+            variant: trip.variant,
+            mode: trip.mode,
+            trafficMode: trip.trafficMode
+        } as TripId;
         this.tripService.deleteTripByTripId(this.agencyStorageService.getInstance(), tripId).subscribe(response => {
             remove(this.trips.trips, {line: trip.line, name: trip.name, variant: trip.variant, mode: trip.mode})
         });
@@ -105,8 +116,10 @@ export class TripListComponent implements OnInit {
         }
 
         this.routeService.updateRoute(this.agencyStorageService.getInstance(), updateRouteRequest).subscribe({
-            next: (response) => {},
-            complete: () => this.isUpdatingBasicInformation = false});
+            next: (response) => {
+            },
+            complete: () => this.isUpdatingBasicInformation = false
+        });
     }
 
     public scrollNoVariants(): void {

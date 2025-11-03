@@ -120,16 +120,16 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => {
             this.$tripDetails = tripDetails;
 
-            this.$tripDetails.item.stops.forEach((stopVa: StopTime) => {
+            this.$tripDetails.item.stops.forEach((stopTime: StopTime) => {
                 const stopTimeModel: StopTimeModel = {} as StopTimeModel;
-                stopTimeModel.stopId = stopVa.stopId;
-                stopTimeModel.stopName = stopVa.stopName;
-                stopTimeModel.lon = stopVa.lon;
-                stopTimeModel.lat = stopVa.lat;
-                stopTimeModel.meters = stopVa.meters;
-                stopTimeModel.calculatedSeconds = stopVa.calculatedSeconds;
-                stopTimeModel.bdot10k = stopVa.bdot10k;
-                stopTimeModel.customizedMinutes = round(stopVa.calculatedSeconds / 60);
+                stopTimeModel.stopId = stopTime.stopId;
+                stopTimeModel.stopName = stopTime.stopName;
+                stopTimeModel.lon = stopTime.lon;
+                stopTimeModel.lat = stopTime.lat;
+                stopTimeModel.meters = stopTime.meters;
+                stopTimeModel.calculatedSeconds = stopTime.calculatedSeconds;
+                stopTimeModel.customizedMinutes = stopTime.customizedSeconds / 60;
+                stopTimeModel.bdot10k = stopTime.bdot10k;
 
                 this.stopTimes.push(stopTimeModel);
             });
