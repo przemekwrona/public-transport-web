@@ -20,3 +20,15 @@ databaseChangeLog:
               - column:
                   name: traffic_mode
             clustered: true
+
+  - changeSet:
+      id: add_colum_is_customized
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: trip
+            columns:
+              - column:
+                  name: is_customized
+                  type: boolean
+                  defaultValueBoolean: false
