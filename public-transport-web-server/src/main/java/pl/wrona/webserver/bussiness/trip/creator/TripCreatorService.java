@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
-import org.igeolab.iot.pt.server.api.model.Trip;
+import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
@@ -49,8 +49,8 @@ public class TripCreatorService {
             throw new BusinessException("ERROR:202510300047", "Trip index already exists");
         }
 
-        Trip tripRequest = createTripDetailsRequest.getBody().getItem();
-        List<Long> stopIds = tripRequest.getStops().stream()
+        TripsDetails tripRequest = createTripDetailsRequest.getBody();
+        List<Long> stopIds = tripRequest.getItem().getStops().stream()
                 .map(StopTime::getStopId)
                 .toList();
 
@@ -65,7 +65,7 @@ public class TripCreatorService {
         tripEntity.setCreatedAt(now);
         tripEntity.setUpdatedAt(now);
 
-        var lastStop = tripRequest.getStops().stream()
+        var lastStop = tripRequest.getItem().getStops().stream()
                 .reduce((first, second) -> second);
 
         tripEntity.setDistanceInMeters(lastStop.map(StopTime::getMeters).orElse(0));
@@ -73,7 +73,7 @@ public class TripCreatorService {
 
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
-        StopTime[] stopTimes = tripRequest.getStops().toArray(StopTime[]::new);
+        StopTime[] stopTimes = tripRequest.getItem().getStops().toArray(StopTime[]::new);
 
         List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
                 .mapToObj(i -> {

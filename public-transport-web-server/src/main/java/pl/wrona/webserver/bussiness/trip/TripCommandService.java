@@ -19,5 +19,9 @@ public class TripCommandService {
         tripCommandRepository.deleteById(tripId.getTripId());
     }
 
+    public TripEntity save(TripEntity entity) {
+        return tripCommandRepository.save(entity);
+    }
+
 
 }

@@ -217,7 +217,7 @@
                             </div>
                             <div class="flex items-center gap-5">
                                 <label class="switch switch-sm">
-                                    <input type="checkbox" [(ngModel)]="isManual"></label>
+                                    <input type="checkbox" [(ngModel)]="$tripDetails.isCustomized"></label>
                             </div>
                         </div>
 
@@ -254,7 +254,7 @@
                                     <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
                                     <span>km ({{ stopTime.calculatedSeconds | time | number: '1.0-0' }} min)</span>
 
-                                    @if (isManual) {
+                                    @if ($tripDetails.isCustomized) {
                                         <div class="inline-block">
                                             <div class="input-group mx-1">
                                                 <input type="number" [(ngModel)]="stopTime.customizedMinutes"
