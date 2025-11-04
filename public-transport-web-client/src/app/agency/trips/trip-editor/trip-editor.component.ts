@@ -117,10 +117,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             mode: TripMode,
             trafficMode: TrafficMode
         });
-        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe(tripDetails => {
+        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
             this.$tripDetails = tripDetails;
 
-            this.$tripDetails.stops.forEach((stopTime: StopTime) => {
+            (this.$tripDetails.stops || []).forEach((stopTime: StopTime) => {
                 const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                 stopTimeModel.stopId = stopTime.stopId;
                 stopTimeModel.stopName = stopTime.stopName;
@@ -134,7 +134,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 this.stopTimes.push(stopTimeModel);
             });
 
-            this.$tripDetails.stops.forEach((stopTime: StopTime) => {
+            (this.$tripDetails.stops || []).forEach((stopTime: StopTime) => {
                 const historicalStopTime: StopTimeModel = {} as StopTimeModel;
                 historicalStopTime.stopId = stopTime.stopId;
                 historicalStopTime.stopName = stopTime.stopName;

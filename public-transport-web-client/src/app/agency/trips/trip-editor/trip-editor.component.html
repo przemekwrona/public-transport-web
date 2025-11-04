@@ -201,6 +201,21 @@
                                     ({{ getLastStop()?.calculatedSeconds | time | number: '1.0-0' }} min)
                                 </td>
                             </tr>
+                            @if ($tripDetails.isCustomized) {
+<!--                                <tr>-->
+<!--                                    <td class="py-3">Rzeczywista prędkość komunikacyjna</td>-->
+<!--                                    <td class="py-3 text-gray-700 text-2sm font-normal">-->
+<!--                                        {{ $tripDetails.item.customizedCommunicationVelocity | number:  '1.0-0' }} km/h-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+                                <tr>
+                                    <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
+                                    <td class="py-3 text-gray-700 text-2sm font-normal">
+                                        {{ getLastStop()?.meters | distance | number: '1.1-1' }} km
+                                        ({{ getLastStop()?.customizedSeconds | time | number: '1.0-0' }} min)
+                                    </td>
+                                </tr>
+                            }
                         </table>
 
                         <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5 mx-7.5">
