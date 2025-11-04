@@ -26,7 +26,8 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
     if (tripEditorComponentMode === TripEditorComponentMode.CREATE) {
         return of({
             tripId: {routeId: {line: line, name: name}, variant: '', mode: TripMode.Front, trafficMode: TrafficMode.Normal},
-            trip: {stops: [], line: line, name: name, isMainVariant: false}})
+            isCustomized: false,
+            item: {stops: [], line: line, name: name, isMainVariant: false}} as TripsDetails)
     } else {
         const tripService: TripService = inject(TripService);
         const routeId: RouteId = {line: line, name: name} as RouteId;
