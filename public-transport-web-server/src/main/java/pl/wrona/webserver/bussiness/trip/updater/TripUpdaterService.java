@@ -6,7 +6,6 @@ import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.stoptime.StopTimeCommandService;
 import pl.wrona.webserver.bussiness.trip.TripCommandService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
@@ -37,7 +36,6 @@ public class TripUpdaterService {
     public Status updateTrip(String instance, UpdateTripDetailsRequest updateTripDetailsRequest) {
         var tripId = updateTripDetailsRequest.getTripId();
         var tripDetails = updateTripDetailsRequest.getBody();
-        var trip = tripDetails.getItem();
 
         List<Long> stopIds = tripDetails.getStops().stream()
                 .map(StopTime::getStopId)
