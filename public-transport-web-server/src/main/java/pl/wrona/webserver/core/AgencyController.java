@@ -5,12 +5,14 @@ import org.igeolab.iot.pt.server.api.AgencyApi;
 import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.AgencyDetails;
+import org.igeolab.iot.pt.server.api.model.PutAgencyPhotoRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.admin.profile.creator.ProfileCreatorService;
 import pl.wrona.webserver.bussiness.agency.details.AgencyDetailsService;
+import pl.wrona.webserver.bussiness.agency.photo.AgencyPhotoService;
 import pl.wrona.webserver.bussiness.agency.updater.AgencyUpdaterService;
 
 @RestController
@@ -22,6 +24,7 @@ public class AgencyController implements AgencyApi {
     private final ProfileCreatorService profileCreatorService;
     private final AgencyDetailsService agencyDetailsService;
     private final AgencyUpdaterService agencyUpdaterService;
+    private final AgencyPhotoService agencyPhotoService;
 
     @Override
     public ResponseEntity<Status> createNewAccount(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
@@ -36,6 +39,11 @@ public class AgencyController implements AgencyApi {
     @Override
     public ResponseEntity<AgencyDetails> getAgency(String agency) {
         return ResponseEntity.ok(agencyDetailsService.getAgency(agency));
+    }
+
+    @Override
+    public ResponseEntity<Status> putAgencyPhoto(String agency, PutAgencyPhotoRequest putAgencyPhotoRequest) {
+        return ResponseEntity.ok(agencyPhotoService.putAgencyPhoto(agency, putAgencyPhotoRequest));
     }
 
     @Override

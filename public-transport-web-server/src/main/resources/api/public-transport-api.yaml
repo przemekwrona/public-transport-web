@@ -132,6 +132,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+  /agency/{agency}/photo:
+    put:
+      tags:
+        - agency
+      summary: Update agency photo
+      operationId: putAgencyPhoto
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
   /agreements/google:
     get:
       tags:
