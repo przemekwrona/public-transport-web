@@ -32,3 +32,16 @@ databaseChangeLog:
                   name: is_customized
                   type: boolean
                   defaultValueBoolean: false
+
+  - changeSet:
+      id: add_colum_agency_photo
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: agency
+            columns:
+              - column:
+                  name: photo
+                  type: blob
+                  constraints:
+                    nullable: true
