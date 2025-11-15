@@ -5,11 +5,11 @@ import org.igeolab.iot.pt.server.api.AgencyApi;
 import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.AgencyDetails;
-import org.igeolab.iot.pt.server.api.model.PutAgencyPhotoRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import pl.wrona.webserver.bussiness.admin.profile.creator.ProfileCreatorService;
 import pl.wrona.webserver.bussiness.agency.details.AgencyDetailsService;
 import pl.wrona.webserver.bussiness.agency.photo.AgencyPhotoService;
@@ -42,8 +42,8 @@ public class AgencyController implements AgencyApi {
     }
 
     @Override
-    public ResponseEntity<Status> putAgencyPhoto(String agency, PutAgencyPhotoRequest putAgencyPhotoRequest) {
-        return ResponseEntity.ok(agencyPhotoService.putAgencyPhoto(agency, putAgencyPhotoRequest));
+    public ResponseEntity<Status> putAgencyPhoto(String agency, MultipartFile file) {
+        return ResponseEntity.ok(agencyPhotoService.putAgencyPhoto(agency, file));
     }
 
     @Override
