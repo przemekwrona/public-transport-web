@@ -88,10 +88,6 @@ public class AgencyEntity {
     @Column(name = "agency_phone")
     private String agencyPhone;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] photo;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "agency_owner_id", referencedColumnName = "app_user_id")
     private AppUser appUser;
@@ -113,5 +109,8 @@ public class AgencyEntity {
 
     @OneToOne(mappedBy = "agency", cascade = CascadeType.ALL)
     private GoogleAgreementEntity googleAgreement;
+
+    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AgencyPhotoEntity> agencyPhotos;
 
 }

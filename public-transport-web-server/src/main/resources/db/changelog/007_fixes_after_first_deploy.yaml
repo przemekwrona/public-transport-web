@@ -33,15 +33,42 @@ databaseChangeLog:
                   type: boolean
                   defaultValueBoolean: false
 
+
   - changeSet:
-      id: add_colum_agency_photo
+      id: add_table_agency_photo
       author: pwrona
       changes:
-        - addColumn:
-            tableName: agency
+        - createSequence:
+            sequenceName: agency_photo_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: agency_photo
             columns:
+              - column:
+                  name: agency_photo_id
+                  type: integer
+                  defaultValueSequenceNext: agency_photo_id_seq
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
                   name: photo
                   type: blob
                   constraints:
-                    nullable: true
+                    nullable: false
+              - column:
+                  name: content_type
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_agency_photo_agency
+                    references: agency(agency_id)
