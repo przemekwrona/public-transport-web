@@ -9,4 +9,6 @@ import pl.wrona.webserver.core.agency.AgencyPhotoEntity;
 public interface AgencyPhotoRepository extends JpaRepository<AgencyPhotoEntity, Long> {
 
     AgencyPhotoEntity findFirstByAgencyOrderByCreatedAtDesc(AgencyEntity agency);
+
+    void deleteAllByAgency(AgencyEntity agency);
 }
