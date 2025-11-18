@@ -3,8 +3,9 @@ import {LoginService} from "../../auth/login.service";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {Router} from "@angular/router";
 import {AgencyStorageService} from "../../auth/agency-storage.service";
-import {AgencyDetails} from "../../generated/public-transport-api";
+import {AgencyDetails, AgencyService} from "../../generated/public-transport-api";
 import {CommonModule} from "@angular/common";
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 
 @Component({
     standalone: true,
@@ -22,12 +23,17 @@ export class HeaderComponent implements OnInit {
     @HostBinding('id') hostId = 'header';
 
     public agencyDetails: AgencyDetails;
+    public image: SafeUrl;
 
-    constructor(private authService: LoginService, private router: Router, private agencyStorageService: AgencyStorageService) {
+    constructor(private authService: LoginService, private router: Router, private agencyStorageService: AgencyStorageService, private agencyService: AgencyService, private sanitizer: DomSanitizer) {
     }
 
     ngOnInit(): void {
         this.agencyStorageService.getAgency().subscribe(agencyDetails => this.agencyDetails = agencyDetails);
+        this.agencyService.getAgencyPhoto(this.agencyStorageService.getInstance()).subscribe((photoResponse: Blob) => {
+            let objectURL: string = URL.createObjectURL(photoResponse);
+            this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        });
     }
 
     public logout(): void {
