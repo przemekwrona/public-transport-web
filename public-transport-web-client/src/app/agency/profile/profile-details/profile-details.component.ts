@@ -10,6 +10,9 @@ import {LoginService} from "../../../auth/login.service";
 import {GoogleAnalyticsService} from "../../../google-analytics.service";
 import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 import {NotificationService} from "../../../shared/notification.service";
+import {ImageCroppedEvent, ImageCropperComponent, LoadedImage} from "ngx-image-cropper";
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     standalone: true,
@@ -22,7 +25,8 @@ import {NotificationService} from "../../../shared/notification.service";
         FontAwesomeModule,
         TranslocoPipe,
         NgxMaskDirective,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ImageCropperComponent
     ],
     providers: [
         AgencyService,
@@ -38,9 +42,9 @@ export class ProfileDetailsComponent implements OnInit {
 
     public isSubmitted: boolean = false;
     public isAgencyDetailsSaving = false;
+    public image: SafeUrl;
 
-
-    constructor(private agencyService: AgencyService, private router: Router, private route: ActivatedRoute, private authService: LoginService, private googleAnalyticsService: GoogleAnalyticsService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
+    constructor(private agencyService: AgencyService, private router: Router, private route: ActivatedRoute, private authService: LoginService, private agencyStorageService: AgencyStorageService, private googleAnalyticsService: GoogleAnalyticsService, private notificationService: NotificationService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer) {
         this.modelForm = this.formBuilder.group({
             agencyName: ['', [Validators.required, Validators.minLength(3)]],
             street: ['', Validators.required],
@@ -64,6 +68,11 @@ export class ProfileDetailsComponent implements OnInit {
             this.modelForm.controls['postalCity'].setValue(agencyDetails.agencyAddress.postalCity);
             this.modelForm.controls['agencyUrl'].setValue(agencyDetails.agencyUrl);
             this.modelForm.controls['agencyTimetableUrl'].setValue(agencyDetails.agencyTimetableUrl);
+        });
+
+        this.agencyService.getAgencyPhoto(this.agencyStorageService.getInstance()).subscribe((photoResponse: Blob) => {
+            let objectURL: string = URL.createObjectURL(photoResponse);
+            this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
         });
     }
 
@@ -99,6 +108,10 @@ export class ProfileDetailsComponent implements OnInit {
 
     public validControl(controlName: string): boolean {
         return !this.isSubmitted || this.modelForm.controls[controlName].valid;
+    }
+
+    public hasImage(): boolean {
+        return this.image !== null;
     }
 
 }
