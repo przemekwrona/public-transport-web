@@ -14,6 +14,7 @@ import pl.wrona.webserver.core.AgencyRepository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.AgencyPhotoEntity;
 import pl.wrona.webserver.exception.BusinessException;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -25,6 +26,8 @@ public class AgencyPhotoService {
     private AgencyRepository agencyRepository;
     private AgencyPhotoRepository agencyPhotoRepository;
 
+    @Transactional
+    @PreAgencyAuthorize
     public Status putAgencyPhoto(String instance, MultipartFile file) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
 
@@ -34,6 +37,8 @@ public class AgencyPhotoService {
             agencyPhoto.setContentType(file.getContentType());
             agencyPhoto.setCreatedAt(LocalDateTime.now());
             agencyPhoto.setAgency(agencyEntity);
+
+            agencyPhotoRepository.deleteAllByAgency(agencyEntity);
             agencyPhotoRepository.save(agencyPhoto);
         } catch (IOException exception) {
             throw new BusinessException("ERROR:202511150747", exception.getMessage());
@@ -41,6 +46,7 @@ public class AgencyPhotoService {
         return new Status().status(Status.StatusEnum.SUCCESS);
     }
 
+    @PreAgencyAuthorize
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getAgencyPhoto(String instance) throws IOException {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
