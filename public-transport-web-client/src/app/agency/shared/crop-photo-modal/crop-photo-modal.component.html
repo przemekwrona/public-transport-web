@@ -1,13 +1,23 @@
 <div class="card-header gap-2" id="auth_social_sign_in">
     <h3 class="card-title">
-        Edycja przystanku
+        Przytnij zdjęcie
     </h3>
     <div (click)="forceCloseModal()" class="btn btn-sm btn-icon btn-icon-lg text-gray-500 hover:text-primary-active">
         <i class="ki-filled ki-cross">
         </i>
     </div>
+    <button (click)="closeModal()">Zapisz</button>
 </div>
 <mat-dialog-content>
-    <app-bus-stop-editor [stopId]="data.stopId" [stopName]="data.stopName" [lat]="data.lat"
-                         [lon]="data.lon" (onSaved)="closeModal($event)"></app-bus-stop-editor>
+    <image-cropper
+            [imageChangedEvent]="data.event"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="1 / 1"
+            [roundCropper]="true"
+            format="png"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded($event)"
+            (cropperReady)="cropperReady()"
+            (loadImageFailed)="loadImageFailed()">
+    </image-cropper>
 </mat-dialog-content>
