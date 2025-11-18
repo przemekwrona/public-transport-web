@@ -133,6 +133,26 @@ paths:
                 $ref: '#/components/schemas/Status'
 
   /agency/{agency}/photo:
+    get:
+      tags:
+        - agency
+      summary: Get agency photo
+      operationId: getAgencyPhoto
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
     put:
       tags:
         - agency

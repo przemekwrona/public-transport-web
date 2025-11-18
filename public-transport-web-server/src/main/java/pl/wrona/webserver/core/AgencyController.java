@@ -15,6 +15,8 @@ import pl.wrona.webserver.bussiness.agency.details.AgencyDetailsService;
 import pl.wrona.webserver.bussiness.agency.photo.AgencyPhotoService;
 import pl.wrona.webserver.bussiness.agency.updater.AgencyUpdaterService;
 
+import java.io.IOException;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("${webserver.context.path}")
@@ -39,6 +41,11 @@ public class AgencyController implements AgencyApi {
     @Override
     public ResponseEntity<AgencyDetails> getAgency(String agency) {
         return ResponseEntity.ok(agencyDetailsService.getAgency(agency));
+    }
+
+    @Override
+    public ResponseEntity getAgencyPhoto(String agency) throws IOException {
+        return agencyPhotoService.getAgencyPhoto(agency);
     }
 
     @Override
