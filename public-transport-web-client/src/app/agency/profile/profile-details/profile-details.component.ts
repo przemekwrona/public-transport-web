@@ -1,5 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {AgencyAddress, AgencyDetails, AgencyService} from "../../../generated/public-transport-api";
+import {Component, OnInit, SecurityContext} from '@angular/core';
+import {
+    AgencyAddress,
+    AgencyDetails,
+    AgencyService
+} from "../../../generated/public-transport-api";
 import {faGlobe, faSpinner, fas, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {CommonModule} from "@angular/common";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -13,6 +17,8 @@ import {NotificationService} from "../../../shared/notification.service";
 import {ImageCroppedEvent, ImageCropperComponent, LoadedImage} from "ngx-image-cropper";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import {ImageEvent, CropPhotoModalComponent} from "../../shared/crop-photo-modal/crop-photo-modal.component";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
     standalone: true,
@@ -25,8 +31,7 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
         FontAwesomeModule,
         TranslocoPipe,
         NgxMaskDirective,
-        ReactiveFormsModule,
-        ImageCropperComponent
+        ReactiveFormsModule
     ],
     providers: [
         AgencyService,
@@ -44,7 +49,7 @@ export class ProfileDetailsComponent implements OnInit {
     public isAgencyDetailsSaving = false;
     public image: SafeUrl;
 
-    constructor(private agencyService: AgencyService, private router: Router, private route: ActivatedRoute, private authService: LoginService, private agencyStorageService: AgencyStorageService, private googleAnalyticsService: GoogleAnalyticsService, private notificationService: NotificationService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer) {
+    constructor(private agencyService: AgencyService, private router: Router, private route: ActivatedRoute, private authService: LoginService, private agencyStorageService: AgencyStorageService, private googleAnalyticsService: GoogleAnalyticsService, private notificationService: NotificationService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer, private dialog: MatDialog) {
         this.modelForm = this.formBuilder.group({
             agencyName: ['', [Validators.required, Validators.minLength(3)]],
             street: ['', Validators.required],
@@ -108,6 +113,20 @@ export class ProfileDetailsComponent implements OnInit {
 
     public validControl(controlName: string): boolean {
         return !this.isSubmitted || this.modelForm.controls[controlName].valid;
+    }
+
+    fileChangeEvent(event: Event): void {
+        let dialogRef: MatDialogRef<CropPhotoModalComponent> = this.dialog.open(CropPhotoModalComponent, {
+            data: { event: event } as ImageEvent
+        });
+
+        dialogRef.afterClosed().subscribe((imageCroppedEvent: ImageCroppedEvent) => {
+            this.agencyService.putAgencyPhoto(this.agencyStorageService.getInstance(), imageCroppedEvent.blob).subscribe(() => {
+                this.agencyService.getAgencyPhoto(this.agencyStorageService.getInstance()).subscribe(photo => {
+                    this.image = this.sanitizer.bypassSecurityTrustUrl(imageCroppedEvent.objectUrl);
+                });
+            });
+        })
     }
 
     public hasImage(): boolean {
