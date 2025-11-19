@@ -44,7 +44,7 @@ public class AgencyController implements AgencyApi {
     }
 
     @Override
-    public ResponseEntity getAgencyPhoto(String agency) throws IOException {
+    public ResponseEntity getAgencyPhoto(String agency) {
         return agencyPhotoService.getAgencyPhoto(agency);
     }
 
