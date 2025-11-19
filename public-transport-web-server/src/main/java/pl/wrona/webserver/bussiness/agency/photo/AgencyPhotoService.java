@@ -54,7 +54,7 @@ public class AgencyPhotoService {
 
     @PreAgencyAuthorize
     @Transactional(readOnly = true)
-    public ResponseEntity<Resource> getAgencyPhoto(String instance) throws IOException {
+    public ResponseEntity<Resource> getAgencyPhoto(String instance) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
         var photo = agencyPhotoRepository.findFirstByAgencyOrderByCreatedAtDesc(agencyEntity);
 
@@ -67,7 +67,7 @@ public class AgencyPhotoService {
                                 .contentLength(resource.contentLength())
                                 .body(resource);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new BusinessException("ERROR:202511191904", "File not found");
                     }
                 })
                 .orElse(ResponseEntity
