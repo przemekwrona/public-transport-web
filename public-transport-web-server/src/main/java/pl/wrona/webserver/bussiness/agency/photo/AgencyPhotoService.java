@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AgencyPhotoService {
 
+    public static final int _2MB = 2 * 1024 * 1024;
     private AgencyRepository agencyRepository;
     private AgencyPhotoRepository agencyPhotoRepository;
 
@@ -31,6 +32,9 @@ public class AgencyPhotoService {
     public Status putAgencyPhoto(String instance, MultipartFile file) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
 
+        if (file.getSize() > _2MB) {
+            throw new BusinessException("ERROR:202511191254", "File exceed 2MB");
+        }
         try {
             AgencyPhotoEntity agencyPhoto = new AgencyPhotoEntity();
             agencyPhoto.setPhoto(file.getBytes());
