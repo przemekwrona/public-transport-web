@@ -76,6 +76,5 @@ databaseChangeLog:
                   type: integer
                   constraints:
                     nullable: false
-                    unique: true
                     foreignKeyName: fk_agency_photo_agency
                     references: agency(agency_id)
