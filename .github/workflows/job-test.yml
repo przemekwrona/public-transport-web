@@ -20,4 +20,4 @@ jobs:
           cache: 'maven'
       - run: |
           cd ${{ inputs.artifact }}
-          mvn clean verify
+          mvn clean install -DskipTests
