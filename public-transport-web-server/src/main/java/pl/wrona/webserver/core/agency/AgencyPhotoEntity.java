@@ -41,6 +41,9 @@ public class AgencyPhotoEntity {
     @Column(name = "content_type")
     private String contentType;
 
+    @Column(name = "content_size_kb")
+    private long contentSizeKb;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

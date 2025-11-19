@@ -35,6 +35,7 @@ public class AgencyPhotoService {
             AgencyPhotoEntity agencyPhoto = new AgencyPhotoEntity();
             agencyPhoto.setPhoto(file.getBytes());
             agencyPhoto.setContentType(file.getContentType());
+            agencyPhoto.setContentSizeKb(file.getSize() / 1024);
             agencyPhoto.setCreatedAt(LocalDateTime.now());
             agencyPhoto.setAgency(agencyEntity);
 
