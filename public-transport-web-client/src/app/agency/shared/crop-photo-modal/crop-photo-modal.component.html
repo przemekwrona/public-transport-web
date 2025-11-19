@@ -6,18 +6,32 @@
         <i class="ki-filled ki-cross">
         </i>
     </div>
-    <button (click)="closeModal()">Zapisz</button>
 </div>
+
 <mat-dialog-content>
-    <image-cropper
-            [imageChangedEvent]="data.event"
-            [maintainAspectRatio]="true"
-            [aspectRatio]="1 / 1"
-            [roundCropper]="true"
-            format="png"
-            (imageCropped)="imageCropped($event)"
-            (imageLoaded)="imageLoaded($event)"
-            (cropperReady)="cropperReady()"
-            (loadImageFailed)="loadImageFailed()">
+    <!--    <div class="grid grid-cols-2 gap-4 h-fit">-->
+    <image-cropper class="h-auto h-fit"
+                   [imageChangedEvent]="data.event"
+                   [maintainAspectRatio]="true"
+                   [aspectRatio]="1 / 1"
+                   [roundCropper]="true"
+                   format="png"
+                   (imageCropped)="imageCropped($event)"
+                   (imageLoaded)="imageLoaded($event)"
+                   (cropperReady)="cropperReady()"
+                   (loadImageFailed)="loadImageFailed()">
     </image-cropper>
 </mat-dialog-content>
+
+<mat-dialog-actions>
+    <div class="w-full text-center p-1">
+        <p [ngClass]="{'text-red-700': hasSizeGtOrEqThan2MB()}" class="text-sm">
+            Przybliżony rozmiar pliku to ~{{ getFileSize() | number: '1.1-2' }}MB
+        </p>
+    </div>
+
+    <div class="w-full text-center p-1">
+        <button (click)="forceCloseModal()" class="btn btn-outline btn-secondary mr-4">Nie chcę zmieniać zdjęcia profilowego</button>
+        <button (click)="closeModal()" class="btn btn-success">Zapisz</button>
+    </div>
+</mat-dialog-actions>

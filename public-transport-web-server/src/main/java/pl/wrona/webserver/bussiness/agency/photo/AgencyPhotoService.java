@@ -18,6 +18,7 @@ import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -57,11 +58,20 @@ public class AgencyPhotoService {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
         var photo = agencyPhotoRepository.findFirstByAgencyOrderByCreatedAtDesc(agencyEntity);
 
-        Resource resource = new ByteArrayResource(photo.getPhoto());
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(photo.getContentType()))
-                .contentLength(resource.contentLength())
-                .body(resource);
+        return Optional.ofNullable(photo)
+                .map(savedPhoto -> {
+                    Resource resource = new ByteArrayResource(savedPhoto.getPhoto());
+                    try {
+                        return ResponseEntity.ok()
+                                .contentType(MediaType.parseMediaType(photo.getContentType()))
+                                .contentLength(resource.contentLength())
+                                .body(resource);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .orElse(ResponseEntity
+                        .notFound()
+                        .build());
     }
 }
