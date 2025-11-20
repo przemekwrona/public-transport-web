@@ -1,1 +1,18 @@
-<p>timetable-board works!</p>
+@for (hour of hours; track hour) {
+    <div class="border-b-zinc-500 row py-1">
+        <div class="inline-block font-bold px-4">{{ hour | number: '2.0-0' }}</div>
+        <div class="inline-block">
+
+            <div class="inline-flex gap-1.5">
+
+                @for (minute of this.departures.get(hour); track minute) {
+                    <input type="number"
+                           (change)="addEmptyDepartureInHour(hour)"
+                           [(ngModel)]="minute.minutes"
+                           class="input input-sm text-center w-10 no-spin"/>
+                }
+
+            </div>
+        </div>
+    </div>
+}
