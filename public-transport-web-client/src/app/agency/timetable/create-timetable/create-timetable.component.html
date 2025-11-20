@@ -1,1 +1,30 @@
-<p>create-timetable works!</p>
+<div class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+        <div class="col-span-1">
+            <div class="grid gap-5 lg:gap-7.5">
+                <!-- begin: cards -->
+                <div class="card">
+                    TAM
+                    <div class="card-body py-10 flex flex-col">
+                        <app-timetable-board></app-timetable-board>
+                    </div>
+                </div>
+                <!-- end: cards -->
+            </div>
+        </div>
+        <div class="col-span-1 lg:col-span-1">
+            <div class="flex flex-col gap-5 lg:gap-7.5 h-full">
+                <!-- begin: cards -->
+                <div class="card">
+                    POWRÓT
+                    <div class="card-body py-10 flex flex-col">
+                        <app-timetable-board></app-timetable-board>
+                    </div>
+                </div>
+                <!-- end: cards -->
+            </div>
+        </div>
+    </div>
+    <!-- end: grid -->
+</div>
