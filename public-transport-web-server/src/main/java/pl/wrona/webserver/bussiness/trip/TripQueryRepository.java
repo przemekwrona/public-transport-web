@@ -22,9 +22,10 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
             WHERE t.route.agency.agencyCode = :agencyCode
             AND t.route.line = :line
             AND t.route.name = :name
+            AND t.variantName = :variantName
             AND t.mode = :mode
             AND t.trafficMode = :trafficMode""")
-    boolean existsTripUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("mode") TripVariantMode mode, @Param("trafficMode") TripTrafficMode trafficMode);
+    boolean existsTripUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("mode") TripVariantMode mode, @Param("trafficMode") TripTrafficMode trafficMode);
 
     @Query("""
             SELECT t FROM TripEntity t

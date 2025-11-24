@@ -42,6 +42,7 @@ public class TripCreatorService {
         boolean uniqueTripIndexExists = tripQueryService.existsUniqueTripIndex(instance,
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getName(),
+                createTripDetailsRequest.getBody().getTripId().getVariantName(),
                 TripModeMapper.map(createTripDetailsRequest.getBody().getItem().getMode()),
                 TripTrafficModeMapper.map(createTripDetailsRequest.getBody().getItem().getTrafficMode()));
 
