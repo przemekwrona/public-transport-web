@@ -5,7 +5,7 @@ import org.igeolab.iot.pt.server.api.model.TripMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 
 @UtilityClass
-public class TripModeMapper {
+public class TripVariantModeMapper {
 
     public TripMode map(TripVariantMode mode) {
         if (TripVariantMode.FRONT.equals(mode)) {
