@@ -78,3 +78,26 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_agency_photo_agency
                     references: agency(agency_id)
+
+  - changeSet:
+      id: update-trip-unique-index
+      author: pwrona
+      changes:
+        - dropIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: route_id
+              - column:
+                  name: variant_name
+              - column:
+                  name: mode
+              - column:
+                  name: traffic_mode
+            indexName: idx_trip_unique
+            tableName: trip
+            unique: true
