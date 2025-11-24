@@ -57,7 +57,7 @@ public class BrigadeService {
                     brigadeTripEntity.setLine(brigadeTrip.getTripId().getRouteId().getLine());
                     brigadeTripEntity.setName(brigadeTrip.getTripId().getRouteId().getName());
                     brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariantName());
-                    brigadeTripEntity.setMode(TripModeMapper.map(brigadeTrip.getTripId().getTripMode()));
+                    brigadeTripEntity.setMode(TripModeMapper.map(brigadeTrip.getTripId().getVariantMode()));
                     brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
                     brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), savedBrigade));
 
@@ -74,7 +74,7 @@ public class BrigadeService {
                                     .line(brigadeTrip.getTripId().getRouteId().getLine())
                                     .name(brigadeTrip.getTripId().getRouteId().getName()))
                             .variantName(brigadeTrip.getTripId().getVariantName())
-                            .tripMode(brigadeTrip.getTripId().getTripMode());
+                            .variantMode(brigadeTrip.getTripId().getVariantMode());
 
                     var tripEntity = tripService.findByTripId(tripId);
 
@@ -98,7 +98,7 @@ public class BrigadeService {
                                         .line(brigade.getLine())
                                         .name(brigade.getName()))
                                 .variantName(brigade.getVariant())
-                                .tripMode(TripModeMapper.map(brigade.getMode())))
+                                .variantMode(TripModeMapper.map(brigade.getMode())))
                         .tripSequence(brigade.getTripSequence())
                         .origin(brigade.getOrigin())
                         .destination(brigade.getDestination())
@@ -146,7 +146,7 @@ public class BrigadeService {
                         brigadeTripEntity.setLine(brigadeTrip.getTripId().getRouteId().getLine());
                         brigadeTripEntity.setName(brigadeTrip.getTripId().getRouteId().getName());
                         brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariantName());
-                        brigadeTripEntity.setMode(TripModeMapper.map(brigadeTrip.getTripId().getTripMode()));
+                        brigadeTripEntity.setMode(TripModeMapper.map(brigadeTrip.getTripId().getVariantMode()));
                         brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
                         brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), entity));
 
@@ -166,7 +166,7 @@ public class BrigadeService {
                                         .line(brigadeTrip.getTripId().getRouteId().getLine())
                                         .name(brigadeTrip.getTripId().getRouteId().getName()))
                                 .variantName(brigadeTrip.getTripId().getVariantName())
-                                .tripMode(brigadeTrip.getTripId().getTripMode());
+                                .variantMode(brigadeTrip.getTripId().getVariantMode());
 
                         var tripEntity = tripService.findByTripId(tripId);
                         brigadeTripEntity.setRootTrip(tripEntity);

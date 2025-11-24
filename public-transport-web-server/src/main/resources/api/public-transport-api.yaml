@@ -1250,7 +1250,7 @@ components:
           $ref: '#/components/schemas/RouteId'
         variantName:
           type: string
-        tripMode:
+        variantMode:
           $ref: '#/components/schemas/TripMode'
         trafficMode:
           $ref: '#/components/schemas/TrafficMode'

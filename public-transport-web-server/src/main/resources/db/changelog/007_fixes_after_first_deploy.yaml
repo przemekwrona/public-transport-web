@@ -80,6 +80,16 @@ databaseChangeLog:
                     references: agency(agency_id)
 
   - changeSet:
+      id: rename-name-and-mode-in-trip-table
+      author: pwrona
+      changes:
+        - renameColumn:
+            columnDataType: varchar(8)
+            newColumnName: variant_mode
+            oldColumnName: mode
+            tableName: trip
+
+  - changeSet:
       id: update-trip-unique-index
       author: pwrona
       changes:
@@ -95,7 +105,7 @@ databaseChangeLog:
               - column:
                   name: variant_name
               - column:
-                  name: mode
+                  name: variant_mode
               - column:
                   name: traffic_mode
             indexName: idx_trip_unique
