@@ -719,6 +719,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/TripsDetails'
 
+  /agency/{agency}/trips/variant-details-existance:
+    post:
+      tags:
+        - trip
+      summary: Return true if trip with defined key already exists
+      operationId: hasVariantDetails
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripId'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
   /trips/approximate-distance:
     post:
       tags:
@@ -1605,6 +1630,8 @@ components:
             - CREATED
             - DELETED
             - SUCCESS
+            - EXISTS
+            - NOT_EXIST
 
     ErrorResponse:
       type: object
