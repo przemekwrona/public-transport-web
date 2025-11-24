@@ -13,7 +13,7 @@ import {
     DndPlaceholderRefDirective
 } from "ngx-drag-drop";
 import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
 import {StopsService, TripService} from "../../generated/public-transport-api";
@@ -39,7 +39,8 @@ import {CountDownComponent} from "./trip-editor/count-down/count-down.component"
 
         TripListComponent,
         TranslocoPipe,
-        CountDownComponent
+        CountDownComponent,
+        ReactiveFormsModule
     ],
     declarations: [
         TripEditorComponent,

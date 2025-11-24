@@ -104,7 +104,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public isRefreshExpanded: boolean = false;
     public isRefreshingExpanded: boolean = false;
 
-    constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService) {
+    public modelForm: FormGroup;
+
+    constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
@@ -383,7 +385,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return tripMeasure;
     }
 
-    public clickCreateOrEdit() {
+    public clickCreateOrEdit(model: FormGroup): void {
         const routeId: RouteId = {};
         routeId.name = this.state.name;
         routeId.line = this.state.line;
