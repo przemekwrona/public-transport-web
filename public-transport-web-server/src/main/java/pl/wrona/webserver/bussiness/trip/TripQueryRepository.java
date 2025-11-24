@@ -23,18 +23,18 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
             AND t.route.line = :line
             AND t.route.name = :name
             AND t.variantName = :variantName
-            AND t.mode = :mode
+            AND t.variantMode = :variantMode
             AND t.trafficMode = :trafficMode""")
-    boolean existsTripUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("mode") TripVariantMode mode, @Param("trafficMode") TripTrafficMode trafficMode);
+    boolean existsTripUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode, @Param("trafficMode") TripTrafficMode trafficMode);
 
     @Query("""
             SELECT t FROM TripEntity t
             WHERE t.route.agency.agencyCode = :agencyCode
             AND t.route.line = :line
             AND t.route.name = :name
-            AND t.mode = :mode
+            AND t.variantMode = :variantMode
             AND t.trafficMode = :trafficMode""")
-    TripEntity findTripByUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("mode") TripVariantMode mode, @Param("trafficMode") TripTrafficMode trafficMode);
+    TripEntity findTripByUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantMode") TripVariantMode variantMode, @Param("trafficMode") TripTrafficMode trafficMode);
 
 
     @Query("""
