@@ -36,6 +36,6 @@ public class TripService {
 
     @Deprecated
     public TripEntity findByTripId(TripId tripId) {
-        return tripRepository.findByLineAndNameAndVariantAndMode(tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariant(), TripModeMapper.map(tripId.getMode()));
+        return tripRepository.findByLineAndNameAndVariantAndMode(tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariantName(), TripModeMapper.map(tripId.getTripMode()));
     }
 }

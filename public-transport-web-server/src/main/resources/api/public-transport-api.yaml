@@ -1248,9 +1248,9 @@ components:
       properties:
         routeId:
           $ref: '#/components/schemas/RouteId'
-        variant:
+        variantName:
           type: string
-        mode:
+        tripMode:
           $ref: '#/components/schemas/TripMode'
         trafficMode:
           $ref: '#/components/schemas/TrafficMode'
