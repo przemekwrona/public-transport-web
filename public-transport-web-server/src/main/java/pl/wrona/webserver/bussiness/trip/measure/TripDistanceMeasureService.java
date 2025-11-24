@@ -86,7 +86,7 @@ public class TripDistanceMeasureService {
                         .routeId(new RouteId()
                                 .line(tripMeasure.getTripId().getRouteId().getLine())
                                 .name(tripMeasure.getTripId().getRouteId().getName()))
-                        .tripMode(tripMeasure.getTripId().getTripMode())
+                        .variantMode(tripMeasure.getTripId().getVariantMode())
                         .trafficMode(tripMeasure.getTripId().getTrafficMode()))
                 .stops(stopTimes)
                 .distanceInMeters(meters)

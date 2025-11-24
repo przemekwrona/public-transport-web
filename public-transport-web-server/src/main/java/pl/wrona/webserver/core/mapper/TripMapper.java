@@ -23,7 +23,7 @@ public class TripMapper {
         tripEntity.setVariantDesignation(trip.getVariantDesignation());
         tripEntity.setVariantDescription(trip.getVariantDescription());
 
-        tripEntity.setMode(TripModeMapper.map(trip.getMode()));
+        tripEntity.setVariantMode(TripModeMapper.map(trip.getMode()));
         tripEntity.setTrafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()));
 
         tripEntity.setHeadsign(trip.getHeadsign());
@@ -57,7 +57,7 @@ public class TripMapper {
                 .variantDescription(trip.getVariantDescription())
                 .travelTimeInSeconds(trip.getTravelTimeInSeconds())
                 .distanceInMeters(trip.getDistanceInMeters())
-                .mode(TripModeMapper.map(trip.getMode()))
+                .mode(TripModeMapper.map(trip.getVariantMode()))
                 .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()))
                 .origin(trip.getOriginStopName())
                 .destination(trip.getDestinationStopName())

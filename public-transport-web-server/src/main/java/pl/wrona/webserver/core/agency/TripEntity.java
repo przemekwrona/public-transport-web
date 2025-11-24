@@ -39,8 +39,9 @@ public class TripEntity {
     @Column(name = "variant_name")
     private String variantName;
 
+    @Column(name = "variant_mode")
     @Enumerated(EnumType.STRING)
-    private TripVariantMode mode;
+    private TripVariantMode variantMode;
 
     @Enumerated(EnumType.STRING)
     private TripTrafficMode trafficMode;
