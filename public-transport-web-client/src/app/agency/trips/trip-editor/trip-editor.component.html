@@ -21,246 +21,256 @@
 <div class="container-fixed">
     <!-- begin: grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
-        <div class="col-span-1">
-            <div class="grid gap-5 lg:gap-7.5">
-                <div class="card">
-                    <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
-                    <div class="card-body grid gap-5">
-                        <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
-                            <div class="flex items-center flex-wrap gap-3.5">
-                                <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
-                                <div class="flex flex-col gap-0.5">
+        <form [formGroup]="modelForm" (ngSubmit)="clickCreateOrEdit(modelForm)">
+            <div class="col-span-1">
+                <div class="grid gap-5 lg:gap-7.5">
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
+                        <div class="card-body grid gap-5">
+                            <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
+                                <div class="flex items-center flex-wrap gap-3.5">
+                                    <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
+                                    <div class="flex flex-col gap-0.5">
                                     <span class="text-sm font-medium text-gray-900">Wariant
                                         Podstawowy</span>
-                                    <span class="text-2sm text-gray-700">
+                                        <span class="text-2sm text-gray-700">
                                         <strong>Wariant podstawowy trasy autobusowej</strong> to główny, standardowy
                                         przebieg trasy, którą dany autobus pokonuje zgodnie z rozkładem jazdy. Jest to
                                         najbardziej typowa i regularna wersja trasy, która obowiązuje przez większość
                                         kursów danej linii.
                                     </span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <label class="switch switch-sm">
+                                        <input type="checkbox" [(ngModel)]="$tripDetails.item.isMainVariant"
+                                               (click)="clickIsMainVariant()"></label>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-5">
-                                <label class="switch switch-sm">
-                                    <input type="checkbox" [(ngModel)]="$tripDetails.item.isMainVariant"
-                                           (click)="clickIsMainVariant()"></label>
+
+                            <div class="text-gray-800 text-2sm">
+                                <span class="text-danger uppercase">{{ 'common.attention' | transloco | uppercase }}
+                                    :</span>
+                                Linia posiada 2 warianty podstawowe (TAM i POWRÓT).
                             </div>
-                        </div>
 
-                        <div class="text-gray-800 text-2sm">
-                            <span class="text-danger uppercase">{{ 'common.attention' | transloco | uppercase }}:</span>
-                            Linia posiada 2 warianty podstawowe (TAM i POWRÓT).
-                        </div>
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Nazwa wariantu</label>
+                                    @if ($tripDetails.item.isMainVariant) {
+                                        <input class="input" value="{{'agency.trip.edit.mainVariant' | transloco }}"
+                                               type="text" placeholder="KOZŁÓW" disabled>
+                                    } @else {
+                                        <input name="variant" id="variant" [(ngModel)]="$tripDetails.item.variant"
+                                               class="input"
+                                               type="text" placeholder="KOZŁÓW">
+                                    }
+                                </div>
+                            </div>
 
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Nazwa wariantu</label>
-                                @if ($tripDetails.item.isMainVariant) {
-                                    <input class="input" value="{{'agency.trip.edit.mainVariant' | transloco }}"
-                                           type="text" placeholder="KOZŁÓW" disabled>
-                                } @else {
-                                    <input name="variant" id="variant" [(ngModel)]="$tripDetails.item.variant"
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Kierunek wariantu</label>
+                                    <select name="mode" id="mode" [(ngModel)]="$tripDetails.item.mode"
+                                            class="select w-full">
+                                        <option [value]="tripModeSelectValue.Front">{{ 'agency.trip.edit.FRONT' | transloco }}</option>
+                                        <option [value]="tripModeSelectValue.Back">{{ 'agency.trip.edit.BACK' | transloco }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
+                                <div class="grid gap-7">
+                                    <label class="form-label max-w-56">Ruch panujący na drodze</label>
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+                                        <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
+                                            <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
+                                                <div class="flex items-center h-11">
+                                                    <img alt="" class="w-12"
+                                                         src="assets/media/svg/bus-svgrepo-com.svg"/>
+                                                </div>
+                                                <span class="text-md font-medium text-gray-900">Normalny ruch</span>
+                                                <input class="appearance-none" name="sso_option" type="radio"
+                                                       [value]="trafficModeSelectValue.Normal"
+                                                       [(ngModel)]="$tripDetails.item.trafficMode"/>
+                                            </div>
+                                        </label>
+                                        <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
+                                            <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
+                                                <div class="flex items-center h-11">
+                                                    <img alt="" class="w-12"
+                                                         src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
+                                                </div>
+                                                <span class="text-md font-medium text-gray-900">Jazda w korku</span>
+                                                <input class="appearance-none" name="sso_option" type="radio"
+                                                       [value]="trafficModeSelectValue.Traffic"
+                                                       [(ngModel)]="$tripDetails.item.trafficMode"/>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <style>
+                                        .sso-active:has(:checked) {
+                                            background-image: url('assets/media/images/2600x1600/bg-1.png');
+                                        }
+
+                                        .dark .sso-active:has(:checked) {
+                                            background-image: url('assets/media/images/2600x1600/bg-1-dark.png');
+                                        }
+                                    </style>
+                                </div>
+                            </div>
+
+                            <span class="badge badge-sm badge-outline badge-danger w-full" style="line-height: inherit">
+                            Trasa już posiada waritan o nazwie: {{ $tripDetails.item.variant }},
+                            Kierunek wariantu: {{ $tripDetails.item.mode }}
+                                Ruch panujący na drodze: {{ $tripDetails.item.trafficMode }}
+                        </span>
+
+                            <div class="border-t border-gray-200 my-2.5" *ngIf="!$tripDetails.item.isMainVariant"></div>
+
+                            <div class="w-full" *ngIf="!$tripDetails.item.isMainVariant">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Symbol jakim oznaczysz kurs na rozkładzie
+                                        jazdy</label>
+                                    <input name="variantDesignation" id="variantDesignation"
+                                           [(ngModel)]="$tripDetails.item.variantDesignation" class="input"
+                                           type="text" placeholder="W">
+                                </div>
+                            </div>
+                            <div class="w-full" *ngIf="!$tripDetails.item.isMainVariant">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Opis oznaczenia</label>
+                                    <input name="variantDescription" id="variantDescription"
+                                           [(ngModel)]="$tripDetails.item.variantDescription" class="input"
+                                           type="text" placeholder="Kurs skrócony do miejscowości Wrocław">
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 my-2.5"></div>
+
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Przystanek początkowy</label>
+                                    <input name="origin" id="origin" [(ngModel)]="$tripDetails.item.origin"
                                            class="input"
                                            type="text" placeholder="KOZŁÓW">
-                                }
-                            </div>
-                        </div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Kierunek wariantu</label>
-                                <select name="mode" id="mode" [(ngModel)]="$tripDetails.item.mode"
-                                        class="select w-full">
-                                    <option [value]="tripModeSelectValue.Front">{{ 'agency.trip.edit.FRONT' | transloco }}</option>
-                                    <option [value]="tripModeSelectValue.Back">{{ 'agency.trip.edit.BACK' | transloco }}</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
-                            <div class="grid gap-7">
-                                <label class="form-label max-w-56">Ruch panujący na drodze</label>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
-                                    <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
-                                        <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
-                                            <div class="flex items-center h-11">
-                                                <img alt="" class="w-12" src="assets/media/svg/bus-svgrepo-com.svg"/>
-                                            </div>
-                                            <span class="text-md font-medium text-gray-900">Normalny ruch</span>
-                                            <input class="appearance-none" name="sso_option" type="radio"
-                                                   [value]="trafficModeSelectValue.Normal"
-                                                   [(ngModel)]="$tripDetails.item.trafficMode"/>
-                                        </div>
-                                    </label>
-                                    <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
-                                        <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
-                                            <div class="flex items-center h-11">
-                                                <img alt="" class="w-12"
-                                                     src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
-                                            </div>
-                                            <span class="text-md font-medium text-gray-900">Jazda w korku</span>
-                                            <input class="appearance-none" name="sso_option" type="radio"
-                                                   [value]="trafficModeSelectValue.Traffic"
-                                                   [(ngModel)]="$tripDetails.item.trafficMode"/>
-                                        </div>
-                                    </label>
                                 </div>
-                                <style>
-                                    .sso-active:has(:checked) {
-                                        background-image: url('assets/media/images/2600x1600/bg-1.png');
-                                    }
-
-                                    .dark .sso-active:has(:checked) {
-                                        background-image: url('assets/media/images/2600x1600/bg-1-dark.png');
-                                    }
-                                </style>
                             </div>
-                        </div>
 
-                        <div class="border-t border-gray-200 my-2.5" *ngIf="!$tripDetails.item.isMainVariant"></div>
-
-                        <div class="w-full" *ngIf="!$tripDetails.item.isMainVariant">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Symbol jakim oznaczysz kurs na rozkładzie
-                                    jazdy</label>
-                                <input name="variantDesignation" id="variantDesignation"
-                                       [(ngModel)]="$tripDetails.item.variantDesignation" class="input"
-                                       type="text" placeholder="W">
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Przystanek końcowy</label>
+                                    <input name="destination" id="destination"
+                                           [(ngModel)]="$tripDetails.item.destination" class="input"
+                                           type="text" placeholder="KOZŁÓW">
+                                </div>
                             </div>
-                        </div>
-                        <div class="w-full" *ngIf="!$tripDetails.item.isMainVariant">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Opis oznaczenia</label>
-                                <input name="variantDescription" id="variantDescription"
-                                       [(ngModel)]="$tripDetails.item.variantDescription" class="input"
-                                       type="text" placeholder="Kurs skrócony do miejscowości Wrocław">
-                            </div>
-                        </div>
 
-                        <div class="border-t border-gray-200 my-2.5"></div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Przystanek początkowy</label>
-                                <input name="origin" id="origin" [(ngModel)]="$tripDetails.item.origin" class="input"
-                                       type="text" placeholder="KOZŁÓW">
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">Kierunek na tablicy czołowej</label>
+                                    <input type="text" name="headsign" id="headsign"
+                                           [(ngModel)]="$tripDetails.item.headsign" class="input">
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Przystanek końcowy</label>
-                                <input name="destination" id="destination"
-                                       [(ngModel)]="$tripDetails.item.destination" class="input"
-                                       type="text" placeholder="KOZŁÓW">
+                            <div class="flex justify-end">
                             </div>
-                        </div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label max-w-56">Kierunek na tablicy czołowej</label>
-                                <input type="text" name="headsign" id="headsign"
-                                       [(ngModel)]="$tripDetails.item.headsign" class="input">
-                            </div>
-                        </div>
-                        <div class="flex justify-end">
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-span-1 lg:col-span-2">
-            <div class="flex flex-col gap-5 lg:gap-7.5">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            Przystanki autobusowe
-                        </h3>
-                    </div>
+            <div class="col-span-1 lg:col-span-2">
+                <div class="flex flex-col gap-5 lg:gap-7.5">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Przystanki autobusowe
+                            </h3>
+                        </div>
 
-                    <div class="card-table scrollable-x-auto pb-3">
-                        <table class="table align-middle text-sm text-gray-500">
-                            <tr>
-                                <td class="py-2 text-gray-600 font-normal">
-                                    Prędkość komunikacyjna
-                                </td>
-                                <td class="py-2 text-center">
-                                    <div class="input-group w-32">
-                                        <input type="number" name="velocity" id="velocity"
-                                               [(ngModel)]="$tripDetails.item.calculatedCommunicationVelocity"
-                                               (ngModelChange)="onCommunicationVelocityChange($event)" class="input"
-                                               placeholder="45">
-                                        <span class="btn btn-secondary">km/h</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3">Dystans (Czas przejazdu)</td>
-                                <td class="py-3 text-gray-700 text-2sm font-normal">
-                                    {{ getLastStop()?.meters | distance | number: '1.1-1' }} km
-                                    ({{ getLastStop()?.calculatedSeconds | time | number: '1.0-0' }} min)
-                                </td>
-                            </tr>
-                            @if ($tripDetails.isCustomized) {
-<!--                                <tr>-->
-<!--                                    <td class="py-3">Rzeczywista prędkość komunikacyjna</td>-->
-<!--                                    <td class="py-3 text-gray-700 text-2sm font-normal">-->
-<!--                                        {{ $tripDetails.item.customizedCommunicationVelocity | number:  '1.0-0' }} km/h-->
-<!--                                    </td>-->
-<!--                                </tr>-->
+                        <div class="card-table scrollable-x-auto pb-3">
+                            <table class="table align-middle text-sm text-gray-500">
                                 <tr>
-                                    <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
-                                    <td class="py-3 text-gray-700 text-2sm font-normal">
-                                        {{ getLastStop()?.meters | distance | number: '1.1-1' }} km
-                                        ({{ getLastStop()?.customizedSeconds | time | number: '1.0-0' }} min)
+                                    <td class="py-2 text-gray-600 font-normal">
+                                        Prędkość komunikacyjna
+                                    </td>
+                                    <td class="py-2 text-center">
+                                        <div class="input-group w-32">
+                                            <input type="number" name="velocity" id="velocity"
+                                                   [(ngModel)]="$tripDetails.item.calculatedCommunicationVelocity"
+                                                   (ngModelChange)="onCommunicationVelocityChange($event)" class="input"
+                                                   placeholder="45">
+                                            <span class="btn btn-secondary">km/h</span>
+                                        </div>
                                     </td>
                                 </tr>
-                            }
-                        </table>
+                                <tr>
+                                    <td class="py-3">Dystans (Czas przejazdu)</td>
+                                    <td class="py-3 text-gray-700 text-2sm font-normal">
+                                        {{ getLastStop()?.meters | distance | number: '1.1-1' }} km
+                                        ({{ getLastStop()?.calculatedSeconds | time | number: '1.0-0' }} min)
+                                    </td>
+                                </tr>
+                                @if ($tripDetails.isCustomized) {
+                                    <!--                                <tr>-->
+                                            <!--                                    <td class="py-3">Rzeczywista prędkość komunikacyjna</td>-->
+                                            <!--                                    <td class="py-3 text-gray-700 text-2sm font-normal">-->
+                                            <!--                                        {{ $tripDetails.item.customizedCommunicationVelocity | number:  '1.0-0' }} km/h-->
+                                            <!--                                    </td>-->
+                                            <!--                                </tr>-->
+                                    <tr>
+                                        <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
+                                        <td class="py-3 text-gray-700 text-2sm font-normal">
+                                            {{ getLastStop()?.meters | distance | number: '1.1-1' }} km
+                                            ({{ getLastStop()?.customizedSeconds | time | number: '1.0-0' }} min)
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
 
-                        <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5 mx-7.5">
-                            <div class="flex items-center flex-wrap gap-3.5">
-                                <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
-                                <div class="flex flex-col gap-0.5">
-                                    <!--                                    <span class="text-sm font-medium text-gray-900">Ręczna modyfikacja</span>-->
-                                    <span class="text-2sm text-gray-700">
+                            <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5 mx-7.5">
+                                <div class="flex items-center flex-wrap gap-3.5">
+                                    <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
+                                    <div class="flex flex-col gap-0.5">
+                                        <!--                                    <span class="text-sm font-medium text-gray-900">Ręczna modyfikacja</span>-->
+                                        <span class="text-2sm text-gray-700">
                                         <strong>Chcę korygować ręcznie zaproponowany czas przejazdu</strong>,
                                         chce samodzielnie zmienić lub dostosować czas trwania przejazdu,
                                         który został wcześniej automatycznie wyliczony lub zasugerowany.
                                     </span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <label class="switch switch-sm">
+                                        <input type="checkbox" [(ngModel)]="$tripDetails.isCustomized"></label>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-5">
-                                <label class="switch switch-sm">
-                                    <input type="checkbox" [(ngModel)]="$tripDetails.isCustomized"></label>
-                            </div>
+
                         </div>
 
-                    </div>
+                        <div class="border-t border-gray-200 my-0"></div>
 
-                    <div class="border-t border-gray-200 my-0"></div>
-
-                    <!--<div class="card-body">-->
-                    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                        <!--<div class="card-body">-->
+                        <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
                         <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
                               class="badge badge-sm badge-outline badge-danger w-full">
                             <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"
                                             (onTime)="refreshMap()"></app-count-down>
                         </span>
 
-                        <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
-                              class="badge badge-sm badge-outline badge-success w-full">
+                            <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
+                                  class="badge badge-sm badge-outline badge-success w-full">
                                 Trasa, czas przjazdu i dystans są zaktualizowane.
                         </span>
 
-                        @for (stopTime of stopTimes; track stopTime; let index = $index) {
-                            <div class="example-box" cdkDrag [@simpleFadeAnimation]="'in'">
+                            @for (stopTime of stopTimes; track stopTime; let index = $index) {
+                                <div class="example-box" cdkDrag [@simpleFadeAnimation]="'in'">
                                 <span>
                                     <span [ngClass]="{'blue': stopTime.bdot10k, 'dark-blue': !stopTime.bdot10k}">{{ index + 1 }}</span>
                                     <span>{{ stopTime?.stopName }} </span>
                                 </span>
 
-                                <span>
+                                    <span>
                                     <span (click)="openDialogEditStop(stopTime)">
                                         <a class="btn btn-sm btn-icon btn-clear btn-primary">
                                             <i class="ki-filled ki-notepad-edit"></i>
@@ -269,8 +279,8 @@
                                     <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
                                     <span>km ({{ stopTime.calculatedSeconds | time | number: '1.0-0' }} min)</span>
 
-                                    @if ($tripDetails.isCustomized) {
-                                        <div class="inline-block">
+                                        @if ($tripDetails.isCustomized) {
+                                            <div class="inline-block">
                                             <div class="input-group mx-1">
                                                 <input type="number" [(ngModel)]="stopTime.customizedMinutes"
                                                        (ngModelChange)="onChangeDeparture(stopTime, index)"
@@ -278,78 +288,80 @@
                                                 <span class="btn btn-secondary h-7.5 px-1">min</span>
                                             </div>
                                         </div>
-                                    }
-                                    <span (click)="remove(stopTime)">
+                                        }
+                                        <span (click)="remove(stopTime)">
                                         <a class="btn btn-sm btn-icon btn-clear btn-danger">
                                             <i class="ki-filled ki-cross-square"></i>
                                         </a>
                                     </span>
                                 </span>
+                                </div>
+                            }
+                            <!--                        @if (isRefreshingExpanded) {-->
+                            <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
+                                  class="badge badge-sm badge-outline badge-danger w-full">
+                                <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
+                        </span>
+                            <!--                        }-->
+
+                            <!--                        @if (isRefreshExpanded) {-->
+                            <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
+                                  class="badge badge-sm badge-outline badge-success w-full">
+                                Trasa, czas przjazdu i dystans są zaktualizowane.
+                            </span>
+                            <!--                        }-->
+                        </div>
+                        <!--</div>-->
+
+                        <div class="card-body pr-2">
+                            <div class="flex justify-end gap-2">
+                                <button (click)="measureDistance()" class="btn btn-secondary px-3">
+                                    <i class="ki-filled ki-arrows-circle"></i>
+                                </button>
+                                <!--                            <button (click)="addBrake()" class="btn btn-secondary pr-2">-->
+                                <!--                                Dodaj postój na przystanku-->
+                                <!--                            </button>-->
                             </div>
-                        }
-                        <!--                        @if (isRefreshingExpanded) {-->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Mapa
+                            </h3>
+                            <a (click)="zoomPolyline()" class="btn btn-link">Zoom</a>
+                        </div>
                         <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
                               class="badge badge-sm badge-outline badge-danger w-full">
                                 <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
-                        </span>
-                        <!--                        }-->
+                    </span>
 
-                        <!--                        @if (isRefreshExpanded) {-->
                         <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
                               class="badge badge-sm badge-outline badge-success w-full">
                                 Trasa, czas przjazdu i dystans są zaktualizowane.
-                            </span>
-                        <!--                        }-->
+                    </span>
+
+                        <!--<div style="display: grid" class="card-body p-5 lg:p-7.5 lg:pb-7">-->
+                        <div style="display: grid">
+                            <div class="map-container">
+                                <div id="map"></div>
+                            </div>
+                        </div>
                     </div>
-                    <!--</div>-->
 
                     <div class="card-body pr-2">
                         <div class="flex justify-end gap-2">
-                            <button (click)="measureDistance()" class="btn btn-secondary px-3">
-                                <i class="ki-filled ki-arrows-circle"></i>
+                            <button (click)="clickCreateOrEdit()" class="btn btn-success">Zapisz Przystanki i wróć do
+                                listy
+                                wariantów
                             </button>
-                            <!--                            <button (click)="addBrake()" class="btn btn-secondary pr-2">-->
-                            <!--                                Dodaj postój na przystanku-->
-                            <!--                            </button>-->
                         </div>
                     </div>
+
                 </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            Mapa
-                        </h3>
-                        <a (click)="zoomPolyline()" class="btn btn-link">Zoom</a>
-                    </div>
-                    <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
-                          class="badge badge-sm badge-outline badge-danger w-full">
-                                <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
-                    </span>
-
-                    <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
-                          class="badge badge-sm badge-outline badge-success w-full">
-                                Trasa, czas przjazdu i dystans są zaktualizowane.
-                    </span>
-
-                    <!--<div style="display: grid" class="card-body p-5 lg:p-7.5 lg:pb-7">-->
-                    <div style="display: grid">
-                        <div class="map-container">
-                            <div id="map"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-body pr-2">
-                    <div class="flex justify-end gap-2">
-                        <button (click)="clickCreateOrEdit()" class="btn btn-success">Zapisz Przystanki i wróć do listy
-                            wariantów
-                        </button>
-                    </div>
-                </div>
-
             </div>
-        </div>
+        </form>
     </div>
     <!-- end: grid -->
 </div>
