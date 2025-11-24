@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
-import pl.wrona.webserver.core.mapper.TripModeMapper;
+import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class TripQueryService {
     }
 
     public TripEntity findByAgencyCodeAndTripId(String instance, TripId tripId) {
-        return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), TripModeMapper.map(tripId.getVariantMode()), TripTrafficModeMapper.map(tripId.getTrafficMode()));
+        return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), TripVariantModeMapper.map(tripId.getVariantMode()), TripTrafficModeMapper.map(tripId.getTrafficMode()));
     }
 
     public boolean existsUniqueTripIndex(String agencyCode, String line, String name, String variantName, TripVariantMode tripMode, TripTrafficMode trafficMode) {

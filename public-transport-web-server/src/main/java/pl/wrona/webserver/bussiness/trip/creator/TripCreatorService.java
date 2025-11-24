@@ -17,7 +17,7 @@ import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
-import pl.wrona.webserver.core.mapper.TripModeMapper;
+import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
@@ -43,7 +43,7 @@ public class TripCreatorService {
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getName(),
                 createTripDetailsRequest.getBody().getTripId().getVariantName(),
-                TripModeMapper.map(createTripDetailsRequest.getBody().getItem().getMode()),
+                TripVariantModeMapper.map(createTripDetailsRequest.getBody().getItem().getMode()),
                 TripTrafficModeMapper.map(createTripDetailsRequest.getBody().getItem().getTrafficMode()));
 
         if (uniqueTripIndexExists) {

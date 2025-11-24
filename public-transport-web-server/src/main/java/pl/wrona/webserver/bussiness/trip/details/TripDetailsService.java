@@ -8,12 +8,10 @@ import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
-import pl.wrona.webserver.core.mapper.TripModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
