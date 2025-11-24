@@ -60,7 +60,7 @@ public class PdfTripService {
         Map<String, Object> variables = new HashMap<>();
 
         var timetables = pdfTripTripRepository.findAllByRoute(line, name).stream()
-                .map(mode -> processTimetable(mode.getLine(), mode.getName(), mode.getMode()))
+                .map(mode -> processTimetable(mode.getLine(), mode.getName(), mode.getVariantMode()))
                 .toList();
 
         var agency = this.agencyService.getLoggedAgency();

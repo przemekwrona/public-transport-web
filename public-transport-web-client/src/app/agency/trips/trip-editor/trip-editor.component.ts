@@ -365,7 +365,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 line: this.state.line,
                 name: this.state.name
             },
-            mode: this.state.mode,
+            variantMode: this.state.mode,
             trafficMode: this.state.trafficMode
         };
         const tripMeasure: TripMeasure = {
@@ -390,8 +390,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         const tripId: TripId = {};
         tripId.routeId = routeId;
-        tripId.variant = this.state.variant;
-        tripId.mode = this.state.mode;
+        tripId.variantName = this.state.variant;
+        tripId.variantMode = this.state.mode;
         tripId.trafficMode = this.state.trafficMode;
 
         const tripDetailsRequest: UpdateTripDetailsRequest = {};

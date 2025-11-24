@@ -6,5 +6,5 @@ public interface TripMode {
 
     String getLine();
     String getName();
-    TripVariantMode getMode();
+    TripVariantMode getVariantMode();
 }
