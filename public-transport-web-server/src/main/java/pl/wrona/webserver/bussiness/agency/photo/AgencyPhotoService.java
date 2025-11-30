@@ -71,7 +71,7 @@ public class AgencyPhotoService {
                     }
                 })
                 .orElse(ResponseEntity
-                        .notFound()
+                        .noContent()
                         .build());
     }
 }
