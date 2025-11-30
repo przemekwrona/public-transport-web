@@ -35,6 +35,7 @@ import {UserListComponent} from "./agency/user/user-list/user-list.component";
 import {usersResolver} from "./agency/user/user-list/users.resolver";
 import {CreateUserComponent} from "./agency/user/create-user/create-user.component";
 import {TimetableListComponent} from "./agency/timetable/timetable-list/timetable-list.component";
+import {agencyDetailsResolver} from "./agency/agency-details.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -43,7 +44,7 @@ export const routes: Routes = [
     {path: 'signin', component: SigninComponent},
     {path: 'planner', component: TransportComponent},
     {
-        path: 'agency', component: AgencyComponent, children: [
+        path: 'agency', component: AgencyComponent, resolve: {agencyDetails: agencyDetailsResolver}, children: [
             {path: 'profile', component: ProfileDetailsComponent, resolve: { agencyDetails: profileDetailsResolver }},
             {path: 'stops', component: StopsComponent, resolve: { centerPoint: centerPointResolver }},
             {path: 'routes', component: RouteListComponent, resolve: { routes: RoutesResolver }},
