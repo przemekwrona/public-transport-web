@@ -6,7 +6,6 @@ import org.apache.lucene.util.SloppyMath;
 import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
-import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.igeolab.iot.pt.server.api.model.TripMeasure;
 import org.springframework.stereotype.Service;
@@ -61,8 +60,8 @@ public class TripDistanceMeasureService {
                 double velocityMps = velocityKph * METERS_PER_SECOND_PER_KMPH;
 
                 // Compute total seconds (rounded up to nearest minute)
-                seconds += (int) Math.round(haversinMeters / velocityMps);
-                seconds += seconds % 60;
+                int travelTimeInSeconds = (int) Math.ceil(Math.round(haversinMeters / velocityMps) / 60.0d) * 60;
+                seconds += travelTimeInSeconds;
 
                 stopTimes.add(new StopTime()
                         .stopId(pairStopTime.getRight().getStopId())
@@ -124,7 +123,9 @@ public class TripDistanceMeasureService {
                 Leg leg = legs.get(i);
 
                 meters += leg.distance();
-                seconds += leg.time();
+
+                int travelTimeInSeconds = (int) Math.ceil(Math.round(leg.time()) / 60.0d) * 60;
+                seconds += travelTimeInSeconds;
             }
         }
 
