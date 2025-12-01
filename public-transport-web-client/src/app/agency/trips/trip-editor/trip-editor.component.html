@@ -20,8 +20,8 @@
 <!-- Container -->
 <div class="container-fixed">
     <!-- begin: grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
-        <form [formGroup]="modelForm" (ngSubmit)="clickCreateOrEdit(modelForm)">
+    <form [formGroup]="modelForm" (ngSubmit)="clickCreateOrEdit(modelForm)">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
             <div class="col-span-1">
                 <div class="grid gap-5 lg:gap-7.5">
                     <div class="card">
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="flex items-center gap-5">
                                     <label class="switch switch-sm">
-                                        <input type="checkbox" [(ngModel)]="$tripDetails.item.isMainVariant"
+                                        <input type="checkbox" formControlName="isMainVariant"
                                                (click)="clickIsMainVariant()"></label>
                                 </div>
                             </div>
@@ -57,13 +57,13 @@
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Nazwa wariantu</label>
-                                    @if ($tripDetails.item.isMainVariant) {
+                                    @if (isMainVariant()) {
                                         <input class="input" value="{{'agency.trip.edit.mainVariant' | transloco }}"
-                                               type="text" placeholder="KOZŁÓW" disabled>
+                                               type="text" disabled>
                                     } @else {
-                                        <input name="variant" id="variant" [(ngModel)]="$tripDetails.item.variant"
-                                               class="input"
-                                               type="text" placeholder="KOZŁÓW">
+                                        <input name="tripVariantName" id="tripVariantName"
+                                               formControlName="tripVariantName"
+                                               class="input" type="text" placeholder="Nazwa wariantu">
                                     }
                                 </div>
                             </div>
@@ -71,8 +71,8 @@
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Kierunek wariantu</label>
-                                    <select name="mode" id="mode" [(ngModel)]="$tripDetails.item.mode"
-                                            class="select w-full">
+                                    <select name="tripVariantMode" id="tripVariantMode"
+                                            formControlName="tripVariantMode" class="select w-full">
                                         <option [value]="tripModeSelectValue.Front">{{ 'agency.trip.edit.FRONT' | transloco }}</option>
                                         <option [value]="tripModeSelectValue.Back">{{ 'agency.trip.edit.BACK' | transloco }}</option>
                                     </select>
@@ -90,9 +90,9 @@
                                                          src="assets/media/svg/bus-svgrepo-com.svg"/>
                                                 </div>
                                                 <span class="text-md font-medium text-gray-900">Normalny ruch</span>
-                                                <input class="appearance-none" name="sso_option" type="radio"
+                                                <input class="appearance-none" name="tripTrafficMode" type="radio"
                                                        [value]="trafficModeSelectValue.Normal"
-                                                       [(ngModel)]="$tripDetails.item.trafficMode"/>
+                                                       formControlName="tripTrafficMode"/>
                                             </div>
                                         </label>
                                         <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
@@ -102,9 +102,9 @@
                                                          src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
                                                 </div>
                                                 <span class="text-md font-medium text-gray-900">Jazda w korku</span>
-                                                <input class="appearance-none" name="sso_option" type="radio"
+                                                <input class="appearance-none" name="tripTrafficMode" type="radio"
                                                        [value]="trafficModeSelectValue.Traffic"
-                                                       [(ngModel)]="$tripDetails.item.trafficMode"/>
+                                                       formControlName="tripTrafficMode"/>
                                             </div>
                                         </label>
                                     </div>
@@ -121,56 +121,54 @@
                             </div>
 
                             <span class="badge badge-sm badge-outline badge-danger w-full" style="line-height: inherit">
-                            Trasa już posiada waritan o nazwie: {{ $tripDetails.item.variant }},
-                            Kierunek wariantu: {{ $tripDetails.item.mode }}
-                                Ruch panujący na drodze: {{ $tripDetails.item.trafficMode }}
-                        </span>
+                                Trasa już posiada waritan o nazwie: {{ $tripDetails.tripId.variantName }},
+                                Kierunek wariantu: {{ $tripDetails.tripId.variantMode }}
+                                Ruch panujący na drodze: {{ $tripDetails.tripId.trafficMode }}</span>
 
-                            <div class="border-t border-gray-200 my-2.5" *ngIf="!$tripDetails.item.isMainVariant"></div>
-
-                            <div class="w-full" *ngIf="!$tripDetails.item.isMainVariant">
-                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                    <label class="form-label max-w-56">Symbol jakim oznaczysz kurs na rozkładzie
-                                        jazdy</label>
-                                    <input name="variantDesignation" id="variantDesignation"
-                                           [(ngModel)]="$tripDetails.item.variantDesignation" class="input"
-                                           type="text" placeholder="W">
+                            @if (!isMainVariant()) {
+                                <div class="border-t border-gray-200 my-2.5"></div>
+                                <div class="w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <label class="form-label max-w-56">Symbol jakim oznaczysz kurs na rozkładzie
+                                            jazdy</label>
+                                        <input formControlName="variantDesignation" name="variantDesignation"
+                                               id="variantDesignation" class="input" type="text"
+                                               placeholder="Symbol kursu na rozkładzie"/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="w-full" *ngIf="!$tripDetails.item.isMainVariant">
-                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                    <label class="form-label max-w-56">Opis oznaczenia</label>
-                                    <input name="variantDescription" id="variantDescription"
-                                           [(ngModel)]="$tripDetails.item.variantDescription" class="input"
-                                           type="text" placeholder="Kurs skrócony do miejscowości Wrocław">
+                                <div class="w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <label class="form-label max-w-56">Opis oznaczenia</label>
+                                        <input formControlName="variantDescription" name="variantDescription"
+                                               id="variantDescription"
+                                               class="input" type="text"
+                                               placeholder="Kurs skrócony do miejscowości Wrocław"/>
+                                    </div>
                                 </div>
-                            </div>
-
+                            }
                             <div class="border-t border-gray-200 my-2.5"></div>
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Przystanek początkowy</label>
-                                    <input name="origin" id="origin" [(ngModel)]="$tripDetails.item.origin"
-                                           class="input"
-                                           type="text" placeholder="KOZŁÓW">
+                                    <input type="text" formControlName="origin" name="origin" id="origin"
+                                           class="input" placeholder="Przystanek początkowy">
                                 </div>
                             </div>
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Przystanek końcowy</label>
-                                    <input name="destination" id="destination"
-                                           [(ngModel)]="$tripDetails.item.destination" class="input"
-                                           type="text" placeholder="KOZŁÓW">
+                                    <input type="text" formControlName="destination" name="destination" id="destination"
+                                           class="input" placeholder="Przystanek końcowy">
                                 </div>
                             </div>
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Kierunek na tablicy czołowej</label>
-                                    <input type="text" name="headsign" id="headsign"
-                                           [(ngModel)]="$tripDetails.item.headsign" class="input">
+                                    <input type="text" formControlName="headsign" name="headsign" id="headsign"
+                                           class="input">
                                 </div>
                             </div>
                             <div class="flex justify-end">
@@ -191,61 +189,61 @@
                         <div class="card-table scrollable-x-auto pb-3">
                             <table class="table align-middle text-sm text-gray-500">
                                 <tr>
-                                    <td class="py-2 text-gray-600 font-normal">
+                                    <td class="py-2">
                                         Prędkość komunikacyjna
                                     </td>
-                                    <td class="py-2 text-center">
+                                    <td class="py-2 justify-items-end">
                                         <div class="input-group w-32">
-                                            <input type="number" name="velocity" id="velocity"
-                                                   [(ngModel)]="$tripDetails.item.calculatedCommunicationVelocity"
-                                                   (ngModelChange)="onCommunicationVelocityChange($event)" class="input"
-                                                   placeholder="45">
+                                            <input type="number" formControlName="calculatedCommunicationVelocity"
+                                                   name="velocity" id="velocity" class="input" placeholder="30">
                                             <span class="btn btn-secondary">km/h</span>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="py-3">Dystans (Czas przejazdu)</td>
-                                    <td class="py-3 text-gray-700 text-2sm font-normal">
+                                    <td class="py-3 text-gray-700 text-2sm font-normal text-end">
                                         {{ getLastStop()?.meters | distance | number: '1.1-1' }} km
                                         ({{ getLastStop()?.calculatedSeconds | time | number: '1.0-0' }} min)
                                     </td>
                                 </tr>
-                                @if ($tripDetails.isCustomized) {
-                                    <!--                                <tr>-->
-                                            <!--                                    <td class="py-3">Rzeczywista prędkość komunikacyjna</td>-->
-                                            <!--                                    <td class="py-3 text-gray-700 text-2sm font-normal">-->
-                                            <!--                                        {{ $tripDetails.item.customizedCommunicationVelocity | number:  '1.0-0' }} km/h-->
-                                            <!--                                    </td>-->
-                                            <!--                                </tr>-->
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
+                                            <div class="flex items-center flex-wrap gap-3.5">
+                                                <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
+                                                <div class="flex flex-col gap-0.5">
+                                                    <!--                                    <span class="text-sm font-medium text-gray-900">Ręczna modyfikacja</span>-->
+                                                    <span class="text-2sm text-gray-700">
+                                        <strong>Chcę korygować ręcznie zaproponowany czas przejazdu</strong>,
+                                        chce samodzielnie zmienić lub dostosować czas trwania przejazdu,
+                                        który został wcześniej automatycznie wyliczony lub zasugerowany.</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-5">
+                                                <label class="switch switch-sm">
+                                                    <input type="checkbox" formControlName="isCustomized"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                @if (isCustomized()) {
+                                    <tr>
+                                        <td class="py-3">Rzeczywista prędkość komunikacyjna</td>
+                                        <td class="py-3 text-gray-700 text-2sm font-normal text-end">
+                                            {{ customizedCommunicationVelocity() | number: '1.0-0' }} km/h
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
-                                        <td class="py-3 text-gray-700 text-2sm font-normal">
+                                        <td class="py-3 text-gray-700 text-2sm font-normal text-end">
                                             {{ getLastStop()?.meters | distance | number: '1.1-1' }} km
-                                            ({{ getLastStop()?.customizedSeconds | time | number: '1.0-0' }} min)
+                                            ({{ getLastStop()?.customizedMinutes | number: '1.0-0' }} min)
                                         </td>
                                     </tr>
                                 }
                             </table>
-
-                            <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5 mx-7.5">
-                                <div class="flex items-center flex-wrap gap-3.5">
-                                    <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
-                                    <div class="flex flex-col gap-0.5">
-                                        <!--                                    <span class="text-sm font-medium text-gray-900">Ręczna modyfikacja</span>-->
-                                        <span class="text-2sm text-gray-700">
-                                        <strong>Chcę korygować ręcznie zaproponowany czas przejazdu</strong>,
-                                        chce samodzielnie zmienić lub dostosować czas trwania przejazdu,
-                                        który został wcześniej automatycznie wyliczony lub zasugerowany.
-                                    </span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-5">
-                                    <label class="switch switch-sm">
-                                        <input type="checkbox" [(ngModel)]="$tripDetails.isCustomized"></label>
-                                </div>
-                            </div>
-
                         </div>
 
                         <div class="border-t border-gray-200 my-0"></div>
@@ -279,11 +277,12 @@
                                     <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
                                     <span>km ({{ stopTime.calculatedSeconds | time | number: '1.0-0' }} min)</span>
 
-                                        @if ($tripDetails.isCustomized) {
+                                        @if (isCustomized()) {
                                             <div class="inline-block">
                                             <div class="input-group mx-1">
-                                                <input type="number" [(ngModel)]="stopTime.customizedMinutes"
-                                                       (ngModelChange)="onChangeDeparture(stopTime, index)"
+                                                <input type="number" id="customizedMinutesControl-{{index}}"
+                                                       name="customizedMinutesControl-{{index}}"
+                                                       [formControl]="stopTime.customizedMinutesControl"
                                                        class="input w-14 h-7.5"/>
                                                 <span class="btn btn-secondary h-7.5 px-1">min</span>
                                             </div>
@@ -352,17 +351,16 @@
 
                     <div class="card-body pr-2">
                         <div class="flex justify-end gap-2">
-                            <button (click)="clickCreateOrEdit()" class="btn btn-success">Zapisz Przystanki i wróć do
-                                listy
-                                wariantów
+                            <button type="submit" class="btn btn-success">
+                                Zapisz Przystanki i wróć do listy wariantów
                             </button>
                         </div>
                     </div>
 
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
     <!-- end: grid -->
 </div>
 <!-- End of Container -->

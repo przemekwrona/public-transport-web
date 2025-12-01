@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.Point2D;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
@@ -11,14 +12,13 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
-import pl.wrona.webserver.core.mapper.TripMapper;
+import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
+import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -31,10 +31,6 @@ public class TripDetailsService {
     @PreAgencyAuthorize
     public TripsDetails getTripByTripId(String instance, TripId tripId) {
         var tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
-
-        var tripResponse = Optional.ofNullable(tripEntity)
-                .map(trip -> TripMapper.map(trip, Map.of()))
-                .orElse(null);
 
         List<StopTimeEntity> stopTimes = tripEntity != null
                 ? stopTimeRepository.findAllByTripId(tripEntity.getTripId()) : List.of();
@@ -65,10 +61,24 @@ public class TripDetailsService {
         }
 
         return new TripsDetails()
+                .tripId(new TripId()
+                        .routeId(new RouteId()
+                                .line(tripEntity.getRoute().getLine())
+                                .name(tripEntity.getRoute().getName()))
+                        .variantName(tripEntity.getVariantName())
+                        .variantMode(TripVariantModeMapper.map(tripEntity.getVariantMode()))
+                        .trafficMode(TripTrafficModeMapper.map(tripEntity.getTrafficMode())))
+                .isMainVariant(tripEntity.isMainVariant())
+                .isCustomized(tripEntity.isCustomized())
                 .stops(stops)
                 .geometry(geometry)
-                .isCustomized(tripEntity.isCustomized())
-                .item(tripResponse);
+                .variantDesignation(tripEntity.getVariantDesignation())
+                .variantDescription(tripEntity.getVariantDescription())
+                .originStopName(tripEntity.getOriginStopName())
+                .destinationStopName(tripEntity.getDestinationStopName())
+                .headsign(tripEntity.getHeadsign())
+                .calculatedCommunicationVelocity(tripEntity.getCalculatedCommunicationVelocity())
+                .customizedCommunicationVelocity(tripEntity.getCustomizedCommunicationVelocity());
     }
 
 }

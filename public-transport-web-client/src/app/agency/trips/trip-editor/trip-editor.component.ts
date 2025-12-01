@@ -1,7 +1,7 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline, Popup} from "leaflet";
-import {find, findIndex, last, round, size} from "lodash";
+import {find, findIndex, last, size} from "lodash";
 import {
     ErrorResponse,
     Point2D,
@@ -32,7 +32,8 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {StopTimeModel} from "./stop-time.model";
 import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
-import haversine from 'haversine-distance'
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {TripIdExistenceValidator} from "./trip-id-existence/trip-id-existence.service";
 
 @Component({
     selector: 'app-trip-editor',
@@ -92,11 +93,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public trafficModeSelectValue = TrafficMode
 
-    public $tripDetails: TripsDetails = {item: {}};
+    public $tripDetails: TripsDetails = {};
     public $tripVariants: RouteDetails = {};
 
     public stopTimes: StopTimeModel[] = [];
-    public historicalStopTimes: StopTimeModel[] = [];
 
     public forceRefreshSubject: Subject<boolean> = new Subject();
     public forceRefresh$: Observable<boolean> = this.forceRefreshSubject.asObservable();
@@ -106,12 +106,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public modelForm: FormGroup;
 
-    constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder) {
+    constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
     ngOnInit(): void {
         this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
+
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,
             name: string,
@@ -119,9 +120,44 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             mode: TripMode,
             trafficMode: TrafficMode
         });
+
+        this.modelForm = this.formBuilder.group({
+            isMainVariant: [true, [Validators.required]],
+            tripVariantName: [this.state.variant, [Validators.required]],
+            tripVariantMode: [this.state.mode, [Validators.required]],
+            tripTrafficMode: [this.state.trafficMode, [Validators.required]],
+
+            variantDesignation: ['', [Validators.required]],
+            variantDescription: ['', [Validators.required]],
+
+            origin: ['', [Validators.required]],
+            destination: ['', [Validators.required]],
+            headsign: ['', [Validators.required]],
+
+            calculatedCommunicationVelocity: [null, [Validators.required, Validators.min(0)]],
+
+            isCustomized: [false, [Validators.required]],
+            stops: this.formBuilder.array([], [Validators.required, Validators.minLength(2)])
+        }, {
+            // asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, 'tripVariantName', 'tripVariantMode', 'tripTrafficMode')
+        });
+
+        this.modelForm.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => this.onCommunicationVelocityChange(value));
+
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
             this.$tripDetails = tripDetails;
+            this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
+            this.modelForm.controls['isCustomized'].setValue(tripDetails.isCustomized);
+            this.modelForm.controls['calculatedCommunicationVelocity'].setValue(tripDetails.calculatedCommunicationVelocity);
 
+            this.modelForm.controls['variantDesignation'].setValue(tripDetails.variantDesignation);
+            this.modelForm.controls['variantDescription'].setValue(tripDetails.variantDescription);
+
+            this.modelForm.controls['origin'].setValue(tripDetails.originStopName);
+            this.modelForm.controls['destination'].setValue(tripDetails.destinationStopName);
+            this.modelForm.controls['headsign'].setValue(tripDetails.headsign);
+
+            const stopArrayControl: FormArray = this.modelForm.get('stops') as FormArray;
             (this.$tripDetails.stops || []).forEach((stopTime: StopTime) => {
                 const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                 stopTimeModel.stopId = stopTime.stopId;
@@ -133,35 +169,31 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 stopTimeModel.customizedMinutes = stopTime.customizedSeconds / 60;
                 stopTimeModel.bdot10k = stopTime.bdot10k;
 
+                const customizedMinutesControl: FormControl<number> = this.formBuilder.control(stopTime.customizedSeconds / 60, [Validators.required]);
+                stopTimeModel.customizedMinutesControl = customizedMinutesControl
                 this.stopTimes.push(stopTimeModel);
+
+                stopArrayControl.push(stopTimeModel.customizedMinutesControl);
             });
 
-            (this.$tripDetails.stops || []).forEach((stopTime: StopTime) => {
-                const historicalStopTime: StopTimeModel = {} as StopTimeModel;
-                historicalStopTime.stopId = stopTime.stopId;
-                historicalStopTime.stopName = stopTime.stopName;
-                historicalStopTime.lon = stopTime.lon;
-                historicalStopTime.lat = stopTime.lat;
-                historicalStopTime.meters = stopTime.meters;
-                historicalStopTime.calculatedSeconds = stopTime.calculatedSeconds;
-                historicalStopTime.bdot10k = stopTime.bdot10k;
-                historicalStopTime.customizedMinutes = round(stopTime.calculatedSeconds / 60);
-
-                this.historicalStopTimes.push(historicalStopTime);
-            })
+            this.stopTimes.forEach((stopTime: StopTimeModel, index: number): void => {
+                stopTime.customizedMinutesControl.valueChanges.subscribe((value: number) => {
+                    this.onChangeDeparture(stopTime, index, value);
+                });
+            });
 
             this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: RouteDetails) => {
                 this.$tripVariants = tripVariants;
 
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
                     if (this.$tripVariants?.trips.length || 0 == 0) {
-                        this.$tripDetails.item.isMainVariant = true;
-                        this.$tripDetails.item.variant = "MAIN";
-                        this.$tripDetails.item.mode = TripMode.Front;
-                        this.$tripDetails.item.trafficMode = TrafficMode.Normal;
-                        this.$tripDetails.item.origin = tripVariants.route.originStop.name;
-                        this.$tripDetails.item.destination = tripVariants.route.destinationStop.name;
-                        this.$tripDetails.item.headsign = tripVariants.route.destinationStop.name;
+                        this.$tripDetails.isMainVariant = true;
+                        this.$tripDetails.tripId.variantName = "MAIN";
+                        this.$tripDetails.tripId.variantMode = TripMode.Front;
+                        this.$tripDetails.tripId.trafficMode = TrafficMode.Normal;
+                        this.$tripDetails.originStopName = tripVariants.route.originStop.name;
+                        this.$tripDetails.destinationStopName = tripVariants.route.destinationStop.name;
+                        this.$tripDetails.headsign = tripVariants.route.destinationStop.name;
 
                         const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                         stopTimeModel.stopId = tripVariants.route.originStop.id;
@@ -173,13 +205,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.stopTimes.push(stopTimeModel);
 
                     } else if (this.$tripVariants.trips.length == 1 && this.$tripVariants.trips[0].isMainVariant && this.$tripVariants.trips[0].mode === TripMode.Front) {
-                        this.$tripDetails.item.isMainVariant = true;
-                        this.$tripDetails.item.variant = "MAIN";
-                        this.$tripDetails.item.mode = TripMode.Back;
-                        this.$tripDetails.item.trafficMode = TrafficMode.Normal;
-                        this.$tripDetails.item.origin = tripVariants.route.destinationStop.name;
-                        this.$tripDetails.item.destination = tripVariants.route.originStop.name;
-                        this.$tripDetails.item.headsign = tripVariants.route.originStop.name;
+                        this.$tripDetails.isMainVariant = true;
+                        this.$tripDetails.tripId.variantName = "MAIN";
+                        this.$tripDetails.tripId.variantMode = TripMode.Back;
+                        this.$tripDetails.tripId.trafficMode = TrafficMode.Normal;
+                        this.$tripDetails.originStopName = tripVariants.route.destinationStop.name;
+                        this.$tripDetails.destinationStopName = tripVariants.route.originStop.name;
+                        this.$tripDetails.headsign = tripVariants.route.originStop.name;
 
                         const stopTimeModel: StopTimeModel = {} as StopTimeModel;
                         stopTimeModel.stopId = tripVariants.route.originStop.id;
@@ -193,7 +225,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 }
             });
         });
-        this.$tripDetails.item.calculatedCommunicationVelocity = this.$tripDetails.item.calculatedCommunicationVelocity || 30;
+        this.$tripDetails.calculatedCommunicationVelocity = this.$tripDetails.calculatedCommunicationVelocity || 30;
     }
 
     ngAfterViewInit(): void {
@@ -208,27 +240,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.onMoveEnd(this.map);
     }
 
-    public onChangeDeparture(currentStopTime: StopTimeModel, no: number): void {
-        const historicalStopTime: StopTimeModel = this.historicalStopTimes[no];
-        const timeDifference: number = currentStopTime.customizedMinutes - historicalStopTime.customizedMinutes;
-
-        this.stopTimes.forEach((value: StopTimeModel, index: number) => {
+    public onChangeDeparture(currentStopTime: StopTimeModel, no: number, value: number): void {
+        const timeDifference: number = value - currentStopTime.customizedMinutes;
+        currentStopTime.customizedMinutes = value;
+        this.stopTimes.forEach((model: StopTimeModel, index: number) => {
             if (no < index) {
-                value.customizedMinutes = value.customizedMinutes + timeDifference;
+                model.customizedMinutes = model.customizedMinutes + timeDifference;
+                model.customizedMinutesControl.setValue(model.customizedMinutes);
             }
-        });
-
-        this.historicalStopTimes = this.stopTimes.map(stopTime => {
-            const updatedHistoricalStopTime = {} as StopTimeModel;
-            updatedHistoricalStopTime.stopId = stopTime.stopId;
-            updatedHistoricalStopTime.stopName = stopTime.stopName;
-            updatedHistoricalStopTime.lon = stopTime.lon;
-            updatedHistoricalStopTime.lat = stopTime.lat;
-            updatedHistoricalStopTime.meters = stopTime.meters;
-            updatedHistoricalStopTime.calculatedSeconds = stopTime.calculatedSeconds;
-            updatedHistoricalStopTime.customizedMinutes = stopTime.customizedMinutes;
-            updatedHistoricalStopTime.bdot10k = stopTime.bdot10k;
-            return updatedHistoricalStopTime;
         });
     }
 
@@ -339,20 +358,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 }
             }
 
-            this.historicalStopTimes = this.stopTimes.map((stopTime: StopTimeModel) => {
-                const historicalStopTime: StopTimeModel = {} as StopTimeModel;
-                historicalStopTime.stopId = stopTime.stopId;
-                historicalStopTime.stopName = stopTime.stopName;
-                historicalStopTime.lon = stopTime.lon;
-                historicalStopTime.lat = stopTime.lat;
-                historicalStopTime.meters = stopTime.meters;
-                historicalStopTime.calculatedSeconds = stopTime.calculatedSeconds;
-                historicalStopTime.bdot10k = stopTime.bdot10k;
-                historicalStopTime.customizedMinutes = round(stopTime.calculatedSeconds / 60);
-
-                return historicalStopTime;
-            });
-
             this.drawPolyline(response.geometry);
 
             if (zoom) {
@@ -372,7 +377,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         };
         const tripMeasure: TripMeasure = {
             tripId: tripId,
-            velocity: this.$tripDetails.item.calculatedCommunicationVelocity
+            velocity: this.$tripDetails.calculatedCommunicationVelocity
         };
         tripMeasure.stops = this.stopTimes.map((stop: StopTimeModel): StopTime => {
             const stopTime: StopTime = {};
@@ -398,7 +403,28 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         const tripDetailsRequest: UpdateTripDetailsRequest = {};
         tripDetailsRequest.tripId = tripId;
+
+        const updatedTripId: TripId = {};
+        updatedTripId.routeId = routeId;
+        updatedTripId.variantName = this.modelForm.controls['tripVariantName'].value;
+        updatedTripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
+        updatedTripId.trafficMode = this.modelForm.controls['tripTrafficMode'].value;
+
         tripDetailsRequest.body = this.$tripDetails;
+        tripDetailsRequest.body.tripId = updatedTripId;
+        tripDetailsRequest.body.isMainVariant = this.modelForm.controls['isMainVariant'].value
+        tripDetailsRequest.body.isCustomized = this.modelForm.controls['isCustomized'].value
+
+        tripDetailsRequest.body.variantDesignation = this.modelForm.controls['variantDesignation'].value
+        tripDetailsRequest.body.variantDescription = this.modelForm.controls['variantDescription'].value
+
+        tripDetailsRequest.body.originStopName = this.modelForm.controls['origin'].value
+        tripDetailsRequest.body.destinationStopName = this.modelForm.controls['destination'].value
+        tripDetailsRequest.body.headsign = this.modelForm.controls['headsign'].value
+
+        tripDetailsRequest.body.calculatedCommunicationVelocity = this.modelForm.controls['calculatedCommunicationVelocity'].value;
+        tripDetailsRequest.body.customizedCommunicationVelocity = Math.round(this.customizedCommunicationVelocity());
+
         tripDetailsRequest.body.stops = this.stopTimes.map(stopTimeModel => {
             const stopTime: StopTime = {};
             stopTime.stopId = stopTimeModel.stopId;
@@ -406,7 +432,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             stopTime.lat = stopTimeModel.lat;
             stopTime.lon = stopTimeModel.lon;
             stopTime.calculatedSeconds = stopTimeModel.calculatedSeconds;
-            stopTime.customizedSeconds = this.$tripDetails.isCustomized ? stopTimeModel.customizedMinutes * 60 : stopTimeModel.calculatedSeconds;
+            stopTime.customizedSeconds = 60 * stopTimeModel.customizedMinutesControl.value;
             stopTime.meters = stopTimeModel.meters;
 
             return stopTime;
@@ -502,8 +528,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
     }
 
-    public getLastStop(): StopTime {
-        return last(this.$tripDetails.stops);
+    public getLastStop(): StopTimeModel {
+        return last(this.stopTimes);
     }
 
     public zoomPolyline(): void {
@@ -513,13 +539,15 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public clickIsMainVariant(): void {
-        if (this.$tripDetails.item.isMainVariant) {
-            this.$tripDetails.item.variant = this.previousVariantName;
+        const isMainVariant: boolean = this.modelForm.controls['isMainVariant'].value as boolean;
+
+        if (isMainVariant) {
+            this.modelForm.controls['tripVariantName'].setValue(this.previousVariantName);
         } else {
-            this.previousVariantName = this.$tripDetails.item.variant;
-            this.$tripDetails.item.variant = 'MAIN';
-            this.$tripDetails.item.variantDesignation = '';
-            this.$tripDetails.item.variantDescription = '';
+            this.previousVariantName = this.modelForm.controls['tripVariantName'].value;
+            this.modelForm.controls['tripVariantName'].setValue('MAIN');
+            this.modelForm.controls['variantDesignation'].setValue('');
+            this.modelForm.controls['variantDescription'].setValue('');
         }
 
     }
@@ -553,5 +581,19 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.isRefreshingExpanded = true;
         this.isRefreshExpanded = false;
         this.forceRefreshSubject.next(true);
+    }
+
+    public isMainVariant(): boolean {
+        return this.modelForm.controls['isMainVariant'].value;
+    }
+
+    public isCustomized(): boolean {
+        return this.modelForm.controls['isCustomized'].value;
+    }
+
+    public customizedCommunicationVelocity(): number {
+        const lastStop: StopTimeModel = this.getLastStop();
+        const velocityMetersPerSeconds: number = lastStop.meters / (60 * lastStop.customizedMinutes);
+        return velocityMetersPerSeconds * 3600 / 1000;
     }
 }
