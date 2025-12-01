@@ -26,9 +26,4 @@ export class TripService {
 
   constructor(private httpClient: HttpClient) {
   }
-
-  getTrip(tripId: string): Observable<SimpleTripResponse> {
-    const parsedTripId = encodeURIComponent(tripId);
-    return this.httpClient.get<SimpleTripResponse>(`/api/agency/WAWA/trips?tripId=${parsedTripId}`);
-  }
 }
