@@ -1425,9 +1425,9 @@ components:
       properties:
         tripId:
           $ref: '#/components/schemas/TripId'
-        firstStop:
+        originStopName:
           type: string
-        lastStop:
+        destinationStopName:
           type: string
         headsign:
           type: string
@@ -1439,10 +1439,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Point2D'
+        isMainVariant:
+          type: boolean
         isCustomized:
           type: boolean
-        item:
-          $ref: '#/components/schemas/Trip'
+        calculatedCommunicationVelocity:
+          type: integer
+        customizedCommunicationVelocity:
+          type: integer
+        variantDesignation:
+          type: string
+        variantDescription:
+          type: string
 
     BrigadePayload:
       type: object

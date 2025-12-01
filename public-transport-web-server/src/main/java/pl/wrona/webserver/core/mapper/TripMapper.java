@@ -2,6 +2,8 @@ package pl.wrona.webserver.core.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
+import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import pl.wrona.webserver.core.agency.TripEntity;
@@ -18,21 +20,30 @@ public class TripMapper {
     }
 
     public TripEntity update(TripEntity tripEntity, TripsDetails tripsDetails) {
-        var trip = tripsDetails.getItem();
-        tripEntity.setVariantName(trip.getVariant());
-        tripEntity.setVariantDesignation(trip.getVariantDesignation());
-        tripEntity.setVariantDescription(trip.getVariantDescription());
+        tripEntity.setVariantName(tripsDetails.getTripId().getVariantName());
+        tripEntity.setVariantMode(TripVariantModeMapper.map(tripsDetails.getTripId().getVariantMode()));
+        tripEntity.setTrafficMode(TripTrafficModeMapper.map(tripsDetails.getTripId().getTrafficMode()));
 
-        tripEntity.setVariantMode(TripVariantModeMapper.map(trip.getMode()));
-        tripEntity.setTrafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()));
+        if (tripsDetails.getIsMainVariant()) {
+            tripEntity.setVariantName("MAIN");
+            tripEntity.setVariantDesignation(StringUtils.EMPTY);
+            tripEntity.setVariantDescription(StringUtils.EMPTY);
 
-        tripEntity.setHeadsign(trip.getHeadsign());
+        } else {
+            tripEntity.setVariantDesignation(tripsDetails.getVariantDesignation());
+            tripEntity.setVariantDescription(tripsDetails.getVariantDescription());
+        }
 
-        tripEntity.setCustomizedCommunicationVelocity(0);
-        tripEntity.setCalculatedCommunicationVelocity(trip.getCalculatedCommunicationVelocity());
-        tripEntity.setOriginStopName(trip.getOrigin());
-        tripEntity.setDestinationStopName(trip.getDestination());
-        tripEntity.setMainVariant(trip.getIsMainVariant());
+        tripEntity.setHeadsign(tripsDetails.getHeadsign());
+
+        StopTime lastStop = tripsDetails.getStops().get(tripsDetails.getStops().size() - 1);
+        var velocityMetersPerSeconds = lastStop.getMeters().doubleValue() / lastStop.getCustomizedSeconds().doubleValue();
+        var velocityKmPerH = Math.round(velocityMetersPerSeconds * 3600.0d / 1000.0d);
+        tripEntity.setCustomizedCommunicationVelocity((int) velocityKmPerH);
+        tripEntity.setCalculatedCommunicationVelocity(tripsDetails.getCalculatedCommunicationVelocity());
+        tripEntity.setOriginStopName(tripsDetails.getOriginStopName());
+        tripEntity.setDestinationStopName(tripsDetails.getDestinationStopName());
+        tripEntity.setMainVariant(tripsDetails.getIsMainVariant());
         tripEntity.setCustomized(tripsDetails.getIsCustomized());
         tripEntity.setUpdatedAt(LocalDateTime.now());
 

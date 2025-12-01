@@ -43,8 +43,8 @@ public class TripCreatorService {
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getName(),
                 createTripDetailsRequest.getBody().getTripId().getVariantName(),
-                TripVariantModeMapper.map(createTripDetailsRequest.getBody().getItem().getMode()),
-                TripTrafficModeMapper.map(createTripDetailsRequest.getBody().getItem().getTrafficMode()));
+                TripVariantModeMapper.map(createTripDetailsRequest.getBody().getTripId().getVariantMode()),
+                TripTrafficModeMapper.map(createTripDetailsRequest.getBody().getTripId().getTrafficMode()));
 
         if (uniqueTripIndexExists) {
             throw new BusinessException("ERROR:202510300047", "Trip index already exists");

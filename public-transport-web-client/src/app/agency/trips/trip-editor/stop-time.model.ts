@@ -1,3 +1,5 @@
+import {FormControl} from "@angular/forms";
+
 export interface StopTimeModel {
     stopId?: number;
     stopName?: string;
@@ -9,4 +11,6 @@ export interface StopTimeModel {
     calculatedSeconds?: number;
     customizedMinutes?: number;
     bdot10k?: boolean;
+
+    customizedMinutesControl: FormControl<number>
 }
