@@ -47,7 +47,7 @@ export class TripListComponent implements OnInit {
     public params: Params;
     public trips: RouteDetails = {route: {line: '', name: ''}};
 
-    public state: { line: string, name: string, variant: string };
+    public state: { line: string, name: string };
 
     public isUpdatingBasicInformation: boolean = false;
 
@@ -58,8 +58,7 @@ export class TripListComponent implements OnInit {
         this._route.data.pipe(map((data: Data) => data['trips'])).subscribe(trips => this.trips = trips);
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,
-            name: string,
-            variant: string
+            name: string
         });
     }
 
@@ -69,8 +68,8 @@ export class TripListComponent implements OnInit {
 
     public editTrip(trip: Trip) {
         const queryParams = {
-            name: trip.name,
-            line: trip.line,
+            name: this.state.name,
+            line: this.state.line,
             variant: trip.variant,
             mode: trip.mode,
             trafficMode: trip.trafficMode
@@ -117,6 +116,10 @@ export class TripListComponent implements OnInit {
 
         this.routeService.updateRoute(this.agencyStorageService.getInstance(), updateRouteRequest).subscribe({
             next: (response) => {
+                this.state = {
+                    line: route.line,
+                    name: route.name
+                }
             },
             complete: () => this.isUpdatingBasicInformation = false
         });
