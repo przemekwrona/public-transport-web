@@ -76,8 +76,10 @@ export class ProfileDetailsComponent implements OnInit {
         });
 
         this.agencyService.getAgencyPhoto(this.agencyStorageService.getInstance()).subscribe((photoResponse: Blob) => {
-            let objectURL: string = URL.createObjectURL(photoResponse);
-            this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            if (photoResponse != null) {
+                let objectURL: string = URL.createObjectURL(photoResponse);
+                this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            }
         });
     }
 

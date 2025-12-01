@@ -33,8 +33,10 @@ export class HeaderComponent implements OnInit {
         this.route.data.pipe(map((data: Data) => data['agencyDetails']))
             .subscribe((agencyDetails: AgencyDetails) => this.agencyDetails = agencyDetails);
         this.agencyService.getAgencyPhoto(this.agencyStorageService.getInstance()).subscribe((photoResponse: Blob) => {
-            let objectURL: string = URL.createObjectURL(photoResponse);
-            this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            if (photoResponse != null) {
+                let objectURL: string = URL.createObjectURL(photoResponse);
+                this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            }
         });
     }
 
