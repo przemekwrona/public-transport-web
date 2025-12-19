@@ -11,6 +11,7 @@ import pl.wrona.webserver.core.agency.TripEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @UtilityClass
 public class TripMapper {
@@ -24,11 +25,10 @@ public class TripMapper {
         tripEntity.setVariantMode(TripVariantModeMapper.map(tripsDetails.getTripId().getVariantMode()));
         tripEntity.setTrafficMode(TripTrafficModeMapper.map(tripsDetails.getTripId().getTrafficMode()));
 
-        if (tripsDetails.getIsMainVariant()) {
+        if (Optional.of(tripsDetails).map(TripsDetails::getIsMainVariant).orElse(Boolean.FALSE)) {
             tripEntity.setVariantName("MAIN");
             tripEntity.setVariantDesignation(StringUtils.EMPTY);
             tripEntity.setVariantDescription(StringUtils.EMPTY);
-
         } else {
             tripEntity.setVariantDesignation(tripsDetails.getVariantDesignation());
             tripEntity.setVariantDescription(tripsDetails.getVariantDescription());

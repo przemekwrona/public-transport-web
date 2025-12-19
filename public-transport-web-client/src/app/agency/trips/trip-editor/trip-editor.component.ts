@@ -432,7 +432,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             stopTime.lat = stopTimeModel.lat;
             stopTime.lon = stopTimeModel.lon;
             stopTime.calculatedSeconds = stopTimeModel.calculatedSeconds;
-            stopTime.customizedSeconds = 60 * stopTimeModel.customizedMinutesControl.value;
+            stopTime.customizedSeconds = 60 * stopTimeModel?.customizedMinutesControl?.value;
+
             stopTime.meters = stopTimeModel.meters;
 
             return stopTime;
