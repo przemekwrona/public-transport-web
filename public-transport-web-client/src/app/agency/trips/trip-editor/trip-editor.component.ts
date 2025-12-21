@@ -32,7 +32,7 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {StopTimeModel} from "./stop-time.model";
 import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {TripIdExistenceValidator} from "./trip-id-existence/trip-id-existence.service";
 
 @Component({
@@ -127,8 +127,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             tripVariantMode: [this.state.mode, [Validators.required]],
             tripTrafficMode: [this.state.trafficMode, [Validators.required]],
 
-            variantDesignation: ['', [Validators.required]],
-            variantDescription: ['', [Validators.required]],
+            variantDesignation: ['', [Validators.minLength(0)]],
+            variantDescription: ['', [Validators.minLength(0)]],
 
             origin: ['', [Validators.required]],
             destination: ['', [Validators.required]],
@@ -138,8 +138,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
             isCustomized: [false, [Validators.required]],
             stops: this.formBuilder.array([], [Validators.required, Validators.minLength(2)])
-        }, {
-            // asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, 'tripVariantName', 'tripVariantMode', 'tripTrafficMode')
+        },
+        {
+            asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.name, this.state.mode, this.state.trafficMode)
         });
 
         this.modelForm.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => this.onCommunicationVelocityChange(value));
