@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AbstractControl, AsyncValidatorFn, FormGroup} from '@angular/forms';
+import {AbstractControl, AsyncValidatorFn, FormGroup, ValidatorFn} from '@angular/forms';
 import {delay, Observable, of} from 'rxjs';
 import {map, catchError, switchMap} from 'rxjs/operators';
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
@@ -10,33 +10,38 @@ export class TripIdExistenceValidator {
     constructor(private agencyStorageService: AgencyStorageService, private tripService: TripService) {
     }
 
-    variantExistsValidator(routeLine: string, routeName: string, variantNameKey: AbstractControl, variantModeKey: AbstractControl, trafficModeKey: AbstractControl): AsyncValidatorFn {
+    variantExistsValidator(line: string, name: string, variantName: string, tripMode: TripMode, trafficMode: TrafficMode): AsyncValidatorFn {
         return (control: FormGroup): Observable<{ variantExists: boolean } | null> => {
-            // Return null for empty values (valid by default)
-            if (!control.value) {
+
+            const variantNameControl: AbstractControl = control.get('tripVariantName');
+            const variantModeControl: AbstractControl = control.get('tripVariantMode');
+            const trafficModeControl: AbstractControl = control.get('tripTrafficMode');
+
+            if (variantNameControl.pristine && variantModeControl.pristine && trafficModeControl.pristine) {
                 return of(null);
             }
 
-            if (variantNameKey.pristine && variantModeKey.pristine && trafficModeKey.pristine) {
+            const variantNameControlValue: string = variantNameControl?.value;
+            const variantModeControlValue: TripMode = variantModeControl?.value;
+            const trafficModeControlValue: TrafficMode = trafficModeControl?.value;
+
+            // Return True if it is the same trip
+            if (variantName === variantNameControlValue && tripMode === variantModeControlValue && trafficMode === trafficModeControlValue) {
                 return of(null);
             }
-
-            const variantName: string = variantNameKey?.value;
-            const variantMode: TripMode = variantModeKey?.value;
-            const trafficMode: TrafficMode = trafficModeKey?.value;
 
             const instance: string = this.agencyStorageService.getInstance();
 
             const routeId: RouteId = {};
-            routeId.line = routeLine;
-            routeId.name = routeName;
+            routeId.line = line;
+            routeId.name = name;
 
             const tripId: TripId = {};
             tripId.routeId = routeId;
 
-            tripId.variantName = variantName;
-            tripId.variantMode = variantMode;
-            tripId.trafficMode = trafficMode;
+            tripId.variantName = variantNameControlValue;
+            tripId.variantMode = variantModeControlValue;
+            tripId.trafficMode = trafficModeControlValue;
 
             return of(control.value).pipe(
                 // Delay processing to debounce user input
