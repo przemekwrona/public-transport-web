@@ -25,6 +25,7 @@ import pl.wrona.webserver.security.PreAgencyAuthorize;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
@@ -89,7 +90,7 @@ public class TripCreatorService {
 
                     entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
                     entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
-                    entity.setCustomizedTimeSeconds(stopTime.getCustomizedSeconds());
+                    entity.setCustomizedTimeSeconds(Optional.ofNullable(stopTime.getCustomizedSeconds()).orElse(stopTime.getCalculatedSeconds()));
                     entity.setDistanceMeters(stopTime.getMeters());
 
                     return entity;

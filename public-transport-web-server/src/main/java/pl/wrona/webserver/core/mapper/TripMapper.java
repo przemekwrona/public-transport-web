@@ -37,7 +37,8 @@ public class TripMapper {
         tripEntity.setHeadsign(tripsDetails.getHeadsign());
 
         StopTime lastStop = tripsDetails.getStops().get(tripsDetails.getStops().size() - 1);
-        var velocityMetersPerSeconds = lastStop.getMeters().doubleValue() / lastStop.getCustomizedSeconds().doubleValue();
+        var customizedSeconds = Optional.ofNullable(lastStop.getCustomizedSeconds()).map(Integer::doubleValue).orElse(lastStop.getCalculatedSeconds().doubleValue());
+        var velocityMetersPerSeconds = lastStop.getMeters().doubleValue() / customizedSeconds;
         var velocityKmPerH = Math.round(velocityMetersPerSeconds * 3600.0d / 1000.0d);
         tripEntity.setCustomizedCommunicationVelocity((int) velocityKmPerH);
         tripEntity.setCalculatedCommunicationVelocity(tripsDetails.getCalculatedCommunicationVelocity());
