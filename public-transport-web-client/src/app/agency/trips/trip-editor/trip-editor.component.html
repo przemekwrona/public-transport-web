@@ -48,6 +48,23 @@
                                 </div>
                             </div>
 
+                            @if (modelForm?.errors?.["variantExists"]) {
+                                <span class="badge badge-sm badge-outline badge-danger block"
+                                      style="line-height: inherit">
+                                    <div>
+                                        Trasa <strong>{{ state.line }} {{ state.name }} </strong> posiada wskazany wariant.
+                                    </div>
+                                    <div>
+                                        Nazwa wariantu: <strong>{{ modelForm.controls["tripVariantName"].value }}</strong>
+                                    </div>
+                                    <div>
+                                        Kierunek wariantu: <strong> {{ "agency.trip.edit." + modelForm.controls["tripVariantMode"].value | transloco }} </strong>
+                                    </div>
+                                    <div>
+                                        Ruch panujący na drodze: <strong>{{ "agency.trip.traffic." +  modelForm.controls["tripTrafficMode"].value | transloco }}</strong>
+                                    </div>
+                                </span>
+                            }
                             <div class="text-gray-800 text-2sm">
                                 <span class="text-danger uppercase">{{ 'common.attention' | transloco | uppercase }}
                                     :</span>
