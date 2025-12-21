@@ -89,7 +89,7 @@
                                                     <img alt="" class="w-12"
                                                          src="assets/media/svg/bus-svgrepo-com.svg"/>
                                                 </div>
-                                                <span class="text-md font-medium text-gray-900">Normalny ruch</span>
+                                                <span class="text-md font-medium text-gray-900"> {{ "agency.trip.traffic." + trafficModeSelectValue.Normal | transloco }}</span>
                                                 <input class="appearance-none" name="tripTrafficMode" type="radio"
                                                        [value]="trafficModeSelectValue.Normal"
                                                        formControlName="tripTrafficMode"/>
@@ -101,7 +101,7 @@
                                                     <img alt="" class="w-12"
                                                          src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
                                                 </div>
-                                                <span class="text-md font-medium text-gray-900">Jazda w korku</span>
+                                                <span class="text-md font-medium text-gray-900"> {{ "agency.trip.traffic." + trafficModeSelectValue.Traffic | transloco }}</span>
                                                 <input class="appearance-none" name="tripTrafficMode" type="radio"
                                                        [value]="trafficModeSelectValue.Traffic"
                                                        formControlName="tripTrafficMode"/>
@@ -120,10 +120,6 @@
                                 </div>
                             </div>
 
-                            <span class="badge badge-sm badge-outline badge-danger w-full" style="line-height: inherit">
-                                Trasa już posiada waritan o nazwie: {{ $tripDetails.tripId.variantName }},
-                                Kierunek wariantu: {{ $tripDetails.tripId.variantMode }}
-                                Ruch panujący na drodze: {{ $tripDetails.tripId.trafficMode }}</span>
 
                             @if (!isMainVariant()) {
                                 <div class="border-t border-gray-200 my-2.5"></div>
