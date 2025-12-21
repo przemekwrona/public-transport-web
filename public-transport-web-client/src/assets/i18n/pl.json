@@ -30,6 +30,10 @@
       "mainVariant": "Wariant podstawowy",
       "FRONT": "TAM",
       "BACK": "POWRÓT",
+      "traffic": {
+        "NORMAL": "Normalny ruch",
+        "TRAFFIC": "Jazda w korku"
+      },
       "edit": {
         "mainVariant": "Wariant podstawowy",
         "FRONT": "TAM",
