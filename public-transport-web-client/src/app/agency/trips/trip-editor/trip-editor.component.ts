@@ -160,6 +160,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.modelForm.controls['isCustomized'].setValue(tripDetails.isCustomized);
             this.modelForm.controls['calculatedCommunicationVelocity'].setValue(tripDetails.calculatedCommunicationVelocity);
 
+            if(tripDetails.isMainVariant) {
+                this.modelForm.controls['tripVariantName'].disable();
+                this.modelForm.controls['tripVariantName'].setValue('MAIN');
+            }
+
             this.modelForm.controls['variantDesignation'].setValue(tripDetails.variantDesignation);
             this.modelForm.controls['variantDescription'].setValue(tripDetails.variantDescription);
 
