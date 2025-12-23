@@ -74,27 +74,15 @@
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Nazwa wariantu</label>
-                                    <!--                                    @if (isMainVariant()) {-->
-                                    <!--                                        <input name="tripVariantName" id="tripVariantName"-->
-                                    <!--                                               formControlName="tripVariantName"-->
-                                    <!--                                               class="input" type="text"-->
-                                    <!--                                               value="{{'agency.trip.edit.mainVariant' | transloco }}"-->
-                                    <!--                                                disabled>-->
-                                    <!--                                    } @else {-->
                                     <input name="tripVariantName" id="tripVariantName"
                                            formControlName="tripVariantName"
                                            class="input" type="text" placeholder="Nazwa wariantu"
                                            [ngClass]="{'border-danger': canCheckErrors('tripVariantName') }">
-                                    <!--                                    }-->
                                 </div>
                                 @if (checkControlHasError("tripVariantName", "required")) {
                                     <span class="text-danger text-2sm">Nazwa wariantu jest wymagana</span>
                                 }
                             </div>
-
-                            <!--                            {{ checkControlHasError("tripVariantName", "required") }}-->
-                            <!--                            {{ checkControlHasError("tripVariantMode", "required") }}-->
-                            <!--                            {{ checkControlHasError("tripTrafficMode", "required") }}-->
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
