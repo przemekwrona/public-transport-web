@@ -19,7 +19,7 @@ import {
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {debounceTime, map, Observable, Subject} from "rxjs";
+import {debounceTime, map, Observable, pairwise, Subject} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {ViewportScroller} from "@angular/common";
 import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
@@ -32,7 +32,15 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {StopTimeModel} from "./stop-time.model";
 import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
-import {FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {
+    AbstractControl,
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    ValidationErrors,
+    Validators
+} from "@angular/forms";
 import {TripIdExistenceValidator} from "./trip-id-existence/trip-id-existence.service";
 
 @Component({
@@ -122,28 +130,29 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
 
         this.modelForm = this.formBuilder.group({
-            isMainVariant: [true, [Validators.required]],
-            tripVariantName: [this.state.variant, [Validators.required]],
-            tripVariantMode: [this.state.mode, [Validators.required]],
-            tripTrafficMode: [this.state.trafficMode, [Validators.required]],
+                isMainVariant: [true, [Validators.required]],
+                tripVariantName: [this.state.variant, [Validators.required]],
+                tripVariantMode: [this.state.mode, [Validators.required]],
+                tripTrafficMode: [this.state.trafficMode, [Validators.required]],
 
-            variantDesignation: ['', [Validators.minLength(0)]],
-            variantDescription: ['', [Validators.minLength(0)]],
+                variantDesignation: ['', [Validators.required, Validators.minLength(0)]],
+                variantDescription: ['', [Validators.required, Validators.minLength(0)]],
 
-            origin: ['', [Validators.required]],
-            destination: ['', [Validators.required]],
-            headsign: ['', [Validators.required]],
+                origin: ['', [Validators.required]],
+                destination: ['', [Validators.required]],
+                headsign: ['', [Validators.required]],
 
-            calculatedCommunicationVelocity: [null, [Validators.required, Validators.min(0)]],
+                calculatedCommunicationVelocity: [null, [Validators.required, Validators.min(0)]],
 
-            isCustomized: [false, [Validators.required]],
-            stops: this.formBuilder.array([], [Validators.required, Validators.minLength(2)])
-        },
-        {
-            asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.name, this.state.mode, this.state.trafficMode)
-        });
+                isCustomized: [false, [Validators.required]],
+                stops: this.formBuilder.array([], [Validators.required, Validators.minLength(2)])
+            },
+            {
+                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.name, this.state.mode, this.state.trafficMode)
+            });
 
         this.modelForm.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => this.onCommunicationVelocityChange(value));
+        this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
 
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
             this.$tripDetails = tripDetails;
@@ -540,18 +549,19 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
     }
 
-    public clickIsMainVariant(): void {
-        const isMainVariant: boolean = this.modelForm.controls['isMainVariant'].value as boolean;
+    clickIsMainVariant(isMainVariant: boolean): void {
+        const tripVariantNameControl: AbstractControl = this.modelForm.get('tripVariantName');
 
         if (isMainVariant) {
-            this.modelForm.controls['tripVariantName'].setValue(this.previousVariantName);
+            tripVariantNameControl.setValue(this.previousVariantName);
+            tripVariantNameControl?.disable();
         } else {
-            this.previousVariantName = this.modelForm.controls['tripVariantName'].value;
-            this.modelForm.controls['tripVariantName'].setValue('MAIN');
+            this.previousVariantName = tripVariantNameControl.value;
+            tripVariantNameControl.setValue('MAIN');
             this.modelForm.controls['variantDesignation'].setValue('');
             this.modelForm.controls['variantDescription'].setValue('');
+            tripVariantNameControl?.enable();
         }
-
     }
 
     openDialogEditStop(stopTime: StopTime): void {
