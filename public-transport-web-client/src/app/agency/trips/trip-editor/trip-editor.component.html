@@ -43,8 +43,8 @@
                                 </div>
                                 <div class="flex items-center gap-5">
                                     <label class="switch switch-sm">
-                                        <input type="checkbox" formControlName="isMainVariant"
-                                               (click)="clickIsMainVariant()"></label>
+                                        <input type="checkbox" formControlName="isMainVariant"/>
+                                    </label>
                                 </div>
                             </div>
 
@@ -61,7 +61,7 @@
                                         Kierunek wariantu: <strong> {{ "agency.trip.edit." + modelForm.controls["tripVariantMode"].value | transloco }} </strong>
                                     </div>
                                     <div>
-                                        Ruch panujący na drodze: <strong>{{ "agency.trip.traffic." +  modelForm.controls["tripTrafficMode"].value | transloco }}</strong>
+                                        Ruch panujący na drodze: <strong>{{ "agency.trip.traffic." + modelForm.controls["tripTrafficMode"].value | transloco }}</strong>
                                     </div>
                                 </span>
                             }
@@ -74,33 +74,49 @@
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Nazwa wariantu</label>
-                                    @if (isMainVariant()) {
-                                        <input class="input" value="{{'agency.trip.edit.mainVariant' | transloco }}"
-                                               type="text" disabled>
-                                    } @else {
-                                        <input name="tripVariantName" id="tripVariantName"
-                                               formControlName="tripVariantName"
-                                               class="input" type="text" placeholder="Nazwa wariantu">
-                                    }
+                                    <!--                                    @if (isMainVariant()) {-->
+                                    <!--                                        <input name="tripVariantName" id="tripVariantName"-->
+                                    <!--                                               formControlName="tripVariantName"-->
+                                    <!--                                               class="input" type="text"-->
+                                    <!--                                               value="{{'agency.trip.edit.mainVariant' | transloco }}"-->
+                                    <!--                                                disabled>-->
+                                    <!--                                    } @else {-->
+                                    <input name="tripVariantName" id="tripVariantName"
+                                           formControlName="tripVariantName"
+                                           class="input" type="text" placeholder="Nazwa wariantu"
+                                           [ngClass]="{'border-danger': canCheckErrors('tripVariantName') }">
+                                    <!--                                    }-->
                                 </div>
+                                @if (checkControlHasError("tripVariantName", "required")) {
+                                    <span class="text-danger text-2sm">Nazwa wariantu jest wymagana</span>
+                                }
                             </div>
+
+                            <!--                            {{ checkControlHasError("tripVariantName", "required") }}-->
+                            <!--                            {{ checkControlHasError("tripVariantMode", "required") }}-->
+                            <!--                            {{ checkControlHasError("tripTrafficMode", "required") }}-->
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Kierunek wariantu</label>
                                     <select name="tripVariantMode" id="tripVariantMode"
-                                            formControlName="tripVariantMode" class="select w-full">
+                                            formControlName="tripVariantMode" class="select w-full"
+                                            [ngClass]="{'border-danger': validControl('tripVariantMode')}">
                                         <option [value]="tripModeSelectValue.Front">{{ 'agency.trip.edit.FRONT' | transloco }}</option>
                                         <option [value]="tripModeSelectValue.Back">{{ 'agency.trip.edit.BACK' | transloco }}</option>
                                     </select>
                                 </div>
+                                @if (checkControlHasError("tripVariantMode", "required")) {
+                                    <span class="text-danger text-2sm">Kierunek wariantu jest wymagany</span>
+                                }
                             </div>
 
                             <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
                                 <div class="grid gap-7">
                                     <label class="form-label max-w-56">Ruch panujący na drodze</label>
                                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
-                                        <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
+                                        <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
+                                               [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
                                             <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                                 <div class="flex items-center h-11">
                                                     <img alt="" class="w-12"
@@ -112,7 +128,8 @@
                                                        formControlName="tripTrafficMode"/>
                                             </div>
                                         </label>
-                                        <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border border-gray-300 rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg">
+                                        <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
+                                               [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
                                             <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                                 <div class="flex items-center h-11">
                                                     <img alt="" class="w-12"
@@ -125,6 +142,9 @@
                                             </div>
                                         </label>
                                     </div>
+                                    @if (checkControlHasError("tripTrafficMode", "required")) {
+                                        <span class="text-danger text-2sm">Ruch panujący jest na drodze jest wymagany</span>
+                                    }
                                     <style>
                                         .sso-active:has(:checked) {
                                             background-image: url('assets/media/images/2600x1600/bg-1.png');
@@ -146,8 +166,12 @@
                                             jazdy</label>
                                         <input formControlName="variantDesignation" name="variantDesignation"
                                                id="variantDesignation" class="input" type="text"
+                                               [ngClass]="{'border-danger': validControl('variantDesignation')}"
                                                placeholder="Symbol kursu na rozkładzie"/>
                                     </div>
+                                    @if (checkControlHasError("variantDesignation", "required")) {
+                                        <span class="text-danger text-2sm">W przypadku gdy wariant nie jest wariantem podstawowym, proszę o podanie w jaki sposób oznaczyć kurs na rozkładzie jazdy</span>
+                                    }
                                 </div>
                                 <div class="w-full">
                                     <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -155,8 +179,12 @@
                                         <input formControlName="variantDescription" name="variantDescription"
                                                id="variantDescription"
                                                class="input" type="text"
-                                               placeholder="Kurs skrócony do miejscowości Wrocław"/>
+                                               [ngClass]="{'border-danger': validControl('variantDescription')}"
+                                               placeholder="Wyjaśnienie oznaczenia"/>
                                     </div>
+                                    @if (checkControlHasError("variantDescription", "required")) {
+                                        <span class="text-danger text-2sm">Podaj naw w jaki sposób wyjaśnić pasazerom co oznacza oznaczenie <strong>{{ modelForm.controls['variantDesignation']?.value }}</strong> na rozkładzie </span>
+                                    }
                                 </div>
                             }
                             <div class="border-t border-gray-200 my-2.5"></div>
@@ -165,24 +193,36 @@
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Przystanek początkowy</label>
                                     <input type="text" formControlName="origin" name="origin" id="origin"
-                                           class="input" placeholder="Przystanek początkowy">
+                                           class="input" placeholder="Przystanek początkowy"
+                                           [ngClass]="{'border-danger': canCheckErrors('origin') }">
                                 </div>
+                                @if (checkControlHasError("origin", "required")) {
+                                    <span class="text-danger text-2sm">Podaj nazwę przystaneku początkowego</span>
+                                }
                             </div>
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Przystanek końcowy</label>
                                     <input type="text" formControlName="destination" name="destination" id="destination"
-                                           class="input" placeholder="Przystanek końcowy">
+                                           class="input" placeholder="Przystanek końcowy"
+                                           [ngClass]="{'border-danger': canCheckErrors('destination') }">
                                 </div>
+                                @if (checkControlHasError("destination", "required")) {
+                                    <span class="text-danger text-2sm">Podaj nazwę przystanku końcowego</span>
+                                }
                             </div>
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Kierunek na tablicy czołowej</label>
                                     <input type="text" formControlName="headsign" name="headsign" id="headsign"
-                                           class="input">
+                                           class="input" placeholder="Tablica czołowa"
+                                           [ngClass]="{'border-danger': canCheckErrors('headsign') }">
                                 </div>
+                                @if (checkControlHasError("headsign", "required")) {
+                                    <span class="text-danger text-2sm">Podaj co wyświetlić jest na tablicy czołowej</span>
+                                }
                             </div>
                             <div class="flex justify-end">
                             </div>
@@ -203,13 +243,21 @@
                             <table class="table align-middle text-sm text-gray-500">
                                 <tr>
                                     <td class="py-2">
-                                        Prędkość komunikacyjna
+                                        <div>Prędkość komunikacyjna</div>
+                                        @if (checkControlHasError("calculatedCommunicationVelocity", "required")) {
+                                            <span class="text-danger text-2sm">Prędkość komunikacyjna jest wymagana</span>
+                                        } @else if (checkControlHasError("calculatedCommunicationVelocity", "min")) {
+                                            <span class="text-danger text-2sm">Minimalna prędkość musi być większa niż 0. Bieżąca wartość to: {{ modelForm.controls["calculatedCommunicationVelocity"].value }}</span>
+                                        }
                                     </td>
                                     <td class="py-2 justify-items-end">
                                         <div class="input-group w-32">
                                             <input type="number" formControlName="calculatedCommunicationVelocity"
-                                                   name="velocity" id="velocity" class="input" placeholder="30">
-                                            <span class="btn btn-secondary">km/h</span>
+                                                   name="calculatedCommunicationVelocity"
+                                                   id="calculatedCommunicationVelocity" class="input "
+                                                   [ngClass]="{'border-t-danger border-b-danger border-l-danger': canCheckErrors('calculatedCommunicationVelocity')}">
+                                            <span class="btn btn-secondary"
+                                                  [ngClass]="{'border-t-danger border-r-danger border-b-danger': canCheckErrors('calculatedCommunicationVelocity')}">km/h</span>
                                         </div>
                                     </td>
                                 </tr>

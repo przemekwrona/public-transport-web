@@ -113,6 +113,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public isRefreshingExpanded: boolean = false;
 
     public modelForm: FormGroup;
+    public isSubmited: boolean = false;
 
     constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
@@ -406,6 +407,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public clickCreateOrEdit(model: FormGroup): void {
+        this.isSubmited = true;
+        if (this.modelForm.invalid) {
+            this.notificationService.showError('Formularz jest niepoprawny uzupełnij braki');
+            return
+        }
+
         const routeId: RouteId = {};
         routeId.name = this.state.name;
         routeId.line = this.state.line;
@@ -612,5 +619,17 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const lastStop: StopTimeModel = this.getLastStop();
         const velocityMetersPerSeconds: number = lastStop.meters / (60 * lastStop.customizedMinutes);
         return velocityMetersPerSeconds * 3600 / 1000;
+    }
+
+    public validControl(controlName: string): ValidationErrors | null {
+        return this.isSubmited && this.modelForm?.controls[controlName]?.errors;
+    }
+
+    public checkControlHasError(controlName: string, errorName: string): boolean {
+        return this.isSubmited && this.validControl(controlName)?.[errorName] || false;
+    }
+
+    public canCheckErrors(controlName: string): boolean {
+        return this.isSubmited && this.validControl(controlName) != null;
     }
 }
