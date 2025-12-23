@@ -312,37 +312,36 @@
 
                             @for (stopTime of stopTimes; track stopTime; let index = $index) {
                                 <div class="example-box" cdkDrag [@simpleFadeAnimation]="'in'">
-                                <span>
-                                    <span [ngClass]="{'blue': stopTime.bdot10k, 'dark-blue': !stopTime.bdot10k}">{{ index + 1 }}</span>
-                                    <span>{{ stopTime?.stopName }} </span>
-                                </span>
-
                                     <span>
-                                    <span (click)="openDialogEditStop(stopTime)">
-                                        <a class="btn btn-sm btn-icon btn-clear btn-primary">
-                                            <i class="ki-filled ki-notepad-edit"></i>
-                                        </a>
+                                        <span [ngClass]="{'blue': stopTime.bdot10k, 'dark-blue': !stopTime.bdot10k}">{{ index + 1 }}</span>
+                                        <span>{{ stopTime?.stopName }} </span>
                                     </span>
-                                    <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
-                                    <span>km ({{ stopTime.calculatedSeconds | time | number: '1.0-0' }} min)</span>
+                                    <span>
+                                        <span (click)="openDialogEditStop(stopTime)">
+                                            <a class="btn btn-sm btn-icon btn-clear btn-primary">
+                                                <i class="ki-filled ki-notepad-edit"></i>
+                                            </a>
+                                        </span>
+                                        <span>{{ stopTime.meters | distance | number: '1.1-1' }}</span>
+                                        <span>km ({{ stopTime.calculatedSeconds | time | number: '1.0-0' }} min)</span>
 
                                         @if (isCustomized()) {
                                             <div class="inline-block">
-                                            <div class="input-group mx-1">
-                                                <input type="number" id="customizedMinutesControl-{{index}}"
-                                                       name="customizedMinutesControl-{{index}}"
-                                                       [formControl]="stopTime.customizedMinutesControl"
-                                                       class="input w-14 h-7.5"/>
-                                                <span class="btn btn-secondary h-7.5 px-1">min</span>
-                                            </div>
-                                        </div>
+                                                    <div class="input-group mx-1">
+                                                        <input type="number" id="customizedMinutesControl-{{index}}"
+                                                               name="customizedMinutesControl-{{index}}"
+                                                               [formControl]="stopTime.customizedMinutesControl"
+                                                               class="input w-14 h-7.5"/>
+                                                        <span class="btn btn-secondary h-7.5 px-1">min</span>
+                                                    </div>
+                                                </div>
                                         }
                                         <span (click)="remove(stopTime)">
-                                        <a class="btn btn-sm btn-icon btn-clear btn-danger">
-                                            <i class="ki-filled ki-cross-square"></i>
-                                        </a>
+                                                <a class="btn btn-sm btn-icon btn-clear btn-danger">
+                                                    <i class="ki-filled ki-cross-square"></i>
+                                                </a>
+                                            </span>
                                     </span>
-                                </span>
                                 </div>
                             }
                             <!--                        @if (isRefreshingExpanded) {-->
