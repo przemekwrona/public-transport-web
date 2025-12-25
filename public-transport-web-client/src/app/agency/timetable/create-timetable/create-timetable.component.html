@@ -9,7 +9,7 @@
                         <h3 class="card-title">Poniedziałek - Piątek</h3>
                     </div>
                     <div class="card-body py-10 flex flex-col">
-                        <app-timetable-board></app-timetable-board>
+                        <app-timetable-board [group]="getTimetableByName('workingDay')"></app-timetable-board>
                     </div>
                 </div>
                 <!-- end: cards -->
@@ -23,7 +23,7 @@
                         <h3 class="card-title">Sobota</h3>
                     </div>
                     <div class="card-body py-10 flex flex-col">
-                        <app-timetable-board></app-timetable-board>
+                        <app-timetable-board [group]="getTimetableByName('saturday')"></app-timetable-board>
                     </div>
                 </div>
                 <!-- end: cards -->
