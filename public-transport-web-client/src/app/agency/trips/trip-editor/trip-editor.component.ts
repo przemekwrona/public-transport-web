@@ -422,7 +422,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             stopTime.lat = stopTimeFormGroup.controls["lat"].value;
             stopTime.lon = stopTimeFormGroup.controls["lon"].value;
             stopTime.calculatedSeconds = stopTimeFormGroup.controls["calculatedSeconds"].value;
-            stopTime.customizedSeconds = 60 * stopTimeFormGroup.controls["customizedMinutes"].value;
+            if (this.modelForm.controls['isCustomized'].value) {
+                stopTime.customizedSeconds = 60 * stopTimeFormGroup.controls["customizedMinutes"].value;
+            } else {
+                stopTime.customizedSeconds = 60 * stopTimeFormGroup.controls["calculatedSeconds"].value;
+            }
             stopTime.meters = stopTimeFormGroup.controls["meters"].value;
 
             return stopTime;
