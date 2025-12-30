@@ -919,6 +919,15 @@ paths:
                 type: string
                 format: binary
 
+  /agency/{agency}/timetable-generator:
+    $ref: './paths/timetable-generator-api.yaml#/paths/~1agency~1{agency}~1timetable-generator'
+
+  /agency/{agency}/timetable-generator/routes:
+    $ref: './paths/timetable-generator-api.yaml#/paths/~1agency~1{agency}~1timetable-generator~1routes'
+
+  /agency/{agency}/timetable-generator/calendars:
+    $ref: './paths/timetable-generator-api.yaml#/paths/~1agency~1{agency}~1timetable-generator~1calendars'
+
 components:
   schemas:
     CreateAppUserRequest:

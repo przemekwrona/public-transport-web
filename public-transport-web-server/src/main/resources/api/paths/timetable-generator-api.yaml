@@ -1,0 +1,149 @@
+openapi: 3.0.0
+info:
+
+paths:
+  /agency/{agency}/timetable-generator:
+    get:
+      tags:
+        - timetable-generator
+      summary: Get list all generated timetables
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableGeneratorPayload'
+
+    post:
+      tags:
+        - timetable-generator
+      summary: Create new timetable generator
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableGeneratorPayload'
+
+    put:
+      tags:
+        - timetable-generator
+      summary: Update already existed timetable
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+
+    delete:
+      tags:
+        - timetable-generator
+      summary: Delete generated summary
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+
+  /agency/{agency}/timetable-generator/routes:
+    get:
+      tags:
+        - timetable-generator
+      summary: Get list all generated timetables
+      operationId: findRoutes
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableGeneratorFilterByRoutesResponse'
+
+  /agency/{agency}/timetable-generator/calendars:
+    get:
+      tags:
+        - timetable-generator
+      summary: Get list all generated timetables
+      operationId: findCalendars
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableGeneratorPayload'
+
+components:
+  schemas:
+    TimetableGeneratorPayload:
+      type: object
+      properties:
+        startDate:
+          type: string
+        endDate:
+          type: string
+        interval:
+          type: string
+
+    TimetableGeneratorFilterByRoutes:
+      type: object
+      properties:
+        line:
+          type: string
+        name:
+          type: string
+
+    TimetableGeneratorFilterByRoutesResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimetableGeneratorFilterByRoutes'
+
+    TimetableGeneratorFilterByCalendar:
+      type: object
+      properties:
+
