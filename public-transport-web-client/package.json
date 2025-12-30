@@ -45,6 +45,7 @@
     "ngx-gauge": "^10.0.0",
     "ngx-image-cropper": "^9.1.5",
     "ngx-mask": "^20.0.3",
+    "ngx-mat-select-search": "^8.0.4",
     "ngx-material-timepicker": "^13.1.1",
     "ngx-sortable": "^2.1.0",
     "rxjs": "~7.8.0",

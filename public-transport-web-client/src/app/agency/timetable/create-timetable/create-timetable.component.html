@@ -1,4 +1,55 @@
 <div class="container-fixed">
+
+    <div class="card min-w-full">
+        <div class="card-body lg:py-7.5 py-5">
+            <div class="flex flex-wrap justify-between gap-5">
+                <div class="flex flex-col mt-2.5">
+                    <div class="text-gray-900 text-sm font-medium">Nazwa i numer linii</div>
+                    <span class="text-gray-700 text-2sm">Nazwa i numer linii</span>
+                </div>
+
+                <label class="sm:max-w-full xl:max-w-96 w-full">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-select [formControl]="bankCtrl" placeholder="Numer i nazwa lini">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="bankFilterCtrl" [placeholderLabel]="'Numer linii'"></ngx-mat-select-search>
+                            </mat-option>
+
+                            @for (route of routes.items; track route) {
+                                <mat-option [value]="route">
+                                    <strong>{{ route.line }}</strong> {{ route.name | routeNameNorm }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </label>
+            </div>
+
+            <div class="flex flex-wrap justify-between gap-5">
+                <div class="flex flex-col mt-2.5">
+                    <div class="text-gray-900 text-sm font-medium">Kalendarz</div>
+                    <span class="text-gray-700 text-2sm">Kalendarz</span>
+                </div>
+
+                <label class="sm:max-w-full xl:max-w-96 w-full">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-select [formControl]="bankCtrl" placeholder="Wybież kalendarz">
+                            @for (calendar of calendarsResponse.calendars; track calendar) {
+                                <mat-option [value]="calendar.calendarName">
+                                    <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
+                                    ({{ calendar.calendarName }})
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="border-t border-white my-5"></div>
+
     <!-- begin: grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
         <div class="col-span-1">
@@ -6,9 +57,9 @@
                 <!-- begin: cards -->
                 <div class="card">
                     <div class="card-header gap-2">
-                        <h3 class="card-title">Poniedziałek - Piątek</h3>
+                        <h3 class="card-title">Kierunek: TAM</h3>
                     </div>
-                    <div class="card-body py-10 flex flex-col">
+                    <div class="card-body py-2.5 flex flex-col">
                         <app-timetable-board [group]="getTimetableByName('workingDay')"></app-timetable-board>
                     </div>
                 </div>
@@ -20,9 +71,9 @@
                 <!-- begin: cards -->
                 <div class="card">
                     <div class="card-header gap-2">
-                        <h3 class="card-title">Sobota</h3>
+                        <h3 class="card-title">Kierunek: POWRÓT</h3>
                     </div>
-                    <div class="card-body py-10 flex flex-col">
+                    <div class="card-body py-2.5 flex flex-col">
                         <app-timetable-board [group]="getTimetableByName('saturday')"></app-timetable-board>
                     </div>
                 </div>
