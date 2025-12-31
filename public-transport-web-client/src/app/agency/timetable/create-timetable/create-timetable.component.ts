@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TimetableBoardComponent} from "./timetable-board/timetable-board.component";
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {
     GetCalendarsResponse,
     TimetableGeneratorFilterByRoutes,
@@ -61,15 +61,32 @@ export class CreateTimetableComponent implements OnInit {
         this._route.data.subscribe(data => this.routes = data['routes']);
     }
 
-    private buildTimetable() {
+    private buildTimetable(): FormGroup {
         return this.formBuilder.group({
-            startTime: [''],
-            endTime: [''],
-            interval: 5
-        });
+            routeId: [{}, [Validators.required]],
+            calendarId: ['', [Validators.required]],
+            front: this.formBuilder.group({
+                startTime: [''],
+                endTime: [''],
+                interval: 5
+            }),
+            back: this.formBuilder.group({
+                startTime: [''],
+                endTime: [''],
+                interval: 8
+            })
+        })
     }
 
-    public getTimetableByName(name: string): FormGroup {
+    private getTimetableByName(name: string): FormGroup {
         return this.formGroup.get(name) as FormGroup;
+    }
+
+    public getFrontTimetableByName(name: string): FormGroup {
+        return this.getTimetableByName(name).get("front") as FormGroup
+    }
+
+    public getBackTimetableByName(name: string): FormGroup {
+        return this.getTimetableByName(name).get("back") as FormGroup
     }
 }
