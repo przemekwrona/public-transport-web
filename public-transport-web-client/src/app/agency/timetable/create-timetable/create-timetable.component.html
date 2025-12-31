@@ -9,7 +9,7 @@
                 </div>
 
                 <label class="sm:max-w-full xl:max-w-96 w-full">
-                    <mat-form-field appearance="outline" class="w-full">
+                    <mat-form-field appearance="outline">
                         <mat-select [formControl]="bankCtrl" placeholder="Numer i nazwa lini">
                             <mat-option>
                                 <ngx-mat-select-search [formControl]="bankFilterCtrl" [placeholderLabel]="'Numer linii'"></ngx-mat-select-search>
@@ -60,7 +60,7 @@
                         <h3 class="card-title">Kierunek: TAM</h3>
                     </div>
                     <div class="card-body py-2.5 flex flex-col">
-                        <app-timetable-board [group]="getTimetableByName('workingDay')"></app-timetable-board>
+                        <app-timetable-board [group]="getFrontTimetableByName('workingDay')"></app-timetable-board>
                     </div>
                 </div>
                 <!-- end: cards -->
@@ -74,7 +74,7 @@
                         <h3 class="card-title">Kierunek: POWRÓT</h3>
                     </div>
                     <div class="card-body py-2.5 flex flex-col">
-                        <app-timetable-board [group]="getTimetableByName('saturday')"></app-timetable-board>
+                        <app-timetable-board [group]="getBackTimetableByName('saturday')"></app-timetable-board>
                     </div>
                 </div>
                 <!-- end: cards -->
