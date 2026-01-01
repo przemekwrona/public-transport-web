@@ -4,12 +4,10 @@ import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, V
 import {
     GetCalendarsResponse,
     TimetableGeneratorFilterByRoutes,
-    TimetableGeneratorFilterByRoutesResponse
+    TimetableGeneratorFilterByRoutesResponse, TimetableGeneratorPayload
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute} from "@angular/router";
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {faClock} from "@fortawesome/free-solid-svg-icons";
 import {CommonModule} from "@angular/common";
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -68,12 +66,14 @@ export class CreateTimetableComponent implements OnInit {
             front: this.formBuilder.group({
                 startTime: [''],
                 endTime: [''],
-                interval: 5
+                interval: 5,
+                departures: this.formBuilder.array([])
             }),
             back: this.formBuilder.group({
                 startTime: [''],
                 endTime: [''],
-                interval: 8
+                interval: 8,
+                departures: this.formBuilder.array([])
             })
         })
     }
@@ -89,4 +89,18 @@ export class CreateTimetableComponent implements OnInit {
     public getBackTimetableByName(name: string): FormGroup {
         return this.getTimetableByName(name).get("back") as FormGroup
     }
+
+    public getRouteIdFormControl(): FormControl {
+        return this.formGroup.get('routeId') as FormControl
+    }
+
+    public getCalendarIdFormControl(): FormControl {
+        return this.formGroup.get('calendarId') as FormControl
+    }
+
+    public buildCreateTimetableRequest() {
+        const timetableGeneratorPayload: TimetableGeneratorPayload = {};
+
+    }
+
 }
