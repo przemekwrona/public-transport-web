@@ -74,11 +74,14 @@
 
             <div class="inline-flex gap-1.5">
 
-                @for (minute of this.departures.get(hour); track minute) {
-                    <input type="number"
-                           (change)="addEmptyDepartureInHour(hour)"
-                           [(ngModel)]="minute.minutes"
-                           class="input input-sm text-center w-10 no-spin"/>
+                @for (departureControl of this.controlDepartures.controls; track $index) {
+                    @if (departureControl.get("hour").value === hour) {
+                        <div [formGroup]="departureControl">
+                            <input type="number" formControlName="minutes"
+                                   (blur)="sortDepartures()"
+                                   class="input input-sm text-center w-10 no-spin">
+                        </div>
+                    }
                 }
 
             </div>
