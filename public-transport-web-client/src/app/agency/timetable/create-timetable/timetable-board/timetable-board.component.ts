@@ -1,16 +1,16 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
-import {FormBuilder, FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators} from "@angular/forms";
+import {
+    AbstractControl,
+    FormArray, FormBuilder,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+} from "@angular/forms";
 import moment, {Moment} from "moment";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {faClock, faGlobe, faSpinner, IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {faClock, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-
-export interface Departure {
-    hour: number;
-    minutes: number | null;
-    symbol: string;
-}
 
 @Component({
     selector: 'app-timetable-board',
@@ -30,71 +30,72 @@ export class TimetableBoardComponent implements OnInit {
     @Input() group!: FormGroup;
 
     public faClock: IconDefinition = faClock;
-    public faGlobe: IconDefinition = faGlobe;
-    public faSpinner: IconDefinition = faSpinner;
 
     public hours: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 
-    public departures: Map<number, Departure[]> = new Map<number, Departure[]>();
-
-    constructor() {
+    constructor(private formBuilder: FormBuilder) {
     }
 
     ngOnInit(): void {
-        this.departures = this.mapDepartures([], true);
+        this.mapDepartures([], true);
     }
 
-    public mapDepartures(generatedDepartures: Moment[], appendEmpty: boolean = false): Map<number, Departure[]> {
-        const departures: Map<number, Departure[]> = new Map<number, Departure[]>();
+    get controlDepartures(): FormArray<FormGroup> {
+        return this.group.get('departures') as FormArray<FormGroup>;
+    }
 
+    public mapDepartures(generatedDepartures: Moment[], appendEmpty: boolean = false) {
         for (const departure of generatedDepartures) {
-
-            const emptyDeparture: Departure = {
-                hour: departure.hours(),
-                minutes: departure.minutes(),
-                symbol: ""
-            } as Departure;
-
-            if (departures.get(departure.hour()) == null) {
-                departures.set(departure.hour(), [emptyDeparture]);
-            } else {
-                departures.get(departure.hour()).push(emptyDeparture);
-            }
+            const departureControl: FormGroup = this.buildDepartureControl(departure.minutes(), departure.hour());
+            this.controlDepartures.push(departureControl);
         }
 
         if (appendEmpty) {
             for (const hour of this.hours) {
-                const emptyDeparture: Departure = {hour: hour, minutes: null, symbol: ""} as Departure;
-
-                if (departures.get(hour) == null) {
-                    const emptyList: Departure[] = [];
-                    emptyList.push(emptyDeparture);
-                    departures.set(hour, emptyList);
-                } else {
-                    departures.get(hour).push(emptyDeparture);
-                }
+                this.controlDepartures.push(this.buildEmptyDepartureControl(hour));
             }
         }
+    }
 
-        return departures;
+    private buildEmptyDepartureControl(hour: number, symbol: string = '') {
+        return this.buildDepartureControl(hour, null, symbol);
+    }
+
+    private buildDepartureControl(hour: number, minutes: number | null, symbol: string = '') {
+        const departureControl: FormGroup = this.formBuilder.group({
+            hour: [hour],
+            minutes: [minutes],
+            symbol: [symbol]
+        });
+
+        departureControl.get('minutes')?.valueChanges.subscribe(value => {
+            this.addEmptyDepartureInHour(hour);
+        });
+
+        return departureControl;
     }
 
     public addEmptyDepartureInHour(hour: number) {
-        const hasEmptyDeparture: boolean = this.departures?.get(hour)
-            .map(departure => departure.minutes)
-            .filter(minute => minute == null).length > 0;
+        const hasEmptyDeparture: boolean = this.controlDepartures.controls
+            .filter((group: FormGroup): boolean => group.get("hour").value === hour)
+            .map((group: FormGroup): AbstractControl => group.get("minutes"))
+            .filter((minuteControl: AbstractControl): boolean => minuteControl.value == null).length > 0;
 
         if (!hasEmptyDeparture) {
-            const emptyDeparture: Departure = {} as Departure;
-            emptyDeparture.hour = hour;
-            emptyDeparture.symbol = "";
-            this.departures.get(hour).push(emptyDeparture);
+            this.controlDepartures.push(this.buildEmptyDepartureControl(hour));
         }
+    }
 
-        const arr: Departure[] = this.departures.get(hour) ?? [];
-        const sortedArr = [...arr].sort((a, b) => a.minutes - b.minutes);
-
-        this.departures.set(hour, sortedArr);
+    public sortDepartures(): void {
+        this.controlDepartures.controls.sort((a: FormGroup, b: FormGroup): number => {
+            if (a.get("minutes").value == null) {
+                return 1;
+            }
+            if (b.get("minutes").value == null) {
+                return -1;
+            }
+            return a.get("minutes").value - b.get("minutes").value;
+        });
     }
 
     public timesBetween(start: Moment, end: Moment, intervalMinutes = 30): Moment[] {
@@ -115,17 +116,7 @@ export class TimetableBoardComponent implements OnInit {
 
         const times: Moment[] = this.timesBetween(start, end, intervalInMinutes);
 
-        console.log(start);
-        console.log(end);
-        console.log(intervalInMinutes);
-
-        this.departures = this.mapDepartures(times, true);
+        this.mapDepartures(times, true);
     }
-
-    openPicker(input: HTMLInputElement, picker: any): void {
-        input.focus();
-        picker.open();
-    }
-
 
 }
