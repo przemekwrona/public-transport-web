@@ -10,7 +10,7 @@
 
                 <label class="sm:max-w-full xl:max-w-96 w-full">
                     <mat-form-field appearance="outline">
-                        <mat-select [formControl]="bankCtrl" placeholder="Numer i nazwa lini">
+                        <mat-select [formControl]="getRouteIdFormControl()" placeholder="Numer i nazwa lini">
                             <mat-option>
                                 <ngx-mat-select-search [formControl]="bankFilterCtrl" [placeholderLabel]="'Numer linii'"></ngx-mat-select-search>
                             </mat-option>
@@ -33,7 +33,7 @@
 
                 <label class="sm:max-w-full xl:max-w-96 w-full">
                     <mat-form-field appearance="outline" class="w-full">
-                        <mat-select [formControl]="bankCtrl" placeholder="Wybież kalendarz">
+                        <mat-select [formControl]="getCalendarIdFormControl()" placeholder="Wybież kalendarz">
                             @for (calendar of calendarsResponse.calendars; track calendar) {
                                 <mat-option [value]="calendar.calendarName">
                                     <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
