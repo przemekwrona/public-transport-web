@@ -46,7 +46,7 @@ export class TimetableBoardComponent implements OnInit {
 
     public mapDepartures(generatedDepartures: Moment[], appendEmpty: boolean = false) {
         for (const departure of generatedDepartures) {
-            const departureControl: FormGroup = this.buildDepartureControl(departure.minutes(), departure.hour());
+            const departureControl: FormGroup = this.buildDepartureControl(departure.hour(), departure.minutes());
             this.controlDepartures.push(departureControl);
         }
 
@@ -63,9 +63,9 @@ export class TimetableBoardComponent implements OnInit {
 
     private buildDepartureControl(hour: number, minutes: number | null, symbol: string = '') {
         const departureControl: FormGroup = this.formBuilder.group({
-            hour: [hour],
-            minutes: [minutes],
-            symbol: [symbol]
+            hour: [hour, []],
+            minutes: [minutes, []],
+            symbol: [symbol, []]
         });
 
         departureControl.get('minutes')?.valueChanges.subscribe(value => {
@@ -116,6 +116,7 @@ export class TimetableBoardComponent implements OnInit {
 
         const times: Moment[] = this.timesBetween(start, end, intervalInMinutes);
 
+        this.controlDepartures.clear();
         this.mapDepartures(times, true);
     }
 
