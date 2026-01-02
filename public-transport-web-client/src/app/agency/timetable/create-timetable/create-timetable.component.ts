@@ -1,10 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {TimetableBoardComponent} from "./timetable-board/timetable-board.component";
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+    Validators
+} from "@angular/forms";
 import {
     GetCalendarsResponse,
     TimetableGeneratorFilterByRoutes,
-    TimetableGeneratorFilterByRoutesResponse, TimetableGeneratorPayload
+    TimetableGeneratorFilterByRoutesResponse, TimetableGeneratorPayload, TimetablePayload, TimetableStopTime
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute} from "@angular/router";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
@@ -13,6 +21,7 @@ import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {RouteNameNormPipe} from "./route-id-normalization.pipe";
+import moment from "moment";
 
 @Component({
     selector: 'app-create-timetable',
@@ -101,6 +110,36 @@ export class CreateTimetableComponent implements OnInit {
     public buildCreateTimetableRequest() {
         const timetableGeneratorPayload: TimetableGeneratorPayload = {};
 
+        const frontDepartures: FormGroup = this.formGroup?.get('workingDay')?.get('front') as FormGroup;
+        const backDepartures: FormGroup = this.formGroup?.get('workingDay')?.get('back') as FormGroup;
+
+        timetableGeneratorPayload.front = this.buildTimetablePayload(frontDepartures);
+        timetableGeneratorPayload.back = this.buildTimetablePayload(backDepartures);
+
+        return timetableGeneratorPayload;
+    }
+
+    private buildTimetablePayload(frontDepartures: FormGroup): TimetablePayload {
+        const timetablePayload: TimetablePayload = {};
+        const departuresControls: FormArray<FormGroup> = frontDepartures?.get('departures') as FormArray<FormGroup>
+        timetablePayload.departures = departuresControls.controls
+            .filter((group: FormGroup): boolean => group.get('minutes').value != null)
+            .map((group: FormGroup): TimetableStopTime => {
+                const stopTime: TimetableStopTime = {}
+                stopTime.time = moment()
+                    .hours(group.get('hour').value)
+                    .minutes(group.get('minutes').value)
+                    .seconds(0)
+                    .format('HH:mm');
+                stopTime.designation = group.get('symbol').value;
+                return stopTime;
+            });
+        return timetablePayload;
+    }
+
+    public saveGeneratedTimetable() {
+        const payload = this.buildCreateTimetableRequest();
+        console.log(payload);
     }
 
 }
