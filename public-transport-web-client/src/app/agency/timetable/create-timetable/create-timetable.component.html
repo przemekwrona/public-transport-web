@@ -30,7 +30,12 @@
                 <div class="flex flex-wrap justify-between gap-5">
                     <div class="flex flex-col mt-2.5">
                         <div class="text-gray-900 text-sm font-medium">Kalendarz</div>
-                        <span class="text-gray-700 text-2sm">Kalendarz</span>
+
+                        @if (checkControlHasError("calendarName", "required")) {
+                            <span class="text-danger text-2sm">Wybierz kalendarz</span>
+                        } @else {
+                            <span class="text-gray-700 text-2sm">Kalendarz</span>
+                        }
                     </div>
 
                     <label class="sm:max-w-full xl:max-w-96 w-full">
