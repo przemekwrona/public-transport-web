@@ -53,21 +53,20 @@ export class CreateTimetableComponent implements OnInit {
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
     public isSubmitted: boolean = false;
 
-    /** control for the selected bank */
-    public bankCtrl: FormControl<TimetableGeneratorFilterByRoutes> = new FormControl<TimetableGeneratorFilterByRoutes>(null);
-
     /** control for the MatSelect filter keyword */
     public bankFilterCtrl: FormControl<string> = new FormControl<string>('');
 
+    get controlTimetables(): FormArray<FormGroup> {
+        return this.formGroup.get('timetables') as FormArray<FormGroup>;
+    }
 
     constructor(private formBuilder: FormBuilder, private _route: ActivatedRoute, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService) {
     }
 
     ngOnInit(): void {
         this.formGroup = this.formBuilder.group({
-            workingDay: this.buildTimetable(),
-            saturday: this.buildTimetable(),
-            sunday: this.buildTimetable()
+            timetables: this.formBuilder.array([this.buildTimetable()]),
+            workingDay: this.buildTimetable()
         });
 
         this._route.data.subscribe(data => this.calendarsResponse = data['calendars']);
@@ -94,7 +93,7 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     private getTimetableByName(name: string): FormGroup {
-        return this.formGroup.get(name) as FormGroup;
+        return this.controlTimetables.controls[0];
     }
 
     public getFrontTimetableByName(name: string): FormGroup {
@@ -106,18 +105,18 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     public getRouteIdFormControl(): FormControl {
-        return this.formGroup.get('workingDay').get('routeId') as FormControl
+        return this.getTimetableByName('').get('routeId') as FormControl
     }
 
     public getCalendarNameFormControl(): FormControl {
-        return this.getTimetableByName('workingDay').get('calendarName') as FormControl
+        return this.getTimetableByName('').get('calendarName') as FormControl
     }
 
     public buildCreateTimetableRequest() {
         const timetableGeneratorPayload: TimetableGeneratorPayload = {};
 
-        const frontDepartures: FormGroup = this.formGroup?.get('workingDay')?.get('front') as FormGroup;
-        const backDepartures: FormGroup = this.formGroup?.get('workingDay')?.get('back') as FormGroup;
+        const frontDepartures: FormGroup = this.getTimetableByName('')?.get('front') as FormGroup;
+        const backDepartures: FormGroup = this.getTimetableByName('')?.get('back') as FormGroup;
 
         timetableGeneratorPayload.front = this.buildTimetablePayload(frontDepartures);
         timetableGeneratorPayload.back = this.buildTimetablePayload(backDepartures);
@@ -165,7 +164,7 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     public checkControlHasError(controlName: string, errorName: string): boolean {
-        return this.isSubmitted && this.formGroup.get('workingDay').get(controlName).errors?.[errorName] || false;
+        return this.isSubmitted && this.getTimetableByName('').get(controlName).errors?.[errorName] || false;
     }
 
     public scrollToFirstError(): void {
