@@ -52,6 +52,7 @@ export class CreateTimetableComponent implements OnInit {
     public calendarsResponse: GetCalendarsResponse = {};
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
     public calendarName = '';
+    public isSubmitted: boolean = false;
 
     /** control for the selected bank */
     public bankCtrl: FormControl<TimetableGeneratorFilterByRoutes> = new FormControl<TimetableGeneratorFilterByRoutes>(null);
@@ -145,11 +146,20 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     public saveGeneratedTimetable() {
-        const payload: TimetableGeneratorPayload = this.buildCreateTimetableRequest();
-        const request: CreateTimetableGeneratorRequest = {};
-        request.timetables = payload;
+        this.isSubmitted = true;
 
-        this.timetableGeneratorService.createTimetableGenerator(this.agencyStorageService.getInstance(), request).subscribe(response => {})
+        if (this.formGroup.valid) {
+            const payload: TimetableGeneratorPayload = this.buildCreateTimetableRequest();
+            const request: CreateTimetableGeneratorRequest = {};
+            request.timetables = payload;
+
+            this.timetableGeneratorService.createTimetableGenerator(this.agencyStorageService.getInstance(), request).subscribe(response => {
+            });
+        }
+    }
+
+    public checkControlHasError(controlName: string, errorName: string): boolean {
+        return this.isSubmitted && this.formGroup.get('workingDay').get(controlName).errors?.[errorName] || false;
     }
 
 }
