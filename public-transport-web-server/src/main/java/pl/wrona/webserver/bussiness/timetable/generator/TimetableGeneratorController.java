@@ -2,11 +2,14 @@ package pl.wrona.webserver.bussiness.timetable.generator;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.TimetableGeneratorApi;
+import org.igeolab.iot.pt.server.api.model.CreateTimetableGeneratorRequest;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorFilterByRoutesResponse;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorPayload;
+import org.igeolab.iot.pt.server.api.model.TimetablePayload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.wrona.webserver.bussiness.timetable.generator.creator.CreateTimetableGeneratorService;
 import pl.wrona.webserver.bussiness.timetable.generator.routes.TimetableRoutePaginationService;
 
 @RestController
@@ -16,6 +19,7 @@ public class TimetableGeneratorController implements TimetableGeneratorApi {
 
 
     private final TimetableRoutePaginationService timetableRoutePaginationService;
+    private final CreateTimetableGeneratorService createTimetableGeneratorService;
 
     @Override
     public ResponseEntity<Void> agencyAgencyTimetableGeneratorDelete(String agency) {
@@ -28,17 +32,17 @@ public class TimetableGeneratorController implements TimetableGeneratorApi {
     }
 
     @Override
-    public ResponseEntity<TimetableGeneratorPayload> agencyAgencyTimetableGeneratorPost(String agency) {
-        return null;
-    }
-
-    @Override
     public ResponseEntity<Void> agencyAgencyTimetableGeneratorPut(String agency) {
         return null;
     }
 
     @Override
-    public ResponseEntity<TimetableGeneratorPayload> findCalendars(String agency) {
+    public ResponseEntity<CreateTimetableGeneratorRequest> createTimetableGenerator(String agency, CreateTimetableGeneratorRequest createTimetableGeneratorRequest) {
+        return ResponseEntity.ok(createTimetableGeneratorService.createTimetableGenerator(agency, createTimetableGeneratorRequest));
+    }
+
+    @Override
+    public ResponseEntity<TimetablePayload> findCalendars(String agency) {
         return null;
     }
 

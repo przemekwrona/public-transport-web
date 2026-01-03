@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.bussiness.trip.TripService;
+import pl.wrona.webserver.core.calendar.CalendarQueryService;
 import pl.wrona.webserver.core.calendar.CalendarService;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
@@ -31,6 +32,7 @@ public class BrigadeService {
     private final BrigadeRepository brigadeRepository;
     private final BrigadeTripRepository brigadeTripRepository;
     private final CalendarService calendarService;
+    private final CalendarQueryService calendarQueryService;
 
     private final TripService tripService;
 
@@ -41,11 +43,13 @@ public class BrigadeService {
             throw new BusinessException("1000", "Brigade with name %s already exists. Select another one.".formatted(request.getBrigadeName()));
         }
 
+        var agencyEntity = agencyService.getLoggedAgency();
+
         var brigadeEntity = new BrigadeEntity();
         brigadeEntity.setBrigadeNumber(request.getBrigadeName());
-        brigadeEntity.setCalendar(calendarService.findCalendarByCalendarName(request.getCalendarName()).orElse(null));
+        brigadeEntity.setCalendar(calendarQueryService.getCalendar(agencyEntity.getAgencyCode(), request.getCalendarName()));
 
-        brigadeEntity.setAgency(agencyService.getLoggedAgency());
+        brigadeEntity.setAgency(agencyEntity);
 
         var savedBrigade = brigadeRepository.save(brigadeEntity);
 

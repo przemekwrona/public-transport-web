@@ -16,7 +16,7 @@ public class CalendarService {
 
     @Deprecated
     public Optional<CalendarEntity> findCalendarByCalendarName(String calendarName) {
-        return calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarName);
+        return calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency().getAgencyCode(), calendarName);
     }
 
 }
