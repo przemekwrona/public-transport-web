@@ -23,7 +23,7 @@ public class CalendarDeletionService {
     @PreAgencyAuthorize
     public Status deleteCalendarByCalendarName(String instance, CalendarQuery calendarQuery) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        calendarRepository.findByAgencyAndCalendarName(agencyEntity, calendarQuery.getCalendarName())
+        calendarRepository.findByAgencyAndCalendarName(instance, calendarQuery.getCalendarName())
                 .ifPresent((CalendarEntity calendarEntity) -> {
                     calendarDatesRepository.deleteByAgencyAndCalendar(agencyEntity, calendarEntity);
                     calendarRepository.delete(calendarEntity);

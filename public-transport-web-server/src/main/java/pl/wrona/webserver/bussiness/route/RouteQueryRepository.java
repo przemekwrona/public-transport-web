@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface RouteQueryRepository extends JpaRepository<RouteEntity, String> {
 
-    @Query("SELECT r FROM RouteEntity r WHERE r.agency.agencyCode = :agencyCode")
+    @Query("SELECT r FROM RouteEntity r WHERE r.agency.agencyCode = :agencyCode ORDER BY r.line")
     List<RouteEntity> findByAgencyCode(@Param("agencyCode") String agencyCode);
 
     @Query("SELECT r FROM RouteEntity r WHERE r.agency.agencyCode = :agencyCode AND r.line = :line AND r.name = :name")

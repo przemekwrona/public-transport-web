@@ -44,7 +44,7 @@ public class CalendarReaderService {
         Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesRepository.findAllByAgency(agencyEntity).stream()
                 .collect(Collectors.groupingBy(calendarDates -> calendarDates.getCalendarDatesId().getServiceId()));
 
-        return calendarRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency(), calendarQuery.getCalendarName())
+        return calendarRepository.findByAgencyAndCalendarName(instance, calendarQuery.getCalendarName())
                 .map(calendar -> CalendarBodyMapper.apply(calendar, calendarDatesDictionary))
                 .orElseThrow();
     }
