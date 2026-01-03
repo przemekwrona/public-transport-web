@@ -6,7 +6,11 @@
                 <div class="flex flex-wrap justify-between gap-5">
                     <div class="flex flex-col mt-2.5">
                         <div class="text-gray-900 text-sm font-medium">Nazwa i numer linii</div>
-                        <span class="text-gray-700 text-2sm">Nazwa i numer linii</span>
+                        @if (checkControlHasError("calendarName", "required")) {
+                            <span class="text-danger text-2sm">Wybierz linię</span>
+                        } @else {
+                            <span class="text-gray-700 text-2sm">Nazwa i numer linii</span>
+                        }
                     </div>
 
                     <label class="sm:max-w-full xl:max-w-96 w-full">
@@ -14,12 +18,13 @@
                             <mat-select [formControl]="getRouteIdFormControl()" placeholder="Numer i nazwa lini">
                                 <mat-option>
                                     <ngx-mat-select-search [formControl]="bankFilterCtrl"
-                                                           [placeholderLabel]="'Numer linii'"></ngx-mat-select-search>
+                                                           [placeholderLabel]="'Numer linii'">
+                                    </ngx-mat-select-search>
                                 </mat-option>
 
                                 @for (route of routes.items; track route) {
-                                    <mat-option [value]="route">
-                                        <strong>{{ route.line }}</strong> {{ route.name | routeNameNorm }} (v1.0)
+                                    <mat-option [value]="route.routeId">
+                                        <strong>{{ route.routeId?.line }}</strong> {{ route.routeId?.name | routeNameNorm }} (v1.0)
                                     </mat-option>
                                 }
                             </mat-select>
