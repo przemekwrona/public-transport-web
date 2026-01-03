@@ -76,7 +76,7 @@ export class CreateTimetableComponent implements OnInit {
 
     private buildTimetable(): FormGroup {
         return this.formBuilder.group({
-            routeId: [{}, [Validators.required]],
+            routeId: [null, [Validators.required]],
             calendarName: ['', [Validators.required]],
             front: this.formBuilder.group({
                 startTime: ['06:00'],
@@ -106,7 +106,7 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     public getRouteIdFormControl(): FormControl {
-        return this.formGroup.get('routeId') as FormControl
+        return this.formGroup.get('workingDay').get('routeId') as FormControl
     }
 
     public getCalendarNameFormControl(): FormControl {
@@ -121,7 +121,7 @@ export class CreateTimetableComponent implements OnInit {
 
         timetableGeneratorPayload.front = this.buildTimetablePayload(frontDepartures);
         timetableGeneratorPayload.back = this.buildTimetablePayload(backDepartures);
-        timetableGeneratorPayload.calendarId = this.getCalendarNameFormControl().value;
+        timetableGeneratorPayload.calendarName = this.getCalendarNameFormControl().value;
 
         return timetableGeneratorPayload;
     }
@@ -144,13 +144,18 @@ export class CreateTimetableComponent implements OnInit {
         return timetablePayload;
     }
 
-    public saveGeneratedTimetable() {
+    public saveGeneratedTimetable(): void {
         this.isSubmitted = true;
 
+        console.log(this.formGroup.errors);
         if (this.formGroup.valid) {
             const payload: TimetableGeneratorPayload = this.buildCreateTimetableRequest();
             const request: CreateTimetableGeneratorRequest = {};
             request.timetables = payload;
+            request.routeId = {};
+            request.routeId = this.formGroup.get('routeId').value;
+
+            console.log(request);
 
             this.timetableGeneratorService.createTimetableGenerator(this.agencyStorageService.getInstance(), request).subscribe(response => {
             });
