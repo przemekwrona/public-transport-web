@@ -2,7 +2,7 @@
 
     <form [formGroup]="formGroup" (ngSubmit)="saveGeneratedTimetable()">
         <div class="card min-w-full">
-            <div class="card-body lg:py-7.5 py-5">
+            <div class="card-body lg:py-7.5">
                 <div class="flex flex-wrap justify-between gap-5">
                     <div class="flex flex-col mt-2.5">
                         <div class="text-gray-900 text-sm font-medium">Nazwa i numer linii</div>
@@ -60,7 +60,20 @@
             </div>
         </div>
 
-        <div class="border-t border-white my-5"></div>
+        <div class="border-t border-white my-2.5"></div>
+
+        <!-- begin: grid -->
+        @if (formGroup.get("routeId").value) {
+            <div class="card min-w-full my-5">
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-start gap-5">
+                        <strong>{{ formGroup.get("routeId").value?.["line"] }}</strong>
+                        <span>{{ formGroup.get("routeId").value?.["name"] }}</span>
+                    </div>
+                </div>
+            </div>
+        }
+        <!-- end: grid -->
 
         <!-- begin: grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
@@ -95,8 +108,10 @@
         </div>
         <!-- end: grid -->
 
+        <div class="border-t border-white my-5"></div>
+
         <!-- begin: grid -->
-        <div class="card min-w-full my-5">
+        <div class="card min-w-full">
             <div class="card-body lg:py-7.5 py-5">
                 <div class="flex flex-wrap justify-end gap-5">
                     <button type="submit" class="btn btn-success">Wygeneruj brygady</button>
