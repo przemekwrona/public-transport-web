@@ -51,7 +51,6 @@ export class CreateTimetableComponent implements OnInit {
     public formGroup: FormGroup;
     public calendarsResponse: GetCalendarsResponse = {};
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
-    public calendarName = '';
     public isSubmitted: boolean = false;
 
     /** control for the selected bank */
@@ -155,11 +154,21 @@ export class CreateTimetableComponent implements OnInit {
 
             this.timetableGeneratorService.createTimetableGenerator(this.agencyStorageService.getInstance(), request).subscribe(response => {
             });
+        } else {
+            this.scrollToFirstError();
         }
     }
 
     public checkControlHasError(controlName: string, errorName: string): boolean {
         return this.isSubmitted && this.formGroup.get('workingDay').get(controlName).errors?.[errorName] || false;
+    }
+
+    public scrollToFirstError(): void {
+        setTimeout(() => {
+            // const invalidControl = document.querySelector('.ng-invalid');
+            const invalidControl = document.querySelector('.text-danger');
+            invalidControl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
     }
 
 }
