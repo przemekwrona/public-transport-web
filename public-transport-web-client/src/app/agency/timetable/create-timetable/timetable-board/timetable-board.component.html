@@ -79,6 +79,7 @@
                         <div [formGroup]="departureControl">
                             <input type="number" formControlName="minutes"
                                    (blur)="sortDepartures()"
+                                   [ngClass]="{'border-danger': submitted && departureControl.get('minutes')?.invalid}"
                                    class="input input-sm text-center w-10 no-spin">
                         </div>
                     }

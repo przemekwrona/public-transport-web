@@ -5,7 +5,7 @@ import {
     FormArray, FormBuilder,
     FormGroup,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule, Validators,
 } from "@angular/forms";
 import moment, {Moment} from "moment";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
@@ -28,6 +28,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 export class TimetableBoardComponent implements OnInit {
 
     @Input() group!: FormGroup;
+    @Input() submitted: boolean = false;
 
     public faClock: IconDefinition = faClock;
 
@@ -63,8 +64,8 @@ export class TimetableBoardComponent implements OnInit {
 
     private buildDepartureControl(hour: number, minutes: number | null, symbol: string = '') {
         const departureControl: FormGroup = this.formBuilder.group({
-            hour: [hour, []],
-            minutes: [minutes, []],
+            hour: [hour, [Validators.min(0), Validators.max(24)]],
+            minutes: [minutes, [Validators.min(0), Validators.max(59)]],
             symbol: [symbol, []]
         });
 

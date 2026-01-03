@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TimetableBoardComponent} from "./timetable-board/timetable-board.component";
 import {
+    AbstractControl,
     FormArray,
     FormBuilder,
     FormControl,
@@ -12,7 +13,6 @@ import {
 import {
     CreateTimetableGeneratorRequest,
     GetCalendarsResponse,
-    TimetableGeneratorFilterByRoutes,
     TimetableGeneratorFilterByRoutesResponse,
     TimetableGeneratorPayload,
     TimetableGeneratorService,
@@ -28,6 +28,52 @@ import {MatSelectModule} from "@angular/material/select";
 import {RouteNameNormPipe} from "./route-id-normalization.pipe";
 import moment from "moment";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+
+
+export interface AllValidationErrors {
+    controlName: string;
+    errorName: string;
+    errorValue: any;
+}
+
+export function getFormValidationErrors(
+    control: AbstractControl,
+    errors: AllValidationErrors[] = [],
+    path: string = ''
+): AllValidationErrors[] {
+
+    if (control instanceof FormControl) {
+        if (control.errors) {
+            Object.entries(control.errors).forEach(([errorName, errorValue]) => {
+                errors.push({
+                    controlName: path,
+                    errorName,
+                    errorValue
+                });
+            });
+        }
+        return errors;
+    }
+
+    if (control instanceof FormGroup) {
+        Object.entries(control.controls).forEach(([key, childControl]) => {
+            const childPath = path ? `${path}.${key}` : key;
+            getFormValidationErrors(childControl, errors, childPath);
+        });
+        return errors;
+    }
+
+    if (control instanceof FormArray) {
+        control.controls.forEach((childControl, index) => {
+            const childPath = `${path}[${index}]`;
+            getFormValidationErrors(childControl, errors, childPath);
+        });
+        return errors;
+    }
+
+    return errors;
+}
+
 
 @Component({
     selector: 'app-create-timetable',
@@ -65,8 +111,8 @@ export class CreateTimetableComponent implements OnInit {
 
     ngOnInit(): void {
         this.formGroup = this.formBuilder.group({
-            timetables: this.formBuilder.array([this.buildTimetable()]),
-            workingDay: this.buildTimetable()
+            routeId: [null, [Validators.required]],
+            timetables: this.formBuilder.array([this.buildTimetable()])
         });
 
         this._route.data.subscribe(data => this.calendarsResponse = data['calendars']);
@@ -75,7 +121,6 @@ export class CreateTimetableComponent implements OnInit {
 
     private buildTimetable(): FormGroup {
         return this.formBuilder.group({
-            routeId: [null, [Validators.required]],
             calendarName: ['', [Validators.required]],
             front: this.formBuilder.group({
                 startTime: ['06:00'],
@@ -105,7 +150,7 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     public getRouteIdFormControl(): FormControl {
-        return this.getTimetableByName('').get('routeId') as FormControl
+        return this.formGroup.get('routeId') as FormControl
     }
 
     public getCalendarNameFormControl(): FormControl {
@@ -146,7 +191,9 @@ export class CreateTimetableComponent implements OnInit {
     public saveGeneratedTimetable(): void {
         this.isSubmitted = true;
 
-        console.log(this.formGroup.errors);
+        const ee = getFormValidationErrors(this.formGroup);
+        console.log(ee);
+        console.log(this.formGroup.valid);
         if (this.formGroup.valid) {
             const payload: TimetableGeneratorPayload = this.buildCreateTimetableRequest();
             const request: CreateTimetableGeneratorRequest = {};
@@ -171,7 +218,7 @@ export class CreateTimetableComponent implements OnInit {
         setTimeout(() => {
             // const invalidControl = document.querySelector('.ng-invalid');
             const invalidControl = document.querySelector('.text-danger');
-            invalidControl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            invalidControl?.scrollIntoView({behavior: 'smooth', block: 'center'});
         });
     }
 
