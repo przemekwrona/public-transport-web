@@ -77,17 +77,17 @@ export class CreateTimetableComponent implements OnInit {
     private buildTimetable(): FormGroup {
         return this.formBuilder.group({
             routeId: [{}, [Validators.required]],
-            calendarId: ['', [Validators.required]],
+            calendarName: ['', [Validators.required]],
             front: this.formBuilder.group({
-                startTime: [''],
-                endTime: [''],
-                interval: 5,
+                startTime: ['06:00'],
+                endTime: ['20:00'],
+                interval: 15,
                 departures: this.formBuilder.array([])
             }),
             back: this.formBuilder.group({
-                startTime: [''],
-                endTime: [''],
-                interval: 8,
+                startTime: ['06:00'],
+                endTime: ['20:00'],
+                interval: 18,
                 departures: this.formBuilder.array([])
             })
         })
@@ -109,8 +109,8 @@ export class CreateTimetableComponent implements OnInit {
         return this.formGroup.get('routeId') as FormControl
     }
 
-    public getCalendarIdFormControl(): FormControl {
-        return this.formGroup.get('calendarId') as FormControl
+    public getCalendarNameFormControl(): FormControl {
+        return this.getTimetableByName('workingDay').get('calendarName') as FormControl
     }
 
     public buildCreateTimetableRequest() {
@@ -121,6 +121,7 @@ export class CreateTimetableComponent implements OnInit {
 
         timetableGeneratorPayload.front = this.buildTimetablePayload(frontDepartures);
         timetableGeneratorPayload.back = this.buildTimetablePayload(backDepartures);
+        timetableGeneratorPayload.calendarId = this.getCalendarNameFormControl().value;
 
         return timetableGeneratorPayload;
     }
