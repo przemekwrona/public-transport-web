@@ -25,19 +25,25 @@ paths:
       tags:
         - timetable-generator
       summary: Create new timetable generator
+      operationId: createTimetableGenerator
       parameters:
         - in: path
           name: agency
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTimetableGeneratorRequest'
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TimetableGeneratorPayload'
+                $ref: '#/components/schemas/CreateTimetableGeneratorRequest'
 
     put:
       tags:
@@ -111,11 +117,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TimetableGeneratorPayload'
+                $ref: '#/components/schemas/TimetablePayload'
 
 components:
   schemas:
-    TimetableGeneratorPayload:
+
+    TimetableStopTime:
+      type: object
+      properties:
+        time:
+          type: string
+        designation:
+          type: string
+
+    TimetablePayload:
       type: object
       properties:
         startDate:
@@ -124,6 +139,28 @@ components:
           type: string
         interval:
           type: string
+        departures:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimetableStopTime'
+
+    TimetableGeneratorPayload:
+      type: object
+      properties:
+        calendarId:
+          type: string
+        front:
+          $ref: '#/components/schemas/TimetablePayload'
+        back:
+          $ref: '#/components/schemas/TimetablePayload'
+
+    CreateTimetableGeneratorRequest:
+      type: object
+      properties:
+        routeId:
+          type: string
+        timetables:
+          $ref: '#/components/schemas/TimetableGeneratorPayload'
 
     TimetableGeneratorFilterByRoutes:
       type: object

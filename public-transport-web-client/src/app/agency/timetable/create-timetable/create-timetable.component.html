@@ -10,7 +10,7 @@
                     </div>
 
                     <label class="sm:max-w-full xl:max-w-96 w-full">
-                        <mat-form-field appearance="outline">
+                        <mat-form-field appearance="outline" class="w-full custom-form-field">
                             <mat-select [formControl]="getRouteIdFormControl()" placeholder="Numer i nazwa lini">
                                 <mat-option>
                                     <ngx-mat-select-search [formControl]="bankFilterCtrl"
@@ -34,7 +34,7 @@
                     </div>
 
                     <label class="sm:max-w-full xl:max-w-96 w-full">
-                        <mat-form-field appearance="outline" class="w-full">
+                        <mat-form-field appearance="outline" class="w-full custom-form-field">
                             <mat-select [formControl]="getCalendarIdFormControl()" placeholder="Wybież kalendarz">
                                 @for (calendar of calendarsResponse.calendars; track calendar) {
                                     <mat-option [value]="calendar.calendarName">
@@ -85,7 +85,15 @@
         </div>
         <!-- end: grid -->
 
-        <button type="submit" class="btn btn-success">Save</button>
+        <!-- begin: grid -->
+        <div class="card min-w-full my-5">
+            <div class="card-body lg:py-7.5 py-5">
+                <div class="flex flex-wrap justify-end gap-5">
+                    <button type="submit" class="btn btn-success">Wygeneruj brygady</button>
+                </div>
+            </div>
+        </div>
+        <!-- end: grid -->
 
     </form>
 </div>
