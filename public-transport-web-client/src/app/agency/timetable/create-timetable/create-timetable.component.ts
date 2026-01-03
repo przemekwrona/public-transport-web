@@ -10,9 +10,14 @@ import {
     Validators
 } from "@angular/forms";
 import {
+    CreateTimetableGeneratorRequest,
     GetCalendarsResponse,
     TimetableGeneratorFilterByRoutes,
-    TimetableGeneratorFilterByRoutesResponse, TimetableGeneratorPayload, TimetablePayload, TimetableStopTime
+    TimetableGeneratorFilterByRoutesResponse,
+    TimetableGeneratorPayload,
+    TimetableGeneratorService,
+    TimetablePayload,
+    TimetableStopTime
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute} from "@angular/router";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
@@ -22,6 +27,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {RouteNameNormPipe} from "./route-id-normalization.pipe";
 import moment from "moment";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     selector: 'app-create-timetable',
@@ -54,7 +60,7 @@ export class CreateTimetableComponent implements OnInit {
     public bankFilterCtrl: FormControl<string> = new FormControl<string>('');
 
 
-    constructor(private formBuilder: FormBuilder, private _route: ActivatedRoute) {
+    constructor(private formBuilder: FormBuilder, private _route: ActivatedRoute, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService) {
     }
 
     ngOnInit(): void {
@@ -138,8 +144,11 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     public saveGeneratedTimetable() {
-        const payload = this.buildCreateTimetableRequest();
-        console.log(payload);
+        const payload: TimetableGeneratorPayload = this.buildCreateTimetableRequest();
+        const request: CreateTimetableGeneratorRequest = {};
+        request.timetables = payload;
+
+        this.timetableGeneratorService.createTimetableGenerator(this.agencyStorageService.getInstance(), request).subscribe(response => {})
     }
 
 }
