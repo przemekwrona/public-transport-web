@@ -35,7 +35,7 @@
 
                     <label class="sm:max-w-full xl:max-w-96 w-full">
                         <mat-form-field appearance="outline" class="w-full custom-form-field">
-                            <mat-select [formControl]="getCalendarIdFormControl()" placeholder="Wybież kalendarz">
+                            <mat-select [formControl]="getCalendarNameFormControl()" placeholder="Wybież kalendarz">
                                 @for (calendar of calendarsResponse.calendars; track calendar) {
                                     <mat-option [value]="calendar.calendarName">
                                         <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
