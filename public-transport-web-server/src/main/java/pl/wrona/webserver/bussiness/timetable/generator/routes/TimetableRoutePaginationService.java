@@ -1,6 +1,7 @@
 package pl.wrona.webserver.bussiness.timetable.generator.routes;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorFilterByRoutes;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorFilterByRoutesResponse;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,9 @@ public class TimetableRoutePaginationService {
                 .page(0)
                 .items(routes.stream()
                         .map(route -> new TimetableGeneratorFilterByRoutes()
-                                .line(route.getLine())
-                                .name(route.getName()))
+                                .routeId(new RouteId()
+                                        .line(route.getLine())
+                                        .name(route.getName())))
                         .toList());
     }
 }

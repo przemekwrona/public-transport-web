@@ -99,6 +99,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/TimetableGeneratorFilterByRoutesResponse'
 
+  /agency/{agency}/timetable-generator/trips:
+    post:
+      tags:
+        - timetable-generator
+      summary: Get front and back trips
+      operationId: findTrips
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripFilter'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripResponse'
+
+
   /agency/{agency}/timetable-generator/calendars:
     get:
       tags:
@@ -121,6 +147,44 @@ paths:
 
 components:
   schemas:
+
+    RouteId:
+      type: object
+      properties:
+        name:
+          type: string
+        line:
+          type: string
+
+    TripFilter:
+      type: object
+      properties:
+        routeId:
+          $ref: '#/components/schemas/RouteId'
+
+    TimetableTrip:
+      type: object
+      properties:
+        tripId:
+          $ref: '../public-transport-api.yaml/#/components/schemas/TripId'
+        designation:
+          type: string
+        description:
+          type: string
+
+    TripResponse:
+      type: object
+      properties:
+        routeFilter:
+          $ref: '#/components/schemas/RouteId'
+        front:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimetableTrip'
+        back:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimetableTrip'
 
     TimetableStopTime:
       type: object
@@ -147,7 +211,7 @@ components:
     TimetableGeneratorPayload:
       type: object
       properties:
-        calendarId:
+        calendarName:
           type: string
         front:
           $ref: '#/components/schemas/TimetablePayload'
@@ -158,17 +222,15 @@ components:
       type: object
       properties:
         routeId:
-          type: string
+          $ref: '#/components/schemas/RouteId'
         timetables:
           $ref: '#/components/schemas/TimetableGeneratorPayload'
 
     TimetableGeneratorFilterByRoutes:
       type: object
       properties:
-        line:
-          type: string
-        name:
-          type: string
+        routeId:
+          $ref: '#/components/schemas/RouteId'
 
     TimetableGeneratorFilterByRoutesResponse:
       type: object
