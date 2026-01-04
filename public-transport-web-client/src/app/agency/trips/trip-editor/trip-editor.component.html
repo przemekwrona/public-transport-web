@@ -252,8 +252,8 @@
                                 <tr>
                                     <td class="py-3">Dystans (Czas przejazdu)</td>
                                     <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                        {{ getLastStop().controls["meters"].value | distance | number: '1.1-1' }} km
-                                        ({{ getLastStop().controls["calculatedSeconds"].value | time | number: '1.0-0' }} min)
+                                        {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km
+                                        ({{ getLastStop()?.controls["calculatedSeconds"].value | time | number: '1.0-0' }} min)
                                     </td>
                                 </tr>
                                 <tr>

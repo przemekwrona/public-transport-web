@@ -431,6 +431,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
             return stopTime;
         });
+        tripDetailsRequest.body.geometry = this.geometry;
 
         if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
             this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
@@ -522,7 +523,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
     }
 
-    public getLastStop(): FormGroup {
+    public getLastStop(): FormGroup | null {
+        if (this.stops.length === 0) {
+            return null;
+        }
         return this.stops.at(this.stops.length - 1);
     }
 
