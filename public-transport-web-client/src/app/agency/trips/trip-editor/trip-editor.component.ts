@@ -36,6 +36,7 @@ import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {TripIdExistenceValidator} from "./trip-id-existence/trip-id-existence.service";
+import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
 
 @Component({
     selector: 'app-trip-editor',
@@ -336,9 +337,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 if (!stopResponse) return;
                 formGroup.controls["meters"].setValue(stopResponse.meters);
                 formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
-                if (formGroup.controls["customizedMinutes"].value == 0) {
-                    formGroup.controls["customizedMinutes"].setValue(Math.ceil(stopResponse.calculatedSeconds / 60));
-                }
+                formGroup.controls["customizedMinutes"].setValue(Math.ceil(stopResponse.calculatedSeconds / 60));
             });
 
             this.drawPolyline(response.geometry);
@@ -373,7 +372,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return tripMeasure;
     }
 
-    public clickCreateOrEdit(model: FormGroup): void {
+    public clickCreateOrEdit(): void {
+        const errors: AllValidationErrors[] = FormUtils.getFormValidationErrors(this.modelForm);
+        console.log(errors);
+
         this.isSubmited = true;
         this.getFormValidationErrors();
         if (this.modelForm.invalid) {
