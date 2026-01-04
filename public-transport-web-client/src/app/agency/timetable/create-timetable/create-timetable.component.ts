@@ -28,52 +28,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {RouteNameNormPipe} from "./route-id-normalization.pipe";
 import moment from "moment";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
-
-
-export interface AllValidationErrors {
-    controlName: string;
-    errorName: string;
-    errorValue: any;
-}
-
-export function getFormValidationErrors(
-    control: AbstractControl,
-    errors: AllValidationErrors[] = [],
-    path: string = ''
-): AllValidationErrors[] {
-
-    if (control instanceof FormControl) {
-        if (control.errors) {
-            Object.entries(control.errors).forEach(([errorName, errorValue]) => {
-                errors.push({
-                    controlName: path,
-                    errorName,
-                    errorValue
-                });
-            });
-        }
-        return errors;
-    }
-
-    if (control instanceof FormGroup) {
-        Object.entries(control.controls).forEach(([key, childControl]) => {
-            const childPath = path ? `${path}.${key}` : key;
-            getFormValidationErrors(childControl, errors, childPath);
-        });
-        return errors;
-    }
-
-    if (control instanceof FormArray) {
-        control.controls.forEach((childControl, index) => {
-            const childPath = `${path}[${index}]`;
-            getFormValidationErrors(childControl, errors, childPath);
-        });
-        return errors;
-    }
-
-    return errors;
-}
-
+import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
 
 @Component({
     selector: 'app-create-timetable',
@@ -194,8 +149,8 @@ export class CreateTimetableComponent implements OnInit {
     public saveGeneratedTimetable(): void {
         this.isSubmitted = true;
 
-        const ee = getFormValidationErrors(this.formGroup);
-        console.log(ee);
+        const errors: AllValidationErrors[] = FormUtils.getFormValidationErrors(this.formGroup);
+        console.log(errors);
         console.log(this.formGroup.valid);
         if (this.formGroup.valid) {
             const payload: TimetableGeneratorPayload = this.buildCreateTimetableRequest();

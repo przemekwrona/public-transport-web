@@ -80,8 +80,8 @@ export class TripListComponent implements OnInit {
     public deleteTrip(trip: Trip) {
         const tripId: TripId = {
             routeId: {line: trip.line, name: trip.name},
-            variant: trip.variant,
-            mode: trip.mode,
+            variantName: trip.variant,
+            variantMode: trip.mode,
             trafficMode: trip.trafficMode
         } as TripId;
         this.tripService.deleteTripByTripId(this.agencyStorageService.getInstance(), tripId).subscribe(response => {
