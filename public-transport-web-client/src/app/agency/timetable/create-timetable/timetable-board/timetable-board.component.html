@@ -65,12 +65,22 @@
     </div>
 </form>
 
+<div class="border-t border-blue-600 my-2.5"></div>
 
-@for (variant of timetableTrips; track $index) {
-    <span>
-        <strong>{{ variant.designation }}</strong> {{ variant.description }}
-    </span>
+@if(hasTripDesignation()) {
+    <span><strong>Oznaczenia na rozkładzie:</strong></span>
 }
+
+@for (variant of findTripDesignation(); track $index) {
+    <div>
+        <strong>{{ variant.designation }}</strong> {{ variant.description }}
+    </div>
+}
+
+@if(hasTripDesignation()) {
+    <div class="border-t border-blue-600 my-2.5"></div>
+}
+
 
 @for (hour of hours; track hour) {
     <div class="border-b-zinc-500 row py-1">

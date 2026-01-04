@@ -12,6 +12,7 @@ import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {faClock, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {TimetableTrip} from "../../../../generated/public-transport-api";
+import {size} from "lodash";
 
 @Component({
     selector: 'app-timetable-board',
@@ -122,6 +123,14 @@ export class TimetableBoardComponent implements OnInit {
 
         this.controlDepartures.clear();
         this.mapDepartures(times, true);
+    }
+
+    public findTripDesignation(): TimetableTrip[] {
+        return (this.timetableTrips || []).filter((trip: TimetableTrip): boolean => trip.tripId.variantName !== 'MAIN');
+    }
+
+    public hasTripDesignation(): boolean {
+        return size(this.findTripDesignation()) > 0;
     }
 
 }
