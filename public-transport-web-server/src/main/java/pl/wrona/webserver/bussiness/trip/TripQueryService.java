@@ -8,6 +8,7 @@ import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,9 @@ public class TripQueryService {
 
     private final TripQueryRepository tripQueryRepository;
 
-    public List<TripEntity> findByAgencyCodeAndLineAndName(String agencyCode, String line, String name) {
-        return tripQueryRepository.findByAgencyCodeAndLineAndName(agencyCode, line, name);
+    @PreAgencyAuthorize
+    public List<TripEntity> findByAgencyCodeAndLineAndName(String instance, String line, String name) {
+        return tripQueryRepository.findByAgencyCodeAndLineAndName(instance, line, name);
     }
 
     public TripEntity findByAgencyCodeAndTripId(String instance, TripId tripId) {

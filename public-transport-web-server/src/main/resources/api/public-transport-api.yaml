@@ -925,6 +925,9 @@ paths:
   /agency/{agency}/timetable-generator/routes:
     $ref: './paths/timetable-generator-api.yaml#/paths/~1agency~1{agency}~1timetable-generator~1routes'
 
+  /agency/{agency}/timetable-generator/trips:
+    $ref: './paths/timetable-generator-api.yaml#/paths/~1agency~1{agency}~1timetable-generator~1trips'
+
   /agency/{agency}/timetable-generator/calendars:
     $ref: './paths/timetable-generator-api.yaml#/paths/~1agency~1{agency}~1timetable-generator~1calendars'
 
