@@ -137,16 +137,16 @@ export class CreateTimetableComponent implements OnInit {
         })
     }
 
-    private getTimetableByName(name: string): FormGroup {
+    private getTimetableByName(): FormGroup {
         return this.controlTimetables.controls[0];
     }
 
-    public getFrontTimetableByName(name: string): FormGroup {
-        return this.getTimetableByName(name).get("front") as FormGroup
+    public getFrontTimetableByName(): FormGroup {
+        return this.getTimetableByName().get("front") as FormGroup
     }
 
-    public getBackTimetableByName(name: string): FormGroup {
-        return this.getTimetableByName(name).get("back") as FormGroup
+    public getBackTimetableByName(): FormGroup {
+        return this.getTimetableByName().get("back") as FormGroup
     }
 
     public getRouteIdFormControl(): FormControl {
@@ -154,14 +154,14 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     public getCalendarNameFormControl(): FormControl {
-        return this.getTimetableByName('').get('calendarName') as FormControl
+        return this.getTimetableByName().get('calendarName') as FormControl
     }
 
     public buildCreateTimetableRequest() {
         const timetableGeneratorPayload: TimetableGeneratorPayload = {};
 
-        const frontDepartures: FormGroup = this.getTimetableByName('')?.get('front') as FormGroup;
-        const backDepartures: FormGroup = this.getTimetableByName('')?.get('back') as FormGroup;
+        const frontDepartures: FormGroup = this.getTimetableByName()?.get('front') as FormGroup;
+        const backDepartures: FormGroup = this.getTimetableByName()?.get('back') as FormGroup;
 
         timetableGeneratorPayload.front = this.buildTimetablePayload(frontDepartures);
         timetableGeneratorPayload.back = this.buildTimetablePayload(backDepartures);
@@ -211,7 +211,7 @@ export class CreateTimetableComponent implements OnInit {
     }
 
     public checkControlHasError(controlName: string, errorName: string): boolean {
-        return this.isSubmitted && this.getTimetableByName('').get(controlName).errors?.[errorName] || false;
+        return this.isSubmitted && this.getTimetableByName().get(controlName).errors?.[errorName] || false;
     }
 
     public scrollToFirstError(): void {
