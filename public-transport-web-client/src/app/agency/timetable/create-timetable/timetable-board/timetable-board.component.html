@@ -66,6 +66,11 @@
 </form>
 
 
+@for (variant of timetableTrips; track $index) {
+    <span>
+        <strong>{{ variant.designation }}</strong> {{ variant.description }}
+    </span>
+}
 
 @for (hour of hours; track hour) {
     <div class="border-b-zinc-500 row py-1">

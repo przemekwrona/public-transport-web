@@ -11,6 +11,7 @@ import moment, {Moment} from "moment";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {faClock, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {TimetableTrip} from "../../../../generated/public-transport-api";
 
 @Component({
     selector: 'app-timetable-board',
@@ -29,6 +30,8 @@ export class TimetableBoardComponent implements OnInit {
 
     @Input() group!: FormGroup;
     @Input() submitted: boolean = false;
+    @Input() timetableTrips: TimetableTrip[];
+
 
     public faClock: IconDefinition = faClock;
 
