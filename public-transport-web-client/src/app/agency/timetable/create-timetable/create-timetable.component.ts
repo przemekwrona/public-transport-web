@@ -12,12 +12,12 @@ import {
 } from "@angular/forms";
 import {
     CreateTimetableGeneratorRequest,
-    GetCalendarsResponse,
+    GetCalendarsResponse, RouteId,
     TimetableGeneratorFilterByRoutesResponse,
     TimetableGeneratorPayload,
     TimetableGeneratorService,
     TimetablePayload,
-    TimetableStopTime
+    TimetableStopTime, TripFilter, TripResponse
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute} from "@angular/router";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
@@ -97,6 +97,7 @@ export class CreateTimetableComponent implements OnInit {
     public formGroup: FormGroup;
     public calendarsResponse: GetCalendarsResponse = {};
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
+    public tripResponse: TripResponse = {};
     public isSubmitted: boolean = false;
 
     /** control for the MatSelect filter keyword */
@@ -114,6 +115,8 @@ export class CreateTimetableComponent implements OnInit {
             routeId: [null, [Validators.required]],
             timetables: this.formBuilder.array([this.buildTimetable()])
         });
+
+        this.formGroup.get('routeId').valueChanges.subscribe((routeId: RouteId) => this.findTripByRouteId(routeId));
 
         this._route.data.subscribe(data => this.calendarsResponse = data['calendars']);
         this._route.data.subscribe(data => this.routes = data['routes']);
@@ -220,6 +223,13 @@ export class CreateTimetableComponent implements OnInit {
             const invalidControl = document.querySelector('.text-danger');
             invalidControl?.scrollIntoView({behavior: 'smooth', block: 'center'});
         });
+    }
+
+    public findTripByRouteId(routeId: RouteId): void {
+        const tripFilter: TripFilter = {};
+        tripFilter.routeId = routeId;
+
+        this.timetableGeneratorService.findTrips(this.agencyStorageService.getInstance(), tripFilter).subscribe((tripResponse: TripResponse) => this.tripResponse = tripResponse);
     }
 
 }
