@@ -11,6 +11,7 @@ import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
 import pl.wrona.webserver.core.calendar.CalendarQueryService;
+import pl.wrona.webserver.core.timetable.TimetableDeparture;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -41,6 +42,13 @@ public class CreateTimetableGeneratorService {
                     item.setFrontStartTime(LocalTime.parse(payload.getStartDate()));
                     item.setFrontEndTime(LocalTime.parse(payload.getEndDate()));
                     item.setFrontInterval(payload.getInterval());
+
+                    item.setFrontPayload(payload.getDepartures().stream()
+                            .map(departure -> TimetableDeparture.builder()
+                                    .time(LocalTime.parse(departure.getTime()))
+                                    .symbol(departure.getDesignation())
+                                    .build())
+                            .toList());
                 });
 
         Optional.of(request)
@@ -50,6 +58,13 @@ public class CreateTimetableGeneratorService {
                     item.setBackStartTime(LocalTime.parse(payload.getStartDate()));
                     item.setBackEndTime(LocalTime.parse(payload.getEndDate()));
                     item.setBackInterval(payload.getInterval());
+
+                    item.setBackPayload(payload.getDepartures().stream()
+                            .map(departure -> TimetableDeparture.builder()
+                                    .time(LocalTime.parse(departure.getTime()))
+                                    .symbol(departure.getDesignation())
+                                    .build())
+                            .toList());
                 });
 
         TimetableGeneratorItemEntity savedTimetableItem = timetableGeneratorCommandService.save(item);

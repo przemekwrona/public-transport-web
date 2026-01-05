@@ -172,19 +172,25 @@ components:
         description:
           type: string
 
+    TripDepartures:
+      type: object
+      properties:
+        tripId:
+          $ref: '../public-transport-api.yaml/#/components/schemas/TripId'
+        departures:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimetableTrip'
+
     TripResponse:
       type: object
       properties:
         routeFilter:
           $ref: '#/components/schemas/RouteId'
         front:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimetableTrip'
+          $ref: '#/components/schemas/TripDepartures'
         back:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimetableTrip'
+          $ref: '#/components/schemas/TripDepartures'
 
     TimetableStopTime:
       type: object
@@ -202,7 +208,7 @@ components:
         endDate:
           type: string
         interval:
-          type: string
+          type: integer
         departures:
           type: array
           items:
