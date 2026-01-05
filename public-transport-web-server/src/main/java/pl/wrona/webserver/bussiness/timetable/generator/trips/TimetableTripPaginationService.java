@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.timetable.generator.trips;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.TimetableTrip;
+import org.igeolab.iot.pt.server.api.model.TripDepartures;
 import org.igeolab.iot.pt.server.api.model.TripFilter;
 import org.igeolab.iot.pt.server.api.model.TripId1;
 import org.igeolab.iot.pt.server.api.model.TripResponse;
@@ -25,6 +26,7 @@ public class TimetableTripPaginationService {
         var trips = tripQueryService.findByAgencyCodeAndLineAndName(instance, tripFilter.getRouteId().getLine(), tripFilter.getRouteId().getName());
 
         var frontTrips = trips.stream()
+                .filter(trip -> !trip.isMainVariant())
                 .filter(trip -> trip.getVariantMode().equals(TripVariantMode.FRONT))
                 .map(TimetableTripPaginationService::mapTripEntity)
                 .toList();
@@ -36,6 +38,7 @@ public class TimetableTripPaginationService {
                 .findFirst().orElse(null);
 
         var backTrips = trips.stream()
+                .filter(trip -> !trip.isMainVariant())
                 .filter(trip -> trip.getVariantMode().equals(TripVariantMode.BACK))
                 .map(TimetableTripPaginationService::mapTripEntity)
                 .toList();
@@ -48,8 +51,12 @@ public class TimetableTripPaginationService {
 
         return new TripResponse()
                 .routeFilter(tripFilter.getRouteId())
-                .front(frontTrips)
-                .back(backTrips);
+                .front(new TripDepartures()
+                        .tripId(mainTripFront.getTripId())
+                        .departures(frontTrips))
+                .back(new TripDepartures()
+                        .tripId(mainTripBack.getTripId())
+                        .departures(backTrips));
     }
 
     private static TimetableTrip mapTripEntity(TripEntity trip) {
