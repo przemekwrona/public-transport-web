@@ -11,8 +11,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,6 +23,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "timetable_generator_item")
+//@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class TimetableGeneratorItemEntity {
 
     @Id
@@ -37,6 +41,10 @@ public class TimetableGeneratorItemEntity {
     @Column(name = "front_interval")
     private int frontInterval;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "front_payload", columnDefinition = "jsonb")
+    private List<TimetableDeparture> frontPayload;
+
     @Column(name = "back_start_time")
     private LocalTime backStartTime;
 
@@ -45,6 +53,10 @@ public class TimetableGeneratorItemEntity {
 
     @Column(name = "back_interval")
     private int backInterval;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "back_payload", columnDefinition = "jsonb")
+    private List<TimetableDeparture> backPayload;
 
 //    route_name
 //            front_start_time

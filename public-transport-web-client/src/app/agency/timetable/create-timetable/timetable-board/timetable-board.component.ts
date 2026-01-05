@@ -11,7 +11,7 @@ import moment, {Moment} from "moment";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {faClock, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-import {TimetableTrip} from "../../../../generated/public-transport-api";
+import {TimetableTrip, TripDepartures} from "../../../../generated/public-transport-api";
 import {size} from "lodash";
 
 @Component({
@@ -31,8 +31,7 @@ export class TimetableBoardComponent implements OnInit {
 
     @Input() group!: FormGroup;
     @Input() submitted: boolean = false;
-    @Input() timetableTrips: TimetableTrip[];
-
+    @Input() tripDepartures: TripDepartures;
 
     public faClock: IconDefinition = faClock;
 
@@ -126,7 +125,7 @@ export class TimetableBoardComponent implements OnInit {
     }
 
     public findTripDesignation(): TimetableTrip[] {
-        return (this.timetableTrips || []).filter((trip: TimetableTrip): boolean => trip.tripId.variantName !== 'MAIN');
+        return (this.tripDepartures?.departures || []).filter((trip: TimetableTrip): boolean => trip.tripId.variantName !== 'MAIN');
     }
 
     public hasTripDesignation(): boolean {

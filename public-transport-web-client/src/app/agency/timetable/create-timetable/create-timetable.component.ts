@@ -130,6 +130,9 @@ export class CreateTimetableComponent implements OnInit {
 
     private buildTimetablePayload(frontDepartures: FormGroup): TimetablePayload {
         const timetablePayload: TimetablePayload = {};
+        timetablePayload.startDate = frontDepartures?.get('startTime').value;
+        timetablePayload.endDate = frontDepartures?.get('endTime').value;
+        timetablePayload.interval = frontDepartures?.get('interval').value;
         const departuresControls: FormArray<FormGroup> = frontDepartures?.get('departures') as FormArray<FormGroup>
         timetablePayload.departures = departuresControls.controls
             .filter((group: FormGroup): boolean => group.get('minutes').value != null)
