@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import org.onebusaway.gtfs.model.calendar.ServiceDate;
 import pl.wrona.webserver.core.brigade.BrigadeEntity;
 import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -60,6 +61,9 @@ public class CalendarEntity {
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Set<CalendarDatesEntity> calendarDates;
+
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
+    private Set<TimetableGeneratorItemEntity> timetableGenerators;
 
     public ServiceDate getServiceStartDate() {
         return new ServiceDate(startDate.getYear(), startDate.getMonthValue(), startDate.getDayOfMonth());
