@@ -63,6 +63,10 @@ public class CreateTimetableGeneratorService {
                 });
 
         item.setCalendar(calendarEntity);
+        item.setRouteLine(request.getRouteId().getLine());
+        item.setRouteName(request.getRouteId().getName());
+        item.setRouteVersion(1);
+        item.setRoute(routeEntity);
 
         TimetableGeneratorItemEntity savedTimetableItem = timetableGeneratorCommandService.save(item);
 

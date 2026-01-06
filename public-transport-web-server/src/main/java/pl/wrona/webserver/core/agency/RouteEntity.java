@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -69,6 +70,9 @@ public class RouteEntity {
 
     @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TripEntity> tripEntities;
+
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
+    private Set<TimetableGeneratorItemEntity> generatedTimetables;
 
     public String getArtificialRouteId() {
         return "%s/%s".formatted(line, name);
