@@ -38,6 +38,7 @@ import {TimetableListComponent} from "./agency/timetable/timetable-list/timetabl
 import {agencyDetailsResolver} from "./agency/agency-details.resolver";
 import {CreateTimetableComponent} from "./agency/timetable/create-timetable/create-timetable.component";
 import {routesInGeneratedTimetableResolver} from "./agency/timetable/create-timetable/routes.resolver";
+import {generatedTimetablesResolver} from "./agency/timetable/timetables.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -54,7 +55,7 @@ export const routes: Routes = [
             {path: 'trips', component: TripListComponent, resolve: {trips: tripsResolver}},
             {path: 'trips/create', component: TripEditorComponent, resolve: { trip: tripEditorResolver, variants:  tripsResolver}, data: { mode: TripEditorComponentMode.CREATE }},
             {path: 'trips/edit', component: TripEditorComponent,  resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
-            {path: 'timetables', component: TimetableListComponent},
+            {path: 'timetables', component: TimetableListComponent, resolve: { timetables: generatedTimetablesResolver }},
             {path: 'timetables/create', component: CreateTimetableComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver }},
             {path: 'brigades', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'brigades/create', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver }, data: { mode: BrigadeEditorComponentMode.CREATE }},
