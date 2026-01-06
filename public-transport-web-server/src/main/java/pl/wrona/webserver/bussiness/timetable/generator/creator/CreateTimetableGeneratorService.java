@@ -7,7 +7,7 @@ import org.igeolab.iot.pt.server.api.model.TimetableGeneratorPayload;
 import org.igeolab.iot.pt.server.api.model.TimetableStopTime;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
-import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorCommandService;
+import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorItemCommandService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
@@ -26,7 +26,7 @@ public class CreateTimetableGeneratorService {
     private final CalendarQueryService calendarQueryService;
     private final RouteQueryService routeQueryService;
     private final TripQueryService tripQueryService;
-    private final TimetableGeneratorCommandService timetableGeneratorCommandService;
+    private final TimetableGeneratorItemCommandService timetableGeneratorItemCommandService;
 
     @PreAgencyAuthorize
     public CreateTimetableGeneratorRequest createTimetableGenerator(String instance, CreateTimetableGeneratorRequest request) {

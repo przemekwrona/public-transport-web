@@ -7,7 +7,7 @@ import pl.wrona.webserver.core.timetable.TimetableGeneratorItemRepository;
 
 @Service
 @AllArgsConstructor
-public class TimetableGeneratorCommandService {
+public class TimetableGeneratorItemCommandService {
 
     private final TimetableGeneratorItemRepository timetableGeneratorItemRepository;
 
