@@ -26,3 +26,7 @@ databaseChangeLog:
   - include:
       file: 007_fixes_after_first_deploy.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 008_init_timetable_generator.yaml
+      relativeToChangelogFile: true
