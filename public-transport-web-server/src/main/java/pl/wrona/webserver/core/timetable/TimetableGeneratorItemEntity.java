@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
 
 import java.time.LocalTime;
@@ -29,10 +30,23 @@ import java.util.List;
 public class TimetableGeneratorItemEntity {
 
     @Id
-    @Column(name = "timetable_generator_id")
+    @Column(name = "timetable_generator_item_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "timetable_generator_item_id_seq")
     @SequenceGenerator(name = "timetable_generator_item_id_seq", sequenceName = "timetable_generator_item_id_seq", allocationSize = 1)
     private Long timetableGeneratorId;
+
+    @Column(name = "route_line")
+    private String routeLine;
+
+    @Column(name = "route_name")
+    private String routeName;
+
+    @Column(name = "route_version")
+    private int routeVersion;
+
+    @ManyToOne
+    @JoinColumn(name = "route_id", nullable = false)
+    private RouteEntity route;
 
     @Column(name = "front_start_time")
     private LocalTime frontStartTime;
@@ -63,17 +77,4 @@ public class TimetableGeneratorItemEntity {
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
     private CalendarEntity calendar;
-
-//    route_name
-//            front_start_time
-//    route_line
-//            front_payload
-//    front_end_time
-//            back_interval
-//    back_payload
-//            back_start_time
-//    front_interval
-//            agency_id
-//    back_end_time
-//            calendar_id
 }
