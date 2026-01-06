@@ -23,6 +23,8 @@ import lombok.Setter;
 import pl.wrona.webserver.core.GoogleAgreementEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEntity;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.timetable.TimetableGeneratorEntity;
+import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 import pl.wrona.webserver.security.AppUser;
 
 import java.time.LocalDateTime;
@@ -112,5 +114,9 @@ public class AgencyEntity {
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AgencyPhotoEntity> agencyPhotos;
+
+    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
+    private Set<TimetableGeneratorEntity> timetableGenerators;
+
 
 }

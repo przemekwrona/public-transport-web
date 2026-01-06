@@ -9,6 +9,7 @@ import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.security.AppUser;
 import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminDetail;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.Optional;
 
@@ -18,8 +19,9 @@ public class AgencyService {
 
     private final AgencyRepository agencyRepository;
 
-    public AgencyEntity findAgencyByAgencyCode(String agencyCode) {
-        return agencyRepository.findByAgencyCodeEquals(agencyCode);
+    @PreAgencyAuthorize
+    public AgencyEntity findAgencyByAgencyCode(String instance) {
+        return agencyRepository.findByAgencyCodeEquals(instance);
     }
 
     @Deprecated

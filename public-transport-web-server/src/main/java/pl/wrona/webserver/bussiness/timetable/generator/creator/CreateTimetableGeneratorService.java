@@ -11,6 +11,8 @@ import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorCommandService;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorItemCommandService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
+import pl.wrona.webserver.core.AgencyService;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
 import pl.wrona.webserver.core.calendar.CalendarQueryService;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CreateTimetableGeneratorService {
 
+    private final AgencyService agencyService;
     private final CalendarQueryService calendarQueryService;
     private final RouteQueryService routeQueryService;
     private final TripQueryService tripQueryService;
@@ -35,12 +38,14 @@ public class CreateTimetableGeneratorService {
     @Transactional
     @PreAgencyAuthorize
     public CreateTimetableGeneratorRequest createTimetableGenerator(String instance, CreateTimetableGeneratorRequest request) {
+        AgencyEntity agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         CalendarEntity calendarEntity = calendarQueryService.getCalendar(instance, request.getTimetables().getCalendarName());
         RouteEntity routeEntity = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, new RouteId()
                 .line(request.getRouteId().getLine())
                 .name(request.getRouteId().getName()));
 
         TimetableGeneratorEntity timetable = TimetableGeneratorEntity.builder()
+                .agency(agencyEntity)
                 .build();
 
         TimetableGeneratorEntity savedTimetable = timetableGeneratorCommandService.save(timetable);
