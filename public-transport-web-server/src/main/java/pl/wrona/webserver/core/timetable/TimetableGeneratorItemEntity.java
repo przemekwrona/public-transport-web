@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import pl.wrona.webserver.core.calendar.CalendarEntity;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -23,7 +26,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "timetable_generator_item")
-//@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class TimetableGeneratorItemEntity {
 
     @Id
@@ -57,6 +59,10 @@ public class TimetableGeneratorItemEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "back_payload", columnDefinition = "jsonb")
     private List<TimetableDeparture> backPayload;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id", nullable = false)
+    private CalendarEntity calendar;
 
 //    route_name
 //            front_start_time

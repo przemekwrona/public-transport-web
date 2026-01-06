@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CreateTimetableGeneratorRequest;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorPayload;
+import org.igeolab.iot.pt.server.api.model.TimetableStopTime;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorCommandService;
@@ -44,10 +45,7 @@ public class CreateTimetableGeneratorService {
                     item.setFrontInterval(payload.getInterval());
 
                     item.setFrontPayload(payload.getDepartures().stream()
-                            .map(departure -> TimetableDeparture.builder()
-                                    .time(LocalTime.parse(departure.getTime()))
-                                    .symbol(departure.getDesignation())
-                                    .build())
+                            .map(CreateTimetableGeneratorService::buildDeparture)
                             .toList());
                 });
 
@@ -60,16 +58,22 @@ public class CreateTimetableGeneratorService {
                     item.setBackInterval(payload.getInterval());
 
                     item.setBackPayload(payload.getDepartures().stream()
-                            .map(departure -> TimetableDeparture.builder()
-                                    .time(LocalTime.parse(departure.getTime()))
-                                    .symbol(departure.getDesignation())
-                                    .build())
+                            .map(CreateTimetableGeneratorService::buildDeparture)
                             .toList());
                 });
+
+        item.setCalendar(calendarEntity);
 
         TimetableGeneratorItemEntity savedTimetableItem = timetableGeneratorCommandService.save(item);
 
         return null;
+    }
+
+    private static TimetableDeparture buildDeparture(TimetableStopTime departure) {
+        return TimetableDeparture.builder()
+                .time(LocalTime.parse(departure.getTime()))
+                .symbol(departure.getDesignation())
+                .build();
     }
 
 }
