@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.TimetableGeneratorApi;
 import org.igeolab.iot.pt.server.api.model.CreateTimetableGeneratorRequest;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorFilterByRoutesResponse;
+import org.igeolab.iot.pt.server.api.model.TimetableGeneratorFindAllResponse;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorPayload;
 import org.igeolab.iot.pt.server.api.model.TimetablePayload;
 import org.igeolab.iot.pt.server.api.model.TripFilter;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.timetable.generator.creator.CreateTimetableGeneratorService;
+import pl.wrona.webserver.bussiness.timetable.generator.pagination.TimetableGeneratorPaginationService;
 import pl.wrona.webserver.bussiness.timetable.generator.routes.TimetableRoutePaginationService;
 import pl.wrona.webserver.bussiness.timetable.generator.trips.TimetableTripPaginationService;
 
@@ -24,14 +26,10 @@ public class TimetableGeneratorController implements TimetableGeneratorApi {
     private final TimetableRoutePaginationService timetableRoutePaginationService;
     private final CreateTimetableGeneratorService createTimetableGeneratorService;
     private final TimetableTripPaginationService timetableTripPaginationService;
+    private final TimetableGeneratorPaginationService timetableGeneratorPaginationService;
 
     @Override
     public ResponseEntity<Void> agencyAgencyTimetableGeneratorDelete(String agency) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<TimetableGeneratorPayload> agencyAgencyTimetableGeneratorGet(String agency) {
         return null;
     }
 
@@ -43,6 +41,11 @@ public class TimetableGeneratorController implements TimetableGeneratorApi {
     @Override
     public ResponseEntity<CreateTimetableGeneratorRequest> createTimetableGenerator(String agency, CreateTimetableGeneratorRequest createTimetableGeneratorRequest) {
         return ResponseEntity.ok(createTimetableGeneratorService.createTimetableGenerator(agency, createTimetableGeneratorRequest));
+    }
+
+    @Override
+    public ResponseEntity<TimetableGeneratorFindAllResponse> findAll(String agency) {
+        return ResponseEntity.ok(timetableGeneratorPaginationService.findAllPaginated(agency,0,100));
     }
 
     @Override

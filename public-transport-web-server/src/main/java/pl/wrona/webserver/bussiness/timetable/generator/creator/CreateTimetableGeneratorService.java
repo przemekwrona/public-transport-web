@@ -21,6 +21,7 @@ import pl.wrona.webserver.core.timetable.TimetableGeneratorEntity;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -46,6 +47,12 @@ public class CreateTimetableGeneratorService {
 
         TimetableGeneratorEntity timetable = TimetableGeneratorEntity.builder()
                 .agency(agencyEntity)
+                .routeLine(request.getRouteId().getLine())
+                .routeName(request.getRouteId().getName())
+                .routeVersion(1)
+                .route(routeEntity)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         TimetableGeneratorEntity savedTimetable = timetableGeneratorCommandService.save(timetable);
@@ -78,11 +85,6 @@ public class CreateTimetableGeneratorService {
                 });
 
         item.setCalendar(calendarEntity);
-        item.setRouteLine(request.getRouteId().getLine());
-        item.setRouteName(request.getRouteId().getName());
-        item.setRouteVersion(1);
-        item.setRoute(routeEntity);
-
         item.setTimetableGenerator(savedTimetable);
 
         TimetableGeneratorItemEntity savedTimetableItem = timetableGeneratorItemCommandService.save(item);

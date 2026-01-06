@@ -22,8 +22,44 @@
 
 <div class="container-fixed">
     <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-
         @if (hasTimetables()) {
+            @for (item of response.items; track $index) {
+
+                <div class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 w-full rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg">
+                    <div class="flex items-center gap-4">
+                        <div class="flex flex-col gap-0.5">
+                            <div class="flex items-center flex-wrap gap-2.5">
+                                <a (click)="openTimetableGenerator(item)"
+                                   class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ item.routeLine }} {{ item.routeName }}</a>
+                                <span class="badge badge-sm badge-outline badge-info">v{{ item.routeVersion }}.0</span>
+                            </div>
+                            <div class="form-info text-gray-800 font-normal">
+                                <div>
+                                    Utworzono: <strong>{{ item.createdAt | date : "YYYY-MM-dd" }}</strong>
+                                </div>
+
+                                <div class="mt-1">
+                                    <span class="mr-2"><strong>Kalendarze</strong></span>
+                                    @for (calendar of item.calendarNames; track $index) {
+                                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1"><strong class="mr-1">{{ calendar.designation }}</strong> {{ calendar.description }}</span>
+                                    }
+                                </div>
+
+                            </div>
+
+                            <!--                            @if (route.matchAnyBrigade) {-->
+<!--                                <span class="text-2sm text-danger">Nie można usunąć. Trasy są przypisane do brygad</span>-->
+<!--                            }-->
+                        </div>
+                    </div>
+                    <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
+<!--                                            <button (click)="downloadPdf(route)" class="btn btn-sm btn-danger shrink-0">PDF</button>-->
+                        <a (click)="openTimetableGenerator(item)" class="btn btn-sm shrink-0 btn-secondary">Pokaż szczegóły</a>
+<!--                        <button [disabled]="route.matchAnyBrigade" (click)="deleteRoute(route)" class="btn btn-sm btn-icon btn-clear btn-danger"><i class="ki-filled ki-cross-square"></i></button>-->
+                    </div>
+                </div>
+
+            }
         } @else {
             <!-- Container -->
             <div class="card w-full">

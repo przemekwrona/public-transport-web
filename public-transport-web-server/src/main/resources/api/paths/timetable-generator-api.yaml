@@ -7,6 +7,7 @@ paths:
       tags:
         - timetable-generator
       summary: Get list all generated timetables
+      operationId: findAll
       parameters:
         - in: path
           name: agency
@@ -19,7 +20,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TimetableGeneratorPayload'
+                $ref: '#/components/schemas/TimetableGeneratorFindAllResponse'
 
     post:
       tags:
@@ -251,4 +252,38 @@ components:
     TimetableGeneratorFilterByCalendar:
       type: object
       properties:
+
+    TimetableGeneratorCalendar:
+      type: object
+      properties:
+        designation:
+          type: string
+        description:
+          type: string
+
+    TimetableGeneratorFindAllItem:
+      type: object
+      properties:
+        routeLine:
+          type: string
+        routeName:
+          type: string
+        routeVersion:
+          type: integer
+        calendarNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimetableGeneratorCalendar'
+        createdAt:
+          type: string
+          format: date-time
+
+    TimetableGeneratorFindAllResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimetableGeneratorFindAllItem'
+
 
