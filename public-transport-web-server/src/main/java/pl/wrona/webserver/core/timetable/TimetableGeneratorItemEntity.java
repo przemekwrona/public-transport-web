@@ -77,4 +77,8 @@ public class TimetableGeneratorItemEntity {
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
     private CalendarEntity calendar;
+
+    @ManyToOne
+    @JoinColumn(name = "timetable_generator_id", nullable = false)
+    private TimetableGeneratorEntity timetableGenerator;
 }
