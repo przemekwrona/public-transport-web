@@ -1,0 +1,103 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-timetable-generator
+      author: pwrona
+      changes:
+        - createSequence:
+            sequenceName: timetable_generator_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: timetable_generator
+            columns:
+              - column:
+                  name: timetable_generator_id
+                  type: integer
+                  defaultValueSequenceNext: timetable_generator_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_timetable_generator
+                    nullable: false
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_timetable_generator_agency
+                    references: agency(agency_id)
+                    nullable: false
+
+  - changeSet:
+      id: create-table-timetable-generator-item
+      author: pwrona
+      changes:
+        - createSequence:
+            sequenceName: timetable_generator_item_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: timetable_generator_item
+            columns:
+              - column:
+                  name: timetable_generator_item_id
+                  type: integer
+                  defaultValueSequenceNext: timetable_generator_item_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_timetable_generator_item
+                    nullable: false
+              - column:
+                  name: route_line
+                  type: varchar(10)
+              - column:
+                  name: route_name
+                  type: varchar(255)
+              - column:
+                  name: route_version
+                  type: integer
+              - column:
+                  name: route_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_timetable_generator_item_route
+                    references: route(route_id)
+                    nullable: false
+              - column:
+                  name: front_start_time
+                  type: time
+              - column:
+                  name: front_end_time
+                  type: time
+              - column:
+                  name: front_interval
+                  type: integer
+              - column:
+                  name: front_payload
+                  type: jsonb
+              - column:
+                  name: back_start_time
+                  type: time
+              - column:
+                  name: back_end_time
+                  type: time
+              - column:
+                  name: back_interval
+                  type: integer
+              - column:
+                  name: back_payload
+                  type: jsonb
+              - column:
+                  name: service_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_timetable_generator_item_calendar
+                    references: calendar(service_id)
+                    nullable: false
+              - column:
+                  name: timetable_generator_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_timetable_generator_item_timetable_generator
+                    references: timetable_generator(timetable_generator_id)
+                    nullable: false
