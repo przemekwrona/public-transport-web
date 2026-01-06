@@ -6,13 +6,16 @@ import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorPayload;
 import org.igeolab.iot.pt.server.api.model.TimetableStopTime;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorCommandService;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorItemCommandService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.calendar.CalendarEntity;
 import pl.wrona.webserver.core.calendar.CalendarQueryService;
 import pl.wrona.webserver.core.timetable.TimetableDeparture;
+import pl.wrona.webserver.core.timetable.TimetableGeneratorEntity;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -26,14 +29,21 @@ public class CreateTimetableGeneratorService {
     private final CalendarQueryService calendarQueryService;
     private final RouteQueryService routeQueryService;
     private final TripQueryService tripQueryService;
+    private final TimetableGeneratorCommandService timetableGeneratorCommandService;
     private final TimetableGeneratorItemCommandService timetableGeneratorItemCommandService;
 
+    @Transactional
     @PreAgencyAuthorize
     public CreateTimetableGeneratorRequest createTimetableGenerator(String instance, CreateTimetableGeneratorRequest request) {
         CalendarEntity calendarEntity = calendarQueryService.getCalendar(instance, request.getTimetables().getCalendarName());
         RouteEntity routeEntity = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, new RouteId()
                 .line(request.getRouteId().getLine())
                 .name(request.getRouteId().getName()));
+
+        TimetableGeneratorEntity timetable = TimetableGeneratorEntity.builder()
+                .build();
+
+        TimetableGeneratorEntity savedTimetable = timetableGeneratorCommandService.save(timetable);
 
         TimetableGeneratorItemEntity item = new TimetableGeneratorItemEntity();
         Optional.of(request)
@@ -68,7 +78,9 @@ public class CreateTimetableGeneratorService {
         item.setRouteVersion(1);
         item.setRoute(routeEntity);
 
-        TimetableGeneratorItemEntity savedTimetableItem = timetableGeneratorCommandService.save(item);
+        item.setTimetableGenerator(savedTimetable);
+
+        TimetableGeneratorItemEntity savedTimetableItem = timetableGeneratorItemCommandService.save(item);
 
         return null;
     }
