@@ -1,7 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {TimetableGeneratorFindAllResponse} from "../../../generated/public-transport-api";
+import {
+    TimetableGeneratorFindAllItem,
+    TimetableGeneratorFindAllResponse
+} from "../../../generated/public-transport-api";
 import {CommonModule} from "@angular/common";
+import {size} from "lodash";
 
 @Component({
     selector: 'app-timetable-list',
@@ -20,11 +24,15 @@ export class TimetableListComponent implements OnInit {
     }
 
     public hasTimetables(): boolean {
-        return false;
+        return size(this.response.items) > 0;
     }
 
     ngOnInit(): void {
         this.response = this.route.snapshot.data["timetables"]
+    }
+
+    public openTimetableGenerator(timetableGenerator: TimetableGeneratorFindAllItem): void {
+
     }
 
 }

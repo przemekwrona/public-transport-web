@@ -20,6 +20,28 @@ databaseChangeLog:
                     primaryKeyName: pk_timetable_generator
                     nullable: false
               - column:
+                  name: route_line
+                  type: varchar(10)
+              - column:
+                  name: route_name
+                  type: varchar(255)
+              - column:
+                  name: route_version
+                  type: integer
+              - column:
+                  name: route_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_timetable_generator_item_route
+                    references: route(route_id)
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: updated_at
+                  type: datetime
+              - column:
                   name: agency_id
                   type: integer
                   constraints:
@@ -46,22 +68,6 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     primaryKeyName: pk_timetable_generator_item
-                    nullable: false
-              - column:
-                  name: route_line
-                  type: varchar(10)
-              - column:
-                  name: route_name
-                  type: varchar(255)
-              - column:
-                  name: route_version
-                  type: integer
-              - column:
-                  name: route_id
-                  type: integer
-                  constraints:
-                    foreignKeyName: fk_timetable_generator_item_route
-                    references: route(route_id)
                     nullable: false
               - column:
                   name: front_start_time

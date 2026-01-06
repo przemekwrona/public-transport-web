@@ -35,19 +35,6 @@ public class TimetableGeneratorItemEntity {
     @SequenceGenerator(name = "timetable_generator_item_id_seq", sequenceName = "timetable_generator_item_id_seq", allocationSize = 1)
     private Long timetableGeneratorId;
 
-    @Column(name = "route_line")
-    private String routeLine;
-
-    @Column(name = "route_name")
-    private String routeName;
-
-    @Column(name = "route_version")
-    private int routeVersion;
-
-    @ManyToOne
-    @JoinColumn(name = "route_id", nullable = false)
-    private RouteEntity route;
-
     @Column(name = "front_start_time")
     private LocalTime frontStartTime;
 
