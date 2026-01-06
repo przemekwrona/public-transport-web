@@ -19,7 +19,7 @@ import {
     TimetablePayload,
     TimetableStopTime, TripFilter, TripResponse
 } from "../../../generated/public-transport-api";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {CommonModule} from "@angular/common";
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
@@ -29,6 +29,7 @@ import {RouteNameNormPipe} from "./route-id-normalization.pipe";
 import moment from "moment";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
+import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
     selector: 'app-create-timetable',
@@ -62,7 +63,7 @@ export class CreateTimetableComponent implements OnInit {
         return this.formGroup.get('timetables') as FormArray<FormGroup>;
     }
 
-    constructor(private formBuilder: FormBuilder, private _route: ActivatedRoute, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService) {
+    constructor(private formBuilder: FormBuilder, private _route: ActivatedRoute, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService, private router: Router) {
     }
 
     ngOnInit(): void {
@@ -154,7 +155,6 @@ export class CreateTimetableComponent implements OnInit {
 
         const errors: AllValidationErrors[] = FormUtils.getFormValidationErrors(this.formGroup);
         console.log(errors);
-        console.log(this.formGroup.valid);
         if (this.formGroup.valid) {
             const payload: TimetableGeneratorPayload = this.buildCreateTimetableRequest();
             const request: CreateTimetableGeneratorRequest = {};
@@ -162,9 +162,9 @@ export class CreateTimetableComponent implements OnInit {
             request.routeId = {};
             request.routeId = this.formGroup.get('routeId').value;
 
-            console.log(request);
-
             this.timetableGeneratorService.createTimetableGenerator(this.agencyStorageService.getInstance(), request).subscribe(response => {
+                this.notificationService.showSuccess('Udało się utworzyć szkic rozkładu jazdy.Teraz musisz wygenerować brygady, aby rozkład był aktywny.');
+                this.router.navigate(['/agency/timetables']).then();
             });
         } else {
             this.scrollToFirstError();
