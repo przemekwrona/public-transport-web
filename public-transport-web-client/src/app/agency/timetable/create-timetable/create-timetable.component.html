@@ -31,32 +31,6 @@
                         </mat-form-field>
                     </label>
                 </div>
-
-                <div class="flex flex-wrap justify-between gap-5">
-                    <div class="flex flex-col mt-2.5">
-                        <div class="text-gray-900 text-sm font-medium">Kalendarz</div>
-
-                        @if (checkControlHasError("calendarName", "required")) {
-                            <span class="text-danger text-2sm">Wybierz kalendarz</span>
-                        } @else {
-                            <span class="text-gray-700 text-2sm">Kalendarz</span>
-                        }
-                    </div>
-
-                    <label class="sm:max-w-full xl:max-w-96 w-full">
-                        <mat-form-field appearance="outline" class="w-full custom-form-field">
-                            <mat-select [formControl]="getCalendarNameFormControl()" placeholder="Wybież kalendarz">
-                                @for (calendar of calendarsResponse.calendars; track calendar) {
-                                    <mat-option [value]="calendar.calendarName">
-                                        <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
-                                        ({{ calendar.calendarName }})
-                                    </mat-option>
-                                }
-                            </mat-select>
-                        </mat-form-field>
-                    </label>
-                </div>
-
             </div>
         </div>
 
@@ -70,7 +44,33 @@
                         <strong>{{ formGroup.get("routeId").value?.["line"] }}</strong>
                         <span>{{ formGroup.get("routeId").value?.["name"] }}</span>
                     </div>
+
+                    <div class="flex flex-wrap justify-between gap-5">
+                        <div class="flex flex-col mt-2.5">
+                            <div class="text-gray-900 text-sm font-medium">Kalendarz</div>
+
+                            @if (checkControlHasError("calendarName", "required")) {
+                                <span class="text-danger text-2sm">Wybierz kalendarz</span>
+                            } @else {
+                                <span class="text-gray-700 text-2sm">Kalendarz</span>
+                            }
+                        </div>
+
+                        <label class="sm:max-w-full xl:max-w-96 w-full">
+                            <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                <mat-select [formControl]="getCalendarNameFormControl()" placeholder="Wybież kalendarz">
+                                    @for (calendar of calendarsResponse.calendars; track calendar) {
+                                        <mat-option [value]="calendar.calendarName">
+                                            <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
+                                            ({{ calendar.calendarName }})
+                                        </mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </label>
+                    </div>
                 </div>
+
             </div>
         }
         <!-- end: grid -->
