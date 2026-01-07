@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterModule} from "@angular/router";
 import {
     TimetableGeneratorFindAllItem,
     TimetableGeneratorFindAllResponse
@@ -11,7 +11,8 @@ import {size} from "lodash";
     selector: 'app-timetable-list',
     standalone: true,
     imports: [
-        CommonModule
+        CommonModule,
+        RouterModule
     ],
     templateUrl: './timetable-list.component.html',
     styleUrl: './timetable-list.component.scss'

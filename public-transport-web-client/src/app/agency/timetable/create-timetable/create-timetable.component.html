@@ -1,4 +1,22 @@
 <div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+        <div class="flex flex-col justify-center gap-2">
+            <h1 class="text-xl font-medium leading-none text-gray-900">Generator Rozkładów jazdy i Brygad</h1>
+            <div class="flex items-center gap-2 text-sm font-normal text-gray-700"></div>
+        </div>
+        <div class="flex items-center gap-2.5">
+            <a [routerLink]="['/agency/timetables']" class="btn btn-sm btn-secondary">Anuluj i wróć do listy Rozkładów Jazdy</a>
+        </div>
+
+        <span class="badge badge-sm badge-outline badge-info w-full" style="line-height: inherit">
+            To jest testowa wersja modułu generowania rozkładów jazdy.
+            Aktualnie pracuję nad funkcjonalnością, która na podstawie zatwierdzonego rozkładu jazdy automatycznie wygeneruje brygady (obieg pojazdów), które będą obsługiwać daną trasę, optymalizując przy tym czasy pracy kierowców i minimalizując puste przebiegi.
+        </span>
+
+    </div>
+</div>
+
+<div class="container-fixed">
 
     <form [formGroup]="formGroup" (ngSubmit)="saveGeneratedTimetable()">
         <div class="card min-w-full">
