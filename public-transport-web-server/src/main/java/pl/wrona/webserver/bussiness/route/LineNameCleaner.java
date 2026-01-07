@@ -10,8 +10,8 @@ public class LineNameCleaner {
                 .replaceAll("\\s{2,}", " ")
                 .replaceAll(" -", "-")
                 .replaceAll("- ", "-")
+                .replaceAll("-", " - ")
                 .trim()
-                .replace(" ", "_")
                 .toUpperCase();
     }
 }
