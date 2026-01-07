@@ -38,6 +38,8 @@ public class RouteEntity {
 
     private String line;
 
+    private int version;
+
     @Column(name = "origin_stop_id")
     private Long originStopId;
 

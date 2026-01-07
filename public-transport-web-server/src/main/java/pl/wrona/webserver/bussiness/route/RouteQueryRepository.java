@@ -28,4 +28,10 @@ public interface RouteQueryRepository extends JpaRepository<RouteEntity, String>
                 AND EXISTS (SELECT 1 FROM BrigadeTripEntity bd WHERE bd.rootTrip.tripId = t.tripId)""")
     List<RouteEntity> findByExistsBrigade(@Param("agencyCode") String agencyCode);
 
+    @Query("""
+            SELECT r.version FROM RouteEntity r
+            WHERE r.agency.agencyCode = :agencyCode AND r.line = :line AND r.name = :name
+            ORDER BY r.version DESC FETCH FIRST 1 ROWS ONLY""")
+    int findLastInsertedVersion(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name);
+
 }
