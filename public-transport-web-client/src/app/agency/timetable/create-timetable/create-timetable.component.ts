@@ -19,7 +19,7 @@ import {
     TimetablePayload,
     TimetableStopTime, TripFilter, TripResponse
 } from "../../../generated/public-transport-api";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {CommonModule} from "@angular/common";
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
@@ -43,7 +43,8 @@ import {NotificationService} from "../../../shared/notification.service";
         NgxMatSelectSearchModule,
         MatFormFieldModule,
         MatSelectModule,
-        RouteNameNormPipe
+        RouteNameNormPipe,
+        RouterModule
     ],
     templateUrl: './create-timetable.component.html',
     styleUrl: './create-timetable.component.scss'
