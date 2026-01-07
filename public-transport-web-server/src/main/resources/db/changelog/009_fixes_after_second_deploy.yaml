@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: append-column-version-to-route
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: route
+            columns:
+              - column:
+                  name: version
+                  type: smallint
+                  defaultValueNumeric: "1"
+                  constraints:
+                    nullable: false
+
+        - dropIndex:
+            indexName: idx_route_name_line
+            tableName: route
+
+        - createIndex:
+            indexName: idx_route_name_line_version
+            tableName: route
+            columns:
+              - column:
+                  descending: true
+                  name: agency_id
+              - column:
+                  descending: true
+                  name: line
+              - column:
+                  descending: true
+                  name: name
+              - column:
+                  descending: true
+                  name: version

@@ -30,3 +30,7 @@ databaseChangeLog:
   - include:
       file: 008_init_timetable_generator.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 009_fixes_after_second_deploy.yaml
+      relativeToChangelogFile: true
