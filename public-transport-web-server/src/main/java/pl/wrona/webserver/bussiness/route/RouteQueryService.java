@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.route;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -31,5 +32,12 @@ public class RouteQueryService {
         return this.routeQueryRepository.findByExistsBrigade(agencyCode).stream()
                 .collect(Collectors.toMap(RouteEntity::getRouteId, Function.identity()));
     }
+
+    @Transactional(readOnly = true)
+    public int findLastInsertedVersion(String instance, String line, String name) {
+        int lastInsertedVersion = this.routeQueryRepository.findLastInsertedVersion(instance, line, name);
+        return lastInsertedVersion == 0 ? 1 : lastInsertedVersion;
+    }
+
 
 }
