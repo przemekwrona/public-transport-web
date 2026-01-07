@@ -64,7 +64,8 @@ public class RouteCreatorService {
                         .status(Status.StatusEnum.CREATED))
                 .routeId(new RouteId()
                         .line(savedRoute.getLine())
-                        .name(savedRoute.getName()));
+                        .name(savedRoute.getName())
+                        .version(savedRoute.getVersion()));
     }
 
 
