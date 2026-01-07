@@ -149,19 +149,11 @@ paths:
 components:
   schemas:
 
-    RouteId:
-      type: object
-      properties:
-        name:
-          type: string
-        line:
-          type: string
-
     TripFilter:
       type: object
       properties:
         routeId:
-          $ref: '#/components/schemas/RouteId'
+          $ref: '../public-transport-api.yaml/#/components/schemas/RouteId'
 
     TimetableTrip:
       type: object
@@ -187,7 +179,7 @@ components:
       type: object
       properties:
         routeFilter:
-          $ref: '#/components/schemas/RouteId'
+          $ref: '../public-transport-api.yaml/#/components/schemas/RouteId'
         front:
           $ref: '#/components/schemas/TripDepartures'
         back:
@@ -229,7 +221,7 @@ components:
       type: object
       properties:
         routeId:
-          $ref: '#/components/schemas/RouteId'
+          $ref: '../public-transport-api.yaml/#/components/schemas/RouteId'
         timetables:
           $ref: '#/components/schemas/TimetableGeneratorPayload'
 
@@ -237,7 +229,7 @@ components:
       type: object
       properties:
         routeId:
-          $ref: '#/components/schemas/RouteId'
+          $ref: '../public-transport-api.yaml/#/components/schemas/RouteId'
 
     TimetableGeneratorFilterByRoutesResponse:
       type: object
