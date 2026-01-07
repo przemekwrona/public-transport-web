@@ -13,10 +13,10 @@ class LineNameCleanerTest {
 
     static Stream<Arguments> provideRouteName() {
         return Stream.of(
-                Arguments.of("Kije - Chmielnik", "KIJE-CHMIELNIK"),
-                Arguments.of("   Kije - Chmielnik     ", "KIJE-CHMIELNIK"),
-                Arguments.of("   Kije     -      Chmielnik     ", "KIJE-CHMIELNIK"),
-                Arguments.of("   Śladków Duży  - Chmielnik     ", "ŚLADKÓW_DUŻY-CHMIELNIK")
+                Arguments.of("Kije - Chmielnik", "KIJE - CHMIELNIK"),
+                Arguments.of("   Kije - Chmielnik     ", "KIJE - CHMIELNIK"),
+                Arguments.of("   Kije     -      Chmielnik     ", "KIJE - CHMIELNIK"),
+                Arguments.of("   Śladków Duży  - Chmielnik     ", "ŚLADKÓW DUŻY - CHMIELNIK")
         );
     }
 
