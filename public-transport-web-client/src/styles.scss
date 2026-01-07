@@ -165,3 +165,37 @@ html {
   }
 }
 
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.select-overrides((
+          //panel-background-color: white,
+          //enabled-trigger-text-color: red,
+          trigger-text-line-height: 1.125rem,
+          trigger-text-size: 0.8125rem
+  ));
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 6px; /*you can tweak around with this, */
+  margin-bottom: -24px; /*and this*/
+}
+
+/*you also have to adjust the label, after the above*/
+.mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+  top: 50%;
+}
+.mdc-floating-label--float-above{
+  top: 80% !important;
+}
+
+.custom-form-field {
+  --mdc-outlined-text-field-outline-color: #DBDFE9;       /* default */
+  --mdc-outlined-text-field-focus-outline-color: #1B84FF; /* focused */
+  --mdc-outlined-text-field-hover-outline-color: #9e9e9e; /* hover */
+  --mdc-outlined-text-field-error-outline-color: red;
+  --mdc-outlined-text-field-outline-width: 1px;           /* default */
+  --mdc-outlined-text-field-focus-outline-width: 1px;     /* focused */
+}
+

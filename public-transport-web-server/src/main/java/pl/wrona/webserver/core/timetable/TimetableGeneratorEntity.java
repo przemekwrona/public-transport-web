@@ -37,8 +37,7 @@ public class TimetableGeneratorEntity {
     @SequenceGenerator(name = "timetable_generator_id_seq", sequenceName = "timetable_generator_id_seq", allocationSize = 1)
     private Long timetableGeneratorId;
 
-    @BatchSize(size = 20)
-    @OneToMany(mappedBy = "timetableGenerator", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "timetableGenerator", cascade = CascadeType.ALL)
     private Set<TimetableGeneratorItemEntity> timetableGenerators;
 
     @Column(name = "route_line")
