@@ -15,8 +15,8 @@ public interface RouteQueryRepository extends JpaRepository<RouteEntity, String>
     @Query("SELECT r FROM RouteEntity r WHERE r.agency.agencyCode = :agencyCode ORDER BY r.line")
     List<RouteEntity> findByAgencyCode(@Param("agencyCode") String agencyCode);
 
-    @Query("SELECT r FROM RouteEntity r WHERE r.agency.agencyCode = :agencyCode AND r.line = :line AND r.name = :name")
-    RouteEntity findByAgencyCodeAndLineAndName(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name);
+    @Query("SELECT r FROM RouteEntity r WHERE r.agency.agencyCode = :agencyCode AND r.line = :line AND r.name = :name AND r.version = :version")
+    RouteEntity findByAgencyCodeAndLineAndName(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("version") int version);
 
     @Deprecated
     @Query("SELECT r FROM RouteEntity r WHERE r.agency = :agency AND r.name = :name AND r.line = :line")
@@ -32,6 +32,6 @@ public interface RouteQueryRepository extends JpaRepository<RouteEntity, String>
             SELECT r.version FROM RouteEntity r
             WHERE r.agency.agencyCode = :agencyCode AND r.line = :line AND r.name = :name
             ORDER BY r.version DESC FETCH FIRST 1 ROWS ONLY""")
-    int findLastInsertedVersion(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name);
+    Integer findLastInsertedVersion(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name);
 
 }

@@ -14,6 +14,11 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
 export class CreateRouteComponent implements OnInit {
 
     public route: Route = {
+        routeId: {
+            line: "",
+            name: "",
+            version: null
+        },
         google: false,
         active: true
     };
@@ -47,7 +52,7 @@ export class CreateRouteComponent implements OnInit {
         this.route.destinationStop = destinationStop;
 
         this.routeService.createRoute(this.agencyStorageService.getInstance(), this.route).subscribe((response: ModificationRouteResponse) => {
-            this.notificationService.showSuccess(`Linia ${this.route.line} (${this.route.name}) została pomyślnie utworzona`);
+            this.notificationService.showSuccess(`Linia ${this.route.routeId.line} (${this.route.routeId.name}) została pomyślnie utworzona`);
             this._router.navigate(['/agency/trips/create'], {
                 queryParams: {
                     line: response.routeId.line,

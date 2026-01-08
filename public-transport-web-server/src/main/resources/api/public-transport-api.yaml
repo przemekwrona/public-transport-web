@@ -1272,10 +1272,8 @@ components:
     Route:
       type: object
       properties:
-        name:
-          type: string
-        line:
-          type: string
+        routeId:
+          $ref: '#/components/schemas/RouteId'
         google:
           type: boolean
         active:

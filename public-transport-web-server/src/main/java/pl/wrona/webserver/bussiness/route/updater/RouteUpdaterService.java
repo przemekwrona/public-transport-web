@@ -23,8 +23,8 @@ public class RouteUpdaterService {
     @PreAgencyAuthorize
     public Status updateRoute(String instance, UpdateRouteRequest updateRouteRequest) {
         var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, updateRouteRequest.getRouteId());
-        route.setLine(updateRouteRequest.getRoute().getLine());
-        route.setName(LineNameCleaner.clean(updateRouteRequest.getRoute().getName()));
+        route.setLine(updateRouteRequest.getRoute().getRouteId().getLine());
+        route.setName(LineNameCleaner.clean(updateRouteRequest.getRoute().getRouteId().getName()));
         route.setGoogle(updateRouteRequest.getRoute().getGoogle());
         route.setActive(updateRouteRequest.getRoute().getActive());
         route.setDescription(updateRouteRequest.getRoute().getDescription());

@@ -4,13 +4,15 @@
         <div class="flex flex-col justify-center gap-2">
             <h1 class="text-xl font-medium leading-none text-gray-900">
                 Linia {{ state?.line }} {{ state?.name }}
+                <span class="badge badge-sm badge-outline badge-info">v{{ state.version }}.0</span>
             </h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
                 Konfiguracja lini autobusowej
             </div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a [routerLink]="['/agency/trips']" [queryParams]="{line: state.line, name: state.name}"
+            <a [routerLink]="['/agency/trips']"
+               [queryParams]="{line: state.line, name: state.name, version: state.version}"
                class="btn btn-sm btn-secondary">Wróć do lini</a>
         </div>
     </div>
@@ -253,7 +255,8 @@
                                     <td class="py-3">Dystans (Czas przejazdu)</td>
                                     <td class="py-3 text-gray-700 text-2sm font-normal text-end">
                                         {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km
-                                        ({{ getLastStop()?.controls["calculatedSeconds"].value | time | number: '1.0-0' }} min)
+                                        ({{ getLastStop()?.controls["calculatedSeconds"].value | time | number: '1.0-0' }}
+                                        min)
                                     </td>
                                 </tr>
                                 <tr>
@@ -287,8 +290,9 @@
                                     <tr>
                                         <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
                                         <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                            {{ getLastStop().controls["meters"].value | distance | number: '1.1-1' }} km
-                                            ({{ getLastStop().controls["customizedMinutes"].value | number: '1.0-0' }} min)
+                                            {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km
+                                            ({{ getLastStop()?.controls["customizedMinutes"].value | number: '1.0-0' }}
+                                            min)
                                         </td>
                                     </tr>
                                 }
@@ -310,8 +314,21 @@
                                 Trasa, czas przjazdu i dystans są zaktualizowane.
                         </span>
                             <div formArrayName="stops">
+                                <div class="px-3">
+                                    @if (checkControlHasError("stops", "required") || checkControlHasError("stops", "minlength")) {
+                                        <span class="text-danger text-2sm">Musisz dodać co najmniej 2 przystanki na trasie. Obecna liczba przystanków wynosi {{ modelForm.controls['stops']?.errors?.['minlength']?.['actualLength'] || 0 }}.</span>
+                                    }
+
+                                    @if (stops.length == 0) {
+                                        <span class="badge badge-sm badge-outline badge-info block" style="line-height: inherit">
+                                            Nie dodałeś jeszcze przystanków. Kliknij na przystanek na mapie poniżej i dodaj kolejne przystanki.                                    </span>
+                                    }
+
+                                </div>
+
                                 @for (stopTime of stops.controls; track index; let index = $index) {
-                                    <div class="example-box" cdkDrag [@simpleFadeAnimation]="'in'" [formGroupName]="index">
+                                    <div class="example-box" cdkDrag [@simpleFadeAnimation]="'in'"
+                                         [formGroupName]="index">
                                         <span>
                                             <span [ngClass]="{'blue': stopTime.controls['bdot10k'].value, 'dark-blue': !stopTime.controls['bdot10k'].value}">{{ index + 1 }}</span>
                                             <span>{{ stopTime.controls["name"].value }} </span>
@@ -324,18 +341,19 @@
                                         </span>
                                         <span>{{ stopTime.controls["meters"].value | distance | number: '1.1-1' }}</span>
                                         <span>km ({{ stopTime.controls["calculatedSeconds"].value | time | number: '1.0-0' }}
-                                                min)</span>
+                                            min)</span>
 
-                                        @if (isCustomized()) {
-                                            <div class="inline-block">
+                                            @if (isCustomized()) {
+                                                <div class="inline-block">
                                                 <div class="input-group mx-1">
                                                     <input type="number" id="customizedMinutes" name="customizedMinutes"
-                                                           formControlName="customizedMinutes" class="input w-14 h-7.5"/>
+                                                           formControlName="customizedMinutes"
+                                                           class="input w-14 h-7.5"/>
                                                     <span class="btn btn-secondary h-7.5 px-1">min</span>
                                                 </div>
                                             </div>
-    <!--                                        {{stops.controls[index].controls["customizedMinutes"].errors | json }}-->
-                                        }
+                                                <!--                                        {{stops.controls[index].controls["customizedMinutes"].errors | json }}-->
+                                            }
                                             <span (click)="remove(index)">
                                                 <a class="btn btn-sm btn-icon btn-clear btn-danger">
                                                     <i class="ki-filled ki-cross-square"></i>
@@ -345,15 +363,6 @@
                                     </div>
                                 }
                             </div>
-
-                            @if (canCheckErrors("stops")) {
-                                @if (checkControlHasError("stops", "required")) {
-                                    <span class="badge badge-sm badge-outline badge-danger block"
-                                          style="line-height: inherit">
-                                        Linia musi składac się z conajmniej 2 przystanków
-                                    </span>
-                                }
-                            }
 
                             <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
                                   class="badge badge-sm badge-outline badge-danger w-full">

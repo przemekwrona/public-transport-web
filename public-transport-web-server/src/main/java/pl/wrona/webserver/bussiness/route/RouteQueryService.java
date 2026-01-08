@@ -25,7 +25,7 @@ public class RouteQueryService {
 
     @PreAgencyAuthorize
     public RouteEntity findRouteByAgencyCodeAndRouteId(String instance, RouteId routeId) {
-        return this.routeQueryRepository.findByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName());
+        return this.routeQueryRepository.findByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName(), routeId.getVersion());
     }
 
     public Map<Long, RouteEntity> findByExistsBrigade(String agencyCode) {
@@ -35,8 +35,8 @@ public class RouteQueryService {
 
     @Transactional(readOnly = true)
     public int findLastInsertedVersion(String instance, String line, String name) {
-        int lastInsertedVersion = this.routeQueryRepository.findLastInsertedVersion(instance, line, name);
-        return lastInsertedVersion == 0 ? 1 : lastInsertedVersion;
+        Integer lastInsertedVersion = this.routeQueryRepository.findLastInsertedVersion(instance, line, name);
+        return lastInsertedVersion == null ? 0 : lastInsertedVersion;
     }
 
 

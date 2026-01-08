@@ -41,14 +41,14 @@
                     <div class="w-full">
                         <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                             <label class="form-label flex items-center gap-1 max-w-56">Numer Linii</label>
-                            <input type="text" name="line" id="line" [(ngModel)]="route.line" class="input"
+                            <input type="text" name="line" id="line" [(ngModel)]="route.routeId.line" class="input"
                                    placeholder="L1">
                         </div>
                     </div>
                     <div class="w-full">
                         <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                             <label class="form-label flex items-center gap-1 max-w-56">Nazwa lini</label>
-                            <input type="text" name="line" id="name" [(ngModel)]="route.name" class="input"
+                            <input type="text" name="line" id="name" [(ngModel)]="route.routeId.name" class="input"
                                    placeholder="Kielce - Wrocław">
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                             <div class="flex flex-col gap-0.5">
                                 <a class="text-sm font-medium text-gray-900 hover:text-primary-active">Google</a>
                                 <a class="text-2sm text-gray-700 hover:text-primary-active"> Chcę aby rozkład jazdy dla
-                                    linii 202 Chmielnik - Pierzchnica był udostępniony w Google Maps. </a>
+                                    linii {{ route.routeId.line }} {{ route.routeId.name }} był udostępniony w Google Maps. </a>
                             </div>
                         </div>
                         <div class="flex items-center gap-5">

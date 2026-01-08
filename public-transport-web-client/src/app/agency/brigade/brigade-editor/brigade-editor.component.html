@@ -259,9 +259,9 @@
                                         <div class="flex flex-col gap-1">
                                             <div class="flex items-center gap-2.5">
                                                 @if (trip.route.active) {
-                                                    <h4 class="text-2xl font-semibold text-gray-900">{{ trip.route.line }} {{ trip.route.name }}</h4>
+                                                    <h4 class="text-2xl font-semibold text-gray-900">{{ trip.route.routeId.line }} {{ trip.route.routeId.name }}</h4>
                                                 } @else {
-                                                    <h4 class="text-2xl font-semibold text-gray-900 opacity-40">{{ trip.route.line }} {{ trip.route.name }}</h4>
+                                                    <h4 class="text-2xl font-semibold text-gray-900 opacity-40">{{ trip.route.routeId.line }} {{ trip.route.routeId.name }}</h4>
                                                 }
                                                 <span *ngIf="!trip.route.active"
                                                       class="badge badge-sm badge-danger badge-outline">Linia jest nieaktywna</span>

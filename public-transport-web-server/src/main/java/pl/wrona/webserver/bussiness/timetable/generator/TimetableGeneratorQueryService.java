@@ -13,7 +13,7 @@ public class TimetableGeneratorQueryService {
 
     private final TimetableGeneratorRepository timetableGeneratorRepository;
 
-    public List<TimetableGeneratorEntity> findAll() {
-        return timetableGeneratorRepository.findAll();
+    public List<TimetableGeneratorEntity> findAll(String instance) {
+        return timetableGeneratorRepository.findAllByAgencyName(instance);
     }
 }

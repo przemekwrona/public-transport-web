@@ -21,7 +21,7 @@ public class TimetableGeneratorPaginationService {
     @PreAgencyAuthorize
     @Transactional(readOnly = true)
     public TimetableGeneratorFindAllResponse findAllPaginated(String instance, int page, int size) {
-        var items = this.timetableGeneratorQueryService.findAll().stream()
+        var items = this.timetableGeneratorQueryService.findAll(instance).stream()
                 .map(element -> new TimetableGeneratorFindAllItem()
                         .routeLine(element.getRouteLine())
                         .routeName(element.getRouteName())
