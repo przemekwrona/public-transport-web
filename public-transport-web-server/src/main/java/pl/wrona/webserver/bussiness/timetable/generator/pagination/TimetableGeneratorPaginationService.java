@@ -23,9 +23,9 @@ public class TimetableGeneratorPaginationService {
     public TimetableGeneratorFindAllResponse findAllPaginated(String instance, int page, int size) {
         var items = this.timetableGeneratorQueryService.findAll(instance).stream()
                 .map(element -> new TimetableGeneratorFindAllItem()
-                        .routeLine(element.getRouteLine())
-                        .routeName(element.getRouteName())
-                        .routeVersion(element.getRouteVersion())
+                        .routeLine(element.getRoute().getLine())
+                        .routeName(element.getRoute().getName())
+                        .routeVersion(element.getRoute().getVersion())
                         .calendarNames(timetableGeneratorItemQueryService.findAllByTimetableGenerator(element).stream()
                                 .map(TimetableGeneratorItemEntity::getCalendar)
                                 .map(calendar -> new TimetableGeneratorCalendar()

@@ -48,9 +48,6 @@ public class CreateTimetableGeneratorService {
 
         TimetableGeneratorEntity timetable = TimetableGeneratorEntity.builder()
                 .agency(agencyEntity)
-                .routeLine(request.getRouteId().getLine())
-                .routeName(request.getRouteId().getName())
-                .routeVersion(1)
                 .route(routeEntity)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())

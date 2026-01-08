@@ -40,15 +40,6 @@ public class TimetableGeneratorEntity {
     @OneToMany(mappedBy = "timetableGenerator", cascade = CascadeType.ALL)
     private Set<TimetableGeneratorItemEntity> timetableGenerators;
 
-    @Column(name = "route_line")
-    private String routeLine;
-
-    @Column(name = "route_name")
-    private String routeName;
-
-    @Column(name = "route_version")
-    private int routeVersion;
-
     @ManyToOne
     @JoinColumn(name = "route_id", nullable = false)
     private RouteEntity route;
