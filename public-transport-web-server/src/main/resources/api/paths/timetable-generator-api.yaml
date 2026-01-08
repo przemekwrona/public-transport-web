@@ -237,6 +237,10 @@ components:
       properties:
         routeId:
           $ref: '../public-transport-api.yaml/#/components/schemas/RouteId'
+        hasMainFrontVariant:
+          type: boolean
+        hasMainBackVariant:
+          type: boolean
 
     TimetableGeneratorFilterByRoutesResponse:
       type: object
