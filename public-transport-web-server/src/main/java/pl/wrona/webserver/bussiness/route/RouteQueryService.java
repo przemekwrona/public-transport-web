@@ -5,10 +5,12 @@ import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.agency.RouteEntity;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,5 +41,12 @@ public class RouteQueryService {
         return lastInsertedVersion == null ? 0 : lastInsertedVersion;
     }
 
+    public Set<RouteEntity> findRouteByExistsTripVariantFront(String instance) {
+        return routeQueryRepository.findRouteByExistsTripVariant(instance, TripVariantMode.FRONT);
+    }
+
+    public Set<RouteEntity> findRouteByExistsTripVariantBack(String instance) {
+        return routeQueryRepository.findRouteByExistsTripVariant(instance, TripVariantMode.BACK);
+    }
 
 }
