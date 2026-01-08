@@ -39,15 +39,15 @@ export class RouteListComponent implements OnInit {
     }
 
     public openRoute(route: Route) {
-        const state = {line: route.line, name: route.name};
+        const state = { line: route.routeId.line, name: route.routeId.name, version: route.routeId.version };
         this.router.navigate(['/agency/trips'], {queryParams: state}).then();
     }
 
     public downloadPdf(route: Route): void {
-        this.pdfService.downloadTripPdf(route.line, route.name).subscribe((response: Blob) => {
+        this.pdfService.downloadTripPdf(route.routeId.line, route.routeId.name).subscribe((response: Blob) => {
             const link = document.createElement('a');
             link.href = URL.createObjectURL(response);
-            link.download = `linia-${route.line}-${route.name}-plan.pdf`.replaceAll(' ', '_');
+            link.download = `linia-${route.routeId.line}-${route.routeId.name}-plan.pdf`.replaceAll(' ', '_');
             link.click();
         });
     }
@@ -55,8 +55,8 @@ export class RouteListComponent implements OnInit {
     public deleteRoute(route: Route): void {
         const agency = this.authService.getInstance();
         const routeId: RouteId = {} as RouteId;
-        routeId.line = route.line;
-        routeId.name = route.name;
+        routeId.line = route.routeId.line;
+        routeId.name = route.routeId.name;
 
         this.routeService.deleteRoute(agency, routeId).subscribe(response => {
             if (response.status.status === Status.StatusEnum.Deleted) {

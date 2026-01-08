@@ -2,6 +2,7 @@ package pl.wrona.webserver.core.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.igeolab.iot.pt.server.api.model.Route;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Stop;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
@@ -15,8 +16,10 @@ public class RouteMapper {
     public Route map(RouteEntity routeEntity, Map<Long, StopEntity> stops, Map<Long, RouteEntity> routeWithBrigades) {
         return Optional.ofNullable(routeEntity)
                 .map(routeOptional -> new Route()
-                        .name(routeEntity.getName())
-                        .line(routeEntity.getLine())
+                        .routeId(new RouteId()
+                                .line(routeEntity.getLine())
+                                .name(routeEntity.getName())
+                                .version(routeEntity.getVersion()))
                         .google(routeEntity.isGoogle())
                         .active(routeEntity.isActive())
                         .originStop(new Stop()

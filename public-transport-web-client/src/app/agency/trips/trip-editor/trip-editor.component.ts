@@ -89,7 +89,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private communicationVelocitySubject = new Subject<number>();
     private previousVariantName = '';
 
-    public state: { name: string, line: string, variant: string, mode: TripMode, trafficMode: TrafficMode };
+    public state: {
+        name: string,
+        line: string,
+        version: number,
+        variant: string,
+        mode: TripMode,
+        trafficMode: TrafficMode
+    };
 
     public tripModeSelectValue = TripMode;
     public tripEditorComponentMode: TripEditorComponentMode;
@@ -163,6 +170,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,
             name: string,
+            version: number,
             variant: string,
             mode: TripMode,
             trafficMode: TrafficMode
@@ -174,8 +182,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 tripVariantMode: [this.state.mode, [Validators.required]],
                 tripTrafficMode: [this.state.trafficMode, [Validators.required]],
 
-                variantDesignation: ['', []],
-                variantDescription: ['', []],
+                variantDesignation: ['', [Validators.required]],
+                variantDescription: ['', [Validators.required]],
 
                 origin: ['', [Validators.required]],
                 destination: ['', [Validators.required]],
@@ -206,6 +214,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.modelForm.controls['variantDesignation'].setValue(tripDetails.variantDesignation);
             this.modelForm.controls['variantDescription'].setValue(tripDetails.variantDescription);
 
+            if (tripDetails.isMainVariant) {
+                this.modelForm.controls["variantDesignation"].setValidators(null);
+                this.modelForm.controls["variantDescription"].setValidators(null);
+            }
+
             this.modelForm.controls['origin'].setValue(tripDetails.originStopName);
             this.modelForm.controls['destination'].setValue(tripDetails.destinationStopName);
             this.modelForm.controls['headsign'].setValue(tripDetails.headsign);
@@ -222,11 +235,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.modelForm.controls["tripVariantName"].setValue("MAIN");
                         this.modelForm.controls["tripVariantMode"].setValue(TripMode.Front);
                         this.modelForm.controls["tripTrafficMode"].setValue(TrafficMode.Normal);
+                        this.modelForm.controls["variantDesignation"].setValidators(null);
+                        this.modelForm.controls["variantDescription"].setValidators(null);
 
                         this.modelForm.controls["origin"].setValue(tripVariants.route.originStop.name);
                         this.modelForm.controls["destination"].setValue(tripVariants.route.destinationStop.name);
                         this.modelForm.controls["headsign"].setValue(tripVariants.route.destinationStop.name);
-                        this.stops.push(this.createStop(tripVariants.route.originStop))
                     }
                 }
             });
@@ -352,7 +366,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const tripId: TripId = {
             routeId: {
                 line: this.state.line,
-                name: this.state.name
+                name: this.state.name,
+                version: this.state.version
             },
             variantMode: this.state.mode,
             trafficMode: this.state.trafficMode
@@ -380,12 +395,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.getFormValidationErrors();
         if (this.modelForm.invalid) {
             this.notificationService.showError('Formularz jest niepoprawny uzupełnij braki');
+            this.scrollToFirstError();
             return
         }
 
         const routeId: RouteId = {};
         routeId.name = this.state.name;
         routeId.line = this.state.line;
+        routeId.version = this.state.version;
 
         const tripId: TripId = {};
         tripId.routeId = routeId;
@@ -458,7 +475,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     this.router.navigate(['/agency/trips'], {
                         queryParams: {
                             line: this.state.line,
-                            name: this.state.name
+                            name: this.state.name,
+                            version: this.state.version
                         }
                     }).then();
                 },
@@ -546,15 +564,26 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         if (isMainVariant) {
             tripVariantNameControl.setValue(this.previousVariantName);
             tripVariantNameControl?.disable();
-            variantDesignationControl.setValidators([Validators.required, Validators.min(0)]);
-            variantDescriptionControl.setValidators([Validators.required, Validators.min(0)]);
+
+            variantDesignationControl.setValue('');
+            variantDesignationControl.setValidators([]);
+            variantDesignationControl.updateValueAndValidity({emitEvent: false});
+
+            variantDescriptionControl.setValue('');
+            variantDescriptionControl.setValidators([]);
+            variantDescriptionControl.updateValueAndValidity({emitEvent: false});
         } else {
             this.previousVariantName = tripVariantNameControl.value;
             tripVariantNameControl.setValue('MAIN');
+
             variantDesignationControl.setValue('');
-            variantDesignationControl.setValidators([]);
+            variantDesignationControl.setValidators([Validators.required]);
+            variantDesignationControl.updateValueAndValidity({emitEvent: false});
+
             variantDescriptionControl.setValue('');
-            variantDescriptionControl.setValidators([]);
+            variantDescriptionControl.setValidators([Validators.required]);
+            variantDescriptionControl.updateValueAndValidity({emitEvent: false});
+
             tripVariantNameControl?.enable();
         }
     }
@@ -598,8 +627,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return this.modelForm.controls['isCustomized'].value;
     }
 
-    public customizedCommunicationVelocity(): number {
-        const lastStop: FormGroup = this.getLastStop();
+    public customizedCommunicationVelocity(): number | null {
+        const lastStop: FormGroup | null = this.getLastStop();
+
+        if (lastStop == null) {
+            return null;
+        }
+
         const distanceInMeters: number = lastStop.controls["meters"].value;
         const timeInMinutes: number = 60 * lastStop.controls["customizedMinutes"].value;
         const velocityMetersPerSeconds: number = distanceInMeters / timeInMinutes;
@@ -626,6 +660,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
                 });
             }
+        });
+    }
+
+    public scrollToFirstError(): void {
+        setTimeout(() => {
+            const invalidControl = document.querySelector('.text-danger');
+            invalidControl?.scrollIntoView({behavior: 'smooth', block: 'center'});
         });
     }
 }

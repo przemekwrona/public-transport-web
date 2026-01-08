@@ -2,6 +2,7 @@ package pl.wrona.webserver.agency;
 
 import io.restassured.http.ContentType;
 import org.igeolab.iot.pt.server.api.model.Route;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Stop;
 import org.junit.jupiter.api.Test;
 import pl.wrona.webserver.BaseIntegrationTest;
@@ -16,8 +17,9 @@ class RouteEntityControllerIntegrationTest extends BaseIntegrationTest {
         with().contentType(ContentType.JSON)
                 .header(authHeader)
                 .body(new Route()
-                        .name("KIELCE - BUSKO-ZDRÓJ")
-                        .line("201")
+                        .routeId(new RouteId()
+                                .line("201")
+                                .name("KIELCE - BUSKO-ZDRÓJ"))
                         .originStop(new Stop()
                                 .name("KIELCE"))
                         .destinationStop(new Stop()

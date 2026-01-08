@@ -56,8 +56,8 @@ public class TripPaginationService {
                                         .thenComparing(Trip::getName))
                                 .toList()))
                 .sorted(Comparator
-                        .comparing((RouteDetails trip) -> trip.getRoute().getLine())
-                        .thenComparing((RouteDetails trip) -> trip.getRoute().getName()))
+                        .comparing((RouteDetails trip) -> trip.getRoute().getRouteId().getLine())
+                        .thenComparing((RouteDetails trip) -> trip.getRoute().getRouteId().getName()))
                 .toList();
 
         return new GetAllTripsResponse()

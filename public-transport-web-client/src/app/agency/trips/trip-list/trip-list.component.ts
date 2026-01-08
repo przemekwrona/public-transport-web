@@ -45,9 +45,9 @@ export class TripListComponent implements OnInit {
     public faCircleXmark: IconDefinition = faCircleXmark;
 
     public params: Params;
-    public trips: RouteDetails = {route: {line: '', name: ''}};
+    public trips: RouteDetails = {route: { routeId: { line: '', name: ''}}};
 
-    public state: { line: string, name: string };
+    public state: { line: string, name: string, version: number };
 
     public isUpdatingBasicInformation: boolean = false;
 
@@ -58,7 +58,8 @@ export class TripListComponent implements OnInit {
         this._route.data.pipe(map((data: Data) => data['trips'])).subscribe(trips => this.trips = trips);
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,
-            name: string
+            name: string,
+            version: number
         });
     }
 
@@ -70,6 +71,7 @@ export class TripListComponent implements OnInit {
         const queryParams = {
             name: this.state.name,
             line: this.state.line,
+            version: this.state.version,
             variant: trip.variant,
             mode: trip.mode,
             trafficMode: trip.trafficMode
@@ -98,12 +100,16 @@ export class TripListComponent implements OnInit {
 
         const routeId: RouteId = {
             line: this.state.line,
-            name: this.state.name
+            name: this.state.name,
+            version: this.state.version
         }
 
         const route: Route = {
-            name: this.trips.route.name,
-            line: this.trips.route.line,
+            routeId: {
+                line: this.trips.route.routeId.line,
+                name: this.trips.route.routeId.name,
+                version: this.trips.route.routeId.version
+            },
             google: this.trips.route.google,
             active: this.trips.route.active,
             description: this.trips.route.description
@@ -117,8 +123,9 @@ export class TripListComponent implements OnInit {
         this.routeService.updateRoute(this.agencyStorageService.getInstance(), updateRouteRequest).subscribe({
             next: (response) => {
                 this.state = {
-                    line: route.line,
-                    name: route.name
+                    line: route.routeId.line,
+                    name: route.routeId.name,
+                    version: route.routeId.version
                 }
             },
             complete: () => this.isUpdatingBasicInformation = false

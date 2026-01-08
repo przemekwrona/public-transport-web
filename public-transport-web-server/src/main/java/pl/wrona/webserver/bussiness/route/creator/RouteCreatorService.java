@@ -8,6 +8,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.LineNameCleaner;
+import pl.wrona.webserver.bussiness.route.RouteCommandService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
@@ -23,7 +24,7 @@ public class RouteCreatorService {
 
     private final StopService stopService;
     private final AgencyService agencyService;
-    private final RouteCreatorRepository routeCreatorRepository;
+    private final RouteCommandService routeCommandService;
     private final RouteQueryService routeQueryService;
 
     @Transactional
@@ -31,13 +32,13 @@ public class RouteCreatorService {
     public ModificationRouteResponse createRoute(String instance, Route route) {
         var stopDictionary = stopService.mapStopByIdsIn(List.of(route.getOriginStop().getId(), route.getDestinationStop().getId()));
 
-        var lastInsertedVersion = routeQueryService.findLastInsertedVersion(instance, route.getLine(), route.getName());
+        var lastInsertedVersion = routeQueryService.findLastInsertedVersion(instance, route.getRouteId().getLine(), route.getRouteId().getName());
 
         RouteEntity unsavedRouteEntity = new RouteEntity();
 
-        unsavedRouteEntity.setLine(route.getLine());
-        unsavedRouteEntity.setName(LineNameCleaner.clean(route.getName()));
-        unsavedRouteEntity.setOriginName(route.getName());
+        unsavedRouteEntity.setLine(route.getRouteId().getLine());
+        unsavedRouteEntity.setName(LineNameCleaner.clean(route.getRouteId().getName()));
+        unsavedRouteEntity.setOriginName(route.getRouteId().getName());
         unsavedRouteEntity.setVersion(++lastInsertedVersion);
 
         unsavedRouteEntity.setOriginStopId(route.getOriginStop().getId());
@@ -57,7 +58,7 @@ public class RouteCreatorService {
 
         unsavedRouteEntity.setAgency(agencyService.findAgencyByAgencyCode(instance));
 
-        RouteEntity savedRoute = routeCreatorRepository.save(unsavedRouteEntity);
+        RouteEntity savedRoute = routeCommandService.save(unsavedRouteEntity);
 
         return new ModificationRouteResponse()
                 .status(new Status()
