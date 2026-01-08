@@ -20,15 +20,6 @@ databaseChangeLog:
                     primaryKeyName: pk_timetable_generator
                     nullable: false
               - column:
-                  name: route_line
-                  type: varchar(10)
-              - column:
-                  name: route_name
-                  type: varchar(255)
-              - column:
-                  name: route_version
-                  type: integer
-              - column:
                   name: route_id
                   type: integer
                   constraints:
