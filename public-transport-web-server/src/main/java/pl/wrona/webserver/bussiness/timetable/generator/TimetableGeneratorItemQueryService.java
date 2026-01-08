@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorEntity;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
-import pl.wrona.webserver.core.timetable.TimetableGeneratorItemRepository;
+import pl.wrona.webserver.core.timetable.TimetableGeneratorItemQueryRepository;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TimetableGeneratorItemQueryService {
 
-    private final TimetableGeneratorItemRepository timetableGeneratorItemRepository;
+    private final TimetableGeneratorItemQueryRepository timetableGeneratorItemRepository;
 
     public List<TimetableGeneratorItemEntity> findAllByTimetableGenerator(TimetableGeneratorEntity timetableGeneratorEntity) {
         return timetableGeneratorItemRepository.findByTimetableGenerator(timetableGeneratorEntity);

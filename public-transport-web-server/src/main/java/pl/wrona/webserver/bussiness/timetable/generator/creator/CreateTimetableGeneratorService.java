@@ -43,7 +43,8 @@ public class CreateTimetableGeneratorService {
         CalendarEntity calendarEntity = calendarQueryService.getCalendar(instance, request.getTimetables().getCalendarName());
         RouteEntity routeEntity = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, new RouteId()
                 .line(request.getRouteId().getLine())
-                .name(request.getRouteId().getName()));
+                .name(request.getRouteId().getName())
+                .version(request.getRouteId().getVersion()));
 
         TimetableGeneratorEntity timetable = TimetableGeneratorEntity.builder()
                 .agency(agencyEntity)

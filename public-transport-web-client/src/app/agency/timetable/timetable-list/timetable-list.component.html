@@ -57,7 +57,9 @@
                         <!--                                            <button (click)="downloadPdf(route)" class="btn btn-sm btn-danger shrink-0">PDF</button>-->
                         <a (click)="openTimetableGenerator(item)" class="btn btn-sm shrink-0 btn-secondary">Pokaż
                             szczegóły</a>
-                        <!--                        <button [disabled]="route.matchAnyBrigade" (click)="deleteRoute(route)" class="btn btn-sm btn-icon btn-clear btn-danger"><i class="ki-filled ki-cross-square"></i></button>-->
+                        <button (click)="deleteGeneratedTimetable(item)"
+                                class="btn btn-sm btn-icon btn-clear btn-danger"><i
+                                class="ki-filled ki-cross-square"></i></button>
                     </div>
                 </div>
 

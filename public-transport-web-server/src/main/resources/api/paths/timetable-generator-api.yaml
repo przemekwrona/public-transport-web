@@ -67,18 +67,25 @@ paths:
       tags:
         - timetable-generator
       summary: Delete generated summary
+      operationId: deleteTimetableGenerator
       parameters:
         - in: path
           name: agency
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimetableGeneratorDeletionRequest'
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
+                $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
   /agency/{agency}/timetable-generator/routes:
     get:
@@ -278,4 +285,11 @@ components:
           items:
             $ref: '#/components/schemas/TimetableGeneratorFindAllItem'
 
-
+    TimetableGeneratorDeletionRequest:
+      type: object
+      properties:
+        routeId:
+          $ref: '../public-transport-api.yaml/#/components/schemas/RouteId'
+        createdDate:
+          type: string
+          format: date-time

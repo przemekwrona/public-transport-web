@@ -1,11 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterModule} from "@angular/router";
 import {
+    Status,
+    TimetableGeneratorDeletionRequest,
     TimetableGeneratorFindAllItem,
-    TimetableGeneratorFindAllResponse
+    TimetableGeneratorFindAllResponse, TimetableGeneratorService
 } from "../../../generated/public-transport-api";
 import {CommonModule} from "@angular/common";
 import {size} from "lodash";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import StatusEnum = Status.StatusEnum;
+import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
     selector: 'app-timetable-list',
@@ -21,7 +26,7 @@ export class TimetableListComponent implements OnInit {
 
     public response: TimetableGeneratorFindAllResponse;
 
-    constructor(private route: ActivatedRoute) {
+    constructor(private route: ActivatedRoute, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService) {
     }
 
     public hasTimetables(): boolean {
@@ -34,6 +39,22 @@ export class TimetableListComponent implements OnInit {
 
     public openTimetableGenerator(timetableGenerator: TimetableGeneratorFindAllItem): void {
 
+    }
+
+    public deleteGeneratedTimetable(timetableGenerator: TimetableGeneratorFindAllItem): void {
+        const request: TimetableGeneratorDeletionRequest = {};
+        request.routeId = {
+            line: timetableGenerator.routeLine,
+            name: timetableGenerator.routeName,
+            version: timetableGenerator.routeVersion,
+        };
+        request.createdDate = timetableGenerator.createdAt;
+        this.timetableGeneratorService.deleteTimetableGenerator(this.agencyStorageService.getInstance(), request).subscribe((deleteStatusResponse: Status) => {
+            if (deleteStatusResponse.status === Status.StatusEnum.Deleted) {
+                this.notificationService.showSuccess("Udało się usunąć Generator Rozkładu Jazdy");
+                this.timetableGeneratorService.findAll(this.agencyStorageService.getInstance()).subscribe((timetableGeneratorsResponse: TimetableGeneratorFindAllResponse) => this.response = timetableGeneratorsResponse);
+            }
+        });
     }
 
 }

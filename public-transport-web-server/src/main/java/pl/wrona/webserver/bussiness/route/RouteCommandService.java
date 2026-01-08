@@ -10,11 +10,12 @@ import pl.wrona.webserver.core.agency.RouteEntity;
 public class RouteCommandService {
     private final RouteCommandRepository routeCommandRepository;
 
-    @Transactional()
+    @Transactional
     public RouteEntity save(RouteEntity routeEntity) {
         return routeCommandRepository.save(routeEntity);
     }
 
+    @Transactional
     public void deleteByRoute(RouteEntity routeEntity) {
         this.routeCommandRepository.delete(routeEntity);
     }
