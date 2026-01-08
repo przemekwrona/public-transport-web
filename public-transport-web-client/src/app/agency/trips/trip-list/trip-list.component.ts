@@ -149,4 +149,8 @@ export class TripListComponent implements OnInit {
         return moment(trip.createdAt).isAfter(twoMinutesAgo)
             || moment(trip.updatedAt).isAfter(twoMinutesAgo)
     }
+
+    public isEmpty(value: string | null): boolean {
+        return [null, undefined, ''].includes(value)
+    }
 }
