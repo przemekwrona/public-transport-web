@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TimetableGeneratorItemRepository extends JpaRepository<TimetableGeneratorItemEntity, Long> {
+public interface TimetableGeneratorItemQueryRepository extends JpaRepository<TimetableGeneratorItemEntity, Long> {
 
     List<TimetableGeneratorItemEntity> findByTimetableGenerator(TimetableGeneratorEntity timetableGenerator);
 }

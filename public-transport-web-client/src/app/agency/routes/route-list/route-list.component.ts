@@ -57,6 +57,7 @@ export class RouteListComponent implements OnInit {
         const routeId: RouteId = {} as RouteId;
         routeId.line = route.routeId.line;
         routeId.name = route.routeId.name;
+        routeId.version = route.routeId.version;
 
         this.routeService.deleteRoute(agency, routeId).subscribe(response => {
             if (response.status.status === Status.StatusEnum.Deleted) {

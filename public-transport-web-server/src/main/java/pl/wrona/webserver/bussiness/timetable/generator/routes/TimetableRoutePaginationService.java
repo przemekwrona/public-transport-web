@@ -22,7 +22,8 @@ public class TimetableRoutePaginationService {
                         .map(route -> new TimetableGeneratorFilterByRoutes()
                                 .routeId(new RouteId()
                                         .line(route.getLine())
-                                        .name(route.getName())))
+                                        .name(route.getName())
+                                        .version(route.getVersion())))
                         .toList());
     }
 }
