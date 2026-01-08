@@ -39,7 +39,7 @@ export class RouteListComponent implements OnInit {
     }
 
     public openRoute(route: Route) {
-        const state = { line: route.routeId.line, name: route.routeId.name, version: route.routeId.version };
+        const state = {line: route.routeId.line, name: route.routeId.name, version: route.routeId.version};
         this.router.navigate(['/agency/trips'], {queryParams: state}).then();
     }
 
@@ -69,6 +69,10 @@ export class RouteListComponent implements OnInit {
 
     public hasRoutes(): boolean {
         return size(this.routes.items) !== 0;
+    }
+
+    public isEmpty(value: string | null): boolean {
+        return [null, undefined, ''].includes(value)
     }
 
 }
