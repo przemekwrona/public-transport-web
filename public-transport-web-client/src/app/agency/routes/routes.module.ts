@@ -10,6 +10,8 @@ import {SharedModule} from "../shared/shared.module";
 import {MatDialogModule} from "@angular/material/dialog";
 import {RouteListComponent} from "./route-list/route-list.component";
 import {PdfService} from "../../generated/public-transport-pdf-api";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
     declarations: [
@@ -29,7 +31,9 @@ import {PdfService} from "../../generated/public-transport-pdf-api";
         MatIconModule,
         MatDialogModule,
         RouteListComponent,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule
     ], providers: [
         PdfService
     ]
