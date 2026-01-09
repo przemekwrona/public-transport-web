@@ -4,8 +4,9 @@ import {Router} from "@angular/router";
 import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
 import {NotificationService} from "../../../shared/notification.service";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {FormUtils} from "../../../shared/form.utils";
+import {pull, remove, sampleSize, without} from "lodash";
 
 @Component({
     selector: 'app-create-route',
@@ -13,6 +14,12 @@ import {FormUtils} from "../../../shared/form.utils";
     styleUrl: './create-route.component.scss'
 })
 export class CreateRouteComponent implements OnInit {
+
+    private randomCities: string[] = ["Kielce", "Warszawa", "Kraków", "Poznań", "Wrocław", "Opole"]
+    private randomLines: string[] = ["L1", "1", "201", "28", "P2"]
+
+    public randomConnection: string = '';
+    public randomLine: string = '';
 
     public route: Route = {
         routeId: {
@@ -42,13 +49,26 @@ export class CreateRouteComponent implements OnInit {
         });
 
         this.modelForm = this.formBuilder.group({
-            line: ['', []],
+            line: ['', [Validators.required]],
             name: ['', [Validators.required]],
             google: [false],
             active: [true],
-            origin: ['', [Validators.required]],
-            destination: ['', [Validators.required]]
+            origin: [this.formBuilder.group({
+                id: [''],
+                name: [''],
+                lon: [''],
+                lat: ['']
+            }), [Validators.required]],
+            destination: [this.formBuilder.group({
+                id: [''],
+                name: [''],
+                lon: [''],
+                lat: ['']
+            }), [Validators.required]]
         });
+
+        this.randomConnection = this.getRandomConnection();
+        this.randomLine = this.getRandomLine();
     }
 
     public createRouteAndNavigateToCreateNewTrip(): void {
@@ -80,5 +100,28 @@ export class CreateRouteComponent implements OnInit {
         });
     }
 
+    public getRandomLine(): string {
+        return sampleSize(this.randomLines, 1)[0];
+    }
+
+    public getRandomConnection(): string {
+        const from: string = sampleSize(this.randomCities, 1)[0];
+        const citiesWithoutFrom: string[] = without(this.randomCities, from);
+        const destination: string = sampleSize(citiesWithoutFrom, 1)[0];
+
+        return `${from} - ${destination}`;
+    }
+
+    public getControl(control: string): FormControl {
+        return this.modelForm.get(control) as FormControl;
+    }
+
+    public getLineControl(): FormControl<string> {
+        return this.getControl("line") as FormControl<string>;
+    }
+
+    public getNameControl(): FormControl<string> {
+        return this.getControl("name") as FormControl<string>;
+    }
 
 }

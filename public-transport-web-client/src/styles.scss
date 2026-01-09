@@ -197,8 +197,15 @@ html {
   --mdc-outlined-text-field-error-outline-color: red;
   --mdc-outlined-text-field-outline-width: 1px;           /* default */
   --mdc-outlined-text-field-focus-outline-width: 1px;     /* focused */
-}
 
+  .mdc-text-field--outlined, .mdc-text-field--outlined.mdc-text-field--focused {
+    .mdc-notched-outline {
+      .mat-mdc-notch-piece.mdc-notched-outline__notch {
+        border-right: 0 solid rgba(0, 0, 0, 0);
+      }
+    }
+  }
+}
 
 a.text-base {
   cursor: pointer;

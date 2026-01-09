@@ -38,18 +38,30 @@
                         <div class="w-full">
                             <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                 <label class="form-label flex items-center gap-1 max-w-56">Numer Linii</label>
-                                <input type="text" name="line" id="line" formControlName="line"
-                                       class="input" placeholder="Numer Linii, np. 201">
-                            </div>
-                        </div>
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label flex items-center gap-1 max-w-56">Nazwa lini</label>
-                                <input type="text" name="line" id="name" formControlName="name" class="input"
-                                       placeholder="Nazwa lini, np. Kielce - Wrocław">
+                                <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                    <mat-label>Numer Linii</mat-label>
+                                    <input type="text" matInput [formControl]="getLineControl()"
+                                           placeholder="Numer Linii, np. {{ randomLine }}">
+                                    @if (getLineControl().hasError('required')) {
+                                        <mat-error>Proszę wprowadź numer linii</mat-error>
+                                    }
+                                </mat-form-field>
                             </div>
                         </div>
 
+                        <div class="w-full">
+                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                <label class="form-label flex items-center gap-1 max-w-56">Nazwa lini</label>
+                                <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                    <mat-label>Nazwa lini</mat-label>
+                                    <input type="text" matInput [formControl]="getNameControl()"
+                                           placeholder="Nazwa Linii, np. {{ randomConnection }}">
+                                    @if (getNameControl().hasError('required')) {
+                                        <mat-error>Proszę wprowadź nazwę linii</mat-error>
+                                    }
+                                </mat-form-field>
+                            </div>
+                        </div>
 
                         <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
                             <div class="flex items-center flex-wrap gap-3.5">
