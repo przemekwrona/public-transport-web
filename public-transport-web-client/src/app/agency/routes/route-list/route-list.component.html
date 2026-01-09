@@ -44,8 +44,16 @@
                             <a (click)="openRoute(route)"
                                class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ route.routeId.name }}</a>
                             <span class="badge badge-sm badge-outline badge-info">v{{ route.routeId.version }}.0</span>
-                            <span *ngIf="!route.active"
-                                  class="badge badge-sm badge-outline badge-danger">NIE Aktywna</span>
+
+                            @if (!route.active) {
+                                <span class="badge badge-sm badge-outline badge-danger">NIE Aktywna</span>
+                            }
+
+                            @if (route.google) {
+                                <span>
+                                    <img [src]="'/assets/media/brand-logos/google.svg'" alt="" class="size-4 shrink-0"></span>
+                            }
+
                         </div>
                         @if (route.matchAnyBrigade) {
                             <span class="text-2sm text-danger">Nie można usunąć. Trasy są przypisane do brygad</span>
@@ -53,9 +61,11 @@
                     </div>
                 </div>
                 <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
-<!--                    <button (click)="downloadPdf(route)" class="btn btn-sm btn-danger shrink-0">PDF</button>-->
+                    <!--                    <button (click)="downloadPdf(route)" class="btn btn-sm btn-danger shrink-0">PDF</button>-->
                     <a (click)="openRoute(route)" class="btn btn-sm shrink-0 btn-secondary">Szczegóły</a>
-                    <button [disabled]="route.matchAnyBrigade" (click)="deleteRoute(route)" class="btn btn-sm btn-icon btn-clear btn-danger"><i class="ki-filled ki-cross-square"></i></button>
+                    <button [disabled]="route.matchAnyBrigade" (click)="deleteRoute(route)"
+                            class="btn btn-sm btn-icon btn-clear btn-danger"><i class="ki-filled ki-cross-square"></i>
+                    </button>
                 </div>
             </div>
         } @else {
