@@ -46,10 +46,10 @@ import {NotificationService} from "../../../shared/notification.service";
         RouteNameNormPipe,
         RouterModule
     ],
-    templateUrl: './create-timetable.component.html',
-    styleUrl: './create-timetable.component.scss'
+    templateUrl: './timetable-editor.component.html',
+    styleUrl: './timetable-editor.component.scss'
 })
-export class CreateTimetableComponent implements OnInit {
+export class TimetableEditorComponent implements OnInit {
 
     public formGroup: FormGroup;
     public calendarsResponse: GetCalendarsResponse = {};
