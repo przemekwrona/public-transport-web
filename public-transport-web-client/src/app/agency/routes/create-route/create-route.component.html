@@ -14,118 +14,130 @@
 </div>
 
 <div class="container-fixed">
-    <div class="flex grow gap-5 lg:gap-7.5">
-        <div class="flex flex-col items-stretch grow gap-5 lg:gap-7.5">
-            <div class="card pb-2.5">
-                <div class="card-header" id="basic_settings">
-                    <h3 class="card-title"> Informacje podstawowe</h3>
-                </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+        <div class="col-span-2">
+            <div class="grid gap-5 lg:gap-7.5">
+                <div class="card pb-2.5">
+                    <div class="card-header" id="basic_settings">
+                        <h3 class="card-title"> Informacje podstawowe</h3>
+                    </div>
 
-                <form [formGroup]="modelForm" (ngSubmit)="createRouteAndNavigateToCreateNewTrip()">
-                    <div class="card-body grid gap-5">
-                        <div class="flex flex-col gap-4">
-                            <!--begin:: Alert-->
-                            <div class="flex flex-col justify-center gap-1 rounded-lg p-4 outline-warning outline-dotted">
-                                <h3 class="text-md leading-none font-semibold text-gray-900">
-                                    <span>Zwróć uwagę na <span>numer linii i nazwa linii</span></span>
-                                </h3>
-                                <p class="text-gray-700 text-2sm font-normal">
-                                    Numer linii nie jest wymagany wystarczy, że podasz nazwę linii.
-                                </p>
+                    <form [formGroup]="modelForm" (ngSubmit)="createRouteAndNavigateToCreateNewTrip()">
+                        <div class="card-body grid gap-5">
+                            <div class="flex flex-col gap-4">
+                                <!--begin:: Alert-->
+                                <div class="flex flex-col justify-center gap-1 rounded-lg p-4 outline-warning outline-dotted">
+                                    <h3 class="text-md leading-none font-semibold text-gray-900">
+                                        <span>Zwróć uwagę na <span>numer linii i nazwa linii</span></span>
+                                    </h3>
+                                    <p class="text-gray-700 text-2sm font-normal">
+                                        Numer linii nie jest wymagany wystarczy, że podasz nazwę linii.
+                                    </p>
+                                </div>
+                                <!--end:: Alert-->
                             </div>
-                            <!--end:: Alert-->
-                        </div>
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label flex items-center gap-1 max-w-56">Numer Linii</label>
-                                <mat-form-field appearance="outline" class="w-full custom-form-field">
-                                    <mat-label>Numer Linii</mat-label>
-                                    <input type="text" matInput [formControl]="getLineControl()"
-                                           placeholder="Numer Linii, np. {{ randomLine }}">
-                                    @if (getLineControl().hasError('required')) {
-                                        <mat-error>Proszę wprowadź numer linii</mat-error>
-                                    }
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label flex items-center gap-1 max-w-56">Nazwa lini</label>
-                                <mat-form-field appearance="outline" class="w-full custom-form-field">
-                                    <mat-label>Nazwa lini</mat-label>
-                                    <input type="text" matInput [formControl]="getNameControl()"
-                                           placeholder="Nazwa Linii, np. {{ randomConnection }}">
-                                    @if (getNameControl().hasError('required')) {
-                                        <mat-error>Proszę wprowadź nazwę linii</mat-error>
-                                    }
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
-                            <div class="flex items-center flex-wrap gap-3.5">
-                                <img src="/assets/media/brand-logos/google.svg" alt="" class="size-6 shrink-0">
-                                <div class="flex flex-col gap-0.5">
-                                    <a class="text-sm font-medium text-gray-900 hover:text-primary-active">Google</a>
-                                    <a class="text-2sm text-gray-700 hover:text-primary-active"> Chcę aby rozkład jazdy
-                                        dla
-                                        linii {{ route.routeId.line }} {{ route.routeId.name }} był udostępniony w
-                                        Google Maps. </a>
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 max-w-56">Numer Linii</label>
+                                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                        <mat-label>Numer Linii</mat-label>
+                                        <input type="text" matInput [formControl]="getLineControl()"
+                                               placeholder="Numer Linii, np. {{ randomLine }}">
+                                        @if (getLineControl().hasError('required')) {
+                                            <mat-error>Proszę wprowadź numer linii</mat-error>
+                                        }
+                                    </mat-form-field>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-5">
-                                <label class="switch switch-sm" data-dashlane-label="true">
-                                    <input type="checkbox" formControlName="google">
-                                </label>
-                            </div>
-                        </div>
 
-                        <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
-                            <div class="flex items-center flex-wrap gap-3.5">
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 max-w-56">Nazwa lini</label>
+                                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                        <mat-label>Nazwa lini</mat-label>
+                                        <input type="text" matInput [formControl]="getNameControl()"
+                                               placeholder="Nazwa Linii, np. {{ randomConnection }}">
+                                        @if (getNameControl().hasError('required')) {
+                                            <mat-error>Proszę wprowadź nazwę linii</mat-error>
+                                        }
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
+                                <div class="flex items-center flex-wrap gap-3.5">
+                                    <img src="/assets/media/brand-logos/google.svg" alt="" class="size-6 shrink-0">
+                                    <div class="flex flex-col gap-0.5">
+                                        <a class="text-sm font-medium text-gray-900 hover:text-primary-active">Google</a>
+                                        <a class="text-2sm text-gray-700 hover:text-primary-active"> Chcę aby rozkład
+                                            jazdy
+                                            dla
+                                            linii {{ route.routeId.line }} {{ route.routeId.name }} był udostępniony w
+                                            Google Maps. </a>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <label class="switch switch-sm" data-dashlane-label="true">
+                                        <input type="checkbox" formControlName="google">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
+                                <div class="flex items-center flex-wrap gap-3.5">
                             <span class="menu-icon items-start w-[25px] text-green-700 dark:text-green-700">
                                 <i class="ki-filled ki-check-circle text-3xl"></i>
                             </span>
-                                <div class="flex flex-col gap-0.5">
-                                    <a class="text-2sm text-gray-700 hover:text-primary-active"> Linia jest aktywna </a>
+                                    <div class="flex flex-col gap-0.5">
+                                        <a class="text-2sm text-gray-700 hover:text-primary-active"> Linia jest
+                                            aktywna </a>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <label class="switch switch-sm" data-dashlane-label="true">
+                                        <input type="checkbox" formControlName="active">
+                                    </label>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-5">
-                                <label class="switch switch-sm" data-dashlane-label="true">
-                                    <input type="checkbox" formControlName="active">
-                                </label>
+
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 max-w-56">
+                                        Przystanek początkowy
+                                    </label>
+                                    <app-bus-stop-selector [(busStopId)]="origin"
+                                                           class="w-full"></app-bus-stop-selector>
+                                </div>
+                            </div>
+
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 max-w-56">
+                                        Przystanek końcowy
+                                    </label>
+                                    <app-bus-stop-selector [(busStopId)]="destination"
+                                                           class="w-full"></app-bus-stop-selector>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-2.5 gap-2.5">
+                                <button [routerLink]="['/agency/routes']" class="btn btn-secondary">
+                                    Anuluj i wróć do listy linii
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    Zapisz linię i dodaj wariant
+                                </button>
                             </div>
                         </div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label flex items-center gap-1 max-w-56">
-                                    Przystanek początkowy
-                                </label>
-                                <app-bus-stop-selector [(busStopId)]="origin" class="w-full"></app-bus-stop-selector>
-                            </div>
-                        </div>
-
-                        <div class="w-full">
-                            <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                <label class="form-label flex items-center gap-1 max-w-56">
-                                    Przystanek końcowy
-                                </label>
-                                <app-bus-stop-selector [(busStopId)]="destination"
-                                                       class="w-full"></app-bus-stop-selector>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-end pt-2.5 gap-2.5">
-                            <button [routerLink]="['/agency/routes']" class="btn btn-secondary">
-                                Anuluj i wróć do listy linii
-                            </button>
-                            <button type="submit" class="btn btn-success">
-                                Zapisz linię i dodaj wariant
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-1 lg:col-span-1">
+            <div class="flex flex-col gap-5 lg:gap-7.5 h-full">
+<!--                <div class="card h-full">-->
+<!--                    <div class="flex flex-wrap items-center gap-5 h-full"></div>-->
+<!--                </div>-->
             </div>
         </div>
     </div>
