@@ -200,11 +200,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         this.modelForm.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => this.onCommunicationVelocityChange(value));
         this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
+        this.modelForm.get('tripVariantMode').valueChanges.subscribe((value: TripMode) => this.onChangeVariantMode(value));
 
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
             this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
             this.modelForm.controls['isCustomized'].setValue(tripDetails.isCustomized);
-            this.modelForm.controls['calculatedCommunicationVelocity'].setValue(tripDetails.calculatedCommunicationVelocity);
+            this.modelForm.controls['calculatedCommunicationVelocity'].setValue(tripDetails.calculatedCommunicationVelocity || 30);
 
             if (tripDetails.isMainVariant) {
                 this.modelForm.controls['tripVariantName'].disable();
@@ -392,7 +393,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         console.log(errors);
 
         this.isSubmited = true;
-        this.getFormValidationErrors();
         if (this.modelForm.invalid) {
             this.notificationService.showError('Formularz jest niepoprawny uzupełnij braki');
             this.scrollToFirstError();
@@ -652,21 +652,21 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return this.isSubmited && this.validControl(controlName) != null;
     }
 
-    getFormValidationErrors() {
-        Object.keys(this.modelForm.controls).forEach(key => {
-            const controlErrors: ValidationErrors = this.modelForm.get(key).errors;
-            if (controlErrors != null) {
-                Object.keys(controlErrors).forEach(keyError => {
-                    console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
-                });
-            }
-        });
-    }
-
     public scrollToFirstError(): void {
         setTimeout(() => {
             const invalidControl = document.querySelector('.text-danger');
             invalidControl?.scrollIntoView({behavior: 'smooth', block: 'center'});
         });
+    }
+
+    public onChangeVariantMode(tripMode: TripMode): void {
+        if (this.stops.length === 0) {
+            if (tripMode === TripMode.Front) {
+                this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
+            }
+            if (tripMode === TripMode.Back) {
+                this.map.flyTo([this.$tripVariants.route.destinationStop.lat, this.$tripVariants.route.destinationStop.lon], 15)
+            }
+        }
     }
 }
