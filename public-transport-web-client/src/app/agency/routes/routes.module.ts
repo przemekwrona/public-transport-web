@@ -5,7 +5,7 @@ import {FieldComponent} from "./field/field.component";
 import {MatIconModule} from "@angular/material/icon";
 import {CreateRouteComponent} from "./create-route/create-route.component";
 import {RouterModule} from "@angular/router";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import {MatDialogModule} from "@angular/material/dialog";
 import {RouteListComponent} from "./route-list/route-list.component";
@@ -28,7 +28,8 @@ import {PdfService} from "../../generated/public-transport-pdf-api";
         MatExpansionModule,
         MatIconModule,
         MatDialogModule,
-        RouteListComponent
+        RouteListComponent,
+        ReactiveFormsModule
     ], providers: [
         PdfService
     ]
