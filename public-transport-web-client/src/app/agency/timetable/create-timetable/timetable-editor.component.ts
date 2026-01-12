@@ -62,7 +62,6 @@ export class TimetableEditorComponent implements OnInit {
     public isSubmitted: boolean = false;
     public timetableEditorComponentMode: TimetableEditorComponentMode;
     public timetableGeneratorDetailsResponse: GetTimetableGeneratorDetailsResponse | null;
-    public selectedRouteId: RouteId | null;
 
     /** control for the MatSelect filter keyword */
     public bankFilterCtrl: FormControl<string> = new FormControl<string>('');
@@ -85,8 +84,8 @@ export class TimetableEditorComponent implements OnInit {
         this.route.data.subscribe(data => this.routes = data['routes']);
         this.route.data.subscribe(data => {
             this.timetableGeneratorDetailsResponse = data['timetableGenerator'] as GetTimetableGeneratorDetailsResponse;
-            this.selectedRouteId = this.timetableGeneratorDetailsResponse.timetableGeneratorId.routeId;
             this.getRouteIdFormControl().setValue(this.timetableGeneratorDetailsResponse.timetableGeneratorId.routeId);
+            this.getCalendarNameFormControl().setValue(this.timetableGeneratorDetailsResponse.timetables.calendarName);
         });
 
     }
