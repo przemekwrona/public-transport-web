@@ -32,53 +32,66 @@
                         }
                     </div>
 
-                    <label class="sm:max-w-full xl:max-w-96 w-full">
-                        <mat-form-field appearance="outline" class="w-full custom-form-field">
-                            <mat-select formControlName="routeId" [compareWith]="compareByRouteId"
-                                        placeholder="Numer i nazwa lini">
-                                <mat-option>
-                                    <ngx-mat-select-search [formControl]="bankFilterCtrl"
-                                                           [placeholderLabel]="'Numer linii'">
-                                    </ngx-mat-select-search>
-                                </mat-option>
+                    @if (isModeCreator()) {
+                        <label class="sm:max-w-full xl:max-w-96 w-full">
+                            <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                <mat-select formControlName="routeId" [compareWith]="compareByRouteId"
+                                            placeholder="Numer i nazwa lini">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="bankFilterCtrl"
+                                                               [placeholderLabel]="'Numer linii'">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
 
-                                @for (route of routes.items; track route) {
-                                    @if (route.hasMainFrontVariant && route.hasMainBackVariant) {
-                                        <mat-option [value]="route.routeId">
-                                            <div class="my-2">
-                                                <strong>{{ route.routeId?.line }}</strong> {{ route.routeId?.name | routeNameNorm }}
-                                                (v1.0)
+                                    @for (route of routes.items; track route) {
+                                        @if (route.hasMainFrontVariant && route.hasMainBackVariant) {
+                                            <mat-option [value]="route.routeId">
+                                                <div class="my-2">
+                                                    <strong>{{ route.routeId?.line }}</strong> {{ route.routeId?.name | routeNameNorm }}
+                                                    (v1.0)
+                                                </div>
+                                            </mat-option>
+                                        } @else {
+                                            <div class="mx-3 my-2">
+                                                <div>
+                                                    <strong>{{ route.routeId?.line }}</strong> {{ route.routeId?.name | routeNameNorm }}
+                                                    (v1.0)
+                                                </div>
+                                                @if (!route.hasMainFrontVariant && !route.hasMainBackVariant) {
+                                                    <div class="badge badge-sm badge-outline badge-danger">Nie możesz
+                                                        skonfigurwoać Rozkładu jazdy dla tej linii. Linia nie posiada
+                                                        wariantu TAM i POWROTNEGO
+                                                    </div>
+                                                } @else if (!route.hasMainFrontVariant) {
+                                                    <div class="badge badge-sm badge-outline badge-danger">Nie możesz
+                                                        skonfigurwoać Rozkładu jazdy dla tej linii. Linia nie posiada
+                                                        wariantu TAM
+                                                    </div>
+                                                } @else if (!route.hasMainBackVariant) {
+                                                    <div class="badge badge-sm badge-outline badge-danger">Nie możesz
+                                                        skonfigurwoać Rozkładu jazdy dla tej linii. Linia nie posiada
+                                                        wariantu POWROTNEGO
+                                                    </div>
+                                                }
                                             </div>
-                                        </mat-option>
-                                    } @else {
-                                        <div class="mx-3 my-2">
-                                            <div>
-                                                <strong>{{ route.routeId?.line }}</strong> {{ route.routeId?.name | routeNameNorm }}
-                                                (v1.0)
-                                            </div>
-                                            @if (!route.hasMainFrontVariant && !route.hasMainBackVariant) {
-                                                <div class="badge badge-sm badge-outline badge-danger">Nie możesz
-                                                    skonfigurwoać Rozkładu jazdy dla tej linii. Linia nie posiada
-                                                    wariantu TAM i POWROTNEGO
-                                                </div>
-                                            } @else if (!route.hasMainFrontVariant) {
-                                                <div class="badge badge-sm badge-outline badge-danger">Nie możesz
-                                                    skonfigurwoać Rozkładu jazdy dla tej linii. Linia nie posiada
-                                                    wariantu TAM
-                                                </div>
-                                            } @else if (!route.hasMainBackVariant) {
-                                                <div class="badge badge-sm badge-outline badge-danger">Nie możesz
-                                                    skonfigurwoać Rozkładu jazdy dla tej linii. Linia nie posiada
-                                                    wariantu POWROTNEGO
-                                                </div>
-                                            }
-                                        </div>
+                                        }
+
                                     }
+                                </mat-select>
+                            </mat-form-field>
+                        </label>
+                    }
 
-                                }
-                            </mat-select>
-                        </mat-form-field>
-                    </label>
+                    @if (isModeEditor()) {
+                        <label class="sm:max-w-full xl:max-w-96 w-full">
+                            <div class="my-2">
+                                <strong>{{ timetableGeneratorDetailsResponse?.routeId?.line }}</strong>
+                                {{ timetableGeneratorDetailsResponse?.routeId?.name }}
+                                <span class="badge badge-sm badge-outline badge-info">v{{ timetableGeneratorDetailsResponse?.routeId?.version }}
+                                    .0</span>
+                            </div>
+                        </label>
+                    }
                 </div>
             </div>
         </div>
@@ -105,18 +118,30 @@
                             }
                         </div>
 
-                        <label class="sm:max-w-full xl:max-w-96 w-full">
-                            <mat-form-field appearance="outline" class="w-full custom-form-field">
-                                <mat-select [formControl]="getCalendarNameFormControl()" placeholder="Wybież kalendarz">
-                                    @for (calendar of calendarsResponse.calendars; track calendar) {
-                                        <mat-option [value]="calendar.calendarName">
-                                            <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
-                                            ({{ calendar.calendarName }})
-                                        </mat-option>
-                                    }
-                                </mat-select>
-                            </mat-form-field>
-                        </label>
+                        @if (isModeCreator()) {
+                            <label class="sm:max-w-full xl:max-w-96 w-full">
+                                <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                    <mat-select [formControl]="getCalendarNameFormControl()"
+                                                placeholder="Wybież kalendarz">
+                                        @for (calendar of calendarsResponse.calendars; track calendar) {
+                                            <mat-option [value]="calendar.calendarName">
+                                                <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
+                                                ({{ calendar.calendarName }})
+                                            </mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                            </label>
+                        }
+
+                        @if (isModeEditor()) {
+                            @let calendar = findCalendarByName(timetableGeneratorDetailsResponse.timetables.calendarName);
+                            <label class="sm:max-w-full xl:max-w-96 w-full">
+                                <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
+                                ({{ calendar.calendarName }})
+                            </label>
+                        }
+
                     </div>
                 </div>
 
