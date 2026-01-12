@@ -106,8 +106,6 @@
                         </div>
 
                         <label class="sm:max-w-full xl:max-w-96 w-full">
-                            {{ getCalendarNameFormControl()?.value }}
-
                             <mat-form-field appearance="outline" class="w-full custom-form-field">
                                 <mat-select [formControl]="getCalendarNameFormControl()" placeholder="Wybież kalendarz">
                                     @for (calendar of calendarsResponse.calendars; track calendar) {
