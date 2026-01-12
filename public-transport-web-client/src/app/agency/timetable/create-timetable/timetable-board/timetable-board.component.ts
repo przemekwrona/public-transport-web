@@ -11,7 +11,11 @@ import moment, {Moment} from "moment";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {faClock, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-import {TimetableTrip, TripDepartures} from "../../../../generated/public-transport-api";
+import {
+    TimetablePayload,
+    TimetableStopTime,
+    TimetableTrip
+} from "../../../../generated/public-transport-api";
 import {size} from "lodash";
 
 @Component({
@@ -31,7 +35,34 @@ export class TimetableBoardComponent implements OnInit {
 
     @Input() group!: FormGroup;
     @Input() submitted: boolean = false;
-    @Input() tripDepartures: TripDepartures;
+
+    @Input()
+    set timetablePayload(timetablePayload: TimetablePayload | null) {
+        if (timetablePayload !== this._timetablePayload) {
+            this.group.get("startTime").setValue(timetablePayload.startDate);
+            this.group.get("endTime").setValue(timetablePayload.endDate);
+            this.group.get("interval").setValue(timetablePayload.interval);
+
+            this.controlDepartures.setValue([]);
+
+            for (const departure of timetablePayload.departures) {
+                const departureControl: FormGroup = this.buildDeparture(departure);
+                this.controlDepartures.push(departureControl);
+            }
+
+            this._timetablePayload = timetablePayload;
+        }
+    }
+
+    get timetablePayload(): TimetablePayload {
+        return this._timetablePayload || {};
+    }
+
+    private _timetablePayload: TimetablePayload;
+
+    get controlDepartures(): FormArray<FormGroup> {
+        return this.group.get('departures') as FormArray<FormGroup>;
+    }
 
     public faClock: IconDefinition = faClock;
 
@@ -42,10 +73,6 @@ export class TimetableBoardComponent implements OnInit {
 
     ngOnInit(): void {
         this.mapDepartures([], true);
-    }
-
-    get controlDepartures(): FormArray<FormGroup> {
-        return this.group.get('departures') as FormArray<FormGroup>;
     }
 
     public mapDepartures(generatedDepartures: Moment[], appendEmpty: boolean = false) {
@@ -59,6 +86,11 @@ export class TimetableBoardComponent implements OnInit {
                 this.controlDepartures.push(this.buildEmptyDepartureControl(hour));
             }
         }
+    }
+
+    private buildDeparture(departure: TimetableStopTime): FormGroup {
+        const [hours, minutes] = departure.time.split(':').map(Number);
+        return this.buildDepartureControl(hours, minutes, departure.designation);
     }
 
     private buildEmptyDepartureControl(hour: number, symbol: string = '') {
@@ -125,7 +157,7 @@ export class TimetableBoardComponent implements OnInit {
     }
 
     public findTripDesignation(): TimetableTrip[] {
-        return (this.tripDepartures?.departures || []).filter((trip: TimetableTrip): boolean => trip.tripId.variantName !== 'MAIN');
+        return (this.timetablePayload?.departures || []).filter((trip: TimetableTrip): boolean => trip.tripId.variantName !== 'MAIN');
     }
 
     public hasTripDesignation(): boolean {
