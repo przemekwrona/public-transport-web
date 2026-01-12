@@ -1,9 +1,11 @@
 package pl.wrona.webserver.bussiness.timetable.generator.pagination;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorCalendar;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorFindAllItem;
 import org.igeolab.iot.pt.server.api.model.TimetableGeneratorFindAllResponse;
+import org.igeolab.iot.pt.server.api.model.TimetableGeneratorId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorItemQueryService;
@@ -23,9 +25,13 @@ public class TimetableGeneratorPaginationService {
     public TimetableGeneratorFindAllResponse findAllPaginated(String instance, int page, int size) {
         var items = this.timetableGeneratorQueryService.findAll(instance).stream()
                 .map(element -> new TimetableGeneratorFindAllItem()
-                        .routeLine(element.getRoute().getLine())
-                        .routeName(element.getRoute().getName())
-                        .routeVersion(element.getRoute().getVersion())
+                        .timetableGeneratorId(new TimetableGeneratorId()
+                                .routeId(new RouteId()
+                                        .line(element.getRoute().getLine())
+                                        .name(element.getRoute().getName())
+                                        .version(element.getRoute().getVersion()))
+                                .timetableVersion(1)
+                                .createdAt(element.getCreatedAt()))
                         .calendarNames(timetableGeneratorItemQueryService.findAllByTimetableGenerator(element).stream()
                                 .map(TimetableGeneratorItemEntity::getCalendar)
                                 .map(calendar -> new TimetableGeneratorCalendar()

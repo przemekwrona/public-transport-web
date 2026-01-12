@@ -87,6 +87,32 @@ paths:
               schema:
                 $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
+  /agency/{agency}/timetable-generator/details:
+    post:
+      tags:
+        - timetable-generator
+      summary: Get list all generated timetables
+      operationId: findTimetableGeneratorDetails
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimetableGeneratorId'
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTimetableGeneratorDetailsResponse'
+
   /agency/{agency}/timetable-generator/routes:
     get:
       tags:
@@ -155,6 +181,16 @@ paths:
 
 components:
   schemas:
+    TimetableGeneratorId:
+      type: object
+      properties:
+        routeId:
+          $ref: '../public-transport-api.yaml/#/components/schemas/RouteId'
+        timetableVersion:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
 
     TripFilter:
       type: object
@@ -232,6 +268,16 @@ components:
         timetables:
           $ref: '#/components/schemas/TimetableGeneratorPayload'
 
+    GetTimetableGeneratorDetailsResponse:
+      type: object
+      properties:
+        timetableGeneratorId:
+          $ref: '#/components/schemas/TimetableGeneratorId'
+        routeId:
+          $ref: '../public-transport-api.yaml/#/components/schemas/RouteId'
+        timetables:
+          $ref: '#/components/schemas/TimetableGeneratorPayload'
+
     TimetableGeneratorFilterByRoutes:
       type: object
       properties:
@@ -267,12 +313,8 @@ components:
     TimetableGeneratorFindAllItem:
       type: object
       properties:
-        routeLine:
-          type: string
-        routeName:
-          type: string
-        routeVersion:
-          type: integer
+        timetableGeneratorId:
+          $ref: '#/components/schemas/TimetableGeneratorId'
         calendarNames:
           type: array
           items:

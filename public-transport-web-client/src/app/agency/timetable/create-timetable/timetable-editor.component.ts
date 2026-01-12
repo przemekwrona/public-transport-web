@@ -12,14 +12,14 @@ import {
 } from "@angular/forms";
 import {
     CreateTimetableGeneratorRequest,
-    GetCalendarsResponse, RouteId,
+    GetCalendarsResponse, GetTimetableGeneratorDetailsResponse, RouteId,
     TimetableGeneratorFilterByRoutesResponse,
     TimetableGeneratorPayload,
     TimetableGeneratorService,
     TimetablePayload,
     TimetableStopTime, TripFilter, TripResponse
 } from "../../../generated/public-transport-api";
-import {ActivatedRoute, Router, RouterModule} from "@angular/router";
+import {ActivatedRoute, Data, Router, RouterModule} from "@angular/router";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {CommonModule} from "@angular/common";
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
@@ -30,6 +30,10 @@ import moment from "moment";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
 import {NotificationService} from "../../../shared/notification.service";
+
+export enum TimetableEditorComponentMode {
+    CREATE, EDIT
+}
 
 @Component({
     selector: 'app-create-timetable',
@@ -56,6 +60,9 @@ export class TimetableEditorComponent implements OnInit {
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
     public tripResponse: TripResponse = {};
     public isSubmitted: boolean = false;
+    public timetableEditorComponentMode: TimetableEditorComponentMode;
+    public timetableGeneratorDetailsResponse: GetTimetableGeneratorDetailsResponse | null;
+    public selectedRouteId: RouteId | null;
 
     /** control for the MatSelect filter keyword */
     public bankFilterCtrl: FormControl<string> = new FormControl<string>('');
@@ -64,19 +71,24 @@ export class TimetableEditorComponent implements OnInit {
         return this.formGroup.get('timetables') as FormArray<FormGroup>;
     }
 
-    constructor(private formBuilder: FormBuilder, private _route: ActivatedRoute, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService, private router: Router) {
-    }
-
-    ngOnInit(): void {
+    constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService) {
         this.formGroup = this.formBuilder.group({
             routeId: [null, [Validators.required]],
             timetables: this.formBuilder.array([this.buildTimetable()])
         });
-
         this.formGroup.get('routeId').valueChanges.subscribe((routeId: RouteId) => this.findTripByRouteId(routeId));
+    }
 
-        this._route.data.subscribe(data => this.calendarsResponse = data['calendars']);
-        this._route.data.subscribe(data => this.routes = data['routes']);
+    ngOnInit(): void {
+        this.route.data.subscribe((data: Data) => this.timetableEditorComponentMode = data['mode']);
+        this.route.data.subscribe(data => this.calendarsResponse = data['calendars']);
+        this.route.data.subscribe(data => this.routes = data['routes']);
+        this.route.data.subscribe(data => {
+            this.timetableGeneratorDetailsResponse = data['timetableGenerator'] as GetTimetableGeneratorDetailsResponse;
+            this.selectedRouteId = this.timetableGeneratorDetailsResponse.timetableGeneratorId.routeId;
+            this.getRouteIdFormControl().setValue(this.timetableGeneratorDetailsResponse.timetableGeneratorId.routeId);
+        });
+
     }
 
     private buildTimetable(): FormGroup {
@@ -184,11 +196,16 @@ export class TimetableEditorComponent implements OnInit {
         });
     }
 
-    public findTripByRouteId(routeId: RouteId): void {
+    public findTripByRouteId(routeId: RouteId | null): void {
+        if (routeId === null) {
+            return;
+        }
         const tripFilter: TripFilter = {};
         tripFilter.routeId = routeId;
 
         this.timetableGeneratorService.findTrips(this.agencyStorageService.getInstance(), tripFilter).subscribe((tripResponse: TripResponse) => this.tripResponse = tripResponse);
     }
+
+    compareByRouteId = (a: RouteId, b: RouteId): boolean => a && b ? a.line === b.line &&  a.name === b.name && a.version === b.version: a === b;
 
 }

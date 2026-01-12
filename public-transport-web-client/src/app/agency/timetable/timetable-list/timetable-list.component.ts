@@ -9,7 +9,6 @@ import {
 import {CommonModule} from "@angular/common";
 import {size} from "lodash";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
-import StatusEnum = Status.StatusEnum;
 import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
@@ -44,9 +43,9 @@ export class TimetableListComponent implements OnInit {
     public deleteGeneratedTimetable(timetableGenerator: TimetableGeneratorFindAllItem): void {
         const request: TimetableGeneratorDeletionRequest = {};
         request.routeId = {
-            line: timetableGenerator.routeLine,
-            name: timetableGenerator.routeName,
-            version: timetableGenerator.routeVersion,
+            line: timetableGenerator.timetableGeneratorId.routeId.line,
+            name: timetableGenerator.timetableGeneratorId.routeId.name,
+            version: timetableGenerator.timetableGeneratorId.routeId.version,
         };
         request.createdDate = timetableGenerator.createdAt;
         this.timetableGeneratorService.deleteTimetableGenerator(this.agencyStorageService.getInstance(), request).subscribe((deleteStatusResponse: Status) => {
