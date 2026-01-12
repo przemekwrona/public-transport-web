@@ -11,6 +11,7 @@ import {
     Validators
 } from "@angular/forms";
 import {
+    CalendarBody,
     CreateTimetableGeneratorRequest,
     GetCalendarsResponse, GetTimetableGeneratorDetailsResponse, RouteId,
     TimetableGeneratorFilterByRoutesResponse,
@@ -58,7 +59,10 @@ export class TimetableEditorComponent implements OnInit {
     public formGroup: FormGroup;
     public calendarsResponse: GetCalendarsResponse = {};
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
-    public tripResponse: TripResponse = {};
+    public tripResponse: TripResponse = {
+        front: {},
+        back: {}
+    };
     public isSubmitted: boolean = false;
     public timetableEditorComponentMode: TimetableEditorComponentMode;
     public timetableGeneratorDetailsResponse: GetTimetableGeneratorDetailsResponse | null;
@@ -90,6 +94,7 @@ export class TimetableEditorComponent implements OnInit {
             this.getFrontTimetableByName().get("startTime").setValue(this.timetableGeneratorDetailsResponse.timetables.front.startDate);
             this.getFrontTimetableByName().get("endTime").setValue(this.timetableGeneratorDetailsResponse.timetables.front.endDate);
             this.getFrontTimetableByName().get("interval").setValue(this.timetableGeneratorDetailsResponse.timetables.front.interval);
+            this.getFrontTimetableByName().get("departures").setValue(this.timetableGeneratorDetailsResponse.timetables.front.departures);
 
             this.getBackTimetableByName().get("startTime").setValue(this.timetableGeneratorDetailsResponse.timetables.back.startDate);
             this.getBackTimetableByName().get("endTime").setValue(this.timetableGeneratorDetailsResponse.timetables.back.endDate);
@@ -214,6 +219,18 @@ export class TimetableEditorComponent implements OnInit {
         this.timetableGeneratorService.findTrips(this.agencyStorageService.getInstance(), tripFilter).subscribe((tripResponse: TripResponse) => this.tripResponse = tripResponse);
     }
 
-    compareByRouteId = (a: RouteId, b: RouteId): boolean => a && b ? a.line === b.line &&  a.name === b.name && a.version === b.version: a === b;
+    public isModeCreator(): boolean {
+        return this.timetableEditorComponentMode === TimetableEditorComponentMode.CREATE;
+    }
+
+    public isModeEditor(): boolean {
+        return this.timetableEditorComponentMode === TimetableEditorComponentMode.EDIT;
+    }
+
+    public findCalendarByName(calendarName: string): CalendarBody  {
+        return this.calendarsResponse.calendars.filter(calendar => calendar.calendarName === calendarName)[0];
+    }
+
+    compareByRouteId = (a: RouteId, b: RouteId): boolean => a && b ? a.line === b.line && a.name === b.name && a.version === b.version : a === b;
 
 }
