@@ -86,6 +86,15 @@ export class TimetableEditorComponent implements OnInit {
             this.timetableGeneratorDetailsResponse = data['timetableGenerator'] as GetTimetableGeneratorDetailsResponse;
             this.getRouteIdFormControl().setValue(this.timetableGeneratorDetailsResponse.timetableGeneratorId.routeId);
             this.getCalendarNameFormControl().setValue(this.timetableGeneratorDetailsResponse.timetables.calendarName);
+
+            this.getFrontTimetableByName().get("startTime").setValue(this.timetableGeneratorDetailsResponse.timetables.front.startDate);
+            this.getFrontTimetableByName().get("endTime").setValue(this.timetableGeneratorDetailsResponse.timetables.front.endDate);
+            this.getFrontTimetableByName().get("interval").setValue(this.timetableGeneratorDetailsResponse.timetables.front.interval);
+
+            this.getBackTimetableByName().get("startTime").setValue(this.timetableGeneratorDetailsResponse.timetables.back.startDate);
+            this.getBackTimetableByName().get("endTime").setValue(this.timetableGeneratorDetailsResponse.timetables.back.endDate);
+            this.getBackTimetableByName().get("interval").setValue(this.timetableGeneratorDetailsResponse.timetables.back.interval);
+
         });
 
     }

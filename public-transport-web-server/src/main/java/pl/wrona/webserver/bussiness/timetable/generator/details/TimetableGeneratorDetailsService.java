@@ -15,7 +15,6 @@ import pl.wrona.webserver.core.calendar.CalendarEntity;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
-import java.awt.event.ItemEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class TimetableGeneratorDetailsService {
         var timetable = timetableGeneratorQueryService.findByAgencyAndRouteIdAndCreateDate(instance, timetableGeneratorId.getRouteId(), timetableGeneratorId.getCreatedAt());
         var items = timetableGeneratorItemQueryService.findAllByTimetableGenerator(timetable);
         var firstItem = items.stream().findFirst();
-
 
         return new GetTimetableGeneratorDetailsResponse()
                 .timetableGeneratorId(new TimetableGeneratorId()
