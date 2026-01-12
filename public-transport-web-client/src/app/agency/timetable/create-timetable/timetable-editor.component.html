@@ -160,7 +160,7 @@
                         </div>
                         <div class="card-body py-2.5 flex flex-col">
                             <app-timetable-board [group]="getFrontTimetableByName()" [submitted]="isSubmitted"
-                                                 [tripDepartures]="tripResponse.front"></app-timetable-board>
+                                                 [timetablePayload]="timetableGeneratorDetailsResponse?.timetables?.front"></app-timetable-board>
                         </div>
                     </div>
                     <!-- end: cards -->
@@ -175,7 +175,7 @@
                         </div>
                         <div class="card-body py-2.5 flex flex-col">
                             <app-timetable-board [group]="getBackTimetableByName()" [submitted]="isSubmitted"
-                                                 [tripDepartures]="tripResponse.back"></app-timetable-board>
+                                                 [timetablePayload]="timetableGeneratorDetailsResponse?.timetables?.back"></app-timetable-board>
                         </div>
                     </div>
                     <!-- end: cards -->

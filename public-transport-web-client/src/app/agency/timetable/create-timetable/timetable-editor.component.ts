@@ -59,10 +59,6 @@ export class TimetableEditorComponent implements OnInit {
     public formGroup: FormGroup;
     public calendarsResponse: GetCalendarsResponse = {};
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
-    public tripResponse: TripResponse = {
-        front: {},
-        back: {}
-    };
     public isSubmitted: boolean = false;
     public timetableEditorComponentMode: TimetableEditorComponentMode;
     public timetableGeneratorDetailsResponse: GetTimetableGeneratorDetailsResponse | null;
@@ -79,7 +75,7 @@ export class TimetableEditorComponent implements OnInit {
             routeId: [null, [Validators.required]],
             timetables: this.formBuilder.array([this.buildTimetable()])
         });
-        this.formGroup.get('routeId').valueChanges.subscribe((routeId: RouteId) => this.findTripByRouteId(routeId));
+        // this.formGroup.get('routeId').valueChanges.subscribe((routeId: RouteId) => this.findTripByRouteId(routeId));
     }
 
     ngOnInit(): void {
@@ -90,16 +86,6 @@ export class TimetableEditorComponent implements OnInit {
             this.timetableGeneratorDetailsResponse = data['timetableGenerator'] as GetTimetableGeneratorDetailsResponse;
             this.getRouteIdFormControl().setValue(this.timetableGeneratorDetailsResponse.timetableGeneratorId.routeId);
             this.getCalendarNameFormControl().setValue(this.timetableGeneratorDetailsResponse.timetables.calendarName);
-
-            this.getFrontTimetableByName().get("startTime").setValue(this.timetableGeneratorDetailsResponse.timetables.front.startDate);
-            this.getFrontTimetableByName().get("endTime").setValue(this.timetableGeneratorDetailsResponse.timetables.front.endDate);
-            this.getFrontTimetableByName().get("interval").setValue(this.timetableGeneratorDetailsResponse.timetables.front.interval);
-            this.getFrontTimetableByName().get("departures").setValue(this.timetableGeneratorDetailsResponse.timetables.front.departures);
-
-            this.getBackTimetableByName().get("startTime").setValue(this.timetableGeneratorDetailsResponse.timetables.back.startDate);
-            this.getBackTimetableByName().get("endTime").setValue(this.timetableGeneratorDetailsResponse.timetables.back.endDate);
-            this.getBackTimetableByName().get("interval").setValue(this.timetableGeneratorDetailsResponse.timetables.back.interval);
-
         });
 
     }
@@ -207,16 +193,6 @@ export class TimetableEditorComponent implements OnInit {
             const invalidControl = document.querySelector('.text-danger');
             invalidControl?.scrollIntoView({behavior: 'smooth', block: 'center'});
         });
-    }
-
-    public findTripByRouteId(routeId: RouteId | null): void {
-        if (routeId === null) {
-            return;
-        }
-        const tripFilter: TripFilter = {};
-        tripFilter.routeId = routeId;
-
-        this.timetableGeneratorService.findTrips(this.agencyStorageService.getInstance(), tripFilter).subscribe((tripResponse: TripResponse) => this.tripResponse = tripResponse);
     }
 
     public isModeCreator(): boolean {
