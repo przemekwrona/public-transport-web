@@ -5,7 +5,8 @@
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700"></div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a [routerLink]="['/agency/timetables']" class="btn btn-sm btn-secondary">Anuluj i wróć do listy Rozkładów Jazdy</a>
+            <a [routerLink]="['/agency/timetables']" class="btn btn-sm btn-secondary">Anuluj i wróć do listy Rozkładów
+                Jazdy</a>
         </div>
 
         <span class="badge badge-sm badge-outline badge-info w-full" style="line-height: inherit">
@@ -33,7 +34,8 @@
 
                     <label class="sm:max-w-full xl:max-w-96 w-full">
                         <mat-form-field appearance="outline" class="w-full custom-form-field">
-                            <mat-select [formControl]="getRouteIdFormControl()" placeholder="Numer i nazwa lini">
+                            <mat-select formControlName="routeId" [compareWith]="compareByRouteId"
+                                        placeholder="Numer i nazwa lini">
                                 <mat-option>
                                     <ngx-mat-select-search [formControl]="bankFilterCtrl"
                                                            [placeholderLabel]="'Numer linii'">
@@ -104,6 +106,8 @@
                         </div>
 
                         <label class="sm:max-w-full xl:max-w-96 w-full">
+                            {{ getCalendarNameFormControl()?.value }}
+
                             <mat-form-field appearance="outline" class="w-full custom-form-field">
                                 <mat-select [formControl]="getCalendarNameFormControl()" placeholder="Wybież kalendarz">
                                     @for (calendar of calendarsResponse.calendars; track calendar) {
@@ -132,7 +136,8 @@
                             <h3 class="card-title">Kierunek: TAM</h3>
                         </div>
                         <div class="card-body py-2.5 flex flex-col">
-                            <app-timetable-board [group]="getFrontTimetableByName()" [submitted]="isSubmitted" [tripDepartures]="tripResponse.front"></app-timetable-board>
+                            <app-timetable-board [group]="getFrontTimetableByName()" [submitted]="isSubmitted"
+                                                 [tripDepartures]="tripResponse.front"></app-timetable-board>
                         </div>
                     </div>
                     <!-- end: cards -->
@@ -146,7 +151,8 @@
                             <h3 class="card-title">Kierunek: POWRÓT</h3>
                         </div>
                         <div class="card-body py-2.5 flex flex-col">
-                            <app-timetable-board [group]="getBackTimetableByName()" [submitted]="isSubmitted" [tripDepartures]="tripResponse.back"></app-timetable-board>
+                            <app-timetable-board [group]="getBackTimetableByName()" [submitted]="isSubmitted"
+                                                 [tripDepartures]="tripResponse.back"></app-timetable-board>
                         </div>
                     </div>
                     <!-- end: cards -->

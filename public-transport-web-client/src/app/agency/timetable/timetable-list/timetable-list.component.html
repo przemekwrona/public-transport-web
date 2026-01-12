@@ -30,8 +30,8 @@
                         <div class="flex flex-col gap-0.5">
                             <div class="flex items-center flex-wrap gap-2.5">
                                 <a (click)="openTimetableGenerator(item)"
-                                   class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ item.routeLine }} {{ item.routeName }}</a>
-                                <span class="badge badge-sm badge-outline badge-info">v{{ item.routeVersion }}.0</span>
+                                   class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ item.timetableGeneratorId.routeId.line }} {{ item.timetableGeneratorId.routeId.name }}</a>
+                                <span class="badge badge-sm badge-outline badge-info">v{{ item.timetableGeneratorId.routeId.version }}.0</span>
                             </div>
                             <div class="form-info text-gray-800 font-normal">
                                 <div>
@@ -55,8 +55,7 @@
                     </div>
                     <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
                         <!--                                            <button (click)="downloadPdf(route)" class="btn btn-sm btn-danger shrink-0">PDF</button>-->
-                        <a (click)="openTimetableGenerator(item)" class="btn btn-sm shrink-0 btn-secondary">Pokaż
-                            szczegóły</a>
+                        <a [routerLink]="['/agency/timetables/edit']" [queryParams]="{ line: item.timetableGeneratorId.routeId.line, name: item.timetableGeneratorId.routeId.name, version: item.timetableGeneratorId.routeId.version, timetableVersion: item.timetableGeneratorId.timetableVersion, createdAt: item.timetableGeneratorId.createdAt}" class="btn btn-sm shrink-0 btn-secondary">Pokaż szczegóły</a>
                         <button (click)="deleteGeneratedTimetable(item)"
                                 class="btn btn-sm btn-icon btn-clear btn-danger"><i
                                 class="ki-filled ki-cross-square"></i></button>
