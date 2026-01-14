@@ -84,9 +84,11 @@
 
                     @if (isModeEditor()) {
                         <label class="sm:max-w-full xl:max-w-96 w-full">
-                            <div class="my-2">
-                                <strong>{{ timetableGeneratorDetailsResponse?.routeId?.line }}</strong>
-                                {{ timetableGeneratorDetailsResponse?.routeId?.name }}
+                            <div class="my-2 text-sm">
+                                <span class="py-2">
+                                    <strong>{{ timetableGeneratorDetailsResponse?.routeId?.line }}</strong>
+                                    {{ timetableGeneratorDetailsResponse?.routeId?.name }}
+                                </span>
                                 <span class="badge badge-sm badge-outline badge-info">v{{ timetableGeneratorDetailsResponse?.routeId?.version }}
                                     .0</span>
                             </div>
@@ -136,7 +138,7 @@
 
                         @if (isModeEditor()) {
                             @let calendar = findCalendarByName(timetableGeneratorDetailsResponse.timetables.calendarName);
-                            <label class="sm:max-w-full xl:max-w-96 w-full">
+                            <label class="sm:max-w-full xl:max-w-96 w-full text-sm">
                                 <strong>{{ calendar.designation }}</strong> {{ calendar.description }}
                                 ({{ calendar.calendarName }})
                             </label>
@@ -190,7 +192,12 @@
         <div class="card min-w-full">
             <div class="card-body lg:py-7.5 py-5">
                 <div class="flex flex-wrap justify-end gap-5">
-                    <button type="submit" class="btn btn-success">Wygeneruj brygady</button>
+                    <a [routerLink]="['/agency/timetables']" class="btn btn-secondary">Anuluj i wróć do listy Rozkładów
+                        Jazdy</a>
+
+                    @if (isModeCreator()) {
+                        <button type="submit" class="btn btn-success">Wygeneruj brygady</button>
+                    }
                 </div>
             </div>
         </div>
