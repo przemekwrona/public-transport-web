@@ -157,7 +157,7 @@ export class TimetableBoardComponent implements OnInit {
     }
 
     public findTripDesignation(): TimetableTrip[] {
-        return (this.timetablePayload?.departures || []).filter((trip: TimetableTrip): boolean => trip.tripId.variantName !== 'MAIN');
+        return (this.timetablePayload?.departures || []).filter((trip: TimetableTrip): boolean => trip.tripId !== null).filter((trip: TimetableTrip): boolean => trip.tripId?.variantName !== 'MAIN');
     }
 
     public hasTripDesignation(): boolean {
