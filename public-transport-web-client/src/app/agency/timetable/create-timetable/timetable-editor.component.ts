@@ -59,6 +59,7 @@ export class TimetableEditorComponent implements OnInit {
     public formGroup: FormGroup;
     public calendarsResponse: GetCalendarsResponse = {};
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
+    public tripResponse: TripResponse = {front: {}, back: {}};
     public isSubmitted: boolean = false;
     public timetableEditorComponentMode: TimetableEditorComponentMode;
     public timetableGeneratorDetailsResponse: GetTimetableGeneratorDetailsResponse | null;
@@ -75,7 +76,7 @@ export class TimetableEditorComponent implements OnInit {
             routeId: [null, [Validators.required]],
             timetables: this.formBuilder.array([this.buildTimetable()])
         });
-        // this.formGroup.get('routeId').valueChanges.subscribe((routeId: RouteId) => this.findTripByRouteId(routeId));
+        this.formGroup.get('routeId').valueChanges.subscribe((routeId: RouteId) => this.findTripByRouteId(routeId));
     }
 
     ngOnInit(): void {
@@ -205,6 +206,15 @@ export class TimetableEditorComponent implements OnInit {
 
     public findCalendarByName(calendarName: string): CalendarBody  {
         return this.calendarsResponse.calendars.filter(calendar => calendar.calendarName === calendarName)[0];
+    }
+
+    public findTripByRouteId(routeId: RouteId): void {
+        const agency: string = this.agencyStorageService.getInstance();
+        const tripFilter: TripFilter = {} as TripFilter;
+        tripFilter.routeId = routeId;
+        this.timetableGeneratorService.findTrips(agency, tripFilter).subscribe((response: TripResponse) => {
+            this.tripResponse = response;
+        });
     }
 
     compareByRouteId = (a: RouteId, b: RouteId): boolean => a && b ? a.line === b.line && a.name === b.name && a.version === b.version : a === b;

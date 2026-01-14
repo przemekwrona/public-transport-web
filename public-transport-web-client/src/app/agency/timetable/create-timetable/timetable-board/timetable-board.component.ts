@@ -14,7 +14,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {
     TimetablePayload,
     TimetableStopTime,
-    TimetableTrip
+    TimetableTrip, TripDepartures
 } from "../../../../generated/public-transport-api";
 import {size} from "lodash";
 
@@ -35,6 +35,7 @@ export class TimetableBoardComponent implements OnInit {
 
     @Input() group!: FormGroup;
     @Input() submitted: boolean = false;
+    @Input() tripDepartures: TripDepartures = {};
 
     @Input()
     set timetablePayload(timetablePayload: TimetablePayload | null) {
@@ -157,7 +158,9 @@ export class TimetableBoardComponent implements OnInit {
     }
 
     public findTripDesignation(): TimetableTrip[] {
-        return (this.timetablePayload?.departures || []).filter((trip: TimetableTrip): boolean => trip.tripId !== null).filter((trip: TimetableTrip): boolean => trip.tripId?.variantName !== 'MAIN');
+        return (this.tripDepartures?.departures || [])
+            .filter((trip: TimetableTrip): boolean => trip.tripId !== null)
+            .filter((trip: TimetableTrip): boolean => trip.tripId?.variantName !== 'MAIN');
     }
 
     public hasTripDesignation(): boolean {
