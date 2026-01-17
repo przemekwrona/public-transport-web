@@ -1,12 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {ModificationRouteResponse, Route, RouteService, Status, Stop} from "../../../generated/public-transport-api";
+import {
+    AgencyAddress,
+    ModificationRouteResponse,
+    Route,
+    RouteService
+} from "../../../generated/public-transport-api";
 import {Router} from "@angular/router";
-import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
 import {NotificationService} from "../../../shared/notification.service";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {FormUtils} from "../../../shared/form.utils";
-import {pull, remove, sampleSize, without} from "lodash";
+import {sampleSize, without} from "lodash";
+import {take} from "rxjs";
 
 @Component({
     selector: 'app-create-route',
@@ -31,8 +35,6 @@ export class CreateRouteComponent implements OnInit {
         active: true
     };
 
-    public origin: BusStopSelectorData = {} as BusStopSelectorData;
-    public destination: BusStopSelectorData = {} as BusStopSelectorData;
     public modelForm: FormGroup;
     public isSubmitted: boolean = false;
 
@@ -45,57 +47,51 @@ export class CreateRouteComponent implements OnInit {
     }
 
     constructor(private _router: Router, private routeService: RouteService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
-    }
-
-    ngOnInit(): void {
-        this.agencyStorageService.getAgencyAddress().subscribe(agencyAddress => {
-            this.origin.stopLon = agencyAddress.lon;
-            this.origin.stopLat = agencyAddress.lat;
-
-            this.destination.stopLon = agencyAddress.lon;
-            this.destination.stopLat = agencyAddress.lat;
-        });
-
         this.modelForm = this.formBuilder.group({
             line: ['', [Validators.required]],
             name: ['', [Validators.required]],
             google: [false],
             active: [true],
-            origin: [this.formBuilder.group({
-                id: [''],
+            origin: this.formBuilder.group({
+                id: ['', Validators.required],
                 name: [''],
                 lon: [''],
                 lat: ['']
-            }), [Validators.required]],
-            destination: [this.formBuilder.group({
-                id: [''],
+            }),
+            destination: this.formBuilder.group({
+                id: ['', Validators.required],
                 name: [''],
                 lon: [''],
                 lat: ['']
-            }), [Validators.required]]
+            })
         });
+    }
 
+    ngOnInit(): void {
+        this.agencyStorageService.getAgencyAddress()
+            .pipe(take(1))
+            .subscribe((agencyAddress: AgencyAddress) => {
+                if (agencyAddress && this.originControl && this.destinationControl) {
+                    this.originControl.patchValue({
+                        lon: agencyAddress.lon,
+                        lat: agencyAddress.lat
+                    });
+
+                    this.destinationControl.patchValue({
+                        lon: agencyAddress.lon,
+                        lat: agencyAddress.lat
+                    });
+                }
+            });
         this.randomConnection = this.getRandomConnection();
         this.randomLine = this.getRandomLine();
     }
 
     public createRouteAndNavigateToCreateNewTrip(): void {
         this.isSubmitted = true;
-        console.log(FormUtils.getFormValidationErrors(this.modelForm));
         if (this.modelForm.invalid) {
             return;
         }
-
-        const originStop: Stop = {} as Stop;
-        originStop.id = this.origin.stopId;
-        originStop.name = this.origin.stopName
-
-        const destinationStop: Stop = {} as Stop;
-        destinationStop.id = this.destination.stopId;
-        destinationStop.name = this.destination.stopName;
-
-        this.route.originStop = originStop;
-        this.route.destinationStop = destinationStop;
 
         this.routeService.createRoute(this.agencyStorageService.getInstance(), this.route).subscribe((response: ModificationRouteResponse) => {
             this.notificationService.showSuccess(`Linia ${this.route.routeId.line} (${this.route.routeId.name}) została pomyślnie utworzona`);

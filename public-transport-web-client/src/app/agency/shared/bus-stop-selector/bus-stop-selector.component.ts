@@ -33,16 +33,10 @@ export class BusStopSelectorComponent implements OnInit {
 
     @Input() stopControl: FormGroup;
 
-    /**
-     * Invoked when the model has been changed
-     */
-    // @Output() busStopIdChange: EventEmitter<BusStopSelectorData> = new EventEmitter<BusStopSelectorData>();
-
     get stopIdControl(): FormControl {
         return this.stopControl.get('id') as FormControl;
     }
 
-    showOptions: boolean = false;
     searchStopControl: FormControl<string> = new FormControl<string>('');
     filteredStops: Stop[];
 
@@ -56,12 +50,6 @@ export class BusStopSelectorComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.stopControl = this.formBuilder.group({
-            id: [''],
-            name: [''],
-            lon: [''],
-            lat: ['']
-        })
     }
 
     searchStops(filter: string): Observable<Stop[]> {
