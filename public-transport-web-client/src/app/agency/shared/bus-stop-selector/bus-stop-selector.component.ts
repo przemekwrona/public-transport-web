@@ -32,6 +32,7 @@ export class BusStopSelectorComponent implements OnInit {
     readonly faBus: IconDefinition = faBus;
 
     @Input() stopControl: FormGroup;
+    @Input() placeholderLabel: string = '';
 
     get stopIdControl(): FormControl {
         return this.stopControl.get('id') as FormControl;

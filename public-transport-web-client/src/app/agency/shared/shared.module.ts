@@ -12,9 +12,9 @@ import {
 import {BusStopEditorComponent} from "./bus-stop-editor/bus-stop-editor.component";
 import {BusStopModalEditorComponent} from "./bus-stop-modal-editor/bus-stop-modal-editor.component";
 import {StopsService} from "../../generated/public-transport-api";
-import {MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
+import {MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption} from "@angular/material/autocomplete";
-import {MatSelect} from "@angular/material/select";
+import {MatSelect, MatSelectModule} from "@angular/material/select";
 import {MatSelectSearchComponent} from "ngx-mat-select-search";
 import {RouteNameNormPipe} from "../timetable/create-timetable/route-id-normalization.pipe";
 import {MatIcon} from "@angular/material/icon";
@@ -38,7 +38,9 @@ import {MatIcon} from "@angular/material/icon";
         MatIcon,
         MatLabel,
         MatSuffix,
-        MatPrefix
+        MatPrefix,
+        MatFormFieldModule,
+        MatSelectModule
     ],
     declarations: [
         BusStopModalSelectorComponent,
