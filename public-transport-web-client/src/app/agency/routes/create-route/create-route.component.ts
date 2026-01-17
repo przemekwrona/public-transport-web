@@ -36,6 +36,14 @@ export class CreateRouteComponent implements OnInit {
     public modelForm: FormGroup;
     public isSubmitted: boolean = false;
 
+    get originControl(): FormGroup {
+        return this.modelForm.get('origin') as FormGroup;
+    }
+
+    get destinationControl(): FormGroup {
+        return this.modelForm.get('destination') as FormGroup;
+    }
+
     constructor(private _router: Router, private routeService: RouteService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
     }
 
