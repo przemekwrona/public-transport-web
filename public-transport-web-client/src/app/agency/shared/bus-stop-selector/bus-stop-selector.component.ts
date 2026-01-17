@@ -1,15 +1,15 @@
 import {
     Component,
-    EventEmitter,
     inject,
-    Input,
-    Output,
-    Renderer2,
+    Input, OnInit
 } from '@angular/core';
 import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport-api";
-import {faMap, faBus} from "@fortawesome/free-solid-svg-icons";
+import {faMap, faBus, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {MatDialog} from "@angular/material/dialog";
 import {BusStopModalSelectorComponent} from "../bus-stop-modal-selector/bus-stop-modal-selector.component";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {debounceTime, distinctUntilChanged, map, Observable, of, startWith} from "rxjs";
+import {switchMap} from "rxjs/operators";
 
 export interface BusStopSelectorData {
     stopId: number;
@@ -23,60 +23,94 @@ export interface BusStopSelectorData {
     templateUrl: './bus-stop-selector.component.html',
     styleUrl: './bus-stop-selector.component.scss'
 })
-export class BusStopSelectorComponent {
-    readonly dialog = inject(MatDialog);
+export class BusStopSelectorComponent implements OnInit {
+    readonly dialog: MatDialog = inject(MatDialog);
 
-    readonly faMap = faMap;
-    readonly faBus = faBus;
+    readonly faMap: IconDefinition = faMap;
+    readonly faBus: IconDefinition = faBus;
 
-    /**
-     * Holds the current value of the slider
-     */
-    @Input() busStopId: BusStopSelectorData = {} as BusStopSelectorData;
+    @Input() stopControl: FormGroup;
 
     /**
      * Invoked when the model has been changed
      */
-    @Output() busStopIdChange: EventEmitter<BusStopSelectorData> = new EventEmitter<BusStopSelectorData>();
+    // @Output() busStopIdChange: EventEmitter<BusStopSelectorData> = new EventEmitter<BusStopSelectorData>();
 
-    busStops: Stop[] = [];
-    showOptions = false;
-
-    constructor(private renderer: Renderer2, private stopsService: StopsService) {
+    get stopIdControl(): FormControl {
+        return this.stopControl.get('id') as FormControl;
     }
 
-    onSelect(option: Stop) {
-        this.showOptions = false;
+    showOptions: boolean = false;
+    searchStopControl: FormControl<string> = new FormControl<string>('');
+    filteredStops: Stop[];
 
-        const busStopSelectorData: BusStopSelectorData = {} as BusStopSelectorData;
-        busStopSelectorData.stopId = option.id;
-        busStopSelectorData.stopName = option.name;
-        busStopSelectorData.stopLon = option.lon;
-        busStopSelectorData.stopLat = option.lat;
-        this.busStopIdChange.emit(busStopSelectorData);
+    constructor(private stopsService: StopsService, private formBuilder: FormBuilder) {
+        this.searchStopControl.valueChanges.pipe(
+            startWith(''),
+            debounceTime(300),
+            distinctUntilChanged(),
+            switchMap((value: string): Observable<Stop[]> => this.searchStops(value))
+        ).subscribe((filteredStops: Stop[]) => this.filteredStops = filteredStops);
     }
 
-    onWrite(): void {
-        if (this.busStopId.stopName.length >= 3) {
-            this.stopsService.findStopsByStopName(this.busStopId.stopName).subscribe((response: StopsResponse) => {
-                this.busStops = response.stops
-                this.showOptions = true;
-            });
+    ngOnInit(): void {
+        this.stopControl = this.formBuilder.group({
+            id: [''],
+            name: [''],
+            lon: [''],
+            lat: ['']
+        })
+    }
+
+    searchStops(filter: string): Observable<Stop[]> {
+        if (filter.length >= 3) {
+            return this.stopsService.findStopsByStopName(filter)
+                .pipe(map((stopResponse: StopsResponse): Stop[] => stopResponse.stops));
+        } else {
+            return of(this.filteredStops);
         }
     }
 
     openDialog(): void {
+        const busStopSelectedData: BusStopSelectorData = {} as BusStopSelectorData;
+        busStopSelectedData.stopId = this.stopControl.get('id')?.value;
+        busStopSelectedData.stopName = this.stopControl.get('name')?.value;
+        busStopSelectedData.stopLon = this.stopControl.get('lon')?.value;
+        busStopSelectedData.stopLat = this.stopControl.get('lat')?.value;
+
         const dialogRef = this.dialog.open(BusStopModalSelectorComponent, {
             width: '90%',
             height: '70%',
-            data: this.busStopId,
+            data: busStopSelectedData,
         });
 
         dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopSelectorData | undefined) => {
             if (busStopSelectorData !== undefined) {
-                this.busStopIdChange.emit(busStopSelectorData);
+                const stop: Stop = {};
+                stop.id = busStopSelectorData.stopId;
+                stop.name = busStopSelectorData.stopName;
+                stop.lon = busStopSelectorData.stopLon;
+                stop.lat = busStopSelectorData.stopLat;
+
+                this.filteredStops = [stop];
+
+                this.stopControl.get('id').setValue(busStopSelectorData.stopId);
+                this.stopControl.get('name').setValue(busStopSelectorData.stopName);
+                this.stopControl.get('lon').setValue(busStopSelectorData.stopLon);
+                this.stopControl.get('lat').setValue(busStopSelectorData.stopLat);
             }
         });
     }
+
+    public onClickStop(busStop: Stop): void {
+        this.filteredStops = [busStop];
+
+        this.stopControl.get('id').setValue(busStop.id);
+        this.stopControl.get('name').setValue(busStop.name);
+        this.stopControl.get('lon').setValue(busStop.lon);
+        this.stopControl.get('lat').setValue(busStop.lat);
+    }
+
+    compareBusStops = (a: Stop, b: Stop) => a && b ? a.id === b.id : a === b;
 
 }
