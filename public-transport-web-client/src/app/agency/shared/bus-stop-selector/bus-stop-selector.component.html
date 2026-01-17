@@ -1,6 +1,7 @@
-<label class="sm:max-w-full xl:max-w-96 w-full">
+<div class="sm:max-w-full xl:max-w-96 w-full">
     <mat-form-field appearance="outline" class="w-full custom-form-field">
         <mat-label>Przystanek początkowy</mat-label>
+
         <div matPrefix class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6 mx-2">
             <fa-icon [icon]="faBus"></fa-icon>
         </div>
@@ -26,11 +27,12 @@
         </mat-select>
 
         <button matSuffix
-           (click)="openDialog()"
-           (pointerdown)="$event.preventDefault(); $event.stopPropagation()"
-           class="shrink-0 select-none text-base text-gray-800 sm:text-sm/6 mx-2">
+                type="button"
+                (click)="openDialog($event)"
+                (pointerdown)="stopPropagation($event)"
+                class="shrink-0 select-none text-base text-gray-600 sm:text-sm/6 mx-2">
             <span>Wybierz z mapy&nbsp;</span>
             <fa-icon [icon]="faMap"></fa-icon>
         </button>
     </mat-form-field>
-</label>
+</div>

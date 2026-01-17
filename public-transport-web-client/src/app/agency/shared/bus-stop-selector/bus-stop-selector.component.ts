@@ -10,6 +10,8 @@ import {BusStopModalSelectorComponent} from "../bus-stop-modal-selector/bus-stop
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {debounceTime, distinctUntilChanged, map, Observable, of, startWith} from "rxjs";
 import {switchMap} from "rxjs/operators";
+import {DomEvent} from "leaflet";
+import stopPropagation = DomEvent.stopPropagation;
 
 export interface BusStopSelectorData {
     stopId: number;
@@ -71,7 +73,9 @@ export class BusStopSelectorComponent implements OnInit {
         }
     }
 
-    openDialog(): void {
+    openDialog($event: MouseEvent): void {
+        stopPropagation($event);
+
         const busStopSelectedData: BusStopSelectorData = {} as BusStopSelectorData;
         busStopSelectedData.stopId = this.stopControl.get('id')?.value;
         busStopSelectedData.stopName = this.stopControl.get('name')?.value;
@@ -109,6 +113,10 @@ export class BusStopSelectorComponent implements OnInit {
         this.stopControl.get('name').setValue(busStop.name);
         this.stopControl.get('lon').setValue(busStop.lon);
         this.stopControl.get('lat').setValue(busStop.lat);
+    }
+
+    public stopPropagation($event: MouseEvent): void {
+        $event.stopPropagation();
     }
 
     compareBusStops = (a: Stop, b: Stop) => a && b ? a.id === b.id : a === b;
