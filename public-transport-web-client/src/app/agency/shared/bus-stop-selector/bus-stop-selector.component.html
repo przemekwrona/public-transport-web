@@ -1,38 +1,40 @@
-<div class="sm:max-w-full xl:max-w-96 w-full">
-    <mat-form-field appearance="outline" class="w-full custom-form-field">
-        <mat-label>Przystanek początkowy</mat-label>
+<mat-form-field appearance="outline" class="w-full custom-form-field">
+    <mat-label>{{ placeholderLabel }}</mat-label>
 
-        <div matPrefix class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6 mx-2">
-            <fa-icon [icon]="faBus"></fa-icon>
-        </div>
+    <div matPrefix class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6 mx-2">
+        <fa-icon [icon]="faBus"></fa-icon>
+    </div>
 
-        <mat-select [formControl]="stopIdControl"
-                    [compareWith]="compareBusStops"
-                    class="busstop-select"
-                    placeholder="Numer i nazwa lini">
-            <mat-option>
-                <ngx-mat-select-search [formControl]="searchStopControl"
-                                       [placeholderLabel]="'Nazwa przystanku autobusowego'"
-                                       [noEntriesFoundLabel]="'Wpisz co najmniej 3 znaki'">
-                </ngx-mat-select-search>
+    <mat-select [formControl]="stopIdControl"
+                [compareWith]="compareBusStops"
+                class="busstop-select"
+                placeholder="Numer i nazwa lini">
+        <mat-option>
+            <ngx-mat-select-search [formControl]="searchStopControl"
+                                   [placeholderLabel]="'Nazwa przystanku autobusowego'"
+                                   [noEntriesFoundLabel]="'Wpisz co najmniej 3 znaki'">
+            </ngx-mat-select-search>
+        </mat-option>
+
+        @for (busStop of filteredStops; track busStop) {
+            <mat-option [value]="busStop.id" (click)="onClickStop(busStop)">
+                <div class="my-2">
+                    {{ busStop.name }}
+                </div>
             </mat-option>
+        }
+    </mat-select>
 
-            @for (busStop of filteredStops; track busStop) {
-                <mat-option [value]="busStop.id" (click)="onClickStop(busStop)">
-                    <div class="my-2">
-                        {{ busStop.name }}
-                    </div>
-                </mat-option>
-            }
-        </mat-select>
+    <button matSuffix
+            type="button"
+            (click)="openDialog($event)"
+            (pointerdown)="stopPropagation($event)"
+            class="shrink-0 select-none text-base text-gray-600 sm:text-sm/6 mx-2">
+        <span>Wybierz z mapy&nbsp;</span>
+        <fa-icon [icon]="faMap"></fa-icon>
+    </button>
 
-        <button matSuffix
-                type="button"
-                (click)="openDialog($event)"
-                (pointerdown)="stopPropagation($event)"
-                class="shrink-0 select-none text-base text-gray-600 sm:text-sm/6 mx-2">
-            <span>Wybierz z mapy&nbsp;</span>
-            <fa-icon [icon]="faMap"></fa-icon>
-        </button>
-    </mat-form-field>
-</div>
+    @if (stopIdControl.hasError('required')) {
+        <mat-error>Wprowadź nazwę przystanku</mat-error>
+    }
+</mat-form-field>
