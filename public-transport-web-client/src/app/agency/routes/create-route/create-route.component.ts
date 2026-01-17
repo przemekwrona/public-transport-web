@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {
     AgencyAddress,
     ModificationRouteResponse,
-    Route,
-    RouteService
+    Route, RouteId,
+    RouteService, Stop
 } from "../../../generated/public-transport-api";
 import {Router} from "@angular/router";
 import {NotificationService} from "../../../shared/notification.service";
@@ -89,16 +89,36 @@ export class CreateRouteComponent implements OnInit {
 
     public createRouteAndNavigateToCreateNewTrip(): void {
         this.isSubmitted = true;
+
         if (this.modelForm.invalid) {
             return;
         }
 
-        this.routeService.createRoute(this.agencyStorageService.getInstance(), this.route).subscribe((response: ModificationRouteResponse) => {
+        const routeId: RouteId = {};
+        routeId.line = this.modelForm.get("line").value;
+        routeId.name = this.modelForm.get("name").value;
+        routeId.version = null;
+
+        const originStop: Stop = {};
+        originStop.id = this.originControl.get('id').value;
+
+        const destinationStop: Stop = {};
+        destinationStop.id = this.destinationControl.get('id').value;
+
+        const createRouteRequest: Route = {};
+        createRouteRequest.routeId = routeId;
+        createRouteRequest.active = this.modelForm.get("active").value;
+        createRouteRequest.google = this.modelForm.get("google").value;
+        createRouteRequest.originStop = originStop;
+        createRouteRequest.destinationStop = destinationStop;
+
+        this.routeService.createRoute(this.agencyStorageService.getInstance(), createRouteRequest).subscribe((response: ModificationRouteResponse) => {
             this.notificationService.showSuccess(`Linia ${this.route.routeId.line} (${this.route.routeId.name}) została pomyślnie utworzona`);
             this._router.navigate(['/agency/trips/create'], {
                 queryParams: {
                     line: response.routeId.line,
-                    name: response.routeId.name
+                    name: response.routeId.name,
+                    version: response.routeId.version
                 }
             }).then();
         });
