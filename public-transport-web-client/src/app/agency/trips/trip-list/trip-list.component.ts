@@ -1,9 +1,8 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Data, Params, Router, RouterModule} from "@angular/router";
 import {
     Route, RouteDetails,
     RouteId, RouteService, Stop,
-    Trip,
     TripId,
     TripService,
     UpdateRouteRequest
@@ -16,12 +15,12 @@ import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
-import moment from "moment";
 import {
     BusStopData,
     BusStopModalSelectorComponent, BusStopSelectorConfig, BusStopSelectorData
 } from "../../shared/bus-stop-modal-selector/bus-stop-modal-selector.component";
 import {MatDialog} from "@angular/material/dialog";
+import {TripItemComponent} from "./trip-item/trip-item.component";
 
 @Component({
     standalone: true,
@@ -33,7 +32,8 @@ import {MatDialog} from "@angular/material/dialog";
         RouterModule,
         FormsModule,
         FaIconComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        TripItemComponent
     ],
     providers: [
         TripService,
@@ -71,30 +71,6 @@ export class TripListComponent implements OnInit {
 
     public createTrip() {
         this._router.navigate(['/agency/trips/create'], {queryParams: this.state});
-    }
-
-    public editTrip(trip: Trip) {
-        const queryParams = {
-            name: this.state.name,
-            line: this.state.line,
-            version: this.state.version,
-            variant: trip.variant,
-            mode: trip.mode,
-            trafficMode: trip.trafficMode
-        };
-        this._router.navigate(['/agency/trips/edit'], {queryParams: queryParams});
-    }
-
-    public deleteTrip(trip: Trip) {
-        const tripId: TripId = {
-            routeId: {line: trip.line, name: trip.name},
-            variantName: trip.variant,
-            variantMode: trip.mode,
-            trafficMode: trip.trafficMode
-        } as TripId;
-        this.tripService.deleteTripByTripId(this.agencyStorageService.getInstance(), tripId).subscribe(response => {
-            remove(this.trips.trips, {line: trip.line, name: trip.name, variant: trip.variant, mode: trip.mode})
-        });
     }
 
     public hasVariants(): boolean {
@@ -150,16 +126,6 @@ export class TripListComponent implements OnInit {
         }
     }
 
-    public isCreatedOrUpdated(trip: Trip): boolean {
-        const twoMinutesAgo = moment().subtract(1, 'minute');
-        return moment(trip.createdAt).isAfter(twoMinutesAgo)
-            || moment(trip.updatedAt).isAfter(twoMinutesAgo)
-    }
-
-    public isEmpty(value: string | null): boolean {
-        return [null, undefined, ''].includes(value)
-    }
-
     public mapPreview(stop: Stop): void {
         const busStopData: BusStopData = {} as BusStopData;
         busStopData.stopId = stop.id;
@@ -181,6 +147,9 @@ export class TripListComponent implements OnInit {
             height: '70%',
             data: busStopSelectorData
         });
+    }
 
+    public onDelete($event: TripId): void {
+        remove(this.trips.trips, {line: $event.routeId.line, name: $event.routeId.name, variant: $event.variantName ,mode: $event.variantMode, trafficMode: $event.trafficMode});
     }
 }
