@@ -119,6 +119,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return this.modelForm.get('stops') as FormArray;
     }
 
+    constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
+        this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
+    }
+
     createStop(stop: Stop): FormGroup {
         const stopControl: FormGroup = this.formBuilder.group({
             id: [stop.id],
@@ -158,10 +162,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
         this.appendValueChangesOnCustomizedMinutes(stopControl);
         return stopControl;
-    }
-
-    constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
-        this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
     ngOnInit(): void {
@@ -399,6 +399,48 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             return
         }
 
+        this.measureDistance().subscribe(success => {
+            this.forceRefreshSubject.next(false);
+            const tripDetailsRequest: UpdateTripDetailsRequest = this.buildCreateOrUpdateTripRequest();
+
+            if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
+                this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
+                    next: () => {
+                        this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została utworzona`);
+                        this.router.navigate(['/agency/trips'], {
+                            queryParams: {
+                                line: this.state.line,
+                                name: this.state.name
+                            }
+                        }).then();
+                    },
+                    error: (response: HttpErrorResponse) => {
+                        const payload: ErrorResponse = response.error;
+                        this.notificationService.showError(`${payload.errorCode}`);
+                    }
+                });
+            } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
+                this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
+                    next: () => {
+                        this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została zaktualizowana`);
+                        this.router.navigate(['/agency/trips'], {
+                            queryParams: {
+                                line: this.state.line,
+                                name: this.state.name,
+                                version: this.state.version
+                            }
+                        }).then();
+                    },
+                    error: (response: HttpErrorResponse) => {
+                        const payload: ErrorResponse = response.error;
+                        console.log(payload);
+                    }
+                });
+            }
+        });
+    }
+
+    private buildCreateOrUpdateTripRequest() {
         const routeId: RouteId = {};
         routeId.name = this.state.name;
         routeId.line = this.state.line;
@@ -451,42 +493,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             return stopTime;
         });
         tripDetailsRequest.body.geometry = this.geometry;
-
-        if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
-            this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
-                next: () => {
-                    this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została utworzona`);
-                    this.router.navigate(['/agency/trips'], {
-                        queryParams: {
-                            line: this.state.line,
-                            name: this.state.name
-                        }
-                    }).then();
-                },
-                error: (response: HttpErrorResponse) => {
-                    const payload: ErrorResponse = response.error;
-                    this.notificationService.showError(`${payload.errorCode}`);
-                }
-            });
-        } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
-            this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
-                next: () => {
-                    this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została zaktualizowana`);
-                    this.router.navigate(['/agency/trips'], {
-                        queryParams: {
-                            line: this.state.line,
-                            name: this.state.name,
-                            version: this.state.version
-                        }
-                    }).then();
-                },
-                error: (response: HttpErrorResponse) => {
-                    const payload: ErrorResponse = response.error;
-                    console.log(payload);
-                }
-            });
-        }
-
+        return tripDetailsRequest;
     }
 
     public drawPolyline(geometry: Point2D[]) {
@@ -518,8 +525,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.forceRefreshIn10seconds();
     }
 
-    public measureDistance(): void {
-        this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest()).subscribe(response => {
+    public measureDistance(): Observable<TripMeasure> {
+        const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest());
+        refreshedStops.subscribe(response => {
             this.stops.controls.forEach((formGroup: FormGroup, index: number) => {
                 const stopResponse: StopTime = response.stops[index];
                 if (!stopResponse) return;
@@ -534,6 +542,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.geometry = response.geometry;
         });
 
+        return refreshedStops;
     }
 
     public onCommunicationVelocityChange(value: number): void {
