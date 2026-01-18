@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, inject, model} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {BusStopSelectorData} from "../bus-stop-selector/bus-stop-selector.component";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
 import * as L from "leaflet";
 import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport-api";
@@ -8,6 +7,24 @@ import {find} from "lodash";
 
 interface StopMarker extends L.Marker {
     id: number;
+}
+
+export interface BusStopData {
+    stopId: number;
+    stopName: string;
+    stopLon: number;
+    stopLat: number;
+}
+
+export interface BusStopSelectorConfig {
+    showTitle: boolean | null;
+    scrollable: boolean | null;
+    fullScreen: boolean | null;
+}
+
+export interface BusStopSelectorData {
+    busStop: BusStopData;
+    config: BusStopSelectorConfig | null;
 }
 
 @Component({
@@ -22,9 +39,10 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
     });
 
     readonly dialogRef = inject(MatDialogRef<BusStopModalSelectorComponent>);
-    readonly data = inject<BusStopSelectorData>(MAT_DIALOG_DATA);
-    readonly stopId = model(this.data.stopId);
-    readonly stopName = model(this.data.stopName);
+    readonly data: BusStopSelectorData = inject<BusStopSelectorData>(MAT_DIALOG_DATA);
+    readonly stopId = model(this.data.busStop.stopId);
+    readonly stopName = model(this.data.busStop.stopName);
+    readonly config = model(this.data.config);
 
     private map: Map;
     private stopMarkers: Marker[] = [];
@@ -63,7 +81,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
                 stopMarkers.forEach(marker => marker.on('click', (event: LeafletMouseEvent) => {
                     const lastClickedStop: Stop = find(this.stops, {id: event.target.id});
 
-                    const selectedStop: BusStopSelectorData = {} as BusStopSelectorData;
+                    const selectedStop: BusStopData = {} as BusStopData;
                     selectedStop.stopId = lastClickedStop.id;
                     selectedStop.stopName = lastClickedStop.name;
                     selectedStop.stopLat = lastClickedStop.lat;
@@ -90,7 +108,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
 
     private initMap(): Map {
         const map: Map = L.map('map-stops', {
-            center: [this.data.stopLat || 52.2321, this.data.stopLon || 20.0559],
+            center: [this.data.busStop.stopLat || 52.2321, this.data.busStop.stopLon || 20.0559],
             // center: [52.2321, 20.0559],
             // zoom: 7,
             zoom: 17,
@@ -110,7 +128,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
         return map;
     }
 
-    closeModal(selectedStop: BusStopSelectorData) {
+    closeModal(selectedStop: BusStopData) {
         this.dialogRef.close(selectedStop);
     }
 
