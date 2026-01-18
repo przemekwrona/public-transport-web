@@ -6,19 +6,16 @@ import {
 import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport-api";
 import {faMap, faBus, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {MatDialog} from "@angular/material/dialog";
-import {BusStopModalSelectorComponent} from "../bus-stop-modal-selector/bus-stop-modal-selector.component";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {debounceTime, distinctUntilChanged, map, Observable, of, startWith} from "rxjs";
 import {switchMap} from "rxjs/operators";
 import {DomEvent} from "leaflet";
 import stopPropagation = DomEvent.stopPropagation;
-
-export interface BusStopSelectorData {
-    stopId: number;
-    stopName: string;
-    stopLon: number;
-    stopLat: number;
-}
+import {
+    BusStopData,
+    BusStopModalSelectorComponent,
+    BusStopSelectorData
+} from "../bus-stop-modal-selector/bus-stop-modal-selector.component";
 
 @Component({
     selector: 'app-bus-stop-selector',
@@ -65,19 +62,22 @@ export class BusStopSelectorComponent implements OnInit {
     openDialog($event: MouseEvent): void {
         stopPropagation($event);
 
-        const busStopSelectedData: BusStopSelectorData = {} as BusStopSelectorData;
-        busStopSelectedData.stopId = this.stopControl.get('id')?.value;
-        busStopSelectedData.stopName = this.stopControl.get('name')?.value;
-        busStopSelectedData.stopLon = this.stopControl.get('lon')?.value;
-        busStopSelectedData.stopLat = this.stopControl.get('lat')?.value;
+        const busStop: BusStopData = {} as BusStopData;
+        busStop.stopId = this.stopControl.get('id')?.value;
+        busStop.stopName = this.stopControl.get('name')?.value;
+        busStop.stopLon = this.stopControl.get('lon')?.value;
+        busStop.stopLat = this.stopControl.get('lat')?.value;
+
+        const busStopSelectorData: BusStopSelectorData = {} as BusStopSelectorData;
+        busStopSelectorData.busStop = busStop;
 
         const dialogRef = this.dialog.open(BusStopModalSelectorComponent, {
             width: '90%',
             height: '70%',
-            data: busStopSelectedData,
+            data: busStopSelectorData,
         });
 
-        dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopSelectorData | undefined) => {
+        dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopData | undefined) => {
             if (busStopSelectorData !== undefined) {
                 const stop: Stop = {};
                 stop.id = busStopSelectorData.stopId;

@@ -25,7 +25,6 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {debounceTime, map, Observable, pairwise, startWith, Subject} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {ViewportScroller} from "@angular/common";
-import {BusStopSelectorData} from "../../shared/bus-stop-selector/bus-stop-selector.component";
 import {MatDialog} from "@angular/material/dialog";
 import {
     BusStopModalEditorComponent,
@@ -37,6 +36,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {TripIdExistenceValidator} from "./trip-id-existence/trip-id-existence.service";
 import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
+import {BusStopData} from "../../shared/bus-stop-modal-selector/bus-stop-modal-selector.component";
 
 @Component({
     selector: 'app-trip-editor',
@@ -599,7 +599,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             data: data,
         });
 
-        dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopSelectorData | undefined) => {
+        dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopData | undefined) => {
             if (busStopSelectorData !== undefined) {
                 const stopTimeControl: FormGroup = this.stops.controls.find((formGroup: FormGroup) => formGroup.controls["id"].value === busStopSelectorData.stopId)
                 stopTimeControl.controls["name"].setValue(busStopSelectorData.stopName);
