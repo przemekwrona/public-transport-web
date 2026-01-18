@@ -2,8 +2,8 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Data, Params, Router, RouterModule} from "@angular/router";
 import {
     Route, RouteDetails,
-    RouteId, RouteService, Stop,
-    TripId,
+    RouteId, RouteService, Stop, Trip,
+    TripId, TripMode,
     TripService,
     UpdateRouteRequest
 } from "../../../generated/public-transport-api";
@@ -151,5 +151,13 @@ export class TripListComponent implements OnInit {
 
     public onDelete($event: TripId): void {
         remove(this.trips.trips, {line: $event.routeId.line, name: $event.routeId.name, variant: $event.variantName ,mode: $event.variantMode, trafficMode: $event.trafficMode});
+    }
+
+    public findTripsWithDirectionFront(): Trip[] {
+        return this.trips.trips.filter(trip => trip.mode === TripMode.Front);
+    }
+
+    public findTripsWithDirectionBack(): Trip[] {
+        return this.trips.trips.filter(trip => trip.mode === TripMode.Back);
     }
 }

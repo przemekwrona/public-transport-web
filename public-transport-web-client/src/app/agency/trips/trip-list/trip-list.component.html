@@ -200,8 +200,20 @@
                                class="btn btn-sm btn-primary">{{ 'agency.trip.addNewVariant' | transloco }}</a>
                         </div>
                     </div>
+
+                    <div class="card-body lg:py-5 grid gap-2.5 lg:gap-2.5">
+                        <strong class="text-sm">TAM</strong>
+                        @for (trip of findTripsWithDirectionFront(); track trip) {
+                            <app-trip-item [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
+                        }
+                        <p class="text-2sm text-gray-800"></p>
+                    </div>
+
+
                     <div class="card-body lg:py-7.5 grid gap-5 lg:gap-5">
-                        @for (trip of trips?.trips; track trip) {
+                        <strong class="text-sm">POWRÓT</strong>
+
+                        @for (trip of findTripsWithDirectionBack(); track trip) {
                             <app-trip-item [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
                         }
                         <p class="text-2sm text-gray-800"></p>
