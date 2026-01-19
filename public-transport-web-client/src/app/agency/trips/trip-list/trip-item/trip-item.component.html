@@ -23,12 +23,17 @@
                 <a (click)="editTrip(trip)"
                    class="text-base font-medium text-gray-900 hover:text-primary-active">
                     {{ trip.origin }} - {{ trip.destination }}
+
+                    @if (trip.trafficMode === TrafficMode.Normal) {
+                        <img alt="" class="inline w-4" src="assets/media/svg/bus-svgrepo-com.svg"/>
+                    } @else if (trip.trafficMode === TrafficMode.Normal) {
+                        <img alt="" class="inline w-6" src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
+                    }
                 </a>
             </div>
             @if (trip.isMainVariant) {
                 <div class="form-info text-gray-800 font-normal">
                     {{ 'agency.trip.mainVariant' | transloco }}
-                    ({{ 'agency.trip.' + trip.mode | transloco }})
                 </div>
             } @else {
                 <div class="form-info text-gray-800 font-normal">
@@ -40,10 +45,10 @@
                 <span class="text-2sm text-danger">Nie można usunąć. Trasa jest przypisane do brygady</span>
             }
 
-<!--            <div class="form-info text-gray-800 font-normal">-->
-<!--                Utworzono: {{ trip?.createdAt | date }}-->
-<!--                Aktualizacja: {{ trip?.updatedAt | date }}-->
-<!--            </div>-->
+            <!--            <div class="form-info text-gray-800 font-normal">-->
+            <!--                Utworzono: {{ trip?.createdAt | date }}-->
+            <!--                Aktualizacja: {{ trip?.updatedAt | date }}-->
+            <!--            </div>-->
         </div>
     </div>
 
