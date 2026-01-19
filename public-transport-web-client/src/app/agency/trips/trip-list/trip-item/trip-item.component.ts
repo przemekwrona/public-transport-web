@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from "@angular/common";
-import {Trip, TripId, TripService} from "../../../../generated/public-transport-api";
+import {TrafficMode, Trip, TripId, TripService} from "../../../../generated/public-transport-api";
 import moment from "moment/moment";
 import {TranslocoModule} from "@jsverse/transloco";
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
@@ -60,4 +60,6 @@ export class TripItemComponent {
     public isEmpty(value: string | null): boolean {
         return [null, undefined, ''].includes(value)
     }
+
+    protected readonly TrafficMode = TrafficMode;
 }
