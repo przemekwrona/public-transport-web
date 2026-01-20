@@ -44,21 +44,22 @@ databaseChangeLog:
       id: create-table-timetable-generator-item
       author: pwrona
       changes:
-        - createSequence:
-            sequenceName: timetable_generator_item_id_seq
-            startValue: 1
-            incrementBy: 1
-
         - createTable:
             tableName: timetable_generator_item
             columns:
               - column:
-                  name: timetable_generator_item_id
+                  name: timetable_generator_id
                   type: integer
-                  defaultValueSequenceNext: timetable_generator_item_id_seq
                   constraints:
-                    primaryKey: true
-                    primaryKeyName: pk_timetable_generator_item
+                    foreignKeyName: fk_timetable_generator_item_timetable_generator
+                    references: timetable_generator(timetable_generator_id)
+                    nullable: false
+              - column:
+                  name: service_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_timetable_generator_item_calendar
+                    references: calendar(service_id)
                     nullable: false
               - column:
                   name: front_start_time
@@ -84,17 +85,8 @@ databaseChangeLog:
               - column:
                   name: back_payload
                   type: jsonb
-              - column:
-                  name: service_id
-                  type: integer
-                  constraints:
-                    foreignKeyName: fk_timetable_generator_item_calendar
-                    references: calendar(service_id)
-                    nullable: false
-              - column:
-                  name: timetable_generator_id
-                  type: integer
-                  constraints:
-                    foreignKeyName: fk_timetable_generator_item_timetable_generator
-                    references: timetable_generator(timetable_generator_id)
-                    nullable: false
+
+        - addPrimaryKey:
+            columnNames: timetable_generator_id, service_id
+            constraintName: pk_timetable_generator_item
+            tableName: timetable_generator_item
