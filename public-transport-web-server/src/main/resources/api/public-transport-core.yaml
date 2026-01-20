@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  title: Open Tip Planner API
+  description: Open Tip Planner API
+  version: 1.0.0
+paths:
+components:
+  schemas:
+    RouteId:
+      type: object
+      properties:
+        name:
+          type: string
+        line:
+          type: string
+        version:
+          type: integer
+
+    TrafficMode:
+      type: string
+      enum:
+        - NORMAL
+        - TRAFFIC
+
+    TripMode:
+      type: string
+      enum:
+        - FRONT
+        - BACK
+
+    TripId:
+      type: object
+      properties:
+        routeId:
+          $ref: '#/components/schemas/RouteId'
+        variantName:
+          type: string
+        variantMode:
+          $ref: '#/components/schemas/TripMode'
+        trafficMode:
+          $ref: '#/components/schemas/TrafficMode'
