@@ -6,18 +6,32 @@
                     <h3 class="card-title">Rozkład Jazdy</h3>
                 </div>
 
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">Oznaczenie na rozkładzie</div>
+                <form [formGroup]="modelForm">
+                    <div class="card-body lg:py-7.5 py-5">
+                        <div class="flex flex-wrap justify-between gap-5">
+                            <div class="flex flex-col">
+                                <div class="text-gray-900 text-sm font-medium">Oznaczenie na rozkładzie</div>
+                            </div>
+
+                            <span class="sm:max-w-full xl:min-w-96">
+                                <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                    <mat-label>Oznaczenie na rozkładzie</mat-label>
+
+                                    <div matPrefix
+                                         class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6 mx-2">
+                                        <fa-icon [icon]="faCalendar"></fa-icon>
+                                    </div>
+
+                                    <input type="text" matInput formControlName="designation"
+                                           placeholder="Oznaczenie na rozkładzie jazdy, np. D">
+                                    @if (hasError('designation', 'required')) {
+                                        <mat-error>Oznaczenie na rozkładzie jazdy jest <strong>wymagane</strong></mat-error>
+                                    }
+                                </mat-form-field>
+                            </span>
                         </div>
-                        <label class="input sm:max-w-full xl:max-w-96">
-                            <i class="ki-solid ki-calendar"></i>
-                            <input type="text" [(ngModel)]="calendarBody.designation"
-                                   (ngModelChange)="onChangeDesignation(calendarBody.designation)" placeholder="D"/>
-                        </label>
                     </div>
-                </div>
+                </form>
 
                 <div class="card-body lg:py-7.5 py-5">
                     <div class="flex flex-wrap justify-between gap-5">
@@ -79,44 +93,33 @@
                         </div>
                         <div class="flex flex-row gap-2.5">
                             <label class="checkbox-group">
-                                <input class="checkbox checkbox-sm" type="checkbox" [(ngModel)]="calendarBody.monday"/>
-                                <span class="checkbox-label">Poniedziałek</span>
+                                <mat-checkbox [formControl]="control('monday')">Poniedziałek</mat-checkbox>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
-                                       [(ngModel)]="calendarBody.tuesday"/>
-                                <span class="checkbox-label">Wtorek</span>
+                                <mat-checkbox [formControl]="control('tuesday')">Wtorek</mat-checkbox>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
-                                       [(ngModel)]="calendarBody.wednesday"/>
-                                <span class="checkbox-label">Środa</span>
+                                <mat-checkbox [formControl]="control('wednesday')">Środa</mat-checkbox>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
-                                       [(ngModel)]="calendarBody.thursday"/>
-                                <span class="checkbox-label">Czwartek</span>
+                                <mat-checkbox [formControl]="control('thursday')">Czwartek</mat-checkbox>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
-                                       [(ngModel)]="calendarBody.friday"/>
-                                <span class="checkbox-label">Piątek</span>
+                                <mat-checkbox [formControl]="control('friday')">Piątek</mat-checkbox>
+                            </label>
+                        </div>
+
+                        <div class="flex flex-row gap-2.5">
+                            <label class="checkbox-group">
+                                <mat-checkbox [formControl]="control('saturday')">Sobota</mat-checkbox>
                             </label>
 
                             <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
-                                       [(ngModel)]="calendarBody.saturday"/>
-                                <span class="checkbox-label">Sobota</span>
-                            </label>
-
-                            <label class="checkbox-group">
-                                <input checked="" class="checkbox checkbox-sm" type="checkbox"
-                                       [(ngModel)]="calendarBody.sunday"/>
-                                <span class="checkbox-label">Niedziela</span>
+                                <mat-checkbox [formControl]="control('sunday')">Niedziela</mat-checkbox>
                             </label>
                         </div>
                     </div>
@@ -259,24 +262,80 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr><td class="font-bold py-1.25">A</td><td class="py-1.25">kursuje od poniedziałku do piątku</td></tr>
-                    <tr><td class="font-bold py-1.25">B</td><td class="py-1.25">kursuje od poniedziałku do piątku oraz w niedzielę</td></tr>
-                    <tr><td class="font-bold py-1.25">C</td><td class="py-1.25">kursuje w soboty, niedziele i święta</td></tr>
-                    <tr><td class="font-bold py-1.25">D</td><td class="py-1.25">kursuje od poniedziałku do piątku oprócz świąt</td></tr>
-                    <tr><td class="font-bold py-1.25">E</td><td class="py-1.25">kursuje od poniedziałku do soboty oprócz świąt</td></tr>
-                    <tr><td class="font-bold py-1.25">H</td><td class="py-1.25">kursuje codziennie w okresie ferii letnich i zimowych oraz szkolnych przerw świątecznych</td></tr>
-                    <tr><td class="font-bold py-1.25">L</td><td class="py-1.25">kursuje w okresie ferii letnich</td></tr>
-                    <tr><td class="font-bold py-1.25">S</td><td class="py-1.25">kursuje w dni nauki szkolnej</td></tr>
-                    <tr><td class="font-bold py-1.25">+</td><td class="py-1.25">kursuje w dni wolne od pracy (niedziele i święta)</td></tr>
-                    <tr><td class="font-bold py-1.25">1</td><td class="py-1.25">kursuje w poniedziałki</td></tr>
-                    <tr><td class="font-bold py-1.25">2</td><td class="py-1.25">kursuje w wtorki</td></tr>
-                    <tr><td class="font-bold py-1.25">3</td><td class="py-1.25">kursuje w środy</td></tr>
-                    <tr><td class="font-bold py-1.25">4</td><td class="py-1.25">kursuje w czwartki</td></tr>
-                    <tr><td class="font-bold py-1.25">5</td><td class="py-1.25">kursuje w piątki</td></tr>
-                    <tr><td class="font-bold py-1.25">6</td><td class="py-1.25">kursuje w soboty</td></tr>
-                    <tr><td class="font-bold py-1.25">7</td><td class="py-1.25">kursuje w niedziele</td></tr>
-                    <tr><td class="font-bold py-1.25">1-4</td><td class="py-1.25">kursuje od poniedziałku do czwartku</td></tr>
-                    <tr><td class="font-bold py-1.25">1/2</td><td class="py-1.25">kursuje z poniedziałku na wtorek</td></tr>
+                    <tr>
+                        <td class="font-bold py-1.25">A</td>
+                        <td class="py-1.25">kursuje od poniedziałku do piątku</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">B</td>
+                        <td class="py-1.25">kursuje od poniedziałku do piątku oraz w niedzielę</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">C</td>
+                        <td class="py-1.25">kursuje w soboty, niedziele i święta</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">D</td>
+                        <td class="py-1.25">kursuje od poniedziałku do piątku oprócz świąt</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">E</td>
+                        <td class="py-1.25">kursuje od poniedziałku do soboty oprócz świąt</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">H</td>
+                        <td class="py-1.25">kursuje codziennie w okresie ferii letnich i zimowych oraz szkolnych przerw
+                            świątecznych
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">L</td>
+                        <td class="py-1.25">kursuje w okresie ferii letnich</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">S</td>
+                        <td class="py-1.25">kursuje w dni nauki szkolnej</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">+</td>
+                        <td class="py-1.25">kursuje w dni wolne od pracy (niedziele i święta)</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">1</td>
+                        <td class="py-1.25">kursuje w poniedziałki</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">2</td>
+                        <td class="py-1.25">kursuje w wtorki</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">3</td>
+                        <td class="py-1.25">kursuje w środy</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">4</td>
+                        <td class="py-1.25">kursuje w czwartki</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">5</td>
+                        <td class="py-1.25">kursuje w piątki</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">6</td>
+                        <td class="py-1.25">kursuje w soboty</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">7</td>
+                        <td class="py-1.25">kursuje w niedziele</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">1-4</td>
+                        <td class="py-1.25">kursuje od poniedziałku do czwartku</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1.25">1/2</td>
+                        <td class="py-1.25">kursuje z poniedziałku na wtorek</td>
+                    </tr>
 
                     <tr><td class="font-bold py-1.25">a</td><td class="py-1.25">nie kursuje w pierwszy dzień Świąt Wielkanocnych oraz w dniu 25.XII</td></tr>
                     <tr><td class="font-bold py-1.25">b</td><td class="py-1.25">nie kursuje w dniu 1.I, w pierwszy dzień Świąt Wielkanocnych i w dniu 25.XII</td></tr>
