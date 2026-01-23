@@ -18,6 +18,13 @@ import {BASE_PATH as PDF_BASE_PATH} from "./generated/public-transport-pdf-api";
 import {UserListComponent} from "./agency/user/user-list/user-list.component";
 import {CreateUserComponent} from "./agency/user/create-user/create-user.component";
 import {provideEnvironmentNgxMask} from "ngx-mask";
+import {DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter} from "@angular/material/core";
+
+export class MondayDateAdapter extends NativeDateAdapter {
+    override getFirstDayOfWeek(): number {
+        return 1; // 0 = Sunday, 1 = Monday
+    }
+}
 
 @NgModule({
     imports: [
@@ -43,7 +50,9 @@ import {provideEnvironmentNgxMask} from "ngx-mask";
         {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
         {provide: API_BASE_PATH, useValue: '/api/v1'},
         {provide: PDF_BASE_PATH, useValue: '/api/v1'},
-        provideEnvironmentNgxMask({validation: false})
+        provideEnvironmentNgxMask({validation: false}),
+        {provide: DateAdapter, useClass: MondayDateAdapter},
+        {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'}
     ],
     bootstrap: [
         AppComponent

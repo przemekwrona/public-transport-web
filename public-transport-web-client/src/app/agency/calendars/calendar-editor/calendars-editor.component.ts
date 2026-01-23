@@ -10,6 +10,8 @@ import {
 import {ActivatedRoute} from "@angular/router";
 import {CalendarEditorComponentMode} from "./calendar-editor-component-mode";
 import {LoginService} from "../../../auth/login.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {faCalendar} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-calendars-editor',
@@ -19,8 +21,12 @@ import {LoginService} from "../../../auth/login.service";
 })
 export class CalendarsEditorComponent implements OnInit {
 
+    protected readonly faCalendar = faCalendar;
+
     private componentMode: CalendarEditorComponentMode;
     private queryCalendarName: string = '';
+
+    public modelForm: FormGroup;
 
     public calendarBody: CalendarBody = {};
 
@@ -31,47 +37,74 @@ export class CalendarsEditorComponent implements OnInit {
     public year: number = 2025;
 
     public CALENDAR_SYMBOLS: { [key: string]: string } = {
-        D: 'kursuje od poniedziałku do piątku oprócz świąt',
+        A: 'kursuje od poniedziałku do piątku',
+        B: 'kursuje od poniedziałku do piątku oraz w niedzielę',
         C: 'kursuje w soboty, niedziele i święta',
+        D: 'kursuje od poniedziałku do piątku oprócz świąt',
+        E: 'kursuje od poniedziałku do soboty oprócz świąt',
+        H: 'kursuje codziennie w okresie ferii letnich i zimowych oraz szkolnych przerw świątecznych',
+        L: 'kursuje w okresie ferii letnich',
+        S: 'kursuje w dni nauki szkolnej',
+        1: 'kursuje w poniedziałki',
+        2: 'kursuje w wtorki',
+        3: 'kursuje w środy',
+        4: 'kursuje w czwartki',
+        5: 'kursuje w piątki',
         6: 'kursuje w soboty',
-        7: 'kursuje w niedziele'
+        7: 'kursuje w niedziele',
+        a: 'nie kursuje w pierwszy dzień Świąt Wielkanocnych oraz w dniu 25.XII',
+        b: 'nie kursuje w dniu 1.I, w pierwszy dzień Świąt Wielkanocnych i w dniu 25.XII',
+        c: 'nie kursuje w dniu 1.I, w pierwszy dzień Świąt Wielkanocnych oraz w dniach 25 i 26.XII',
+        d: 'nie kursuje w dniu 1.I, w pierwszy i drugi dzień Świąt Wielkanocnych oraz w dniach 25 i 26.XII',
+        e: 'nie kursuje w okresie ferii letnich',
+        f: 'nie kursuje w okresie ferii letnich i zimowych oraz szkolnych przerw świątecznych',
+        g: 'nie kursuje w dniu 24.XII',
+        h: 'nie kursuje w Wielką Sobotę oraz w dniu 24.XII',
+        i: 'nie kursuje w dniu 26.XII',
+        j: 'nie kursuje w dniu 27.XII',
+        k: 'nie kursuje w drugi dzień Świąt Wielkanocnych oraz w dniu 26.XII',
+        l: 'nie kursuje w dniu 31.XII',
+        m: 'nie kursuje w dniach 24 i 31.XII',
+        n: 'nie kursuje w Wielką Sobotę oraz w dniach 24 i 31.XII'
     }
 
-    constructor(private calendarService: CalendarService, private loginService: LoginService, private _route: ActivatedRoute) {
+    constructor(private calendarService: CalendarService, private loginService: LoginService, private _route: ActivatedRoute, private formBuilder: FormBuilder) {
     }
 
     ngOnInit(): void {
         this._route.data.subscribe(data => this.componentMode = data['mode']);
         this._route.queryParams.subscribe(params => this.queryCalendarName = params['name']);
 
-        this.calendarBody.designation = '';
-        this.calendarBody.description = '';
-        this.calendarBody.startDate = '2025-03-10';
-        this.calendarBody.endDate = '2025-03-10';
+        this.modelForm = this.formBuilder.group({
+            designation: ['', [Validators.required]],
+            description: ['', [Validators.required]],
+            startDate: [moment().startOf('day').toDate(), [Validators.required]],
+            endDate: [moment().endOf('year').toDate(), [Validators.required]],
+            monday: [false],
+            tuesday: [false],
+            wednesday: [false],
+            thursday: [false],
+            friday: [false],
+            saturday: [false],
+            sunday: [false]
+        })
 
-        this.calendarBody.monday = false;
-        this.calendarBody.tuesday = false;
-        this.calendarBody.wednesday = false;
-        this.calendarBody.thursday = false;
-        this.calendarBody.friday = false;
-        this.calendarBody.saturday = false;
-        this.calendarBody.sunday = false;
+        this.modelForm.get('designation').valueChanges.subscribe((value: string) => this.onChangeDesignation(value))
 
         this._route.data.subscribe(data => {
             const calendar: CalendarBody = data['calendar'];
-            this.calendarBody.calendarName = calendar.calendarName;
-            this.calendarBody.designation = calendar.designation;
-            this.calendarBody.description = calendar.description;
-            this.calendarBody.startDate = calendar.startDate;
-            this.calendarBody.endDate = calendar.endDate;
+            this.modelForm.get('designation').setValue(calendar.designation);
+            this.modelForm.get('description').setValue(calendar.description);
+            this.modelForm.get('startDate').setValue(calendar.startDate);
+            this.modelForm.get('endDate').setValue(calendar.endDate);
 
-            this.calendarBody.monday = calendar.monday;
-            this.calendarBody.tuesday = calendar.tuesday;
-            this.calendarBody.wednesday = calendar.wednesday;
-            this.calendarBody.thursday = calendar.thursday;
-            this.calendarBody.friday = calendar.friday;
-            this.calendarBody.saturday = calendar.saturday;
-            this.calendarBody.sunday = calendar.sunday;
+            this.modelForm.get('monday').setValue(calendar.monday);
+            this.modelForm.get('tuesday').setValue(calendar.tuesday);
+            this.modelForm.get('wednesday').setValue(calendar.wednesday);
+            this.modelForm.get('thursday').setValue(calendar.thursday);
+            this.modelForm.get('friday').setValue(calendar.friday);
+            this.modelForm.get('saturday').setValue(calendar.saturday);
+            this.modelForm.get('sunday').setValue(calendar.sunday);
 
             this.includeDays = new Set(calendar.included)
             this.excludeDays = new Set(calendar.excluded)
@@ -80,32 +113,32 @@ export class CalendarsEditorComponent implements OnInit {
 
     public onChangeDesignation(changedDesignation: string): void {
         if (changedDesignation.length > 0) {
-            this.calendarBody.description = this.CALENDAR_SYMBOLS[changedDesignation];
+            this.modelForm.get('description').setValue(this.CALENDAR_SYMBOLS[changedDesignation]);
         }
     }
 
     public getDays(): number[] {
         const days: number[] = [];
 
-        if (this.calendarBody.monday) {
+        if (this.modelForm.get('monday').value) {
             days.push(1);
         }
-        if (this.calendarBody.tuesday) {
+        if (this.modelForm.get('tuesday').value) {
             days.push(2);
         }
-        if (this.calendarBody.wednesday) {
+        if (this.modelForm.get('wednesday').value) {
             days.push(3);
         }
-        if (this.calendarBody.thursday) {
+        if (this.modelForm.get('thursday').value) {
             days.push(4);
         }
-        if (this.calendarBody.friday) {
+        if (this.modelForm.get('friday').value) {
             days.push(5);
         }
-        if (this.calendarBody.saturday) {
+        if (this.modelForm.get('saturday').value) {
             days.push(6);
         }
-        if (this.calendarBody.sunday) {
+        if (this.modelForm.get('sunday').value) {
             days.push(0);
         }
         return days;
@@ -174,6 +207,14 @@ export class CalendarsEditorComponent implements OnInit {
 
         this.calendarService.updateCalendar(this.loginService.getInstance(), request).subscribe(status => {
         });
+    }
+
+    public hasError(controlName: string, error: string): boolean {
+        return this.modelForm.get(controlName).hasError(error);
+    }
+
+    public control(controlName: string): FormControl {
+        return this.modelForm.get(controlName) as FormControl;
     }
 
 }
