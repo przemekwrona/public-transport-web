@@ -36,7 +36,8 @@ export class CalendarsEditorComponent implements OnInit {
     public days: number[] = [];
     public year: number = 2025;
 
-    public presentendMonths: Date[] = [];
+    public presentedMonths: Date[] = [];
+    public weekdays: number[] = [];
 
     public CALENDAR_SYMBOLS: { [key: string]: string } = {
         A: 'kursuje od poniedziałku do piątku',
@@ -95,6 +96,14 @@ export class CalendarsEditorComponent implements OnInit {
         this.modelForm.get('startDate').valueChanges.subscribe((value: Date) => this.onChangeStartDate(value))
         this.modelForm.get('endDate').valueChanges.subscribe((value: Date) => this.onChangeEndtDate(value))
 
+        this.modelForm.get('monday').valueChanges.subscribe((selected: boolean) => this.onChangeDateOfWeek(selected, 1))
+        this.modelForm.get('tuesday').valueChanges.subscribe((selected: boolean) => this.onChangeDateOfWeek(selected, 2))
+        this.modelForm.get('wednesday').valueChanges.subscribe((selected: boolean) => this.onChangeDateOfWeek(selected, 3))
+        this.modelForm.get('thursday').valueChanges.subscribe((selected: boolean) => this.onChangeDateOfWeek(selected, 4))
+        this.modelForm.get('friday').valueChanges.subscribe((selected: boolean) => this.onChangeDateOfWeek(selected, 5))
+        this.modelForm.get('saturday').valueChanges.subscribe((selected: boolean) => this.onChangeDateOfWeek(selected, 6))
+        this.modelForm.get('sunday').valueChanges.subscribe((selected: boolean) => this.onChangeDateOfWeek(selected, 7))
+
         this._route.data.subscribe(data => {
             const calendar: CalendarBody = data['calendar'];
             this.modelForm.get('designation').setValue(calendar.designation);
@@ -123,12 +132,18 @@ export class CalendarsEditorComponent implements OnInit {
 
     public onChangeStartDate(startDate: Date): void {
         const endDate: Date = this.modelForm.get('endDate').value as Date;
-        this.presentendMonths = this.getRangeCalendars(startDate, endDate);
+        this.presentedMonths = this.getRangeCalendars(startDate, endDate);
     }
 
     public onChangeEndtDate(endDate: Date): void {
         const startDate: Date = this.modelForm.get('startDate').value as Date;
-        this.presentendMonths = this.getRangeCalendars(startDate, endDate);
+        this.presentedMonths = this.getRangeCalendars(startDate, endDate);
+    }
+
+    public onChangeDateOfWeek(selected: boolean, numberOfDay: number) {
+        this.weekdays = selected
+            ? [...new Set([...this.weekdays, numberOfDay])]
+            : this.weekdays.filter(day => day !== numberOfDay);
     }
 
     private getRangeCalendars(startDate: Date, endDate: Date): Date[] {
@@ -145,34 +160,7 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public getYearsOfPresentedMonths(): number[] {
-        return uniq(this.presentendMonths.map((presentedDate: Date): number => presentedDate.getFullYear()));
-    }
-
-    public getDays(): number[] {
-        const days: number[] = [];
-
-        if (this.modelForm.get('monday').value) {
-            days.push(1);
-        }
-        if (this.modelForm.get('tuesday').value) {
-            days.push(2);
-        }
-        if (this.modelForm.get('wednesday').value) {
-            days.push(3);
-        }
-        if (this.modelForm.get('thursday').value) {
-            days.push(4);
-        }
-        if (this.modelForm.get('friday').value) {
-            days.push(5);
-        }
-        if (this.modelForm.get('saturday').value) {
-            days.push(6);
-        }
-        if (this.modelForm.get('sunday').value) {
-            days.push(0);
-        }
-        return days;
+        return uniq(this.presentedMonths.map((presentedDate: Date): number => presentedDate.getFullYear()));
     }
 
     public getIncludeDays(): string[] {

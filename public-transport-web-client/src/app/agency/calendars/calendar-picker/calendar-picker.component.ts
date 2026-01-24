@@ -88,8 +88,6 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
         }
         this.selectedMonth = moment(`${this.year}-${this.month}-01`, 'YYYY-MM-DD');
         this.selectedMonthDate = this.selectedMonth.toDate();
-
-        console.log(this.includeDays);
     }
 
     public handleDay(day: moment.Moment): void {
@@ -133,6 +131,11 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
                 }
             }
         }
+
+
+        if (!changes['weekdays'].firstChange) {
+            this.calendar.updateTodaysDate();
+        }
     }
 
     public selectedChange($event: Date) {
@@ -141,7 +144,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     }
 
     dateClass: (date: Date) => string | string[] = (date: Date): string | string[] => {
-        const formattedDay = moment(date).format('yyyy-MM-DD');
+        const formattedDay: string = moment(date).format('yyyy-MM-DD');
         if (this.weekdays.includes(date.getDay())) {
             if (this.excludeDays.has(formattedDay)) {
                 return ['has-week-day', 'has-excluded-day'];
