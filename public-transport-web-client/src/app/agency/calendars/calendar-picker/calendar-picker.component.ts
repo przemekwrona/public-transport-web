@@ -13,32 +13,6 @@ import {MatCalendar, MatDatepickerModule} from "@angular/material/datepicker";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 
-class DateManager {
-
-    private included: Date[];
-    private excluded: Date[];
-
-    constructor() {
-    }
-
-    isIncluded(date: Date): boolean {
-        return this.included.includes(date);
-    }
-
-    isExcluded(date: Date): boolean {
-        return this.excluded.includes(date);
-    }
-
-    handelDate(date: Date) {
-        if (this.isIncluded(date)) {
-            const index: number = this.included.indexOf(date);
-            if (index > -1) {
-                this.included.splice(index, 1);
-            }
-        }
-    }
-}
-
 @Component({
     imports: [
         MatFormFieldModule,
@@ -61,23 +35,14 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
     @Input() public weekdays: number[] = []
 
-    @Input() public includeDays: Set<string> = new Set<string>();
-    @Input() public excludeDays: Set<string> = new Set<string>();
+    @Input() public includeDays: Date[] = [];
+    @Output() public includeDaysChange: EventEmitter<Date[]> = new EventEmitter<Date[]>();
 
-    @Output() public includeDaysChange: EventEmitter<Set<string>> = new EventEmitter<Set<string>>();
-    @Output() public excludeDaysChange: EventEmitter<Set<string>> = new EventEmitter<Set<string>>();
+    @Input() public excludeDays: Date[] = [];
+    @Output() public excludeDaysChange: EventEmitter<Date[]> = new EventEmitter<Date[]>();
 
     public selectedMonth: moment.Moment;
     public selectedMonthDate!: Date;
-
-    private dateManager: DateManager = new DateManager();
-
-    public holidays: string[] = ['01-01', '01-06', '12-24',
-        '04-20', '04-21',
-        '05-01', '05-03',
-        '06-19',
-        '11-01', '11-11',
-        '12-25', '12-26'];
 
     ngOnInit(): void {
         if (this.year == null) {
@@ -90,74 +55,60 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
         this.selectedMonthDate = this.selectedMonth.toDate();
     }
 
-    public handleDay(day: moment.Moment): void {
-        const value: string = day.format('YYYY-MM-DD');
-        if (this.weekdays.includes(day.weekday())) {
-            if (this.excludeDays.has(value)) {
-                this.excludeDays.delete(value);
+    public handleDay(day: Date): void {
+
+        if (this.weekdays.includes(day.getDay())) {
+            const index: number = this.excludeDays.findIndex(d => this.sameDay(d, day));
+            if (index > -1) {
+                this.excludeDays.splice(index, 1); // remove
             } else {
-                this.excludeDays.add(value);
+                this.excludeDays.push(day); // add
             }
             this.excludeDaysChange.emit(this.excludeDays);
         } else {
-            if (this.singleSelection) {
-                this.includeDays.clear();
-                this.includeDays.add(value);
+            const index: number = this.includeDays.findIndex(d => this.sameDay(d, day));
+            if (index > -1) {
+                this.includeDays.splice(index, 1);
             } else {
-                if (this.includeDays.has(value)) {
-                    this.includeDays.delete(value);
-                } else {
-                    this.includeDays.add(value);
-                }
+                this.includeDays.push(day);
             }
-
-            this.includeDaysChange.emit(this.includeDays);
+            this.includeDaysChange.emit(this.excludeDays);
         }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['weekdays']?.currentValue) {
-            for (let includedDay of this.includeDays.values()) {
-                const day: moment.Moment = moment(includedDay);
-                if (this.weekdays.includes(day.weekday())) {
-                    this.includeDays.delete(includedDay);
-                }
-            }
-
-            for (let excludeDay of this.excludeDays.values()) {
-                const day: moment.Moment = moment(excludeDay);
-                if (!this.weekdays.includes(day.weekday())) {
-                    this.excludeDays.delete(excludeDay);
-                }
-            }
-        }
-
-
         if (!changes['weekdays'].firstChange) {
             this.calendar.updateTodaysDate();
         }
     }
 
     public selectedChange($event: Date) {
-        this.handleDay(moment($event));
+        this.handleDay($event);
         this.calendar.updateTodaysDate();
     }
 
     dateClass: (date: Date) => string | string[] = (date: Date): string | string[] => {
-        const formattedDay: string = moment(date).format('yyyy-MM-DD');
         if (this.weekdays.includes(date.getDay())) {
-            if (this.excludeDays.has(formattedDay)) {
+            const index: number = this.excludeDays.findIndex(d => this.sameDay(d, date));
+            if (index > -1) {
                 return ['has-week-day', 'has-excluded-day'];
             } else {
                 return 'has-week-day';
             }
         } else {
-            if (this.includeDays.has(formattedDay)) {
+            const index: number = this.includeDays.findIndex(d => this.sameDay(d, date));
+            if (index > -1) {
                 return ['has-no-week-day', 'has-included-day']
             } else {
                 return 'has-no-week-day';
             }
         }
     };
+
+    private sameDay(firstDate: Date, secondDate: Date): boolean {
+        return firstDate.getFullYear() === secondDate.getFullYear()
+            && firstDate.getMonth() === secondDate.getMonth()
+            && firstDate.getDate() === secondDate.getDate();
+    }
 
 }
