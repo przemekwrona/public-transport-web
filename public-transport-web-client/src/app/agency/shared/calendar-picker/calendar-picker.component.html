@@ -1,45 +1,11 @@
-<div class="grid grid-cols-7 w-fit" style="">
+<span>
+    <mat-calendar class="max-w-72" [dateClass]="dateClass"
+                  [startAt]="selectedMonthDate"
+                  [minDate]="startDate"
+                  [maxDate]="endDate"
+                  (selectedChange)="selectedChange($event)"></mat-calendar>
 
-    <div (click)="prev()" class="col-span-2 w-fit text-sm text-center p-2"> Prev </div>
-    <div class="col-span-3 text-center p-2">{{ selectedMonth.format("MMM") }}</div>
-    <div (click)="next()" class="col-span-2 w-full text-sm text-end p-2">Next</div>
+</span>
 
-    <div class="col-span-1 w-fit text-sm text-center p-2">WT</div>
-    <div class="col-span-1 w-fit text-sm text-center p-2">ŚR</div>
-    <div class="col-span-1 w-fit text-sm text-center p-2">CZ</div>
-    <div class="col-span-1 w-fit text-sm text-center p-2">PT</div>
-    <div class="col-span-1 w-fit text-sm text-center p-2">SB</div>
-    <div class="col-span-1 w-fit text-sm text-center p-2">ND</div>
-
-    @for (day of getCalendar(); track day; let index = $index) {
-        @if (index === 0) {
-            <button class="col-span-1 btn w-fit h-fit p-2 rounded-full"
-                    [ngClass]="{
-                 'col-start-1': day.weekday() === 1,
-                 'col-start-2': day.weekday() === 2,
-                 'col-start-3': day.weekday() === 3,
-                 'col-start-4': day.weekday() === 4,
-                 'col-start-5': day.weekday() === 5,
-                 'col-start-6': day.weekday() === 6,
-                 'col-start-7': day.weekday() === 7 || day.weekday() == 0,
-                 'btn-success': isIncludedWeekday(day),
-                 'btn-danger': isExcluded(day),
-                 'btn-dark': isIncluded(day),
-                 'outline-double outline-danger': isHoliday(day) }" (click)="handleDay(day)">
-                {{ day.format('DD') }}
-            </button>
-        } @else {
-            <button class="col-span-1 btn w-fit h-fit p-2 rounded-full"
-                    [ngClass]="{
-                        'btn-success': isIncludedWeekday(day),
-                        'btn-danger': isExcluded(day),
-                        'btn-dark': isIncluded(day),
-                        'outline-double outline-danger': isHoliday(day)
-                        }"
-                    (click)="handleDay(day)"> {{ day.format('DD') }}
-            </button>
-
-        }
-    }
-
-</div>
+<!--<mat-card class="demo-inline-calendar-card">-->
+<!--</mat-card>-->
