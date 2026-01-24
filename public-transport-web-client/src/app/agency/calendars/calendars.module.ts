@@ -12,7 +12,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {provideLuxonDateAdapter} from "@angular/material-luxon-adapter";
-import {CalendarPickerComponent} from "../shared/calendar-picker/calendar-picker.component";
+import {CalendarPickerComponent} from "./calendar-picker/calendar-picker.component";
 
 export const MY_FORMATS = {
     parse: {
