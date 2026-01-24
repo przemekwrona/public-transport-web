@@ -1,4 +1,4 @@
-import {InjectionToken, NgModule} from '@angular/core';
+import {APP_ID, InjectionToken, NgModule} from '@angular/core';
 import {AppComponent} from "./app.component";
 import {LandingModule} from "./landing/landing.module";
 import {BrowserModule} from "@angular/platform-browser";
@@ -39,6 +39,7 @@ import {provideEnvironmentNgxMask} from "ngx-mask";
         AppComponent
     ],
     providers: [
+        { provide: APP_ID, useValue: 'nastepna-stacja' },
         {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
         {provide: API_BASE_PATH, useValue: '/api/v1'},
         {provide: PDF_BASE_PATH, useValue: '/api/v1'},
