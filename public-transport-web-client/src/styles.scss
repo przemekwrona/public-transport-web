@@ -150,6 +150,7 @@ a.text-base {
 .mat-calendar-table .mat-calendar-body .mat-calendar-body-cell-container button.mat-calendar-body-cell {
   &.has-week-day span.mat-calendar-body-cell-content {
     background-color: #17C653;
+    color: white;
   }
   &.has-week-day.has-excluded-day span.mat-calendar-body-cell-content {
     background-color: red;
