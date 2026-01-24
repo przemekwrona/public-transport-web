@@ -36,6 +36,8 @@ export class CalendarsEditorComponent implements OnInit {
     public days: number[] = [];
     public year: number = 2025;
 
+    public presentendMonths: Date[] = [];
+
     public CALENDAR_SYMBOLS: { [key: string]: string } = {
         A: 'kursuje od poniedziałku do piątku',
         B: 'kursuje od poniedziałku do piątku oraz w niedzielę',
@@ -90,6 +92,8 @@ export class CalendarsEditorComponent implements OnInit {
         })
 
         this.modelForm.get('designation').valueChanges.subscribe((value: string) => this.onChangeDesignation(value))
+        this.modelForm.get('startDate').valueChanges.subscribe((value: Date) => this.onChangeStartDate(value))
+        this.modelForm.get('endDate').valueChanges.subscribe((value: Date) => this.onChangeEndtDate(value))
 
         this._route.data.subscribe(data => {
             const calendar: CalendarBody = data['calendar'];
@@ -115,6 +119,33 @@ export class CalendarsEditorComponent implements OnInit {
         if (changedDesignation.length > 0) {
             this.modelForm.get('description').setValue(this.CALENDAR_SYMBOLS[changedDesignation]);
         }
+    }
+
+    public onChangeStartDate(startDate: Date): void {
+        const endDate: Date = this.modelForm.get('endDate').value as Date;
+        this.presentendMonths = this.getRangeCalendars(startDate, endDate);
+    }
+
+    public onChangeEndtDate(endDate: Date): void {
+        const startDate: Date = this.modelForm.get('startDate').value as Date;
+        this.presentendMonths = this.getRangeCalendars(startDate, endDate);
+    }
+
+    private getRangeCalendars(startDate: Date, endDate: Date): Date[] {
+        const start: moment.Moment = moment(startDate).startOf('month');
+        const end: moment.Moment = moment(endDate).startOf('month');
+
+        let results: Date[] = [];
+        while (end.isSameOrAfter(start)) {
+            results.push(start.clone().toDate());
+            start.add(1, 'month');
+        }
+
+        return results;
+    }
+
+    public getYearsOfPresentedMonths(): number[] {
+        return uniq(this.presentendMonths.map((presentedDate: Date): number => presentedDate.getFullYear()));
     }
 
     public getDays(): number[] {

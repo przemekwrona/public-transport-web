@@ -74,7 +74,8 @@
                                 <mat-form-field appearance="outline" class="w-full custom-form-field">
                                     <mat-label>Rozkład Obowiązuje OD</mat-label>
                                     <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
-                                    <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                                    <mat-datepicker-toggle matIconSuffix
+                                                           [for]="startDatePicker"></mat-datepicker-toggle>
                                     <mat-datepicker #startDatePicker></mat-datepicker>
                                     @if (hasError('startDate', 'required')) {
                                         <mat-error>Data początkowa obowiązywania rozklad jest <strong>wymagana</strong></mat-error>
@@ -201,33 +202,35 @@
                 <div class="card-body lg:py-7.5 py-5">
                     <div class="border-t border-gray-200 my-7.5"></div>
 
-                    <h2 class="text-center">
-                        <button class="btn" (click)="prevYear()">Prev</button>
-                        {{ year }}
-                        <button class="btn" (click)="nextYear()">Next</button>
-                    </h2>
-                    <div class="grid grid-cols-3 gap-4">
+                    @for (presentedYear of getYearsOfPresentedMonths(); track presentedYear) {
 
-                        @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
-                            <div>
-                                <app-calendar-picker [year]="year" [month]="month"
-                                                     [weekdays]="getDays()"
-                                                     [(includeDays)]="includeDays"
-                                                     [(excludeDays)]="excludeDays"></app-calendar-picker>
+                        <div class="flex flex-wrap justify-between gap-5">
+                            <div class="flex flex-col">
+                                <div class="text-gray-900 font-medium">
+                                    <strong>{{ presentedYear }}</strong>
+                                </div>
                             </div>
-                        }
-
-                    </div>
-
+                        </div>
+                        <div class="grid grid-cols-1 gap-4">
+                            @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
+                                <div>
+                                    <app-calendar-picker [year]="presentedYear" [month]="month"
+                                                         [weekdays]="getDays()"
+                                                         [(includeDays)]="includeDays"
+                                                         [(excludeDays)]="excludeDays"></app-calendar-picker>
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div class="card-body">
                     @if (isCreate()) {
-                        <button (click)="save()" class="btn btn-success">Zapisz</button>
+                        <button type="submit" (click)="save()" class="btn btn-success">Zapisz</button>
                     }
 
                     @if (isEdit()) {
-                        <button (click)="update()" class="btn btn-success">Aktulaizuj</button>
+                        <button type="submit" (click)="update()" class="btn btn-success">Aktulaizuj</button>
                     }
                 </div>
 
