@@ -9,7 +9,9 @@ import {
     SimpleChanges, ViewChild
 } from '@angular/core';
 import moment from "moment";
-import {MatCalendar} from "@angular/material/datepicker";
+import {MatCalendar, MatDatepickerModule} from "@angular/material/datepicker";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 class DateManager {
 
@@ -38,11 +40,15 @@ class DateManager {
 }
 
 @Component({
+    imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule
+    ],
     selector: 'app-calendar-picker',
     templateUrl: './calendar-picker.component.html',
     styleUrl: './calendar-picker.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
 })
 export class CalendarPickerComponent implements OnInit, OnChanges {
     @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
