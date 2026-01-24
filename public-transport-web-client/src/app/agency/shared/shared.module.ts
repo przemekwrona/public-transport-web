@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CalendarInputComponent} from "./calendar-input/calendar-input.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BusStopSelectorComponent} from "./bus-stop-selector/bus-stop-selector.component";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
@@ -47,15 +46,13 @@ import {MatCardModule} from "@angular/material/card";
     ],
     declarations: [
         BusStopModalSelectorComponent,
-        BusStopSelectorComponent,
-        CalendarInputComponent
+        BusStopSelectorComponent
     ],
     exports: [
         BusStopEditorComponent,
         BusStopModalEditorComponent,
         BusStopModalSelectorComponent,
-        BusStopSelectorComponent,
-        CalendarInputComponent
+        BusStopSelectorComponent
     ],
     providers: [
         StopsService
