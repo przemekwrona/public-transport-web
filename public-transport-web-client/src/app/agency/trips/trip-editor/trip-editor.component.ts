@@ -68,7 +68,8 @@ import {BusStopData} from "../../shared/bus-stop-modal-selector/bus-stop-modal-s
                 animate('400ms ease-in-out') // 400 milliseconds transition time
             ])
         ])
-    ]
+    ],
+    standalone: false
 })
 export class TripEditorComponent implements OnInit, AfterViewInit {
     private BDOT10K_STOP = L.divIcon({

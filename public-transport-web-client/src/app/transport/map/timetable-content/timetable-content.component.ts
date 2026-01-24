@@ -20,7 +20,8 @@ export class PatternTime {
 @Component({
     selector: 'app-timetable-content',
     templateUrl: './timetable-content.component.html',
-    styleUrl: './timetable-content.component.scss'
+    styleUrl: './timetable-content.component.scss',
+    standalone: false
 })
 export class TimetableContentComponent {
 

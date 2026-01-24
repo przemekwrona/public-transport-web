@@ -20,7 +20,6 @@ import {size} from "lodash";
 
 @Component({
     selector: 'app-timetable-board',
-    standalone: true,
     imports: [
         CommonModule,
         FormsModule,

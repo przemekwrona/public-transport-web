@@ -14,7 +14,8 @@ import {LoginService} from "../../../auth/login.service";
 @Component({
     selector: 'app-calendars-editor',
     templateUrl: './calendars-editor.component.html',
-    styleUrl: './calendars-editor.component.scss'
+    styleUrl: './calendars-editor.component.scss',
+    standalone: false
 })
 export class CalendarsEditorComponent implements OnInit {
 

@@ -21,7 +21,6 @@ import {ImageEvent, CropPhotoModalComponent} from "../../shared/crop-photo-modal
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
-    standalone: true,
     selector: 'app-profile',
     templateUrl: './profile-details.component.html',
     styleUrl: './profile-details.component.scss',

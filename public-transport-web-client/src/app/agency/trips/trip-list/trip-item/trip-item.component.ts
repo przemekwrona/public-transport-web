@@ -8,7 +8,6 @@ import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-trip-item',
-    standalone: true,
     imports: [
         CommonModule,
         TranslocoModule

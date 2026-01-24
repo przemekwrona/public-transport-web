@@ -8,7 +8,8 @@ import moment from "moment";
     styleUrls: [
         '../itinerary/itinerary.component.scss',
         './itinerary-bike-header.component.scss'
-    ]
+    ],
+    standalone: false
 })
 export class ItineraryBikeHeaderComponent extends ItineraryComponent {
 

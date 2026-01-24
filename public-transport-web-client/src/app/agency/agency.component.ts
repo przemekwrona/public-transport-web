@@ -4,9 +4,10 @@ import KTComponents from "../../metronic/core";
 import KTLayout from '../../metronic/app/layouts/demo1';
 
 @Component({
-  selector: 'app-agency',
-  templateUrl: './agency.component.html',
-  styleUrl: './agency.component.scss'
+    selector: 'app-agency',
+    templateUrl: './agency.component.html',
+    styleUrl: './agency.component.scss',
+    standalone: false
 })
 export class AgencyComponent implements OnInit, AfterViewInit {
 

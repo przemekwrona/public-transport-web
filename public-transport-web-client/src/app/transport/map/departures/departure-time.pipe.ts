@@ -3,7 +3,8 @@ import moment from 'moment';
 import {interval, map, Observable, timer} from "rxjs";
 
 @Pipe({
-  name: 'departureTime'
+    name: 'departureTime',
+    standalone: false
 })
 export class DepartureTimePipe implements PipeTransform {
 

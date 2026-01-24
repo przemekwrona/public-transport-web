@@ -30,7 +30,8 @@ export interface BusStopSelectorData {
 @Component({
     selector: 'app-bus-stop-modal-selector',
     templateUrl: './bus-stop-modal-selector.component.html',
-    styleUrl: './bus-stop-modal-selector.component.scss'
+    styleUrl: './bus-stop-modal-selector.component.scss',
+    standalone: false
 })
 export class BusStopModalSelectorComponent implements AfterViewInit {
     private ICON = L.divIcon({

@@ -8,7 +8,8 @@ import {Route, Stop, StopTime} from "../../../generated/public-transport-planner
     selector: 'app-timetable',
     templateUrl: './timetable.component.html',
     styleUrl: './timetable.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TimetableComponent {
 

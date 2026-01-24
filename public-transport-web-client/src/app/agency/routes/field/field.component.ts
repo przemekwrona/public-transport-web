@@ -1,9 +1,10 @@
 import {Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'app-field',
-  templateUrl: './field.component.html',
-  styleUrl: './field.component.scss'
+    selector: 'app-field',
+    templateUrl: './field.component.html',
+    styleUrl: './field.component.scss',
+    standalone: false
 })
 export class FieldComponent {
 

@@ -12,7 +12,6 @@ export interface BusStopModalEditorData {
 }
 
 @Component({
-    standalone: true,
     imports: [
         CommonModule,
         MatDialogModule,

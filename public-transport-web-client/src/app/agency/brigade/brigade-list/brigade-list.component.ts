@@ -6,7 +6,8 @@ import {size} from "lodash";
 @Component({
     selector: 'app-brigade-list',
     templateUrl: './brigade-list.component.html',
-    styleUrl: './brigade-list.component.scss'
+    styleUrl: './brigade-list.component.scss',
+    standalone: false
 })
 export class BrigadeListComponent {
 

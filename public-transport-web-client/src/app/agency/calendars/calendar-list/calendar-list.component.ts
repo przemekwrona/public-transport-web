@@ -7,7 +7,8 @@ import {LoginService} from "../../../auth/login.service";
 @Component({
     selector: 'app-calendars',
     templateUrl: './calendar-list.component.html',
-    styleUrl: './calendar-list.component.scss'
+    styleUrl: './calendar-list.component.scss',
+    standalone: false
 })
 export class CalendarListComponent implements OnInit {
 

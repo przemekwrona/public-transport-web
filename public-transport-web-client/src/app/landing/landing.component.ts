@@ -7,7 +7,8 @@ import {faPhone, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 @Component({
     selector: 'app-landing',
     templateUrl: './landing.component.html',
-    styleUrl: './landing.component.scss'
+    styleUrl: './landing.component.scss',
+    standalone: false
 })
 export class LandingComponent implements OnInit {
 

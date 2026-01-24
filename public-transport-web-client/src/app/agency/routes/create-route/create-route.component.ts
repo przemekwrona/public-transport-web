@@ -15,7 +15,8 @@ import {take} from "rxjs";
 @Component({
     selector: 'app-create-route',
     templateUrl: './create-route.component.html',
-    styleUrl: './create-route.component.scss'
+    styleUrl: './create-route.component.scss',
+    standalone: false
 })
 export class CreateRouteComponent implements OnInit {
 

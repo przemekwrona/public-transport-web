@@ -32,7 +32,8 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
             state('in', style({opacity: 1})),
             transition(':enter', [style({opacity: 0}), animate('500ms 600ms ease-in')])
         ])
-    ]
+    ],
+    standalone: false
 })
 export class BrigadeEditorComponent implements OnInit {
 

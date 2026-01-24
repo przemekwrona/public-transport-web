@@ -4,7 +4,6 @@ import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
 @Component({
-    standalone: true,
     imports: [
         CommonModule,
         FormsModule

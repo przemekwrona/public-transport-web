@@ -6,9 +6,10 @@ import {decode} from "@googlemaps/polyline-codec";
 import {Itinerary, Leg} from "../../../../generated/public-transport-planner-api";
 
 @Component({
-  selector: 'app-itinerary-header',
-  templateUrl: './itinerary-header.component.html',
-  styleUrl: './itinerary-header.component.scss'
+    selector: 'app-itinerary-header',
+    templateUrl: './itinerary-header.component.html',
+    styleUrl: './itinerary-header.component.scss',
+    standalone: false
 })
 export class ItineraryHeaderComponent implements OnInit, OnDestroy {
 

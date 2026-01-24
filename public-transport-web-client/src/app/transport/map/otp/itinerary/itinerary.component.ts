@@ -8,9 +8,10 @@ import {Itinerary, Leg} from "../../../../generated/public-transport-planner-api
 
 
 @Component({
-  selector: 'app-itinerary',
-  templateUrl: './itinerary.component.html',
-  styleUrl: './itinerary.component.scss'
+    selector: 'app-itinerary',
+    templateUrl: './itinerary.component.html',
+    styleUrl: './itinerary.component.scss',
+    standalone: false
 })
 export class ItineraryComponent implements OnInit, OnDestroy {
 

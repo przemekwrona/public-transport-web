@@ -6,7 +6,8 @@ import {JourneySummaryResponse} from "../../../../generated/public-transport-api
     selector: 'app-summary-journey',
     templateUrl: './summary-journey.component.html',
     styleUrl: './summary-journey.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SummaryJourneyComponent {
     constructor(@Inject(MAT_DIALOG_DATA) public summary: JourneySummaryResponse) {

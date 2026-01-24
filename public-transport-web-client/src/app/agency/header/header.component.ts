@@ -9,7 +9,6 @@ import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {map} from "rxjs";
 
 @Component({
-    standalone: true,
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',

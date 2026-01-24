@@ -14,7 +14,8 @@ import moment from "moment";
     selector: 'app-calendar-picker',
     templateUrl: './calendar-picker.component.html',
     styleUrl: './calendar-picker.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CalendarPickerComponent implements OnInit, OnChanges {
 

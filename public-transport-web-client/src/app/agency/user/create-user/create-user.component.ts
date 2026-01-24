@@ -9,7 +9,6 @@ import {matchPasswordValidator} from "./match-password.validator";
 
 @Component({
     selector: 'app-create-user',
-    standalone: true,
     imports: [
         CommonModule,
         FormsModule,

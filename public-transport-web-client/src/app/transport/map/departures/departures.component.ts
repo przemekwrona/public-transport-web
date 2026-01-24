@@ -17,7 +17,8 @@ export class TimeTuple {
 @Component({
     selector: 'app-departures',
     templateUrl: './departures.component.html',
-    styleUrl: './departures.component.scss'
+    styleUrl: './departures.component.scss',
+    standalone: false
 })
 export class DeparturesComponent implements OnInit, OnDestroy {
 

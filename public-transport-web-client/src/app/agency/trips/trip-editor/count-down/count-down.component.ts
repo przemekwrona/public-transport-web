@@ -4,7 +4,6 @@ import {CommonModule} from "@angular/common";
 
 @Component({
     selector: 'app-count-down',
-    standalone: true,
     imports: [
         CommonModule
     ],

@@ -4,7 +4,8 @@ import {Route, Stop, StopDetails} from "../../../generated/public-transport-plan
 @Component({
     selector: 'app-routes',
     templateUrl: './routes.component.html',
-    styleUrl: './routes.component.scss'
+    styleUrl: './routes.component.scss',
+    standalone: false
 })
 export class RoutesComponent {
 

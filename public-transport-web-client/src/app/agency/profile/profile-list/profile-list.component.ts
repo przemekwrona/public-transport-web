@@ -7,7 +7,6 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     selector: 'app-profile-list',
-    standalone: true,
     imports: [
         CommonModule,
         RouterModule

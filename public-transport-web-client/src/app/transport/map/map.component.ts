@@ -17,7 +17,8 @@ import {ItineraryManagerService} from "./service/itinerary-manager.service";
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
-    styleUrl: './map.component.scss'
+    styleUrl: './map.component.scss',
+    standalone: false
 })
 export class MapComponent implements OnInit, AfterViewInit {
     private ZOOM: number = 16;

@@ -13,7 +13,6 @@ import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
     selector: 'app-timetable-list',
-    standalone: true,
     imports: [
         CommonModule,
         RouterModule
