@@ -121,6 +121,18 @@ html {
       }
     }
   }
+
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    margin-top: 12px;
+  }
+
+  //.mdc-floating-label--float-above {
+  //  top: 80% !important;
+  //}
+
+  .mdc-floating-label--float-above {
+    top: 60% !important;
+  }
 }
 
 a.text-base {
