@@ -18,6 +18,8 @@ import {MatSelect, MatSelectModule} from "@angular/material/select";
 import {MatSelectSearchComponent} from "ngx-mat-select-search";
 import {RouteNameNormPipe} from "../timetable/create-timetable/route-id-normalization.pipe";
 import {MatIcon} from "@angular/material/icon";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatCardModule} from "@angular/material/card";
 
 
 @NgModule({
@@ -40,7 +42,9 @@ import {MatIcon} from "@angular/material/icon";
         MatSuffix,
         MatPrefix,
         MatFormFieldModule,
-        MatSelectModule
+        MatSelectModule,
+        MatDatepickerModule,
+        MatCardModule
     ],
     declarations: [
         BusStopModalSelectorComponent,

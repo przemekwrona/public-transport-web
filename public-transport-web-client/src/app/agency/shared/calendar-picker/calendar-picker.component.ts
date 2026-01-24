@@ -6,9 +6,37 @@ import {
     OnChanges,
     OnInit,
     Output,
-    SimpleChanges
+    SimpleChanges, ViewChild
 } from '@angular/core';
 import moment from "moment";
+import {MatCalendar} from "@angular/material/datepicker";
+
+class DateManager {
+
+    private included: Date[];
+    private excluded: Date[];
+
+    constructor() {
+    }
+
+    isIncluded(date: Date): boolean {
+        return this.included.includes(date);
+    }
+
+    isExcluded(date: Date): boolean {
+        return this.excluded.includes(date);
+    }
+
+    handelDate(date: Date) {
+        if (this.isIncluded(date)) {
+            const index: number = this.included.indexOf(date);
+            if (index > -1) {
+                this.included.splice(index, 1);
+            }
+        }
+    }
+}
+
 
 @Component({
     selector: 'app-calendar-picker',
@@ -18,6 +46,7 @@ import moment from "moment";
     standalone: false
 })
 export class CalendarPickerComponent implements OnInit, OnChanges {
+    @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
 
     @Input() showNavigation: boolean = false;
     @Input() public year: number;
@@ -35,6 +64,9 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     @Output() public excludeDaysChange: EventEmitter<Set<string>> = new EventEmitter<Set<string>>();
 
     public selectedMonth: moment.Moment;
+    public selectedMonthDate!: Date;
+
+    private dateManager: DateManager = new DateManager();
 
     public holidays: string[] = ['01-01', '01-06', '12-24',
         '04-20', '04-21',
@@ -51,23 +83,9 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
             this.month = moment().month();
         }
         this.selectedMonth = moment(`${this.year}-${this.month}-01`, 'YYYY-MM-DD');
-    }
+        this.selectedMonthDate = this.selectedMonth.toDate();
 
-    public getCalendar(): moment.Moment[] {
-        let currentDate: moment.Moment = moment(`${this.year}-${this.month}`, 'YYYY-MM');
-        let end: moment.Moment = moment(`${this.year}-${this.month}`, 'YYYY-MM').add(currentDate.daysInMonth(), 'days');
-
-        const dates: moment.Moment[] = []
-
-        for (let i: number = 0; i < end.diff(currentDate, 'days'); i++) {
-            dates.push(moment(`${this.year}-${this.month}`, 'YYYY-MM').add(i, 'days'));
-        }
-
-        return dates;
-    }
-
-    public isIncludedWeekday(day: moment.Moment): boolean {
-        return this.weekdays.includes(day.weekday()) && !this.excludeDays.has(day.format('YYYY-MM-DD'));
+        console.log(this.includeDays);
     }
 
     public handleDay(day: moment.Moment): void {
@@ -93,30 +111,6 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
             this.includeDaysChange.emit(this.includeDays);
         }
-    }
-
-    public isIncluded(day: moment.Moment): boolean {
-        return this.includeDays.has(day.format('YYYY-MM-DD'));
-    }
-
-    public isExcluded(day: moment.Moment): boolean {
-        return this.excludeDays.has(day.format('YYYY-MM-DD'));
-    }
-
-    public isHoliday(day: moment.Moment): boolean {
-        return this.holidays.includes(day.format('MM-DD'));
-    }
-
-    public prev(): void {
-        this.selectedMonth = this.selectedMonth.subtract(1, 'month')
-        this.year = this.selectedMonth.year();
-        this.month = this.selectedMonth.month() + 1;
-    }
-
-    public next(): void {
-        this.selectedMonth = this.selectedMonth.add(1, 'month');
-        this.year = this.selectedMonth.year();
-        this.month = this.selectedMonth.month() + 1;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
