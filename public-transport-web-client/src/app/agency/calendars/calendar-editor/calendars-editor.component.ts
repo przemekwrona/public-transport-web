@@ -30,8 +30,8 @@ export class CalendarsEditorComponent implements OnInit {
 
     public calendarBody: CalendarBody = {};
 
-    public includeDays: Set<string> = new Set<string>();
-    public excludeDays: Set<string> = new Set<string>();
+    public includeDays: Date[] = [];
+    public excludeDays: Date[] = [];
 
     public days: number[] = [];
     public year: number = 2025;
@@ -119,8 +119,8 @@ export class CalendarsEditorComponent implements OnInit {
             this.modelForm.get('saturday').setValue(calendar.saturday);
             this.modelForm.get('sunday').setValue(calendar.sunday);
 
-            this.includeDays = new Set(calendar.included)
-            this.excludeDays = new Set(calendar.excluded)
+            this.includeDays = calendar.excluded.map((date: string): Date => moment(date).toDate());
+            this.excludeDays = calendar.excluded.map((date: string): Date => moment(date).toDate());
         });
     }
 
@@ -164,35 +164,19 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public getIncludeDays(): string[] {
-        return [...this.includeDays];
+        return this.includeDays.map((date: Date) => moment(date).format('yyyy-MM-dd'));
     }
 
-    public getUniqueIncludedYears(): number[] {
-        return uniq(this.getIncludeDays().map((date: string): number => moment(date).year())).sort();
-    }
-
-    public getGroupedIncludedDaysByYear() {
-        return groupBy(this.getIncludeDays(), (date: string) => moment(date).year());
+    public getGroupedIncludedDaysByYear(year: number) {
+        return this.includeDays.filter((date: Date) => date.getFullYear() === year).sort();
     }
 
     public getExcludeDays(): string[] {
-        return [...this.excludeDays];
+        return this.excludeDays.map((date: Date) => moment(date).format('yyyy-MM-DD'));
     }
 
-    public getUniqueExcludedYears(): number[] {
-        return uniq(this.getExcludeDays().map((date: string): number => moment(date).year())).sort();
-    }
-
-    public getGroupedExcludedDaysByYear() {
-        return groupBy(this.getExcludeDays(), (date: string) => moment(date).year());
-    }
-
-    public nextYear(): void {
-        this.year++;
-    }
-
-    public prevYear(): void {
-        this.year--;
+    public findExcludedDaysByYear(year: number): Date[] {
+        return this.excludeDays.filter((date: Date) => date.getFullYear() === year).sort();
     }
 
     public isCreate(): boolean {
@@ -206,8 +190,8 @@ export class CalendarsEditorComponent implements OnInit {
     public save(): void {
         const payload: CalendarPayload = {};
         payload.body = this.calendarBody;
-        payload.body.included = [...this.includeDays];
-        payload.body.excluded = [...this.excludeDays];
+        payload.body.included = this.getIncludeDays();
+        payload.body.excluded = this.getExcludeDays();
 
         this.calendarService.createCalendar(this.loginService.getInstance(), payload).subscribe(status => {
         });
@@ -217,8 +201,8 @@ export class CalendarsEditorComponent implements OnInit {
     public update(): void {
         const payload: CalendarPayload = {};
         payload.body = this.calendarBody;
-        payload.body.included = [...this.includeDays];
-        payload.body.excluded = [...this.excludeDays];
+        payload.body.included = this.getIncludeDays();
+        payload.body.excluded = this.getExcludeDays();
 
         const request: UpdateCalendarRequest = {};
         request.body = this.calendarBody;
