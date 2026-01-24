@@ -31,54 +31,81 @@
                             </span>
                         </div>
                     </div>
-                </form>
 
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">
-                                Wyjaśnienie
-                            </div>
-                            <span class="text-gray-700 text-2sm">
+                    <div class="card-body lg:py-7.5 py-5">
+                        <div class="flex flex-wrap justify-between gap-5">
+                            <div class="flex flex-col">
+                                <div class="text-gray-900 text-sm font-medium">
+                                    Wyjaśnienie
+                                </div>
+                                <span class="text-gray-700 text-2sm">
                                 Opis który pojawi się na rozkładzie jazdy
                             </span>
-                        </div>
-                        <label class="input sm:max-w-full xl:max-w-96 w-full">
-                            <i class="ki-solid ki-calendar">
-                            </i>
-                            <input type="text" [(ngModel)]="calendarBody.description"
-                                   placeholder="kursuje od poniedziałku do piątku oprócz świąt"/>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">
-                                Rozkład Obowiązuje OD
                             </div>
-                            <span class="text-gray-700 text-2sm">OD kiedy dany rozkład jazdy jest aktualny.</span>
-                        </div>
-                        <label class="sm:max-w-full xl:max-w-96 w-full">
-                            <app-calendar-input [(ngModel)]="calendarBody.startDate" [showNavigation]="true"/>
-                        </label>
-                    </div>
-                </div>
+                            <span class="sm:max-w-full xl:min-w-96">
+                                <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                    <mat-label>Opis który pojawi się na rozkładzie jazdy</mat-label>
 
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">
-                                Rozkład Obowiązuje DO
-                            </div>
-                            <span class="text-gray-700 text-2sm">DO kiedy dany rozkład jazdy jest aktualny.</span>
+                                    <div matPrefix
+                                         class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6 mx-2">
+                                        <fa-icon [icon]="faCalendar"></fa-icon>
+                                    </div>
+
+                                    <input type="text" matInput formControlName="description"
+                                           placeholder="Opis który pojawi się na rozkładzie jazdy">
+                                    @if (hasError('description', 'required')) {
+                                        <mat-error>Oznaczenie na rozkładzie jazdy jest <strong>wymagane</strong></mat-error>
+                                    }
+                                </mat-form-field>
+                            </span>
                         </div>
-                        <label class="sm:max-w-full xl:max-w-96 w-full">
-                            <app-calendar-input [(ngModel)]="calendarBody.endDate"/>
-                        </label>
                     </div>
-                </div>
+
+                    <div class="card-body lg:py-7.5 py-5">
+                        <div class="flex flex-wrap justify-between gap-5">
+                            <div class="flex flex-col">
+                                <div class="text-gray-900 text-sm font-medium">
+                                    Rozkład Obowiązuje OD
+                                </div>
+                                <span class="text-gray-700 text-2sm">OD kiedy dany rozkład jazdy jest aktualny.</span>
+                            </div>
+
+                            <span class="sm:max-w-full xl:min-w-96">
+                                <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                    <mat-label>Rozkład Obowiązuje OD</mat-label>
+                                    <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
+                                    <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #startDatePicker></mat-datepicker>
+                                    @if (hasError('startDate', 'required')) {
+                                        <mat-error>Data początkowa obowiązywania rozklad jest <strong>wymagana</strong></mat-error>
+                                    }
+                                </mat-form-field>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-body lg:py-7.5 py-5">
+                        <div class="flex flex-wrap justify-between gap-5">
+                            <div class="flex flex-col">
+                                <div class="text-gray-900 text-sm font-medium">
+                                    Rozkład Obowiązuje DO
+                                </div>
+                                <span class="text-gray-700 text-2sm">DO kiedy dany rozkład jazdy jest aktualny.</span>
+                            </div>
+                            <span class="sm:max-w-full xl:min-w-96">
+                                <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                    <mat-label>Rozkład Obowiązuje DO</mat-label>
+                                    <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
+                                    <mat-datepicker-toggle matIconSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #endDatePicker></mat-datepicker>
+                                    @if (hasError('endDate', 'required')) {
+                                        <mat-error>Data końcowa obowiązywania rozklad jest <strong>wymagana</strong></mat-error>
+                                    }
+                                </mat-form-field>
+                            </span>
+                        </div>
+                    </div>
+                </form>
 
                 <div class="card-body lg:py-7.5 py-5">
 
