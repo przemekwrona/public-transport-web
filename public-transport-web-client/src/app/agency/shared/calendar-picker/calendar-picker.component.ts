@@ -23,6 +23,8 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     @Input() public year: number;
     @Input() public month: number;
     @Input() public singleSelection: boolean = false;
+    @Input() public startDate: Date;
+    @Input() public endDate: Date;
 
     @Input() public weekdays: number[] = []
 

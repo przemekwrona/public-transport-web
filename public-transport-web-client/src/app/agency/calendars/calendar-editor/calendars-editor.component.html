@@ -216,6 +216,8 @@
                                 <div>
                                     <app-calendar-picker [year]="presentedYear" [month]="month"
                                                          [weekdays]="getDays()"
+                                                         [startDate]="control('startDate').value"
+                                                         [endDate]="control('endDate').value"
                                                          [(includeDays)]="includeDays"
                                                          [(excludeDays)]="excludeDays"></app-calendar-picker>
                                 </div>
