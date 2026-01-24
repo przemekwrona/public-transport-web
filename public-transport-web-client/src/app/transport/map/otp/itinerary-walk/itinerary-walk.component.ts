@@ -3,12 +3,13 @@ import moment from 'moment';
 import {ItineraryComponent} from "../itinerary/itinerary.component";
 
 @Component({
-  selector: 'app-itinerary-walk',
-  templateUrl: './itinerary-walk.component.html',
-  styleUrls: [
-    '../itinerary/itinerary.component.scss',
-    './itinerary-walk.component.scss'
-  ]
+    selector: 'app-itinerary-walk',
+    templateUrl: './itinerary-walk.component.html',
+    styleUrls: [
+        '../itinerary/itinerary.component.scss',
+        './itinerary-walk.component.scss'
+    ],
+    standalone: false
 })
 export class ItineraryWalkComponent extends ItineraryComponent {
 

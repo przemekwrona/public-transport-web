@@ -4,9 +4,10 @@ import {Map, Polyline, PolyUtil} from "leaflet";
 import {Itinerary, Leg, TripPoint} from "../../../../generated/public-transport-planner-api";
 
 @Component({
-  selector: 'app-itinerary-details',
-  templateUrl: './itinerary-details.component.html',
-  styleUrl: './itinerary-details.component.scss'
+    selector: 'app-itinerary-details',
+    templateUrl: './itinerary-details.component.html',
+    styleUrl: './itinerary-details.component.scss',
+    standalone: false
 })
 export class ItineraryDetailsComponent implements OnDestroy {
 

@@ -23,7 +23,6 @@ import {MatDialog} from "@angular/material/dialog";
 import {TripItemComponent} from "./trip-item/trip-item.component";
 
 @Component({
-    standalone: true,
     selector: 'app-trip-list',
     templateUrl: './trip-list.component.html',
     styleUrl: './trip-list.component.scss',

@@ -5,7 +5,6 @@ import {AppUsersResponse} from "../../../generated/public-transport-api";
 
 @Component({
     selector: 'app-user-list',
-    standalone: true,
     imports: [
         DatePipe,
         RouterModule

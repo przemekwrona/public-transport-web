@@ -20,7 +20,8 @@ export class OtpPoint {
 @Component({
     selector: 'app-otp',
     templateUrl: './otp.component.html',
-    styleUrl: './otp.component.scss'
+    styleUrl: './otp.component.scss',
+    standalone: false
 })
 export class OtpComponent implements OnDestroy {
     public myControl = new FormControl('');

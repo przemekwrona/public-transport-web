@@ -38,7 +38,6 @@ export enum TimetableEditorComponentMode {
 
 @Component({
     selector: 'app-create-timetable',
-    standalone: true,
     imports: [
         CommonModule,
         TimetableBoardComponent,

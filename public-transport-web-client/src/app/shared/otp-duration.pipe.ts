@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'otpDuration'
+    name: 'otpDuration',
+    standalone: false
 })
 export class OtpDurationPipe implements PipeTransform {
 

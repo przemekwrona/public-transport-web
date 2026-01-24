@@ -24,7 +24,8 @@ import {animate, style, transition, trigger} from "@angular/animations";
             useExisting: forwardRef(() => CalendarInputComponent),
             multi: true
         }
-    ]
+    ],
+    standalone: false
 })
 export class CalendarInputComponent implements ControlValueAccessor {
 

@@ -20,7 +20,8 @@ import {
 @Component({
     selector: 'app-bus-stop-selector',
     templateUrl: './bus-stop-selector.component.html',
-    styleUrl: './bus-stop-selector.component.scss'
+    styleUrl: './bus-stop-selector.component.scss',
+    standalone: false
 })
 export class BusStopSelectorComponent implements OnInit {
     readonly dialog: MatDialog = inject(MatDialog);

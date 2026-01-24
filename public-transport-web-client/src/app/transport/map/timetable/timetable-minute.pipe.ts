@@ -1,7 +1,8 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-    name: 'timetableMinute'
+    name: 'timetableMinute',
+    standalone: false
 })
 export class TimetableMinutePipe implements PipeTransform {
 

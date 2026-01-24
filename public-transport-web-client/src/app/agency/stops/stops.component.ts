@@ -15,7 +15,6 @@ interface StopMarker extends L.Marker {
 }
 
 @Component({
-    standalone: true,
     imports: [
         CommonModule,
         SharedModule

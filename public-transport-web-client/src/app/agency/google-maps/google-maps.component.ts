@@ -13,7 +13,6 @@ import {LoginService} from "../../auth/login.service";
 import {AgencyStorageService} from "../../auth/agency-storage.service";
 
 @Component({
-    standalone: true,
     selector: 'app-google-maps',
     templateUrl: './google-maps.component.html',
     styleUrl: './google-maps.component.scss',

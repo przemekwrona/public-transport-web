@@ -10,7 +10,6 @@ export interface ImageEvent {
 
 @Component({
     selector: 'app-crop-photo-modal',
-    standalone: true,
     imports: [
         CommonModule,
         MatDialogModule,

@@ -4,9 +4,10 @@ import moment from "moment";
 import {Route, Stop, StopDetails} from "../../../generated/public-transport-planner-api";
 
 @Component({
-  selector: 'app-stop',
-  templateUrl: './stop.component.html',
-  styleUrl: './stop.component.scss'
+    selector: 'app-stop',
+    templateUrl: './stop.component.html',
+    styleUrl: './stop.component.scss',
+    standalone: false
 })
 export class StopComponent implements OnInit, OnDestroy {
 

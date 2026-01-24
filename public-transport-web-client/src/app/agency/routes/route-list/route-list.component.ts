@@ -9,7 +9,6 @@ import {size} from "lodash";
 import {GoogleAnalyticsService} from "../../../google-analytics.service";
 
 @Component({
-    standalone: true,
     imports: [
         CommonModule
     ],

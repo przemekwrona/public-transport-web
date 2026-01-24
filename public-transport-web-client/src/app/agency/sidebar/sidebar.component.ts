@@ -5,7 +5,6 @@ import {RouterModule} from "@angular/router";
 import {AgencyStorageService} from "../../auth/agency-storage.service";
 
 @Component({
-    standalone: true,
     imports: [
         CommonModule,
         RouterModule
