@@ -1,6 +1,6 @@
 import {Component, forwardRef, Input} from '@angular/core';
 import moment from "moment";
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
@@ -30,6 +30,7 @@ import {animate, style, transition, trigger} from "@angular/animations";
 export class CalendarInputComponent implements ControlValueAccessor {
 
     @Input() showNavigation: boolean = false;
+    @Input() control: FormControl;
 
     onChange = (value: string) => {};
     onTouched = () => {};
