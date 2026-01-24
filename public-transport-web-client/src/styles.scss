@@ -210,3 +210,11 @@ html {
 a.text-base {
   cursor: pointer;
 }
+
+.sso-active:has(:checked) {
+  background-image: url('assets/media/images/2600x1600/bg-1.png');
+}
+
+.dark .sso-active:has(:checked) {
+  background-image: url('assets/media/images/2600x1600/bg-1-dark.png');
+}
