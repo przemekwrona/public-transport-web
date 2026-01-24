@@ -135,4 +135,26 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
         }
     }
 
+    public selectedChange($event: Date) {
+        this.handleDay(moment($event));
+        this.calendar.updateTodaysDate();
+    }
+
+    dateClass: (date: Date) => string | string[] = (date: Date): string | string[] => {
+        const formattedDay = moment(date).format('yyyy-MM-DD');
+        if (this.weekdays.includes(date.getDay())) {
+            if (this.excludeDays.has(formattedDay)) {
+                return ['has-week-day', 'has-excluded-day'];
+            } else {
+                return 'has-week-day';
+            }
+        } else {
+            if (this.includeDays.has(formattedDay)) {
+                return ['has-no-week-day', 'has-included-day']
+            } else {
+                return 'has-no-week-day';
+            }
+        }
+    };
+
 }

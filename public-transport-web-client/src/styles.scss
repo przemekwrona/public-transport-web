@@ -146,3 +146,19 @@ a.text-base {
 .dark .sso-active:has(:checked) {
   background-image: url('assets/media/images/2600x1600/bg-1-dark.png');
 }
+
+.mat-calendar-table .mat-calendar-body .mat-calendar-body-cell-container button.mat-calendar-body-cell {
+  &.has-week-day span.mat-calendar-body-cell-content {
+    background-color: #17C653;
+  }
+  &.has-week-day.has-excluded-day span.mat-calendar-body-cell-content {
+    background-color: red;
+  }
+  &.has-no-week-day span.mat-calendar-body-cell-content {
+    background-color: white;
+  }
+  &.has-no-week-day.has-included-day span.mat-calendar-body-cell-content {
+    background-color: black;
+    color: white;
+  }
+}
