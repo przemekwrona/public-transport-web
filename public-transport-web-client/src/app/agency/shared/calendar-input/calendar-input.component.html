@@ -13,8 +13,7 @@
         <div class="relative z-10 p-4" *ngIf="isFocus" @fadeInOut>
             <app-calendar-picker [singleSelection]="true"
                                  [includeDays]="includeDays"
-                                 (includeDaysChange)="onChangeIncludeDays($event)"
-                                 [showNavigation]="showNavigation"></app-calendar-picker>
+                                 (includeDaysChange)="onChangeIncludeDays($event)"></app-calendar-picker>
         </div>
 
     </div>

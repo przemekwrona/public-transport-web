@@ -37,7 +37,6 @@ class DateManager {
     }
 }
 
-
 @Component({
     selector: 'app-calendar-picker',
     templateUrl: './calendar-picker.component.html',
@@ -48,7 +47,6 @@ class DateManager {
 export class CalendarPickerComponent implements OnInit, OnChanges {
     @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
 
-    @Input() showNavigation: boolean = false;
     @Input() public year: number;
     @Input() public month: number;
     @Input() public singleSelection: boolean = false;
