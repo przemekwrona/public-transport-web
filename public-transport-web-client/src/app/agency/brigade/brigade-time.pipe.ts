@@ -1,6 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import moment from 'moment';
-import {Moment} from "moment";
 
 @Pipe({
     name: 'brigadeEditorTime',

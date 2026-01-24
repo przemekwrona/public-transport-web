@@ -2,7 +2,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DivIcon, LatLngBounds, Map, Marker, Polyline} from "leaflet";
 import * as L from "leaflet";
 import moment from "moment";
-import {decode} from "@googlemaps/polyline-codec";
 import {Itinerary, Leg} from "../../../../generated/public-transport-planner-api";
 
 @Component({

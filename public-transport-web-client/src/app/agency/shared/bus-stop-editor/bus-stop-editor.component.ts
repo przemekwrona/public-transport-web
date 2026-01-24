@@ -8,8 +8,7 @@ import {FormsModule} from "@angular/forms";
         CommonModule,
         FormsModule
     ],
-    providers: [
-    ],
+    providers: [],
     selector: 'app-bus-stop-editor',
     templateUrl: './bus-stop-editor.component.html',
     styleUrl: './bus-stop-editor.component.scss'
