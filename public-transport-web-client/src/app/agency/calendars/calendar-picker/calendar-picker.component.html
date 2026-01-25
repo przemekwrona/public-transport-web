@@ -1,5 +1,29 @@
 <div class="ns-calendar-picker">
-    <div class="text-center">{{ "common.date.months." + getCurrentMonth() | transloco }}</div>
+    @if (getCurrentMonth() === 1) {
+        <div transloco="common.date.months.1" class="text-center">Styczeń</div>
+    } @else if (getCurrentMonth() === 2) {
+        <div transloco="common.date.months.2" class="text-center">Luty</div>
+    } @else if (getCurrentMonth() === 3) {
+        <div transloco="common.date.months.3" class="text-center">Marzec</div>
+    } @else if (getCurrentMonth() === 4) {
+        <div transloco="common.date.months.4" class="text-center">Kwiecień</div>
+    } @else if (getCurrentMonth() === 5) {
+        <div transloco="common.date.months.5" class="text-center">Maj</div>
+    } @else if (getCurrentMonth() === 6) {
+        <div transloco="common.date.months.6" class="text-center">Czerwiec</div>
+    } @else if (getCurrentMonth() === 7) {
+        <div transloco="common.date.months.7" class="text-center">Lipiec</div>
+    } @else if (getCurrentMonth() === 8) {
+        <div transloco="common.date.months.8" class="text-center">Sierpień</div>
+    } @else if (getCurrentMonth() === 9) {
+        <div transloco="common.date.months.9" class="text-center">Wrzesień</div>
+    } @else if (getCurrentMonth() === 10) {
+        <div transloco="common.date.months.10" class="text-center">Październik</div>
+    } @else if (getCurrentMonth() === 11) {
+        <div transloco="common.date.months.11" class="text-center">Listopad</div>
+    } @else if (getCurrentMonth() === 12) {
+        <div transloco="common.date.months.12" class="text-center">Grudzień</div>
+    }
 
     @if (isInRange(selectedMonthDate)) {
         <mat-calendar class="max-w-72" [dateClass]="dateClass" [classList]="'ns-calendar-picker'"

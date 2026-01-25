@@ -131,8 +131,8 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
             && firstDate.getDate() === secondDate.getDate();
     }
 
-    public getCurrentMonth(): string {
-        return `${this.selectedMonthDate.getMonth() + 1}`;
+    public getCurrentMonth(): number {
+        return this.selectedMonthDate.getMonth() + 1;
     }
 
     public isInRange(currentDate: Date): boolean {

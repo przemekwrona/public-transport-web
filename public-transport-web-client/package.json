@@ -6,13 +6,15 @@
     "start": "ng serve",
     "build": "ng build --configuration development --ssr=false",
     "build:prod": "ng build --configuration production --ssr=false --output-path ../public-transport-web-server/src/main/resources/static",
-    "generate": "npm run generate:api & npm run generate:pdf:api & npm run generate:planner:api",
+    "generate": "npm run i18n:extract & npm run generate:api & npm run generate:pdf:api & npm run generate:planner:api",
     "generate:api": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/api/public-transport-api.yaml -g typescript-angular -o ./src/app/generated/public-transport-api",
     "generate:pdf:api": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/api/public-transport-pdf-api.yaml -g typescript-angular -o ./src/app/generated/public-transport-pdf-api",
     "generate:planner:api": "openapi-generator-cli generate -i ../public-transport-web-server/src/main/resources/api/public-transport-planner-api.yaml -g typescript-angular -o ./src/app/generated/public-transport-planner-api",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "mock:server": "mockserver -p 3000 -m mock"
+    "mock:server": "mockserver -p 3000 -m mock",
+    "i18n:extract": "npx transloco-keys-manager extract --input src --output src/assets/i18n --langs pl en",
+    "i18n:find": "npx transloco-keys-manager find"
   },
   "private": true,
   "dependencies": {
@@ -56,6 +58,7 @@
     "@angular-devkit/build-angular": "^19.2.19",
     "@angular/cli": "^19.2.19",
     "@angular/compiler-cli": "^19.2.18",
+    "@jsverse/transloco-keys-manager": "^6.2.2",
     "@openapitools/openapi-generator-cli": "^2.20.2",
     "@types/jasmine": "~5.1.0",
     "autoprefixer": "^10.4.20",
