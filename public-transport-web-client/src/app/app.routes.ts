@@ -43,6 +43,7 @@ import {
 import {routesInGeneratedTimetableResolver} from "./agency/timetable/create-timetable/routes.resolver";
 import {generatedTimetablesResolver} from "./agency/timetable/timetables.resolver";
 import {timetableEditorResolver} from "./agency/timetable/create-timetable/timetable-editor.resolver";
+import {calendarEmptyResolver} from "./agency/calendars/calendar-editor/calendar-empty.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -66,7 +67,7 @@ export const routes: Routes = [
             {path: 'brigades/create', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver }, data: { mode: BrigadeEditorComponentMode.CREATE }},
             {path: 'brigades/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'calendars', component: CalendarListComponent, resolve: { calendars: getAllCalendarsResolver }},
-            {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}},
+            {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
             {path: 'calendars/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
             {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
         ]
