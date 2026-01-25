@@ -1,10 +1,15 @@
 <div class="ns-calendar-picker">
     <div class="text-center">{{ "common.date.months." + getCurrentMonth() | transloco }}</div>
-    <mat-calendar class="max-w-72" [dateClass]="dateClass" [classList]="'ns-calendar-picker'"
-                  [startAt]="selectedMonthDate"
-                  [minDate]="startDate"
-                  [maxDate]="endDate"
-                  (selectedChange)="selectedChange($event)"></mat-calendar>
+
+    @if (isInRange(selectedMonthDate)) {
+        <mat-calendar class="max-w-72" [dateClass]="dateClass" [classList]="'ns-calendar-picker'"
+                      [startAt]="selectedMonthDate"
+                      [minDate]="startDate"
+                      [maxDate]="endDate"
+                      (selectedChange)="selectedChange($event)"></mat-calendar>
+    } @else {
+        <div class="text-center text-sm mt-24">Ten miesiąc jest poza wybranym zakresem dat.</div>
+    }
 
 </div>
 

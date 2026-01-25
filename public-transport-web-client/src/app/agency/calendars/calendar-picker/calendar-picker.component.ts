@@ -74,8 +74,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
                 const excludedDayIndex: number = this.excludeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
                 if (excludedDayIndex > -1) {
                     const isWeekday: boolean = this.weekdays.includes(day.day());
-                    if(!isWeekday) {
-                        console.log(isWeekday + '    ' + day.format('yyyy-MM-DD'));
+                    if (!isWeekday) {
                         this.excludeDaysChange.emit(day.toDate());
                     }
                 }
@@ -134,6 +133,14 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
     public getCurrentMonth(): string {
         return `${this.selectedMonthDate.getMonth() + 1}`;
+    }
+
+    public isInRange(currentDate: Date): boolean {
+        const currentMoment: moment.Moment = moment(currentDate);
+        const startMoment: moment.Moment = moment(this.startDate).startOf('month');
+        const endMoment: moment.Moment = moment(this.endDate).endOf('month');
+
+        return currentMoment.isSameOrAfter(startMoment) && currentMoment.isSameOrBefore(endMoment);
     }
 
 }
