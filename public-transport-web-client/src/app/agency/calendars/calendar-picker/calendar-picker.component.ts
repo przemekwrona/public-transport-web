@@ -11,12 +11,14 @@ import moment from "moment";
 import {MatCalendar, MatDatepickerModule} from "@angular/material/datepicker";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {TranslocoModule} from "@jsverse/transloco";
 
 @Component({
     imports: [
         MatFormFieldModule,
         MatInputModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        TranslocoModule
     ],
     selector: 'app-calendar-picker',
     templateUrl: './calendar-picker.component.html',
@@ -129,6 +131,10 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
         return firstDate.getFullYear() === secondDate.getFullYear()
             && firstDate.getMonth() === secondDate.getMonth()
             && firstDate.getDate() === secondDate.getDate();
+    }
+
+    public getCurrentMonth(): string {
+        return `${this.selectedMonthDate.getMonth() + 1}`;
     }
 
 }

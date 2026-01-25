@@ -1,11 +1,12 @@
-<span class="ns-calendar-picker">
+<div class="ns-calendar-picker">
+    <div class="text-center">{{ "common.date.months." + getCurrentMonth() | transloco }}</div>
     <mat-calendar class="max-w-72" [dateClass]="dateClass" [classList]="'ns-calendar-picker'"
                   [startAt]="selectedMonthDate"
                   [minDate]="startDate"
                   [maxDate]="endDate"
                   (selectedChange)="selectedChange($event)"></mat-calendar>
 
-</span>
+</div>
 
 <!--<mat-card class="demo-inline-calendar-card">-->
 <!--</mat-card>-->
