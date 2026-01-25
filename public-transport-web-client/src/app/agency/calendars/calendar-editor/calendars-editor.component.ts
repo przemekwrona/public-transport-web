@@ -7,11 +7,12 @@ import {
     CalendarService,
     UpdateCalendarRequest
 } from "../../../generated/public-transport-api";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {CalendarEditorComponentMode} from "./calendar-editor-component-mode";
 import {LoginService} from "../../../auth/login.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {faCalendar} from "@fortawesome/free-solid-svg-icons";
+import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
     selector: 'app-calendars-editor',
@@ -69,7 +70,7 @@ export class CalendarsEditorComponent implements OnInit {
         n: 'nie kursuje w Wielką Sobotę oraz w dniach 24 i 31.XII'
     }
 
-    constructor(private calendarService: CalendarService, private loginService: LoginService, private _route: ActivatedRoute, private formBuilder: FormBuilder) {
+    constructor(private calendarService: CalendarService, private loginService: LoginService, private _route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private notificationService: NotificationService) {
     }
 
     ngOnInit(): void {
@@ -223,6 +224,11 @@ export class CalendarsEditorComponent implements OnInit {
         payload.body.excluded = this.getExcludeDays();
 
         this.calendarService.createCalendar(this.loginService.getInstance(), payload).subscribe(status => {
+            this.notificationService.showSuccess('Kalendarz został utworzony');
+            this.notificationService.showInfo('Zaraz zostaniesz przekieowany na listę kalendarzy');
+            setTimeout(() => {
+                this.navigateToCalendars();
+            }, 3000);
         });
     }
 
@@ -248,6 +254,16 @@ export class CalendarsEditorComponent implements OnInit {
         request.body = body;
 
         this.calendarService.updateCalendar(this.loginService.getInstance(), request).subscribe(status => {
+            this.notificationService.showSuccess('Kalendarz został zaktualizowany');
+            this.notificationService.showInfo('Zaraz zostaniesz przekieowany na listę kalendarzy');
+            setTimeout(() => {
+                this.navigateToCalendars();
+            }, 4000);
+        });
+    }
+
+    public navigateToCalendars() {
+        this.router.navigate(['/agency/calendars']).then(() => {
         });
     }
 

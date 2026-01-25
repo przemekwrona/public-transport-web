@@ -235,14 +235,16 @@
                     }
                 </div>
 
-                <div class="card-body">
-                    @if (isCreate()) {
-                        <button type="submit" (click)="save()" class="btn btn-success">Zapisz</button>
-                    }
+                <div class="card-body lg:py-7.5 py-5">
+                    <div class="flex flex-wrap justify-end gap-5">
+                        @if (isCreate()) {
+                            <button type="submit" (click)="save()" class="btn btn-success">Zapisz i wroć do listy linii</button>
+                        }
 
-                    @if (isEdit()) {
-                        <button type="submit" (click)="update()" class="btn btn-success">Aktulaizuj</button>
-                    }
+                        @if (isEdit()) {
+                            <button type="submit" (click)="update()" class="btn btn-success">Aktulaizuj i wróć do listy lini</button>
+                        }
+                    </div>
                 </div>
 
             </div>

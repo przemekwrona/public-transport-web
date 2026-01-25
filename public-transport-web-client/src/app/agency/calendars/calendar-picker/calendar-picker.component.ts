@@ -23,7 +23,6 @@ import {TranslocoModule} from "@jsverse/transloco";
     selector: 'app-calendar-picker',
     templateUrl: './calendar-picker.component.html',
     styleUrl: './calendar-picker.component.scss'
-    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarPickerComponent implements OnInit, OnChanges {
     @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;

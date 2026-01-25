@@ -5,18 +5,16 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     providedIn: 'root'
 })
 export class NotificationService {
+    private queue: Array<{ message: string; action?: string; panelClass?: string }> = [];
+    private isShowing = false;
+
 
     constructor(private snackBar: MatSnackBar) {
     }
 
     showNotification(message: string, action: string = 'Close', panelClass: string = '') {
-        // Displaying the toast notification
-        this.snackBar.open(message, action, {
-            duration: 5000,  // Notification will disappear after 3 seconds
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-            panelClass: [panelClass]
-        });
+        this.queue.push({ message, action, panelClass });
+        this.processQueue();
     }
 
     showSuccess(message: string) {
@@ -29,5 +27,24 @@ export class NotificationService {
 
     showInfo(message: string) {
         this.showNotification(message, '', 'snackbar-info')
+    }
+
+    private processQueue() {
+        if (this.isShowing || this.queue.length === 0) return;
+
+        this.isShowing = true;
+        const { message, action, panelClass } = this.queue.shift()!;
+
+        const ref = this.snackBar.open(message, action, {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: [panelClass]
+        });
+
+        ref.afterDismissed().subscribe(() => {
+            this.isShowing = false;
+            this.processQueue();
+        });
     }
 }
