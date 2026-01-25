@@ -218,10 +218,14 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public save(): void {
+        if(this.modelForm.invalid) {
+            this.scrollToFirstError();
+            return;
+        }
+
+        const body: CalendarBody = this.buildCalendarBodyReuest();
         const payload: CalendarPayload = {};
-        // payload.body = this.calendarBody;
-        payload.body.included = this.getIncludeDays();
-        payload.body.excluded = this.getExcludeDays();
+        payload.body = body;
 
         this.calendarService.createCalendar(this.loginService.getInstance(), payload).subscribe(status => {
             this.notificationService.showSuccess('Kalendarz został utworzony');
@@ -233,6 +237,26 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public update(): void {
+        if(this.modelForm.invalid) {
+            this.scrollToFirstError();
+            return;
+        }
+
+        const body: CalendarBody = this.buildCalendarBodyReuest();
+        const request: UpdateCalendarRequest = {};
+        request.calendarName = this.queryCalendarName;
+        request.body = body;
+
+        this.calendarService.updateCalendar(this.loginService.getInstance(), request).subscribe(status => {
+            this.notificationService.showSuccess('Kalendarz został zaktualizowany');
+            this.notificationService.showInfo('Zaraz zostaniesz przekieowany na listę kalendarzy');
+            setTimeout(() => {
+                this.navigateToCalendars();
+            }, 4000);
+        });
+    }
+
+    private buildCalendarBodyReuest() {
         const body: CalendarBody = {}
         body.calendarName = this.queryCalendarName;
         body.designation = this.modelForm.get('designation').value;
@@ -248,18 +272,7 @@ export class CalendarsEditorComponent implements OnInit {
         body.sunday = this.modelForm.get('sunday').value;
         body.included = this.getIncludeDays();
         body.excluded = this.getExcludeDays();
-
-        const request: UpdateCalendarRequest = {};
-        request.calendarName = this.queryCalendarName;
-        request.body = body;
-
-        this.calendarService.updateCalendar(this.loginService.getInstance(), request).subscribe(status => {
-            this.notificationService.showSuccess('Kalendarz został zaktualizowany');
-            this.notificationService.showInfo('Zaraz zostaniesz przekieowany na listę kalendarzy');
-            setTimeout(() => {
-                this.navigateToCalendars();
-            }, 4000);
-        });
+        return body;
     }
 
     public navigateToCalendars() {
@@ -327,5 +340,19 @@ export class CalendarsEditorComponent implements OnInit {
             && firstDate.getMonth() === secondDate.getMonth()
             && firstDate.getDate() === secondDate.getDate();
     }
+
+    private scrollToFirstError() {
+        const firstInvalid: HTMLElement | null =
+            document.querySelector('form .ng-invalid');
+
+        if (firstInvalid) {
+            firstInvalid.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            firstInvalid.focus?.();
+        }
+    }
+
 
 }
