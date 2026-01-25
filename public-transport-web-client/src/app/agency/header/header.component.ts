@@ -12,7 +12,7 @@ import {map} from "rxjs";
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
-    imports: [CommonModule, TranslocoPipe],
+    imports: [CommonModule],
     providers: [LoginService]
 })
 export class HeaderComponent implements OnInit {
