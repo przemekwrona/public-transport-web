@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: Transactions API
+  description: API for retrieving financial transactions
+  version: 1.0.0
+
+paths:
+  /accounts/{accountId}/transactions:
+    get:
+      summary: Get list of transactions
+      description: Returns a list of transactions with destination, amount, currency, date, and links.
+      tags:
+        - transactions
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: from
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: days
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response with transactions list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsResponse'
+
+components:
+  schemas:
+    TransactionsResponse:
+      type: object
+      required:
+        - transactions
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+
+    Transaction:
+      type: object
+      required:
+        - id
+        - destination
+        - amount
+        - currency
+        - date
+        - links
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 74ebe39c-2668-4808-b2b2-2be6808c4376
+        destination:
+          type: string
+          description: Destination account number (e.g. IBAN)
+          example: GB90GGCS64720653757553
+        amount:
+          type: number
+          format: double
+          example: 13371.9
+        currency:
+          type: string
+          example: GBP
+        date:
+          type: string
+          format: date-time
+          example: 2025-02-19T19:02:20Z
+        links:
+          $ref: '#/components/schemas/TransactionLinks'
+
+    TransactionLinks:
+      type: object
+      required:
+        - info
+      properties:
+        info:
+          type: string
+          description: Relative link to transaction details
+          example: /74ebe39c-2668-4808-b2b2-2be6808c4376

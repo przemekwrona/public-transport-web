@@ -87,8 +87,8 @@ html {
 // Customize the entire app. Change :root to your selector if you want to scope the styles.
 :root {
   @include mat.select-overrides((
-          //panel-background-color: white,
-          //enabled-trigger-text-color: red,
+    //panel-background-color: white,
+    //enabled-trigger-text-color: red,
           trigger-text-line-height: 1.125rem,
           trigger-text-size: 0.8125rem
   ));
@@ -147,19 +147,30 @@ a.text-base {
   background-image: url('assets/media/images/2600x1600/bg-1-dark.png');
 }
 
-.mat-calendar-table .mat-calendar-body .mat-calendar-body-cell-container button.mat-calendar-body-cell {
-  &.has-week-day span.mat-calendar-body-cell-content {
-    background-color: #17C653;
-    color: white;
+.ns-calendar-picker {
+  .mat-calendar-header {
+    display: none;
   }
-  &.has-week-day.has-excluded-day span.mat-calendar-body-cell-content {
-    background-color: red;
-  }
-  &.has-no-week-day span.mat-calendar-body-cell-content {
-    background-color: white;
-  }
-  &.has-no-week-day.has-included-day span.mat-calendar-body-cell-content {
-    background-color: black;
-    color: white;
+
+  .mat-calendar-table .mat-calendar-body .mat-calendar-body-cell-container button.mat-calendar-body-cell {
+    &.has-week-day span.mat-calendar-body-cell-content {
+      background-color: #17C653;
+      color: white;
+    }
+
+    &.has-week-day.has-excluded-day span.mat-calendar-body-cell-content {
+      background-color: red;
+    }
+
+    &.has-no-week-day span.mat-calendar-body-cell-content {
+      background-color: white;
+    }
+
+    &.has-no-week-day.has-included-day span.mat-calendar-body-cell-content {
+      background-color: black;
+      color: white;
+    }
   }
 }
+
+
