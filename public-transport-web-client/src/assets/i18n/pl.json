@@ -1,37 +1,38 @@
 {
+  "signin.username.placeholder": "Podaj nazwę użytkownika",
+  "signin.password.placeholder": "Wprowadź hasło",
+  "signin.header": "Logowanie do Systemu",
+  "signin.undo": "Wróć na stronę główną",
+  "signin.username.label": "Nazwa użytkownika",
+  "signin.password.label": "Hasło",
+  "signin.notification.lack-of-account": "Nie masz konta? Skontaktuj się z zespołem Następna Stacja mailowo w celu jego założenia. Napisz na adres biuro@nastepnastacja.pl",
+  "signin.login.button": "Zaloguj się",
+  "agency.trip.listOfVariants": "Missing value for 'agency.trip.listOfVariants'",
+  "agency.trip.addNewVariant": "Missing value for 'agency.trip.addNewVariant'",
+  "agency.trip.mainVariant": "Missing value for 'agency.trip.mainVariant'",
+  "agency.trip.variantDetails": "Missing value for 'agency.trip.variantDetails'",
+  "common.attention": "Missing value for 'common.attention'",
+  "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
+  "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'",
+  "agency.profile.title": "Missing value for 'agency.profile.title'",
+  "agency.profile.subtitle": "Missing value for 'agency.profile.subtitle'",
+  "common.date.months.1": "Styczeń",
+  "common.date.months.2": "Luty",
+  "common.date.months.3": "Marzec",
+  "common.date.months.4": "Kwiecień",
+  "common.date.months.5": "Maj",
+  "common.date.months.6": "Czerwiec",
+  "common.date.months.7": "Lipiec",
+  "common.date.months.8": "Sierpień",
+  "common.date.months.9": "Wrzesień",
+  "common.date.months.10": "Październik",
+  "common.date.months.11": "Listopad",
+  "common.date.months.12": "Grudzień",
   "common": {
-    "attention": "Uwaga",
-    "date": {
-      "months": {
-        "1": "Styczeń",
-        "2": "Luty",
-        "3": "Marzec",
-        "4": "Kwiecień",
-        "5": "Maj",
-        "6": "Czerwiec",
-        "7": "Lipiec",
-        "8": "Sierpień",
-        "9": "Wrzesień",
-        "10": "Październik",
-        "11": "Listopad",
-        "12": "Grudzień"
-      }
-    }
+    "attention": "Uwaga"
   },
   "header": {
     "logout": "Wyloguj się"
-  },
-  "signin": {
-    "header": "Logowanie do Systemu",
-    "undo": "Wróć na stronę główną",
-    "usernameLabel": "Nazwa użytkownika",
-    "usernamePlaceholder": "Podaj nazwę użytkownika",
-    "passwordLabel": "Hasło",
-    "passwordPlaceholder": "Wprowadź hasło",
-    "loginButton": "Zaloguj się",
-    "notification": {
-      "lackOfAccount": "Nie masz konta? Skontaktuj się z zespołem Następna Stacja mailowo w celu jego założenia. Napisz na adres biuro@nastepnastacja.pl"
-    }
   },
   "agency": {
     "profile": {
