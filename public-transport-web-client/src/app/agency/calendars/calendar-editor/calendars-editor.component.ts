@@ -28,8 +28,6 @@ export class CalendarsEditorComponent implements OnInit {
 
     public modelForm: FormGroup;
 
-    public excludeDays: Date[] = [];
-
     public includeDaysMap: Map<string, Date[]> = new Map<string, Date[]>;
     public excludeDaysMap: Map<string, Date[]> = new Map<string, Date[]>;
 
@@ -121,16 +119,26 @@ export class CalendarsEditorComponent implements OnInit {
 
             calendar.included.forEach((includedDate: string) => {
                 const included: moment.Moment = moment(includedDate);
-                const dateKey: string = included.startOf('month').format('yyyy-MM-DD');
+                const dateKey: string = moment(includedDate).startOf('month').format('yyyy-MM-DD');
                 const isEmptyDateKey: boolean = isEmpty(this.includeDaysMap.get(dateKey));
                 if (isEmptyDateKey) {
                     this.includeDaysMap.set(dateKey, [included.toDate()])
                 } else {
                     this.includeDaysMap.get(dateKey).push(included.toDate());
                 }
-            })
 
-            this.excludeDays = calendar.excluded.map((date: string): Date => moment(date).toDate());
+            });
+
+            calendar.excluded.forEach((excludedDate: string) => {
+                const excluded: moment.Moment = moment(excludedDate);
+                const dateKey: string = moment(excludedDate).startOf('month').format('yyyy-MM-DD');
+                const isEmptyDateKey: boolean = isEmpty(this.excludeDaysMap.get(dateKey));
+                if (isEmptyDateKey) {
+                    this.excludeDaysMap.set(dateKey, [excluded.toDate()])
+                } else {
+                    this.excludeDaysMap.get(dateKey).push(excluded.toDate());
+                }
+            });
         });
     }
 
@@ -189,11 +197,15 @@ export class CalendarsEditorComponent implements OnInit {
             .map((date: Date): string => moment(date).format('yyyy-MM-DD'))
             .map((includedDateKey: string): Date[] => this.includeDaysMap.get(includedDateKey))
             .flatMap((included: Date[]): Date[] => included)
-            .map((date: Date) => moment(date).format('yyyy-MM-DD'));
+            .map((date: Date): string => moment(date).format('yyyy-MM-DD'));
     }
 
     public getExcludeDays(): string[] {
-        return this.excludeDays.map((date: Date) => moment(date).format('yyyy-MM-DD'));
+        return this.presentedMonths
+            .map((date: Date): string => moment(date).format('yyyy-MM-DD'))
+            .map((excludedDateKey: string): Date[] => this.excludeDaysMap.get(excludedDateKey))
+            .flatMap((excluded: Date[]): Date[] => excluded)
+            .map((date: Date): string => moment(date).format('yyyy-MM-DD'));
     }
 
     public isCreate(): boolean {
@@ -215,8 +227,6 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public update(): void {
-        console.log(this.modelForm.get('startDate').value)
-        console.log(this.modelForm.get('endDate').value)
         const body: CalendarBody = {}
         body.calendarName = this.queryCalendarName;
         body.designation = this.modelForm.get('designation').value;
@@ -257,7 +267,7 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public handleOnChangeIncludeDate(date: Date): void {
-        const dateKey: string = moment(date).format('yyyy-MM-01');
+        const dateKey: string = moment(date).startOf('month').format('yyyy-MM-DD');
         if (isEmpty(this.includeDaysMap.get(dateKey))) {
             this.includeDaysMap.set(dateKey, [date]);
         } else {
@@ -273,15 +283,15 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public getIncludedDates(dateKey: string): Date[] {
-        return (this.includeDaysMap.get(dateKey) || []).sort()
+        return (this.includeDaysMap.get(dateKey) || []).sort((a, b) => moment(a).unix() - moment(b).unix())
     }
 
     public getExcludedDates(dateKey: string): Date[] {
-        return (this.excludeDaysMap.get(dateKey) || []).sort()
+        return (this.excludeDaysMap.get(dateKey) || []).sort((a, b) => moment(a).unix() - moment(b).unix())
     }
 
     public handleOnChangeExcludeDate(date: Date): void {
-        const dateKey: string = moment(date).format('yyyy-MM-01');
+        const dateKey: string = moment(date).startOf('month').format('yyyy-MM-DD');
         if (isEmpty(this.excludeDaysMap.get(dateKey))) {
             this.excludeDaysMap.set(dateKey, [date]);
         } else {
