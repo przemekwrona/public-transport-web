@@ -220,13 +220,14 @@
                         <div class="grid grid-cols-3 gap-4">
                             @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
                                 <div>
+                                    @let dateKey = buildKey(presentedYear, month);
                                     <app-calendar-picker [year]="presentedYear" [month]="month"
                                                          [weekdays]="weekdays"
                                                          [startDate]="control('startDate').value"
                                                          [endDate]="control('endDate').value"
-                                                         [includeDays]="includeDaysMap.get(buildKey(presentedYear, month))"
+                                                         [includeDays]="includeDaysMap.get(dateKey)"
                                                          (includeDaysChange)="handleOnChangeIncludeDate($event)"
-                                                         [excludeDays]="excludeDaysMap.get(buildKey(presentedYear, month))"
+                                                         [excludeDays]="excludeDaysMap.get(dateKey)"
                                                          (excludeDaysChange)="handleOnChangeExcludeDate($event)"></app-calendar-picker>
                                 </div>
                             }

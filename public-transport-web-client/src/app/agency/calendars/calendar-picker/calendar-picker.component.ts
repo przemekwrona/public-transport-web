@@ -1,5 +1,4 @@
 import {
-    ChangeDetectionStrategy,
     Component,
     EventEmitter,
     Input,
@@ -57,23 +56,29 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['weekdays'] && changes['weekdays'].previousValue) {
-            console.log(changes['weekdays'].previousValue);
-            // const start: moment.Moment = moment('2026-01-01');
-            // const end: moment.Moment = start.clone().endOf('month');
-            //
-            // for (let day: moment.Moment = start.clone(); day.isSameOrBefore(end); day.add(1, 'day')) {
-            //     const includedDay: number = this.includeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
-            //     if (includedDay > -1) {
-            //         this.includeDaysChange.emit(day.toDate());
-            //     }
-            // }
-            //
-            // for (let day: moment.Moment = start.clone(); day.isSameOrBefore(end); day.add(1, 'day')) {
-            //     const excludedDay: number = this.excludeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
-            //     if (excludedDay > -1) {
-            //         this.excludeDaysChange.emit(day.toDate());
-            //     }
-            // }
+            const start: moment.Moment = this.selectedMonth;
+            const end: moment.Moment = start.clone().endOf('month');
+
+            for (let day: moment.Moment = start.clone(); day.isSameOrBefore(end); day.add(1, 'day')) {
+                const includedDay: number = this.includeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
+                if (includedDay > -1) {
+                    const isWeekday: boolean = this.weekdays.includes(day.day());
+                    if (isWeekday) {
+                        this.includeDaysChange.emit(day.toDate());
+                    }
+                }
+            }
+
+            for (let day: moment.Moment = start.clone(); day.isSameOrBefore(end); day.add(1, 'day')) {
+                const excludedDayIndex: number = this.excludeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
+                if (excludedDayIndex > -1) {
+                    const isWeekday: boolean = this.weekdays.includes(day.day());
+                    if(!isWeekday) {
+                        console.log(isWeekday + '    ' + day.format('yyyy-MM-DD'));
+                        this.excludeDaysChange.emit(day.toDate());
+                    }
+                }
+            }
 
             this.calendar.updateTodaysDate();
         }
