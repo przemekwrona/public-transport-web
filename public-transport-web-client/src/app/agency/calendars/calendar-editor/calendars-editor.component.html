@@ -1,4 +1,18 @@
 <div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+        <div class="flex flex-col justify-center gap-2">
+            <h1 class="text-xl font-medium leading-none text-gray-900">Konfiguracja nowego kalendarza</h1>
+            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
+<!--                Brygada to harmonogram kursów przypisanych jednemu kierowcy do realizacji w ciągu doby.-->
+            </div>
+        </div>
+        <div class="flex items-center gap-2.5">
+            <a [routerLink]="['/agency/calendars']" class="btn btn-sm btn-secondary">Wróć do listy kalendarzy</a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fixed">
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
         <div class="col-span-2">
             <div class="card min-w-full">
@@ -237,6 +251,8 @@
 
                 <div class="card-body lg:py-7.5 py-5">
                     <div class="flex flex-wrap justify-end gap-5">
+                        <a [routerLink]="['/agency/calendars']" class="btn btn-secondary">Wróć do listy kalendarzy</a>
+
                         @if (isCreate()) {
                             <button type="submit" (click)="save()" class="btn btn-success">Zapisz i wroć do listy linii</button>
                         }
