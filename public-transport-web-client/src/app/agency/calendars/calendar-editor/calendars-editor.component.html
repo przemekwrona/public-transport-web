@@ -3,7 +3,7 @@
         <div class="flex flex-col justify-center gap-2">
             <h1 class="text-xl font-medium leading-none text-gray-900">Konfiguracja nowego kalendarza</h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-<!--                Brygada to harmonogram kursów przypisanych jednemu kierowcy do realizacji w ciągu doby.-->
+                <!--                Brygada to harmonogram kursów przypisanych jednemu kierowcy do realizacji w ciągu doby.-->
             </div>
         </div>
         <div class="flex items-center gap-2.5">
@@ -166,103 +166,106 @@
                         </div>
                     </div>
 
-                </form>
-
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">
-                                Nie kursuje w dni
-                            </div>
-                            <!--<span class="text-gray-700 text-2sm">Lorem Ipsum</span>-->
-                        </div>
-                        <label class="sm:max-w-full xl:max-w-96 w-full">
-                            @for (excludedYear of getYearsOfPresentedMonths(); track excludedYear) {
-
-                                <strong class="block text-sm"> {{ excludedYear }} </strong>
-
-                                @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
-                                    @let dateKey = buildKey(excludedYear, month);
-                                    @for (excludedDate of getExcludedDates(dateKey); track excludedDate) {
-                                        <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset mr-1"> {{ excludedDate | date: "dd.MM" }} </span>
-                                    }
-                                }
-
-                            }
-                        </label>
-                    </div>
-                </div>
-
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">
-                                Kursuje w dodatkowe dni
-                            </div>
-                            <!--<span class="text-gray-700 text-2sm">Lorem Ipsum</span>-->
-                        </div>
-                        <label class="sm:max-w-full xl:max-w-96 w-full">
-
-                            @for (includedYear of getYearsOfPresentedMonths(); track includedYear) {
-
-                                <strong class="block text-sm"> {{ includedYear }} </strong>
-
-                                @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
-                                    @let dateKey = buildKey(includedYear, month);
-                                    @for (includedDate of getIncludedDates(dateKey); track includedDate) {
-                                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">{{ includedDate | date: "dd.MM" }}</span>
-                                    }
-                                }
-                            }
-
-                        </label>
-                    </div>
-                </div>
-
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="border-t border-gray-200 my-7.5"></div>
-
-                    @for (presentedYear of getYearsOfPresentedMonths(); track presentedYear) {
-
+                    <div class="card-body lg:py-7.5 py-5">
                         <div class="flex flex-wrap justify-between gap-5">
                             <div class="flex flex-col">
-                                <div class="text-gray-900 font-medium">
-                                    <strong>{{ presentedYear }}</strong>
+                                <div class="text-gray-900 text-sm font-medium">
+                                    Nie kursuje w dni
+                                </div>
+                                <!--<span class="text-gray-700 text-2sm">Lorem Ipsum</span>-->
+                            </div>
+                            <label class="sm:max-w-full xl:max-w-96 w-full">
+                                @for (excludedYear of getYearsOfPresentedMonths(); track excludedYear) {
+
+                                    <strong class="block text-sm"> {{ excludedYear }} </strong>
+
+                                    @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
+                                        @let dateKey = buildKey(excludedYear, month);
+                                        @for (excludedDate of getExcludedDates(dateKey); track excludedDate) {
+                                            <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset mr-1"> {{ excludedDate | date: "dd.MM" }} </span>
+                                        }
+                                    }
+
+                                }
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="card-body lg:py-7.5 py-5">
+                        <div class="flex flex-wrap justify-between gap-5">
+                            <div class="flex flex-col">
+                                <div class="text-gray-900 text-sm font-medium">
+                                    Kursuje w dodatkowe dni
+                                </div>
+                                <!--<span class="text-gray-700 text-2sm">Lorem Ipsum</span>-->
+                            </div>
+                            <label class="sm:max-w-full xl:max-w-96 w-full">
+
+                                @for (includedYear of getYearsOfPresentedMonths(); track includedYear) {
+
+                                    <strong class="block text-sm"> {{ includedYear }} </strong>
+
+                                    @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
+                                        @let dateKey = buildKey(includedYear, month);
+                                        @for (includedDate of getIncludedDates(dateKey); track includedDate) {
+                                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">{{ includedDate | date: "dd.MM" }}</span>
+                                        }
+                                    }
+                                }
+
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="card-body lg:py-7.5 py-5">
+                        <div class="border-t border-gray-200 my-7.5"></div>
+
+                        @for (presentedYear of getYearsOfPresentedMonths(); track presentedYear) {
+
+                            <div class="flex flex-wrap justify-between gap-5">
+                                <div class="flex flex-col">
+                                    <div class="text-gray-900 font-medium">
+                                        <strong>{{ presentedYear }}</strong>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
-                                <div>
-                                    @let dateKey = buildKey(presentedYear, month);
-                                    <app-calendar-picker [year]="presentedYear" [month]="month"
-                                                         [weekdays]="weekdays"
-                                                         [startDate]="control('startDate').value"
-                                                         [endDate]="control('endDate').value"
-                                                         [includeDays]="includeDaysMap.get(dateKey)"
-                                                         (includeDaysChange)="handleOnChangeIncludeDate($event)"
-                                                         [excludeDays]="excludeDaysMap.get(dateKey)"
-                                                         (excludeDaysChange)="handleOnChangeExcludeDate($event)"></app-calendar-picker>
-                                </div>
-                            }
-                        </div>
-                    }
-                </div>
-
-                <div class="card-body lg:py-7.5 py-5">
-                    <div class="flex flex-wrap justify-end gap-5">
-                        <a [routerLink]="['/agency/calendars']" class="btn btn-secondary">Wróć do listy kalendarzy</a>
-
-                        @if (isCreate()) {
-                            <button type="submit" (click)="save()" class="btn btn-success">Zapisz i wroć do listy linii</button>
-                        }
-
-                        @if (isEdit()) {
-                            <button type="submit" (click)="update()" class="btn btn-success">Aktulaizuj i wróć do listy lini</button>
+                            <div class="grid grid-cols-3 gap-4">
+                                @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
+                                    <div>
+                                        @let dateKey = buildKey(presentedYear, month);
+                                        <app-calendar-picker [year]="presentedYear" [month]="month"
+                                                             [weekdays]="weekdays"
+                                                             [startDate]="control('startDate').value"
+                                                             [endDate]="control('endDate').value"
+                                                             [includeDays]="includeDaysMap.get(dateKey)"
+                                                             (includeDaysChange)="handleOnChangeIncludeDate($event)"
+                                                             [excludeDays]="excludeDaysMap.get(dateKey)"
+                                                             (excludeDaysChange)="handleOnChangeExcludeDate($event)"></app-calendar-picker>
+                                    </div>
+                                }
+                            </div>
                         }
                     </div>
-                </div>
 
+                    <div class="card-body lg:py-7.5 py-5">
+                        <div class="flex flex-wrap justify-end gap-5">
+                            <a [routerLink]="['/agency/calendars']" class="btn btn-secondary">Wróć do listy
+                                kalendarzy</a>
+
+                            @if (isCreate()) {
+                                <button type="submit" (click)="save()" class="btn btn-success">Zapisz i wroć do listy
+                                    linii
+                                </button>
+                            }
+
+                            @if (isEdit()) {
+                                <button type="submit" (click)="update()" class="btn btn-success">Aktulaizuj i wróć do
+                                    listy lini
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="col-span-1">
