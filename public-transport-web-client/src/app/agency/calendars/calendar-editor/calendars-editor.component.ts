@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {groupBy, uniq} from "lodash";
+import {uniq, isEmpty} from "lodash";
 import moment from "moment";
 import {
     CalendarBody,
@@ -28,10 +28,10 @@ export class CalendarsEditorComponent implements OnInit {
 
     public modelForm: FormGroup;
 
-    public calendarBody: CalendarBody = {};
-
-    public includeDays: Date[] = [];
     public excludeDays: Date[] = [];
+
+    public includeDaysMap: Map<string, Date[]> = new Map<string, Date[]>;
+    public excludeDaysMap: Map<string, Date[]> = new Map<string, Date[]>;
 
     public days: number[] = [];
     public year: number = 2025;
@@ -119,7 +119,17 @@ export class CalendarsEditorComponent implements OnInit {
             this.modelForm.get('saturday').setValue(calendar.saturday);
             this.modelForm.get('sunday').setValue(calendar.sunday);
 
-            this.includeDays = calendar.excluded.map((date: string): Date => moment(date).toDate());
+            calendar.included.forEach((includedDate: string) => {
+                const included: moment.Moment = moment(includedDate);
+                const dateKey: string = included.startOf('month').format('yyyy-MM-DD');
+                const isEmptyDateKey: boolean = isEmpty(this.includeDaysMap.get(dateKey));
+                if (isEmptyDateKey) {
+                    this.includeDaysMap.set(dateKey, [included.toDate()])
+                } else {
+                    this.includeDaysMap.get(dateKey).push(included.toDate());
+                }
+            })
+
             this.excludeDays = calendar.excluded.map((date: string): Date => moment(date).toDate());
         });
     }
@@ -133,11 +143,22 @@ export class CalendarsEditorComponent implements OnInit {
     public onChangeStartDate(startDate: Date): void {
         const endDate: Date = this.modelForm.get('endDate').value as Date;
         this.presentedMonths = this.getRangeCalendars(startDate, endDate);
+        this.refreshIncludedAndExcludedDays();
     }
 
     public onChangeEndtDate(endDate: Date): void {
         const startDate: Date = this.modelForm.get('startDate').value as Date;
         this.presentedMonths = this.getRangeCalendars(startDate, endDate);
+        this.refreshIncludedAndExcludedDays();
+    }
+
+    private refreshIncludedAndExcludedDays() {
+        this.presentedMonths
+            .map((value: Date): string => moment(value).format('yyyy-MM-DD'))
+            .forEach((keyDate: string): void => {
+                this.includeDaysMap.set(keyDate, isEmpty(this.includeDaysMap.get(keyDate)) ? [] : this.includeDaysMap.get(keyDate));
+                this.excludeDaysMap.set(keyDate, isEmpty(this.excludeDaysMap.get(keyDate)) ? [] : this.excludeDaysMap.get(keyDate));
+            });
     }
 
     public onChangeDateOfWeek(selected: boolean, numberOfDay: number) {
@@ -164,19 +185,15 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public getIncludeDays(): string[] {
-        return this.includeDays.map((date: Date) => moment(date).format('yyyy-MM-dd'));
-    }
-
-    public getGroupedIncludedDaysByYear(year: number) {
-        return this.includeDays.filter((date: Date) => date.getFullYear() === year).sort();
+        return this.presentedMonths
+            .map((date: Date): string => moment(date).format('yyyy-MM-DD'))
+            .map((includedDateKey: string): Date[] => this.includeDaysMap.get(includedDateKey))
+            .flatMap((included: Date[]): Date[] => included)
+            .map((date: Date) => moment(date).format('yyyy-MM-DD'));
     }
 
     public getExcludeDays(): string[] {
         return this.excludeDays.map((date: Date) => moment(date).format('yyyy-MM-DD'));
-    }
-
-    public findExcludedDaysByYear(year: number): Date[] {
-        return this.excludeDays.filter((date: Date) => date.getFullYear() === year).sort();
     }
 
     public isCreate(): boolean {
@@ -189,7 +206,7 @@ export class CalendarsEditorComponent implements OnInit {
 
     public save(): void {
         const payload: CalendarPayload = {};
-        payload.body = this.calendarBody;
+        // payload.body = this.calendarBody;
         payload.body.included = this.getIncludeDays();
         payload.body.excluded = this.getExcludeDays();
 
@@ -197,16 +214,28 @@ export class CalendarsEditorComponent implements OnInit {
         });
     }
 
-
     public update(): void {
-        const payload: CalendarPayload = {};
-        payload.body = this.calendarBody;
-        payload.body.included = this.getIncludeDays();
-        payload.body.excluded = this.getExcludeDays();
+        console.log(this.modelForm.get('startDate').value)
+        console.log(this.modelForm.get('endDate').value)
+        const body: CalendarBody = {}
+        body.calendarName = this.queryCalendarName;
+        body.designation = this.modelForm.get('designation').value;
+        body.description = this.modelForm.get('description').value;
+        body.startDate = moment(this.modelForm.get('startDate').value).format('yyyy-MM-DD');
+        body.endDate = moment(this.modelForm.get('endDate').value).format('yyyy-MM-DD');
+        body.monday = this.modelForm.get('monday').value;
+        body.tuesday = this.modelForm.get('tuesday').value;
+        body.wednesday = this.modelForm.get('wednesday').value;
+        body.thursday = this.modelForm.get('thursday').value;
+        body.friday = this.modelForm.get('friday').value;
+        body.saturday = this.modelForm.get('saturday').value;
+        body.sunday = this.modelForm.get('sunday').value;
+        body.included = this.getIncludeDays();
+        body.excluded = this.getExcludeDays();
 
         const request: UpdateCalendarRequest = {};
-        request.body = this.calendarBody;
         request.calendarName = this.queryCalendarName;
+        request.body = body;
 
         this.calendarService.updateCalendar(this.loginService.getInstance(), request).subscribe(status => {
         });
@@ -218,6 +247,59 @@ export class CalendarsEditorComponent implements OnInit {
 
     public control(controlName: string): FormControl {
         return this.modelForm.get(controlName) as FormControl;
+    }
+
+    public buildKey(year: number, month: number): string {
+        if (month < 10) {
+            return `${year}-0${month}-01`;
+        }
+        return `${year}-${month}-01`;
+    }
+
+    public handleOnChangeIncludeDate(date: Date): void {
+        const dateKey: string = moment(date).format('yyyy-MM-01');
+        if (isEmpty(this.includeDaysMap.get(dateKey))) {
+            this.includeDaysMap.set(dateKey, [date]);
+        } else {
+            const includedDates: Date[] = this.includeDaysMap.get(dateKey);
+            const dateIndex: number = includedDates.findIndex((includedDate: Date) => this.sameDay(includedDate, date));
+
+            if (dateIndex > -1) {
+                includedDates.splice(dateIndex, 1);
+            } else {
+                includedDates.push(date);
+            }
+        }
+    }
+
+    public getIncludedDates(dateKey: string): Date[] {
+        return (this.includeDaysMap.get(dateKey) || []).sort()
+    }
+
+    public getExcludedDates(dateKey: string): Date[] {
+        return (this.excludeDaysMap.get(dateKey) || []).sort()
+    }
+
+    public handleOnChangeExcludeDate(date: Date): void {
+        const dateKey: string = moment(date).format('yyyy-MM-01');
+        if (isEmpty(this.excludeDaysMap.get(dateKey))) {
+            this.excludeDaysMap.set(dateKey, [date]);
+        } else {
+            const excludedDates: Date[] = this.excludeDaysMap.get(dateKey);
+            const dateIndex: number = excludedDates.findIndex((excludedDate: Date): boolean => this.sameDay(excludedDate, date));
+
+            if (dateIndex > -1) {
+                excludedDates.splice(dateIndex, 1);
+            } else {
+                excludedDates.push(date);
+            }
+        }
+    }
+
+    private sameDay(firstDate: Date, secondDate: Date): boolean {
+        return firstDate.getFullYear() === secondDate.getFullYear()
+            && firstDate.getMonth() === secondDate.getMonth()
+            && firstDate.getDate() === secondDate.getDate();
     }
 
 }

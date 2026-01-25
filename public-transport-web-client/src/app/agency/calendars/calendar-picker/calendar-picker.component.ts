@@ -21,8 +21,8 @@ import {MatInputModule} from "@angular/material/input";
     ],
     selector: 'app-calendar-picker',
     templateUrl: './calendar-picker.component.html',
-    styleUrl: './calendar-picker.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrl: './calendar-picker.component.scss'
+    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarPickerComponent implements OnInit, OnChanges {
     @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
@@ -36,10 +36,10 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     @Input() public weekdays: number[] = []
 
     @Input() public includeDays: Date[] = [];
-    @Output() public includeDaysChange: EventEmitter<Date[]> = new EventEmitter<Date[]>();
+    @Output() public includeDaysChange: EventEmitter<Date> = new EventEmitter<Date>();
 
     @Input() public excludeDays: Date[] = [];
-    @Output() public excludeDaysChange: EventEmitter<Date[]> = new EventEmitter<Date[]>();
+    @Output() public excludeDaysChange: EventEmitter<Date> = new EventEmitter<Date>();
 
     public selectedMonth: moment.Moment;
     public selectedMonthDate!: Date;
@@ -55,29 +55,26 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
         this.selectedMonthDate = this.selectedMonth.toDate();
     }
 
-    public handleDay(day: Date): void {
-
-        if (this.weekdays.includes(day.getDay())) {
-            const index: number = this.excludeDays.findIndex(d => this.sameDay(d, day));
-            if (index > -1) {
-                this.excludeDays.splice(index, 1); // remove
-            } else {
-                this.excludeDays.push(day); // add
-            }
-            this.excludeDaysChange.emit(this.excludeDays);
-        } else {
-            const index: number = this.includeDays.findIndex(d => this.sameDay(d, day));
-            if (index > -1) {
-                this.includeDays.splice(index, 1);
-            } else {
-                this.includeDays.push(day);
-            }
-            this.includeDaysChange.emit(this.excludeDays);
-        }
-    }
-
     ngOnChanges(changes: SimpleChanges): void {
-        if (!changes['weekdays'].firstChange) {
+        if (changes['weekdays'] && changes['weekdays'].previousValue) {
+            console.log(changes['weekdays'].previousValue);
+            // const start: moment.Moment = moment('2026-01-01');
+            // const end: moment.Moment = start.clone().endOf('month');
+            //
+            // for (let day: moment.Moment = start.clone(); day.isSameOrBefore(end); day.add(1, 'day')) {
+            //     const includedDay: number = this.includeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
+            //     if (includedDay > -1) {
+            //         this.includeDaysChange.emit(day.toDate());
+            //     }
+            // }
+            //
+            // for (let day: moment.Moment = start.clone(); day.isSameOrBefore(end); day.add(1, 'day')) {
+            //     const excludedDay: number = this.excludeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
+            //     if (excludedDay > -1) {
+            //         this.excludeDaysChange.emit(day.toDate());
+            //     }
+            // }
+
             this.calendar.updateTodaysDate();
         }
     }
@@ -89,14 +86,14 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
     dateClass: (date: Date) => string | string[] = (date: Date): string | string[] => {
         if (this.weekdays.includes(date.getDay())) {
-            const index: number = this.excludeDays.findIndex(d => this.sameDay(d, date));
+            const index: number = this.excludeDays.findIndex((excludedDate: Date): boolean => this.isSameDay(excludedDate, date));
             if (index > -1) {
                 return ['has-week-day', 'has-excluded-day'];
             } else {
                 return 'has-week-day';
             }
         } else {
-            const index: number = this.includeDays.findIndex(d => this.sameDay(d, date));
+            const index: number = this.includeDays.findIndex((includedDate: Date): boolean => this.isSameDay(includedDate, date));
             if (index > -1) {
                 return ['has-no-week-day', 'has-included-day']
             } else {
@@ -105,7 +102,25 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
         }
     };
 
-    private sameDay(firstDate: Date, secondDate: Date): boolean {
+    private handleDay(clickedDate: Date): void {
+        if (this.weekdays.includes(clickedDate.getDay())) {
+            const index: number = this.excludeDays.findIndex(d => this.isSameDay(d, clickedDate));
+            if (index > -1) {
+                this.excludeDaysChange.emit(clickedDate);
+            } else {
+                this.excludeDaysChange.emit(clickedDate);
+            }
+        } else {
+            const index: number = this.includeDays.findIndex(d => this.isSameDay(d, clickedDate));
+            if (index > -1) {
+                this.includeDaysChange.emit(clickedDate);
+            } else {
+                this.includeDaysChange.emit(clickedDate);
+            }
+        }
+    }
+
+    private isSameDay(firstDate: Date, secondDate: Date): boolean {
         return firstDate.getFullYear() === secondDate.getFullYear()
             && firstDate.getMonth() === secondDate.getMonth()
             && firstDate.getDate() === secondDate.getDate();
