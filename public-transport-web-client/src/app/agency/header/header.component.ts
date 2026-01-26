@@ -1,7 +1,7 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {LoginService} from "../../auth/login.service";
 import {TranslocoPipe} from "@jsverse/transloco";
-import {ActivatedRoute, Data, Router} from "@angular/router";
+import {ActivatedRoute, Data, Router, RouterModule} from "@angular/router";
 import {AgencyStorageService} from "../../auth/agency-storage.service";
 import {AgencyDetails, AgencyService, TripsDetails} from "../../generated/public-transport-api";
 import {CommonModule} from "@angular/common";
@@ -12,7 +12,10 @@ import {map} from "rxjs";
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
-    imports: [CommonModule],
+    imports: [
+        CommonModule,
+        RouterModule
+    ],
     providers: [LoginService]
 })
 export class HeaderComponent implements OnInit {
