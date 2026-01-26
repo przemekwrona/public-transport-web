@@ -194,7 +194,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 stops: this.formBuilder.array([], [Validators.required, Validators.minLength(2)])
             },
             {
-                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.name, this.state.mode, this.state.trafficMode)
+                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.mode, this.state.trafficMode)
             });
 
         this.modelForm.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => this.onCommunicationVelocityChange(value));
