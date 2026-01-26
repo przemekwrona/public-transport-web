@@ -4,7 +4,7 @@ import {TranslocoPipe} from "@jsverse/transloco";
 import {ActivatedRoute, Data, Router, RouterModule} from "@angular/router";
 import {AgencyStorageService} from "../../auth/agency-storage.service";
 import {AgencyDetails, AgencyService, TripsDetails} from "../../generated/public-transport-api";
-import {CommonModule} from "@angular/common";
+import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {map} from "rxjs";
 
@@ -14,7 +14,8 @@ import {map} from "rxjs";
     styleUrl: './header.component.scss',
     imports: [
         CommonModule,
-        RouterModule
+        RouterModule,
+        NgOptimizedImage
     ],
     providers: [LoginService]
 })
