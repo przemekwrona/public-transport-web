@@ -409,7 +409,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.router.navigate(['/agency/trips'], {
                             queryParams: {
                                 line: this.state.line,
-                                name: this.state.name
+                                name: this.state.name,
+                                version: this.state.version
                             }
                         }).then();
                     },
