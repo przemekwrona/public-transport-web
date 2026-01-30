@@ -149,7 +149,16 @@ export class TripListComponent implements OnInit {
     }
 
     public onDelete($event: TripId): void {
-        remove(this.trips.trips, {line: $event.routeId.line, name: $event.routeId.name, variant: $event.variantName ,mode: $event.variantMode, trafficMode: $event.trafficMode});
+        const agency: string = this.agencyStorageService.getInstance();
+        this.tripService.deleteTripByTripId(agency, $event).subscribe({
+            next: (response) => remove(this.trips.trips, {
+                    line: $event.routeId.line,
+                    name: $event.routeId.name,
+                    variant: $event.variantName,
+                    mode: $event.variantMode,
+                    trafficMode: $event.trafficMode
+                })
+        });
     }
 
     public findTripsWithDirectionFront(): Trip[] {
