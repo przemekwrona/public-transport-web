@@ -82,6 +82,14 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
             this.calendar.updateTodaysDate();
         }
+
+        if (changes['startDate'] && changes['startDate'].previousValue) {
+            this.calendar.updateTodaysDate();
+        }
+
+        if (changes['endDate'] && changes['endDate'].previousValue) {
+            this.calendar.updateTodaysDate();
+        }
     }
 
     public selectedChange($event: Date) {
@@ -90,6 +98,13 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     }
 
     dateClass: (date: Date) => string | string[] = (date: Date): string | string[] => {
+        const momentDate: moment.Moment = moment(date);
+        const startMomentDate: moment.Moment = moment(this.startDate);
+        const endMomentDate: moment.Moment = moment(this.endDate);
+        if (momentDate.isBefore(startMomentDate) || momentDate.isAfter(endMomentDate)) {
+            return '';
+        }
+
         if (this.weekdays.includes(date.getDay())) {
             const index: number = this.excludeDays.findIndex((excludedDate: Date): boolean => this.isSameDay(excludedDate, date));
             if (index > -1) {

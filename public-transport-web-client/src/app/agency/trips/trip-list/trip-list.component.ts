@@ -21,6 +21,7 @@ import {
 } from "../../shared/bus-stop-modal-selector/bus-stop-modal-selector.component";
 import {MatDialog} from "@angular/material/dialog";
 import {TripItemComponent} from "./trip-item/trip-item.component";
+import {MatIconModule} from "@angular/material/icon";
 
 @Component({
     selector: 'app-trip-list',
@@ -32,7 +33,8 @@ import {TripItemComponent} from "./trip-item/trip-item.component";
         FormsModule,
         FaIconComponent,
         TranslocoPipe,
-        TripItemComponent
+        TripItemComponent,
+        MatIconModule
     ],
     providers: [
         TripService,

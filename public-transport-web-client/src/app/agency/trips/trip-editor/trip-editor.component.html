@@ -86,19 +86,37 @@
                                 }
                             </div>
 
-                            <div class="w-full">
-                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                            <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
+                                <div class="grid gap-7">
                                     <label class="form-label max-w-56">Kierunek wariantu</label>
-                                    <select name="tripVariantMode" id="tripVariantMode"
-                                            formControlName="tripVariantMode" class="select w-full"
-                                            [ngClass]="{'border-danger': validControl('tripVariantMode')}">
-                                        <option [value]="tripModeSelectValue.Front">{{ 'agency.trip.edit.FRONT' | transloco }}</option>
-                                        <option [value]="tripModeSelectValue.Back">{{ 'agency.trip.edit.BACK' | transloco }}</option>
-                                    </select>
+                                    <mat-radio-group formControlName="tripVariantMode">
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+                                            <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
+                                                   [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
+                                                <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
+                                                    <div class="flex items-center h-11">
+                                                        <mat-icon aria-hidden="false" fontIcon="arrow_forward" class="size-48"></mat-icon>
+                                                    </div>
+                                                    <span class="text-md font-medium text-gray-900"> TAM </span>
+                                                    <mat-radio-button class="appearance-none hidden" [value]="tripModeSelectValue.Front">TAM</mat-radio-button>
+                                                </div>
+                                            </label>
+                                            <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
+                                                   [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
+                                                <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
+                                                    <div class="flex items-center h-11">
+                                                        <mat-icon aria-hidden="false" fontIcon="arrow_back" class="size-48"></mat-icon>
+                                                    </div>
+                                                    <span class="text-md font-medium text-gray-900">POWRÓT</span>
+                                                    <mat-radio-button class="appearance-none hidden" [value]="tripModeSelectValue.Back">POWRÓT</mat-radio-button>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </mat-radio-group>
+                                    @if (checkControlHasError("tripTrafficMode", "required")) {
+                                        <span class="text-danger text-2sm">Ruch panujący jest na drodze jest wymagany</span>
+                                    }
                                 </div>
-                                @if (checkControlHasError("tripVariantMode", "required")) {
-                                    <span class="text-danger text-2sm">Kierunek wariantu jest wymagany</span>
-                                }
                             </div>
 
                             <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
@@ -109,8 +127,7 @@
                                                [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
                                             <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                                 <div class="flex items-center h-11">
-                                                    <img alt="" class="w-12"
-                                                         src="assets/media/svg/bus-svgrepo-com.svg"/>
+                                                    <mat-icon aria-hidden="false" fontIcon="directions_bus" class="size-48"></mat-icon>
                                                 </div>
                                                 <span class="text-md font-medium text-gray-900"> {{ "agency.trip.traffic." + trafficModeSelectValue.Normal | transloco }}</span>
                                                 <input class="appearance-none" name="tripTrafficMode" type="radio"
@@ -122,8 +139,7 @@
                                                [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
                                             <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                                 <div class="flex items-center h-11">
-                                                    <img alt="" class="w-12"
-                                                         src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
+                                                    <mat-icon aria-hidden="false" fontIcon="traffic_jam" class="size-48"></mat-icon>
                                                 </div>
                                                 <span class="text-md font-medium text-gray-900"> {{ "agency.trip.traffic." + trafficModeSelectValue.Traffic | transloco }}</span>
                                                 <input class="appearance-none" name="tripTrafficMode" type="radio"
@@ -281,7 +297,8 @@
                                     <tr>
                                         <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
                                         <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                            {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km
+                                            {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }}
+                                            km
                                             ({{ getLastStop()?.controls["customizedMinutes"].value | number: '1.0-0' }}
                                             min)
                                         </td>
@@ -307,11 +324,13 @@
                             <div formArrayName="stops">
                                 <div class="px-3">
                                     @if (checkControlHasError("stops", "required") || checkControlHasError("stops", "minlength")) {
-                                        <span class="text-danger text-2sm">Musisz dodać co najmniej 2 przystanki na trasie. Obecna liczba przystanków wynosi {{ modelForm.controls['stops']?.errors?.['minlength']?.['actualLength'] || 0 }}.</span>
+                                        <span class="text-danger text-2sm">Musisz dodać co najmniej 2 przystanki na trasie. Obecna liczba przystanków wynosi {{ modelForm.controls['stops']?.errors?.['minlength']?.['actualLength'] || 0 }}
+                                            .</span>
                                     }
 
                                     @if (stops.length == 0) {
-                                        <span class="badge badge-sm badge-outline badge-info block" style="line-height: inherit">
+                                        <span class="badge badge-sm badge-outline badge-info block"
+                                              style="line-height: inherit">
                                             Nie dodałeś jeszcze przystanków. Kliknij na przystanek na mapie poniżej i dodaj kolejne przystanki.                                    </span>
                                     }
 

@@ -15,9 +15,9 @@
                 </svg>
                 <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4 text-sm">
                     @if (trip.trafficMode === TrafficMode.Normal) {
-                        <img alt="" class="inline w-10" src="assets/media/svg/bus-svgrepo-com.svg"/>
-                    } @else if (trip.trafficMode === TrafficMode.Normal) {
-                        <img alt="" class="inline w-6" src="assets/media/svg/traffic-jam-svgrepo-com.svg"/>
+                        <mat-icon aria-hidden="false" fontIcon="directions_bus" class="size-12"></mat-icon>
+                    } @else if (trip.trafficMode === TrafficMode.Traffic) {
+                        <mat-icon aria-hidden="false" fontIcon="traffic_jam" class="size-12"></mat-icon>
                     }
                 </div>
             </div>
