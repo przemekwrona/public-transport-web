@@ -19,6 +19,8 @@ import {RouterModule} from "@angular/router";
 import {StopsService, TripService} from "../../generated/public-transport-api";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {CountDownComponent} from "./trip-editor/count-down/count-down.component";
+import {MatRadioModule} from "@angular/material/radio";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
     imports: [
@@ -40,7 +42,10 @@ import {CountDownComponent} from "./trip-editor/count-down/count-down.component"
         TripListComponent,
         TranslocoPipe,
         CountDownComponent,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+
+        MatRadioModule,
+        MatIconModule
     ],
     declarations: [
         TripEditorComponent,

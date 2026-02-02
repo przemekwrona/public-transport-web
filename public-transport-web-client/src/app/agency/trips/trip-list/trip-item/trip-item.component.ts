@@ -5,12 +5,14 @@ import moment from "moment/moment";
 import {TranslocoModule} from "@jsverse/transloco";
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
 import {Router} from "@angular/router";
+import {MatIconModule} from "@angular/material/icon";
 
 @Component({
     selector: 'app-trip-item',
     imports: [
         CommonModule,
-        TranslocoModule
+        TranslocoModule,
+        MatIconModule
     ],
     templateUrl: './trip-item.component.html',
     styleUrl: './trip-item.component.scss'
