@@ -2,8 +2,9 @@ import {Component} from '@angular/core';
 import {Router, RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {AgencyAdminCreateAccountRequest, AgencyService} from "../../../generated/public-transport-api";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NotificationService} from "../../../shared/notification.service";
+import {MatInputModule} from "@angular/material/input";
 
 @Component({
     selector: 'app-create-profile',
@@ -11,7 +12,8 @@ import {NotificationService} from "../../../shared/notification.service";
         CommonModule,
         ReactiveFormsModule,
         RouterModule,
-        FormsModule
+        FormsModule,
+        MatInputModule
     ],
     providers: [],
     templateUrl: './create-profile.component.html',
@@ -72,14 +74,24 @@ export class CreateProfileComponent {
             && this.createProfileForm.get(fieldName)?.errors?.['required'];
     }
 
-    public validityCheckMaxLength(fieldName: string): boolean {
-        return this.validityCheck(fieldName)
-            && this.createProfileForm.get(fieldName)?.errors?.['maxlength'];
+    public getCompanyNameControl(): FormControl<string> {
+        return this.createProfileForm.get("companyName") as FormControl<string>;
     }
 
-    public validityCheckMinLength(fieldName: string): boolean {
-        return this.validityCheck(fieldName)
-            && this.createProfileForm.get(fieldName)?.errors?.['minlength'];
+    public getCompanyCodeControl(): FormControl<string> {
+        return this.createProfileForm.get("companyCode") as FormControl<string>;
+    }
+
+    public getTaxIdentificationNumberControl(): FormControl<string> {
+        return this.createProfileForm.get("taxIdentificationNumber") as FormControl<string>;
+    }
+
+    public getPostalCodeControl(): FormControl<string> {
+        return this.createProfileForm.get("postalCode") as FormControl<string>;
+    }
+
+    public getPostalCityControl(): FormControl<string> {
+        return this.createProfileForm.get("postalCity") as FormControl<string>;
     }
 
 }
