@@ -152,15 +152,20 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Ulica/Miejscowość</div>
-                                    @if (this.validityCheckRequired('street')) {
-                                        <span class="text-red-700 text-2sm">Ulica/Miejscowość</span>
-                                    } @else {
                                     <span class="text-gray-700 text-2sm">Ulica/Miejscowość</span>
-                                }
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('street')}" class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="street"/>
-                                </label>
+                                <div class="sm:max-w-full xl:max-w-96 w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Ulica/Miejscowość</mat-label>
+                                            <input type="text" matInput [formControl]="getStreetNumberControl()"
+                                                   placeholder="Ulica/Miejscowość">
+                                            @if (getStreetNumberControl().hasError('required')) {
+                                                <mat-error>Podaj Ulicę/Miejscowość</mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="my-7.5"></div>
