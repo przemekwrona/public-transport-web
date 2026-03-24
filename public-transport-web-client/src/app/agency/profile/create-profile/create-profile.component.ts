@@ -1,10 +1,16 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
-import {AgencyAdminCreateAccountRequest, AgencyService} from "../../../generated/public-transport-api";
+import {
+    AgencyAdminCreateAccountRequest,
+    AgencyService, AppUser,
+    UsersService
+} from "../../../generated/public-transport-api";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NotificationService} from "../../../shared/notification.service";
 import {MatInputModule} from "@angular/material/input";
+import {debounceTime, distinctUntilChanged, map, Observable, of, startWith, switchAll, switchMap} from "rxjs";
+import {MatSelectModule} from "@angular/material/select";
 
 @Component({
     selector: 'app-create-profile',
@@ -13,19 +19,24 @@ import {MatInputModule} from "@angular/material/input";
         ReactiveFormsModule,
         RouterModule,
         FormsModule,
-        MatInputModule
+        MatInputModule,
+        MatSelectModule
     ],
     providers: [],
     templateUrl: './create-profile.component.html',
     styleUrl: './create-profile.component.scss'
 })
-export class CreateProfileComponent {
+export class CreateProfileComponent implements OnInit {
+
+    public searchAppUser: FormControl<string> = new FormControl('');
+
+    public filteredAppUsers: AppUser[] = [];
 
     public createProfileForm: FormGroup;
 
     public agency: AgencyAdminCreateAccountRequest = {} as AgencyAdminCreateAccountRequest;
 
-    constructor(private fb: FormBuilder, private agencyService: AgencyService, private notificationService: NotificationService, private router: Router) {
+    constructor(private fb: FormBuilder, private agencyService: AgencyService, private notificationService: NotificationService, private router: Router, private usersService: UsersService) {
         this.createProfileForm = this.fb.group({
             companyName: ['', [Validators.required, Validators.minLength(3)]],
             companyCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
@@ -37,6 +48,26 @@ export class CreateProfileComponent {
             postalCode: ['', [Validators.required, Validators.minLength(4)]],
             postalCity: ['', [Validators.required]]
         });
+    }
+
+    ngOnInit(): void {
+        this.searchAppUser.valueChanges.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            switchMap(value => this._filter(value || ''))).subscribe({
+            next: (users) => this.filteredAppUsers = users,
+            error: (err) => {
+                console.error('Filtering error:', err);
+                this.filteredAppUsers = []; // Reset on error
+            }
+        });
+    }
+
+    private _filter(value: string): Observable<AppUser[]> {
+        const filterValue = value.toLowerCase();
+        return this.usersService.getAppUsers(filterValue).pipe(
+            map(response => response.users)
+        );
     }
 
     public createProfile(): void {
@@ -64,14 +95,8 @@ export class CreateProfileComponent {
         }
     }
 
-    public validityCheck(fieldName: string): boolean {
-        return this.createProfileForm.get(fieldName)?.touched
-            && this.createProfileForm.get(fieldName)?.invalid;
-    }
-
-    public validityCheckRequired(fieldName: string): boolean {
-        return this.validityCheck(fieldName)
-            && this.createProfileForm.get(fieldName)?.errors?.['required'];
+    public findAppUserByUsername(username: string): AppUser | null {
+        return this.filteredAppUsers.find(user => user.username === username) ?? null;
     }
 
     public getCompanyNameControl(): FormControl<string> {
