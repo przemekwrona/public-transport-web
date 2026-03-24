@@ -55,17 +55,26 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Identyfikator Firmy</div>
-                                    @if (this.validityCheckRequired('companyCode')) {
-                                        <span class="text-red-700 text-2sm">Nadaj unikalny kod techniczny</span>
-                                    } @else if (this.validityCheckMaxLength('companyCode')) {
-                                        <span class="text-red-700 text-2sm">Maksymalna długość znaków 15</span>
-                                    } @else {
-                                        <span class="text-gray-700 text-2sm">Kod techniczny nadawany manualnie</span>
-                                    }
+                                    <span class="text-gray-700 text-2sm">Kod techniczny nadawany manualnie</span>
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('companyCode')}" class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="companyCode"/>
-                                </label>
+                                <div class="sm:max-w-full xl:max-w-96 w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Identyfikator Firmy</mat-label>
+                                            <input type="text" matInput [formControl]="getCompanyCodeControl()"
+                                                   placeholder="Identyfikator Firmy">
+                                            @if (getCompanyCodeControl().hasError('required')) {
+                                                <mat-error>Identyfikator Firmy jest wymagana</mat-error>
+                                            } @else if (getCompanyCodeControl().hasError('minlength')) {
+                                                <mat-error>Identyfikator Firmy powinna mieć conajmniej 3 znaki
+                                                </mat-error>
+                                            } @else if (getCompanyCodeControl().hasError('maxlength')) {
+                                                <mat-error>Identyfikator Firmy powinna mieć conajwyżej 15 znaki
+                                                </mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="my-7.5"></div>
