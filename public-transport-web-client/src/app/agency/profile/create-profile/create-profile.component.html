@@ -168,15 +168,20 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Numer domu</div>
-                                    @if (this.validityCheckRequired('houseNumber')) {
-                                        <span class="text-red-700 text-2sm">Podaj Numer domu</span>
-                                    } @else {
                                     <span class="text-gray-700 text-2sm">Numer domu</span>
-                                }
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('houseNumber')}" class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="houseNumber"/>
-                                </label>
+                                <div class="sm:max-w-full xl:max-w-96 w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Numer domu</mat-label>
+                                            <input type="text" matInput [formControl]="getHouseNumberControl()"
+                                                   placeholder="Numer domu">
+                                            @if (getHouseNumberControl().hasError('required')) {
+                                                <mat-error>Podaj Numer domu</mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="my-7.5"></div>
@@ -184,15 +189,20 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Numer mieszkania</div>
-                                    @if (this.validityCheckRequired('flatNumber')) {
-                                        <span class="text-red-700 text-2sm">Podaj Numer mieszkania</span>
-                                    } @else {
                                     <span class="text-gray-700 text-2sm">Numer mieszkania</span>
-                                }
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('flatNumber')}" class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="flatNumber"/>
-                                </label>
+                                <div class="sm:max-w-full xl:max-w-96 w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Numer mieszkania</mat-label>
+                                            <input type="text" matInput [formControl]="getFlatNumberControl()"
+                                                   placeholder="Numer mieszkania">
+                                            @if (getFlatNumberControl().hasError('required')) {
+                                                <mat-error>Podaj Numer mieszkania</mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="my-7.5"></div>
