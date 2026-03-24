@@ -11,10 +11,10 @@ public class UserPaginationService {
 
     private final UserPaginationRepository userPaginationRepository;
 
-    public AppUsersResponse findAllAppUsers() {
+    public AppUsersResponse findAllAppUsers(String search) {
         AppUsersResponse appUsersResponse = new AppUsersResponse();
 
-        userPaginationRepository.findAll().stream()
+        userPaginationRepository.findAllByUsernameContainsOrEmailContains(search, search).stream()
                 .map(user -> new AppUser()
                         .username(user.getUsername())
                         .email(user.getEmail())

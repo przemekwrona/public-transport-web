@@ -25,7 +25,8 @@ public class UserController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<AppUsersResponse> getAppUsers() {
-        return ResponseEntity.ok(userPaginationService.findAllAppUsers());
+    public ResponseEntity<AppUsersResponse> getAppUsers(String search) {
+        return ResponseEntity.ok(userPaginationService.findAllAppUsers(search));
     }
+
 }
