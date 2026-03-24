@@ -32,18 +32,22 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Nazwa Firmy</div>
-                                    @if (this.validityCheckRequired('companyName')) {
-                                        <span class="text-red-700 text-2sm">Nazwa firmy jest wymagana</span>
-                                    } @else if (this.validityCheckMinLength('companyName')) {
-                                        <span class="text-red-700 text-2sm">Nazwa firmy powinna mieć conajmniej 3 znaki</span>
-                                    } @else {
-                                        <span class="text-gray-700 text-2sm">Nazwa firmy w CEIDG</span>
-                                    }
+                                    <span class="text-gray-700 text-2sm">Nazwa firmy w CEIDG</span>
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('companyName')}"
-                                       class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="companyName"/>
-                                </label>
+                                <div class="sm:max-w-full xl:max-w-96 w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Nazwa Firmy</mat-label>
+                                            <input type="text" matInput [formControl]="getCompanyNameControl()"
+                                                   placeholder="Nazwa Firmy">
+                                            @if (getCompanyNameControl().hasError('required')) {
+                                                <mat-error>Nazwa firmy jest wymagana</mat-error>
+                                            } @else if (getCompanyNameControl().hasError('minlength')) {
+                                                <mat-error>Nazwa firmy powinna mieć conajmniej 3 znaki</mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="my-7.5"></div>
