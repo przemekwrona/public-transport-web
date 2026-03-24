@@ -109,17 +109,39 @@
                                     <span class="text-gray-700 text-2sm">Właściciel konta</span>
                                 </div>
                                 <div class="sm:max-w-full xl:max-w-96 w-full">
-                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
-                                            <mat-label>Właściciel konta</mat-label>
-                                            <input type="text" matInput
-                                                   [formControl]="getAccountNameControl()"
-                                                   placeholder="Właściciel konta">
-                                            @if (getAccountNameControl().hasError('required')) {
-                                                <mat-error>Wskaż właściciela konta</mat-error>
-                                            }
-                                        </mat-form-field>
-                                    </div>
+                                    <mat-form-field appearance="outline" class="custom-form-field w-full">
+                                        <mat-label>Właściciel konta</mat-label>
+                                        <mat-select [formControl]="getAccountNameControl()"
+                                                    placeholder="Właściciel konta">
+
+                                            <div class="select-search-container">
+                                                <mat-form-field appearance="outline" class="w-full">
+                                                    <input matInput
+                                                           placeholder="Szukaj..."
+                                                           [formControl]="searchAppUser"
+                                                           (keydown)="$event.stopPropagation()">
+                                                </mat-form-field>
+                                            </div>
+
+                                            <mat-select-trigger>
+                                              <span *ngIf="searchAppUser.value">
+                                                  @let user = findAppUserByUsername(getAccountNameControl().value);
+                                                  <strong>{{ user?.username }}</strong> {{ user?.email }}
+                                              </span>
+                                            </mat-select-trigger>
+
+                                            <mat-option *ngFor="let appUser of filteredAppUsers"
+                                                        [value]="appUser.username">
+                                                <div>{{ appUser.username }}</div>
+                                                <div class="text-sm text-gray-500">{{ appUser.email }}</div>
+                                            </mat-option>
+
+                                            <mat-option *ngIf="(filteredAppUsers)?.length === 0" disabled>
+                                                Brak wyników dla frazy {{ searchAppUser.value }}
+                                            </mat-option>
+
+                                        </mat-select>
+                                    </mat-form-field>
                                 </div>
                             </div>
 
