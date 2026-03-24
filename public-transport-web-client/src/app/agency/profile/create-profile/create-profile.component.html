@@ -200,15 +200,20 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Kod pocztowy</div>
-                                    @if (this.validityCheckRequired('postalCode')) {
-                                        <span class="text-red-700 text-2sm">Podaj Kod pocztowy</span>
-                                    } @else {
                                     <span class="text-gray-700 text-2sm">Kod pocztowy</span>
-                                }
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('postalCode')}" class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="postalCode"/>
-                                </label>
+                                <div class="sm:max-w-full xl:max-w-96 w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Kod pocztowy</mat-label>
+                                            <input type="text" matInput [formControl]="getPostalCodeControl()"
+                                                   placeholder="Kod pocztowy">
+                                            @if (getPostalCodeControl().hasError('required')) {
+                                                <mat-error>Podaj Kod pocztowy</mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="my-7.5"></div>
@@ -216,15 +221,20 @@
                             <div class="flex flex-wrap justify-between gap-5">
                                 <div class="flex flex-col">
                                     <div class="text-gray-900 text-sm font-medium">Miasto</div>
-                                    @if (this.validityCheckRequired('postalCity')) {
-                                        <span class="text-red-700 text-2sm">Podaj Miasto</span>
-                                    } @else {
                                     <span class="text-gray-700 text-2sm">Miasto</span>
-                                }
                                 </div>
-                                <label [ngClass]="{'border-red-700': validityCheck('postalCity')}" class="input sm:max-w-full xl:max-w-96 w-full">
-                                    <input type="text" formControlName="postalCity"/>
-                                </label>
+                                <div class="sm:max-w-full xl:max-w-96 w-full">
+                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Miasto</mat-label>
+                                            <input type="text" matInput [formControl]="getPostalCityControl()"
+                                                   placeholder="Identyfikator Firmy">
+                                            @if (getPostalCityControl().hasError('required')) {
+                                                <mat-error>Podaj Miasto</mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="border-t border-gray-200 my-7.5"></div>
