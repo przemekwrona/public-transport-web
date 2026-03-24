@@ -86,6 +86,10 @@ export class CreateProfileComponent {
         return this.createProfileForm.get("taxIdentificationNumber") as FormControl<string>;
     }
 
+    public getStreetNumberControl(): FormControl<string> {
+        return this.createProfileForm.get("street") as FormControl<string>;
+    }
+
     public getHouseNumberControl(): FormControl<string> {
         return this.createProfileForm.get("houseNumber") as FormControl<string>;
     }
