@@ -38,3 +38,7 @@ databaseChangeLog:
   - include:
       file: 010_init_territorial_units.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 011_territorial_stop_matcher.yaml
+      relativeToChangelogFile: true
