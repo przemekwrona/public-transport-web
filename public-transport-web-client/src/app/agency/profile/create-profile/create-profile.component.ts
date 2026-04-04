@@ -65,7 +65,7 @@ export class CreateProfileComponent implements OnInit {
 
     private _filter(value: string): Observable<AppUser[]> {
         const filterValue = value.toLowerCase();
-        return this.usersService.getAppUsers(filterValue).pipe(
+        return this.usersService.getAppUsers().pipe(
             map(response => response.users)
         );
     }
