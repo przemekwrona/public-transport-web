@@ -34,3 +34,7 @@ databaseChangeLog:
   - include:
       file: 009_fixes_after_second_deploy.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 010_init_territorial_units.yaml
+      relativeToChangelogFile: true
