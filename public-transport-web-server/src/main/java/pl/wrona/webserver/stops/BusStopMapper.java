@@ -1,6 +1,10 @@
 package pl.wrona.webserver.stops;
 
+import org.apache.commons.lang3.StringUtils;
 import org.igeolab.iot.pt.server.api.model.Stop;
+import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
+
+import java.util.Optional;
 
 public class BusStopMapper {
 
@@ -14,6 +18,9 @@ public class BusStopMapper {
                 .lat((float) stop.getLat())
                 .isBdot10k(stop.isBdot10k())
                 .isOsm(stop.isOsm())
-                .territoryOsmId(stop.getTerritorialUnit().getLokalnyid());
+                .territoryOsmId(Optional.of(stop)
+                        .map(BusStop::getTerritorialUnit)
+                        .map(TerritorialUnitEntity::getLokalnyid)
+                        .orElse(StringUtils.EMPTY));
     }
 }
