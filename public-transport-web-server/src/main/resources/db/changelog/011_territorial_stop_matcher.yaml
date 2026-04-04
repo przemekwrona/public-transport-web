@@ -52,6 +52,3 @@ databaseChangeLog:
             referencedTableName: territorial_unit
             referencedColumnNames: territorial_unit_id
             constraintName: fk_stop_territorial_unit
-
-        - dropTable:
-            tableName: territorial_unit_stop
