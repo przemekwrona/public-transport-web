@@ -3,11 +3,14 @@ package pl.wrona.webserver.stops;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
 
 @Entity
 @Table(name = "stop")
@@ -39,5 +42,9 @@ public class BusStop {
 
     @Column(name = "is_active")
     private boolean active;
+
+    @ManyToOne
+    @JoinColumn(name = "territorial_unit_id", nullable = false)
+    private TerritorialUnitEntity territorialUnit;
 }
 

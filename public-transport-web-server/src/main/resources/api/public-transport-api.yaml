@@ -1224,6 +1224,8 @@ components:
           type: boolean
         isBdot10k:
           type: boolean
+        territory_osm_id:
+          type: string
 
     StopsPatchRequest:
       type: object
@@ -1243,6 +1245,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Stop'
+        territories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Territory'
 
     RouteId:
       type: object
@@ -1649,6 +1655,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AppUser'
+
+    Territory:
+      type: object
+      properties:
+        id:
+          type: string
+        teryt:
+          type: string
+        idterc:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
 
     Status:
       type: object
