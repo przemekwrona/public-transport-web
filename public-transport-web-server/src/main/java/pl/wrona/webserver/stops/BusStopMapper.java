@@ -13,6 +13,7 @@ public class BusStopMapper {
                 .lon((float) stop.getLon())
                 .lat((float) stop.getLat())
                 .isBdot10k(stop.isBdot10k())
-                .isOsm(stop.isOsm());
+                .isOsm(stop.isOsm())
+                .territoryOsmId(stop.getTerritorialUnit().getLokalnyid());
     }
 }
