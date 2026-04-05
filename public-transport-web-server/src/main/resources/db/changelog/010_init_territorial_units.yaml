@@ -43,10 +43,10 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: INT
               - column:
-                  name: CENTROID_LON
+                  name: LON
                   type: DECIMAL(20,15)
               - column:
-                  name: CENTROID_LAT
+                  name: LAT
                   type: DECIMAL(20,15)
 
         - createIndex:
@@ -100,12 +100,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -146,12 +146,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -192,12 +192,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -238,12 +238,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -284,12 +284,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -330,12 +330,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -376,12 +376,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -422,12 +422,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -468,12 +468,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -514,12 +514,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -560,12 +560,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -606,12 +606,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -652,12 +652,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -698,12 +698,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
 
         - loadData:
@@ -745,12 +745,12 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
         - loadData:
             tableName: territorial_unit
@@ -791,10 +791,10 @@ databaseChangeLog:
                   name: LICZ_MIESZ
                   type: NUMERIC
               - column:
-                  header: LON
-                  name: CENTROID_LON
+                  header: LAT
+                  name: LAT
                   type: NUMERIC
               - column:
-                  header: LAT
-                  name: CENTROID_LAT
+                  header: LON
+                  name: LON
                   type: NUMERIC
