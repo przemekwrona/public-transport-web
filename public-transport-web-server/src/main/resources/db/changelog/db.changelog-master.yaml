@@ -42,3 +42,7 @@ databaseChangeLog:
   - include:
       file: 011_territorial_stop_matcher.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 012_teryt.yaml
+      relativeToChangelogFile: true
