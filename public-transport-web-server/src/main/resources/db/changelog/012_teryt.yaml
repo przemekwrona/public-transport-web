@@ -1,0 +1,87 @@
+databaseChangeLog:
+  - changeSet:
+      id: init-teryt
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: teryt
+            columns:
+              - column:
+                  name: TERYT
+                  type: VARCHAR(4)
+              - column:
+                  name: IDTERC
+                  type: VARCHAR(7)
+              - column:
+                  name: WOJ
+                  type: VARCHAR(2)
+              - column:
+                  name: POW
+                  type: VARCHAR(2)
+              - column:
+                  name: GMI
+                  type: VARCHAR(2)
+              - column:
+                  name: RODZ
+                  type: CHAR(1)
+              - column:
+                  name: NAZWA
+                  type: VARCHAR(50)
+              - column:
+                  name: NAZWA_DOD
+                  type: VARCHAR(50)
+
+        - loadData:
+            tableName: teryt
+            file: db/gus/teryt/TERC_Adresowy_2026-04-05.csv
+            separator: ";"
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: WOJ
+                  name: WOJ
+                  type: STRING
+              - column:
+                  header: POW
+                  name: POW
+                  type: STRING
+              - column:
+                  header: GMI
+                  name: GMI
+                  type: STRING
+              - column:
+                  header: RODZ
+                  name: RODZ
+                  type: STRING
+              - column:
+                  header: NAZWA
+                  name: NAZWA
+                  type: STRING
+              - column:
+                  header: NAZWA_DOD
+                  name: NAZWA_DOD
+                  type: STRING
+
+        - modifyDataType:
+            tableName: territorial_unit
+            columnName: idterc
+            newDataType: varchar(7)
+
+        - modifyDataType:
+            tableName: territorial_unit
+            columnName: teryt
+            newDataType: varchar(4)
+
+        - createIndex:
+            indexName: idx_teryt_idterc
+            unique: true
+            tableName: teryt
+            columns:
+              - column:
+                  name: idterc
+
+        - sql:
+            sql: UPDATE teryt SET idterc = CONCAT(woj, pow, gmi, rodz) WHERE woj != '' AND pow != '' AND gmi != '' AND rodz != '';
+
+        - sql:
+            sql: UPDATE teryt SET teryt = CONCAT(woj, pow) WHERE woj != '' AND pow != '' AND gmi = '' AND rodz = '';
