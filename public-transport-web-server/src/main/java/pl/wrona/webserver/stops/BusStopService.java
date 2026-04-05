@@ -25,7 +25,7 @@ public class BusStopService {
 
     public StopsResponse findBusStop(float maxLat, float minLon, float minLat, float maxLon) {
         var stopEntities = busStopRepository.findAllByArea(maxLat, minLon, minLat, maxLon);
-        var stopIds = stopEntities.stream().map(BusStop::getTerritorialUnit).map(TerritorialUnitEntity::getTerritorialUnitId).toList();
+        var stopIds = stopEntities.stream().map(BusStop::getTerritorialUnit).filter(Objects::nonNull).map(TerritorialUnitEntity::getTerritorialUnitId).toList();
         var territoryEntities = territorialUnitQueryService.findAllByStopIn(stopIds);
         var territories = territoryEntities.stream()
                 .map(it -> new Territory()

@@ -54,10 +54,10 @@ public class TerritorialUnitEntity {
     @Column(name = "licz_miesz")
     private String liczMiesz;
 
-    @Column(name = "centroid_lon")
+    @Column(name = "lon")
     private String centroidLon;
 
-    @Column(name = "centroid_lat")
+    @Column(name = "lat")
     private String centroidLat;
 
     @OneToMany(mappedBy = "territorialUnit")
