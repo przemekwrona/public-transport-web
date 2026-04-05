@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: init-territorial-units
+      id: init-territorial-units-stops
       author: pwrona
       changes:
         - createTable:
@@ -14,7 +14,7 @@ databaseChangeLog:
                   type: VARCHAR(36)
 
   - changeSet:
-      id: load-territorial-units
+      id: load-territorial-unit-stops
       author: pwrona
       changes:
         - loadData:
