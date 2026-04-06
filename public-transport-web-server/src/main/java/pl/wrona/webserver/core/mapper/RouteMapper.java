@@ -18,7 +18,7 @@ public class RouteMapper {
 
     public Route map(RouteEntity routeEntity, Map<Long, StopEntity> stops, Map<Long, RouteEntity> routeWithBrigades, Map<Long, TerritorialUnitEntity> territories) {
         var originStop = Optional.ofNullable(stops.get(routeEntity.getOriginStopId()));
-        var destinationStop = Optional.ofNullable(stops.get(routeEntity.getOriginStopId()));
+        var destinationStop = Optional.ofNullable(stops.get(routeEntity.getDestinationStopId()));
 
         var originTerritoryOpt = Optional.ofNullable(territories.get(originStop.map(StopEntity::getTerritorialUnitId).orElse(null)));
         var destinationTerritoryOpt = Optional.ofNullable(territories.get(destinationStop.map(StopEntity::getTerritorialUnitId).orElse(null)));
