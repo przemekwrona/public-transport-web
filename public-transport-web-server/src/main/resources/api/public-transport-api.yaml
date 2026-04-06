@@ -940,6 +940,25 @@ paths:
   /agency/{agency}/timetable-generator/calendars:
     $ref: './paths/timetable-generator-api.yaml#/paths/~1agency~1{agency}~1timetable-generator~1calendars'
 
+  /location/search:
+    get:
+      tags:
+        - location
+      operationId: findLocationByName
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Gtfs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationSearchResponse'
+
 components:
   schemas:
     CreateAppUserRequest:
@@ -1681,6 +1700,28 @@ components:
           type: string
         voivodeshipName:
           type: string
+
+    LocationSearch:
+      type: object
+      properties:
+        territorial_unit_id:
+          type: string
+        name:
+          type: string
+        woj:
+          type: string
+        pow:
+          type: string
+        gm:
+          type: string
+
+    LocationSearchResponse:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationSearch'
 
     Status:
       type: object
