@@ -91,3 +91,15 @@ databaseChangeLog:
 
         - sql:
             sql: UPDATE teryt SET idterc = teryt WHERE idterc IS NULL;
+
+  - changeSet:
+      id: city-selector-adaptation
+      author: pwrona
+      changes:
+        - update:
+            id: upper-nazwa-in-territorial_unit
+            tableName: territorial_unit
+            columns:
+              - column:
+                  name: nazwa
+                  valueComputed: UPPER(nazwa)
