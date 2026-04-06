@@ -52,7 +52,7 @@ public class TerritorialUnitEntity {
     private String rodzaj;
 
     @Column(name = "licz_miesz")
-    private String liczMiesz;
+    private Integer liczMiesz;
 
     @Column(name = "lon")
     private String centroidLon;

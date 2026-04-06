@@ -13,5 +13,5 @@ public interface TerritorialUnitRepository extends JpaRepository<TerritorialUnit
     @Query(value = "SELECT t FROM TerritorialUnitEntity t WHERE t.territorialUnitId IN :territoriesIds")
     List<TerritorialUnitEntity> findAllByStopIn(@Param("territoriesIds") List<Long> territoriesIds);
 
-    List<TerritorialUnitEntity> findAllByNazwaLike(String nazwa);
+    List<TerritorialUnitEntity> findAllByNazwaStartingWith(String nazwa);
 }
