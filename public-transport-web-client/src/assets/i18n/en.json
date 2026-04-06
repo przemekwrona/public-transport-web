@@ -12,8 +12,6 @@
   "agency.trip.mainVariant": "Missing value for 'agency.trip.mainVariant'",
   "agency.trip.variantDetails": "Missing value for 'agency.trip.variantDetails'",
   "common.attention": "Missing value for 'common.attention'",
-  "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
-  "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'",
   "agency.profile.title": "Missing value for 'agency.profile.title'",
   "agency.profile.subtitle": "Missing value for 'agency.profile.subtitle'",
   "common.date.months.1": "Missing value for 'common.date.months.1'",
@@ -27,5 +25,7 @@
   "common.date.months.9": "Missing value for 'common.date.months.9'",
   "common.date.months.10": "Missing value for 'common.date.months.10'",
   "common.date.months.11": "Missing value for 'common.date.months.11'",
-  "common.date.months.12": "Missing value for 'common.date.months.12'"
+  "common.date.months.12": "Missing value for 'common.date.months.12'",
+  "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
+  "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'"
 }
