@@ -12,8 +12,6 @@
   "agency.trip.mainVariant": "Missing value for 'agency.trip.mainVariant'",
   "agency.trip.variantDetails": "Missing value for 'agency.trip.variantDetails'",
   "common.attention": "Missing value for 'common.attention'",
-  "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
-  "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'",
   "agency.profile.title": "Missing value for 'agency.profile.title'",
   "agency.profile.subtitle": "Missing value for 'agency.profile.subtitle'",
   "common.date.months.1": "Styczeń",
@@ -28,6 +26,8 @@
   "common.date.months.10": "Październik",
   "common.date.months.11": "Listopad",
   "common.date.months.12": "Grudzień",
+  "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
+  "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'",
   "common": {
     "attention": "Uwaga"
   },
