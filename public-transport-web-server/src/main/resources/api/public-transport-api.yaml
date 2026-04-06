@@ -1662,12 +1662,24 @@ components:
         id:
           type: string
         teryt:
-          type: string
+          $ref: '#/components/schemas/Teryt'
         idterc:
           type: string
         name:
           type: string
         type:
+          type: string
+
+    Teryt:
+      type: object
+      properties:
+        teryt:
+          type: string
+        terytName:
+          type: string
+        voivodeshipTeryt:
+          type: string
+        voivodeshipName:
           type: string
 
     Status:
