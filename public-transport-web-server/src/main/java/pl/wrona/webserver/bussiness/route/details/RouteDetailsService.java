@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.core.TerritorialUnitQueryService;
+import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +25,7 @@ public class RouteDetailsService {
     private final RouteQueryService routeQueryService;
     private final TripQueryService tripQueryService;
     private final StopService stopService;
+    private final TerritorialUnitQueryService territorialUnitQueryService;
 
     @PreAgencyAuthorize
     public RouteDetails getRouteDetails(String instance, RouteId routeId) {
@@ -34,8 +39,11 @@ public class RouteDetailsService {
         var stopsIds = List.of(route.getOriginStopId(), route.getDestinationStopId());
         var stopDictionary = stopService.mapStopByIdsIn(stopsIds);
 
+        var territoriesUnits = territorialUnitQueryService.findAllByStopIdIn(stopsIds);
+        var territoriesDictionary = territoriesUnits.stream().collect(Collectors.toMap(TerritorialUnitEntity::getTerritorialUnitId, Function.identity()));
+
         return new RouteDetails()
-                .route(RouteMapper.map(route, stopDictionary, Map.of()))
+                .route(RouteMapper.map(route, stopDictionary, Map.of(), territoriesDictionary))
                 .trips(trips);
     }
 }

@@ -48,7 +48,7 @@ public class TripPaginationService {
 
         List<RouteDetails> tripsResponse = tripSet.keySet().stream()
                 .map(route -> new RouteDetails()
-                        .route(RouteMapper.map(route, stopDictionary, Map.of()))
+                        .route(RouteMapper.map(route, stopDictionary, Map.of(), Map.of()))
                         .trips(tripSet.get(route).stream()
                                 .map(trip -> TripMapper.map(trip, Map.of()))
                                 .sorted(Comparator

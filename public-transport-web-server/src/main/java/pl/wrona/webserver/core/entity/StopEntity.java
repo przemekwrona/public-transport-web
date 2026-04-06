@@ -54,4 +54,7 @@ public class StopEntity {
 
     @OneToMany(mappedBy = "stopEntity")
     private List<StopTimeEntity> stopTimeEntities;
+
+    @Column(name = "territorial_unit_id")
+    private Long territorialUnitId;
 }

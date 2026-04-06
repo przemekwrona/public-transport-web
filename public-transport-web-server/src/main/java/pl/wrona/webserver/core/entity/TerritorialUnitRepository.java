@@ -11,7 +11,10 @@ import java.util.List;
 public interface TerritorialUnitRepository extends JpaRepository<TerritorialUnitEntity, Long> {
 
     @Query(value = "SELECT t FROM TerritorialUnitEntity t WHERE t.territorialUnitId IN :territoriesIds")
-    List<TerritorialUnitEntity> findAllByStopIn(@Param("territoriesIds") List<Long> territoriesIds);
+    List<TerritorialUnitEntity> findAllByTerritoriesIdIn(@Param("territoriesIds") List<Long> territoriesIds);
+
+    @Query(value = "SELECT t FROM TerritorialUnitEntity t JOIN t.busStops s WHERE s.stopId IN :stopIds")
+    List<TerritorialUnitEntity> findAllByStopIdIn(@Param("stopIds") List<Long> stopIds);
 
     List<TerritorialUnitEntity> findAllByNazwaStartingWith(String nazwa);
 }

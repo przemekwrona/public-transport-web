@@ -32,7 +32,7 @@ public class BusStopService {
     public StopsResponse findBusStop(float maxLat, float minLon, float minLat, float maxLon) {
         var stopEntities = busStopRepository.findAllByArea(maxLat, minLon, minLat, maxLon);
         var territorialUnitIds = stopEntities.stream().map(BusStop::getTerritorialUnit).filter(Objects::nonNull).map(TerritorialUnitEntity::getTerritorialUnitId).toList();
-        var territoryEntities = territorialUnitQueryService.findAllByStopIn(territorialUnitIds);
+        var territoryEntities = territorialUnitQueryService.findAllByTerritoriesIdIn(territorialUnitIds);
         var tertitoryIdterc = territoryEntities.stream().map(TerritorialUnitEntity::getIdterc).collect(Collectors.toSet());
         var tertitoryTeryts = territoryEntities.stream().map(TerritorialUnitEntity::getTeryt).collect(Collectors.toSet());
 
