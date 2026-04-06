@@ -1,0 +1,166 @@
+databaseChangeLog:
+  - changeSet:
+      id: remapping-stop-to-territorial-unit
+      author: pwrona
+      context: prod
+      changes:
+        - sql:
+            sql: TRUNCATE TABLE territorial_unit_stop;
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_1.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_2.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_3.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_4.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_5.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_6.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_7.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_8.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_9.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+        - loadData:
+            tableName: territorial_unit_stop
+            file: db/bdot/adms_stop_maping_on_prod/stop_part_10.csv
+            separator: ","
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: stop_id
+                  name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: LOKALNYID
+                  name: LOKALNYID
+                  type: STRING
+
+  - changeSet:
+      id: remapping-and-assigning-stop-to-territorial-unit
+      author: pwrona
+      context: prod
+      changes:
+        - sql:
+            sql: UPDATE stop s SET territorial_unit_id =  t.territorial_unit_id FROM territorial_unit_stop ts JOIN territorial_unit t ON t.lokalnyid = ts.lokalnyid WHERE ts.stop_id = s.stop_id;
