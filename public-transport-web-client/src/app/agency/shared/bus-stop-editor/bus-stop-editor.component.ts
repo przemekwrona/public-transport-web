@@ -18,6 +18,16 @@ export class BusStopEditorComponent implements OnChanges {
     @Input() public stopName: string;
     @Input() public lon: number;
     @Input() public lat: number;
+    @Input() public isBdot: boolean;
+    @Input() public isOsm: boolean;
+
+    @Input() public territoryName: string;
+    @Input() public type: string;
+    @Input() public teryt: string;
+    @Input() public terytName: string;
+    @Input() public voivodeshipTeryt: string;
+    @Input() public voivodeshipName: string;
+    @Input() public idterc: string;
 
     @Output() public onSaved = new EventEmitter<StopsPatchRequest>();
 
@@ -41,4 +51,5 @@ export class BusStopEditorComponent implements OnChanges {
         this.active = true;
     }
 
+    protected readonly name = name;
 }
