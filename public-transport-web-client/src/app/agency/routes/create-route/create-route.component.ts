@@ -43,6 +43,10 @@ export class CreateRouteComponent implements OnInit {
         return this.modelForm.get('origin') as FormGroup;
     }
 
+    get originCityControl(): FormGroup {
+        return this.modelForm.get('originCity') as FormGroup;
+    }
+
     get destinationControl(): FormGroup {
         return this.modelForm.get('destination') as FormGroup;
     }
@@ -64,6 +68,14 @@ export class CreateRouteComponent implements OnInit {
                 name: [''],
                 lon: [''],
                 lat: ['']
+            }),
+            originCity: this.formBuilder.group({
+                id: [''],
+                name: ['']
+            }),
+            destinationCity: this.formBuilder.group({
+                id: [''],
+                name: ['']
             })
         });
     }
