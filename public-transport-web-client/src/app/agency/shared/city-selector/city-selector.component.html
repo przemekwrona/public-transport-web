@@ -1,1 +1,30 @@
-<p>city-selector works!</p>
+<mat-form-field appearance="outline" class="w-full custom-form-field">
+    <mat-label>{{ placeholderLabel }}</mat-label>
+    <mat-select [formControl]="cityIdControl"
+                [compareWith]="compareCities"
+                class="busstop-select"
+                placeholder="{{ placeholderLabel }}">
+
+
+        <mat-option>
+            <ngx-mat-select-search [formControl]="searchCityControl"
+                                   [placeholderLabel]="'Nazwa przystanku autobusowego'"
+                                   [noEntriesFoundLabel]="'Wpisz co najmniej 3 znaki'">
+            </ngx-mat-select-search>
+        </mat-option>
+
+        @for (city of filteredCities; track city) {
+            <mat-option [value]="city.territorial_unit_id" (click)="onClickCity(city)">
+
+                <div class="my-2">
+                    <div class="mr-2">{{ city.name }}&nbsp;</div>
+                    <div class="text-sm text-gray-600">woj: {{ lower(city.woj) }} pow: {{ city.pow }}</div>
+                </div>
+            </mat-option>
+        }
+    </mat-select>
+
+    @if (cityIdControl.hasError('required')) {
+        <mat-error>Wprowadź nazwę miejscowośći</mat-error>
+    }
+</mat-form-field>
