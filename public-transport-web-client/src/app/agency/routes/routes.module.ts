@@ -12,6 +12,7 @@ import {RouteListComponent} from "./route-list/route-list.component";
 import {PdfService} from "../../generated/public-transport-pdf-api";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {CitySelectorComponent} from "../shared/city-selector/city-selector.component";
 
 @NgModule({
     declarations: [
@@ -33,7 +34,8 @@ import {MatInputModule} from "@angular/material/input";
         RouteListComponent,
         ReactiveFormsModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        CitySelectorComponent
     ], providers: [
         PdfService
     ]

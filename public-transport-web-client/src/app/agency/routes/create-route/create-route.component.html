@@ -130,6 +130,17 @@
                                 </div>
                             </div>
 
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 max-w-56">
+                                        Miejscowość początkowa
+                                    </label>
+                                    <label class="sm:max-w-full w-full">
+                                        <app-city-selector [cityControl]="originCityControl" [placeholderLabel]="'Miejscowość początkowa'" class="w-full"></app-city-selector>
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="border-t border-gray-200"></div>
 
                             <div class="flex justify-end pt-2.5 gap-2.5">
