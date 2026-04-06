@@ -7,23 +7,93 @@
             <input class="input" type="text" [(ngModel)]="stopName"/>
         </div>
     </div>
+
     <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label class="form-label max-w-56">
-            Współrzędne Geograficzne
+        <label class="form-label">
+            <span class="">Miejscowość</span>
         </label>
-        <div class="grow text-sm">
+        <div class="grow text-sm min-w-56 text-right">
+            @if (type) {
+                <span class="badge badge-sm badge-outline badge-primary mr-1">{{ type }}</span>
+            }
+            <span>{{ territoryName }} </span>
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label">
+            Powiat
+        </label>
+        <div class="grow text-sm min-w-56 text-right">
+            {{ terytName }}
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label">
+            Województwo
+        </label>
+        <div class="grow text-sm min-w-56 text-right">
+            {{ voivodeshipName }}
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label">
+            Pozycja
+        </label>
+        <div class="grow text-sm min-w-56 text-right">
             {{ lon }},{{ lat }}
         </div>
     </div>
-    <div class="flex items-center flex-wrap gap-2.5">
-        <label class="form-label max-w-56">
-            Widoczność przystanku
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label text-gray-600">
+            TERYT
         </label>
-        <label class="switch">
+        <div class="grow text-sm min-w-56 text-right text-gray-600">
+            {{ teryt }}
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label text-gray-600">TERC</label>
+        <div class="grow text-sm min-w-56 text-right text-gray-600">
+            {{ idterc }}
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label">Widoczność</label>
+        <label class="switch w-min-56">
             <input checked="" type="checkbox" [(ngModel)]="active"/>
             <span class="text-gray-800 text-sm">Aktywny</span>
         </label>
     </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label">Źródło</label>
+        <div class="grow text-sm w-min-56 text-right">
+            @if (isBdot) {
+<!--                <span>-->
+<!--                    <div class="bdot-stop">-->
+<!--                        <img src="assets/bus-solid.svg">-->
+<!--                    </div>-->
+<!--                </span>-->
+                <span class="badge badge-sm badge-outline badge-primary mr-1">BDOT10k</span>
+            }
+
+            @if (isOsm) {
+<!--                <span>-->
+<!--                     <div class="osm-stop">-->
+<!--                        <img src="assets/bus-solid.svg">-->
+<!--                     </div>-->
+<!--                </span>-->
+                <span class="badge badge-sm badge-outline badge-primary mr-1">OSM</span>
+            }
+        </div>
+    </div>
+
     <div class="flex justify-end">
         <button (click)="saveStop()" class="btn btn-primary">
             Zapisz zmiany

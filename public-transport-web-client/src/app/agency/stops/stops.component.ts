@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {find} from "lodash";
 
-import {CenterPoint, Stop, StopsResponse, StopsService} from "../../generated/public-transport-api";
+import {CenterPoint, Stop, StopsResponse, StopsService, Territory} from "../../generated/public-transport-api";
 import {LoginService} from "../../auth/login.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
@@ -41,7 +41,10 @@ export class StopsComponent implements OnInit, AfterViewInit {
     private stopMarkers: Marker[] = [];
 
     public stops: Stop[] = [];
+    public territories: Territory[] = [];
+
     public lastClickedStop: Stop = {} as Stop;
+    public lastClickedStopTerritory: Territory = {} as Territory;
 
     constructor(private stopsService: StopsService, private authService: LoginService, private router: Router, private route: ActivatedRoute, private googleAnalyticsService: GoogleAnalyticsService) {
     }
@@ -109,11 +112,15 @@ export class StopsComponent implements OnInit, AfterViewInit {
                     stopMarker.id = stop.id;
                     return stopMarker;
                 }) || []
-                stopMarkers.forEach(marker => marker.on('click', (event: LeafletMouseEvent) => this.lastClickedStop = find(this.stops, {id: event.target.id})));
+                stopMarkers.forEach(marker => marker.on('click', (event: LeafletMouseEvent) => {
+                    this.lastClickedStop = find(this.stops, {id: event.target.id});
+                    this.lastClickedStopTerritory = find(this.territories, {id: this.lastClickedStop.territory_osm_id});
+                }));
                 stopMarkers.forEach(marker => marker.addTo(map));
 
 
                 this.stops = response.stops || [];
+                this.territories = response.territories || [];
 
                 for (let marker of this.stopMarkers) {
                     marker.removeFrom(map);

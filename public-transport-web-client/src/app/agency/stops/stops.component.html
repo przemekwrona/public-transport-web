@@ -32,7 +32,17 @@
                                     [stopId]="lastClickedStop.id"
                                     [stopName]="lastClickedStop.name"
                                     [lon]="lastClickedStop.lon"
-                                    [lat]="lastClickedStop.lat"></app-bus-stop-editor>
+                                    [lat]="lastClickedStop.lat"
+                                    [isBdot]="lastClickedStop.isBdot10k"
+                                    [isOsm]="lastClickedStop.isOsm"
+
+                                    [territoryName]="lastClickedStopTerritory.name"
+                                    [type]="lastClickedStopTerritory.type"
+                                    [teryt]="lastClickedStopTerritory.teryt?.teryt"
+                                    [terytName]="lastClickedStopTerritory.teryt?.terytName"
+                                    [voivodeshipTeryt]="lastClickedStopTerritory.teryt?.voivodeshipTeryt"
+                                    [voivodeshipName]="lastClickedStopTerritory.teryt?.voivodeshipName"
+                                    [idterc]="lastClickedStopTerritory.idterc"></app-bus-stop-editor>
                         </div>
                     </div>
                 } @else {
@@ -65,6 +75,22 @@
                                     <div class="flex flex-col gap-0.5">
                                         <span class="flex items-center gap-1.5 leading-none font-medium text-sm text-gray-900">Nazwa przystanku</span>
                                         <span class="text-sm text-gray-700">{{ lastClickedStop?.name || ' ' }}</span>
+                                    </div>
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="flex items-center gap-1.5 leading-none font-medium text-sm text-gray-900">Nazwa przystanku</span>
+                                        <span class="text-sm text-gray-700">{{ lastClickedStopTerritory.name }}</span>
+                                    </div>
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="flex items-center gap-1.5 leading-none font-medium text-sm text-gray-900">Nazwa przystanku</span>
+                                        <span class="text-sm text-gray-700">{{ lastClickedStopTerritory.type }}</span>
+                                    </div>
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="flex items-center gap-1.5 leading-none font-medium text-sm text-gray-900">Nazwa przystanku</span>
+                                        <span class="text-sm text-gray-700">{{ lastClickedStopTerritory.teryt }}</span>
+                                    </div>
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="flex items-center gap-1.5 leading-none font-medium text-sm text-gray-900">Nazwa przystanku</span>
+                                        <span class="text-sm text-gray-700">{{ lastClickedStopTerritory.idterc }}</span>
                                     </div>
                                 </div>
                             </div>
