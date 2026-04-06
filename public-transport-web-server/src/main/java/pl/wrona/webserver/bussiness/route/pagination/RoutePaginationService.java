@@ -9,6 +9,7 @@ import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class RoutePaginationService {
         var routesWithBrigades = routeQueryService.findByExistsBrigade(instance);
 
         var items = routes.stream()
-                .map(route -> RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds), routesWithBrigades))
+                .map(route -> RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds), routesWithBrigades, Map.of()))
                 .toList();
 
         return new Routes()
