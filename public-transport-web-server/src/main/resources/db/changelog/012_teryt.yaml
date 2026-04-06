@@ -85,3 +85,9 @@ databaseChangeLog:
 
         - sql:
             sql: UPDATE teryt SET teryt = CONCAT(woj, pow) WHERE woj != '' AND pow != '' AND gmi = '' AND rodz = '';
+
+        - sql:
+            sql: UPDATE teryt SET teryt = CONCAT(woj) WHERE woj != '' AND pow = '' AND gmi = '' AND rodz = '';
+
+        - sql:
+            sql: UPDATE teryt SET idterc = teryt WHERE idterc IS NULL;
