@@ -11,7 +11,7 @@ import {faCircleXmark, faMap, faSpinner, IconDefinition} from '@fortawesome/free
 import {remove} from "lodash";
 import {map} from "rxjs";
 import {CommonModule} from "@angular/common";
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
@@ -22,6 +22,7 @@ import {
 import {MatDialog} from "@angular/material/dialog";
 import {TripItemComponent} from "./trip-item/trip-item.component";
 import {MatIconModule} from "@angular/material/icon";
+import {MatError, MatFormField, MatInput, MatLabel} from "@angular/material/input";
 
 @Component({
     selector: 'app-trip-list',
@@ -31,10 +32,17 @@ import {MatIconModule} from "@angular/material/icon";
         CommonModule,
         RouterModule,
         FormsModule,
+        ReactiveFormsModule,
         FaIconComponent,
         TranslocoPipe,
         TripItemComponent,
-        MatIconModule
+        MatIconModule,
+        MatError,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        MatError,
+        MatFormField
     ],
     providers: [
         TripService,
@@ -58,11 +66,21 @@ export class TripListComponent implements OnInit {
 
     public isUpdatingBasicInformation: boolean = false;
 
-    constructor(private tripService: TripService, private agencyStorageService: AgencyStorageService, private routeService: RouteService, private _router: Router, private _route: ActivatedRoute, private dialog: MatDialog) {
+    public modelForm: FormGroup;
+
+    constructor(private tripService: TripService, private agencyStorageService: AgencyStorageService, private routeService: RouteService, private _router: Router, private _route: ActivatedRoute, private dialog: MatDialog, private fb: FormBuilder) {
+        this.modelForm = this.fb.group({
+            line: ['', [Validators.required]],
+            name: ['', [Validators.required]]
+        });
     }
 
     ngOnInit(): void {
-        this._route.data.pipe(map((data: Data) => data['trips'])).subscribe(trips => this.trips = trips);
+        this._route.data.pipe(map((data: Data) => data['trips'])).subscribe(trips => {
+            this.getNameControl().setValue(trips.route.routeId.name);
+            this.getLineControl().setValue(trips.route.routeId.line);
+            this.trips = trips;
+        });
         this._route.queryParams.subscribe(params => this.state = params as {
             line: string,
             name: string,
@@ -89,8 +107,8 @@ export class TripListComponent implements OnInit {
 
         const route: Route = {
             routeId: {
-                line: this.trips.route.routeId.line,
-                name: this.trips.route.routeId.name,
+                line: this.getLineControl().value,
+                name: this.getNameControl().value,
                 version: this.trips.route.routeId.version
             },
             google: this.trips.route.google,
@@ -154,12 +172,12 @@ export class TripListComponent implements OnInit {
         const agency: string = this.agencyStorageService.getInstance();
         this.tripService.deleteTripByTripId(agency, $event).subscribe({
             next: (response) => remove(this.trips.trips, {
-                    line: $event.routeId.line,
-                    name: $event.routeId.name,
-                    variant: $event.variantName,
-                    mode: $event.variantMode,
-                    trafficMode: $event.trafficMode
-                })
+                line: $event.routeId.line,
+                name: $event.routeId.name,
+                variant: $event.variantName,
+                mode: $event.variantMode,
+                trafficMode: $event.trafficMode
+            })
         });
     }
 
@@ -169,5 +187,17 @@ export class TripListComponent implements OnInit {
 
     public findTripsWithDirectionBack(): Trip[] {
         return this.trips.trips.filter(trip => trip.mode === TripMode.Back);
+    }
+
+    public getControl(control: string): FormControl {
+        return this.modelForm.get(control) as FormControl;
+    }
+
+    public getLineControl(): FormControl<string> {
+        return this.getControl("line") as FormControl<string>;
+    }
+
+    public getNameControl(): FormControl<string> {
+        return this.getControl("name") as FormControl<string>;
     }
 }
