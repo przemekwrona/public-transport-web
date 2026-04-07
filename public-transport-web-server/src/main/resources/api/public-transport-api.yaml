@@ -1469,6 +1469,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Trip'
+        territories:
+          type: array
+          items:
+            $ref: '#/components/schemas/TerritoryUnit'
 
     TripsDetails:
       type: object
@@ -1741,6 +1745,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocationSearch'
+
+    TerritoryUnit:
+      type: object
+      properties:
+        name:
+          type: string
 
     Status:
       type: object

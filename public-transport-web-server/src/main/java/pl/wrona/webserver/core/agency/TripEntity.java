@@ -96,4 +96,8 @@ public class TripEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public boolean isFrontVariantMode() {
+        return TripVariantMode.FRONT.equals(variantMode);
+    }
+
 }
