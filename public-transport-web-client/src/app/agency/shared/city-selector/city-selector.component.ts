@@ -61,6 +61,8 @@ export class CitySelectorComponent {
 
         this.cityControl.get('id').setValue(location.territorial_unit_id);
         this.cityControl.get('name').setValue(location.name);
+        this.cityControl.get('lon').setValue(location.lon);
+        this.cityControl.get('lat').setValue(location.lat);
     }
 
     public lower(v: string): string {
