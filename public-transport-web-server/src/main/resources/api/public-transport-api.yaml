@@ -1737,6 +1737,12 @@ components:
           type: string
         gm:
           type: string
+        lon:
+          type: number
+          format: float
+        lat:
+          type: number
+          format: float
 
     LocationSearchResponse:
       type: object
