@@ -107,12 +107,42 @@
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label flex items-center gap-1 max-w-56">
+                                        Miejscowość początkowa
+                                    </label>
+                                    <label class="sm:max-w-full w-full">
+                                        <app-city-selector [cityControl]="originCityControl"
+                                                           [placeholderLabel]="'Miejscowość początkowa'"
+                                                           class="w-full"></app-city-selector>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 max-w-56">
                                         Przystanek początkowy
                                     </label>
                                     <label class="sm:max-w-full w-full">
+                                        @let originCity = getControl('originCity');
                                         <app-bus-stop-selector [stopControl]="originControl"
                                                                [placeholderLabel]="'Przystanek początkowy'"
+                                                               [suggestedLocation]="{lon: originCity.value.lon, lat: originCity.value.lat}"
                                                                class="w-full"></app-bus-stop-selector>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="border-t my-2 border-white"></div>
+
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 max-w-56">
+                                        Miejscowość końcowa
+                                    </label>
+                                    <label class="sm:max-w-full w-full">
+                                        <app-city-selector [cityControl]="destinationCityControl"
+                                                           [placeholderLabel]="'Miejscowość końcowa'"
+                                                           class="w-full"></app-city-selector>
                                     </label>
                                 </div>
                             </div>
@@ -123,20 +153,11 @@
                                         Przystanek końcowy
                                     </label>
                                     <label class="sm:max-w-full w-full">
+                                        @let destinationCity = getControl('destinationCity');
                                         <app-bus-stop-selector [stopControl]="destinationControl"
                                                                [placeholderLabel]="'Przystanek końcowy'"
+                                                               [suggestedLocation]="{lon: destinationCity.value.lon, lat: destinationCity.value.lat}"
                                                                class="w-full"></app-bus-stop-selector>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="w-full">
-                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                    <label class="form-label flex items-center gap-1 max-w-56">
-                                        Miejscowość początkowa
-                                    </label>
-                                    <label class="sm:max-w-full w-full">
-                                        <app-city-selector [cityControl]="originCityControl" [placeholderLabel]="'Miejscowość początkowa'" class="w-full"></app-city-selector>
                                     </label>
                                 </div>
                             </div>
@@ -144,7 +165,7 @@
                             <div class="border-t border-gray-200"></div>
 
                             <div class="flex justify-end pt-2.5 gap-2.5">
-                                <button  type="button" [routerLink]="['/agency/routes']" class="btn btn-secondary">
+                                <button type="button" [routerLink]="['/agency/routes']" class="btn btn-secondary">
                                     Anuluj i wróć do listy linii
                                 </button>
                                 <button type="submit" class="btn btn-success">
