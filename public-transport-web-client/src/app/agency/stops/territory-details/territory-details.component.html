@@ -1,0 +1,47 @@
+<div class="grid gap-5">
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label">
+            <span class="">Miejscowość</span>
+        </label>
+        <div class="grow text-sm min-w-56 text-right">
+            @if (territory.type) {
+                <span class="badge badge-sm badge-outline badge-primary mr-1">{{ territory.type }}</span>
+            }
+            <span>{{ territory?.name }} </span>
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label">
+            Powiat
+        </label>
+        <div class="grow text-sm min-w-56 text-right">
+            {{ territory?.teryt?.terytName }}
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label">
+            Województwo
+        </label>
+        <div class="grow text-sm min-w-56 text-right">
+            {{ territory?.teryt?.voivodeshipName }}
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label text-gray-600">
+            TERYT
+        </label>
+        <div class="grow text-sm min-w-56 text-right text-gray-600">
+            {{ territory?.teryt?.teryt }}
+        </div>
+    </div>
+
+    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label class="form-label text-gray-600">TERC</label>
+        <div class="grow text-sm min-w-56 text-right text-gray-600">
+            {{ territory?.idterc }}
+        </div>
+    </div>
+</div>
