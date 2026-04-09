@@ -35,7 +35,9 @@ public class LocationQueryService {
                         .name(it.getNazwa())
                         .woj(voivodship.get(it.getTeryt().substring(0, 2)).getNazwa())
                         .pow(powiat.get(it.getTeryt()).getNazwa())
-                        .gm(String.valueOf(it.getLiczMiesz())))
+                        .gm(String.valueOf(it.getLiczMiesz()))
+                        .lon(it.getCentroidLon())
+                        .lat(it.getCentroidLat()))
                 .toList();
 
         return new LocationSearchResponse()
