@@ -112,7 +112,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
             center: [this.data.busStop.stopLat || 52.2321, this.data.busStop.stopLon || 20.0559],
             // center: [52.2321, 20.0559],
             // zoom: 7,
-            zoom: 17,
+            zoom: 15,
             zoomControl: false
         });
 
