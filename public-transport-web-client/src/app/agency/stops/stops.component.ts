@@ -9,6 +9,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
 import {GoogleAnalyticsService} from "../../google-analytics.service";
+import {TerritoryDetailsComponent} from "./territory-details/territory-details.component";
 
 interface StopMarker extends L.Marker {
     id: number;
@@ -17,7 +18,8 @@ interface StopMarker extends L.Marker {
 @Component({
     imports: [
         CommonModule,
-        SharedModule
+        SharedModule,
+        TerritoryDetailsComponent
     ],
     providers: [
         LoginService

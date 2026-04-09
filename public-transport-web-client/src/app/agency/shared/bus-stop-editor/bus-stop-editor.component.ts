@@ -21,14 +21,6 @@ export class BusStopEditorComponent implements OnChanges {
     @Input() public isBdot: boolean;
     @Input() public isOsm: boolean;
 
-    @Input() public territoryName: string;
-    @Input() public type: string;
-    @Input() public teryt: string;
-    @Input() public terytName: string;
-    @Input() public voivodeshipTeryt: string;
-    @Input() public voivodeshipName: string;
-    @Input() public idterc: string;
-
     @Output() public onSaved = new EventEmitter<StopsPatchRequest>();
 
     public active: boolean = true;
