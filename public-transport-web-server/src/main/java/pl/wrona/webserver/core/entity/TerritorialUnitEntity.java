@@ -55,10 +55,10 @@ public class TerritorialUnitEntity {
     private Integer liczMiesz;
 
     @Column(name = "lon")
-    private String centroidLon;
+    private Float centroidLon;
 
     @Column(name = "lat")
-    private String centroidLat;
+    private Float centroidLat;
 
     @OneToMany(mappedBy = "territorialUnit")
     private Set<BusStop> busStops;
