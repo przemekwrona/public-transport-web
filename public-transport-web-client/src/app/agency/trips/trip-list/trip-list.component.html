@@ -151,18 +151,18 @@
                             <div class="text-gray-900 text-sm font-medium">Przez</div>
                             <span class="text-gray-700 text-2sm">Miejscowości przez które prowadzi linia autobusowa dla głównego wariantu</span>
                         </div>
+
                         <div class="flex flex-col w-full gap-1">
-                            <div class="flex items-center justify-between flex-wrap gap-2">
-                                <div class="flex items-center gap-0.5">
-                                    @for (territory of trips.territories; track territory; let isLast = $last) {
-                                        <span class="badge badge-sm badge-outline badge-dark">{{ territory?.name }}</span>
-                                        @if (!isLast) {
-                                            <span>-</span>
-                                        }
+                            <div class="inline-block">
+                                @for (territory of trips.territories; track territory; let isLast = $last) {
+                                    <span class="badge badge-sm badge-outline badge-dark">{{ territory?.name }}</span>
+                                    @if (!isLast) {
+                                        <span>-</span>
                                     }
-                                </div>
+                                }
                             </div>
                         </div>
+
                     </div>
 
                     <div class="flex flex-wrap justify-between gap-5">
