@@ -21,6 +21,8 @@ import {TranslocoPipe} from "@jsverse/transloco";
 import {CountDownComponent} from "./trip-editor/count-down/count-down.component";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatIconModule} from "@angular/material/icon";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
     imports: [
@@ -45,7 +47,9 @@ import {MatIconModule} from "@angular/material/icon";
         ReactiveFormsModule,
 
         MatRadioModule,
-        MatIconModule
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule
     ],
     declarations: [
         TripEditorComponent,

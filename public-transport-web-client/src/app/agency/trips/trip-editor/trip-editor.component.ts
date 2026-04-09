@@ -33,7 +33,15 @@ import {
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
-import {AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {
+    AbstractControl,
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    ValidationErrors,
+    Validators
+} from "@angular/forms";
 import {TripIdExistenceValidator} from "./trip-id-existence/trip-id-existence.service";
 import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
 import {BusStopData} from "../../shared/bus-stop-modal-selector/bus-stop-modal-selector.component";
@@ -245,6 +253,30 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 }
             });
         });
+    }
+
+    get tripVariantNameControl(): FormControl {
+        return this.modelForm.get('tripVariantName') as FormControl;
+    }
+
+    get variantDesignationControl(): FormControl {
+        return this.modelForm.get('variantDesignation') as FormControl;
+    }
+
+    get variantDescriptionControl(): FormControl {
+        return this.modelForm.get('variantDescription') as FormControl;
+    }
+
+    get originControl(): FormControl {
+        return this.modelForm.get('origin') as FormControl;
+    }
+
+    get destinationControl(): FormControl {
+        return this.modelForm.get('destination') as FormControl;
+    }
+
+    get headsignControl(): FormControl {
+        return this.modelForm.get('headsign') as FormControl;
     }
 
     ngAfterViewInit(): void {

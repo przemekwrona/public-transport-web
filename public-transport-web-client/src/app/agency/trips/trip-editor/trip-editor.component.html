@@ -74,16 +74,16 @@
                             </div>
 
                             <div class="w-full">
-                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                    <label class="form-label max-w-56">Nazwa wariantu</label>
-                                    <input name="tripVariantName" id="tripVariantName"
-                                           formControlName="tripVariantName"
-                                           class="input" type="text" placeholder="Nazwa wariantu"
-                                           [ngClass]="{'border-danger': canCheckErrors('tripVariantName') }">
+                                <div class="flex items-baseline flex-wrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 w-full">Nazwa wariantu</label>
+                                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                        <mat-label>Nazwa wariantu</mat-label>
+                                        <input type="text" matInput [formControl]="tripVariantNameControl">
+                                        @if (tripVariantNameControl.hasError('required')) {
+                                            <mat-error>Nazwa wariantu jest wymagana</mat-error>
+                                        }
+                                    </mat-form-field>
                                 </div>
-                                @if (checkControlHasError("tripVariantName", "required")) {
-                                    <span class="text-danger text-2sm">Nazwa wariantu jest wymagana</span>
-                                }
                             </div>
 
                             <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
@@ -157,72 +157,75 @@
 
                             @if (!isMainVariant()) {
                                 <div class="border-t border-gray-200 my-2.5"></div>
+
                                 <div class="w-full">
-                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                        <label class="form-label max-w-56">Symbol jakim oznaczysz kurs na rozkładzie
-                                            jazdy</label>
-                                        <input formControlName="variantDesignation" name="variantDesignation"
-                                               id="variantDesignation" class="input" type="text"
-                                               [ngClass]="{'border-danger': validControl('variantDesignation')}"
-                                               placeholder="Symbol kursu na rozkładzie"/>
+                                    <div class="flex items-baseline flex-wrap gap-2.5">
+                                        <label class="form-label flex items-center gap-1 w-full">Symbol kursu na rozkładzie jazdy</label>
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Symbol kursu na rozkładzie jazdy</mat-label>
+                                            <input type="text" matInput [formControl]="variantDesignationControl">
+                                            @if (variantDesignationControl.hasError('required')) {
+                                                <mat-error>Proszę o podaj symbol w jaki sposób oznaczyć kurs na rozkładzie jazdy</mat-error>
+                                            }
+                                        </mat-form-field>
                                     </div>
-                                    @if (checkControlHasError("variantDesignation", "required")) {
-                                        <span class="text-danger text-2sm">W przypadku gdy wariant nie jest wariantem podstawowym, proszę o podanie w jaki sposób oznaczyć kurs na rozkładzie jazdy</span>
-                                    }
                                 </div>
+
                                 <div class="w-full">
-                                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                        <label class="form-label max-w-56">Opis oznaczenia</label>
-                                        <input formControlName="variantDescription" name="variantDescription"
-                                               id="variantDescription"
-                                               class="input" type="text"
-                                               [ngClass]="{'border-danger': validControl('variantDescription')}"
-                                               placeholder="Wyjaśnienie oznaczenia"/>
+                                    <div class="flex items-baseline flex-wrap gap-2.5">
+                                        <label class="form-label flex items-center gap-1 w-full">Opis oznaczenia</label>
+                                        <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                            <mat-label>Opis oznaczenia</mat-label>
+                                            <input type="text" matInput [formControl]="variantDescriptionControl">
+                                            @if (variantDescriptionControl.hasError('required')) {
+                                                <mat-error>Podaj w jaki sposób wyjaśnić pasazerom co oznacza oznaczenie <strong>{{ modelForm.controls['variantDesignation']?.value }}</strong> na rozkładzie </mat-error>
+                                            }
+                                        </mat-form-field>
                                     </div>
-                                    @if (checkControlHasError("variantDescription", "required")) {
-                                        <span class="text-danger text-2sm">Podaj naw w jaki sposób wyjaśnić pasazerom co oznacza oznaczenie <strong>{{ modelForm.controls['variantDesignation']?.value }}</strong> na rozkładzie </span>
-                                    }
                                 </div>
+
                             }
                             <div class="border-t border-gray-200 my-2.5"></div>
 
                             <div class="w-full">
-                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                    <label class="form-label max-w-56">Przystanek początkowy</label>
-                                    <input type="text" formControlName="origin" name="origin" id="origin"
-                                           class="input" placeholder="Przystanek początkowy"
-                                           [ngClass]="{'border-danger': canCheckErrors('origin') }">
+                                <div class="flex items-baseline flex-wrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 w-full">Przystanek początkowy</label>
+                                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                        <mat-label>Przystanek początkowy</mat-label>
+                                        <input type="text" matInput [formControl]="originControl">
+                                        @if (originControl.hasError('required')) {
+                                            <mat-error>Proszę wprowadź przystanek początkowy</mat-error>
+                                        }
+                                    </mat-form-field>
                                 </div>
-                                @if (checkControlHasError("origin", "required")) {
-                                    <span class="text-danger text-2sm">Podaj nazwę przystaneku początkowego</span>
-                                }
                             </div>
 
                             <div class="w-full">
-                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                    <label class="form-label max-w-56">Przystanek końcowy</label>
-                                    <input type="text" formControlName="destination" name="destination" id="destination"
-                                           class="input" placeholder="Przystanek końcowy"
-                                           [ngClass]="{'border-danger': canCheckErrors('destination') }">
+                                <div class="flex items-baseline flex-wrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 w-full">Przystanek końcowy</label>
+                                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                        <mat-label>Przystanek końcowy</mat-label>
+                                        <input type="text" matInput [formControl]="destinationControl">
+                                        @if (destinationControl.hasError('required')) {
+                                            <mat-error>Proszę wprowadź przystanek końcowy</mat-error>
+                                        }
+                                    </mat-form-field>
                                 </div>
-                                @if (checkControlHasError("destination", "required")) {
-                                    <span class="text-danger text-2sm">Podaj nazwę przystanku końcowego</span>
-                                }
                             </div>
 
                             <div class="w-full">
-                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                                    <label class="form-label max-w-56">Kierunek na tablicy czołowej</label>
-                                    <input type="text" formControlName="headsign" name="headsign" id="headsign"
-                                           class="input" placeholder="Tablica czołowa"
-                                           [ngClass]="{'border-danger': canCheckErrors('headsign') }">
+                                <div class="flex items-baseline flex-wrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 w-full">Kierunek na tablicy czołowej</label>
+                                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                                        <mat-label>Kierunek na tablicy czołowej</mat-label>
+                                        <input type="text" matInput [formControl]="headsignControl">
+                                        @if (headsignControl.hasError('required')) {
+                                            <mat-error>Proszę wprowadź przystanek końcowy</mat-error>
+                                        }
+                                    </mat-form-field>
                                 </div>
-                                @if (checkControlHasError("headsign", "required")) {
-                                    <span class="text-danger text-2sm">Podaj co wyświetlić jest na tablicy czołowej</span>
-                                }
                             </div>
-                            <div class="flex justify-end">
-                            </div>
+
                         </div>
                     </div>
                 </div>
