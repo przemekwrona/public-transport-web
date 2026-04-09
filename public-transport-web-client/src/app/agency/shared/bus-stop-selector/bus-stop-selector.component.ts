@@ -17,6 +17,11 @@ import {
     BusStopSelectorData
 } from "../bus-stop-modal-selector/bus-stop-modal-selector.component";
 
+export class LonLat {
+    lon: number
+    lat: number
+}
+
 @Component({
     selector: 'app-bus-stop-selector',
     templateUrl: './bus-stop-selector.component.html',
@@ -31,6 +36,7 @@ export class BusStopSelectorComponent implements OnInit {
 
     @Input() stopControl: FormGroup;
     @Input() placeholderLabel: string = '';
+    @Input() suggestedLocation: LonLat = {} as LonLat;
 
     get stopIdControl(): FormControl {
         return this.stopControl.get('id') as FormControl;
