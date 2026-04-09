@@ -51,6 +51,10 @@ export class CreateRouteComponent implements OnInit {
         return this.modelForm.get('destination') as FormGroup;
     }
 
+    get destinationCityControl(): FormGroup {
+        return this.modelForm.get('destinationCity') as FormGroup;
+    }
+
     constructor(private _router: Router, private routeService: RouteService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
         this.modelForm = this.formBuilder.group({
             line: ['', [Validators.required]],
@@ -71,11 +75,15 @@ export class CreateRouteComponent implements OnInit {
             }),
             originCity: this.formBuilder.group({
                 id: [''],
-                name: ['']
+                name: [''],
+                lon: [''],
+                lat: ['']
             }),
             destinationCity: this.formBuilder.group({
                 id: [''],
-                name: ['']
+                name: [''],
+                lon: [''],
+                lat: ['']
             })
         });
     }
