@@ -70,10 +70,17 @@ export class BusStopSelectorComponent implements OnInit {
         stopPropagation($event);
 
         const busStop: BusStopData = {} as BusStopData;
-        busStop.stopId = this.stopControl.get('id')?.value;
-        busStop.stopName = this.stopControl.get('name')?.value;
-        busStop.stopLon = this.stopControl.get('lon')?.value;
-        busStop.stopLat = this.stopControl.get('lat')?.value;
+
+        if (this.suggestedLocation && this.suggestedLocation.lon && this.suggestedLocation.lat) {
+            busStop.stopLon = this.suggestedLocation.lon;
+            busStop.stopLat = this.suggestedLocation.lat;
+        } else {
+            busStop.stopId = this.stopControl.get('id')?.value;
+            busStop.stopName = this.stopControl.get('name')?.value;
+            busStop.stopLon = this.stopControl.get('lon')?.value;
+            busStop.stopLat = this.stopControl.get('lat')?.value;
+        }
+
 
         const busStopSelectorData: BusStopSelectorData = {} as BusStopSelectorData;
         busStopSelectorData.busStop = busStop;
