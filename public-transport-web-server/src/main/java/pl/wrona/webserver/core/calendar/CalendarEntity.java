@@ -26,7 +26,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "calendar")
+@Table(name = "calendar_symbol")
 public class CalendarEntity {
 
     @Id
