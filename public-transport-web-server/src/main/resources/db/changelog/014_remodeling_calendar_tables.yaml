@@ -1,1 +1,8 @@
 databaseChangeLog:
+  - changeSet:
+      id: rename-calendar-to-calendar-symbol
+      author: pwrona
+      changes:
+        - renameTable:
+            oldTableName: calendar
+            newTableName: calendar_symbol
