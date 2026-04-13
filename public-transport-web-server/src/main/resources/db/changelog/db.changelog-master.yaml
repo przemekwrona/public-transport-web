@@ -50,3 +50,7 @@ databaseChangeLog:
   - include:
       file: 013_territorial_stop_prod_matcher.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 014_remodeling_calendar_tables.yaml
+      relativeToChangelogFile: true
