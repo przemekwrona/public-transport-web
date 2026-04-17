@@ -8,7 +8,6 @@ public class CalendarHandler {
 
     public static ServiceCalendar handle(CalendarSymbolEntity calendar) {
         AgencyAndId agencyAndId = new AgencyAndId();
-        agencyAndId.setId(calendar.getCalendarName());
 
         ServiceCalendar serviceCalendar = new ServiceCalendar();
         serviceCalendar.setServiceId(agencyAndId);
@@ -19,9 +18,6 @@ public class CalendarHandler {
         serviceCalendar.setFriday(calendar.isFriday() ? 1 : 0);
         serviceCalendar.setSaturday(calendar.isSaturday() ? 1 : 0);
         serviceCalendar.setSunday(calendar.isSunday() ? 1 : 0);
-
-        serviceCalendar.setStartDate(calendar.getServiceStartDate());
-        serviceCalendar.setEndDate(calendar.getServiceEndDate());
 
         return serviceCalendar;
 

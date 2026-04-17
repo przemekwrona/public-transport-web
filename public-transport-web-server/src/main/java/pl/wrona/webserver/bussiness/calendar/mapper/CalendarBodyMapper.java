@@ -2,6 +2,7 @@ package pl.wrona.webserver.bussiness.calendar.mapper;
 
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
+import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.calendar.ExceptionType;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public class CalendarBodyMapper {
 
-    public static CalendarBody apply(CalendarSymbolEntity calendar, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
+    public static CalendarBody apply(CalendarItemEntity item, CalendarSymbolEntity calendar, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
         List<LocalDate> included = calendarDatesDictionary.getOrDefault(calendar.getServiceId(), List.of()).stream()
                 .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
@@ -21,11 +22,11 @@ public class CalendarBodyMapper {
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
         return new CalendarBody()
-                .calendarName(calendar.getCalendarName())
+                .calendarName(calendar.getCalendarItem().getCalendarName())
                 .designation(calendar.getDesignation())
                 .description(calendar.getDescription())
-                .startDate(calendar.getStartDate())
-                .endDate(calendar.getEndDate())
+                .startDate(calendar.getCalendarItem().getStartDate())
+                .endDate(calendar.getCalendarItem().getEndDate())
                 .monday(calendar.isMonday())
                 .tuesday(calendar.isTuesday())
                 .wednesday(calendar.isWednesday())

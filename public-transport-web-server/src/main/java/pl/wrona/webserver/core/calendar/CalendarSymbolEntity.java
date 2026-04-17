@@ -42,9 +42,6 @@ public class CalendarSymbolEntity {
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Set<BrigadeEntity> brigadeEntities;
 
-    @Column(name = "calendar_name")
-    private String calendarName;
-
     private String designation;
     private String description;
 
@@ -56,9 +53,6 @@ public class CalendarSymbolEntity {
     private boolean saturday;
     private boolean sunday;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
-
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Set<CalendarDatesEntity> calendarDates;
 
@@ -69,11 +63,4 @@ public class CalendarSymbolEntity {
     @JoinColumn(name = "calendar_item_id", nullable = false)
     private CalendarItemEntity calendarItem;
 
-    public ServiceDate getServiceStartDate() {
-        return new ServiceDate(startDate.getYear(), startDate.getMonthValue(), startDate.getDayOfMonth());
-    }
-
-    public ServiceDate getServiceEndDate() {
-        return new ServiceDate(endDate.getYear(), endDate.getMonthValue(), endDate.getDayOfMonth());
-    }
 }

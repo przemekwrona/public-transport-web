@@ -104,4 +104,19 @@ databaseChangeLog:
         - dropIndex:
             indexName: idx_agency_and_calendar_name
             tableName: calendar_symbol
+
+  - changeSet:
+      id: remove-columns-from-calendar-symbol
+      author: pwrona
+      changes:
+        - dropColumn:
+            columnName: calendar_name
+            tableName: calendar_symbol
+        - dropColumn:
+            columnName: start_date
+            tableName: calendar_symbol
+        - dropColumn:
+            columnName: end_date
+            tableName: calendar_symbol
+
        
