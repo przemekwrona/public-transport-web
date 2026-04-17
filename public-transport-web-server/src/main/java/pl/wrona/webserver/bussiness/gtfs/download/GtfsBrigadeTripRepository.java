@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 import java.util.List;
 
@@ -19,5 +19,5 @@ public interface GtfsBrigadeTripRepository extends JpaRepository<BrigadeTripEnti
             AND bt.brigade.calendar IN :calendars""")
     List<BrigadeTripEntity> findAllByAgencyAndActiveCalendars(
             @Param("agency") AgencyEntity agency,
-            @Param("calendars") List<CalendarEntity> calendars);
+            @Param("calendars") List<CalendarSymbolEntity> calendars);
 }

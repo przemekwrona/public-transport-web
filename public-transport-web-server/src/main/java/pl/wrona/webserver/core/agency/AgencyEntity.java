@@ -1,16 +1,13 @@
 package pl.wrona.webserver.core.agency;
 
-import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -22,9 +19,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.wrona.webserver.core.GoogleAgreementEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEntity;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorEntity;
-import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 import pl.wrona.webserver.security.AppUser;
 
 import java.time.LocalDateTime;
@@ -101,7 +97,7 @@ public class AgencyEntity {
     private Set<BrigadeEntity> brigades;
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
-    private Set<CalendarEntity> calendars;
+    private Set<CalendarSymbolEntity> calendars;
 
     @ManyToMany
     @JoinTable(name = "app_user_agency",

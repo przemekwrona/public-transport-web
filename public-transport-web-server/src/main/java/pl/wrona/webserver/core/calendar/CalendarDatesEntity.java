@@ -29,7 +29,7 @@ public class CalendarDatesEntity {
 
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false, insertable = false, updatable = false)
-    private CalendarEntity calendar;
+    private CalendarSymbolEntity calendar;
 
     public ServiceDate getServiceDate() {
         return new ServiceDate(calendarDatesId.getDate().getYear(), calendarDatesId.getDate().getMonthValue(), calendarDatesId.getDate().getDayOfMonth());

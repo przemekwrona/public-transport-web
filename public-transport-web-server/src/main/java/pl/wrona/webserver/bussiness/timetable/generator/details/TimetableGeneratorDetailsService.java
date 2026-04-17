@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorItemQueryService;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorQueryService;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -42,7 +42,7 @@ public class TimetableGeneratorDetailsService {
                         .createdAt(timetableGeneratorId.getCreatedAt()))
                 .routeId(timetableGeneratorId.getRouteId())
                 .timetables(new TimetableGeneratorPayload()
-                        .calendarName(items.stream().findFirst().map(TimetableGeneratorItemEntity::getCalendar).map(CalendarEntity::getCalendarName).orElse(""))
+                        .calendarName(items.stream().findFirst().map(TimetableGeneratorItemEntity::getCalendar).map(CalendarSymbolEntity::getCalendarName).orElse(""))
                         .front(new TimetablePayload()
                                 .startDate(firstItem
                                         .map(TimetableGeneratorItemEntity::getFrontStartTime)

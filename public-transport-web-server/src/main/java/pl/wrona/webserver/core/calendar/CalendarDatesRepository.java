@@ -17,6 +17,6 @@ public interface CalendarDatesRepository extends JpaRepository<CalendarDatesEnti
 
     @Modifying
     @Query("DELETE FROM CalendarDatesEntity cd WHERE cd.calendar.agency = :agency AND cd.calendar = :calendarEntity")
-    void deleteByAgencyAndCalendar(@Param("agency") AgencyEntity agencyEntity, @Param("calendarEntity") CalendarEntity calendarEntity);
+    void deleteByAgencyAndCalendar(@Param("agency") AgencyEntity agencyEntity, @Param("calendarEntity") CalendarSymbolEntity calendarSymbolEntity);
 
 }

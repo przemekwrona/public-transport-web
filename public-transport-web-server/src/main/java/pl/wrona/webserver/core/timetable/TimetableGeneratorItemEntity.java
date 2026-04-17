@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -30,7 +30,7 @@ public class TimetableGeneratorItemEntity {
     @Id
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
-    private CalendarEntity calendar;
+    private CalendarSymbolEntity calendar;
 
     @Id
     @ManyToOne

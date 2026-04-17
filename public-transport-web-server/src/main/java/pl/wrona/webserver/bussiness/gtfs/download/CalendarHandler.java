@@ -2,11 +2,11 @@ package pl.wrona.webserver.bussiness.gtfs.download;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.ServiceCalendar;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 public class CalendarHandler {
 
-    public static ServiceCalendar handle(CalendarEntity calendar) {
+    public static ServiceCalendar handle(CalendarSymbolEntity calendar) {
         AgencyAndId agencyAndId = new AgencyAndId();
         agencyAndId.setId(calendar.getCalendarName());
 
