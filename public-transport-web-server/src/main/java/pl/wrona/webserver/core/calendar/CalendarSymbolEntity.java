@@ -65,7 +65,7 @@ public class CalendarSymbolEntity {
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Set<TimetableGeneratorItemEntity> timetableGenerators;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "calendar_item_id", nullable = false)
     private CalendarItemEntity calendarItem;
 
