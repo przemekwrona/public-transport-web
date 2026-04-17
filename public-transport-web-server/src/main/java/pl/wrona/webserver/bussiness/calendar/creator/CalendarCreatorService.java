@@ -5,6 +5,7 @@ import org.igeolab.iot.pt.server.api.model.CalendarPayload;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.bussiness.calendar.CalendarItemCommandService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
@@ -28,6 +29,7 @@ public class CalendarCreatorService {
     private final CalendarRepository calendarRepository;
     private final CalendarDatesRepository calendarDatesRepository;
     private final AgencyService agencyService;
+    private final CalendarItemCommandService calendarItemCommandService;
 
     @Transactional
     @PreAgencyAuthorize
@@ -52,9 +54,11 @@ public class CalendarCreatorService {
         calendarItem.setCalendarName(calendarName);
         calendarItem.setStartDate(calendarBody.getStartDate());
         calendarItem.setEndDate(calendarBody.getEndDate());
+        var savedCalendarItem = calendarItemCommandService.save(calendarItem);
 
         var calendarEntity = CalendarEntityMapper.apply(calendarBody, agencyEntity);
         calendarEntity.setCalendarName(calendarName);
+        calendarEntity.setCalendarItem(savedCalendarItem);
         CalendarSymbolEntity savedCalendar = calendarRepository.save(calendarEntity);
 
         Set<CalendarDatesEntity> calendarDates = CalendarDatesEntityMapper.apply(calendarBody, savedCalendar);

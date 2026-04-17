@@ -28,8 +28,8 @@ public class CalendarItemEntity {
 
     @Id
     @Column(name = "calendar_item_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "calendar_symbol_id_seq")
-    @SequenceGenerator(name = "calendar_symbol_id_seq", sequenceName = "calendar_symbol_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "calendar_item_id_seq")
+    @SequenceGenerator(name = "calendar_item_id_seq", sequenceName = "calendar_item_id_seq", allocationSize = 1)
     private Long calendarItemId;
 
     @ManyToOne
