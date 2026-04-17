@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Repository
@@ -19,4 +20,5 @@ public interface CalendarDatesRepository extends JpaRepository<CalendarDatesEnti
     @Query("DELETE FROM CalendarDatesEntity cd WHERE cd.calendar.agency = :agency AND cd.calendar = :calendarEntity")
     void deleteByAgencyAndCalendar(@Param("agency") AgencyEntity agencyEntity, @Param("calendarEntity") CalendarSymbolEntity calendarSymbolEntity);
 
+    List<CalendarDatesEntity> findAllByCalendar(CalendarSymbolEntity calendarSymbol);
 }

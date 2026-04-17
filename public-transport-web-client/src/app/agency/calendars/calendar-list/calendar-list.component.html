@@ -71,7 +71,7 @@
                                 class="btn btn-sm btn-dark shrink-0">
                             Usuń
                         </button>
-                        <a [routerLink]="['/agency/calendars/edit']" [queryParams]="{name: calendar?.calendarName}"
+                        <a [routerLink]="['/agency/calendars/edit']" [queryParams]="{designation: calendar?.designation, startDate: calendar?.startDate, endDate: calendar?.endDate}"
                            class="btn btn-sm shrink-0 btn-secondary">Pokaż
                             szczegóły</a>
                     </div>

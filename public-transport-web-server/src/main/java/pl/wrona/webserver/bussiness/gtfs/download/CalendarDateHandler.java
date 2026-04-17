@@ -8,7 +8,7 @@ public class CalendarDateHandler {
 
     public static ServiceCalendarDate handle(CalendarDatesEntity calendarDate) {
         AgencyAndId agencyAndId = new AgencyAndId();
-        agencyAndId.setId(calendarDate.getCalendar().getCalendarName());
+        agencyAndId.setId(calendarDate.getCalendar().getCalendarItem().getCalendarName());
 
         ServiceCalendarDate serviceCalendarDate = new ServiceCalendarDate();
         serviceCalendarDate.setServiceId(agencyAndId);

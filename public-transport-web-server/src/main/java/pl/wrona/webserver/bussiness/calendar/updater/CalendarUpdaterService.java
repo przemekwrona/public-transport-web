@@ -11,7 +11,7 @@ import pl.wrona.webserver.bussiness.calendar.mapper.CalendarDatesEntityMapper;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.bussiness.calendar.mapper.CalendarEntityMapper;
-import pl.wrona.webserver.core.calendar.CalendarRepository;
+import pl.wrona.webserver.core.calendar.CalendarSymbolRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.Set;
@@ -20,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class CalendarUpdaterService {
 
-    private final CalendarRepository calendarRepository;
+    private final CalendarSymbolRepository calendarSymbolRepository;
     private final CalendarDatesRepository calendarDatesRepository;
 
     private final AgencyService agencyService;
@@ -29,11 +29,11 @@ public class CalendarUpdaterService {
     @PreAgencyAuthorize
     public Status updateCalendar(String instance, UpdateCalendarRequest updateCalendarRequest) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        calendarRepository.findByAgencyAndCalendarName(instance, updateCalendarRequest.getCalendarName()).ifPresent(calendarEntity -> {
+        calendarSymbolRepository.findByAgencyAndCalendarName(instance, updateCalendarRequest.getCalendarName()).ifPresent(calendarEntity -> {
             calendarDatesRepository.deleteByAgencyAndCalendar(agencyEntity, calendarEntity);
 
             CalendarSymbolEntity updatedCalendarSymbolEntity = CalendarEntityMapper.apply(calendarEntity, updateCalendarRequest.getBody(), agencyEntity);
-            CalendarSymbolEntity savedCalendarSymbolEntity = calendarRepository.save(updatedCalendarSymbolEntity);
+            CalendarSymbolEntity savedCalendarSymbolEntity = calendarSymbolRepository.save(updatedCalendarSymbolEntity);
 
             Set<CalendarDatesEntity> calendarDates = CalendarDatesEntityMapper.apply(updateCalendarRequest.getBody(), savedCalendarSymbolEntity);
             calendarDatesRepository.saveAll(calendarDates);

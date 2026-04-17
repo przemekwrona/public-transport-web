@@ -105,7 +105,7 @@ public class GtfsDownloadService {
                         Trip trip = new Trip();
                         trip.setId(agencyAndId);
                         trip.setRoute(routesDictionary.get(brigadeTrip.getRouteId()));
-                        trip.setServiceId(calendarDictionary.get(brigadeTrip.getBrigade().getCalendar().getCalendarName()).getServiceId());
+                        trip.setServiceId(calendarDictionary.get(brigadeTrip.getBrigade().getCalendar().getCalendarItem().getCalendarName()).getServiceId());
                         return trip;
                     }).toList();
 

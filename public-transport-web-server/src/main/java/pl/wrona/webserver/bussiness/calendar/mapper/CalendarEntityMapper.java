@@ -13,7 +13,6 @@ public class CalendarEntityMapper {
     public static CalendarSymbolEntity apply(CalendarSymbolEntity calendarSymbolEntity, CalendarBody calendarBody, AgencyEntity agencyEntity) {
         calendarSymbolEntity.setAgency(agencyEntity);
 
-        calendarSymbolEntity.setCalendarName(calendarBody.getCalendarName());
         calendarSymbolEntity.setDesignation(calendarBody.getDesignation());
         calendarSymbolEntity.setDescription(calendarBody.getDescription());
 
@@ -27,8 +26,6 @@ public class CalendarEntityMapper {
         calendarSymbolEntity.setSaturday(calendarBody.getSaturday());
         calendarSymbolEntity.setSunday(calendarBody.getSunday());
 
-        calendarSymbolEntity.setStartDate(calendarBody.getStartDate());
-        calendarSymbolEntity.setEndDate(calendarBody.getEndDate());
         return calendarSymbolEntity;
     }
 

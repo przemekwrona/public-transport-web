@@ -9,7 +9,9 @@ export const calendarResolver: ResolveFn<Observable<CalendarBody>> = (route, sta
     const loginService: LoginService = inject(LoginService);
 
     const query: CalendarQuery = {};
-    query.calendarName = route.queryParams['name'];
+    query.designation = route.queryParams['designation'];
+    query.startDate = route.queryParams['startDate'];
+    query.endDate = route.queryParams['endDate'];
 
     return calendarsService.getCalendarByCalendarName(loginService.getInstance(), query);
 };

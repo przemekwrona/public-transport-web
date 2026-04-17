@@ -15,7 +15,7 @@ import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.bussiness.calendar.mapper.CalendarEntityMapper;
-import pl.wrona.webserver.core.calendar.CalendarRepository;
+import pl.wrona.webserver.core.calendar.CalendarSymbolRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.format.DateTimeFormatter;
@@ -27,7 +27,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class CalendarCreatorService {
 
-    private final CalendarRepository calendarRepository;
+    private final CalendarSymbolRepository calendarSymbolRepository;
     private final CalendarDatesRepository calendarDatesRepository;
     private final AgencyService agencyService;
     private final CalendarItemCommandService calendarItemCommandService;
@@ -44,7 +44,8 @@ public class CalendarCreatorService {
                 calendarBody.getEndDate().format(DateTimeFormatter.BASIC_ISO_DATE));
 
         var lastSavedCalendarNumber = this.findCalendarStartsWith(agencyEntity, calendarIdPrefix).stream()
-                .map(CalendarSymbolEntity::getCalendarName)
+                .map(CalendarSymbolEntity::getCalendarItem)
+                .map(CalendarItemEntity::getCalendarName)
                 .map(calendarName -> calendarName.substring(calendarIdPrefix.length() + 1))
                 .map(Long::valueOf).max(Comparator.naturalOrder())
                 .orElse(0L);
@@ -68,8 +69,7 @@ public class CalendarCreatorService {
             calendarEntity.setCalendarItem(alreadySavedCalendarItem);
         }
 
-        calendarEntity.setCalendarName(calendarName);
-        CalendarSymbolEntity savedCalendar = calendarRepository.save(calendarEntity);
+        CalendarSymbolEntity savedCalendar = calendarSymbolRepository.save(calendarEntity);
 
         Set<CalendarDatesEntity> calendarDates = CalendarDatesEntityMapper.apply(calendarBody, savedCalendar);
         calendarDatesRepository.saveAll(calendarDates);
@@ -78,7 +78,7 @@ public class CalendarCreatorService {
     }
 
     public List<CalendarSymbolEntity> findCalendarStartsWith(AgencyEntity agencyEntity, String calendarName) {
-        return this.calendarRepository.findAllByAgencyAndCalendarNameStartingWith(agencyEntity, calendarName);
+        return this.calendarSymbolRepository.findAllByAgencyAndCalendarNameStartingWith(agencyEntity, calendarName);
     }
 
 }
