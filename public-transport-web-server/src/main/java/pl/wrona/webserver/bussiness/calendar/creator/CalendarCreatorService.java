@@ -6,6 +6,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemCommandService;
+import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
@@ -30,6 +31,7 @@ public class CalendarCreatorService {
     private final CalendarDatesRepository calendarDatesRepository;
     private final AgencyService agencyService;
     private final CalendarItemCommandService calendarItemCommandService;
+    private final CalendarItemQueryService calendarItemQueryService;
 
     @Transactional
     @PreAgencyAuthorize
@@ -49,16 +51,24 @@ public class CalendarCreatorService {
 
         var calendarName = "%s/%s".formatted(calendarIdPrefix, lastSavedCalendarNumber + 1);
 
-        var calendarItem = new CalendarItemEntity();
-        calendarItem.setAgency(agencyEntity);
-        calendarItem.setCalendarName(calendarName);
-        calendarItem.setStartDate(calendarBody.getStartDate());
-        calendarItem.setEndDate(calendarBody.getEndDate());
-        var savedCalendarItem = calendarItemCommandService.save(calendarItem);
-
         var calendarEntity = CalendarEntityMapper.apply(calendarBody, agencyEntity);
+
+        var alreadySavedCalendarItem = calendarItemQueryService.findByAgencyAndStartDateAndEndDate(agencyEntity.getAgencyCode(), calendarBody.getStartDate(), calendarBody.getEndDate());
+
+        if (alreadySavedCalendarItem == null) {
+            var calendarItem = new CalendarItemEntity();
+            calendarItem.setAgency(agencyEntity);
+            calendarItem.setCalendarName(calendarName);
+            calendarItem.setStartDate(calendarBody.getStartDate());
+            calendarItem.setEndDate(calendarBody.getEndDate());
+            var savedCalendarItem = calendarItemCommandService.save(calendarItem);
+
+            calendarEntity.setCalendarItem(savedCalendarItem);
+        } else {
+            calendarEntity.setCalendarItem(alreadySavedCalendarItem);
+        }
+
         calendarEntity.setCalendarName(calendarName);
-        calendarEntity.setCalendarItem(savedCalendarItem);
         CalendarSymbolEntity savedCalendar = calendarRepository.save(calendarEntity);
 
         Set<CalendarDatesEntity> calendarDates = CalendarDatesEntityMapper.apply(calendarBody, savedCalendar);
