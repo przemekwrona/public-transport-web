@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core.brigade;
+package pl.wrona.webserver.core.calendar;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,34 +14,35 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "brigade")
-public class BrigadeEntity {
+@Table(name = "calendar_item")
+public class CalendarItemEntity {
 
     @Id
-    @Column(name = "brigade_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brigade_id_generator")
-    @SequenceGenerator(name = "brigade_id_generator", sequenceName = "brigade_id_seq", allocationSize = 1)
-    private Long brigadeId;
+    @Column(name = "calendar_item_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "calendar_symbol_id_seq")
+    @SequenceGenerator(name = "calendar_symbol_id_seq", sequenceName = "calendar_symbol_id_seq", allocationSize = 1)
+    private Long calendarItemId;
 
     @ManyToOne
     @JoinColumn(name = "agency_id", nullable = false)
     private AgencyEntity agency;
 
-    @ManyToOne
-    @JoinColumn(name = "service_id")
-    private CalendarSymbolEntity calendar;
+    @Column(name = "calendar_name")
+    private String calendarName;
 
-    private String brigadeNumber;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-    @OneToMany(mappedBy = "brigade", cascade = CascadeType.ALL)
-    private Set<BrigadeTripEntity> brigadeTrips;
+    @OneToMany(mappedBy = "calendarItem", cascade = CascadeType.ALL)
+    private Set<CalendarSymbolEntity> calendarSymbols;
+
 }

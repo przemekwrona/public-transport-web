@@ -3,7 +3,7 @@ package pl.wrona.webserver.bussiness.gtfs.download;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,13 +16,13 @@ public class GtfsCalendarService {
     private final GtfsCalendarDateRepository gtfsCalendarDateRepository;
 
 
-    public List<CalendarEntity> findAllActiveCalendarDate(String instance) {
+    public List<CalendarSymbolEntity> findAllActiveCalendarDate(String instance) {
         LocalDate now = LocalDate.now();
 
         return this.gtfsCalendarRepository.findAllByAgencyAndStartDateGreaterThanEqual(instance, now);
     }
 
-    public List<CalendarDatesEntity> findAllActiveCalendarDate(List<CalendarEntity> calendars) {
+    public List<CalendarDatesEntity> findAllActiveCalendarDate(List<CalendarSymbolEntity> calendars) {
         return this.gtfsCalendarDateRepository.findAllByCalendarIn(calendars);
     }
 }

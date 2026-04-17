@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class GtfsBrigadeTripService {
     private final GtfsBrigadeTripRepository gtfsBrigadeTripRepository;
 
 
-    public List<BrigadeTripEntity> findAllByAgencyAndActiveCalendars(AgencyEntity agency, List<CalendarEntity> calendars) {
+    public List<BrigadeTripEntity> findAllByAgencyAndActiveCalendars(AgencyEntity agency, List<CalendarSymbolEntity> calendars) {
         return gtfsBrigadeTripRepository.findAllByAgencyAndActiveCalendars(agency, calendars);
     }
 }

@@ -6,3 +6,102 @@ databaseChangeLog:
         - renameTable:
             oldTableName: calendar
             newTableName: calendar_symbol
+
+        - renameSequence:
+            oldSequenceName: service_id_seq
+            newSequenceName: calendar_symbol_id_seq
+
+  - changeSet:
+      id: create-table-calendar-item
+      author: pwrona
+      changes:
+        - renameColumn:
+            tableName: calendar_symbol
+            oldColumnName: service_id
+            newColumnName: calendar_symbol_id
+
+        - createSequence:
+            sequenceName: calendar_item_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: calendar_item
+            columns:
+              - column:
+                  name: calendar_item_id
+                  type: integer
+                  defaultValueSequenceNext: calendar_item_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_item_calendar
+                    nullable: false
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_calendar_item_agency
+                    references: agency(agency_id)
+              - column:
+                  name: calendar_name
+                  type: varchar(50)
+              - column:
+                  name: start_date
+                  type: date
+              - column:
+                  name: end_date
+                  type: date
+
+  - changeSet:
+      id: insert-into-calendar-item
+      author: pwona
+      changes:
+        - sql:
+            sql: INSERT INTO public.calendar_item(agency_id, calendar_name, start_date, end_date) SELECT cs.agency_id, cs.calendar_name, cs.start_date, cs.end_date FROM calendar_symbol cs;
+
+  - changeSet:
+      id: add-column-calendar-item-id-into-calendar-symbol
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: calendar_symbol
+            columns:
+              - column:
+                  name: calendar_item_id
+                  type: integer
+
+        - addForeignKeyConstraint:
+            baseTableName: calendar_symbol
+            baseColumnNames: calendar_item_id
+            constraintName: fk_calendar_symbol_calendar_item
+            referencedTableName: calendar_item
+            referencedColumnNames: calendar_item_id
+
+  - changeSet:
+      id: insert-calendar-item-id-into-calendar-symbol
+      author: pwrona
+      changes:
+        - sql:
+            sql: |
+              UPDATE calendar_symbol cs
+              SET calendar_item_id = ci.calendar_item_id
+              FROM calendar_item ci
+              WHERE cs.agency_id = ci.agency_id
+              AND cs.calendar_name = ci.calendar_name
+              AND cs.start_date = ci.start_date
+              AND cs.end_date = ci.end_date;
+
+
+  - changeSet:
+      id: insert-constraint-on-table-calendar
+      author: pwrona
+      changes:
+        - addUniqueConstraint:
+            tableName: calendar_item
+            columnNames: agency_id, start_date, end_date
+            constraintName: uq_calendar_item_agency_start_end_date
+
+        - dropIndex:
+            indexName: idx_agency_and_calendar_name
+            tableName: calendar_symbol
+       

@@ -27,12 +27,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "calendar_symbol")
-public class CalendarEntity {
+public class CalendarSymbolEntity {
 
     @Id
-    @Column(name = "service_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "service_id_seq")
-    @SequenceGenerator(name = "service_id_seq", sequenceName = "service_id_seq", allocationSize = 1)
+    @Column(name = "calendar_symbol_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "calendar_symbol_id_seq")
+    @SequenceGenerator(name = "calendar_symbol_id_seq", sequenceName = "calendar_symbol_id_seq", allocationSize = 1)
     private Long serviceId;
 
     @ManyToOne
@@ -64,6 +64,10 @@ public class CalendarEntity {
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Set<TimetableGeneratorItemEntity> timetableGenerators;
+
+    @ManyToOne
+    @JoinColumn(name = "calendar_item_id", nullable = false)
+    private CalendarItemEntity calendarItem;
 
     public ServiceDate getServiceStartDate() {
         return new ServiceDate(startDate.getYear(), startDate.getMonthValue(), startDate.getDayOfMonth());

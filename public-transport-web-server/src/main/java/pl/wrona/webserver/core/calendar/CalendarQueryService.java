@@ -11,7 +11,7 @@ public class CalendarQueryService {
     private final CalendarRepository calendarRepository;
 
     @PreAgencyAuthorize
-    public CalendarEntity getCalendar(String instance, String calendarName) {
+    public CalendarSymbolEntity getCalendar(String instance, String calendarName) {
         return calendarRepository.findByAgencyAndCalendarName(instance, calendarName).orElse(null);
     }
 }

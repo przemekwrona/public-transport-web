@@ -2,7 +2,7 @@ package pl.wrona.webserver.bussiness.calendar.mapper;
 
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.calendar.ExceptionType;
 
 import java.time.LocalDate;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class CalendarBodyMapper {
 
-    public static CalendarBody apply(CalendarEntity calendar, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
+    public static CalendarBody apply(CalendarSymbolEntity calendar, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
         List<LocalDate> included = calendarDatesDictionary.getOrDefault(calendar.getServiceId(), List.of()).stream()
                 .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();

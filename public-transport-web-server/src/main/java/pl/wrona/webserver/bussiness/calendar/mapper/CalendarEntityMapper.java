@@ -2,34 +2,34 @@ package pl.wrona.webserver.bussiness.calendar.mapper;
 
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import pl.wrona.webserver.core.agency.AgencyEntity;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 public class CalendarEntityMapper {
 
-    public static CalendarEntity apply(CalendarBody calendarBody, AgencyEntity agencyEntity) {
-        return apply(new CalendarEntity(), calendarBody, agencyEntity);
+    public static CalendarSymbolEntity apply(CalendarBody calendarBody, AgencyEntity agencyEntity) {
+        return apply(new CalendarSymbolEntity(), calendarBody, agencyEntity);
     }
 
-    public static CalendarEntity apply(CalendarEntity calendarEntity, CalendarBody calendarBody, AgencyEntity agencyEntity) {
-        calendarEntity.setAgency(agencyEntity);
+    public static CalendarSymbolEntity apply(CalendarSymbolEntity calendarSymbolEntity, CalendarBody calendarBody, AgencyEntity agencyEntity) {
+        calendarSymbolEntity.setAgency(agencyEntity);
 
-        calendarEntity.setCalendarName(calendarBody.getCalendarName());
-        calendarEntity.setDesignation(calendarBody.getDesignation());
-        calendarEntity.setDescription(calendarBody.getDescription());
+        calendarSymbolEntity.setCalendarName(calendarBody.getCalendarName());
+        calendarSymbolEntity.setDesignation(calendarBody.getDesignation());
+        calendarSymbolEntity.setDescription(calendarBody.getDescription());
 
-        calendarEntity.setMonday(calendarBody.getMonday());
-        calendarEntity.setThursday(calendarBody.getMonday());
-        calendarEntity.setMonday(calendarBody.getMonday());
-        calendarEntity.setTuesday(calendarBody.getTuesday());
-        calendarEntity.setWednesday(calendarBody.getWednesday());
-        calendarEntity.setThursday(calendarBody.getThursday());
-        calendarEntity.setFriday(calendarBody.getFriday());
-        calendarEntity.setSaturday(calendarBody.getSaturday());
-        calendarEntity.setSunday(calendarBody.getSunday());
+        calendarSymbolEntity.setMonday(calendarBody.getMonday());
+        calendarSymbolEntity.setThursday(calendarBody.getMonday());
+        calendarSymbolEntity.setMonday(calendarBody.getMonday());
+        calendarSymbolEntity.setTuesday(calendarBody.getTuesday());
+        calendarSymbolEntity.setWednesday(calendarBody.getWednesday());
+        calendarSymbolEntity.setThursday(calendarBody.getThursday());
+        calendarSymbolEntity.setFriday(calendarBody.getFriday());
+        calendarSymbolEntity.setSaturday(calendarBody.getSaturday());
+        calendarSymbolEntity.setSunday(calendarBody.getSunday());
 
-        calendarEntity.setStartDate(calendarBody.getStartDate());
-        calendarEntity.setEndDate(calendarBody.getEndDate());
-        return calendarEntity;
+        calendarSymbolEntity.setStartDate(calendarBody.getStartDate());
+        calendarSymbolEntity.setEndDate(calendarBody.getEndDate());
+        return calendarSymbolEntity;
     }
 
 

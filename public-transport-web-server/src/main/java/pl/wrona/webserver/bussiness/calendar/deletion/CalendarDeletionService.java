@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
-import pl.wrona.webserver.core.calendar.CalendarEntity;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.calendar.CalendarRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -24,9 +24,9 @@ public class CalendarDeletionService {
     public Status deleteCalendarByCalendarName(String instance, CalendarQuery calendarQuery) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         calendarRepository.findByAgencyAndCalendarName(instance, calendarQuery.getCalendarName())
-                .ifPresent((CalendarEntity calendarEntity) -> {
-                    calendarDatesRepository.deleteByAgencyAndCalendar(agencyEntity, calendarEntity);
-                    calendarRepository.delete(calendarEntity);
+                .ifPresent((CalendarSymbolEntity calendarSymbolEntity) -> {
+                    calendarDatesRepository.deleteByAgencyAndCalendar(agencyEntity, calendarSymbolEntity);
+                    calendarRepository.delete(calendarSymbolEntity);
                 });
 
         return new Status().status(Status.StatusEnum.DELETED);
