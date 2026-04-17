@@ -22,11 +22,11 @@ public class CalendarBodyMapper {
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
         return new CalendarBody()
-                .calendarName(calendar.getCalendarItem().getCalendarName())
+                .calendarName(item.getCalendarName())
                 .designation(calendar.getDesignation())
                 .description(calendar.getDescription())
-                .startDate(calendar.getCalendarItem().getStartDate())
-                .endDate(calendar.getCalendarItem().getEndDate())
+                .startDate(item.getStartDate())
+                .endDate(item.getEndDate())
                 .monday(calendar.isMonday())
                 .tuesday(calendar.isTuesday())
                 .wednesday(calendar.isWednesday())
