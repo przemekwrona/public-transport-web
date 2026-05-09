@@ -47,6 +47,6 @@ databaseChangeLog:
       file: 012_teryt.yaml
       relativeToChangelogFile: true
 
-#  - include:
-#      file: 014_remodeling_calendar_tables.yaml
-#      relativeToChangelogFile: true
+  - include:
+      file: 013_remodeling_calendar_tables.yaml
+      relativeToChangelogFile: true
