@@ -10,6 +10,16 @@ databaseChangeLog:
                   name: STOP_ID
                   type: integer
               - column:
+                  name: bdot10k_id
+                  type: varchar(60)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: osm_id
+                  type: varchar(60)
+                  constraints:
+                    nullable: true
+              - column:
                   name: LOKALNYID
                   type: VARCHAR(36)
 
@@ -28,6 +38,14 @@ databaseChangeLog:
                   name: STOP_ID
                   type: NUMERIC
               - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
+                  type: NUMERIC
+              - column:
                   header: LOKALNYID
                   name: LOKALNYID
                   type: STRING
@@ -40,6 +58,14 @@ databaseChangeLog:
               - column:
                   header: stop_id
                   name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
                   type: NUMERIC
               - column:
                   header: LOKALNYID
@@ -56,6 +82,14 @@ databaseChangeLog:
                   name: STOP_ID
                   type: NUMERIC
               - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
+                  type: NUMERIC
+              - column:
                   header: LOKALNYID
                   name: LOKALNYID
                   type: STRING
@@ -68,6 +102,14 @@ databaseChangeLog:
               - column:
                   header: stop_id
                   name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
                   type: NUMERIC
               - column:
                   header: LOKALNYID
@@ -84,6 +126,14 @@ databaseChangeLog:
                   name: STOP_ID
                   type: NUMERIC
               - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
+                  type: NUMERIC
+              - column:
                   header: LOKALNYID
                   name: LOKALNYID
                   type: STRING
@@ -96,6 +146,14 @@ databaseChangeLog:
               - column:
                   header: stop_id
                   name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
                   type: NUMERIC
               - column:
                   header: LOKALNYID
@@ -112,6 +170,14 @@ databaseChangeLog:
                   name: STOP_ID
                   type: NUMERIC
               - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
+                  type: NUMERIC
+              - column:
                   header: LOKALNYID
                   name: LOKALNYID
                   type: STRING
@@ -124,6 +190,14 @@ databaseChangeLog:
               - column:
                   header: stop_id
                   name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
                   type: NUMERIC
               - column:
                   header: LOKALNYID
@@ -140,6 +214,14 @@ databaseChangeLog:
                   name: STOP_ID
                   type: NUMERIC
               - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
+                  type: NUMERIC
+              - column:
                   header: LOKALNYID
                   name: LOKALNYID
                   type: STRING
@@ -152,6 +234,14 @@ databaseChangeLog:
               - column:
                   header: stop_id
                   name: STOP_ID
+                  type: NUMERIC
+              - column:
+                  header: bdot10k_id
+                  name: BDOT10K_ID
+                  type: STRING
+              - column:
+                  header: osm_id
+                  name: OSM_ID
                   type: NUMERIC
               - column:
                   header: LOKALNYID
@@ -169,8 +259,15 @@ databaseChangeLog:
                   name: territorial_unit_id
                   type: integer
 
+  - changeSet:
+      id: assign-territorial-unit-to-stop
+      author: pwrona
+      changes:
         - sql:
-            sql: UPDATE stop s SET territorial_unit_id =  t.territorial_unit_id FROM territorial_unit_stop ts JOIN territorial_unit t ON t.lokalnyid = ts.lokalnyid WHERE ts.stop_id = s.stop_id;
+            sql: UPDATE stop s SET territorial_unit_id = t.territorial_unit_id FROM territorial_unit_stop ts JOIN territorial_unit t ON t.lokalnyid = ts.lokalnyid WHERE ts.bdot10k_id != '' AND ts.bdot10k_id = s.bdot10k_id;
+
+        - sql:
+            sql: UPDATE stop s SET territorial_unit_id = t.territorial_unit_id FROM territorial_unit_stop ts JOIN territorial_unit t ON t.lokalnyid = ts.lokalnyid WHERE ts.osm_id != '-1' AND ts.osm_id = s.osm_id;
 
         - addForeignKeyConstraint:
             baseTableName: stop
