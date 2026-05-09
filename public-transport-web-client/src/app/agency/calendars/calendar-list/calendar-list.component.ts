@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {CalendarQuery, CalendarService, GetCalendarsResponse, Status} from "../../../generated/public-transport-api";
 import {size} from "lodash";
 import {LoginService} from "../../../auth/login.service";
+import {MatDialog} from "@angular/material/dialog";
+import {CalendarItemModalComponent} from "../calendar-item-modal/calendar-item-modal.component";
 
 @Component({
     selector: 'app-calendars',
@@ -14,7 +16,7 @@ export class CalendarListComponent implements OnInit {
 
     public calendarsResponse: GetCalendarsResponse;
 
-    constructor(private calendarService: CalendarService, private loginService: LoginService, private route: ActivatedRoute) {
+    constructor(private calendarService: CalendarService, private loginService: LoginService, private route: ActivatedRoute, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -36,5 +38,13 @@ export class CalendarListComponent implements OnInit {
 
     public hasCalendar(): boolean {
         return size(this.calendarsResponse.calendars) > 0;
+    }
+
+    openDialog() {
+        const dialogRef = this.dialog.open(CalendarItemModalComponent);
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+        });
     }
 }
