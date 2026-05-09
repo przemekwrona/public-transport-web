@@ -350,6 +350,19 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>4.20.0</version>
+                <configuration>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
+                    <url>${HEROKU_DB_URL}</url>
+                    <username>${HEROKU_DB_USER}</username>
+                    <password>${HEROKU_DB_PASSWORD}</password>
+                    <driver>org.postgresql.Driver</driver>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
