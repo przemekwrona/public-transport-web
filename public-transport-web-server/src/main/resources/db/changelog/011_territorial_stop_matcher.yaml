@@ -26,6 +26,7 @@ databaseChangeLog:
   - changeSet:
       id: load-territorial-unit-stops
       author: pwrona
+      context: "local,dev,qa,prod"
       changes:
         - loadData:
             tableName: territorial_unit_stop
