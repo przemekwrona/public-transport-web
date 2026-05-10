@@ -29,7 +29,7 @@ public class CalendarUpdaterService {
     @PreAgencyAuthorize
     public Status updateCalendar(String instance, UpdateCalendarRequest updateCalendarRequest) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        calendarSymbolRepository.findByAgencyAndCalendarName(instance, updateCalendarRequest.getCalendarName()).ifPresent(calendarEntity -> {
+        calendarSymbolRepository.findByAgencyAndCalendarNameAndDesignation(instance, updateCalendarRequest.getCalendarName(), updateCalendarRequest.getBody().getDesignation()).ifPresent(calendarEntity -> {
             calendarDatesRepository.deleteByAgencyAndCalendar(agencyEntity, calendarEntity);
 
             CalendarSymbolEntity updatedCalendarSymbolEntity = CalendarSymbolEntityMapper.apply(calendarEntity, updateCalendarRequest.getBody(), agencyEntity);

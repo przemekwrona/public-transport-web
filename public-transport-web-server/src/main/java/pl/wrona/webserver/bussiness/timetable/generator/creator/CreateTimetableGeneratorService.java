@@ -40,7 +40,7 @@ public class CreateTimetableGeneratorService {
     @PreAgencyAuthorize
     public CreateTimetableGeneratorRequest createTimetableGenerator(String instance, CreateTimetableGeneratorRequest request) {
         AgencyEntity agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        CalendarSymbolEntity calendarSymbolEntity = calendarQueryService.getCalendar(instance, request.getTimetables().getCalendarName());
+        CalendarSymbolEntity calendarSymbolEntity = calendarQueryService.getCalendar(instance, request.getTimetables().getCalendarName(), "");
         RouteEntity routeEntity = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, new RouteId()
                 .line(request.getRouteId().getLine())
                 .name(request.getRouteId().getName())

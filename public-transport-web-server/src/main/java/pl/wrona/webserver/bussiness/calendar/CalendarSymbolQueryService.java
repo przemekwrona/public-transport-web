@@ -20,7 +20,7 @@ public class CalendarSymbolQueryService {
 
     @Deprecated
     public Optional<CalendarSymbolEntity> findCalendarByCalendarName(String calendarName) {
-        return calendarSymbolQueryRepository.findByAgencyAndCalendarName(agencyService.getLoggedAgency().getAgencyCode(), calendarName);
+        return calendarSymbolQueryRepository.findByAgencyAndCalendarNameAndDesignation(agencyService.getLoggedAgency().getAgencyCode(), calendarName, "");
     }
 
     public CalendarSymbolEntity findCalendarByCalendarCode(CalendarItemEntity itemEntity, String symbol) {
