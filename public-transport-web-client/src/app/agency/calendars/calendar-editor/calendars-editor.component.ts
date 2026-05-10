@@ -75,7 +75,7 @@ export class CalendarsEditorComponent implements OnInit {
 
     ngOnInit(): void {
         this._route.data.subscribe(data => this.componentMode = data['mode']);
-        this._route.queryParams.subscribe(params => this.queryCalendarName = params['name']);
+        this._route.paramMap.subscribe(params => this.queryCalendarName = params.get('calendarName'));
 
         this.modelForm = this.formBuilder.group({
             designation: ['', [Validators.required]],

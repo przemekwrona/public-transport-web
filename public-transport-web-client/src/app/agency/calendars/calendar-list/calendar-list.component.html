@@ -105,10 +105,9 @@
                                             class="btn btn-sm btn-dark shrink-0">
                                         Usuń
                                     </button>
-                                    <a [routerLink]="['/agency/calendars/edit']"
+                                    <a [routerLink]="['/agency/calendars', calendarSymbol?.calendarName, 'symbol', 'edit']"
                                        [queryParams]="{designation: calendarSymbol?.designation, startDate: calendarSymbol?.startDate, endDate: calendarSymbol?.endDate}"
-                                       class="btn btn-sm shrink-0 btn-secondary">Pokaż
-                                        szczegóły</a>
+                                       class="btn btn-sm shrink-0 btn-secondary">Pokaż szczegóły</a>
                                 </div>
                             </div>
 
