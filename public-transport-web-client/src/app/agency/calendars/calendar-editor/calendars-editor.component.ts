@@ -80,8 +80,8 @@ export class CalendarsEditorComponent implements OnInit {
         this.modelForm = this.formBuilder.group({
             designation: ['', [Validators.required]],
             description: ['', [Validators.required]],
-            startDate: [moment().startOf('day').toDate(), [Validators.required]],
-            endDate: [moment().endOf('year').toDate(), [Validators.required]],
+            startDate: [{value: moment().startOf('day').toDate(), disabled: true}, [Validators.required]],
+            endDate: [{value: moment().endOf('year').toDate(), disabled: true}, [Validators.required]],
             monday: [false],
             tuesday: [false],
             wednesday: [false],
@@ -218,7 +218,7 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public save(): void {
-        if(this.modelForm.invalid) {
+        if (this.modelForm.invalid) {
             this.scrollToFirstError();
             return;
         }
@@ -237,7 +237,7 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     public update(): void {
-        if(this.modelForm.invalid) {
+        if (this.modelForm.invalid) {
             this.scrollToFirstError();
             return;
         }
