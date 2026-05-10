@@ -119,4 +119,18 @@ databaseChangeLog:
             columnName: end_date
             tableName: calendar_symbol
 
+  - changeSet:
+      id: create-unique-index-calendar-symbol
+      author: pwrona
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: calendar_item_id
+              - column:
+                  name: designation
+            indexName: uq_calendar_item_and_designation
+            tableName: calendar_symbol
+            unique: true
+
        
