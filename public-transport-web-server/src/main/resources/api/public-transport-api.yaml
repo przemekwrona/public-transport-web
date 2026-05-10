@@ -833,7 +833,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetCalendarItemResponse'
 
-  /agency/{agency}/calendar:
+  /agency/{agency}/calendar-symbol:
     post:
       tags:
         - calendar
@@ -898,12 +898,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCalendarsResponse'
-
     delete:
       tags:
         - calendar
-      summary: Delete calendar by calendarName
-      operationId: deleteCalendarByCalendarName
+      summary: Delete calendar by calendarName and symbol
+      operationId: deleteCalendarByCalendarNameAndSymbol
       parameters:
         - in: path
           name: agency
@@ -914,7 +913,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CalendarQuery'
+              $ref: '#/components/schemas/CalendarSymbolQuery'
         required: true
       responses:
         204:
@@ -939,7 +938,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CalendarQuery'
+              $ref: '#/components/schemas/CalendarSymbolQuery'
       responses:
         200:
           description: OK
@@ -1631,7 +1630,7 @@ components:
         body:
           $ref: '#/components/schemas/CalendarBody'
 
-    CalendarQuery:
+    CalendarSymbolQuery:
       type: object
       properties:
         designation:

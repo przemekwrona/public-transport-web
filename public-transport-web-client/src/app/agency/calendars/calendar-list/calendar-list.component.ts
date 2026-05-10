@@ -1,11 +1,10 @@
 import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {
-    CalendarQuery,
+    CalendarSymbolQuery,
     CalendarService,
     CreateCalendarItemResponse, GetCalendarItemResponse,
-    GetCalendarsResponse,
-    Status
+    Status, CalendarSymbolBody
 } from "../../../generated/public-transport-api";
 import {size} from "lodash";
 import {LoginService} from "../../../auth/login.service";
@@ -30,10 +29,13 @@ export class CalendarListComponent implements OnInit {
         this.calendarsResponse = this.route.snapshot.data['calendars'];
     }
 
-    public deleteByCalendarName(calendarName: string) {
-        const query: CalendarQuery = {};
-        query.calendarName = calendarName;
-        this.calendarService.deleteCalendarByCalendarName(this.loginService.getInstance(), query).subscribe((response: Status) => {
+    public deleteByCalendarSymbol(calendarSymbol: CalendarSymbolBody) {
+        const query: CalendarSymbolQuery = {};
+        query.calendarName = calendarSymbol.calendarName;
+        query.designation = calendarSymbol.designation;
+        query.startDate = calendarSymbol.startDate;
+        query.endDate = calendarSymbol.endDate;
+        this.calendarService.deleteCalendarByCalendarNameAndSymbol(this.loginService.getInstance(), query).subscribe((response: Status) => {
             this.calendarService.getCalendarItems(this.loginService.getInstance())
                 .subscribe((calendarResponse: GetCalendarItemResponse) => this.calendarsResponse = calendarResponse);
         });

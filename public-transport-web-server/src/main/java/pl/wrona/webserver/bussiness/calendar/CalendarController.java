@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.CalendarApi;
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import org.igeolab.iot.pt.server.api.model.CalendarPayload;
-import org.igeolab.iot.pt.server.api.model.CalendarQuery;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolQuery;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarItemRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarItemResponse;
 import org.igeolab.iot.pt.server.api.model.GetCalendarItemResponse;
@@ -45,13 +45,13 @@ public class CalendarController implements CalendarApi {
     }
 
     @Override
-    public ResponseEntity<Status> deleteCalendarByCalendarName(String agency, CalendarQuery calendarQuery) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(calendarDeletionService.deleteCalendarByCalendarName(agency, calendarQuery));
+    public ResponseEntity<Status> deleteCalendarByCalendarNameAndSymbol(String agency, CalendarSymbolQuery calendarSymbolQuery) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(calendarDeletionService.deleteCalendarByCalendarName(agency, calendarSymbolQuery));
     }
 
     @Override
-    public ResponseEntity<CalendarBody> getCalendarByCalendarName(String agency, CalendarQuery calendarQuery) {
-        return ResponseEntity.status(HttpStatus.OK).body(calendarReaderService.getCalendarByCalendarName(agency, calendarQuery));
+    public ResponseEntity<CalendarBody> getCalendarByCalendarName(String agency, CalendarSymbolQuery calendarSymbolQuery) {
+        return ResponseEntity.status(HttpStatus.OK).body(calendarReaderService.getCalendarByCalendarName(agency, calendarSymbolQuery));
     }
 
     @Override
