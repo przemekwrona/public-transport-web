@@ -1,9 +1,9 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {
     CalendarQuery,
     CalendarService,
-    CreateCalendarItemResponse,
+    CreateCalendarItemResponse, GetCalendarItemResponse,
     GetCalendarsResponse,
     Status
 } from "../../../generated/public-transport-api";
@@ -20,7 +20,8 @@ import {CalendarItemModalComponent} from "../calendar-item-modal/calendar-item-m
 })
 export class CalendarListComponent implements OnInit {
 
-    public calendarsResponse: GetCalendarsResponse;
+    public calendarsResponse: GetCalendarItemResponse;
+    readonly panelOpenState: WritableSignal<boolean> = signal(false);
 
     constructor(private calendarService: CalendarService, private loginService: LoginService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog) {
     }
@@ -33,8 +34,8 @@ export class CalendarListComponent implements OnInit {
         const query: CalendarQuery = {};
         query.calendarName = calendarName;
         this.calendarService.deleteCalendarByCalendarName(this.loginService.getInstance(), query).subscribe((response: Status) => {
-            this.calendarService.getCalendars(this.loginService.getInstance())
-                .subscribe((calendarResponse: GetCalendarsResponse) => this.calendarsResponse = calendarResponse);
+            this.calendarService.getCalendarItems(this.loginService.getInstance())
+                .subscribe((calendarResponse: GetCalendarItemResponse) => this.calendarsResponse = calendarResponse);
         });
     }
 
@@ -43,7 +44,7 @@ export class CalendarListComponent implements OnInit {
     }
 
     public hasCalendar(): boolean {
-        return size(this.calendarsResponse.calendars) > 0;
+        return size(this.calendarsResponse.items) > 0;
     }
 
     openDialog() {

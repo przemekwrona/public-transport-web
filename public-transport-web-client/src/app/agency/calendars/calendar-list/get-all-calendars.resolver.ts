@@ -1,12 +1,12 @@
 import {ResolveFn} from '@angular/router';
 import {inject} from "@angular/core";
 import {Observable} from "rxjs";
-import {CalendarService, GetCalendarsResponse} from "../../../generated/public-transport-api";
+import {CalendarService, GetCalendarItemResponse, GetCalendarsResponse} from "../../../generated/public-transport-api";
 import {LoginService} from "../../../auth/login.service";
 
-export const getAllCalendarsResolver: ResolveFn<GetCalendarsResponse> = (route, state): Observable<GetCalendarsResponse> => {
+export const getAllCalendarsResolver: ResolveFn<GetCalendarItemResponse> = (route, state): Observable<GetCalendarItemResponse> => {
     const calendarService = inject(CalendarService);
     const loginService = inject(LoginService);
 
-    return calendarService.getCalendars(loginService.getInstance());
+    return calendarService.getCalendarItems(loginService.getInstance());
 };
