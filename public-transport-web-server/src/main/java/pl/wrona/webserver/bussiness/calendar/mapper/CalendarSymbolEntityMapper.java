@@ -4,7 +4,7 @@ import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
-public class CalendarEntityMapper {
+public class CalendarSymbolEntityMapper {
 
     public static CalendarSymbolEntity apply(CalendarBody calendarBody, AgencyEntity agencyEntity) {
         return apply(new CalendarSymbolEntity(), calendarBody, agencyEntity);

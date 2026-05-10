@@ -8,14 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
-import pl.wrona.webserver.core.calendar.CalendarSymbolRepository;
+import pl.wrona.webserver.core.calendar.CalendarSymbolQueryRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 @Service
 @AllArgsConstructor
 public class CalendarDeletionService {
 
-    private final CalendarSymbolRepository calendarSymbolRepository;
+    private final CalendarSymbolQueryRepository calendarSymbolRepository;
     private final CalendarDatesRepository calendarDatesRepository;
     private final AgencyService agencyService;
 

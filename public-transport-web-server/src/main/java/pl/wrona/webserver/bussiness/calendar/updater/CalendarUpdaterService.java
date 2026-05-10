@@ -10,8 +10,8 @@ import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
 import pl.wrona.webserver.bussiness.calendar.mapper.CalendarDatesEntityMapper;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
-import pl.wrona.webserver.bussiness.calendar.mapper.CalendarEntityMapper;
-import pl.wrona.webserver.core.calendar.CalendarSymbolRepository;
+import pl.wrona.webserver.bussiness.calendar.mapper.CalendarSymbolEntityMapper;
+import pl.wrona.webserver.core.calendar.CalendarSymbolQueryRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.Set;
@@ -20,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class CalendarUpdaterService {
 
-    private final CalendarSymbolRepository calendarSymbolRepository;
+    private final CalendarSymbolQueryRepository calendarSymbolRepository;
     private final CalendarDatesRepository calendarDatesRepository;
 
     private final AgencyService agencyService;
@@ -32,7 +32,7 @@ public class CalendarUpdaterService {
         calendarSymbolRepository.findByAgencyAndCalendarName(instance, updateCalendarRequest.getCalendarName()).ifPresent(calendarEntity -> {
             calendarDatesRepository.deleteByAgencyAndCalendar(agencyEntity, calendarEntity);
 
-            CalendarSymbolEntity updatedCalendarSymbolEntity = CalendarEntityMapper.apply(calendarEntity, updateCalendarRequest.getBody(), agencyEntity);
+            CalendarSymbolEntity updatedCalendarSymbolEntity = CalendarSymbolEntityMapper.apply(calendarEntity, updateCalendarRequest.getBody(), agencyEntity);
             CalendarSymbolEntity savedCalendarSymbolEntity = calendarSymbolRepository.save(updatedCalendarSymbolEntity);
 
             Set<CalendarDatesEntity> calendarDates = CalendarDatesEntityMapper.apply(updateCalendarRequest.getBody(), savedCalendarSymbolEntity);

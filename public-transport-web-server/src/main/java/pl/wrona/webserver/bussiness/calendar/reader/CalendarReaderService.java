@@ -11,8 +11,8 @@ import pl.wrona.webserver.bussiness.calendar.mapper.CalendarBodyMapper;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
 import pl.wrona.webserver.core.calendar.CalendarDatesQueryService;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
-import pl.wrona.webserver.core.calendar.CalendarSymbolQueryService;
-import pl.wrona.webserver.core.calendar.CalendarSymbolRepository;
+import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
+import pl.wrona.webserver.core.calendar.CalendarSymbolQueryRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CalendarReaderService {
 
-    private final CalendarSymbolRepository calendarSymbolRepository;
+    private final CalendarSymbolQueryRepository calendarSymbolRepository;
     private final CalendarDatesRepository calendarDatesRepository;
     private final AgencyService agencyService;
     private final CalendarItemQueryService calendarItemQueryService;

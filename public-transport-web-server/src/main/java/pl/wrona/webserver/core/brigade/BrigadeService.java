@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.bussiness.trip.TripService;
 import pl.wrona.webserver.core.calendar.CalendarQueryService;
-import pl.wrona.webserver.core.calendar.CalendarSymbolQueryService;
+import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
 
