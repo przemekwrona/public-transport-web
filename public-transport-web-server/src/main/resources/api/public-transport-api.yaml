@@ -814,6 +814,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateCalendarItemResponse'
+    get:
+      tags:
+        - calendar
+      summary: Return active calendars items and theirs symbols
+      operationId: getCalendarItems
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCalendarItemResponse'
 
   /agency/{agency}/calendar:
     post:
@@ -1690,6 +1708,70 @@ components:
       properties:
         calendarName:
           type: string
+
+    CalendarSymbolBody:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        calendarName:
+          type: string
+        description:
+          type: string
+        designation:
+          type: string
+        monday:
+          type: boolean
+        tuesday:
+          type: boolean
+        wednesday:
+          type: boolean
+        thursday:
+          type: boolean
+        friday:
+          type: boolean
+        saturday:
+          type: boolean
+        sunday:
+          type: boolean
+        included:
+          type: array
+          items:
+            type: string
+            format: date
+        excluded:
+          type: array
+          items:
+            type: string
+            format: date
+
+    CalendarItemBody:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        calendarName:
+          type: string
+        symbols:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalendarSymbolBody'
+
+    GetCalendarItemResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalendarItemBody'
 
     CenterPoint:
       type: object
