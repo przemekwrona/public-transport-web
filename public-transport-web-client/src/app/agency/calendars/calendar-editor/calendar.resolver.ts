@@ -1,8 +1,7 @@
 import {ResolveFn} from '@angular/router';
 import {inject} from "@angular/core";
 import {
-    CalendarBody,
-    CalendarQuery,
+    CalendarSymbolQuery,
     CalendarService,
     CalendarSymbolBody
 } from "../../../generated/public-transport-api";
@@ -13,7 +12,7 @@ export const calendarResolver: ResolveFn<Observable<CalendarSymbolBody>> = (rout
     const calendarsService: CalendarService = inject(CalendarService);
     const loginService: LoginService = inject(LoginService);
 
-    const query: CalendarQuery = {};
+    const query: CalendarSymbolQuery = {};
     query.designation = route.queryParams['designation'];
     query.startDate = route.queryParams['startDate'];
     query.endDate = route.queryParams['endDate'];

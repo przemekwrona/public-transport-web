@@ -1,7 +1,7 @@
 package pl.wrona.webserver.bussiness.calendar.deletion;
 
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.CalendarQuery;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolQuery;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ public class CalendarDeletionService {
 
     @Transactional
     @PreAgencyAuthorize
-    public Status deleteCalendarByCalendarName(String instance, CalendarQuery calendarQuery) {
+    public Status deleteCalendarByCalendarName(String instance, CalendarSymbolQuery calendarQuery) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         calendarSymbolRepository.findByAgencyAndCalendarNameAndDesignation(instance, calendarQuery.getCalendarName(), calendarQuery.getDesignation())
                 .ifPresent((CalendarSymbolEntity calendarSymbolEntity) -> {

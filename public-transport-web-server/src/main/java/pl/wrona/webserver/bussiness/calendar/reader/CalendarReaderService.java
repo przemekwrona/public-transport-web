@@ -2,7 +2,7 @@ package pl.wrona.webserver.bussiness.calendar.reader;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
-import org.igeolab.iot.pt.server.api.model.CalendarQuery;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolQuery;
 import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
@@ -45,7 +45,7 @@ public class CalendarReaderService {
     }
 
     @PreAgencyAuthorize
-    public CalendarBody getCalendarByCalendarName(String instance, CalendarQuery calendarQuery) {
+    public CalendarBody getCalendarByCalendarName(String instance, CalendarSymbolQuery calendarQuery) {
         var item = calendarItemQueryService.findByAgencyAndStartDateAndEndDate(instance, calendarQuery.getStartDate(), calendarQuery.getEndDate());
         var symbol = calendarSymbolQueryService.findCalendarByCalendarCode(item, calendarQuery.getDesignation());
         var dates = calendarDatesQueryService.findAllByCalendar(symbol);
