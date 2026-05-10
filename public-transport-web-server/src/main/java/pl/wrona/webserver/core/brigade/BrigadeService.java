@@ -47,7 +47,7 @@ public class BrigadeService {
 
         var brigadeEntity = new BrigadeEntity();
         brigadeEntity.setBrigadeNumber(request.getBrigadeName());
-        brigadeEntity.setCalendar(calendarQueryService.getCalendar(agencyEntity.getAgencyCode(), request.getCalendarName()));
+        brigadeEntity.setCalendar(calendarQueryService.getCalendar(agencyEntity.getAgencyCode(), request.getCalendarName(), ""));
 
         brigadeEntity.setAgency(agencyEntity);
 

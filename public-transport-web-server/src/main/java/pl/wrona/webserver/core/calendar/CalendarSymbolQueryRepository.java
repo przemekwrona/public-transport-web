@@ -14,8 +14,8 @@ public interface CalendarSymbolQueryRepository extends JpaRepository<CalendarSym
 
     List<CalendarSymbolEntity> findAllByAgency(AgencyEntity agencyEntity);
 
-    @Query(value = "SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency.agencyCode= :agency AND s.calendarItem.calendarName = :calendarName")
-    Optional<CalendarSymbolEntity> findByAgencyAndCalendarName(@Param("agency") String agency, @Param("calendarName") String calendarName);
+    @Query(value = "SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency.agencyCode= :agency AND s.calendarItem.calendarName = :calendarName AND s.designation = :designation")
+    Optional<CalendarSymbolEntity> findByAgencyAndCalendarNameAndDesignation(@Param("agency") String agency, @Param("calendarName") String calendarName, @Param("designation") String designation);
 
     @Query(value = "SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency= :agency AND s.calendarItem.calendarName LIKE CONCAT(:calendarName, '%')")
     List<CalendarSymbolEntity> findAllByAgencyAndCalendarNameStartingWith(@Param("agency") AgencyEntity agencyEntity, @Param("agency") String calendarName);
