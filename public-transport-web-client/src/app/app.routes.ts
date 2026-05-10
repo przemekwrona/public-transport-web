@@ -68,6 +68,7 @@ export const routes: Routes = [
             {path: 'brigades/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'calendars', component: CalendarListComponent, resolve: { calendars: getAllCalendarsResolver }},
             {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
+            {path: 'calendars/:calendarName/symbol/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
             {path: 'calendars/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
             {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
         ]

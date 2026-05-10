@@ -21,4 +21,6 @@ public interface CalendarDatesRepository extends JpaRepository<CalendarDatesEnti
     void deleteByAgencyAndCalendar(@Param("agency") AgencyEntity agencyEntity, @Param("calendarEntity") CalendarSymbolEntity calendarSymbolEntity);
 
     List<CalendarDatesEntity> findAllByCalendar(CalendarSymbolEntity calendarSymbol);
+
+    List<CalendarDatesEntity> findAllByCalendarIn(List<CalendarSymbolEntity> calendarSymbols);
 }

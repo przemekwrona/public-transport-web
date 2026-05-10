@@ -8,7 +8,7 @@ import pl.wrona.webserver.security.PreAgencyAuthorize;
 @AllArgsConstructor
 public class CalendarQueryService {
 
-    private final CalendarSymbolRepository calendarSymbolRepository;
+    private final CalendarSymbolQueryRepository calendarSymbolRepository;
 
     @PreAgencyAuthorize
     public CalendarSymbolEntity getCalendar(String instance, String calendarName) {

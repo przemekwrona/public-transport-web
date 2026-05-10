@@ -14,4 +14,8 @@ public class CalendarDatesQueryService {
     public List<CalendarDatesEntity> findAllByCalendar(CalendarSymbolEntity calendarId) {
         return calendarDatesRepository.findAllByCalendar(calendarId);
     }
+
+    public List<CalendarDatesEntity> findAllByCalendar(List<CalendarSymbolEntity> calendarSymbols) {
+        return calendarDatesRepository.findAllByCalendarIn(calendarSymbols);
+    }
 }

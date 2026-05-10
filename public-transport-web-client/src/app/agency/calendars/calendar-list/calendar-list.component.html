@@ -24,48 +24,81 @@
                                 Obowiązuje od<strong>&nbsp;{{ calendarItem?.startDate }}&nbsp;</strong> do <strong>&nbsp;{{ calendarItem?.endDate }}</strong>.
                             </mat-panel-title>
                             <mat-panel-description>
-                                {{ calendarItem?.calendarName }}
                             </mat-panel-description>
                         </mat-expansion-panel-header>
-                        Currently I am {{ panelOpenState() ? 'open' : 'closed' }}
-                        <p>I'm visible because I am open</p>
-                    </mat-expansion-panel>
+                        <a [routerLink]="['/agency/calendars/', calendarItem.calendarName, 'symbol', 'create']"
+                           class="btn btn-sm btn-primary">Dodaj nowy Symbol</a>
 
-                    <div class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg">
-                        <div class="flex items-center gap-4">
-                            <div class="flex flex-col gap-1.5">
-                                <div class="form-info text-gray-800 font-normal">
-                                    <!--                                @if (hasElements(calendar.included)) {-->
-                                    <!--                                    <div class="mt-1">-->
-                                    <!--                                        <span><strong>Dodatkowy kurs w dniach: </strong></span>-->
-                                    <!--                                        @for (included of calendar.included; track included) {-->
-                                    <!--                                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">{{ included | date: "dd.MM" }}</span>-->
-                                    <!--                                        }-->
-                                    <!--                                    </div>-->
-                                    <!--                                }-->
+                        @for (calendarSymbol of calendarItem.symbols || []; track calendarSymbol; ) {
 
-                                    <!--                                @if (hasElements(calendar.excluded)) {-->
-                                    <!--                                    <div class="mt-1">-->
-                                    <!--                                        <span><strong>NIE kursuje w dni: </strong></span>-->
+                            <div class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg">
+                                <div class="flex items-center gap-4">
+                                    <div class="flex flex-col gap-1.5">
+                                        <div class="form-info text-gray-800 font-normal">
 
-                                    <!--                                        @for (excluded of calendar.excluded; track excluded) {-->
-                                    <!--                                            <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset mr-1">{{ excluded | date: "dd.MM" }}</span>-->
-                                    <!--                                        }-->
-                                    <!--                                    </div>-->
-                                    <!--                                }-->
+                                            {{ calendarSymbol?.designation }} {{ calendarSymbol?.description }}
+
+                                            <div class="mt-1">
+                                                <span><strong>Kursuje w DNI: </strong></span>
+                                                @if (calendarSymbol.monday) {
+                                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">PONIEDZIAŁEK</span>
+                                                }
+                                                @if (calendarSymbol.tuesday) {
+                                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">WTOREK</span>
+                                                }
+                                                @if (calendarSymbol.wednesday) {
+                                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">ŚRODA</span>
+                                                }
+                                                @if (calendarSymbol.thursday) {
+                                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">CZWARTEK</span>
+                                                }
+                                                @if (calendarSymbol.friday) {
+                                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">PIĄTEK</span>
+                                                }
+                                                @if (calendarSymbol.saturday) {
+                                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">SOBOTA</span>
+                                                }
+                                                @if (calendarSymbol.sunday) {
+                                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">NIEDZIELA</span>
+                                                }
+                                            </div>
+
+                                            @if (hasElements(calendarSymbol.included)) {
+                                                <div class="mt-1">
+                                                    <span><strong>Dodatkowy kurs w dniach: </strong></span>
+                                                    @for (included of calendarSymbol.included; track included) {
+                                                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1">{{ included | date: "dd.MM" }}</span>
+                                                    }
+                                                </div>
+                                            }
+
+                                            @if (hasElements(calendarSymbol.excluded)) {
+                                                <div class="mt-1">
+                                                    <span><strong>NIE kursuje w dni: </strong></span>
+                                                    @for (excluded of calendarSymbol.excluded; track excluded) {
+                                                        <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset mr-1">{{ excluded | date: "dd.MM" }}</span>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
+                                    <button (click)="deleteByCalendarName(calendarSymbol?.calendarName)"
+                                            class="btn btn-sm btn-dark shrink-0">
+                                        Usuń
+                                    </button>
+                                    <a [routerLink]="['/agency/calendars/edit']"
+                                       [queryParams]="{designation: calendarSymbol?.designation, startDate: calendarSymbol?.startDate, endDate: calendarSymbol?.endDate}"
+                                       class="btn btn-sm shrink-0 btn-secondary">Pokaż
+                                        szczegóły</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
-                            <!--                        <button (click)="deleteByCalendarName(calendar?.calendarName)"-->
-                            <!--                                class="btn btn-sm btn-dark shrink-0">-->
-                            <!--                            Usuń-->
-                            <!--                        </button>-->
-                            <!--                        <a [routerLink]="['/agency/calendars/edit']" [queryParams]="{designation: calendar?.designation, startDate: calendar?.startDate, endDate: calendar?.endDate}"-->
-                            <!--                           class="btn btn-sm shrink-0 btn-secondary">Pokaż-->
-                            <!--                            szczegóły</a>-->
-                        </div>
-                    </div>
+
+
+                        }
+                    </mat-expansion-panel>
+
                 }
             </mat-accordion>
         } @else {

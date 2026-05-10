@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CalendarSymbolRepository extends JpaRepository<CalendarSymbolEntity, Long> {
+public interface CalendarSymbolQueryRepository extends JpaRepository<CalendarSymbolEntity, Long> {
 
     List<CalendarSymbolEntity> findAllByAgency(AgencyEntity agencyEntity);
 
@@ -21,4 +21,7 @@ public interface CalendarSymbolRepository extends JpaRepository<CalendarSymbolEn
     List<CalendarSymbolEntity> findAllByAgencyAndCalendarNameStartingWith(@Param("agency") AgencyEntity agencyEntity, @Param("agency") String calendarName);
 
     CalendarSymbolEntity findByCalendarItemAndDesignationEquals(CalendarItemEntity calendarItemEntity, String designation);
+
+    @Query(value = "SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency.agencyCode = :agency AND s.calendarItem.calendarName IN :calendarNames")
+    List<CalendarSymbolEntity> findAllByAgencyAndCalendarNamesIn(@Param("agency") String agency, @Param("calendarNames") List<String> calendarNames);
 }
