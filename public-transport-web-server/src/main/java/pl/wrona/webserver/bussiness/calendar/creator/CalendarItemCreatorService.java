@@ -20,7 +20,7 @@ public class CalendarItemCreatorService {
     public CreateCalendarItemResponse createCalendarItem(String instance, CreateCalendarItemRequest createCalendarItemRequest) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
 
-        var calendarName = "%s--%s--%s".formatted(instance, createCalendarItemRequest.getStartDate(), createCalendarItemRequest.getEndDate());
+        var calendarName = "%s--%s".formatted(createCalendarItemRequest.getStartDate(), createCalendarItemRequest.getEndDate());
 
         var calendarItem = new CalendarItemEntity();
         calendarItem.setAgency(agencyEntity);
