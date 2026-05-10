@@ -12,6 +12,8 @@ import {
     CreateCalendarItemResponse
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import {MatInput} from "@angular/material/input";
+import moment from "moment";
 
 @Component({
     selector: 'app-calendar-item-modal',
@@ -23,7 +25,8 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
         MatDatepickerModule,
         FormsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        MatInput
     ],
     providers: [
         AgencyStorageService,
@@ -58,13 +61,17 @@ export class CalendarItemModalComponent {
         if (this.modelForm.valid) {
             const agency: string = this.agencyStorageService.getInstance();
             const calendarItemRequest: CreateCalendarItemRequest = {} as CreateCalendarItemRequest;
-            calendarItemRequest.startDate = this.startDateControl.value;
-            calendarItemRequest.endDate = this.endDateControl.value;
+            calendarItemRequest.startDate = moment(this.startDateControl.value).format('YYYY-MM-DD');
+            calendarItemRequest.endDate = moment(this.endDateControl.value).format('YYYY-MM-DD');
 
             this.calendarService.createCalendarItem(agency, calendarItemRequest).subscribe((response: CreateCalendarItemResponse) => {
                 this.dialogRef.close(response);
             })
         }
+    }
+
+    public hasError(controlName: string, error: string): boolean {
+        return this.modelForm.get(controlName).hasError(error);
     }
 
 }
