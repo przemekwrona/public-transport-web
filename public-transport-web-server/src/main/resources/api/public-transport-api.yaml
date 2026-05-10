@@ -790,6 +790,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/TripMeasure'
 
+  /agency/{agency}/calendar-item:
+    post:
+      tags:
+        - calendar
+      summary: Create new Calendar Item
+      operationId: createCalendarItem
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCalendarItemRequest'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCalendarItemResponse'
+
   /agency/{agency}/calendar:
     post:
       tags:
@@ -1649,6 +1674,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CalendarBody'
+
+    CreateCalendarItemRequest:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    CreateCalendarItemResponse:
+      type: object
+      properties:
+        calendarName:
+          type: string
 
     CenterPoint:
       type: object

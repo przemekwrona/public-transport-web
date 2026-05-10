@@ -6,6 +6,12 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {SharedModule} from "../../shared/shared.module";
 import {CommonModule} from "@angular/common";
+import {
+    CalendarService,
+    CreateCalendarItemRequest,
+    CreateCalendarItemResponse
+} from "../../../generated/public-transport-api";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     selector: 'app-calendar-item-modal',
@@ -18,6 +24,10 @@ import {CommonModule} from "@angular/common";
         FormsModule,
         ReactiveFormsModule,
         SharedModule
+    ],
+    providers: [
+        AgencyStorageService,
+        CalendarService
     ],
     templateUrl: './calendar-item-modal.component.html',
     styleUrl: './calendar-item-modal.component.scss'
@@ -35,7 +45,7 @@ export class CalendarItemModalComponent {
         return this.modelForm.get('endDate') as FormControl;
     }
 
-    constructor(private formBuilder: FormBuilder, private dialogRef: MatDialogRef<CalendarItemModalComponent>) {
+    constructor(private formBuilder: FormBuilder, private dialogRef: MatDialogRef<CalendarItemModalComponent>, private agencyStorageService: AgencyStorageService, private calendarService: CalendarService) {
         this.modelForm = this.formBuilder.group({
             startDate: ['', [Validators.required]],
             endDate: ['', [Validators.required]]
@@ -46,7 +56,14 @@ export class CalendarItemModalComponent {
         this.isSubmitted = true;
 
         if (this.modelForm.valid) {
-            this.dialogRef.close();
+            const agency: string = this.agencyStorageService.getInstance();
+            const calendarItemRequest: CreateCalendarItemRequest = {} as CreateCalendarItemRequest;
+            calendarItemRequest.startDate = this.startDateControl.value;
+            calendarItemRequest.endDate = this.endDateControl.value;
+
+            this.calendarService.createCalendarItem(agency, calendarItemRequest).subscribe((response: CreateCalendarItemResponse) => {
+                this.dialogRef.close(response);
+            })
         }
     }
 
