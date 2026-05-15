@@ -832,6 +832,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCalendarItemResponse'
+    delete:
+      tags:
+        - calendar
+      operationId: deleteCalendarItem
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteCalendarItemRequest'
+      responses:
+        204:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+
 
   /agency/{agency}/calendar-symbol:
     post:
@@ -1691,6 +1715,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CalendarBody'
+
+    CalendarItemId:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    DeleteCalendarItemRequest:
+      type: object
+      properties:
+        calendarItemId:
+          $ref: '#/components/schemas/CalendarItemId'
 
     CreateCalendarItemRequest:
       type: object

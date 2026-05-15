@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,10 @@ public interface CalendarSymbolQueryRepository extends JpaRepository<CalendarSym
 
     CalendarSymbolEntity findByCalendarItemAndDesignationEquals(CalendarItemEntity calendarItemEntity, String designation);
 
-    @Query(value = "SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency.agencyCode = :agency AND s.calendarItem.calendarName IN :calendarNames")
+    @Query(value = "SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency.agencyCode = :agency AND s.calendarItem.calendarName IN :calendarNames ORDER BY s.calendarItem.startDate ASC")
     List<CalendarSymbolEntity> findAllByAgencyAndCalendarNamesIn(@Param("agency") String agency, @Param("calendarNames") List<String> calendarNames);
+
+    @Query(value = "SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency.agencyCode = :agency AND s.calendarItem.startDate = :startDate AND s.calendarItem.endDate = :endDate")
+    List<CalendarSymbolEntity> findAllByAgencyAndStartDateAndEndDate(@Param("agency") String agency, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
 }

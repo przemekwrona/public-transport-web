@@ -14,7 +14,7 @@ public interface CalendarItemQueryRepository extends JpaRepository<CalendarItemE
     @Query(value = "SELECT i FROM CalendarItemEntity i WHERE i.agency.agencyCode = :instance AND i.startDate = :startDate AND i.endDate = :endDate")
     CalendarItemEntity findByAgencyAndStartDateAndEndDate(@Param("instance") String instance, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query(value = "SELECT i FROM CalendarItemEntity i WHERE i.agency.agencyCode = :instance")
+    @Query(value = "SELECT i FROM CalendarItemEntity i WHERE i.agency.agencyCode = :instance ORDER BY i.startDate DESC")
     List<CalendarItemEntity> findByAgency(@Param("instance") String instance);
 
 }
