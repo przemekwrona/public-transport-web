@@ -23,13 +23,13 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
     styleUrl: './brigade-editor.component.scss',
     animations: [
         trigger('fadeBrigadeAnimation', [
-            state('in', style({ opacity: 1 })),
-            transition(':enter', [style({ opacity: 0 }), animate(500)]),
-            transition(':leave', animate(500, style({ opacity: 0 })))
+            state('in', style({opacity: 1})),
+            transition(':enter', [style({opacity: 0}), animate(500)]),
+            transition(':leave', animate(500, style({opacity: 0})))
         ]),
         trigger('fadeDragAndDropAnimation', [
-            state('in', style({ opacity: 1 })),
-            transition(':enter', [style({ opacity: 0 }), animate('500ms 600ms ease-in')])
+            state('in', style({opacity: 1})),
+            transition(':enter', [style({opacity: 0}), animate('500ms 600ms ease-in')])
         ])
     ],
     standalone: false
@@ -255,5 +255,12 @@ export class BrigadeEditorComponent implements OnInit {
 
     }
 
-    protected readonly tripModeSelectValue = TripMode;
+    compareByCalendarId(current: CalendarId, option: CalendarId): boolean {
+        return current && option
+            ? current.name === option.name
+            && current.symbol === option.symbol
+            && current.version === option.version
+            : current === option;
+    }
+
 }
