@@ -219,12 +219,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
-  /brigades:
+  /agency/{agency}/brigades:
     get:
       tags:
         - brigade
       summary: Get list of brigades
       operationId: getBrigades
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -238,6 +244,12 @@ paths:
         - brigade
       summary: Create new brigade
       operationId: createBrigade
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -256,6 +268,12 @@ paths:
         - brigade
       summary: Update brigade
       operationId: updateBrigade
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -274,6 +292,12 @@ paths:
         - brigade
       summary: Delete brigade
       operationId: deleteBrigade
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -1583,8 +1607,8 @@ components:
       properties:
         brigadeName:
           type: string
-        calendarName:
-          type: string
+        calendarId:
+          $ref: './public-transport-core.yaml/#/components/schemas/CalendarId'
         trips:
           type: array
           items:

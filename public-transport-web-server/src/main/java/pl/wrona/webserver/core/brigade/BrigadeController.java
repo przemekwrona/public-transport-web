@@ -21,18 +21,18 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadeService brigadeService;
 
     @Override
-    public ResponseEntity<GetBrigadeResponse> getBrigades() {
-        return ResponseEntity.ok(brigadeService.findBrigades());
+    public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
+        return ResponseEntity.ok(brigadeService.findBrigades(agency));
     }
 
     @Override
-    public ResponseEntity<Status> createBrigade(BrigadeBody createBrigadeRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeService.createBrigade(createBrigadeRequest));
+    public ResponseEntity<Status> createBrigade(String agency, BrigadeBody createBrigadeRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeService.createBrigade(agency, createBrigadeRequest));
     }
 
     @Override
-    public ResponseEntity<Status> deleteBrigade(BrigadeDeleteBody brigadeDeleteBody) {
-        return ResponseEntity.status(HttpStatus.OK).body(brigadeService.deleteBrigade(brigadeDeleteBody));
+    public ResponseEntity<Status> deleteBrigade(String agency, BrigadeDeleteBody brigadeDeleteBody) {
+        return ResponseEntity.status(HttpStatus.OK).body(brigadeService.deleteBrigade(agency, brigadeDeleteBody));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<Status> updateBrigade(BrigadePatchBody brigadePatchBody) {
-        return ResponseEntity.ok(brigadeService.updateBrigade(brigadePatchBody));
+    public ResponseEntity<Status> updateBrigade(String agency, BrigadePatchBody brigadePatchBody) {
+        return ResponseEntity.ok(brigadeService.updateBrigade(agency, brigadePatchBody));
     }
 }

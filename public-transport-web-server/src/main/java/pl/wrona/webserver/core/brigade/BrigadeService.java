@@ -6,6 +6,7 @@ import org.igeolab.iot.pt.server.api.model.BrigadeDeleteBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.BrigadeTrip;
+import org.igeolab.iot.pt.server.api.model.CalendarId;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeBody;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId;
@@ -19,6 +20,7 @@ import pl.wrona.webserver.core.calendar.CalendarQueryService;
 import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -36,18 +38,20 @@ public class BrigadeService {
 
     private final TripService tripService;
 
+    @PreAgencyAuthorize
     @Transactional
-    public Status createBrigade(BrigadeBody request) {
+    public Status createBrigade(String instance, BrigadeBody request) {
 
         if (existsByBrigadeName(request.getBrigadeName())) {
             throw new BusinessException("1000", "Brigade with name %s already exists. Select another one.".formatted(request.getBrigadeName()));
         }
 
-        var agencyEntity = agencyService.getLoggedAgency();
+        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
+        var calendarEntity = calendarQueryService.getCalendar(agencyEntity.getAgencyCode(), request.getCalendarId());
 
         var brigadeEntity = new BrigadeEntity();
         brigadeEntity.setBrigadeNumber(request.getBrigadeName());
-        brigadeEntity.setCalendar(calendarQueryService.getCalendar(agencyEntity.getAgencyCode(), request.getCalendarName(), ""));
+        brigadeEntity.setCalendar(calendarEntity);
 
         brigadeEntity.setAgency(agencyEntity);
 
@@ -113,12 +117,16 @@ public class BrigadeService {
         return brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadePayload.getBrigadeName())
                 .map(brigadeEntity -> new BrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
-                        .calendarName(brigadeEntity.getCalendar().getCalendarItem().getCalendarName())
+                        .calendarId(new CalendarId()
+                                .name(brigadeEntity.getCalendar().getCalendarItem().getCalendarName())
+                                .symbol(brigadeEntity.getCalendar().getDesignation())
+                                .version(1))
                         .trips(trips))
                 .orElse(null);
     }
 
-    public GetBrigadeResponse findBrigades() {
+    @PreAgencyAuthorize
+    public GetBrigadeResponse findBrigades(String instance) {
         var brigades = brigadeRepository.findAllByAgency(agencyService.getLoggedAgency()).stream()
                 .map(brigadeEntity -> new GetBrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
@@ -130,13 +138,14 @@ public class BrigadeService {
                 .brigades(brigades);
     }
 
+    @PreAgencyAuthorize
     @Transactional
-    public Status updateBrigade(BrigadePatchBody brigadePatchBody) {
+    public Status updateBrigade(String instance, BrigadePatchBody brigadePatchBody) {
         String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();
 
         brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadeId).ifPresent((BrigadeEntity entity) -> {
             entity.setBrigadeNumber(brigadePatchBody.getBrigadeBody().getBrigadeName());
-            entity.setCalendar(calendarSymbolQueryService.findCalendarByCalendarName(brigadePatchBody.getBrigadeBody().getCalendarName()).orElse(null));
+//            entity.setCalendar(calendarSymbolQueryService.findCalendarByCalendarName(brigadePatchBody.getBrigadeBody().getCalendarName()).orElse(null));
 
             brigadeRepository.save(entity);
 
@@ -190,7 +199,8 @@ public class BrigadeService {
         return this.brigadeRepository.existsBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadeName);
     }
 
-    public Status deleteBrigade(BrigadeDeleteBody brigadeDeleteBody) {
+    @PreAgencyAuthorize
+    public Status deleteBrigade(String instance, BrigadeDeleteBody brigadeDeleteBody) {
         brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadeDeleteBody.getBrigadeName()).ifPresent(brigadeRepository::delete);
         return new Status().status(Status.StatusEnum.DELETED);
     }
