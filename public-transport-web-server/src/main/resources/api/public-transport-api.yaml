@@ -1697,6 +1697,8 @@ components:
       properties:
         calendarName:
           type: string
+        calendarId:
+          $ref: './public-transport-core.yaml/#/components/schemas/CalendarId'
         description:
           type: string
         designation:
@@ -1781,6 +1783,8 @@ components:
         endDate:
           type: string
           format: date
+        calendarId:
+          $ref: './public-transport-core.yaml/#/components/schemas/CalendarId'
         calendarName:
           type: string
         description:

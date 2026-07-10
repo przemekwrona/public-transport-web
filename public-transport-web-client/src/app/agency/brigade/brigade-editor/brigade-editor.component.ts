@@ -43,7 +43,7 @@ export class BrigadeEditorComponent implements OnInit {
 
     public queryBrigadeName: string = '';
     public brigadeName = '';
-    public calendarName = '';
+    public calendarId: CalendarId = {};
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
 
@@ -63,7 +63,7 @@ export class BrigadeEditorComponent implements OnInit {
 
         this._route.data.subscribe(data => this.componentMode = data['mode']);
         this._route.data.subscribe(data => {
-            this.calendarName = data['brigade']?.calendarName;
+            this.calendarId = data['brigade']?.calendarId;
             this.brigadeItems = data['brigade'];
             this.brigadeItems = (data['brigade']?.trips || []).map((trip: BrigadeTrip) => {
                 const brigadeModel: BrigadeModel = {} as BrigadeModel;
@@ -202,19 +202,12 @@ export class BrigadeEditorComponent implements OnInit {
     }
 
     saveOrEditBrigade(): void {
-        const firstCalendar = this.calendarsResponse.calendars.find(c => c.calendarName = this.calendarName);
-
-        let calendarId: CalendarId = {};
-        calendarId.name = firstCalendar.calendarName
-        calendarId.symbol = firstCalendar.designation;
-        calendarId.version = 1;
-
         let brigadePayload: BrigadePayload = {};
         brigadePayload.brigadeName = this.queryBrigadeName;
 
         let brigadeBody: BrigadeBody = {};
         brigadeBody.brigadeName = this.brigadeName;
-        brigadeBody.calendarId = calendarId;
+        brigadeBody.calendarId = this.calendarId;
 
         let tripSequence: number = 0;
         brigadeBody.trips = this.brigadeItems.map(brigadeBody => {
