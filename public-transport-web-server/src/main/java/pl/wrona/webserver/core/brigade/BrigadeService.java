@@ -29,7 +29,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BrigadeService {
 
-    private AgencyService agencyService;
+    private final AgencyService agencyService;
 
     private final BrigadeRepository brigadeRepository;
     private final BrigadeTripRepository brigadeTripRepository;
@@ -142,10 +142,12 @@ public class BrigadeService {
     @Transactional
     public Status updateBrigade(String instance, BrigadePatchBody brigadePatchBody) {
         String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();
+        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
+        var calendarEntity = calendarQueryService.getCalendar(instance, brigadePatchBody.getBrigadeBody().getCalendarId());
 
-        brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadeId).ifPresent((BrigadeEntity entity) -> {
+        brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyEntity, brigadeId).ifPresent((BrigadeEntity entity) -> {
             entity.setBrigadeNumber(brigadePatchBody.getBrigadeBody().getBrigadeName());
-//            entity.setCalendar(calendarSymbolQueryService.findCalendarByCalendarName(brigadePatchBody.getBrigadeBody().getCalendarName()).orElse(null));
+            entity.setCalendar(calendarEntity);
 
             brigadeRepository.save(entity);
 
