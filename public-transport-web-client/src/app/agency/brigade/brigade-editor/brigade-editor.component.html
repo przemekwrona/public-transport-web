@@ -218,9 +218,9 @@
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">Kalendarz</label>
                                     <div class="grow">
-                                        <select name="calendar" id="calendar" [(ngModel)]="calendarId" class="select">
+                                        <select name="calendar" id="calendar" [(ngModel)]="calendarId" [compareWith]="compareByCalendarId" class="select">
                                             @for (calendar of calendarsResponse.calendars || []; track calendar) {
-                                                <option [value]="calendar.calendarId">
+                                                <option [ngValue]="calendar.calendarId">
                                                     {{ calendar.designation }} - {{ calendar.description }}
                                                     ({{ calendar.calendarName }}
                                                     )
