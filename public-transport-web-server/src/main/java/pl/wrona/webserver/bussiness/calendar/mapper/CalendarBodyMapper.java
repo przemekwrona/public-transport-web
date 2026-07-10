@@ -1,6 +1,7 @@
 package pl.wrona.webserver.bussiness.calendar.mapper;
 
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
+import org.igeolab.iot.pt.server.api.model.CalendarId;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
@@ -13,28 +14,32 @@ import java.util.Map;
 
 public class CalendarBodyMapper {
 
-    public static CalendarBody apply(CalendarItemEntity item, CalendarSymbolEntity calendar, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
-        List<LocalDate> included = calendarDatesDictionary.getOrDefault(calendar.getServiceId(), List.of()).stream()
+    public static CalendarBody apply(CalendarItemEntity item, CalendarSymbolEntity symbol, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
+        List<LocalDate> included = calendarDatesDictionary.getOrDefault(symbol.getServiceId(), List.of()).stream()
                 .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
-        List<LocalDate> excluded = calendarDatesDictionary.getOrDefault(calendar.getServiceId(), List.of()).stream()
+        List<LocalDate> excluded = calendarDatesDictionary.getOrDefault(symbol.getServiceId(), List.of()).stream()
                 .filter(calendarDate -> ExceptionType.REMOVED.equals(calendarDate.getExceptionType()))
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
         return new CalendarBody()
                 .calendarName(item.getCalendarName())
-                .designation(calendar.getDesignation())
-                .description(calendar.getDescription())
+                .calendarId(new CalendarId()
+                        .name(item.getCalendarName())
+                        .symbol(symbol.getDesignation())
+                        .version(1))
+                .designation(symbol.getDesignation())
+                .description(symbol.getDescription())
                 .startDate(item.getStartDate())
                 .endDate(item.getEndDate())
-                .monday(calendar.isMonday())
-                .tuesday(calendar.isTuesday())
-                .wednesday(calendar.isWednesday())
-                .thursday(calendar.isThursday())
-                .friday(calendar.isFriday())
-                .saturday(calendar.isSaturday())
-                .sunday(calendar.isSunday())
+                .monday(symbol.isMonday())
+                .tuesday(symbol.isTuesday())
+                .wednesday(symbol.isWednesday())
+                .thursday(symbol.isThursday())
+                .friday(symbol.isFriday())
+                .saturday(symbol.isSaturday())
+                .sunday(symbol.isSunday())
                 .included(included)
                 .excluded(excluded);
     }
