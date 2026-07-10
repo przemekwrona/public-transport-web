@@ -235,13 +235,14 @@ export class BrigadeEditorComponent implements OnInit {
         });
         const agency = this.agencyStorageService.getInstance();
         if (this.componentMode === BrigadeEditorComponentMode.CREATE) {
-            this.brigadeService.createBrigade(agency, brigadeBody).subscribe(
-                (response) => {
-                    this._router.navigate(['/agency/brigades'])
+            this.brigadeService.createBrigade(agency, brigadeBody).subscribe({
+                next: (response) => {
+                    this._router.navigate(['/agency/brigades']).then();
                 },
-                (response: HttpErrorResponse) => {
+                error: (response: HttpErrorResponse) => {
                     this.saveError = response.error;
-                });
+                }
+            });
         }
 
         if (this.componentMode === BrigadeEditorComponentMode.EDIT) {
@@ -249,7 +250,10 @@ export class BrigadeEditorComponent implements OnInit {
             brigadePatchBody.brigadePayload = brigadePayload;
             brigadePatchBody.brigadeBody = brigadeBody;
 
-            this.brigadeService.updateBrigade(agency, brigadePatchBody).subscribe(response => {
+            this.brigadeService.updateBrigade(agency, brigadePatchBody).subscribe({
+                next: response => {
+                    this._router.navigate(['/agency/brigades']).then();
+                }
             });
         }
 
