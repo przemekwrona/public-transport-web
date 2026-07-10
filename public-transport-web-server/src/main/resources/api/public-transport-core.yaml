@@ -39,3 +39,13 @@ components:
           $ref: '#/components/schemas/TripMode'
         trafficMode:
           $ref: '#/components/schemas/TrafficMode'
+
+    CalendarId:
+      type: object
+      properties:
+        name:
+          type: string
+        symbol:
+          type: string
+        version:
+          type: integer

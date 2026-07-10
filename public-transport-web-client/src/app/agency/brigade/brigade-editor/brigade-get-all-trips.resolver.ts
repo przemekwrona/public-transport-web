@@ -1,10 +1,11 @@
 import { ResolveFn } from '@angular/router';
 import {inject} from "@angular/core";
-import {BrigadeService} from "../brigade.service";
 import {Observable} from "rxjs";
-import {GetBrigadeResponse} from "../../../generated/public-transport-api";
+import {BrigadeService, GetBrigadeResponse} from "../../../generated/public-transport-api";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 export const brigadeGetAllTripsResolver: ResolveFn<Observable<GetBrigadeResponse>> = (route, state) => {
   const brigadeService = inject(BrigadeService);
-  return brigadeService.getAllBrigades();
+  const agencyStorageService = inject(AgencyStorageService);
+  return brigadeService.getBrigades(agencyStorageService.getInstance());
 };

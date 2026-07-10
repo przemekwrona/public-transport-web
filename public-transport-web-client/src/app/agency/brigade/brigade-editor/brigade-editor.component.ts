@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {BrigadeService} from "../brigade.service";
 import {
     BrigadeBody, BrigadePatchBody,
-    BrigadePayload,
-    BrigadeTrip, ErrorResponse,
+    BrigadePayload, BrigadeService,
+    BrigadeTrip, CalendarId, ErrorResponse,
     GetAllTripsResponse, GetCalendarsResponse, RouteId,
     Trip,
     TripId, TripMode, TripService
@@ -203,12 +202,19 @@ export class BrigadeEditorComponent implements OnInit {
     }
 
     saveOrEditBrigade(): void {
+        const firstCalendar = this.calendarsResponse.calendars.find(c => c.calendarName = this.calendarName);
+
+        let calendarId: CalendarId = {};
+        calendarId.name = firstCalendar.calendarName
+        calendarId.symbol = firstCalendar.designation;
+        calendarId.version = 1;
+
         let brigadePayload: BrigadePayload = {};
         brigadePayload.brigadeName = this.queryBrigadeName;
 
         let brigadeBody: BrigadeBody = {};
         brigadeBody.brigadeName = this.brigadeName;
-        brigadeBody.calendarName = this.calendarName;
+        brigadeBody.calendarId = calendarId;
 
         let tripSequence: number = 0;
         brigadeBody.trips = this.brigadeItems.map(brigadeBody => {
@@ -234,9 +240,9 @@ export class BrigadeEditorComponent implements OnInit {
 
             return brigadeTrip;
         });
-
+        const agency = this.agencyStorageService.getInstance();
         if (this.componentMode === BrigadeEditorComponentMode.CREATE) {
-            this.brigadeService.saveBrigade(brigadeBody).subscribe(
+            this.brigadeService.createBrigade(agency, brigadeBody).subscribe(
                 (response) => {
                     this._router.navigate(['/agency/brigades'])
                 },
@@ -250,7 +256,7 @@ export class BrigadeEditorComponent implements OnInit {
             brigadePatchBody.brigadePayload = brigadePayload;
             brigadePatchBody.brigadeBody = brigadeBody;
 
-            this.brigadeService.putBrigade(brigadePatchBody).subscribe(response => {
+            this.brigadeService.updateBrigade(agency, brigadePatchBody).subscribe(response => {
             });
         }
 
