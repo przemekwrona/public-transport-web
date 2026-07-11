@@ -36,8 +36,8 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<BrigadeBody> getBrigadeByBrigadeName(BrigadePayload brigadePayload) {
-        return ResponseEntity.ok(brigadeService.getBrigadeByBrigadeName(brigadePayload));
+    public ResponseEntity<BrigadeBody> getBrigadeByBrigadeName(String agency, BrigadePayload brigadePayload) {
+        return ResponseEntity.ok(brigadeService.getBrigadeByBrigadeName(agency, brigadePayload));
     }
 
     @Override
