@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface BrigadeTripRepository extends JpaRepository<BrigadeTripEntity, Long> {
 
-    @Query("SELECT bt FROM BrigadeTripEntity bt WHERE bt.brigade.brigadeNumber = :brigadeName")
-    List<BrigadeTripEntity> findAllByBrigadeName(@Param("brigadeName") String brigadeName);
+    @Query("SELECT bt FROM BrigadeTripEntity bt WHERE bt.brigade.agency.agencyCode = :agency AND bt.brigade.brigadeNumber = :brigadeName")
+    List<BrigadeTripEntity> findAllByBrigadeName(@Param("agency") String agency, @Param("brigadeName") String brigadeName);
 
     @Modifying
     void deleteAllByBrigade(BrigadeEntity brigade);

@@ -97,8 +97,10 @@ public class BrigadeService {
         return new Status().status(Status.StatusEnum.CREATED);
     }
 
-    public BrigadeBody getBrigadeByBrigadeName(BrigadePayload brigadePayload) {
-        List<BrigadeTrip> trips = brigadeTripRepository.findAllByBrigadeName(brigadePayload.getBrigadeName()).stream()
+    @PreAgencyAuthorize
+    public BrigadeBody getBrigadeByBrigadeName(String instance, BrigadePayload brigadePayload) {
+        var agencyEntity = this.agencyService.findAgencyByAgencyCode(instance);
+        List<BrigadeTrip> trips = brigadeTripRepository.findAllByBrigadeName(instance, brigadePayload.getBrigadeName()).stream()
                 .map(brigade -> new BrigadeTrip()
                         .tripId(new TripId()
                                 .routeId(new RouteId()
@@ -114,7 +116,7 @@ public class BrigadeService {
                         .departureTime(brigade.getDepartureTimeInSeconds()))
                 .toList();
 
-        return brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadePayload.getBrigadeName())
+        return brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyEntity, brigadePayload.getBrigadeName())
                 .map(brigadeEntity -> new BrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
                         .calendarId(new CalendarId()

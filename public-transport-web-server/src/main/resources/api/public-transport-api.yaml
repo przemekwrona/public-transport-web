@@ -200,7 +200,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GoogleAgreementsResponse'
-
     put:
       tags:
         - google-agreements
@@ -238,7 +237,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetBrigadeResponse'
-
     post:
       tags:
         - brigade
@@ -262,7 +260,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-
     put:
       tags:
         - brigade
@@ -286,7 +283,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-
     delete:
       tags:
         - brigade
@@ -311,11 +307,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
-  /brigades/details:
+  /agency/{agency}/brigades/details:
     post:
       tags:
         - brigade
       operationId: getBrigadeByBrigadeName
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -878,8 +880,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-
-
 
   /agency/{agency}/calendar-symbol:
     post:
