@@ -66,7 +66,7 @@ public class BrigadeService {
                     brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariantName());
                     brigadeTripEntity.setMode(TripVariantModeMapper.map(brigadeTrip.getTripId().getVariantMode()));
                     brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
-                    brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), savedBrigade));
+                    brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyEntity, savedBrigade));
 
                     brigadeTripEntity.setBrigade(savedBrigade);
                     brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
@@ -127,7 +127,8 @@ public class BrigadeService {
 
     @PreAgencyAuthorize
     public GetBrigadeResponse findBrigades(String instance) {
-        var brigades = brigadeRepository.findAllByAgency(agencyService.getLoggedAgency()).stream()
+        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
+        var brigades = brigadeRepository.findAllByAgency(agencyEntity).stream()
                 .map(brigadeEntity -> new GetBrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
                         .calendarDesignation(brigadeEntity.getCalendar().getDesignation())
@@ -162,7 +163,7 @@ public class BrigadeService {
                         brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariantName());
                         brigadeTripEntity.setMode(TripVariantModeMapper.map(brigadeTrip.getTripId().getVariantMode()));
                         brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
-                        brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyService.getLoggedAgency(), entity));
+                        brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyEntity, entity));
 
                         brigadeTripEntity.setBrigade(entity);
                         brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
