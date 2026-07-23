@@ -7,8 +7,7 @@ import {DayPilot} from "@daypilot/daypilot-lite-angular";
 export class BrigadeSchedulerService {
 
     resources: any[] = [
-        { name: "Brygada 1", id: "GA", expanded: true},
-        { name: "Brygada 2", id: "GB", expanded: true}
+        { name: "Brygada 1", id: "GA", expanded: true}
     ];
 
     events: any[] = [
