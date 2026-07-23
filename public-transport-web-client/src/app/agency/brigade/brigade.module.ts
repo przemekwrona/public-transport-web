@@ -7,6 +7,7 @@ import {BrigadeTimePipe} from "./brigade-time.pipe";
 import {CdkDrag, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
+import {BrigadeSchedulerComponent} from "./brigade-scheduler/brigade-scheduler.component";
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import {RouterModule} from "@angular/router";
         CdkDropListGroup,
         CdkDropList,
         CdkDrag,
-        FaIconComponent
+        FaIconComponent,
+        BrigadeSchedulerComponent
     ],
     declarations: [
         BrigadeListComponent,
