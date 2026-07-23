@@ -1,7 +1,9 @@
-import {AfterViewInit, Component, signal, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, signal, ViewChild} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
 import {BrigadeSchedulerService} from "./brigade-scheduler.service";
-import {CommonModule, JsonPipe} from "@angular/common";
+import {CommonModule} from "@angular/common";
+import {BrigadeModel} from "../brigade-editor/brigade-editor.model";
+import moment from "moment";
 
 @Component({
     selector: 'app-brigade-scheduler',
@@ -19,6 +21,8 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
 
     @ViewChild("scheduler")
     scheduler!: DayPilotSchedulerComponent;
+
+    @Input() brigadeEvent: BrigadeModel[] = []
 
     events: DayPilot.EventData[] = [];
 
@@ -40,17 +44,22 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
                 format: "mm",
             },
         ],
+        useEventBoxes: "Never",
         scale: "CellDuration",
+        // scale: "Minute",
         cellDuration: 15,
         days: 1,
         startDate: DayPilot.Date.today(),
         eventHeight: 40,
         timeRangeSelectedHandling: "Enabled",
+        snapToGrid: false,
         onTimeRangeSelected: async (args) => {
             const scheduler = args.control;
             const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
             scheduler.clearSelection();
-            if (modal.canceled) { return; }
+            if (modal.canceled) {
+                return;
+            }
             scheduler.events.add({
                 start: args.start,
                 end: args.end,
@@ -63,6 +72,9 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
         onEventMoved: (args) => {
             console.log("Event moved: " + args.e.text());
         },
+        onEventClick: (args) =>{
+            console.log('On event click');
+        },
         eventResizeHandling: "Update",
         onEventResized: (args) => {
             console.log("Event resized: " + args.e.text());
@@ -74,7 +86,12 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
         eventRightClickHandling: "ContextMenu",
         contextMenu: new DayPilot.Menu({
             items: [
-                { text: "Delete", onClick: (args) => { const dp = args.source.calendar; dp.events.remove(args.source); } }
+                {
+                    text: "Delete", onClick: (args) => {
+                        const dp = args.source.calendar;
+                        dp.events.remove(args.source);
+                    }
+                }
             ]
         }),
     };
@@ -91,14 +108,27 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
         // 1. Update resources directly on the control
         this.ds.getResources().subscribe(result => {
             // This forces DayPilot to accept the new data and redraw the rows
-            this.scheduler.control.update({ resources: result });
+            this.scheduler.control.update({resources: result});
         });
 
-        // 2. Update events directly on the control
-        this.ds.getEvents(from, to).subscribe(result => {
-            // This forces DayPilot to accept the new data and redraw the events
-            this.scheduler.control.update({ events: result });
+        const events = this.brigadeEvent.map(e => {
+            const event: DayPilot.EventData = {} as DayPilot.EventData;
+            event.resource = "GA";
+
+            const departureTime = moment(e.departureTime, "HH:mm");
+            const arrivalTime = departureTime.clone().add(e.travelTimeInSeconds + 60, 'second');
+            const r = Math.random();
+            return {
+                id: `${e.line}_${e.mode}_${r}`,
+                resource: "GA",
+                start: departureTime.format('yyyy-MM-DDTHH:mm:SS'),
+                end: arrivalTime.format('yyyy-MM-DDTHH:mm:SS'),
+                text: `${departureTime.format('HH:mm')} - ${arrivalTime.format('HH:mm')} \n${e.line} ${e.name} ${e.mode}`,
+                color: "#e69138"
+            } as DayPilot.EventData
         });
+        // 2. Update events directly on the control
+        this.scheduler.control.update({events: events});
     }
 
 }
