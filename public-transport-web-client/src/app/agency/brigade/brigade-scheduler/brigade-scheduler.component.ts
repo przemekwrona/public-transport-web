@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, signal, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, signal, ViewChild} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
 import {BrigadeSchedulerService} from "./brigade-scheduler.service";
 import {CommonModule} from "@angular/common";
@@ -17,7 +17,7 @@ import moment from "moment";
     templateUrl: './brigade-scheduler.component.html',
     styleUrl: './brigade-scheduler.component.scss'
 })
-export class BrigadeSchedulerComponent implements AfterViewInit {
+export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
 
     @ViewChild("scheduler")
     scheduler!: DayPilotSchedulerComponent;
@@ -53,6 +53,7 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
         eventHeight: 40,
         timeRangeSelectedHandling: "Enabled",
         snapToGrid: false,
+        rowMarginBottom: 0,
         onTimeRangeSelected: async (args) => {
             const scheduler = args.control;
             const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
@@ -72,7 +73,7 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
         onEventMoved: (args) => {
             console.log("Event moved: " + args.e.text());
         },
-        onEventClick: (args) =>{
+        onEventClick: (args) => {
             console.log('On event click');
         },
         eventResizeHandling: "Update",
@@ -99,6 +100,9 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
     constructor(private ds: BrigadeSchedulerService) {
     }
 
+    ngOnInit(): void {
+    }
+
     ngAfterViewInit(): void {
         this.ds.getResources().subscribe(result => this.config.resources = result);
 
@@ -123,12 +127,20 @@ export class BrigadeSchedulerComponent implements AfterViewInit {
                 resource: "GA",
                 start: departureTime.format('yyyy-MM-DDTHH:mm:SS'),
                 end: arrivalTime.format('yyyy-MM-DDTHH:mm:SS'),
-                text: `${departureTime.format('HH:mm')} - ${arrivalTime.format('HH:mm')} \n${e.line} ${e.name} ${e.mode}`,
+                text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${e.line} ${e.name} ${e.mode}`,
                 color: "#e69138"
             } as DayPilot.EventData
         });
         // 2. Update events directly on the control
         this.scheduler.control.update({events: events});
+
+        const firstDate = this.brigadeEvent
+            .map(brigade => brigade.departureTime)
+            .map(departureTime => moment(departureTime, "HH:mm"))
+            .reduce((current, next) => current.isBefore(next) ? current : next)
+            .subtract(45, 'minutes');
+
+        this.scheduler.control.scrollTo(firstDate.format('yyyy-MM-DDTHH:mm:SS'));
     }
 
 }
