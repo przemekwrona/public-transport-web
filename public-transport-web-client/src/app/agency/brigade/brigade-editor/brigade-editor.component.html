@@ -21,9 +21,14 @@
 
             <div class="w-full">
                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label class="form-label max-w-56">Nazwa brygady</label>
-                    <input type="text" name="brigadeName" id="brigadeName" [(ngModel)]="brigadeName"
-                           class="input">
+                    <label class="form-label flex items-center gap-1 max-w-56">Nazwa Brygady</label>
+                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                        <mat-label>Nazwa Brygady</mat-label>
+                        <input type="text" matInput [formControl]="getBrigadeName()" placeholder="Nazwa Brygady">
+                        @if (getBrigadeName().hasError('required')) {
+                            <mat-error>Proszę wprowadź Nazwę Brygady</mat-error>
+                        }
+                    </mat-form-field>
                 </div>
             </div>
 

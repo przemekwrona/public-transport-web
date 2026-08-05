@@ -16,6 +16,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {BrigadeEditorComponentMode} from "./brigade-editor-component-mode";
 import {HttpErrorResponse} from "@angular/common/http";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
     selector: 'app-brigade-editor',
@@ -42,14 +43,27 @@ export class BrigadeEditorComponent implements OnInit {
     public calendarsResponse: GetCalendarsResponse = {};
 
     public queryBrigadeName: string = '';
-    public brigadeName = '';
     public calendarId: CalendarId = {};
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
 
     public saveError: ErrorResponse | null = null;
 
-    constructor(private brigadeService: BrigadeService, private tripService: TripService, private agencyStorageService: AgencyStorageService, private _route: ActivatedRoute, private _router: Router) {
+    public modelForm: FormGroup;
+    public isSubmitted: boolean = false;
+
+    get brigadeNameControl(): FormGroup {
+        return this.modelForm.get('brigadeName') as FormGroup;
+    }
+
+    constructor(private brigadeService: BrigadeService, private tripService: TripService, private agencyStorageService: AgencyStorageService, private _route: ActivatedRoute, private _router: Router, private formBuilder: FormBuilder) {
+        this.modelForm = this.formBuilder.group({
+            brigadeName: ['', [Validators.required]]
+        });
+
+        this._route.queryParams.subscribe(params => {
+            this.getBrigadeName().patchValue(params['name']);
+        });
     }
 
     ngOnInit(): void {
@@ -58,7 +72,6 @@ export class BrigadeEditorComponent implements OnInit {
             lines: []
         } : this.tripsResponse = response);
 
-        this._route.queryParams.subscribe(params => this.brigadeName = params['name']);
         this._route.queryParams.subscribe(params => this.queryBrigadeName = params['name']);
 
         this._route.data.subscribe(data => this.componentMode = data['mode']);
@@ -206,7 +219,7 @@ export class BrigadeEditorComponent implements OnInit {
         brigadePayload.brigadeName = this.queryBrigadeName;
 
         let brigadeBody: BrigadeBody = {};
-        brigadeBody.brigadeName = this.brigadeName;
+        brigadeBody.brigadeName = this.getBrigadeName().value;
         brigadeBody.calendarId = this.calendarId;
 
         let tripSequence: number = 0;
@@ -265,6 +278,14 @@ export class BrigadeEditorComponent implements OnInit {
             && current.symbol === option.symbol
             && current.version === option.version
             : current === option;
+    }
+
+    public getControl(control: string): FormControl {
+        return this.modelForm.get(control) as FormControl;
+    }
+
+    public getBrigadeName(): FormControl<string> {
+        return this.getControl("brigadeName") as FormControl<string>;
     }
 
 }
