@@ -1,13 +1,14 @@
 import {NgModule} from '@angular/core';
-import {CommonModule, JsonPipe, NgClass} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {BrigadeListComponent} from "./brigade-list/brigade-list.component";
 import {BrigadeEditorComponent} from "./brigade-editor/brigade-editor.component";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrigadeTimePipe} from "./brigade-time.pipe";
 import {CdkDrag, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
 import {BrigadeSchedulerComponent} from "./brigade-scheduler/brigade-scheduler.component";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
     imports: [
@@ -18,7 +19,9 @@ import {BrigadeSchedulerComponent} from "./brigade-scheduler/brigade-scheduler.c
         CdkDropList,
         CdkDrag,
         FaIconComponent,
-        BrigadeSchedulerComponent
+        BrigadeSchedulerComponent,
+        ReactiveFormsModule,
+        MatInputModule
     ],
     declarations: [
         BrigadeListComponent,
