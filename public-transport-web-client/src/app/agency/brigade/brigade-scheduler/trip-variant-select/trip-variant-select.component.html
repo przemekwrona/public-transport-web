@@ -1,1 +1,44 @@
-<p>trip-variant-select works!</p>
+<mat-form-field appearance="outline" class="w-full custom-form-field">
+    <mat-label>Numer lini</mat-label>
+    <mat-select [formControl]="selectedTripControl">
+        <!-- Search Input -->
+        <input
+                class="select-search-input"
+                type="text"
+                placeholder="Szukaj linii..."
+                [formControl]="searchControl"
+                (keydown)="$event.stopPropagation()"> <!-- Prevents spacebar from closing the menu -->
+
+        <!-- Filtered Options -->
+        @for (routeDetails of filteredRouteDetails$ | async; track routeDetails) {
+            <mat-optgroup>
+                <div>
+                    <span>Linia</span>
+                    <span>&nbsp;</span>
+                    <strong>{{ routeDetails.route.routeId.line }}</strong>
+                </div>
+
+                @for (trip of routeDetails.trips; track trip) {
+                    <mat-option [value]="trip.name">
+                        <div class="mb-1 mt-1">
+                            <div class="text-gray-900 text-md leading-none font-medium">
+                                z: {{ trip.origin }} do: {{ trip.destination }}
+                                ({{ trip.travelTimeInSeconds | formatSeconds }})
+                            </div>
+                            <div class="text-gray-500">Wariant podstawowy</div>
+                        </div>
+                    </mat-option>
+                }
+            </mat-optgroup>
+        }
+
+        <!-- Empty State -->
+        @if ((filteredRouteDetails$ | async)?.length === 0) {
+            <mat-option disabled>
+                Nie znaleziono linii
+            </mat-option>
+        }
+
+
+    </mat-select>
+</mat-form-field>
