@@ -133,4 +133,29 @@ databaseChangeLog:
             tableName: calendar_symbol
             unique: true
 
-       
+  - changeSet:
+      id: add-sequence-and-sequence-hex-columns-to-calendar
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: calendar_item
+            columns:
+              - column:
+                  name: sequence
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sequence_hex
+                  type: varchar(4)
+                  constraints:
+                    nullable: true
+        - createIndex:
+            tableName: calendar_item
+            indexName: idx_agency_id_sequence
+            unique: true
+            columns:
+              - column:
+                  name: agency_id
+              - column:
+                  name: sequence

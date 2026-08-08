@@ -45,4 +45,12 @@ public class CalendarItemEntity {
     @OneToMany(mappedBy = "calendarItem", cascade = CascadeType.ALL)
     private Set<CalendarSymbolEntity> calendarSymbols;
 
+    private Integer sequence;
+
+    private String sequenceHex;
+
+    public static String toHex(Integer sequence) {
+        return String.format("%04x", sequence);
+    }
+
 }
