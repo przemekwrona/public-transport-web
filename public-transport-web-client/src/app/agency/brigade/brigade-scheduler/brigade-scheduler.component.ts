@@ -61,19 +61,25 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         snapToGrid: false,
         rowMarginBottom: 0,
         onTimeRangeSelected: async (args) => {
+            // Clear the temporary selection highlight in DayPilot
+            args.control.clearSelection();
+
+            // Open your own modal, passing in the start/end times
+            this.openMyCreateModal(args.start, args.end, args.control);
+
             const scheduler = args.control;
-            const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
+            // const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
             scheduler.clearSelection();
-            if (modal.canceled) {
-                return;
-            }
-            scheduler.events.add({
-                start: args.start,
-                end: args.end,
-                id: DayPilot.guid(),
-                resource: args.resource,
-                text: modal.result
-            });
+            // if (modal.canceled) {
+            //     return;
+            // }
+            // scheduler.events.add({
+            //     start: args.start,
+            //     end: args.end,
+            //     id: DayPilot.guid(),
+            //     resource: args.resource,
+            //     text: modal.result
+            // });
         },
         eventMoveHandling: "Update",
         onEventMoved: (args) => {
