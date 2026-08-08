@@ -3,8 +3,10 @@ package pl.wrona.webserver.core.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
+import org.igeolab.iot.pt.server.api.model.TripId1;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import pl.wrona.webserver.core.agency.TripEntity;
 
@@ -61,6 +63,14 @@ public class TripMapper {
 
     public Trip map(TripEntity trip, Map<Long, TripEntity> tripWithBrigades) {
         return new Trip()
+                .tripId(new TripId1()
+                        .routeId(new RouteId()
+                                .line(trip.getRoute().getLine())
+                                .name(trip.getRoute().getName())
+                                .version(trip.getRoute().getVersion()))
+                        .variantName(trip.getVariantName())
+                        .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
+                        .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode())))
                 .name(trip.getRoute().getName())
                 .line(trip.getRoute().getLine())
                 .variant(trip.getVariantName())
