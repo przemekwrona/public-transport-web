@@ -4,6 +4,12 @@ import {BrigadeSchedulerService} from "./brigade-scheduler.service";
 import {CommonModule} from "@angular/common";
 import {BrigadeModel} from "../brigade-editor/brigade-editor.model";
 import moment from "moment";
+import ResourceData = DayPilot.ResourceData;
+import {MatDialog} from "@angular/material/dialog";
+import {
+    OnTimeRangeAndTripSelected,
+    OnTimeRangeSelectedModalComponent
+} from "./on-time-range-selected-modal/on-time-range-selected-modal.component";
 
 @Component({
     selector: 'app-brigade-scheduler',
@@ -97,7 +103,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         }),
     };
 
-    constructor(private ds: BrigadeSchedulerService) {
+    constructor(private ds: BrigadeSchedulerService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -141,6 +147,40 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             .subtract(45, 'minutes');
 
         this.scheduler.control.scrollTo(firstDate.format('yyyy-MM-DDTHH:mm:SS'));
+    }
+
+    // --- CREATE NEW EVENT ---
+    openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, dpControl: DayPilot.Scheduler) {
+        const dialogRef = this.dialog.open(OnTimeRangeSelectedModalComponent, {
+            data: {start: start.toString(), end: end.toString()}
+        });
+
+        dialogRef.afterClosed().subscribe((result: OnTimeRangeAndTripSelected) => {
+            // If the user cancelled the modal, result is null/undefined
+            if (!result) return;
+
+            // Add the new event to the DayPilot calendar
+            const startDate = moment(result.start).format('HH:mm');
+            const endDate = moment(result.end).format('HH:mm');
+            const event: DayPilot.EventData = {
+                start: new DayPilot.Date(result.start),
+                end: new DayPilot.Date(result.end),
+                id: DayPilot.guid(),
+                resource: 'GA',
+                text: `${startDate}-${endDate}\n${result.tripId.routeId.line} ${result.origin} - ${result.destination} ${result.tripId.variantMode}` // Data returned from your modal
+            } as DayPilot.EventData;
+
+            dpControl.events.add(event);
+        });
+    }
+
+    public addBrigade(): void {
+        const resources: ResourceData[] = this.scheduler.control.resources;
+        const emptyResource: ResourceData = {} as ResourceData;
+        emptyResource.name = 'Brygada 2';
+        emptyResource.id = 'GB';
+
+        this.scheduler.control.update({resources: [...resources, ...[emptyResource]]});
     }
 
 }
