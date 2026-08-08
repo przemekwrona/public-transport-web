@@ -1,1 +1,78 @@
-<p>on-time-range-selected-modal works!</p>
+<h2 mat-dialog-title>Dodaj nową linię</h2>
+
+<form [formGroup]="modelForm" (ngSubmit)="selectTrip()">
+
+    <mat-dialog-content class="mat-typography">
+        <p>
+            Prosimy o wskazanie okresu, który ma obejmować kalendarz. Sugerujemy, aby wybrane daty były tożsame z
+            terminami
+            widniejącymi we wniosku o oficjalne pozwolenie. Dzięki temu brygady zostaną utworzone wyłącznie na czas
+            realnego, usankcjonowanego prawnie działania, co ułatwi rozliczenia i kontrolę nad projektem.
+        </p>
+        <div class="lg:py-5 py-2.5">
+            <div class="flex flex-wrap justify-between gap-5">
+                <div class="flex flex-col">
+                    <div class="text-gray-900 text-sm font-medium">
+                        Rozkład Obowiązuje OD
+                    </div>
+                    <span class="text-gray-700 text-2sm">OD kiedy dany rozkład jazdy jest aktualny.</span>
+                </div>
+
+                <span class="sm:max-w-full xl:min-w-96">
+
+                    <!-- Pass the Observable directly to the input -->
+                    <app-trip-variant-select
+                            formControlName="route"
+                            label="Numer lini"
+                            (onChange)="selectTrip()">
+                    </app-trip-variant-select>
+
+                    <!--                    <mat-form-field appearance="outline" class="w-full custom-form-field">-->
+                    <!--                        <mat-label>Rozkład Obowiązuje OD</mat-label>-->
+                    <!--                        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">-->
+                    <!--                        <mat-datepicker-toggle matIconSuffix-->
+                    <!--                                               [for]="startDatePicker"></mat-datepicker-toggle>-->
+                    <!--                        <mat-datepicker #startDatePicker></mat-datepicker>-->
+                    <!--                        @if (hasError('startDate', 'required')) {-->
+                    <!--                            <mat-error>Data początkowa obowiązywania rozklad jest <strong>wymagana</strong></mat-error>-->
+                    <!--                        }-->
+                    <!--                    </mat-form-field>-->
+                </span>
+            </div>
+        </div>
+
+        <!--        <div class="lg:py-5 py-2.5">-->
+        <!--            <div class="flex flex-wrap justify-between gap-5">-->
+        <!--                <div class="flex flex-col">-->
+        <!--                    <div class="text-gray-900 text-sm font-medium">-->
+        <!--                        Rozkład Obowiązuje DO-->
+        <!--                    </div>-->
+        <!--                    <span class="text-gray-700 text-2sm">DO kiedy dany rozkład jazdy jest aktualny.</span>-->
+        <!--                </div>-->
+        <!--                <span class="sm:max-w-full xl:min-w-96">-->
+        <!--                    <mat-form-field appearance="outline" class="w-full custom-form-field">-->
+        <!--                        <mat-label>Rozkład Obowiązuje DO</mat-label>-->
+        <!--                        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">-->
+        <!--                        <mat-datepicker-toggle matIconSuffix [for]="endDatePicker"></mat-datepicker-toggle>-->
+        <!--                        <mat-datepicker #endDatePicker></mat-datepicker>-->
+        <!--                        @if (hasError('endDate', 'required')) {-->
+        <!--                            <mat-error>Data końcowa obowiązywania rozklad jest <strong>wymagana</strong></mat-error>-->
+        <!--                        }-->
+        <!--                    </mat-form-field>-->
+        <!--                </span>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+        <!--        @if (modelForm.valid) {-->
+        <!--            <span>Kalendarz będzie obowiązywać-->
+        <!--                od {{ startDateControl.value | date :'yyyy-MM-dd' }}-->
+        <!--                do {{ endDateControl.value | date :'yyyy-MM-dd' }}-->
+        <!--            </span>-->
+        <!--        }-->
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Anuluj</button>
+        <button type="submit" mat-button cdkFocusInitial>Zapisz i dodaj kurs do trasy</button>
+    </mat-dialog-actions>
+</form>
