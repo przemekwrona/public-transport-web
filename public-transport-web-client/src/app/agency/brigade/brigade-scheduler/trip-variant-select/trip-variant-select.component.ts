@@ -1,7 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, input, output, OnInit} from '@angular/core';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
-import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {GetAllTripsResponse, RouteDetails, TripService} from "../../../../generated/public-transport-api";
 import {CommonModule} from "@angular/common";
@@ -18,16 +18,36 @@ import {FormatSecondsPipe} from "./format-seconds.pipe";
         MatFormFieldModule,
         MatSelectModule, FormsModule, ReactiveFormsModule, MatInputModule
     ],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => TripVariantSelectComponent),
+            multi: true
+        }
+    ],
     templateUrl: './trip-variant-select.component.html',
     styleUrl: './trip-variant-select.component.scss'
 })
-export class TripVariantSelectComponent implements OnInit {
+export class TripVariantSelectComponent implements OnInit, ControlValueAccessor {
+    // Keep the label as a modern signal
+    label = input<string>('');
 
-    selectedTripControl = new FormControl('');
+    // Add onChange as a modern output
+    onChange = output<any>();
+
+    // Local control for the search input
     searchControl = new FormControl('');
 
     // Observable for filtered results
     filteredRouteDetails$!: Observable<RouteDetails[]>;
+
+    // Internal state
+    value: any = null;
+    isDisabled: boolean = false;
+
+    // CVA Placeholder functions (renamed onChange to _onModelChange to avoid conflict)
+    _onModelChange: any = () => {};
+    onTouched: any = () => {};
 
     constructor(private agencyStorageService: AgencyStorageService, private tripService: TripService) {
     }
@@ -47,4 +67,35 @@ export class TripVariantSelectComponent implements OnInit {
         );
     }
 
+    onSelectionChange(val: any) {
+        this.value = val;
+
+        // Notify Angular forms of the value change
+        this._onModelChange(val);
+
+        // Emit the value to parent components listening to (onChange)
+        this.onChange.emit(val);
+    }
+
+    onDropdownClose(isOpen: boolean) {
+        if (!isOpen) {
+            this.onTouched();
+        }
+    }
+
+    writeValue(val: any): void {
+        this.value = val;
+    }
+
+    registerOnChange(fn: any): void {
+        this._onModelChange = fn;
+    }
+
+    registerOnTouched(fn: any): void {
+        this.onTouched = fn;
+    }
+
+    setDisabledState(isDisabled: boolean): void {
+        this.isDisabled = isDisabled;
+    }
 }

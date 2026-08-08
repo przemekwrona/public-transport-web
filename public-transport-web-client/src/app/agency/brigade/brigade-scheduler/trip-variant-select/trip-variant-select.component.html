@@ -1,6 +1,9 @@
 <mat-form-field appearance="outline" class="w-full custom-form-field">
-    <mat-label>Numer lini</mat-label>
-    <mat-select [formControl]="selectedTripControl">
+    <mat-label>{{ label() }}</mat-label>
+    <mat-select [ngModel]="value"
+                [disabled]="isDisabled"
+                (ngModelChange)="onSelectionChange($event)"
+                (openedChange)="onDropdownClose($event)">
         <!-- Search Input -->
         <input
                 class="select-search-input"
@@ -19,7 +22,7 @@
                 </div>
 
                 @for (trip of routeDetails.trips; track trip) {
-                    <mat-option [value]="trip.name">
+                    <mat-option [value]="trip.tripId">
                         <div class="mb-1 mt-1">
                             <div class="text-gray-900 text-md leading-none font-medium">
                                 z: {{ trip.origin }} do: {{ trip.destination }}
