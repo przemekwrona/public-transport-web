@@ -1467,6 +1467,8 @@ components:
     Trip:
       type: object
       properties:
+        tripId:
+          $ref: './public-transport-core.yaml/#/components/schemas/TripId'
         name:
           type: string
         line:
