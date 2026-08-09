@@ -55,9 +55,13 @@ export class OnTimeRangeSelectedModalComponent {
         const instance = this.agencyStorageService.getInstance();
         const tripId: TripId = this.modelForm.controls['route'].value;
         this.tripService.getTripByVariant(instance, tripId).subscribe(tripDetails => {
+
+            const lastStop = tripDetails?.stops?.reduce((curr, next) =>
+                curr.calculatedSeconds > next.calculatedSeconds ? curr : next);
+
             const results: OnTimeRangeAndTripSelected = {} as OnTimeRangeAndTripSelected;
             results.start = this.data.start;
-            results.end = moment(this.data.start).add(1 * 60 * 60, 'seconds').format("yyyy-MM-DDTHH:mm:SS");
+            results.end = moment(this.data.start).add(lastStop.calculatedSeconds, 'seconds').format("yyyy-MM-DDTHH:mm:SS");
             results.tripId = tripId;
             results.origin = tripDetails.originStopName;
             results.destination = tripDetails.destinationStopName;

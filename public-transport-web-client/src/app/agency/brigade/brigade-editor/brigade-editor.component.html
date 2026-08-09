@@ -42,7 +42,8 @@
                             @for (calendar of calendarsResponse.calendars || []; track calendar) {
                                 <mat-option [value]="calendar.calendarId">
                                     <div>
-                                        <div> {{ calendar.designation }} - ({{ calendar.startDate }}--{{ calendar.endDate }})
+                                        <div> {{ calendar.designation }} - ({{ calendar.startDate }}
+                                            --{{ calendar.endDate }})
                                         </div>
                                         <div>{{ calendar.description }}</div>
                                     </div>
@@ -66,9 +67,9 @@
         <div class="col-span-1">
             <div class="grid gap-5 lg:gap-7.5">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Plan Brygady</h3>
-                    </div>
+                    <!--                    <div class="card-header">-->
+                    <!--                        <h3 class="card-title">Plan Brygady</h3>-->
+                    <!--                    </div>-->
 
                     <!--                    <div cdkDropList (cdkDropListDropped)="drop($event)" class="pb-7.5 poem">-->
                     <!--                        @for (brigadeItem of brigadeItems || []; track brigadeItem; let brigadeIndex = $index) {-->
