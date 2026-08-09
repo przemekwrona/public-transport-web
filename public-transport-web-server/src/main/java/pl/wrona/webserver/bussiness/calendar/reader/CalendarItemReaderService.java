@@ -1,24 +1,19 @@
 package pl.wrona.webserver.bussiness.calendar.reader;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.time.CalendarUtils;
 import org.igeolab.iot.pt.server.api.model.CalendarItemBody;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
-import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import org.igeolab.iot.pt.server.api.model.GetCalendarItemResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
 import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
 import pl.wrona.webserver.bussiness.calendar.mapper.CalendarBodyMapper;
-import pl.wrona.webserver.bussiness.calendar.mapper.CalendarSymbolEntityMapper;
-import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
-import pl.wrona.webserver.core.calendar.CalendarDatesQueryService;
+import pl.wrona.webserver.bussiness.calendar.CalendarDatesQueryService;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,7 +60,7 @@ public class CalendarItemReaderService {
 
     @PreAgencyAuthorize
     public CalendarItemBody getCalendarByCalendarCode(String instance, String calendarCode) {
-        var calendarItem = calendarItemQueryService.findByCalendarCode(instance, calendarCode);
+        var calendarItem = calendarItemQueryService.findByAgencyCalendarCode(instance, calendarCode);
         return new CalendarItemBody()
                 .calendarItemId(new CalendarItemId1()
                         .code(calendarItem.getSequenceHex()))

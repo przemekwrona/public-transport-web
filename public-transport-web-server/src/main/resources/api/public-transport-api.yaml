@@ -996,6 +996,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+  /agency/{agency}/calendar-item/{calendarCode}/calendar-symbol/{calendarSymbol}:
+    get:
+      tags:
+        - calendar
+      summary: Return active calendars
+      operationId: getCalendarSymbol
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarSymbol
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarSymbolBody'
+
   /agency/{agency}/calendar/details:
     post:
       tags:
@@ -1810,8 +1840,8 @@ components:
         endDate:
           type: string
           format: date
-        calendarId:
-          $ref: './public-transport-core.yaml/#/components/schemas/CalendarId'
+        calendarSymbolId:
+          $ref: './public-transport-core.yaml/#/components/schemas/CalendarSymbolId'
         calendarName:
           type: string
         description:

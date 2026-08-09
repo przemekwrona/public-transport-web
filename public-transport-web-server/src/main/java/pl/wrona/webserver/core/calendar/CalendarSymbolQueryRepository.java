@@ -1,5 +1,6 @@
 package pl.wrona.webserver.core.calendar;
 
+import org.igeolab.iot.pt.server.api.model.CalendarItemId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,4 +30,6 @@ public interface CalendarSymbolQueryRepository extends JpaRepository<CalendarSym
     @Query(value = "SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency.agencyCode = :agency AND s.calendarItem.startDate = :startDate AND s.calendarItem.endDate = :endDate")
     List<CalendarSymbolEntity> findAllByAgencyAndStartDateAndEndDate(@Param("agency") String agency, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    @Query("SELECT s FROM CalendarSymbolEntity s WHERE s.calendarItem.agency.agencyCode = :agency AND s.calendarItem.sequenceHex = :calendarCode AND s.designation = :calendarSymbol")
+    CalendarSymbolEntity findByAgencyAndCalendarAndSymbol(@Param("agency") String agency, @Param("calendarCode") String calendarCode, @Param("calendarSymbol") String calendarSymbol);
 }
