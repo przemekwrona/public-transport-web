@@ -37,7 +37,9 @@ public class AppUserService {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        var agency = agencyOwnerRepository.findAllByAppUser(userDetails);
+        var agency = agencyOwnerRepository.findAllByAppUser(userDetails).stream()
+                .findFirst()
+                .orElse(null);
 
         return new LoginAppUserResponse()
                 .token(authTokenUtils.generateJwtToken(userDetails))

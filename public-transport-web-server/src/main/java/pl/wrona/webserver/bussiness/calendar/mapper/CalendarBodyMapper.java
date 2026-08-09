@@ -1,7 +1,6 @@
 package pl.wrona.webserver.bussiness.calendar.mapper;
 
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
-import org.igeolab.iot.pt.server.api.model.CalendarId;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolId;

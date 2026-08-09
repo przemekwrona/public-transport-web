@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {
     BrigadeBody, BrigadePatchBody,
     BrigadePayload, BrigadeService,
-    BrigadeTrip, CalendarId, ErrorResponse,
+    BrigadeTrip, CalendarSymbolId, ErrorResponse,
     GetAllTripsResponse, GetCalendarsResponse, RouteId,
     Trip,
     TripId, TripMode, TripService
@@ -43,7 +43,7 @@ export class BrigadeEditorComponent implements OnInit {
     public calendarsResponse: GetCalendarsResponse = {};
 
     public queryBrigadeName: string = '';
-    public calendarId: CalendarId = {};
+    public calendarId: CalendarSymbolId = {};
     public brigadeItems: BrigadeModel[] = [];
     public isEntered: boolean = false;
 
@@ -220,7 +220,7 @@ export class BrigadeEditorComponent implements OnInit {
 
         let brigadeBody: BrigadeBody = {};
         brigadeBody.brigadeName = this.getBrigadeName().value;
-        brigadeBody.calendarId = this.calendarId;
+        brigadeBody.calendarSymbolId = this.calendarId;
 
         let tripSequence: number = 0;
         brigadeBody.trips = this.brigadeItems.map(brigadeBody => {
@@ -272,11 +272,10 @@ export class BrigadeEditorComponent implements OnInit {
 
     }
 
-    compareByCalendarId(current: CalendarId, option: CalendarId): boolean {
+    compareByCalendarId(current: CalendarSymbolId, option: CalendarSymbolId): boolean {
         return current && option
-            ? current.name === option.name
+            ? current.calendarItemId.code === option.calendarItemId.code
             && current.symbol === option.symbol
-            && current.version === option.version
             : current === option;
     }
 

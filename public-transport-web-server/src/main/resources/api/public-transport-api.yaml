@@ -1664,8 +1664,8 @@ components:
       properties:
         brigadeName:
           type: string
-        calendarId:
-          $ref: './public-transport-core.yaml/#/components/schemas/CalendarId'
+        calendarSymbolId:
+          $ref: './public-transport-core.yaml/#/components/schemas/CalendarSymbolId'
         trips:
           type: array
           items:
