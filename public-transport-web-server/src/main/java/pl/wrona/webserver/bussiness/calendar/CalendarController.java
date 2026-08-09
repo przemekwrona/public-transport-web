@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.calendar;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.CalendarApi;
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
+import org.igeolab.iot.pt.server.api.model.CalendarItemBody;
 import org.igeolab.iot.pt.server.api.model.CalendarPayload;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolQuery;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarItemRequest;
@@ -55,6 +56,11 @@ public class CalendarController implements CalendarApi {
     @Override
     public ResponseEntity<Status> deleteCalendarItem(String agency, DeleteCalendarItemRequest deleteCalendarItemRequest) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(calendarItemDeletionService.deleteCalendarItem(agency, deleteCalendarItemRequest));
+    }
+
+    @Override
+    public ResponseEntity<CalendarItemBody> getCalendarByCalendarCode(String agency, String calendarCode) {
+        return ResponseEntity.ok(calendarItemReaderService.getCalendarByCalendarCode(agency, calendarCode));
     }
 
     @Override

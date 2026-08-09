@@ -40,6 +40,20 @@ components:
         trafficMode:
           $ref: '#/components/schemas/TrafficMode'
 
+    CalendarItemId:
+      type: object
+      properties:
+        code:
+          type: string
+
+    CalendarSymbolId:
+      type: object
+      properties:
+        calendarItemId:
+          $ref: '#/components/schemas/CalendarItemId'
+        symbol:
+          type: string
+
     CalendarId:
       type: object
       properties:

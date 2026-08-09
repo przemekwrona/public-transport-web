@@ -881,6 +881,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+  /agency/{agency}/calendar-item/{calendarCode}:
+    get:
+      tags:
+        - calendar
+      summary: Return active calendars
+      operationId: getCalendarByCalendarCode
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarItemBody'
+
   /agency/{agency}/calendar-symbol:
     post:
       tags:
@@ -1697,10 +1722,10 @@ components:
     CalendarBody:
       type: object
       properties:
+        calendarId:
+          $ref: './public-transport-core.yaml/#/components/schemas/CalendarSymbolId'
         calendarName:
           type: string
-        calendarId:
-          $ref: './public-transport-core.yaml/#/components/schemas/CalendarId'
         description:
           type: string
         designation:
@@ -1821,6 +1846,8 @@ components:
     CalendarItemBody:
       type: object
       properties:
+        calendarItemId:
+          $ref: './public-transport-core.yaml/#/components/schemas/CalendarItemId'
         startDate:
           type: string
           format: date

@@ -28,4 +28,8 @@ public class CalendarItemQueryService {
         return calendarItemQueryRepository.findLastSavedByAgency(instance);
     }
 
+    public CalendarItemEntity findByCalendarCode(String instance, String calendarCode) {
+        return calendarItemQueryRepository.findByAgencyAndSequenceHexEquals(instance, calendarCode);
+    }
+
 }
