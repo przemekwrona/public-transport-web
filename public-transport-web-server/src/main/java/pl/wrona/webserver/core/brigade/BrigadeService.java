@@ -6,7 +6,8 @@ import org.igeolab.iot.pt.server.api.model.BrigadeDeleteBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.BrigadeTrip;
-import org.igeolab.iot.pt.server.api.model.CalendarId;
+import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolId;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeBody;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId;
@@ -47,11 +48,11 @@ public class BrigadeService {
         }
 
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        var calendarEntity = calendarQueryService.getCalendar(agencyEntity.getAgencyCode(), request.getCalendarId());
+        var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndCalendarAndSymbol(instance, request.getCalendarSymbolId().getCalendarItemId().getCode(), request.getCalendarSymbolId().getSymbol());
 
         var brigadeEntity = new BrigadeEntity();
         brigadeEntity.setBrigadeNumber(request.getBrigadeName());
-        brigadeEntity.setCalendar(calendarEntity);
+        brigadeEntity.setCalendar(calendarSymbolEntity);
 
         brigadeEntity.setAgency(agencyEntity);
 
@@ -119,10 +120,10 @@ public class BrigadeService {
         return brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyEntity, brigadePayload.getBrigadeName())
                 .map(brigadeEntity -> new BrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
-                        .calendarId(new CalendarId()
-                                .name(brigadeEntity.getCalendar().getCalendarItem().getCalendarName())
-                                .symbol(brigadeEntity.getCalendar().getDesignation())
-                                .version(1))
+                        .calendarSymbolId(new CalendarSymbolId()
+                                .calendarItemId(new CalendarItemId1()
+                                        .code(brigadeEntity.getCalendar().getCalendarItem().getSequenceHex()))
+                                .symbol(brigadeEntity.getCalendar().getDesignation()))
                         .trips(trips))
                 .orElse(null);
     }
@@ -146,11 +147,11 @@ public class BrigadeService {
     public Status updateBrigade(String instance, BrigadePatchBody brigadePatchBody) {
         String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        var calendarEntity = calendarQueryService.getCalendar(instance, brigadePatchBody.getBrigadeBody().getCalendarId());
+        var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndCalendarAndSymbol(instance, brigadePatchBody.getBrigadeBody().getCalendarSymbolId().getCalendarItemId().getCode(), brigadePatchBody.getBrigadeBody().getCalendarSymbolId().getSymbol());
 
         brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyEntity, brigadeId).ifPresent((BrigadeEntity entity) -> {
             entity.setBrigadeNumber(brigadePatchBody.getBrigadeBody().getBrigadeName());
-            entity.setCalendar(calendarEntity);
+            entity.setCalendar(calendarSymbolEntity);
 
             brigadeRepository.save(entity);
 

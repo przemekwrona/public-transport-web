@@ -1,7 +1,7 @@
 package pl.wrona.webserver.core.calendar;
 
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.CalendarId;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolId;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -16,8 +16,9 @@ public class CalendarQueryService {
         return calendarSymbolRepository.findByAgencyAndCalendarNameAndDesignation(instance, calendarName, designation).orElse(null);
     }
 
+    @Deprecated
     @PreAgencyAuthorize
-    public CalendarSymbolEntity getCalendar(String instance, CalendarId calendarId) {
-        return calendarSymbolRepository.findByAgencyAndCalendarNameAndDesignation(instance, calendarId.getName(), calendarId.getSymbol()).orElse(null);
+    public CalendarSymbolEntity getCalendar(String instance, CalendarSymbolId calendarId) {
+        return calendarSymbolRepository.findByAgencyAndCalendarAndSymbol(instance, calendarId.getCalendarItemId().getCode(), calendarId.getSymbol());
     }
 }

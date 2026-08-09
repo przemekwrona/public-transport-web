@@ -4,8 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 
+import java.util.List;
+
 @Repository
 public interface AgencyOwnerRepository extends JpaRepository<AgencyEntity, Long> {
 
-    AgencyEntity findAllByAppUser(AppUser appUserId);
+    List<AgencyEntity> findAllByAppUser(AppUser appUserId);
 }

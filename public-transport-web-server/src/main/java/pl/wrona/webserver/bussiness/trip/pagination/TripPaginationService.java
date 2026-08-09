@@ -34,7 +34,8 @@ public class TripPaginationService {
 
     @PreAgencyAuthorize
     public GetAllTripsResponse getTripsByLineOrName(String instance, String lineOrName) {
-        Map<RouteEntity, Set<TripEntity>> tripSet = tripRepository.findByLineOrNameContainingIgnoreCase(lineOrName, agencyService.getLoggedAgency()).stream()
+        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
+        Map<RouteEntity, Set<TripEntity>> tripSet = tripRepository.findByLineOrNameContainingIgnoreCase(lineOrName, agencyEntity).stream()
                 .collect(Collectors.groupingBy(TripEntity::getRoute, Collectors.toSet()));
 
         Map<Long, TripEntity> tripInBrigadeDictionary = tripQueryService.mapByExistsBrigade(instance);
