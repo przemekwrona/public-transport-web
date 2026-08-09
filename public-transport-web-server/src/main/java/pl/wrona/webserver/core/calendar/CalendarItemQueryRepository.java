@@ -20,4 +20,7 @@ public interface CalendarItemQueryRepository extends JpaRepository<CalendarItemE
     @Query("SELECT i FROM CalendarItemEntity i WHERE i.agency.agencyCode = :instance AND i.sequence = (SELECT MAX(ci.sequence) FROM CalendarItemEntity ci WHERE ci.agency.agencyCode = :instance)")
     CalendarItemEntity findLastSavedByAgency(@Param("instance") String instance);
 
+    @Query("SELECT i FROM CalendarItemEntity  i WHERE i.agency.agencyCode = :instance AND i.sequenceHex = :sequenceHex")
+    CalendarItemEntity findByAgencyAndSequenceHexEquals(@Param("instance") String instance, @Param("sequenceHex") String sequenceHex);
+
 }

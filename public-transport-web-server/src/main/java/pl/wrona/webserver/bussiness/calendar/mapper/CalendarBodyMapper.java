@@ -2,7 +2,9 @@ package pl.wrona.webserver.bussiness.calendar.mapper;
 
 import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import org.igeolab.iot.pt.server.api.model.CalendarId;
+import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolId;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
@@ -25,10 +27,10 @@ public class CalendarBodyMapper {
 
         return new CalendarBody()
                 .calendarName(item.getCalendarName())
-                .calendarId(new CalendarId()
-                        .name(item.getCalendarName())
-                        .symbol(symbol.getDesignation())
-                        .version(1))
+                .calendarId(new CalendarSymbolId()
+                        .calendarItemId(new CalendarItemId1()
+                                .code(item.getSequenceHex()))
+                        .symbol(symbol.getDesignation()))
                 .designation(symbol.getDesignation())
                 .description(symbol.getDescription())
                 .startDate(item.getStartDate())
@@ -54,6 +56,9 @@ public class CalendarBodyMapper {
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
         return new CalendarSymbolBody()
+                .calendarId(new CalendarId()
+                        .name(item.getSequenceHex())
+                        .version(1))
                 .calendarName(item.getCalendarName())
                 .designation(calendar.getDesignation())
                 .description(calendar.getDescription())
