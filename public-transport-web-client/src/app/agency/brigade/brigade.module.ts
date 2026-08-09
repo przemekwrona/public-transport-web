@@ -9,6 +9,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
 import {BrigadeSchedulerComponent} from "./brigade-scheduler/brigade-scheduler.component";
 import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import {MatInputModule} from "@angular/material/input";
         FaIconComponent,
         BrigadeSchedulerComponent,
         ReactiveFormsModule,
-        MatInputModule
+        MatInputModule,
+        MatSelectModule
     ],
     declarations: [
         BrigadeListComponent,

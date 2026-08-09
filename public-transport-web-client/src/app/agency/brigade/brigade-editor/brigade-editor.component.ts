@@ -76,7 +76,7 @@ export class BrigadeEditorComponent implements OnInit {
 
         this._route.data.subscribe(data => this.componentMode = data['mode']);
         this._route.data.subscribe(data => {
-            this.calendarId = data['brigade']?.calendarId;
+            this.calendarId = data['brigade']?.calendarSymbolId;
             this.brigadeItems = data['brigade'];
             this.brigadeItems = (data['brigade']?.trips || []).map((trip: BrigadeTrip) => {
                 const brigadeModel: BrigadeModel = {} as BrigadeModel;
