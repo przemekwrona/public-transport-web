@@ -1,7 +1,6 @@
 import {ResolveFn} from '@angular/router';
 import {inject} from "@angular/core";
 import {
-    CalendarSymbolQuery,
     CalendarService,
     CalendarSymbolBody
 } from "../../../generated/public-transport-api";
@@ -12,10 +11,9 @@ export const calendarResolver: ResolveFn<Observable<CalendarSymbolBody>> = (rout
     const calendarsService: CalendarService = inject(CalendarService);
     const loginService: LoginService = inject(LoginService);
 
-    const query: CalendarSymbolQuery = {};
-    query.designation = route.queryParams['designation'];
-    query.startDate = route.queryParams['startDate'];
-    query.endDate = route.queryParams['endDate'];
+    const instance = loginService.getInstance();
+    const calendarCode: string = route.paramMap.get('calendarCode');
+    const calendarSymbol: string = route.paramMap.get('calendarSymbol');
 
-    return calendarsService.getCalendarByCalendarName(loginService.getInstance(), query);
+    return calendarsService.getCalendarSymbol(instance, calendarCode, calendarSymbol);
 };

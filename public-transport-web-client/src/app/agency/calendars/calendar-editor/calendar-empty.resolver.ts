@@ -1,34 +1,38 @@
 import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from '@angular/router';
-import {CalendarBody, CalendarService, CalendarSymbolBody} from "../../../generated/public-transport-api";
-import {Observable, of} from "rxjs";
-import moment from "moment";
+import {CalendarService, CalendarSymbolBody} from "../../../generated/public-transport-api";
+import {map, Observable} from "rxjs";
 import {inject} from "@angular/core";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 export const calendarEmptyResolver: ResolveFn<Observable<CalendarSymbolBody>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const agencyStorageService: AgencyStorageService = inject(AgencyStorageService);
+    const calendarService: CalendarService = inject(CalendarService);
 
-    const calendarName: string = route.paramMap.get('calendarName');
-    const [startDate, endDate] = calendarName
-        .split('--')
-        .map(dateStr => moment(dateStr));
+    const instance: string = agencyStorageService.getInstance();
+    const calendarCode: string = route.paramMap.get('calendarCode');
 
-    const calendarBody: CalendarSymbolBody = {};
-    calendarBody.calendarName = calendarName;
-    calendarBody.designation = '';
-    calendarBody.description = '';
-    calendarBody.description = '';
-    calendarBody.startDate = startDate.format('YYYY-MM-DD');
-    calendarBody.endDate = endDate.format('YYYY-MM-DD');
-    calendarBody.monday = false;
-    calendarBody.tuesday = false;
-    calendarBody.wednesday = false;
-    calendarBody.thursday = false;
-    calendarBody.friday = false;
-    calendarBody.saturday = false;
-    calendarBody.sunday = false;
-    calendarBody.included = [];
-    calendarBody.excluded = [];
 
-    return of(calendarBody);
+    return calendarService.getCalendarByCalendarCode(instance, calendarCode).pipe(
+        map(calendarItem => {
+
+            const calendarBody: CalendarSymbolBody = {
+                calendarName: calendarCode,
+                designation: '',
+                description: '',
+                startDate: calendarItem.startDate,
+                endDate: calendarItem.endDate,
+                monday: false,
+                tuesday: false,
+                wednesday: false,
+                thursday: false,
+                friday: false,
+                saturday: false,
+                sunday: false,
+                included: [],
+                excluded: []
+            };
+
+            return calendarBody;
+        })
+    );
 };

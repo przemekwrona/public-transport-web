@@ -56,9 +56,10 @@ public class CalendarBodyMapper {
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
         return new CalendarSymbolBody()
-                .calendarId(new CalendarId()
-                        .name(item.getSequenceHex())
-                        .version(1))
+                .calendarSymbolId(new CalendarSymbolId()
+                        .calendarItemId(new CalendarItemId1()
+                                .code(item.getSequenceHex()))
+                        .symbol(calendar.getDesignation()))
                 .calendarName(item.getCalendarName())
                 .designation(calendar.getDesignation())
                 .description(calendar.getDescription())

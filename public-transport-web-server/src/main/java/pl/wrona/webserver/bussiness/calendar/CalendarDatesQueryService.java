@@ -1,7 +1,10 @@
-package pl.wrona.webserver.core.calendar;
+package pl.wrona.webserver.bussiness.calendar;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
+import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 import java.util.List;
 
