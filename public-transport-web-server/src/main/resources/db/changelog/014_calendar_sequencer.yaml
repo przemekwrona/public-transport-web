@@ -1,0 +1,43 @@
+databaseChangeLog:
+  # 1. Create the tracking table
+  - changeSet:
+      id: create_calendar_sequences_table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: calendar_sequences
+            columns:
+              - column:
+                  name: agency_code
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: next_value
+                  type: BIGINT
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: calendar_sequences
+            columnNames: agency_code
+            constraintName: pk_calendar_sequences
+      rollback:
+        - dropTable:
+            tableName: calendar_sequences
+
+  - changeSet:
+      id: initialize-calendar-sequences-from-calendar-item
+      author: pwrona
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO calendar_sequences (agency_code, next_value)
+              SELECT a.agency_code, MAX(ci.sequence) + 1
+              FROM calendar_item ci
+              JOIN agency a ON a.agency_id = ci.agency_id
+              WHERE ci.sequence IS NOT NULL
+              GROUP BY a.agency_code;
+      rollback:
+        - sql:
+            sql: DELETE FROM calendar_sequences;
