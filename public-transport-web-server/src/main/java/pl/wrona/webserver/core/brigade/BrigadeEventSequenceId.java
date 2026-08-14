@@ -14,6 +14,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class BrigadeEventSequenceId implements Serializable {
 
+    @Column(name = "agency_code", length = 15, nullable = false)
+    private String agencyCode;
+
     @Column(name = "calendar_code", length = 4, nullable = false)
     private String calendarCode;
 

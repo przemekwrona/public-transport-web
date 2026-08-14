@@ -183,6 +183,11 @@ databaseChangeLog:
             tableName: brigade_event_sequence
             columns:
               - column:
+                  name: agency_code
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
                   name: calendar_code
                   type: varchar(4)
                   constraints:
@@ -200,7 +205,7 @@ databaseChangeLog:
                     nullable: false
         - addPrimaryKey:
             tableName: brigade_event_sequence
-            columnNames: calendar_code, calendar_symbol
+            columnNames: agency_code, calendar_code, calendar_symbol
             constraintName: pk_brigade_event_sequence
       rollback:
         - dropTable:
