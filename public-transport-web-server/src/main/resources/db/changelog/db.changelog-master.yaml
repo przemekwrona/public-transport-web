@@ -54,3 +54,7 @@ databaseChangeLog:
   - include:
       file: 014_calendar_sequencer.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 015_calendar_resource.yaml
+      relativeToChangelogFile: true
