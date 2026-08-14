@@ -23,6 +23,7 @@ import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorSer
 import pl.wrona.webserver.bussiness.brigade.event.updater.BrigadeEventUpdaterService;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
 import pl.wrona.webserver.bussiness.brigade.group.pagination.BrigadePaginationService;
+import pl.wrona.webserver.bussiness.brigade.resource.creator.BrigadeResourceCreatorService;
 
 @RestController
 @AllArgsConstructor
@@ -35,6 +36,7 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadeGroupDetailsService brigadeGroupDetailsService;
     private final BrigadeEventCreatorService brigadeEventCreatorService;
     private final BrigadeEventUpdaterService brigadeEventUpdaterService;
+    private final BrigadeResourceCreatorService brigadeResourceCreatorService;
 
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
@@ -53,7 +55,8 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<NextCalendarResourceSequenceResponse> getNextCalendarResourceSequence(String agency, String calendarCode, String symbol) {
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                brigadeResourceCreatorService.getNextCalendarResourceSequence(agency, calendarCode, symbol));
     }
 
     @Override

@@ -12,7 +12,7 @@ import {
     BrigadeEvent,
     BrigadeResource,
     BrigadeService,
-    CalendarSymbolId,
+    CalendarSymbolId, NextCalendarResourceSequenceResponse,
     PutBrigadeEventBody
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
@@ -23,8 +23,7 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
         CommonModule,
         DayPilotModule,
     ],
-    providers: [
-    ],
+    providers: [],
     templateUrl: './brigade-scheduler.component.html',
     styleUrl: './brigade-scheduler.component.scss'
 })
@@ -261,6 +260,14 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             const startDate = startMoment.format('HH:mm');
             const endDate = endMoment.format('HH:mm');
             args.e.text(`${startDate}-${endDate}\n${line} ${name}`);
+        });
+    }
+
+    public addBrigade(): void {
+        const instance: string = this.agencyStorage.getInstance();
+        this.brigadeService.getNextCalendarResourceSequence(instance, this.calendarSymbolId.calendarItemId.code, this.calendarSymbolId.symbol).subscribe((results: NextCalendarResourceSequenceResponse) => {
+            const resource = {name: `#${results.sequenceHex}`, id: results.sequenceHex, expanded: true};
+            this.scheduler.control.update({resources: [...this.scheduler.control.resources, resource]});
         });
     }
 
