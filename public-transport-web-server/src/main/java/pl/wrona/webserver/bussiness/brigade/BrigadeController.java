@@ -10,6 +10,7 @@ import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
+import org.igeolab.iot.pt.server.api.model.NextBrigadeEventSequenceResponse;
 import org.igeolab.iot.pt.server.api.model.NextCalendarResourceSequenceResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,11 @@ public class BrigadeController implements BrigadeApi {
     @Override
     public ResponseEntity<BrigadeBodyV2> getCalendarSymbolBrigadeResources(String agency, String calendarCode, String symbol) {
         return ResponseEntity.ok(brigadeGroupDetailsService.getCalendarSymbolBrigadeResources(agency, calendarCode, symbol));
+    }
+
+    @Override
+    public ResponseEntity<NextBrigadeEventSequenceResponse> getNextBrigadeEventSequence(String agency, String calendarCode, String symbol, String resourceCode) {
+        return null;
     }
 
     @Override
