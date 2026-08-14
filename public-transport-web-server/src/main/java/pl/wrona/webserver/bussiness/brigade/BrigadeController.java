@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.brigade;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.BrigadeApi;
 import org.igeolab.iot.pt.server.api.model.BrigadeBody;
+import org.igeolab.iot.pt.server.api.model.BrigadeBodyV2;
 import org.igeolab.iot.pt.server.api.model.BrigadeDeleteBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
@@ -32,6 +33,11 @@ public class BrigadeController implements BrigadeApi {
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
         return ResponseEntity.ok(brigadePaginationService.findBrigades(agency));
+    }
+
+    @Override
+    public ResponseEntity<BrigadeBodyV2> getCalendarSymbolBrigadeResources(String agency, String calendarCode, String symbol) {
+        return ResponseEntity.ok(brigadeGroupDetailsService.getCalendarSymbolBrigadeResources(agency, calendarCode, symbol));
     }
 
     @Override
