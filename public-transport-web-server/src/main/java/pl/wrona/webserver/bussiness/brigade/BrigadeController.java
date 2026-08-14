@@ -9,30 +9,37 @@ import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
+import org.igeolab.iot.pt.server.api.model.NextCalendarResourceSequenceResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
-import pl.wrona.webserver.core.brigade.BrigadeService;
+import pl.wrona.webserver.bussiness.brigade.group.pagination.BrigadePaginationService;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("${webserver.context.path}")
 public class BrigadeController implements BrigadeApi {
 
-    private final BrigadeService brigadeService;
+    private final BrigadeQueryService brigadeQueryService;
     private final BrigadeGroupCreatorService brigadeGroupCreatorService;
+    private final BrigadePaginationService brigadePaginationService;
 
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
-        return ResponseEntity.ok(brigadeService.findBrigades(agency));
+        return ResponseEntity.ok(brigadePaginationService.findBrigades(agency));
+    }
+
+    @Override
+    public ResponseEntity<NextCalendarResourceSequenceResponse> getNextCalendarResourceSequence(String agency, String calendarCode, String symbol) {
+        return ResponseEntity.badRequest().build();
     }
 
     @Override
     public ResponseEntity<Status> createBrigade(String agency, BrigadeBody createBrigadeRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeService.createBrigade(agency, createBrigadeRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeQueryService.createBrigade(agency, createBrigadeRequest));
     }
 
     @Override
@@ -42,16 +49,16 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<Status> deleteBrigade(String agency, BrigadeDeleteBody brigadeDeleteBody) {
-        return ResponseEntity.status(HttpStatus.OK).body(brigadeService.deleteBrigade(agency, brigadeDeleteBody));
+        return ResponseEntity.status(HttpStatus.OK).body(brigadeQueryService.deleteBrigade(agency, brigadeDeleteBody));
     }
 
     @Override
     public ResponseEntity<BrigadeBody> getBrigadeByBrigadeName(String agency, BrigadePayload brigadePayload) {
-        return ResponseEntity.ok(brigadeService.getBrigadeByBrigadeName(agency, brigadePayload));
+        return ResponseEntity.ok(brigadeQueryService.getBrigadeByBrigadeName(agency, brigadePayload));
     }
 
     @Override
     public ResponseEntity<Status> updateBrigade(String agency, BrigadePatchBody brigadePatchBody) {
-        return ResponseEntity.ok(brigadeService.updateBrigade(agency, brigadePatchBody));
+        return ResponseEntity.ok(brigadeQueryService.updateBrigade(agency, brigadePatchBody));
     }
 }
