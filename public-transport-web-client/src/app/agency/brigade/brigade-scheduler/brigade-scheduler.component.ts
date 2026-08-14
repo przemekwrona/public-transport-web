@@ -67,7 +67,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             args.control.clearSelection();
 
             // Open your own modal, passing in the start/end times
-            this.openMyCreateModal(args.start, args.end, args.control);
+            this.openMyCreateModal(args.start, args.end, args.resource, args.control);
 
             const scheduler = args.control;
             // const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
@@ -157,9 +157,9 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     }
 
     // --- CREATE NEW EVENT ---
-    openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, dpControl: DayPilot.Scheduler) {
+    openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, resource: DayPilot.ResourceId, dpControl: DayPilot.Scheduler) {
         const dialogRef = this.dialog.open(OnTimeRangeSelectedModalComponent, {
-            data: {start: start.toString(), end: end.toString()}
+            data: {start: start.toString(), end: end.toString(), resourceId: resource.toString()}
         });
 
         dialogRef.afterClosed().subscribe((result: OnTimeRangeAndTripSelected) => {
@@ -173,7 +173,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                 start: new DayPilot.Date(result.start),
                 end: new DayPilot.Date(result.end),
                 id: DayPilot.guid(),
-                resource: 'GA',
+                resource: result.resourceId,
                 text: `${startDate}-${endDate}\n${result.tripId.routeId.line} ${result.origin} - ${result.destination} ${result.tripId.variantMode}` // Data returned from your modal
             } as DayPilot.EventData;
 
