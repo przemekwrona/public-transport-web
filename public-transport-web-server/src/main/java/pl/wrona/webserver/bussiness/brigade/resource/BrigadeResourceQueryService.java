@@ -21,4 +21,10 @@ public class BrigadeResourceQueryService {
         return brigadeResourceQueryRepository.findAllByBrigadeGroupBrigadeGroupIdOrderBySequenceAsc(brigadeGroupId);
     }
 
+    public BrigadeResourceEntity findByAgencyAndCalendarAndSymbolAndResourceCode(
+            String agency, String calendarCode, String symbol, String resourceCode) {
+        return brigadeResourceQueryRepository.findByAgencyAndCalendarAndSymbolAndResourceCode(
+                agency, calendarCode, symbol, resourceCode);
+    }
+
 }
