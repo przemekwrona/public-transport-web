@@ -10,6 +10,7 @@ import {
     OnTimeRangeAndTripSelected,
     OnTimeRangeSelectedModalComponent
 } from "./on-time-range-selected-modal/on-time-range-selected-modal.component";
+import {BrigadeBodyV2, BrigadeResource} from "../../../generated/public-transport-api";
 
 @Component({
     selector: 'app-brigade-scheduler',
@@ -29,6 +30,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     scheduler!: DayPilotSchedulerComponent;
 
     @Input() brigadeEvent: BrigadeModel[] = []
+    @Input() brigadeResources: BrigadeResource[];
 
     events: DayPilot.EventData[] = [];
 
@@ -116,20 +118,19 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.ds.getResources().subscribe(result => this.config.resources = result);
-
         var from = this.scheduler.control.visibleStart();
         var to = this.scheduler.control.visibleEnd();
 
         // 1. Update resources directly on the control
-        this.ds.getResources().subscribe(result => {
-            // This forces DayPilot to accept the new data and redraw the rows
-            this.scheduler.control.update({resources: result});
-        });
+        const resources = this.brigadeResources
+            .map((resource: BrigadeResource) => {
+                return  {name: `#${resource.sequenceHex}`, id: resource.sequenceHex, expanded: true};
+            }) as any[];
+        this.scheduler.control.update({resources: resources});
 
         const events = this.brigadeEvent.map(e => {
             const event: DayPilot.EventData = {} as DayPilot.EventData;
-            event.resource = "GA";
+            event.resource = "0001";
 
             const departureTime = moment(e.departureTime, "HH:mm");
             const arrivalTime = departureTime.clone().add(e.travelTimeInSeconds + 60, 'second');

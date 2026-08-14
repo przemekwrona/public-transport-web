@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {
-    BrigadeBody, BrigadePatchBody,
-    BrigadePayload, BrigadeService,
+    BrigadeBody, BrigadeBodyV2, BrigadePatchBody,
+    BrigadePayload, BrigadeResource, BrigadeService,
     BrigadeTrip, CalendarSymbolId, ErrorResponse,
     GetAllTripsResponse, GetCalendarsResponse, RouteId,
     Trip,
@@ -41,6 +41,8 @@ export class BrigadeEditorComponent implements OnInit {
 
     public tripsResponse: GetAllTripsResponse = {filter: '', lines: []};
     public calendarsResponse: GetCalendarsResponse = {};
+    public brigaderResponse: BrigadeBodyV2= {} as BrigadeBodyV2;
+    public brigadeResources: BrigadeResource[] = [];
 
     public queryBrigadeName: string = '';
     public calendarId: CalendarSymbolId = {};
@@ -76,7 +78,11 @@ export class BrigadeEditorComponent implements OnInit {
 
         this._route.data.subscribe(data => this.componentMode = data['mode']);
         this._route.data.subscribe(data => {
-            this.calendarId = data['brigade']?.calendarSymbolId;
+            const brigadeV2: BrigadeBodyV2 = data['brigade'];
+
+            this.brigaderResponse = brigadeV2;
+            this.calendarId = brigadeV2?.calendarSymbolId;
+
             this.brigadeItems = data['brigade'];
             this.brigadeItems = (data['brigade']?.trips || []).map((trip: BrigadeTrip) => {
                 const brigadeModel: BrigadeModel = {} as BrigadeModel;
