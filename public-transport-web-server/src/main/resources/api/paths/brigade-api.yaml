@@ -274,6 +274,8 @@ components:
       properties:
         brigadeName:
           type: string
+        calendarSymbolId:
+          $ref: '../public-transport-core.yaml#/components/schemas/CalendarSymbolId'
 
     BrigadeDeleteBody:
       type: object

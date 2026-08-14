@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.wrona.webserver.bussiness.brigade.details.BrigadeGroupDetailsService;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
 import pl.wrona.webserver.bussiness.brigade.group.pagination.BrigadePaginationService;
 
@@ -26,6 +27,7 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadeQueryService brigadeQueryService;
     private final BrigadeGroupCreatorService brigadeGroupCreatorService;
     private final BrigadePaginationService brigadePaginationService;
+    private final BrigadeGroupDetailsService brigadeGroupDetailsService;
 
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
@@ -54,7 +56,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<BrigadeBody> getBrigadeByBrigadeName(String agency, BrigadePayload brigadePayload) {
-        return ResponseEntity.ok(brigadeQueryService.getBrigadeByBrigadeName(agency, brigadePayload));
+        return ResponseEntity.ok(brigadeGroupDetailsService.getBrigadeByBrigadeName(agency, brigadePayload));
     }
 
     @Override
