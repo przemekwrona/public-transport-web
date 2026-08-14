@@ -16,8 +16,8 @@ public class BrigadeEventCreatorService {
 
     @PreAgencyAuthorize
     @Transactional
-    public NextBrigadeEventSequenceResponse getNextBrigadeEventSequence(String agency, String calendarCode, String symbol, String resourceCode) {
-        var nextSequence = brigadeEventSequenceQueryService.findNextValue(agency, calendarCode, symbol);
+    public NextBrigadeEventSequenceResponse getNextBrigadeEventSequence(String instance, String calendarCode, String symbol, String resourceCode) {
+        var nextSequence = brigadeEventSequenceQueryService.findNextValue(instance, calendarCode, symbol);
         return new NextBrigadeEventSequenceResponse()
                 .sequence(nextSequence)
                 .sequenceHex(Hex.toHex(nextSequence));
