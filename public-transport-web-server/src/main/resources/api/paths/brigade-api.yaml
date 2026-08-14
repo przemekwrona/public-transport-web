@@ -213,6 +213,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/NextCalendarResourceSequenceResponse'
 
+  /agency/{agency}/calendar/{calendarCode}/symbol/{symbol}/resource/{resourceCode}/event:
+    post:
+      tags:
+        - brigade
+      summary: Get next brigade event sequence
+      operationId: getNextBrigadeEventSequence
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: symbol
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: resourceCode
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NextBrigadeEventSequenceResponse'
+
 components:
   schemas:
     CreateCalendarSymbolBrigadeRequest:
@@ -233,6 +268,14 @@ components:
           $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
     NextCalendarResourceSequenceResponse:
+      type: object
+      properties:
+        sequence:
+          type: integer
+        sequenceHex:
+          type: string
+
+    NextBrigadeEventSequenceResponse:
       type: object
       properties:
         sequence:
