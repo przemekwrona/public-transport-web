@@ -339,6 +339,22 @@ components:
         sequenceHex:
           type: string
 
+    BrigadeEvent:
+      type: object
+      properties:
+        startSecond:
+          type: integer
+        endSecond:
+          type: integer
+        line:
+          type: string
+        name:
+          type: string
+        sequence:
+          type: integer
+        sequenceHex:
+          type: string
+
     GetBrigadeBody:
       type: object
       properties:
@@ -388,6 +404,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BrigadeTrip'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrigadeEvent'
 
     BrigadeResource:
       type: object
