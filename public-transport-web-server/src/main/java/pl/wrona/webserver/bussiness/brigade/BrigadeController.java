@@ -12,6 +12,7 @@ import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.NextBrigadeEventSequenceResponse;
 import org.igeolab.iot.pt.server.api.model.NextCalendarResourceSequenceResponse;
+import org.igeolab.iot.pt.server.api.model.PutBrigadeEventBody;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.brigade.details.BrigadeGroupDetailsService;
 import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorService;
+import pl.wrona.webserver.bussiness.brigade.event.updater.BrigadeEventUpdaterService;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
 import pl.wrona.webserver.bussiness.brigade.group.pagination.BrigadePaginationService;
 
@@ -32,6 +34,7 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadePaginationService brigadePaginationService;
     private final BrigadeGroupDetailsService brigadeGroupDetailsService;
     private final BrigadeEventCreatorService brigadeEventCreatorService;
+    private final BrigadeEventUpdaterService brigadeEventUpdaterService;
 
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
@@ -51,6 +54,11 @@ public class BrigadeController implements BrigadeApi {
     @Override
     public ResponseEntity<NextCalendarResourceSequenceResponse> getNextCalendarResourceSequence(String agency, String calendarCode, String symbol) {
         return ResponseEntity.badRequest().build();
+    }
+
+    @Override
+    public ResponseEntity<Status> putBrigadeEvent(String agency, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
+        return ResponseEntity.ok(brigadeEventUpdaterService.putBrigadeEvent(agency, calendarCode, symbol, resourceCode, putBrigadeEventBody));
     }
 
     @Override

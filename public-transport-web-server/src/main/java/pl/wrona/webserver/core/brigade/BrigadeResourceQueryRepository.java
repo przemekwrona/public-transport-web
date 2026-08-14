@@ -1,6 +1,8 @@
 package pl.wrona.webserver.core.brigade;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,4 +11,16 @@ import java.util.List;
 public interface BrigadeResourceQueryRepository extends JpaRepository<BrigadeResourceEntity, Long> {
 
     List<BrigadeResourceEntity> findAllByBrigadeGroupBrigadeGroupIdOrderBySequenceAsc(Long brigadeGroupId);
+
+    @Query("""
+            SELECT r FROM BrigadeResourceEntity r
+            WHERE r.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
+            AND r.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
+            AND r.brigadeGroup.calendarSymbol.designation = :symbol
+            AND r.sequenceHex = :resourceCode""")
+    BrigadeResourceEntity findByAgencyAndCalendarAndSymbolAndResourceCode(
+            @Param("agency") String agency,
+            @Param("calendarCode") String calendarCode,
+            @Param("symbol") String symbol,
+            @Param("resourceCode") String resourceCode);
 }
