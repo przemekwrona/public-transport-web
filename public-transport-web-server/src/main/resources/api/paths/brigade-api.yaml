@@ -1,0 +1,96 @@
+openapi: 3.0.0
+info:
+
+paths:
+  /agency/{agency}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
+    post:
+      tags:
+        - brigade
+      summary: Create brigade for calendar symbol
+      operationId: createCalendarSymbolBrigade
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarSymbol
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCalendarSymbolBrigadeRequest'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCalendarSymbolBrigadeResponse'
+
+  /agency/{agency}/calendar/{calendarCode}/symbol/{symbol}/resource:
+    post:
+      tags:
+        - calendar-resource
+      summary: Get next calendar resource sequence
+      operationId: getNextCalendarResourceSequence
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: symbol
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NextCalendarResourceSequenceResponse'
+
+components:
+  schemas:
+    CreateCalendarSymbolBrigadeRequest:
+      type: object
+      required:
+        - calendarSymbolId
+        - brigadeName
+      properties:
+        calendarSymbolId:
+          $ref: '../public-transport-core.yaml#/components/schemas/CalendarSymbolId'
+        brigadeName:
+          type: string
+
+    CreateCalendarSymbolBrigadeResponse:
+      type: object
+      properties:
+        status:
+          $ref: '../public-transport-api.yaml/#/components/schemas/Status'
+
+    NextCalendarResourceSequenceResponse:
+      type: object
+      properties:
+        sequence:
+          type: integer
+        sequenceHex:
+          type: string
