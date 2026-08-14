@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, Input, OnInit, signal, ViewChild} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
-import {BrigadeSchedulerService} from "./brigade-scheduler.service";
 import {CommonModule} from "@angular/common";
 import {BrigadeModel} from "../brigade-editor/brigade-editor.model";
 import moment from "moment";
@@ -25,7 +24,6 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
         DayPilotModule,
     ],
     providers: [
-        BrigadeSchedulerService
     ],
     templateUrl: './brigade-scheduler.component.html',
     styleUrl: './brigade-scheduler.component.scss'
@@ -118,7 +116,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         }),
     };
 
-    constructor(private ds: BrigadeSchedulerService, private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private dialog: MatDialog) {
+    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
