@@ -1,11 +1,11 @@
 databaseChangeLog:
   # 1. Create the tracking table
   - changeSet:
-      id: create_calendar_sequences_table
+      id: create_calendar_item_sequences_table
       author: pwrona
       changes:
         - createTable:
-            tableName: calendar_sequences
+            tableName: calendar_item_sequences
             columns:
               - column:
                   name: agency_code
@@ -19,12 +19,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - addPrimaryKey:
-            tableName: calendar_sequences
+            tableName: calendar_item_sequences
             columnNames: agency_code
-            constraintName: pk_calendar_sequences
+            constraintName: pk_calendar_item_sequences
       rollback:
         - dropTable:
-            tableName: calendar_sequences
+            tableName: calendar_item_sequences
 
   - changeSet:
       id: initialize-calendar-sequences-from-calendar-item
@@ -32,7 +32,7 @@ databaseChangeLog:
       changes:
         - sql:
             sql: |
-              INSERT INTO calendar_sequences (agency_code, next_value)
+              INSERT INTO calendar_item_sequences (agency_code, next_value)
               SELECT a.agency_code, MAX(ci.sequence) + 1
               FROM calendar_item ci
               JOIN agency a ON a.agency_id = ci.agency_id
@@ -40,4 +40,4 @@ databaseChangeLog:
               GROUP BY a.agency_code;
       rollback:
         - sql:
-            sql: DELETE FROM calendar_sequences;
+            sql: DELETE FROM calendar_item_sequences;
