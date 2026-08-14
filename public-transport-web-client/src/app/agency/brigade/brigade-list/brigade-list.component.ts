@@ -1,8 +1,10 @@
 import {Component} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BrigadeDeleteBody, BrigadeService, GetBrigadeResponse} from "../../../generated/public-transport-api";
 import {size} from "lodash";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import {MatDialog} from "@angular/material/dialog";
+import {BrigadeCreatorModalComponent} from "../brigade-creator-modal/brigade-creator-modal.component";
 
 @Component({
     selector: 'app-brigade-list',
@@ -14,8 +16,16 @@ export class BrigadeListComponent {
 
     public brigadesResponse: GetBrigadeResponse;
 
-    constructor(private route: ActivatedRoute, private agencyStorageService: AgencyStorageService, private brigadeService: BrigadeService) {
+    constructor(private route: ActivatedRoute, private router: Router, private agencyStorageService: AgencyStorageService, private brigadeService: BrigadeService, private dialog: MatDialog) {
         this.brigadesResponse = this.route.snapshot.data['brigades'];
+    }
+
+    public createBrigade(): void {
+        const dialogRef = this.dialog.open(BrigadeCreatorModalComponent);
+
+        dialogRef.afterClosed().subscribe((results) => {
+            this.router.navigate(['/agency/brigades/edit'], { queryParams: { name: '200' } }).then(() => {});
+        });
     }
 
     public deleteBrigadeByName(brigadeName: string): void {
