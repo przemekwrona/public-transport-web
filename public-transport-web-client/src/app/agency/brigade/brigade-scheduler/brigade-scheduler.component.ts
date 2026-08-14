@@ -10,7 +10,13 @@ import {
     OnTimeRangeAndTripSelected,
     OnTimeRangeSelectedModalComponent
 } from "./on-time-range-selected-modal/on-time-range-selected-modal.component";
-import {BrigadeBodyV2, BrigadeResource} from "../../../generated/public-transport-api";
+import {
+    BrigadeBodyV2,
+    BrigadeResource,
+    BrigadeService,
+    CalendarSymbolId
+} from "../../../generated/public-transport-api";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 @Component({
     selector: 'app-brigade-scheduler',
@@ -30,6 +36,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     scheduler!: DayPilotSchedulerComponent;
 
     @Input() brigadeEvent: BrigadeModel[] = []
+    @Input() calendarSymbolId: CalendarSymbolId = {} as CalendarSymbolId;
     @Input() brigadeResources: BrigadeResource[];
 
     events: DayPilot.EventData[] = [];
@@ -111,7 +118,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         }),
     };
 
-    constructor(private ds: BrigadeSchedulerService, private dialog: MatDialog) {
+    constructor(private ds: BrigadeSchedulerService, private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -169,6 +176,12 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             // Add the new event to the DayPilot calendar
             const startDate = moment(result.start).format('HH:mm');
             const endDate = moment(result.end).format('HH:mm');
+
+            const instance: string = this.agencyStorage.getInstance();
+
+            this.brigadeService.getNextBrigadeEventSequence(instance, this.calendarSymbolId.calendarItemId.code, this.calendarSymbolId.symbol, result.resourceId).subscribe((response) => {
+                console.log(response);
+            });
             const event: DayPilot.EventData = {
                 start: new DayPilot.Date(result.start),
                 end: new DayPilot.Date(result.end),
