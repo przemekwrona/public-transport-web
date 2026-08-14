@@ -49,8 +49,4 @@ public class CalendarItemEntity {
 
     private String sequenceHex;
 
-    public static String toHex(Integer sequence) {
-        return String.format("%04x", sequence);
-    }
-
 }

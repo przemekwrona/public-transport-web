@@ -24,10 +24,6 @@ public class CalendarItemQueryService {
         return calendarItemQueryRepository.findByAgency(instance);
     }
 
-    public CalendarItemEntity findLastSavedByAgency(String instance) {
-        return calendarItemQueryRepository.findLastSavedByAgency(instance);
-    }
-
     public CalendarItemEntity findByAgencyCalendarCode(String instance, String calendarCode) {
         return calendarItemQueryRepository.findByAgencyAndSequenceHexEquals(instance, calendarCode);
     }
