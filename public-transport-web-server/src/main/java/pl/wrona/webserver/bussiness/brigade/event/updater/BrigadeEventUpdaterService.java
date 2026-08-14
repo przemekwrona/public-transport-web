@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.PutBrigadeEventBody;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
@@ -15,6 +16,7 @@ import pl.wrona.webserver.security.PreAgencyAuthorize;
 public class BrigadeEventUpdaterService {
 
     private final BrigadeEventCommandRepository brigadeEventCommandRepository;
+    private final BrigadeEventQueryService brigadeEventQueryService;
     private final BrigadeResourceQueryService brigadeResourceQueryService;
 
     @PreAgencyAuthorize
@@ -23,14 +25,19 @@ public class BrigadeEventUpdaterService {
         var resource = brigadeResourceQueryService.findByAgencyAndCalendarAndSymbolAndResourceCode(
                 instance, calendarCode, symbol, resourceCode);
 
-        var brigadeEvent = new BrigadeEventEntity();
+        var brigadeEvent = brigadeEventQueryService.findByAgencyAndCalendarAndSymbolAndEventHex(
+                instance, calendarCode, symbol, putBrigadeEventBody.getSequenceHex());
+        if (brigadeEvent == null) {
+            brigadeEvent = new BrigadeEventEntity();
+            brigadeEvent.setSequence(putBrigadeEventBody.getSequence());
+            brigadeEvent.setSequenceHex(putBrigadeEventBody.getSequenceHex());
+        }
+
         brigadeEvent.setStartSecond(putBrigadeEventBody.getStartSecond());
         brigadeEvent.setEndSecond(putBrigadeEventBody.getEndSecond());
         brigadeEvent.setResource(resource);
         brigadeEvent.setLine(putBrigadeEventBody.getLine());
         brigadeEvent.setName(putBrigadeEventBody.getName());
-        brigadeEvent.setSequence(putBrigadeEventBody.getSequence());
-        brigadeEvent.setSequenceHex(putBrigadeEventBody.getSequenceHex());
 
         brigadeEventCommandRepository.save(brigadeEvent);
 

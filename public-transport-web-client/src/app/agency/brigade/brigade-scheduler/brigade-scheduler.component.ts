@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, signal, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
 import {CommonModule} from "@angular/common";
 import {BrigadeModel} from "../brigade-editor/brigade-editor.model";
@@ -90,7 +90,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         },
         eventMoveHandling: "Update",
         onEventMoved: (args) => {
-            console.log("Event moved: " + args.e.text());
+            this.updateBrigadeEvent(args);
         },
         onEventClick: (args) => {
             console.log('On event click');
@@ -139,12 +139,18 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                 const arrivalTime = moment().startOf('day').add(event.endSecond, 'seconds');
 
                 return {
-                    id: `${event.line}_${event.sequence}_${resource.sequence}`,
+                    id: event.sequenceHex,
                     resource: resource.sequenceHex,
                     start: departureTime.format('YYYY-MM-DDTHH:mm:ss'),
                     end: arrivalTime.format('YYYY-MM-DDTHH:mm:ss'),
                     text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${event.line} ${event.name}`,
-                    color: '#e69138'
+                    color: '#e69138',
+                    tags: {
+                        line: event.line,
+                        name: event.name,
+                        sequence: event.sequence,
+                        sequenceHex: event.sequenceHex
+                    }
                 } as DayPilot.EventData;
             });
         });
@@ -178,12 +184,21 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             const instance: string = this.agencyStorage.getInstance();
 
             this.brigadeService.getNextBrigadeEventSequence(instance, this.calendarSymbolId.calendarItemId.code, this.calendarSymbolId.symbol, result.resourceId).subscribe((response) => {
+                const line = result.tripId.routeId.line;
+                const name = result.tripId.routeId.name;
+
                 const event: DayPilot.EventData = {
                     start: new DayPilot.Date(result.start),
                     end: new DayPilot.Date(result.end),
                     id: response.sequenceHex,
                     resource: result.resourceId,
-                    text: `${startDate}-${endDate}\n${result.tripId.routeId.line} ${result.origin} - ${result.destination} ${result.tripId.variantMode}` // Data returned from your modal
+                    text: `${startDate}-${endDate}\n${line} ${result.origin} - ${result.destination} ${result.tripId.variantMode}`,
+                    tags: {
+                        line,
+                        name,
+                        sequence: response.sequence,
+                        sequenceHex: response.sequenceHex
+                    }
                 } as DayPilot.EventData;
 
                 const startMoment = moment(result.start);
@@ -193,8 +208,8 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                 const putBrigadeEventBody: PutBrigadeEventBody = {
                     startSecond: startMoment.diff(midnight, 'seconds'),
                     endSecond: endMoment.diff(midnight, 'seconds'),
-                    line: result.tripId.routeId.line,
-                    name: result.tripId.routeId.name,
+                    line,
+                    name,
                     sequence: response.sequence,
                     sequenceHex: response.sequenceHex
                 };
@@ -210,6 +225,42 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                 });
             });
 
+        });
+    }
+
+    // --- UPDATE EVENT (MOVE) ---
+    updateBrigadeEvent(args: DayPilot.SchedulerEventMovedArgs): void {
+        const tags = args.e.data.tags ?? {};
+        const line: string = tags.line;
+        const name: string = tags.name;
+        const sequence: number = tags.sequence;
+        const sequenceHex: string = tags.sequenceHex ?? String(args.e.id());
+
+        const startMoment = moment(args.newStart.toString());
+        const endMoment = moment(args.newEnd.toString());
+        const midnight = startMoment.clone().startOf('day');
+
+        const putBrigadeEventBody: PutBrigadeEventBody = {
+            startSecond: startMoment.diff(midnight, 'seconds'),
+            endSecond: endMoment.diff(midnight, 'seconds'),
+            line,
+            name,
+            sequence,
+            sequenceHex
+        };
+
+        const instance: string = this.agencyStorage.getInstance();
+
+        this.brigadeService.putBrigadeEvent(
+            instance,
+            this.calendarSymbolId.calendarItemId.code,
+            this.calendarSymbolId.symbol,
+            String(args.newResource),
+            putBrigadeEventBody
+        ).subscribe(() => {
+            const startDate = startMoment.format('HH:mm');
+            const endDate = endMoment.format('HH:mm');
+            args.e.text(`${startDate}-${endDate}\n${line} ${name}`);
         });
     }
 
