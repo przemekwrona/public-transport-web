@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.bussiness.brigade.details.BrigadeGroupDetailsService;
+import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorService;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
 import pl.wrona.webserver.bussiness.brigade.group.pagination.BrigadePaginationService;
 
@@ -30,6 +31,7 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadeGroupCreatorService brigadeGroupCreatorService;
     private final BrigadePaginationService brigadePaginationService;
     private final BrigadeGroupDetailsService brigadeGroupDetailsService;
+    private final BrigadeEventCreatorService brigadeEventCreatorService;
 
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
@@ -43,7 +45,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<NextBrigadeEventSequenceResponse> getNextBrigadeEventSequence(String agency, String calendarCode, String symbol, String resourceCode) {
-        return null;
+        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeEventCreatorService.getNextBrigadeEventSequence(agency, calendarCode, symbol, resourceCode));
     }
 
     @Override
