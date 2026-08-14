@@ -218,30 +218,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
-  /agency/{agency}/brigades/details:
-    post:
-      tags:
-        - brigade
-      operationId: getBrigadeByBrigadeName
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: './paths/brigade-api.yaml#/components/schemas/BrigadePayload'
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: './paths/brigade-api.yaml#/components/schemas/BrigadeBody'
-
   /otp/routers/{instance_id}/plan/summary:
     get:
       tags:
@@ -963,6 +939,9 @@ paths:
 
   /agency/{agency}/brigades:
     $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1brigades'
+
+  /agency/{agency}/brigades/details:
+    $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1brigades~1details'
 
   /agency/{agency}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
     $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1calendar~1{calendarCode}~1symbol~1{calendarSymbol}~1brigade'

@@ -94,6 +94,30 @@ paths:
               schema:
                 $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
+  /agency/{agency}/brigades/details:
+    post:
+      tags:
+        - brigade
+      operationId: getBrigadeByBrigadeName
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrigadePayload'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrigadeBody'
+
   /agency/{agency}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
     post:
       tags:
