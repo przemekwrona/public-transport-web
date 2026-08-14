@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>Dodaj nową brygadę</h2>
+<form [formGroup]="modelForm" (ngSubmit)="createBrigade()">
+
+    <mat-dialog-content class="mat-typography">
+        <p>
+            Brygada to harmonogram kursów przypisanych jednemu kierowcy do realizacji w ciągu doby.
+            Prosimy o podanie nazwy brygady oraz wskazanie kalendarza, na którym ma obowiązywać.
+        </p>
+
+        <div class="lg:py-5 py-2.5">
+            <div class="flex flex-wrap justify-between gap-5">
+                <div class="flex flex-col">
+                    <div class="text-gray-900 text-sm font-medium">
+                        Nazwa brygady
+                    </div>
+                    <span class="text-gray-700 text-2sm">Unikalna nazwa identyfikująca brygadę w systemie.</span>
+                </div>
+
+                <span class="sm:max-w-full xl:min-w-96">
+                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                        <mat-label>Nazwa brygady</mat-label>
+                        <input matInput type="text" formControlName="brigadeName" placeholder="Nazwa brygady">
+                        @if (hasError('brigadeName', 'required')) {
+                            <mat-error>Nazwa brygady jest <strong>wymagana</strong></mat-error>
+                        }
+                    </mat-form-field>
+                </span>
+            </div>
+        </div>
+
+        <div class="lg:py-5 py-2.5">
+            <div class="flex flex-wrap justify-between gap-5">
+                <div class="flex flex-col">
+                    <div class="text-gray-900 text-sm font-medium">
+                        Kalendarz
+                    </div>
+                    <span class="text-gray-700 text-2sm">Wybierz kalendarz, na którym brygada ma obowiązywać.</span>
+                </div>
+
+                <span class="sm:max-w-full xl:min-w-96">
+                    <mat-form-field appearance="outline" class="w-full custom-form-field">
+                        <mat-label>Kalendarz</mat-label>
+                        <mat-select formControlName="calendarId" [compareWith]="compareByCalendarId">
+                            @for (calendar of calendarsResponse.calendars || []; track calendar) {
+                                <mat-option [value]="calendar.calendarId">
+                                    <div>
+                                        <div>{{ calendar.designation }} - ({{ calendar.startDate }} -- {{ calendar.endDate }})</div>
+                                        <div>{{ calendar.description }}</div>
+                                    </div>
+                                </mat-option>
+                            }
+                        </mat-select>
+                        @if (hasError('calendarId', 'required')) {
+                            <mat-error>Kalendarz jest <strong>wymagany</strong></mat-error>
+                        }
+                    </mat-form-field>
+                </span>
+            </div>
+        </div>
+
+        @if (modelForm.valid) {
+            <span>Brygada <strong>{{ brigadeNameControl.value }}</strong> zostanie przypisana do wybranego kalendarza.</span>
+        }
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Anuluj</button>
+        <button type="submit" mat-button cdkFocusInitial>Zapisz i dodaj kursy</button>
+    </mat-dialog-actions>
+</form>

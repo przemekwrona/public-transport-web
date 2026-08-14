@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a [routerLink]="['/agency/brigades/create']" class="btn btn-sm btn-primary">Dodaj nową brygadę</a>
+            <button (click)="createBrigade()" class="btn btn-sm btn-primary">Dodaj nową brygadę</button>
         </div>
     </div>
 </div>
@@ -75,9 +75,9 @@
                             </p>
                         </div>
                         <div class="flex justify-center mb-5">
-                            <a [routerLink]="['/agency/brigades/create']" class="btn btn-primary">
+                            <button (click)="createBrigade()" class="btn btn-primary">
                                 Dodaj Nową Brygadę
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
