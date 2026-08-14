@@ -416,6 +416,10 @@ components:
           type: integer
         sequenceHex:
           type: string
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrigadeEvent'
 
     BrigadeBodyV2:
       type: object
