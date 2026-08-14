@@ -14,7 +14,8 @@ import {
     BrigadeBodyV2,
     BrigadeResource,
     BrigadeService,
-    CalendarSymbolId
+    CalendarSymbolId,
+    PutBrigadeEventBody
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
@@ -188,21 +189,31 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                     text: `${startDate}-${endDate}\n${result.tripId.routeId.line} ${result.origin} - ${result.destination} ${result.tripId.variantMode}` // Data returned from your modal
                 } as DayPilot.EventData;
 
-                dpControl.events.add(event);
+                const startMoment = moment(result.start);
+                const endMoment = moment(result.end);
+                const midnight = startMoment.clone().startOf('day');
 
-                // this.brigadeService.updateBrigade(response.sequenceHex);
+                const putBrigadeEventBody: PutBrigadeEventBody = {
+                    startSecond: startMoment.diff(midnight, 'seconds'),
+                    endSecond: endMoment.diff(midnight, 'seconds'),
+                    line: result.tripId.routeId.line,
+                    name: result.tripId.routeId.name,
+                    sequence: response.sequence,
+                    sequenceHex: response.sequenceHex
+                };
+
+                this.brigadeService.putBrigadeEvent(
+                    instance,
+                    this.calendarSymbolId.calendarItemId.code,
+                    this.calendarSymbolId.symbol,
+                    result.resourceId,
+                    putBrigadeEventBody
+                ).subscribe(() => {
+                    dpControl.events.add(event);
+                });
             });
 
         });
-    }
-
-    public addBrigade(): void {
-        const resources: ResourceData[] = this.scheduler.control.resources;
-        const emptyResource: ResourceData = {} as ResourceData;
-        emptyResource.name = 'Brygada 2';
-        emptyResource.id = 'GB';
-
-        this.scheduler.control.update({resources: [...resources, ...[emptyResource]]});
     }
 
 }

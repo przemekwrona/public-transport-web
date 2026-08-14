@@ -19,9 +19,9 @@ public class BrigadeEventUpdaterService {
 
     @PreAgencyAuthorize
     @Transactional
-    public Status putBrigadeEvent(String agency, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
+    public Status putBrigadeEvent(String instance, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
         var resource = brigadeResourceQueryService.findByAgencyAndCalendarAndSymbolAndResourceCode(
-                agency, calendarCode, symbol, resourceCode);
+                instance, calendarCode, symbol, resourceCode);
 
         var brigadeEvent = new BrigadeEventEntity();
         brigadeEvent.setStartSecond(putBrigadeEventBody.getStartSecond());
