@@ -46,8 +46,7 @@
                         <button (click)="deleteBrigadeByName(brigade?.brigadeName)"
                                 class="btn btn-sm btn-dark shrink-0">Usuń
                         </button>
-
-                        <a [routerLink]="['/agency/brigades/edit']"
+                        <a [routerLink]="['/agency/calendars', brigade.calendarSymbolId.calendarItemId.code, 'symbol', brigade.calendarSymbolId.symbol, 'brigades', 'edit']"
                            [queryParams]="{name: brigade?.brigadeName}"
                            class="btn btn-sm shrink-0 btn-secondary">Pokaż szczegóły</a>
                     </div>
