@@ -5,7 +5,7 @@ import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.TimetableTrip;
 import org.igeolab.iot.pt.server.api.model.TripDepartures;
 import org.igeolab.iot.pt.server.api.model.TripFilter;
-import org.igeolab.iot.pt.server.api.model.TripId2;
+import org.igeolab.iot.pt.server.api.model.TripId3;
 import org.igeolab.iot.pt.server.api.model.TripResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
@@ -61,7 +61,7 @@ public class TimetableTripPaginationService {
 
     private static TimetableTrip mapTripEntity(TripEntity trip) {
         return new TimetableTrip()
-                .tripId(new TripId2()
+                .tripId(new TripId3()
                         .routeId(new RouteId()
                                 .line(trip.getRoute().getLine())
                                 .name(trip.getRoute().getName())

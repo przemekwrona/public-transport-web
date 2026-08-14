@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core.brigade;
+package pl.wrona.webserver.bussiness.brigade;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.BrigadeBody;
@@ -7,16 +7,21 @@ import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.BrigadeTrip;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
-import org.igeolab.iot.pt.server.api.model.CalendarSymbolId;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolId1;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeBody;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripId2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.bussiness.trip.TripService;
+import pl.wrona.webserver.core.brigade.BrigadeEntity;
+import pl.wrona.webserver.core.brigade.BrigadeRepository;
+import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
+import pl.wrona.webserver.core.brigade.BrigadeTripRepository;
 import pl.wrona.webserver.core.calendar.CalendarQueryService;
 import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
@@ -28,7 +33,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class BrigadeService {
+public class BrigadeQueryService {
 
     private final AgencyService agencyService;
 
@@ -103,7 +108,7 @@ public class BrigadeService {
         var agencyEntity = this.agencyService.findAgencyByAgencyCode(instance);
         List<BrigadeTrip> trips = brigadeTripRepository.findAllByBrigadeName(instance, brigadePayload.getBrigadeName()).stream()
                 .map(brigade -> new BrigadeTrip()
-                        .tripId(new TripId()
+                        .tripId(new TripId2()
                                 .routeId(new RouteId()
                                         .line(brigade.getLine())
                                         .name(brigade.getName()))
@@ -120,7 +125,7 @@ public class BrigadeService {
         return brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyEntity, brigadePayload.getBrigadeName())
                 .map(brigadeEntity -> new BrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
-                        .calendarSymbolId(new CalendarSymbolId()
+                        .calendarSymbolId(new CalendarSymbolId1()
                                 .calendarItemId(new CalendarItemId1()
                                         .code(brigadeEntity.getCalendar().getCalendarItem().getSequenceHex()))
                                 .symbol(brigadeEntity.getCalendar().getDesignation()))
@@ -131,9 +136,14 @@ public class BrigadeService {
     @PreAgencyAuthorize
     public GetBrigadeResponse findBrigades(String instance) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
+
         var brigades = brigadeRepository.findAllByAgency(agencyEntity).stream()
                 .map(brigadeEntity -> new GetBrigadeBody()
                         .brigadeName(brigadeEntity.getBrigadeNumber())
+                        .calendarSymbolId(new CalendarSymbolId1()
+                                .calendarItemId(new CalendarItemId1()
+                                        .code(brigadeEntity.getCalendar().getCalendarItem().getSequenceHex()))
+                                .symbol(brigadeEntity.getCalendar().getDesignation()))
                         .calendarDesignation(brigadeEntity.getCalendar().getDesignation())
                         .calendarDescription(brigadeEntity.getCalendar().getDescription()))
                 .toList();
