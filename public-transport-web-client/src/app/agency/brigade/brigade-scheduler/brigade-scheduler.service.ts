@@ -6,10 +6,6 @@ import {DayPilot} from "@daypilot/daypilot-lite-angular";
 @Injectable()
 export class BrigadeSchedulerService {
 
-    resources: any[] = [
-        { name: "Brygada 1", id: "GA", expanded: true}
-    ];
-
     events: any[] = [
         {
             id: "1",
@@ -52,15 +48,4 @@ export class BrigadeSchedulerService {
         // return this.http.get("/api/events?from=" + from.toString() + "&to=" + to.toString());
     }
 
-    getResources(): Observable<any[]> {
-
-        // simulating an HTTP request
-        return new Observable(observer => {
-            setTimeout(() => {
-                observer.next(this.resources);
-            }, 200);
-        });
-
-        // return this.http.get("/api/resources");
-    }
 }
