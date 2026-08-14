@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarItemRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarItemResponse;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemCommandService;
-import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
 import pl.wrona.webserver.bussiness.calendar.CalendarSequenceQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
@@ -18,7 +18,6 @@ public class CalendarItemCreatorService {
 
     private AgencyService agencyService;
     private CalendarSequenceQueryService calendarSequenceQueryService;
-    private CalendarItemQueryService calendarItemQueryService;
     private CalendarItemCommandService calendarItemCommandService;
 
     @PreAgencyAuthorize
@@ -35,10 +34,8 @@ public class CalendarItemCreatorService {
         calendarItem.setStartDate(createCalendarItemRequest.getStartDate());
         calendarItem.setEndDate(createCalendarItemRequest.getEndDate());
         calendarItem.setSequence(nextValue);
-        calendarItem.setSequenceHex(String.format("%04d", Integer.parseInt(Integer.toString(nextValue, 36))).replace(' ', '0'));
+        calendarItem.setSequenceHex(Hex.toHex(nextValue));
    
-   
-
         var savedCalendarItem = calendarItemCommandService.save(calendarItem);
 
         return new CreateCalendarItemResponse()
