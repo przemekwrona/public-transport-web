@@ -218,95 +218,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
-  /agency/{agency}/brigades:
-    get:
-      tags:
-        - brigade
-      summary: Get list of brigades
-      operationId: getBrigades
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetBrigadeResponse'
-    post:
-      tags:
-        - brigade
-      summary: Create new brigade
-      operationId: createBrigade
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BrigadeBody'
-      responses:
-        201:
-          description: CREATED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-    put:
-      tags:
-        - brigade
-      summary: Update brigade
-      operationId: updateBrigade
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BrigadePatchBody'
-      responses:
-        201:
-          description: CREATED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-    delete:
-      tags:
-        - brigade
-      summary: Delete brigade
-      operationId: deleteBrigade
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BrigadeDeleteBody'
-      responses:
-        200:
-          description: DELETED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-
   /agency/{agency}/brigades/details:
     post:
       tags:
@@ -322,14 +233,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BrigadePayload'
+              $ref: './paths/brigade-api.yaml#/components/schemas/BrigadePayload'
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BrigadeBody'
+                $ref: './paths/brigade-api.yaml#/components/schemas/BrigadeBody'
 
   /otp/routers/{instance_id}/plan/summary:
     get:
@@ -1050,6 +961,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CalendarBody'
 
+  /agency/{agency}/brigades:
+    $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1brigades'
+
   /agency/{agency}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
     $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1calendar~1{calendarCode}~1symbol~1{calendarSymbol}~1brigade'
 
@@ -1658,74 +1572,6 @@ components:
           type: string
         variantDescription:
           type: string
-
-    BrigadePayload:
-      type: object
-      properties:
-        brigadeName:
-          type: string
-
-    BrigadeBody:
-      type: object
-      properties:
-        brigadeName:
-          type: string
-        calendarSymbolId:
-          $ref: './public-transport-core.yaml/#/components/schemas/CalendarSymbolId'
-        trips:
-          type: array
-          items:
-            $ref: '#/components/schemas/BrigadeTrip'
-
-    BrigadeDeleteBody:
-      type: object
-      properties:
-        brigadeName:
-          type: string
-
-    BrigadePatchBody:
-      type: object
-      properties:
-        brigadePayload:
-          $ref: '#/components/schemas/BrigadePayload'
-        brigadeBody:
-          $ref: '#/components/schemas/BrigadeBody'
-
-    BrigadeTrip:
-      type: object
-      properties:
-        tripId:
-          $ref: '#/components/schemas/TripId'
-        tripSequence:
-          type: integer
-        origin:
-          type: string
-        destination:
-          type: string
-        travelTimeInSeconds:
-          type: integer
-        arrivalTime:
-          type: integer
-        departureTime:
-          type: integer
-
-    GetBrigadeBody:
-      type: object
-      properties:
-        brigadeName:
-          type: string
-        calendarDesignation:
-          type: string
-        calendarDescription:
-          type: string
-
-    GetBrigadeResponse:
-      type: object
-      properties:
-        brigades:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetBrigadeBody'
 
     UpdateCalendarRequest:
       type: object
