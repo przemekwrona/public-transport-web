@@ -36,7 +36,6 @@ public class BrigadeQueryService {
     private final BrigadeRepository brigadeRepository;
     private final BrigadeTripRepository brigadeTripRepository;
     private final CalendarSymbolQueryService calendarSymbolQueryService;
-    private final CalendarQueryService calendarQueryService;
 
     private final TripService tripService;
 
@@ -97,25 +96,6 @@ public class BrigadeQueryService {
         brigadeTripRepository.saveAll(brigadeTrips);
 
         return new Status().status(Status.StatusEnum.CREATED);
-    }
-
-    @PreAgencyAuthorize
-    public GetBrigadeResponse findBrigades(String instance) {
-        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-
-        var brigades = brigadeRepository.findAllByAgency(agencyEntity).stream()
-                .map(brigadeEntity -> new GetBrigadeBody()
-                        .brigadeName(brigadeEntity.getBrigadeNumber())
-                        .calendarSymbolId(new CalendarSymbolId1()
-                                .calendarItemId(new CalendarItemId1()
-                                        .code(brigadeEntity.getCalendar().getCalendarItem().getSequenceHex()))
-                                .symbol(brigadeEntity.getCalendar().getDesignation()))
-                        .calendarDesignation(brigadeEntity.getCalendar().getDesignation())
-                        .calendarDescription(brigadeEntity.getCalendar().getDescription()))
-                .toList();
-
-        return new GetBrigadeResponse()
-                .brigades(brigades);
     }
 
     @PreAgencyAuthorize
