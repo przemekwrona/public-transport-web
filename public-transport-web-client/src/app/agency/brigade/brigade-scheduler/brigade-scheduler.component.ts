@@ -180,17 +180,19 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             const instance: string = this.agencyStorage.getInstance();
 
             this.brigadeService.getNextBrigadeEventSequence(instance, this.calendarSymbolId.calendarItemId.code, this.calendarSymbolId.symbol, result.resourceId).subscribe((response) => {
-                console.log(response);
-            });
-            const event: DayPilot.EventData = {
-                start: new DayPilot.Date(result.start),
-                end: new DayPilot.Date(result.end),
-                id: DayPilot.guid(),
-                resource: result.resourceId,
-                text: `${startDate}-${endDate}\n${result.tripId.routeId.line} ${result.origin} - ${result.destination} ${result.tripId.variantMode}` // Data returned from your modal
-            } as DayPilot.EventData;
+                const event: DayPilot.EventData = {
+                    start: new DayPilot.Date(result.start),
+                    end: new DayPilot.Date(result.end),
+                    id: response.sequenceHex,
+                    resource: result.resourceId,
+                    text: `${startDate}-${endDate}\n${result.tripId.routeId.line} ${result.origin} - ${result.destination} ${result.tripId.variantMode}` // Data returned from your modal
+                } as DayPilot.EventData;
 
-            dpControl.events.add(event);
+                dpControl.events.add(event);
+
+                // this.brigadeService.updateBrigade(response.sequenceHex);
+            });
+
         });
     }
 
