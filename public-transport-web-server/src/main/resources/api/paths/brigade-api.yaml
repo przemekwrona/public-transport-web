@@ -248,6 +248,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/NextBrigadeEventSequenceResponse'
 
+    put:
+      tags:
+        - brigade
+      summary: Create brigade event for resource
+      operationId: putBrigadeEvent
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: symbol
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: resourceCode
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutBrigadeEventBody'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../public-transport-api.yaml/#/components/schemas/Status'
+
 components:
   schemas:
     CreateCalendarSymbolBrigadeRequest:
@@ -278,6 +318,22 @@ components:
     NextBrigadeEventSequenceResponse:
       type: object
       properties:
+        sequence:
+          type: integer
+        sequenceHex:
+          type: string
+
+    PutBrigadeEventBody:
+      type: object
+      properties:
+        startSecond:
+          type: integer
+        endSecond:
+          type: integer
+        line:
+          type: string
+        name:
+          type: string
         sequence:
           type: integer
         sequenceHex:
