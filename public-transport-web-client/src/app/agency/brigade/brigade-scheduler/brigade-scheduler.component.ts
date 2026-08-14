@@ -4,14 +4,13 @@ import {BrigadeSchedulerService} from "./brigade-scheduler.service";
 import {CommonModule} from "@angular/common";
 import {BrigadeModel} from "../brigade-editor/brigade-editor.model";
 import moment from "moment";
-import ResourceData = DayPilot.ResourceData;
 import {MatDialog} from "@angular/material/dialog";
 import {
     OnTimeRangeAndTripSelected,
     OnTimeRangeSelectedModalComponent
 } from "./on-time-range-selected-modal/on-time-range-selected-modal.component";
 import {
-    BrigadeBodyV2,
+    BrigadeEvent,
     BrigadeResource,
     BrigadeService,
     CalendarSymbolId,
@@ -132,26 +131,26 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         // 1. Update resources directly on the control
         const resources = this.brigadeResources
             .map((resource: BrigadeResource) => {
-                return  {name: `#${resource.sequenceHex}`, id: resource.sequenceHex, expanded: true};
+                return {name: `#${resource.sequenceHex}`, id: resource.sequenceHex, expanded: true};
             }) as any[];
         this.scheduler.control.update({resources: resources});
 
-        const events = this.brigadeEvent.map(e => {
-            const event: DayPilot.EventData = {} as DayPilot.EventData;
-            event.resource = "0001";
+        const events: DayPilot.EventData[] = this.brigadeResources.flatMap((resource: BrigadeResource) => {
+            return resource.events.map((event: BrigadeEvent) => {
+                const departureTime = moment().startOf('day').add(event.startSecond, 'seconds');
+                const arrivalTime = moment().startOf('day').add(event.endSecond, 'seconds');
 
-            const departureTime = moment(e.departureTime, "HH:mm");
-            const arrivalTime = departureTime.clone().add(e.travelTimeInSeconds + 60, 'second');
-            const r = Math.random();
-            return {
-                id: `${e.line}_${e.mode}_${r}`,
-                resource: "GA",
-                start: departureTime.format('yyyy-MM-DDTHH:mm:SS'),
-                end: arrivalTime.format('yyyy-MM-DDTHH:mm:SS'),
-                text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${e.line} ${e.name} ${e.mode}`,
-                color: "#e69138"
-            } as DayPilot.EventData
+                return {
+                    id: `${event.line}_${event.sequence}_${resource.sequence}`,
+                    resource: resource.sequenceHex,
+                    start: departureTime.format('YYYY-MM-DDTHH:mm:ss'),
+                    end: arrivalTime.format('YYYY-MM-DDTHH:mm:ss'),
+                    text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${event.line} ${event.name}`,
+                    color: '#e69138'
+                } as DayPilot.EventData;
+            });
         });
+
         // 2. Update events directly on the control
         this.scheduler.control.update({events: events});
 
