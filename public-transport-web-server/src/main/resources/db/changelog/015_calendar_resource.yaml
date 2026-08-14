@@ -111,3 +111,97 @@ databaseChangeLog:
       rollback:
         - dropTable:
             tableName: brigade_resource_sequences
+
+  - changeSet:
+      id: create-table-brigade-event
+      author: pwrona
+      changes:
+        - createSequence:
+            sequenceName: brigade_event_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: brigade_event
+            columns:
+              - column:
+                  name: brigade_event_id
+                  type: integer
+                  defaultValueSequenceNext: brigade_event_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_brigade_event
+                    nullable: false
+              - column:
+                  name: start_second
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_second
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resource_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_brigade_event_brigade_resource
+                    references: brigade_resource(brigade_resource_id)
+              - column:
+                  name: line
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sequence
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sequence_hex
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: brigade_event
+        - dropSequence:
+            sequenceName: brigade_event_id_seq
+
+  - changeSet:
+      id: create-brigade-event-sequence-table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: brigade_event_sequence
+            columns:
+              - column:
+                  name: calendar_code
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: calendar_symbol
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: next_value
+                  type: BIGINT
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: brigade_event_sequence
+            columnNames: calendar_code, calendar_symbol
+            constraintName: pk_brigade_event_sequence
+      rollback:
+        - dropTable:
+            tableName: brigade_event_sequence
