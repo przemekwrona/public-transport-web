@@ -17,6 +17,7 @@ import moment from "moment";
 export interface OnTimeRangeAndTripSelected {
     start: string
     end: string
+    resourceId: string
     tripId: TripId1
     origin: string
     destination: string
@@ -42,7 +43,7 @@ export class OnTimeRangeSelectedModalComponent {
 
     private formBuilder: FormBuilder = inject(FormBuilder);
 
-    data = inject<{ start: string, end: string }>(MAT_DIALOG_DATA);
+    data = inject<{ start: string, end: string, resourceId: string }>(MAT_DIALOG_DATA);
 
     modelForm = this.formBuilder.group({
         route: [null, [Validators.required]]
@@ -62,6 +63,7 @@ export class OnTimeRangeSelectedModalComponent {
             const results: OnTimeRangeAndTripSelected = {} as OnTimeRangeAndTripSelected;
             results.start = this.data.start;
             results.end = moment(this.data.start).add(lastStop.calculatedSeconds, 'seconds').format("yyyy-MM-DDTHH:mm:SS");
+            results.resourceId = this.data.resourceId;
             results.tripId = tripId;
             results.origin = tripDetails.originStopName;
             results.destination = tripDetails.destinationStopName;
