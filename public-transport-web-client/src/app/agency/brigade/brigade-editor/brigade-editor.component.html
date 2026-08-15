@@ -59,11 +59,10 @@
 
     <div class="border-t border-white my-2.5"></div>
 
-    {{ brigaderResponse | json }}
     @for (brigade of brigaderResponse?.brigade?.brigades || []; track brigade) {
         <app-brigade-scheduler [brigadeEvent]="[]"
-                               [brigadeResources]="brigade.brigadeResources"
-                               [calendarSymbolId]="calendarId"></app-brigade-scheduler>
+                               [brigadeBody]="brigade"
+                               [brigadeCode]="brigaderResponse.brigade.sequenceHex"></app-brigade-scheduler>
     }
 
     <div class="border-t border-white my-2.5"></div>

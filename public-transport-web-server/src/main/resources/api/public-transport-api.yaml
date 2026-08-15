@@ -949,8 +949,8 @@ paths:
   /agency/{agency}/calendar/{calendarCode}/symbol/{symbol}/resource:
     $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1calendar~1{calendarCode}~1symbol~1{symbol}~1resource'
 
-  /agency/{agency}/calendar/{calendarCode}/symbol/{symbol}/resource/{resourceCode}/event:
-    $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1calendar~1{calendarCode}~1symbol~1{symbol}~1resource~1{resourceCode}~1event'
+  /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{symbol}/resource/{resourceCode}/event:
+    $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1brigades~1{brigadeCode}~1calendar~1{calendarCode}~1symbol~1{symbol}~1resource~1{resourceCode}~1event'
 
   /agency/{agency}/gtfs/download:
     get:

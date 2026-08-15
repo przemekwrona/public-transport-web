@@ -9,6 +9,7 @@ import {
     OnTimeRangeSelectedModalComponent
 } from "./on-time-range-selected-modal/on-time-range-selected-modal.component";
 import {
+    BrigadeBodyV2,
     BrigadeEvent,
     BrigadeResource,
     BrigadeService,
@@ -34,8 +35,10 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     scheduler!: DayPilotSchedulerComponent;
 
     @Input() brigadeEvent: BrigadeModel[] = []
-    @Input() calendarSymbolId: CalendarSymbolId = {} as CalendarSymbolId;
-    @Input() brigadeResources: BrigadeResource[];
+    @Input() brigadeBody: BrigadeBodyV2 = {} as BrigadeBodyV2;
+    @Input() brigadeCode: string = '';
+
+    // @Input() brigadeResources: BrigadeResource[];
 
     events: DayPilot.EventData[] = [];
 
@@ -127,13 +130,13 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         var to = this.scheduler.control.visibleEnd();
 
         // 1. Update resources directly on the control
-        const resources = this.brigadeResources
+        const resources = this.brigadeBody.brigadeResources
             .map((resource: BrigadeResource) => {
                 return {name: `#${resource.sequenceHex}`, id: resource.sequenceHex, expanded: true};
             }) as any[];
         this.scheduler.control.update({resources: resources});
 
-        const events: DayPilot.EventData[] = this.brigadeResources.flatMap((resource: BrigadeResource) => {
+        const events: DayPilot.EventData[] = this.brigadeBody.brigadeResources.flatMap((resource: BrigadeResource) => {
             return resource.events.map((event: BrigadeEvent) => {
                 const departureTime = moment().startOf('day').add(event.startSecond, 'seconds');
                 const arrivalTime = moment().startOf('day').add(event.endSecond, 'seconds');
@@ -183,7 +186,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
 
             const instance: string = this.agencyStorage.getInstance();
 
-            this.brigadeService.getNextBrigadeEventSequence(instance, this.calendarSymbolId.calendarItemId.code, this.calendarSymbolId.symbol, result.resourceId).subscribe((response) => {
+            this.brigadeService.getNextBrigadeEventSequence(instance, this.brigadeCode, this.brigadeBody.calendarSymbolId.calendarItemId.code, this.brigadeBody.calendarSymbolId.symbol, result.resourceId).subscribe((response) => {
                 const line = result.tripId.routeId.line;
                 const name = result.tripId.routeId.name;
 
@@ -216,8 +219,9 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
 
                 this.brigadeService.putBrigadeEvent(
                     instance,
-                    this.calendarSymbolId.calendarItemId.code,
-                    this.calendarSymbolId.symbol,
+                    this.brigadeCode,
+                    this.brigadeBody.calendarSymbolId.calendarItemId.code,
+                    this.brigadeBody.calendarSymbolId.symbol,
                     result.resourceId,
                     putBrigadeEventBody
                 ).subscribe(() => {
@@ -253,8 +257,9 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
 
         this.brigadeService.putBrigadeEvent(
             instance,
-            this.calendarSymbolId.calendarItemId.code,
-            this.calendarSymbolId.symbol,
+            this.brigadeCode,
+            this.brigadeBody.calendarSymbolId.calendarItemId.code,
+            this.brigadeBody.calendarSymbolId.symbol,
             String(args.newResource),
             putBrigadeEventBody
         ).subscribe(() => {

@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.brigade.details.BrigadeGroupDetailsService;
 import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorService;
 import pl.wrona.webserver.bussiness.brigade.event.updater.BrigadeEventUpdaterService;
@@ -47,8 +48,8 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<NextBrigadeEventSequenceResponse> getNextBrigadeEventSequence(String agency, String calendarCode, String symbol, String resourceCode) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeEventCreatorService.getNextBrigadeEventSequence(agency, 1, calendarCode, symbol, resourceCode));
+    public ResponseEntity<NextBrigadeEventSequenceResponse> getNextBrigadeEventSequence(String agency, String brigadeCode, String calendarCode, String symbol, String resourceCode) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeEventCreatorService.getNextBrigadeEventSequence(agency, Hex.fromHex(brigadeCode), calendarCode, symbol, resourceCode));
     }
 
     @Override
@@ -57,7 +58,7 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<Status> putBrigadeEvent(String agency, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
+    public ResponseEntity<Status> putBrigadeEvent(String agency, String brigadeCode, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
         return ResponseEntity.ok(brigadeEventUpdaterService.putBrigadeEvent(agency, calendarCode, symbol, resourceCode, putBrigadeEventBody));
     }
 
