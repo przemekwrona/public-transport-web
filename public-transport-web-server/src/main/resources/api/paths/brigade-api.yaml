@@ -155,7 +155,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateCalendarSymbolBrigadeResponse'
 
-  /agency/{agency}/calendar/{calendarCode}/symbol/{symbol}/resource:
+  /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{symbol}/resource:
     get:
       tags:
         - brigade
@@ -164,6 +164,11 @@ paths:
       parameters:
         - in: path
           name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: brigadeCode
           required: true
           schema:
             type: string
@@ -193,6 +198,11 @@ paths:
       parameters:
         - in: path
           name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: brigadeCode
           required: true
           schema:
             type: string
