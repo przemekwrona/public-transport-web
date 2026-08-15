@@ -20,6 +20,13 @@ databaseChangeLog:
                     primaryKeyName: pk_brigade_item
                     nullable: false
               - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_brigade_item_agency
+                    references: agency(agency_id)
+              - column:
                   name: calendar_item_id
                   type: integer
                   constraints:
