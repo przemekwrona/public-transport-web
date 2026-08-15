@@ -32,11 +32,8 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     @ViewChild("scheduler")
     scheduler!: DayPilotSchedulerComponent;
 
-    @Input() brigadeEvent: BrigadeModel[] = []
-    @Input() brigadeBody: BrigadeBodyV2 = {} as BrigadeBodyV2;
     @Input() brigadeCode: string = '';
-
-    // @Input() brigadeResources: BrigadeResource[];
+    @Input() brigadeBody: BrigadeBodyV2 = {} as BrigadeBodyV2;
 
     events: DayPilot.EventData[] = [];
 
@@ -159,11 +156,12 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         // 2. Update events directly on the control
         this.scheduler.control.update({events: events});
 
-        const firstDate = this.brigadeEvent
-            .map(brigade => brigade.departureTime)
-            .map(departureTime => moment(departureTime, "HH:mm"))
-            .reduce((current, next) => current.isBefore(next) ? current : next)
-            .subtract(45, 'minutes');
+        const minStartSeconds: number = this.brigadeBody.brigadeResources
+            .flatMap(brigade => brigade.events)
+            .map(departureTime => departureTime.startSecond)
+            .reduce((current, next) => current <= next ? current : next);
+
+        const firstDate = moment().startOf('day').add(minStartSeconds, 'seconds').subtract(45, 'minutes');
 
         this.scheduler.control.scrollTo(firstDate.format('yyyy-MM-DDTHH:mm:SS'));
     }

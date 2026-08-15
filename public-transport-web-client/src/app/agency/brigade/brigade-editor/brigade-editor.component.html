@@ -32,27 +32,27 @@
                 </div>
             </div>
 
-            <div class="w-full">
-                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label class="form-label flex items-center gap-1 max-w-56">Kalendarz</label>
-                    <mat-form-field appearance="outline" class="w-full custom-form-field">
-                        <mat-label>Kalendarz</mat-label>
-                        <mat-select name="calendar" id="calendar" [(ngModel)]="calendarId"
-                                    [compareWith]="compareByCalendarId">
-                            @for (calendar of calendarsResponse.calendars || []; track calendar) {
-                                <mat-option [value]="calendar.calendarId">
-                                    <div>
-                                        <div> {{ calendar.designation }} - ({{ calendar.startDate }}
-                                            --{{ calendar.endDate }})
-                                        </div>
-                                        <div>{{ calendar.description }}</div>
-                                    </div>
-                                </mat-option>
-                            }
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
+<!--            <div class="w-full">-->
+<!--                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">-->
+<!--                    <label class="form-label flex items-center gap-1 max-w-56">Kalendarz</label>-->
+<!--                    <mat-form-field appearance="outline" class="w-full custom-form-field">-->
+<!--                        <mat-label>Kalendarz</mat-label>-->
+<!--                        <mat-select name="calendar" id="calendar" [(ngModel)]="calendarId"-->
+<!--                                    [compareWith]="compareByCalendarId">-->
+<!--                            @for (calendar of calendarsResponse.calendars || []; track calendar) {-->
+<!--                                <mat-option [value]="calendar.calendarId">-->
+<!--                                    <div>-->
+<!--                                        <div> {{ calendar.designation }} - ({{ calendar.startDate }}-->
+<!--                                            &#45;&#45;{{ calendar.endDate }})-->
+<!--                                        </div>-->
+<!--                                        <div>{{ calendar.description }}</div>-->
+<!--                                    </div>-->
+<!--                                </mat-option>-->
+<!--                            }-->
+<!--                        </mat-select>-->
+<!--                    </mat-form-field>-->
+<!--                </div>-->
+<!--            </div>-->
 
         </div>
     </div>
@@ -60,9 +60,7 @@
     <div class="border-t border-white my-2.5"></div>
 
     @for (brigade of brigaderResponse?.brigade?.brigades || []; track brigade) {
-        <app-brigade-scheduler [brigadeEvent]="[]"
-                               [brigadeBody]="brigade"
-                               [brigadeCode]="brigaderResponse.brigade.sequenceHex"></app-brigade-scheduler>
+        <app-brigade-scheduler [brigadeBody]="brigade" [brigadeCode]="brigaderResponse.brigade.sequenceHex"></app-brigade-scheduler>
     }
 
     <button (click)="addCalendar()" class="btn btn-sm btn-success w-full my-2 justify-center">Dodaj Kalendarz</button>
