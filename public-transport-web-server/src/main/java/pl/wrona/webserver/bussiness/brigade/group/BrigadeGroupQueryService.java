@@ -17,6 +17,10 @@ public class BrigadeGroupQueryService {
         return brigadeGroupQueryRepository.findBtBrigadeCode(instance, brigadeCode);
     }
 
+    public BrigadeGroupEntity findByBrigadeCode(String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
+        return brigadeGroupQueryRepository.findBtBrigadeCode(instance, brigadeCode, calendarCode, calendarSymbol);
+    }
+
     public List<BrigadeGroupEntity> findAll(String instance) {
         return brigadeGroupQueryRepository.findAllByAgencyCode(instance);
     }

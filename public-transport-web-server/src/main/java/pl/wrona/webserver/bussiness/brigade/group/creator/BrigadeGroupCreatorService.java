@@ -7,6 +7,7 @@ import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
+import pl.wrona.webserver.bussiness.brigade.item.BrigadeItemQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceCommandService;
 import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeGroupCommandRepository;
@@ -21,6 +22,7 @@ public class BrigadeGroupCreatorService {
 
     private final BrigadeGroupCommandRepository brigadeGroupCommandRepository;
     private final CalendarSymbolQueryService calendarSymbolQueryService;
+    private final BrigadeItemQueryService brigadeItemQueryService;
     private final BrigadeGroupQueryService brigadeGroupQueryService;
     private final BrigadeResourceCommandService brigadeResourceCommandService;
 
@@ -34,14 +36,14 @@ public class BrigadeGroupCreatorService {
                     .status(new Status().status(Status.StatusEnum.EXISTS));
         }
 
-        var brigadeGroupEntity = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode);
+        var brigadeItemEntity = brigadeItemQueryService.findByBrigadeCode(instance, brigadeCode);
         var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);
 
         var brigadeGroup = new BrigadeGroupEntity();
-        brigadeGroup.setBrigadeItem(brigadeGroupEntity.getBrigadeItem());
+        brigadeGroup.setBrigadeItem(brigadeItemEntity);
         brigadeGroup.setCalendarSymbol(calendarSymbolEntity);
         brigadeGroup.setName(request.getBrigadeName());
-        brigadeGroupCommandRepository.save(brigadeGroupEntity);
+        brigadeGroupCommandRepository.save(brigadeGroup);
 
         var savedBrigadeResource = brigadeResourceCommandService.init(instance, brigadeCode, calendarCode, calendarSymbol);
 

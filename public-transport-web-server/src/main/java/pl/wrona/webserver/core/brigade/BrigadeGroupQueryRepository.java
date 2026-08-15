@@ -18,6 +18,14 @@ public interface BrigadeGroupQueryRepository extends JpaRepository<BrigadeGroupE
 
     @Query("""
             SELECT b FROM BrigadeGroupEntity b
+            WHERE b.calendarSymbol.calendarItem.agency.agencyCode = :instance
+            AND b.brigadeItem.sequenceHex = :brigadeCode
+            AND b.calendarSymbol.calendarItem.sequenceHex = :calendarCode
+            AND b.calendarSymbol.designation = :calendarSymbol""")
+    BrigadeGroupEntity findBtBrigadeCode(@Param("instance") String instance, @Param("brigadeCode") String brigadeCode, @Param("calendarCode") String calendarCode, @Param("calendarSymbol") String calendarSymbol);
+
+    @Query("""
+            SELECT b FROM BrigadeGroupEntity b
             JOIN FETCH b.brigadeItem
             JOIN FETCH b.calendarSymbol s
             JOIN FETCH s.calendarItem
