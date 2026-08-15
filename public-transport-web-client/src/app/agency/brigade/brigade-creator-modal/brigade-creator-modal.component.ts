@@ -75,9 +75,9 @@ export class BrigadeCreatorModalComponent implements OnInit {
 
         const instance: string = this.agencyStorageService.getInstance();
 
-        this.brigadeService.createCalendarSymbolBrigade(instance, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest).subscribe((response: CreateCalendarSymbolBrigadeResponse) => {
-            this.dialogRef.close(response);
-        });
+        // this.brigadeService.createCalendarSymbolBrigade(instance, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest).subscribe((response: CreateCalendarSymbolBrigadeResponse) => {
+        //     this.dialogRef.close(response);
+        // });
     }
 
     public hasError(controlName: string, error: string): boolean {
