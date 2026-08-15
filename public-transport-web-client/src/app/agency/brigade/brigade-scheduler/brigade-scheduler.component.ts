@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
 import {CommonModule} from "@angular/common";
-import {BrigadeModel} from "../brigade-editor/brigade-editor.model";
 import moment from "moment";
 import {MatDialog} from "@angular/material/dialog";
 import {
@@ -13,7 +12,7 @@ import {
     BrigadeEvent,
     BrigadeResource,
     BrigadeService,
-    CalendarSymbolId, NextCalendarResourceSequenceResponse,
+    NextCalendarResourceSequenceResponse,
     PutBrigadeEventBody
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
@@ -24,8 +23,7 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
         CommonModule,
         DayPilotModule,
     ],
-    providers: [
-    ],
+    providers: [],
     templateUrl: './brigade-scheduler.component.html',
     styleUrl: './brigade-scheduler.component.scss'
 })
@@ -104,7 +102,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         },
         eventDeleteHandling: "Update",
         onEventDeleted: (args) => {
-            console.log("Event deleted: " + args.e.text());
+            this.deleteBrigadeEvent(args);
         },
         eventRightClickHandling: "ContextMenu",
         contextMenu: new DayPilot.Menu({
@@ -267,6 +265,23 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             const endDate = endMoment.format('HH:mm');
             args.e.text(`${startDate}-${endDate}\n${line} ${name}`);
         });
+    }
+
+    // --- DELETE EVENT ---
+    deleteBrigadeEvent(args: DayPilot.SchedulerEventDeletedArgs): void {
+        const tags = args.e.data.tags ?? {};
+        const sequenceHex: string = tags.sequenceHex ?? String(args.e.id());
+        const resourceCode: string = String(args.e.resource());
+        const instance: string = this.agencyStorage.getInstance();
+
+        this.brigadeService.deleteBrigadeEvent(
+            instance,
+            this.brigadeCode,
+            this.brigadeBody.calendarSymbolId.calendarItemId.code,
+            this.brigadeBody.calendarSymbolId.symbol,
+            resourceCode,
+            sequenceHex
+        ).subscribe();
     }
 
     public addResource(): void {
