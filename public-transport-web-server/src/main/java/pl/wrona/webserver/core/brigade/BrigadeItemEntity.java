@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 
 @Data
@@ -26,6 +27,10 @@ public class BrigadeItemEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brigade_item_id_seq")
     @SequenceGenerator(name = "brigade_item_id_seq", sequenceName = "brigade_item_id_seq", allocationSize = 1)
     private Long brigadeItemId;
+
+    @ManyToOne
+    @JoinColumn(name = "agency_id", nullable = false)
+    private AgencyEntity agency;
 
     @ManyToOne
     @JoinColumn(name = "calendar_item_id", nullable = false)
