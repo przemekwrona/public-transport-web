@@ -5,10 +5,11 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {CommonModule} from "@angular/common";
 import {
+    BrigadeBody,
     BrigadeService,
     CalendarService,
     CalendarSymbolId, CreateCalendarSymbolBrigadeRequest, CreateCalendarSymbolBrigadeResponse,
-    GetCalendarsResponse
+    GetCalendarsResponse, Status
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatInput} from "@angular/material/input";
@@ -66,8 +67,6 @@ export class BrigadeCreatorModalComponent implements OnInit {
 
         const brigadeName: string = this.brigadeNameControl.value;
         const calendarSymbolId: CalendarSymbolId = this.modelForm.get('calendarId').value;
-        const calendarCode = calendarSymbolId.calendarItemId.code;
-        const calendarSymbol = calendarSymbolId.symbol;
 
         const createCalendarSymbolBrigadeRequest: CreateCalendarSymbolBrigadeRequest = {} as CreateCalendarSymbolBrigadeRequest;
         createCalendarSymbolBrigadeRequest.brigadeName = brigadeName;
@@ -75,9 +74,13 @@ export class BrigadeCreatorModalComponent implements OnInit {
 
         const instance: string = this.agencyStorageService.getInstance();
 
-        // this.brigadeService.createCalendarSymbolBrigade(instance, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest).subscribe((response: CreateCalendarSymbolBrigadeResponse) => {
-        //     this.dialogRef.close(response);
-        // });
+        const brigadeBody: BrigadeBody = {} as BrigadeBody;
+        brigadeBody.brigadeName = brigadeName;
+        brigadeBody.calendarSymbolId = calendarSymbolId;
+
+        this.brigadeService.createBrigade(instance, brigadeBody).subscribe((response: Status) => {
+            this.dialogRef.close(response);
+        });
     }
 
     public hasError(controlName: string, error: string): boolean {
