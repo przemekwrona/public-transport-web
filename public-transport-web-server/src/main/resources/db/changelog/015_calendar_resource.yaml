@@ -1,5 +1,74 @@
 databaseChangeLog:
   - changeSet:
+      id: create-table-brigade-item
+      author: pwrona
+      changes:
+        - createSequence:
+            sequenceName: brigade_item_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: brigade_item
+            columns:
+              - column:
+                  name: brigade_item_id
+                  type: integer
+                  defaultValueSequenceNext: brigade_item_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_brigade_item
+                    nullable: false
+              - column:
+                  name: calendar_item_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_brigade_item_calendar_item
+                    references: calendar_item(calendar_item_id)
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: brigade_item
+        - dropSequence:
+            sequenceName: brigade_item_id_seq
+
+  - changeSet:
+      id: create-brigade-item-sequence-table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: brigade_item_sequence
+            columns:
+              - column:
+                  name: agency_code
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: calendar_code
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: next_value
+                  type: BIGINT
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: brigade_item_sequence
+            columnNames: agency_code, calendar_code
+            constraintName: pk_brigade_item_sequence
+      rollback:
+        - dropTable:
+            tableName: brigade_item_sequence
+
+  - changeSet:
       id: create-table-brigade-group
       author: pwrona
       changes:
@@ -20,12 +89,12 @@ databaseChangeLog:
                     primaryKeyName: pk_brigade_group
                     nullable: false
               - column:
-                  name: calendar_symbol_id
+                  name: brigade_item_id
                   type: integer
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_brigade_group_calendar_symbol
-                    references: calendar_symbol(calendar_symbol_id)
+                    foreignKeyName: fk_brigade_group_brigade_item
+                    references: brigade_item(brigade_item_id)
               - column:
                   name: name
                   type: varchar(50)
@@ -89,6 +158,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: brigade_item_sequence
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
                   name: calendar_item_sequence
                   type: int
                   constraints:
@@ -106,7 +180,7 @@ databaseChangeLog:
                     nullable: false
         - addPrimaryKey:
             tableName: brigade_resource_sequences
-            columnNames: agency_code, calendar_item_sequence, calendar_symbol
+            columnNames: agency_code, brigade_item_sequence, calendar_item_sequence, calendar_symbol
             constraintName: pk_brigade_resource_sequences
       rollback:
         - dropTable:
@@ -188,6 +262,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: brigade_item_sequence
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
                   name: calendar_code
                   type: varchar(4)
                   constraints:
@@ -205,7 +284,7 @@ databaseChangeLog:
                     nullable: false
         - addPrimaryKey:
             tableName: brigade_event_sequence
-            columnNames: agency_code, calendar_code, calendar_symbol
+            columnNames: agency_code, brigade_item_sequence, calendar_code, calendar_symbol
             constraintName: pk_brigade_event_sequence
       rollback:
         - dropTable:

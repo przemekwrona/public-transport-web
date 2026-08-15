@@ -17,6 +17,9 @@ public class BrigadeEventSequenceId implements Serializable {
     @Column(name = "agency_code", length = 15, nullable = false)
     private String agencyCode;
 
+    @Column(name = "brigade_item_sequence", nullable = false)
+    private Integer brigadeItemSequence;
+
     @Column(name = "calendar_code", length = 4, nullable = false)
     private String calendarCode;
 
