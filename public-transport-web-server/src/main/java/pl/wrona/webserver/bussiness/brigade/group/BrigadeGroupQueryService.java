@@ -13,8 +13,8 @@ public class BrigadeGroupQueryService {
 
     private final BrigadeGroupQueryRepository brigadeGroupQueryRepository;
 
-    public BrigadeGroupEntity findByCalendarCodeAndCalendarSymbol(String instance, String calendarCode, String calendarSymbol) {
-        return brigadeGroupQueryRepository.findByCalendarSymbol(instance, calendarCode, calendarSymbol);
+    public BrigadeGroupEntity findByBrigadeCode(String instance, String brigadeCode) {
+        return brigadeGroupQueryRepository.findBtBrigadeCode(instance, brigadeCode);
     }
 
     public List<BrigadeGroupEntity> findAll(String instance) {

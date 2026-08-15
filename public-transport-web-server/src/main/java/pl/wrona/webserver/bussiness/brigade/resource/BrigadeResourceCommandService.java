@@ -27,19 +27,19 @@ public class BrigadeResourceCommandService {
 
     @PreAgencyAuthorize
     @Transactional
-    public NextCalendarResourceSequenceResponse getNextCalendarResourceSequence(String instance, Integer brigadeItemSequence, String calendarCode, String calendarSymbol) {
-        var savedResource = init(instance, brigadeItemSequence, calendarCode, calendarSymbol);
+    public NextCalendarResourceSequenceResponse getNextCalendarResourceSequence(String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
+        var savedResource = init(instance, brigadeCode, calendarCode, calendarSymbol);
         return new NextCalendarResourceSequenceResponse()
                 .sequence(savedResource.getSequence())
                 .sequenceHex(savedResource.getSequenceHex());
     }
 
     @Transactional
-    public BrigadeResourceEntity init(String instance, Integer brigadeItemSequence, String calendarCode, String calendarSymbol) {
-        var nextResourceSequence = this.brigadeResourceSequenceQueryService.findNextValue(instance, brigadeItemSequence, Hex.fromHex(calendarCode), calendarSymbol);
+    public BrigadeResourceEntity init(String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
+        var nextResourceSequence = this.brigadeResourceSequenceQueryService.findNextValue(instance, brigadeCode, Hex.fromHex(calendarCode), calendarSymbol);
         var nextResourceSequenceCode = Hex.toHex(nextResourceSequence);
 
-        var savedBrigadeGroup = brigadeGroupQueryService.findByCalendarCodeAndCalendarSymbol(instance, calendarCode, calendarSymbol);
+        var savedBrigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode);
 
         var brigadeResourceEntity = new BrigadeResourceEntity();
         brigadeResourceEntity.setBrigadeGroup(savedBrigadeGroup);

@@ -33,8 +33,8 @@ public class BrigadeGroupDetailsService {
     private final BrigadeEventQueryService brigadeEventQueryService;
 
     @PreAgencyAuthorize
-    public BrigadeBodyV2 getCalendarSymbolBrigadeResources(String instance, String calendarCode, String symbol) {
-        var brigadeGroup = brigadeGroupQueryService.findByCalendarCodeAndCalendarSymbol(instance, calendarCode, symbol);
+    public BrigadeBodyV2 getCalendarSymbolBrigadeResources(String instance, String brigadeCode) {
+        var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode);
         if (brigadeGroup == null) {
             return null;
         }

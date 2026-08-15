@@ -46,7 +46,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<BrigadeBodyV2> getCalendarSymbolBrigadeResources(String agency, String brigadeCode, String calendarCode, String symbol) {
-        return ResponseEntity.ok(brigadeGroupDetailsService.getCalendarSymbolBrigadeResources(agency, calendarCode, symbol));
+        return ResponseEntity.ok(brigadeGroupDetailsService.getCalendarSymbolBrigadeResources(agency, brigadeCode));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<NextCalendarResourceSequenceResponse> getNextCalendarResourceSequence(String agency, String brigadeCode, String calendarCode, String symbol) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeResourceCommandService.getNextCalendarResourceSequence(agency, Hex.fromHex(brigadeCode), calendarCode, symbol));
+        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeResourceCommandService.getNextCalendarResourceSequence(agency, brigadeCode, calendarCode, symbol));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<CreateCalendarSymbolBrigadeResponse> createCalendarSymbolBrigade(String agency, String brigadeCode, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest createCalendarSymbolBrigadeRequest) {
-        return ResponseEntity.ok(brigadeGroupCreatorService.createBrigadeGroup(agency, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest));
+        return ResponseEntity.ok(brigadeGroupCreatorService.createBrigadeGroup(agency, brigadeCode, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest));
     }
 
     @Override
