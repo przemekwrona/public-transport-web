@@ -28,6 +28,10 @@ public class BrigadeGroupEntity {
     private Long brigadeGroupId;
 
     @ManyToOne
+    @JoinColumn(name = "brigade_item_id", nullable = false)
+    private BrigadeItemEntity brigadeItem;
+
+    @ManyToOne
     @JoinColumn(name = "calendar_symbol_id", nullable = false)
     private CalendarSymbolEntity calendarSymbol;
 
