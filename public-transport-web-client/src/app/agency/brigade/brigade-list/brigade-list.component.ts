@@ -39,7 +39,7 @@ export class BrigadeListComponent {
     }
 
     public hasBrigades(): boolean {
-        return size(this.brigadesResponse.brigades) > 0;
+        return size(this.brigadesResponse.items) > 0;
     }
 
 }

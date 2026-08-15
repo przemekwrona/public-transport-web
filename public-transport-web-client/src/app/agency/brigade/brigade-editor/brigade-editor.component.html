@@ -59,7 +59,12 @@
 
     <div class="border-t border-white my-2.5"></div>
 
-    <app-brigade-scheduler [brigadeEvent]="brigadeItems" [brigadeResources]="brigaderResponse.brigadeResources" [calendarSymbolId]="calendarId"></app-brigade-scheduler>
+    {{ brigaderResponse | json }}
+    @for (brigade of brigaderResponse?.brigade?.brigades || []; track brigade) {
+        <app-brigade-scheduler [brigadeEvent]="[]"
+                               [brigadeResources]="brigade.brigadeResources"
+                               [calendarSymbolId]="calendarId"></app-brigade-scheduler>
+    }
 
     <div class="border-t border-white my-2.5"></div>
 

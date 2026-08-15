@@ -65,13 +65,12 @@ export const routes: Routes = [
             {path: 'timetables/edit', component: TimetableEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, timetableGenerator: timetableEditorResolver }, data: { mode: TimetableEditorComponentMode.EDIT }},
             {path: 'brigades', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'brigades/create', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver }, data: { mode: BrigadeEditorComponentMode.CREATE }},
-            {path: 'brigades/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'calendars', component: CalendarListComponent, resolve: { calendars: getAllCalendarsResolver }},
             {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
             {path: 'calendars/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
             {path: 'calendars/:calendarCode/symbol/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
             {path: 'calendars/:calendarCode/symbol/:calendarSymbol/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
-            {path: 'calendars/:calendarCode/symbol/:calendarSymbol/brigades/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
+            {path: 'brigades/:brigadeCode/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
             {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
         ]
     },
