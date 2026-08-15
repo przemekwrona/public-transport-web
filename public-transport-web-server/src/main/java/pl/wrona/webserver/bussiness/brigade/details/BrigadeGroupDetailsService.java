@@ -20,6 +20,7 @@ import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,19 +40,12 @@ public class BrigadeGroupDetailsService {
         }
 
         var resourceEntities = brigadeResourceQueryService.findAllByBrigadeGroupId(brigadeGroup.getBrigadeGroupId());
-        var eventsByResourceId = brigadeEventQueryService.findAllByResourceIds(
-                        resourceEntities.stream().map(BrigadeResourceEntity::getBrigadeResourceId).toList())
-                .stream()
-                .collect(Collectors.groupingBy(event -> event.getResource().getBrigadeResourceId()));
-
-        var brigadeResources = resourceEntities.stream()
-                .map(resource -> map(resource, eventsByResourceId.getOrDefault(resource.getBrigadeResourceId(), List.of())))
-                .toList();
+        var eventsByResourceId = groupEventsByResourceId(resourceEntities);
 
         return new BrigadeBodyV2()
                 .brigadeName(brigadeGroup.getName())
                 .calendarSymbolId(mapCalendarSymbolId(brigadeGroup))
-                .brigadeResources(brigadeResources);
+                .brigadeResources(mapResources(resourceEntities, eventsByResourceId));
     }
 
     @PreAgencyAuthorize
@@ -62,27 +56,59 @@ public class BrigadeGroupDetailsService {
         }
 
         var brigadeGroups = brigadeGroupQueryService.findAllByBrigadeCode(instance, brigadeCode);
+        var resourcesByGroupId = brigadeGroups.stream()
+                .collect(Collectors.toMap(
+                        BrigadeGroupEntity::getBrigadeGroupId,
+                        group -> brigadeResourceQueryService.findAllByBrigadeGroupId(group.getBrigadeGroupId())));
+        var eventsByResourceId = groupEventsByResourceId(
+                resourcesByGroupId.values().stream().flatMap(List::stream).toList());
 
         return new GetBrigadeDetailsResponse()
-                .brigade(mapItem(brigadeItem, brigadeGroups));
+                .brigade(mapItem(brigadeItem, brigadeGroups, resourcesByGroupId, eventsByResourceId));
     }
 
-    private static BrigadeItemBody mapItem(BrigadeItemEntity brigadeItem, List<BrigadeGroupEntity> brigadeGroups) {
+    private Map<Long, List<BrigadeEventEntity>> groupEventsByResourceId(List<BrigadeResourceEntity> resourceEntities) {
+        return brigadeEventQueryService.findAllByResourceIds(
+                        resourceEntities.stream().map(BrigadeResourceEntity::getBrigadeResourceId).toList())
+                .stream()
+                .collect(Collectors.groupingBy(event -> event.getResource().getBrigadeResourceId()));
+    }
+
+    private static BrigadeItemBody mapItem(
+            BrigadeItemEntity brigadeItem,
+            List<BrigadeGroupEntity> brigadeGroups,
+            Map<Long, List<BrigadeResourceEntity>> resourcesByGroupId,
+            Map<Long, List<BrigadeEventEntity>> eventsByResourceId) {
         return new BrigadeItemBody()
                 .name(brigadeItem.getName())
                 .sequence(brigadeItem.getSequence())
                 .sequenceHex(brigadeItem.getSequenceHex())
                 .brigades(brigadeGroups.stream()
-                        .map(BrigadeGroupDetailsService::mapGroup)
+                        .map(group -> mapGroup(
+                                group,
+                                resourcesByGroupId.getOrDefault(group.getBrigadeGroupId(), List.of()),
+                                eventsByResourceId))
                         .toList());
     }
 
-    private static BrigadeBodyV2 mapGroup(BrigadeGroupEntity brigadeGroupEntity) {
+    private static BrigadeBodyV2 mapGroup(
+            BrigadeGroupEntity brigadeGroupEntity,
+            List<BrigadeResourceEntity> resourceEntities,
+            Map<Long, List<BrigadeEventEntity>> eventsByResourceId) {
         return new BrigadeBodyV2()
                 .brigadeName(brigadeGroupEntity.getName())
                 .calendarSymbolId(mapCalendarSymbolId(brigadeGroupEntity))
                 .calendarDesignation(brigadeGroupEntity.getCalendarSymbol().getDesignation())
-                .calendarDescription(brigadeGroupEntity.getCalendarSymbol().getDescription());
+                .calendarDescription(brigadeGroupEntity.getCalendarSymbol().getDescription())
+                .brigadeResources(mapResources(resourceEntities, eventsByResourceId));
+    }
+
+    private static List<BrigadeResource> mapResources(
+            List<BrigadeResourceEntity> resourceEntities,
+            Map<Long, List<BrigadeEventEntity>> eventsByResourceId) {
+        return resourceEntities.stream()
+                .map(resource -> map(resource, eventsByResourceId.getOrDefault(resource.getBrigadeResourceId(), List.of())))
+                .toList();
     }
 
     private static CalendarSymbolId1 mapCalendarSymbolId(BrigadeGroupEntity brigadeGroup) {
