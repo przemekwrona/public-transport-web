@@ -13,8 +13,6 @@ import pl.wrona.webserver.core.brigade.BrigadeGroupCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
-import java.time.LocalDateTime;
-
 @Service
 @AllArgsConstructor
 public class BrigadeGroupCreatorService {
@@ -26,7 +24,7 @@ public class BrigadeGroupCreatorService {
 
     @PreAgencyAuthorize
     @Transactional
-    public CreateCalendarSymbolBrigadeResponse createBrigadeGroup(String instance, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest request) {
+    public CreateCalendarSymbolBrigadeResponse createBrigadeGroup(String instance, Integer brigadeItemSequence, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest request) {
         var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);
 
         var brigadeGroup = brigadeGroupQueryService.findByCalendarCodeAndCalendarSymbol(instance, calendarCode, calendarSymbol);
@@ -38,9 +36,9 @@ public class BrigadeGroupCreatorService {
         var brigadeGroupEntity = new BrigadeGroupEntity();
         brigadeGroupEntity.setCalendarSymbol(calendarSymbolEntity);
         brigadeGroupEntity.setName(request.getBrigadeName());
-        var savedBrigadeGroup = brigadeGroupCommandRepository.save(brigadeGroupEntity);
+        brigadeGroupCommandRepository.save(brigadeGroupEntity);
 
-        var savedBrigadeResource = brigadeResourceCommandService.init(instance, calendarCode, calendarSymbol);
+        brigadeResourceCommandService.init(instance, brigadeItemSequence, calendarCode, calendarSymbol);
 
         return new CreateCalendarSymbolBrigadeResponse()
                 .status(new Status().status(Status.StatusEnum.CREATED));

@@ -24,8 +24,8 @@ public class BrigadeResourceCommandService {
     }
 
     @Transactional
-    public BrigadeResourceEntity init(String instance, String calendarCode, String calendarSymbol) {
-        var nextResourceSequence = this.brigadeResourceSequenceQueryService.findNextValue(instance, Hex.fromHex(calendarCode), calendarSymbol);
+    public BrigadeResourceEntity init(String instance, Integer brigadeItemSequence, String calendarCode, String calendarSymbol) {
+        var nextResourceSequence = this.brigadeResourceSequenceQueryService.findNextValue(instance, brigadeItemSequence, Hex.fromHex(calendarCode), calendarSymbol);
         var nextResourceSequenceCode = Hex.toHex(nextResourceSequence);
 
         var savedBrigadeGroup = brigadeGroupQueryService.findByCalendarCodeAndCalendarSymbol(instance, calendarCode, calendarSymbol);

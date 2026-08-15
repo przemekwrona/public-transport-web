@@ -11,10 +11,12 @@ public interface BrigadeEventSequenceQueryRepository extends JpaRepository<Briga
     @Query("""
             SELECT s FROM BrigadeEventSequenceEntity s
             WHERE s.id.agencyCode = :agencyCode
+            AND s.id.brigadeItemSequence = :brigadeItemSequence
             AND s.id.calendarCode = :calendarCode
             AND s.id.calendarSymbol = :calendarSymbol""")
-    BrigadeEventSequenceEntity findByAgencyCodeAndCalendarCodeAndCalendarSymbol(
+    BrigadeEventSequenceEntity findByAgencyCodeAndBrigadeItemSequenceAndCalendarCodeAndCalendarSymbol(
             @Param("agencyCode") String agencyCode,
+            @Param("brigadeItemSequence") Integer brigadeItemSequence,
             @Param("calendarCode") String calendarCode,
             @Param("calendarSymbol") String calendarSymbol);
 
