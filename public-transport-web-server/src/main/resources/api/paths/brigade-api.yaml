@@ -314,6 +314,51 @@ paths:
               schema:
                 $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
+  /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{symbol}/resource/{resourceCode}/event/{eventCode}:
+    delete:
+      tags:
+        - brigade
+      summary: Delete brigade event for resource
+      operationId: deleteBrigadeEvent
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: brigadeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: symbol
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: resourceCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: eventCode
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: DELETED
+          content:
+            application/json:
+              schema:
+                $ref: '../public-transport-api.yaml/#/components/schemas/Status'
+
 components:
   schemas:
     CreateCalendarSymbolBrigadeRequest:
