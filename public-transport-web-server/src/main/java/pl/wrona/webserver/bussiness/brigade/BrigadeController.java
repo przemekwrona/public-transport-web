@@ -48,7 +48,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<NextBrigadeEventSequenceResponse> getNextBrigadeEventSequence(String agency, String calendarCode, String symbol, String resourceCode) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeEventCreatorService.getNextBrigadeEventSequence(agency, calendarCode, symbol, resourceCode));
+        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeEventCreatorService.getNextBrigadeEventSequence(agency, 1, calendarCode, symbol, resourceCode));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<CreateCalendarSymbolBrigadeResponse> createCalendarSymbolBrigade(String agency, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest createCalendarSymbolBrigadeRequest) {
-        return ResponseEntity.ok(brigadeGroupCreatorService.createBrigadeGroup(agency, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest));
+        return ResponseEntity.ok(brigadeGroupCreatorService.createBrigadeGroup(agency, 0, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest));
     }
 
     @Override

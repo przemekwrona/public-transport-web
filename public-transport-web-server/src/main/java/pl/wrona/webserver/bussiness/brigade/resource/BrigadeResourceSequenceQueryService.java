@@ -13,11 +13,11 @@ public class BrigadeResourceSequenceQueryService {
     private final BrigadeResourceSequenceCommandService brigadeResourceSequenceCommandService;
 
     @Transactional
-    public Integer findNextValue(String agencyCode, Integer calendarItemSequence, String calendarSymbol) {
-        var sequencer = brigadeResourceSequenceQueryRepository.findByAgencyCodeAndCalendarItemSequenceAndCalendarSymbol(
-                agencyCode, calendarItemSequence, calendarSymbol);
+    public Integer findNextValue(String agencyCode, Integer brigadeItemSequence, Integer calendarItemSequence, String calendarSymbol) {
+        var sequencer = brigadeResourceSequenceQueryRepository.findByAgencyCodeAndBrigadeItemSequenceAndCalendarItemSequenceAndCalendarSymbol(
+                agencyCode, brigadeItemSequence, calendarItemSequence, calendarSymbol);
         if (sequencer == null) {
-            sequencer = brigadeResourceSequenceCommandService.init(agencyCode, calendarItemSequence, calendarSymbol);
+            sequencer = brigadeResourceSequenceCommandService.init(agencyCode, brigadeItemSequence, calendarItemSequence, calendarSymbol);
         }
         var nextValue = sequencer.getNextValue();
         sequencer.setNextValue(nextValue + 1);

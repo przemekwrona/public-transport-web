@@ -16,14 +16,14 @@ public class BrigadeEventSequenceCommandService {
     private final BrigadeEventSequenceQueryRepository brigadeEventSequenceQueryRepository;
 
     @Transactional
-    public BrigadeEventSequenceEntity init(String agencyCode, String calendarCode, String calendarSymbol) {
-        var existing = brigadeEventSequenceQueryRepository.findByAgencyCodeAndCalendarCodeAndCalendarSymbol(
-                agencyCode, calendarCode, calendarSymbol);
+    public BrigadeEventSequenceEntity init(String agencyCode, Integer brigadeItemSequence, String calendarCode, String calendarSymbol) {
+        var existing = brigadeEventSequenceQueryRepository.findByAgencyCodeAndBrigadeItemSequenceAndCalendarCodeAndCalendarSymbol(
+                agencyCode, brigadeItemSequence, calendarCode, calendarSymbol);
         if (existing != null) {
             return existing;
         }
         return brigadeEventSequenceCommandRepository.save(new BrigadeEventSequenceEntity(
-                new BrigadeEventSequenceId(agencyCode, calendarCode, calendarSymbol), 1L));
+                new BrigadeEventSequenceId(agencyCode, brigadeItemSequence, calendarCode, calendarSymbol), 1L));
     }
 
 }
