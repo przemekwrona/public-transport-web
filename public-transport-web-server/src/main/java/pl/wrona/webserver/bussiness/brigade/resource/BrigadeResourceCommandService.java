@@ -2,11 +2,13 @@ package pl.wrona.webserver.bussiness.brigade.resource;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.NextCalendarResourceSequenceResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeResourceCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
+import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +23,15 @@ public class BrigadeResourceCommandService {
     @Transactional
     public BrigadeResourceEntity save(BrigadeResourceEntity brigadeGroupEntity) {
         return brigadeResourceCommandRepository.save(brigadeGroupEntity);
+    }
+
+    @PreAgencyAuthorize
+    @Transactional
+    public NextCalendarResourceSequenceResponse getNextCalendarResourceSequence(String instance, Integer brigadeItemSequence, String calendarCode, String calendarSymbol) {
+        var savedResource = init(instance, brigadeItemSequence, calendarCode, calendarSymbol);
+        return new NextCalendarResourceSequenceResponse()
+                .sequence(savedResource.getSequence())
+                .sequenceHex(savedResource.getSequenceHex());
     }
 
     @Transactional

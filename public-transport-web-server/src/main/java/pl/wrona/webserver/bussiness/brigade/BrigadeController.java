@@ -24,6 +24,7 @@ import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorSer
 import pl.wrona.webserver.bussiness.brigade.event.updater.BrigadeEventUpdaterService;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
 import pl.wrona.webserver.bussiness.brigade.group.pagination.BrigadePaginationService;
+import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceCommandService;
 
 @RestController
 @AllArgsConstructor
@@ -36,6 +37,7 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadeGroupDetailsService brigadeGroupDetailsService;
     private final BrigadeEventCreatorService brigadeEventCreatorService;
     private final BrigadeEventUpdaterService brigadeEventUpdaterService;
+    private final BrigadeResourceCommandService brigadeResourceCommandService;
 
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
@@ -43,7 +45,7 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<BrigadeBodyV2> getCalendarSymbolBrigadeResources(String agency, String calendarCode, String symbol) {
+    public ResponseEntity<BrigadeBodyV2> getCalendarSymbolBrigadeResources(String agency, String brigadeCode, String calendarCode, String symbol) {
         return ResponseEntity.ok(brigadeGroupDetailsService.getCalendarSymbolBrigadeResources(agency, calendarCode, symbol));
     }
 
@@ -53,8 +55,8 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<NextCalendarResourceSequenceResponse> getNextCalendarResourceSequence(String agency, String calendarCode, String symbol) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<NextCalendarResourceSequenceResponse> getNextCalendarResourceSequence(String agency, String brigadeCode, String calendarCode, String symbol) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeResourceCommandService.getNextCalendarResourceSequence(agency, Hex.fromHex(brigadeCode), calendarCode, symbol));
     }
 
     @Override
