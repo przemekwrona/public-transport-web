@@ -118,7 +118,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BrigadeBody'
 
-  /agency/{agency}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
+  /agency/{agency}/brigade/{brigadeCode}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
     post:
       tags:
         - brigade
@@ -127,6 +127,11 @@ paths:
       parameters:
         - in: path
           name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: brigadeCode
           required: true
           schema:
             type: string

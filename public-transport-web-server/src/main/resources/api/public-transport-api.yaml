@@ -943,8 +943,8 @@ paths:
   /agency/{agency}/brigades/details:
     $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1brigades~1details'
 
-  /agency/{agency}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
-    $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1calendar~1{calendarCode}~1symbol~1{calendarSymbol}~1brigade'
+  /agency/{agency}/brigade/{brigadeCode}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
+    $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1brigade~1{brigadeCode}~1calendar~1{calendarCode}~1symbol~1{calendarSymbol}~1brigade'
 
   /agency/{agency}/calendar/{calendarCode}/symbol/{symbol}/resource:
     $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1calendar~1{calendarCode}~1symbol~1{symbol}~1resource'

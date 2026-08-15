@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.brigade.details.BrigadeGroupDetailsService;
 import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorService;
 import pl.wrona.webserver.bussiness.brigade.event.updater.BrigadeEventUpdaterService;
@@ -67,8 +68,8 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<CreateCalendarSymbolBrigadeResponse> createCalendarSymbolBrigade(String agency, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest createCalendarSymbolBrigadeRequest) {
-        return ResponseEntity.ok(brigadeGroupCreatorService.createBrigadeGroup(agency, 0, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest));
+    public ResponseEntity<CreateCalendarSymbolBrigadeResponse> createCalendarSymbolBrigade(String agency, String brigadeCode, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest createCalendarSymbolBrigadeRequest) {
+        return ResponseEntity.ok(brigadeGroupCreatorService.createBrigadeGroup(agency, brigadeCode, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest));
     }
 
     @Override
