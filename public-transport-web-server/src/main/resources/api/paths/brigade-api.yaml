@@ -94,29 +94,30 @@ paths:
               schema:
                 $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
-  /agency/{agency}/brigades/details:
-    post:
+  /agency/{agency}/brigades/{brigadeCode}/details:
+    get:
       tags:
         - brigade
-      operationId: getBrigadeByBrigadeName
+      summary: Get brigade item details by brigade code
+      operationId: getBrigadeDetails
       parameters:
         - in: path
           name: agency
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BrigadePayload'
+        - in: path
+          name: brigadeCode
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BrigadeBody'
+                $ref: '#/components/schemas/GetBrigadeDetailsResponse'
 
   /agency/{agency}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
     post:
@@ -355,25 +356,33 @@ components:
         sequenceHex:
           type: string
 
-    GetBrigadeBody:
+    BrigadeItemBody:
       type: object
       properties:
-        brigadeName:
+        name:
           type: string
-        calendarSymbolId:
-          $ref: '../public-transport-core.yaml#/components/schemas/CalendarSymbolId'
-        calendarDesignation:
+        sequence:
+          type: integer
+        sequenceHex:
           type: string
-        calendarDescription:
-          type: string
+        brigades:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrigadeBodyV2'
+
+    GetBrigadeDetailsResponse:
+      type: object
+      properties:
+        brigade:
+          $ref: '#/components/schemas/BrigadeItemBody'
 
     GetBrigadeResponse:
       type: object
       properties:
-        brigades:
+        items:
           type: array
           items:
-            $ref: '#/components/schemas/GetBrigadeBody'
+            $ref: '#/components/schemas/BrigadeItemBody'
 
     BrigadeTrip:
       type: object
@@ -428,6 +437,10 @@ components:
           type: string
         calendarSymbolId:
           $ref: '../public-transport-core.yaml#/components/schemas/CalendarSymbolId'
+        calendarDesignation:
+          type: string
+        calendarDescription:
+          type: string
         brigadeResources:
           type: array
           items:

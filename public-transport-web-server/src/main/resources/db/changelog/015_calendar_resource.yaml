@@ -27,6 +27,16 @@ databaseChangeLog:
                     foreignKeyName: fk_brigade_item_calendar_item
                     references: calendar_item(calendar_item_id)
               - column:
+                  name: sequence
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sequence_hex
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
                   name: name
                   type: varchar(50)
                   constraints:

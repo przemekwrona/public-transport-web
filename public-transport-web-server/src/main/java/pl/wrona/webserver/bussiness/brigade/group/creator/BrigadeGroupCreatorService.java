@@ -6,6 +6,7 @@ import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
 import pl.wrona.webserver.bussiness.brigade.item.BrigadeItemCommandService;
 import pl.wrona.webserver.bussiness.brigade.item.BrigadeItemSequenceQueryService;
@@ -43,6 +44,8 @@ public class BrigadeGroupCreatorService {
         var brigadeItemEntity = new BrigadeItemEntity();
         brigadeItemEntity.setCalendarItem(calendarSymbolEntity.getCalendarItem());
         brigadeItemEntity.setName(request.getBrigadeName());
+        brigadeItemEntity.setSequence(brigadeItemSequence);
+        brigadeItemEntity.setSequenceHex(Hex.toHex(brigadeItemSequence));
         var savedBrigadeItem = brigadeItemCommandService.save(brigadeItemEntity);
 
         var brigadeGroupEntity = new BrigadeGroupEntity();
