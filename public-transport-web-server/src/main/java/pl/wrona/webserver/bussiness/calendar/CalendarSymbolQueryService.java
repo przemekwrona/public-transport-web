@@ -36,8 +36,12 @@ public class CalendarSymbolQueryService {
         return calendarSymbolQueryRepository.findAllByAgencyAndStartDateAndEndDate(agencyCode, calendarItemId.getStartDate(), calendarItemId.getEndDate());
     }
 
-    public CalendarSymbolEntity findByAgencyAndCalendarAndSymbol(String agencyCode, String calendarCode, String calendarSymbol) {
-        return calendarSymbolQueryRepository.findByAgencyAndCalendarAndSymbol(agencyCode, calendarCode, calendarSymbol);
+    public CalendarSymbolEntity findByAgencyAndBrigadeAndCalendarAndSymbol(String agencyCode, String calendarCode, String calendarSymbol) {
+        return calendarSymbolQueryRepository.findByAgencyAndBrigadeAndCalendarAndSymbol(agencyCode, calendarCode, calendarSymbol);
+    }
+
+    public CalendarSymbolEntity findByAgencyAndBrigadeAndCalendarAndSymbol(String agencyCode, String brigadeCode, String calendarCode, String calendarSymbol) {
+        return calendarSymbolQueryRepository.findByAgencyAndBrigadeAndCalendarAndSymbol(agencyCode, brigadeCode, calendarCode, calendarSymbol);
     }
 
 }

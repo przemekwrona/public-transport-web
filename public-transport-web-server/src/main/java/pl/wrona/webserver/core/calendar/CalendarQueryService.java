@@ -19,6 +19,6 @@ public class CalendarQueryService {
     @Deprecated
     @PreAgencyAuthorize
     public CalendarSymbolEntity getCalendar(String instance, CalendarSymbolId calendarId) {
-        return calendarSymbolRepository.findByAgencyAndCalendarAndSymbol(instance, calendarId.getCalendarItemId().getCode(), calendarId.getSymbol());
+        return calendarSymbolRepository.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, "", calendarId.getCalendarItemId().getCode(), calendarId.getSymbol());
     }
 }

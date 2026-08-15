@@ -37,7 +37,7 @@ public class BrigadeQueryService {
     public Status updateBrigade(String instance, BrigadePatchBody brigadePatchBody) {
         String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndCalendarAndSymbol(instance, brigadePatchBody.getBrigadeBody().getCalendarSymbolId().getCalendarItemId().getCode(), brigadePatchBody.getBrigadeBody().getCalendarSymbolId().getSymbol());
+        var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, "", brigadePatchBody.getBrigadeBody().getCalendarSymbolId().getCalendarItemId().getCode(), brigadePatchBody.getBrigadeBody().getCalendarSymbolId().getSymbol());
 
         brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyEntity, brigadeId).ifPresent((BrigadeEntity entity) -> {
             entity.setBrigadeNumber(brigadePatchBody.getBrigadeBody().getBrigadeName());
