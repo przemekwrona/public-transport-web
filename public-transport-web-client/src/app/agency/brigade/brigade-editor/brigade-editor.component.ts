@@ -17,6 +17,10 @@ import {BrigadeEditorComponentMode} from "./brigade-editor-component-mode";
 import {HttpErrorResponse} from "@angular/common/http";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {MatDialog} from "@angular/material/dialog";
+import {
+    BrigadeGroupCreatorModalComponent
+} from "../brigade-group-creator-modal/brigade-group-creator-modal.component";
 
 @Component({
     selector: 'app-brigade-editor',
@@ -57,7 +61,7 @@ export class BrigadeEditorComponent implements OnInit {
         return this.modelForm.get('brigadeName') as FormGroup;
     }
 
-    constructor(private brigadeService: BrigadeService, private tripService: TripService, private agencyStorageService: AgencyStorageService, private _route: ActivatedRoute, private _router: Router, private formBuilder: FormBuilder) {
+    constructor(private brigadeService: BrigadeService, private tripService: TripService, private agencyStorageService: AgencyStorageService, private _route: ActivatedRoute, private _router: Router, private formBuilder: FormBuilder, private dialog: MatDialog) {
         this.modelForm = this.formBuilder.group({
             brigadeName: ['', [Validators.required]]
         });
@@ -275,6 +279,26 @@ export class BrigadeEditorComponent implements OnInit {
             });
         }
 
+    }
+
+    public addCalendar(): void {
+        const brigade = this.brigaderResponse.brigade;
+        const dialogRef = this.dialog.open(BrigadeGroupCreatorModalComponent, {
+            data: {
+                brigadeCode: brigade.sequenceHex,
+                brigadeName: brigade.name
+            }
+        });
+
+        dialogRef.afterClosed().subscribe((response) => {
+            if (!response) {
+                return;
+            }
+
+            const instance: string = this.agencyStorageService.getInstance();
+            this.brigadeService.getBrigadeDetails(instance, brigade.sequenceHex)
+                .subscribe(details => this.brigaderResponse = details);
+        });
     }
 
     compareByCalendarId(current: CalendarSymbolId, option: CalendarSymbolId): boolean {
