@@ -269,4 +269,15 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         });
     }
 
+    public addResource(): void {
+        const instance: string = this.agencyStorage.getInstance();
+
+        // this.brigadeService.getNextCalendarResourceSequence(instance, this.brigadeCode).subscribe((sequence: number) => {
+        //     this.scheduler.addResource({
+        //         id: String(sequence),
+        //         name: `Brygada ${sequence}`
+        //     });
+        // });
+    }
+
 }
