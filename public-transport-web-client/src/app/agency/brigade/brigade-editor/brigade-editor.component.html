@@ -231,11 +231,6 @@
                     <!--                        </div>-->
                     <!--                    </div>-->
 
-                    @if (saveError === null) {
-                        <button (click)="saveOrEditBrigade()" class="btn btn-success">Zapisz i wróć do listy brygad
-                        </button>
-                    }
-
                     @if (saveError !== null) {
                         <button class="btn btn-danger">
                             Error: {{ saveError.errorCode }} {{ saveError.message }}
