@@ -3,7 +3,7 @@ import {
     BrigadeBody, BrigadeBodyV2, BrigadePatchBody,
     BrigadePayload, BrigadeResource, BrigadeService,
     BrigadeTrip, CalendarSymbolId, ErrorResponse,
-    GetAllTripsResponse, GetCalendarsResponse, RouteId,
+    GetAllTripsResponse, GetBrigadeDetailsResponse, GetCalendarsResponse, RouteId,
     Trip,
     TripId, TripMode, TripService
 } from "../../../generated/public-transport-api";
@@ -41,8 +41,7 @@ export class BrigadeEditorComponent implements OnInit {
 
     public tripsResponse: GetAllTripsResponse = {filter: '', lines: []};
     public calendarsResponse: GetCalendarsResponse = {};
-    public brigaderResponse: BrigadeBodyV2= {} as BrigadeBodyV2;
-    public brigadeResources: BrigadeResource[] = [];
+    public brigaderResponse: GetBrigadeDetailsResponse= {} as GetBrigadeDetailsResponse;
 
     public queryBrigadeName: string = '';
     public calendarId: CalendarSymbolId = {};
@@ -78,10 +77,10 @@ export class BrigadeEditorComponent implements OnInit {
 
         this._route.data.subscribe(data => this.componentMode = data['mode']);
         this._route.data.subscribe(data => {
-            const brigadeV2: BrigadeBodyV2 = data['brigade'];
+            const getBrigadeDetailsResponse: GetBrigadeDetailsResponse = data['brigade'];
 
-            this.brigaderResponse = brigadeV2;
-            this.calendarId = brigadeV2?.calendarSymbolId;
+            this.brigaderResponse = getBrigadeDetailsResponse;
+            // this.calendarId = brigadeV2?.calendarSymbolId;
 
             this.brigadeItems = data['brigade'];
             this.brigadeItems = (data['brigade']?.trips || []).map((trip: BrigadeTrip) => {

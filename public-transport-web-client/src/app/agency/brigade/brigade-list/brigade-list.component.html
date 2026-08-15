@@ -16,7 +16,7 @@
     <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
 
         @if (hasBrigades()) {
-            @for (brigade of brigadesResponse.brigades || []; track brigade; ) {
+            @for (brigadeGroup of brigadesResponse.items || []; track brigadeGroup; ) {
                 <div class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg w-full">
                     <div class="flex items-center gap-4">
                         <div class="relative size-[50px] shrink-0">
@@ -35,19 +35,23 @@
                         </div>
                         <div class="flex flex-col gap-1.5">
                             <div class="flex items-center flex-wrap gap-2.5">
-                                <a class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ brigade?.brigadeName }} </a>
+                                <a class="text-base font-medium text-gray-900 hover:text-primary-active"> {{ brigadeGroup?.name }} </a>
                             </div>
-                            <div class="form-info text-gray-800 font-normal">
-                                <strong>{{ brigade?.calendarDesignation }}</strong> - {{ brigade.calendarDescription }}
-                            </div>
+
+                            @for (brigade of brigadeGroup.brigades || []; track brigade; ) {
+                                <div class="form-info text-gray-800 font-normal">
+                                    <strong>{{ brigade?.calendarDesignation }}</strong> - {{ brigade.calendarDescription }}
+                                </div>
+                            }
+
                         </div>
                     </div>
                     <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
-                        <button (click)="deleteBrigadeByName(brigade?.brigadeName)"
-                                class="btn btn-sm btn-dark shrink-0">Usuń
-                        </button>
-                        <a [routerLink]="['/agency/calendars', brigade.calendarSymbolId.calendarItemId.code, 'symbol', brigade.calendarSymbolId.symbol, 'brigades', 'edit']"
-                           [queryParams]="{name: brigade?.brigadeName}"
+<!--                        <button (click)="deleteBrigadeByName(brigade?.brigadeName)"-->
+<!--                                class="btn btn-sm btn-dark shrink-0">Usuń-->
+<!--                        </button>-->
+                        <a [routerLink]="['/agency/brigades', brigadeGroup.sequenceHex, 'edit']"
+                           [queryParams]="{name: brigadeGroup?.name}"
                            class="btn btn-sm shrink-0 btn-secondary">Pokaż szczegóły</a>
                     </div>
                 </div>
