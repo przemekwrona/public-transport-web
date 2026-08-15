@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.brigade.resource;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.core.brigade.BrigadeResourceSequenceQueryRepository;
 
 @Service
@@ -13,7 +14,8 @@ public class BrigadeResourceSequenceQueryService {
     private final BrigadeResourceSequenceCommandService brigadeResourceSequenceCommandService;
 
     @Transactional
-    public Integer findNextValue(String agencyCode, Integer brigadeItemSequence, Integer calendarItemSequence, String calendarSymbol) {
+    public Integer findNextValue(String agencyCode, String brigadeCode, Integer calendarItemSequence, String calendarSymbol) {
+        var brigadeItemSequence = Hex.fromHex(brigadeCode);
         var sequencer = brigadeResourceSequenceQueryRepository.findByAgencyCodeAndBrigadeItemSequenceAndCalendarItemSequenceAndCalendarSymbol(
                 agencyCode, brigadeItemSequence, calendarItemSequence, calendarSymbol);
         if (sequencer == null) {
