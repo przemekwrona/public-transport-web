@@ -1,7 +1,6 @@
 package pl.wrona.webserver.bussiness.brigade;
 
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.BrigadeBody;
 import org.igeolab.iot.pt.server.api.model.BrigadeDeleteBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.RouteId;
@@ -15,10 +14,8 @@ import pl.wrona.webserver.core.brigade.BrigadeEntity;
 import pl.wrona.webserver.core.brigade.BrigadeRepository;
 import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
 import pl.wrona.webserver.core.brigade.BrigadeTripRepository;
-import pl.wrona.webserver.core.calendar.CalendarQueryService;
 import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
-import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalTime;
@@ -34,65 +31,6 @@ public class BrigadeQueryService {
     private final CalendarSymbolQueryService calendarSymbolQueryService;
 
     private final TripService tripService;
-
-    @PreAgencyAuthorize
-    @Transactional
-    public Status createBrigade(String instance, BrigadeBody request) {
-
-        if (existsByBrigadeName(request.getBrigadeName())) {
-            throw new BusinessException("1000", "Brigade with name %s already exists. Select another one.".formatted(request.getBrigadeName()));
-        }
-
-        var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndCalendarAndSymbol(instance, request.getCalendarSymbolId().getCalendarItemId().getCode(), request.getCalendarSymbolId().getSymbol());
-
-        var brigadeEntity = new BrigadeEntity();
-        brigadeEntity.setBrigadeNumber(request.getBrigadeName());
-        brigadeEntity.setCalendar(calendarSymbolEntity);
-
-        brigadeEntity.setAgency(agencyEntity);
-
-        var savedBrigade = brigadeRepository.save(brigadeEntity);
-
-        var brigadeTrips = request.getTrips().stream()
-                .map(brigadeTrip -> {
-                    var brigadeTripEntity = new BrigadeTripEntity();
-
-                    brigadeTripEntity.setLine(brigadeTrip.getTripId().getRouteId().getLine());
-                    brigadeTripEntity.setName(brigadeTrip.getTripId().getRouteId().getName());
-                    brigadeTripEntity.setVariant(brigadeTrip.getTripId().getVariantName());
-                    brigadeTripEntity.setMode(TripVariantModeMapper.map(brigadeTrip.getTripId().getVariantMode()));
-                    brigadeTripEntity.setTripSequence(brigadeTrip.getTripSequence());
-                    brigadeTripEntity.setBrigadeTripId(brigadeTripEntity.stringifyId(agencyEntity, savedBrigade));
-
-                    brigadeTripEntity.setBrigade(savedBrigade);
-                    brigadeTripEntity.setOrigin(brigadeTrip.getOrigin());
-                    brigadeTripEntity.setDestination(brigadeTrip.getDestination());
-                    brigadeTripEntity.setTravelTimeInSeconds(brigadeTrip.getTravelTimeInSeconds());
-
-                    int secondOfDay = LocalTime.MIN.plusSeconds(brigadeTrip.getDepartureTime()).toSecondOfDay();
-                    brigadeTripEntity.setDepartureTimeInSeconds(secondOfDay);
-
-                    var tripId = new TripId()
-                            .routeId(new RouteId()
-                                    .line(brigadeTrip.getTripId().getRouteId().getLine())
-                                    .name(brigadeTrip.getTripId().getRouteId().getName()))
-                            .variantName(brigadeTrip.getTripId().getVariantName())
-                            .variantMode(brigadeTrip.getTripId().getVariantMode());
-
-                    var tripEntity = tripService.findByTripId(tripId);
-
-                    brigadeTripEntity.setRootTrip(tripEntity);
-                    brigadeTripEntity.setVariantDesignation(tripEntity.getVariantDesignation());
-                    brigadeTripEntity.setVariantDescription(tripEntity.getVariantDescription());
-
-                    return brigadeTripEntity;
-                }).toList();
-
-        brigadeTripRepository.saveAll(brigadeTrips);
-
-        return new Status().status(Status.StatusEnum.CREATED);
-    }
 
     @PreAgencyAuthorize
     @Transactional
@@ -151,10 +89,6 @@ public class BrigadeQueryService {
         });
 
         return new Status().status(Status.StatusEnum.SUCCESS);
-    }
-
-    public boolean existsByBrigadeName(String brigadeName) {
-        return this.brigadeRepository.existsBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadeName);
     }
 
     @PreAgencyAuthorize

@@ -23,7 +23,8 @@ import pl.wrona.webserver.bussiness.brigade.details.BrigadeGroupDetailsService;
 import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorService;
 import pl.wrona.webserver.bussiness.brigade.event.updater.BrigadeEventUpdaterService;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
-import pl.wrona.webserver.bussiness.brigade.group.pagination.BrigadePaginationService;
+import pl.wrona.webserver.bussiness.brigade.item.pagination.BrigadeItemPaginationService;
+import pl.wrona.webserver.bussiness.brigade.item.creator.BrigadeItemCreatorService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceCommandService;
 
 @RestController
@@ -32,8 +33,9 @@ import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceCommandServi
 public class BrigadeController implements BrigadeApi {
 
     private final BrigadeQueryService brigadeQueryService;
+    private final BrigadeItemCreatorService brigadeItemCreatorService;
     private final BrigadeGroupCreatorService brigadeGroupCreatorService;
-    private final BrigadePaginationService brigadePaginationService;
+    private final BrigadeItemPaginationService brigadeItemPaginationService;
     private final BrigadeGroupDetailsService brigadeGroupDetailsService;
     private final BrigadeEventCreatorService brigadeEventCreatorService;
     private final BrigadeEventUpdaterService brigadeEventUpdaterService;
@@ -41,7 +43,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
-        return ResponseEntity.ok(brigadePaginationService.findBrigades(agency));
+        return ResponseEntity.ok(brigadeItemPaginationService.findBrigades(agency));
     }
 
     @Override
@@ -66,7 +68,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<Status> createBrigade(String agency, BrigadeBody createBrigadeRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeQueryService.createBrigade(agency, createBrigadeRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(brigadeItemCreatorService.createBrigade(agency, createBrigadeRequest));
     }
 
     @Override

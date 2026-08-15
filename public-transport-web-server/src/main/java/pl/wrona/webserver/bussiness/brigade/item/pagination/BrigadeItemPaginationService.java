@@ -1,4 +1,4 @@
-package pl.wrona.webserver.bussiness.brigade.group.pagination;
+package pl.wrona.webserver.bussiness.brigade.item.pagination;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.BrigadeBodyV2;
@@ -8,29 +8,33 @@ import org.igeolab.iot.pt.server.api.model.CalendarSymbolId1;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
+import pl.wrona.webserver.bussiness.brigade.item.BrigadeItemQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class BrigadePaginationService {
+public class BrigadeItemPaginationService {
 
     private final BrigadeGroupQueryService brigadeGroupQueryService;
+    private final BrigadeItemQueryService brigadeItemQueryService;
 
     @PreAgencyAuthorize
     public GetBrigadeResponse findBrigades(String instance) {
-        var items = brigadeGroupQueryService.findAll(instance).stream()
+        Map<Long, List<BrigadeGroupEntity>> groupsByItemId = brigadeGroupQueryService.findAll(instance).stream()
                 .collect(Collectors.groupingBy(
-                        BrigadeGroupEntity::getBrigadeItem,
+                        group -> group.getBrigadeItem().getBrigadeItemId(),
                         LinkedHashMap::new,
-                        Collectors.toList()))
-                .entrySet().stream()
-                .map(entry -> mapItem(entry.getKey(), entry.getValue()))
+                        Collectors.toList()));
+
+        var items = brigadeItemQueryService.findAll(instance).stream()
+                .map(item -> mapItem(item, groupsByItemId.getOrDefault(item.getBrigadeItemId(), List.of())))
                 .toList();
 
         return new GetBrigadeResponse()
@@ -43,7 +47,7 @@ public class BrigadePaginationService {
                 .sequence(brigadeItem.getSequence())
                 .sequenceHex(brigadeItem.getSequenceHex())
                 .brigades(brigadeGroups.stream()
-                        .map(BrigadePaginationService::map)
+                        .map(BrigadeItemPaginationService::map)
                         .toList());
     }
 
