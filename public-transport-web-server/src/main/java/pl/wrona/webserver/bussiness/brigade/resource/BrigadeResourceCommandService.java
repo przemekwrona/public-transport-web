@@ -39,7 +39,7 @@ public class BrigadeResourceCommandService {
         var nextResourceSequence = this.brigadeResourceSequenceQueryService.findNextValue(instance, brigadeCode, Hex.fromHex(calendarCode), calendarSymbol);
         var nextResourceSequenceCode = Hex.toHex(nextResourceSequence);
 
-        var savedBrigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode);
+        var savedBrigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, calendarSymbol);
 
         var brigadeResourceEntity = new BrigadeResourceEntity();
         brigadeResourceEntity.setBrigadeGroup(savedBrigadeGroup);
