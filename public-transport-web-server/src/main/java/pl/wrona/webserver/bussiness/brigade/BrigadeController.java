@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.brigade.details.BrigadeGroupDetailsService;
 import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorService;
+import pl.wrona.webserver.bussiness.brigade.event.deletion.BrigadeEventDeletionService;
 import pl.wrona.webserver.bussiness.brigade.event.updater.BrigadeEventUpdaterService;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
 import pl.wrona.webserver.bussiness.brigade.item.pagination.BrigadeItemPaginationService;
@@ -39,6 +40,7 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadeGroupDetailsService brigadeGroupDetailsService;
     private final BrigadeEventCreatorService brigadeEventCreatorService;
     private final BrigadeEventUpdaterService brigadeEventUpdaterService;
+    private final BrigadeEventDeletionService brigadeEventDeletionService;
     private final BrigadeResourceCommandService brigadeResourceCommandService;
 
     @Override
@@ -64,6 +66,11 @@ public class BrigadeController implements BrigadeApi {
     @Override
     public ResponseEntity<Status> putBrigadeEvent(String agency, String brigadeCode, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
         return ResponseEntity.ok(brigadeEventUpdaterService.putBrigadeEvent(agency, calendarCode, symbol, resourceCode, putBrigadeEventBody));
+    }
+
+    @Override
+    public ResponseEntity<Status> deleteBrigadeEvent(String agency, String brigadeCode, String calendarCode, String symbol, String resourceCode, String eventCode) {
+        return ResponseEntity.ok(brigadeEventDeletionService.deleteBrigadeEvent(agency, calendarCode, symbol, eventCode));
     }
 
     @Override
