@@ -34,4 +34,8 @@ public class BrigadeItemEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
+    private Integer sequence;
+
+    private String sequenceHex;
+
 }

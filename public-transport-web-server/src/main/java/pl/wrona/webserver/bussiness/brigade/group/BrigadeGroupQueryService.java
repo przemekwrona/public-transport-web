@@ -21,4 +21,8 @@ public class BrigadeGroupQueryService {
         return brigadeGroupQueryRepository.findAllByAgencyCode(instance);
     }
 
+    public List<BrigadeGroupEntity> findAllByBrigadeCode(String instance, String brigadeCode) {
+        return brigadeGroupQueryRepository.findAllByAgencyCodeAndBrigadeCode(instance, brigadeCode);
+    }
+
 }

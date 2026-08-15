@@ -6,9 +6,9 @@ import org.igeolab.iot.pt.server.api.model.BrigadeBody;
 import org.igeolab.iot.pt.server.api.model.BrigadeBodyV2;
 import org.igeolab.iot.pt.server.api.model.BrigadeDeleteBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
-import org.igeolab.iot.pt.server.api.model.BrigadePayload;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeResponse;
+import org.igeolab.iot.pt.server.api.model.GetBrigadeDetailsResponse;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.NextBrigadeEventSequenceResponse;
 import org.igeolab.iot.pt.server.api.model.NextCalendarResourceSequenceResponse;
@@ -77,8 +77,8 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<BrigadeBody> getBrigadeByBrigadeName(String agency, BrigadePayload brigadePayload) {
-        return ResponseEntity.ok(brigadeGroupDetailsService.getBrigadeByBrigadeName(agency, brigadePayload));
+    public ResponseEntity<GetBrigadeDetailsResponse> getBrigadeDetails(String agency, String brigadeCode) {
+        return ResponseEntity.ok(brigadeGroupDetailsService.getBrigadeDetails(agency, brigadeCode));
     }
 
     @Override
