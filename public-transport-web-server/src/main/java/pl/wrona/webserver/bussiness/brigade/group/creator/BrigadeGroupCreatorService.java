@@ -11,6 +11,7 @@ import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceCommandServi
 import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeGroupCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
+import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemQueryRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -21,29 +22,28 @@ public class BrigadeGroupCreatorService {
     private final BrigadeGroupCommandRepository brigadeGroupCommandRepository;
     private final CalendarSymbolQueryService calendarSymbolQueryService;
     private final BrigadeGroupQueryService brigadeGroupQueryService;
-    private final BrigadeItemQueryRepository brigadeItemQueryRepository;
     private final BrigadeResourceCommandService brigadeResourceCommandService;
 
     @PreAgencyAuthorize
     @Transactional
     public CreateCalendarSymbolBrigadeResponse createBrigadeGroup(String instance, String brigadeCode, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest request) {
-        var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);
+        var usedCalendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, brigadeCode, calendarCode, calendarSymbol);
 
-        var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode);
-        if (brigadeGroup != null) {
+        if(usedCalendarSymbolEntity != null) {
             return new CreateCalendarSymbolBrigadeResponse()
                     .status(new Status().status(Status.StatusEnum.EXISTS));
         }
 
-        var brigadeItem = brigadeItemQueryRepository.findByAgencyCodeAndSequenceHex(instance, brigadeCode);
+        var brigadeGroupEntity = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode);
+        var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);
 
-        var brigadeGroupEntity = new BrigadeGroupEntity();
-        brigadeGroupEntity.setBrigadeItem(brigadeItem);
-        brigadeGroupEntity.setCalendarSymbol(calendarSymbolEntity);
-        brigadeGroupEntity.setName(request.getBrigadeName());
+        var brigadeGroup = new BrigadeGroupEntity();
+        brigadeGroup.setBrigadeItem(brigadeGroupEntity.getBrigadeItem());
+        brigadeGroup.setCalendarSymbol(calendarSymbolEntity);
+        brigadeGroup.setName(request.getBrigadeName());
         brigadeGroupCommandRepository.save(brigadeGroupEntity);
 
-        brigadeResourceCommandService.init(instance, brigadeItem.getSequenceHex(), calendarCode, calendarSymbol);
+        var savedBrigadeResource = brigadeResourceCommandService.init(instance, brigadeCode, calendarCode, calendarSymbol);
 
         return new CreateCalendarSymbolBrigadeResponse()
                 .status(new Status().status(Status.StatusEnum.CREATED));
