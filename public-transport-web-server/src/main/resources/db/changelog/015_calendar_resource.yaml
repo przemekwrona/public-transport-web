@@ -96,6 +96,13 @@ databaseChangeLog:
                     foreignKeyName: fk_brigade_group_brigade_item
                     references: brigade_item(brigade_item_id)
               - column:
+                  name: calendar_symbol_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_brigade_group_calendar_symbol
+                    references: calendar_symbol(calendar_symbol_id)
+              - column:
                   name: name
                   type: varchar(50)
                   constraints:

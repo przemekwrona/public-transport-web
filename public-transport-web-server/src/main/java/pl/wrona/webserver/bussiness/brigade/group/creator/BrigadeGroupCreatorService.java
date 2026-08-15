@@ -24,7 +24,7 @@ public class BrigadeGroupCreatorService {
 
     @PreAgencyAuthorize
     @Transactional
-    public CreateCalendarSymbolBrigadeResponse createBrigadeGroup(String instance, Integer brigadeItemSequence, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest request) {
+    public CreateCalendarSymbolBrigadeResponse createBrigadeGroup(String instance, String brigadeCode, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest request) {
         var calendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);
 
         var brigadeGroup = brigadeGroupQueryService.findByCalendarCodeAndCalendarSymbol(instance, calendarCode, calendarSymbol);
@@ -38,7 +38,7 @@ public class BrigadeGroupCreatorService {
         brigadeGroupEntity.setName(request.getBrigadeName());
         brigadeGroupCommandRepository.save(brigadeGroupEntity);
 
-        brigadeResourceCommandService.init(instance, brigadeItemSequence, calendarCode, calendarSymbol);
+        brigadeResourceCommandService.init(instance, brigadeCode, calendarCode, calendarSymbol);
 
         return new CreateCalendarSymbolBrigadeResponse()
                 .status(new Status().status(Status.StatusEnum.CREATED));
