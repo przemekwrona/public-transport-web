@@ -444,6 +444,8 @@ components:
           type: integer
         sequenceHex:
           type: string
+        tripId:
+          $ref: '../public-transport-core.yaml#/components/schemas/TripId'
 
     BrigadeEvent:
       type: object
