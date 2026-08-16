@@ -8,15 +8,20 @@ import org.igeolab.iot.pt.server.api.model.BrigadeResource;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolId1;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeDetailsResponse;
+import org.igeolab.iot.pt.server.api.model.RouteId;
+import org.igeolab.iot.pt.server.api.model.TripId2;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
+import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemQueryRepository;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
+import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
+import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -132,6 +137,21 @@ public class BrigadeGroupDetailsService {
                 .line(brigadeEventEntity.getLine())
                 .name(brigadeEventEntity.getName())
                 .sequence(brigadeEventEntity.getSequence())
-                .sequenceHex(brigadeEventEntity.getSequenceHex());
+                .sequenceHex(brigadeEventEntity.getSequenceHex())
+                .tripId(mapTripId(brigadeEventEntity.getTrip()));
+    }
+
+    private static TripId2 mapTripId(TripEntity trip) {
+        if (trip == null || trip.getRoute() == null) {
+            return null;
+        }
+        return new TripId2()
+                .routeId(new RouteId()
+                        .line(trip.getRoute().getLine())
+                        .name(trip.getRoute().getName())
+                        .version(trip.getRoute().getVersion()))
+                .variantName(trip.getVariantName())
+                .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
+                .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()));
     }
 }
