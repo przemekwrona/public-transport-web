@@ -7,9 +7,11 @@ import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.route.LineNameCleaner;
 import pl.wrona.webserver.bussiness.route.RouteCommandService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.bussiness.route.RouteSequenceQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.agency.RouteEntity;
@@ -26,6 +28,7 @@ public class RouteCreatorService {
     private final AgencyService agencyService;
     private final RouteCommandService routeCommandService;
     private final RouteQueryService routeQueryService;
+    private final RouteSequenceQueryService routeSequenceQueryService;
 
     @Transactional
     @PreAgencyAuthorize
@@ -50,6 +53,10 @@ public class RouteCreatorService {
         unsavedRouteEntity.setVia(route.getVia());
         unsavedRouteEntity.setGoogle(route.getGoogle());
         unsavedRouteEntity.setActive(route.getActive());
+
+        var nextSequence = routeSequenceQueryService.findNextValue(instance);
+        unsavedRouteEntity.setRouteSequence(nextSequence);
+        unsavedRouteEntity.setRouteCode(Hex.toHex5(nextSequence));
 
         LocalDateTime now = LocalDateTime.now();
 
