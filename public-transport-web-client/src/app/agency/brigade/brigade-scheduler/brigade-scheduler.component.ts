@@ -144,7 +144,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                     resource: resource.sequenceHex,
                     start: departureTime.format('YYYY-MM-DDTHH:mm:ss'),
                     end: arrivalTime.format('YYYY-MM-DDTHH:mm:ss'),
-                    text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${event.line} ${event.name}`,
+                    text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${event.tripId.variantMode} ${event.line} ${event.name}`,
                     color: '#e69138',
                     tags: {
                         line: event.line,
