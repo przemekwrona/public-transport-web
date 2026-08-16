@@ -7,8 +7,10 @@ import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
+import pl.wrona.webserver.bussiness.trip.TripSequenceQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.bussiness.trip.TripRepository;
@@ -36,6 +38,7 @@ public class TripCreatorService {
     private final StopTimeRepository stopTimeRepository;
     private final TripQueryService tripQueryService;
     private final RouteQueryService routeQueryService;
+    private final TripSequenceQueryService tripSequenceQueryService;
 
     @Transactional
     @PreAgencyAuthorize
@@ -62,6 +65,10 @@ public class TripCreatorService {
 
         TripEntity tripEntity = TripMapper.map(tripRequest);
         tripEntity.setRoute(route);
+
+        var nextSequence = tripSequenceQueryService.findNextValue(instance, route.getRouteSequence());
+        tripEntity.setTripSequence(nextSequence);
+        tripEntity.setTripCode(Hex.toHex3(nextSequence));
 
         LocalDateTime now = LocalDateTime.now();
         tripEntity.setCreatedAt(now);
