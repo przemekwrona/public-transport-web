@@ -1,1 +1,13 @@
-<p>brigade-timetable-modal works!</p>
+<h2 mat-dialog-title>Rozkład jazdy</h2>
+
+<mat-dialog-content class="mat-typography">
+    @if (timetable.trips?.length) {
+        <p>Załadowano kursów: {{ timetable.trips.length }}</p>
+    } @else {
+        <p>Ładowanie rozkładu…</p>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Zamknij</button>
+</mat-dialog-actions>
