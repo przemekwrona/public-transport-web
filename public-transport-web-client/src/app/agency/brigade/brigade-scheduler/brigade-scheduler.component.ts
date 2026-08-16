@@ -181,6 +181,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             const endDate = moment(result.end).format('HH:mm');
 
             const instance: string = this.agencyStorage.getInstance();
+            const tripId = result.tripId;
 
             this.brigadeService.getNextBrigadeEventSequence(instance, this.brigadeCode, this.brigadeBody.calendarSymbolId.calendarItemId.code, this.brigadeBody.calendarSymbolId.symbol, result.resourceId).subscribe((response) => {
                 const line = result.tripId.routeId.line;
@@ -195,8 +196,9 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                     tags: {
                         line,
                         name,
+                        tripId: tripId,
                         sequence: response.sequence,
-                        sequenceHex: response.sequenceHex
+                        sequenceHex: response.sequenceHex,
                     }
                 } as DayPilot.EventData;
 
@@ -210,7 +212,8 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                     line,
                     name,
                     sequence: response.sequence,
-                    sequenceHex: response.sequenceHex
+                    sequenceHex: response.sequenceHex,
+                    tripId
                 };
 
                 this.brigadeService.putBrigadeEvent(

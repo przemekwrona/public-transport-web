@@ -46,7 +46,7 @@ export class OnTimeRangeSelectedModalComponent {
     data = inject<{ start: string, end: string, resourceId: string }>(MAT_DIALOG_DATA);
 
     modelForm = this.formBuilder.group({
-        route: [null, [Validators.required]]
+        tripId: [null, [Validators.required]]
     });
 
     constructor(private dialogRef: MatDialogRef<OnTimeRangeSelectedModalComponent>, private agencyStorageService: AgencyStorageService, private tripService: TripService) {
@@ -54,7 +54,7 @@ export class OnTimeRangeSelectedModalComponent {
 
     public selectTrip() {
         const instance = this.agencyStorageService.getInstance();
-        const tripId: TripId = this.modelForm.controls['route'].value;
+        const tripId: TripId = this.modelForm.controls['tripId'].value;
         this.tripService.getTripByVariant(instance, tripId).subscribe(tripDetails => {
 
             const lastStop = tripDetails?.stops?.reduce((curr, next) =>
