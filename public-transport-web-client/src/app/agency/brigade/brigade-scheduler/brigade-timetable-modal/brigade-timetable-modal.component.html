@@ -2,12 +2,28 @@
 
 <mat-dialog-content class="mat-typography">
     @if (timetable.trips?.length) {
-        <p>Załadowano kursów: {{ timetable.trips.length }}</p>
+        <div class="flex flex-col gap-4">
+            @for (trip of timetable.trips; track trip.tripId?.routeId?.line + '-' + trip.tripId?.routeId?.name) {
+                <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                    <div class="text-sm font-medium text-gray-900 mb-2">
+                        {{ trip.tripId?.routeId?.line }} {{ trip.tripId?.routeId?.name }}
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <app-timetable-board
+                                title="Tam"
+                                [variant]="trip.front ?? {}">
+                        </app-timetable-board>
+                        <app-timetable-board
+                                title="Powrót"
+                                [variant]="trip.back ?? {}">
+                        </app-timetable-board>
+                    </div>
+                </div>
+            }
+        </div>
     } @else {
         <p>Ładowanie rozkładu…</p>
     }
-
-    {{timetable | json}}
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
