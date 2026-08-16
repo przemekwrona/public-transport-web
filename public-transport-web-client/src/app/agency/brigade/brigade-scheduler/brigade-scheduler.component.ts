@@ -16,7 +16,7 @@ import {
     BrigadeResource,
     BrigadeService,
     NextCalendarResourceSequenceResponse,
-    PutBrigadeEventBody
+    PutBrigadeEventBody, TripId2
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
@@ -150,7 +150,8 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                         line: event.line,
                         name: event.name,
                         sequence: event.sequence,
-                        sequenceHex: event.sequenceHex
+                        sequenceHex: event.sequenceHex,
+                        tripId: event.tripId,
                     }
                 } as DayPilot.EventData;
             });
@@ -249,20 +250,22 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         const tags = args.e.data.tags ?? {};
         const line: string = tags.line;
         const name: string = tags.name;
+        const tripId: TripId2 = tags.tripId;
         const sequence: number = tags.sequence;
         const sequenceHex: string = tags.sequenceHex ?? String(args.e.id());
 
         const startMoment = moment(args.newStart.toString());
         const endMoment = moment(args.newEnd.toString());
         const midnight = startMoment.clone().startOf('day');
-
+        console.log(tripId);
         const putBrigadeEventBody: PutBrigadeEventBody = {
             startSecond: startMoment.diff(midnight, 'seconds'),
             endSecond: endMoment.diff(midnight, 'seconds'),
             line,
             name,
             sequence,
-            sequenceHex
+            sequenceHex,
+            tripId
         };
 
         const instance: string = this.agencyStorage.getInstance();
