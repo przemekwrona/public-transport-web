@@ -3,20 +3,14 @@
 }
 
 @for (hour of hours; track hour) {
-    @if (departuresForHour(hour).length) {
-        <div class="border-b border-zinc-200 row py-1">
-            <div class="inline-block font-bold px-2 w-8">{{ hour | number: '2.0-0' }}</div>
-            <div class="inline-flex flex-wrap gap-1.5">
-                @for (departure of departuresForHour(hour); track $index) {
-                    <span class="text-sm text-gray-900">
-                        {{ departure.m != null ? (departure.m | number: '2.0-0') : departure.time }}{{ departure.symbol }}
-                    </span>
-                }
-            </div>
+    <div class="border-b border-zinc-200 row py-1 min-w-96">
+        <div class="inline-block font-bold px-2 w-8">{{ hour | number: '2.0-0' }}</div>
+        <div class="inline-flex flex-wrap gap-1.5">
+            @for (departure of departuresForHour(hour); track $index) {
+                <span class="text-sm text-gray-900">
+                    {{ departure.m != null ? (departure.m | number: '2.0-0') : departure.time }}{{ departure.symbol }}
+                </span>
+            }
         </div>
-    }
-}
-
-@if (!(variant?.departures?.length)) {
-    <span class="text-sm text-gray-500">Brak odjazdów</span>
+    </div>
 }
