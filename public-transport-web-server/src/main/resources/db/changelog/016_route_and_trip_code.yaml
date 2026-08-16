@@ -49,3 +49,59 @@ databaseChangeLog:
       rollback:
         - dropTable:
             tableName: route_sequence
+
+  - changeSet:
+      id: add-trip-sequence-and-trip-code-to-trip
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: trip
+            columns:
+              - column:
+                  name: trip_sequence
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: trip_code
+                  type: varchar(5)
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropColumn:
+            tableName: trip
+            columnName: trip_sequence
+        - dropColumn:
+            tableName: trip
+            columnName: trip_code
+
+  - changeSet:
+      id: create-trip-sequence-table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: trip_sequence
+            columns:
+              - column:
+                  name: agency_code
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: route_sequence
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: next_value
+                  type: BIGINT
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: trip_sequence
+            columnNames: agency_code, route_sequence
+            constraintName: pk_trip_sequence
+      rollback:
+        - dropTable:
+            tableName: trip_sequence
