@@ -58,3 +58,7 @@ databaseChangeLog:
   - include:
       file: 015_calendar_resource.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 016_route_and_trip_code.yaml
+      relativeToChangelogFile: true

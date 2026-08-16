@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-route-sequence-and-route-code-to-route
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: route
+            columns:
+              - column:
+                  name: route_sequence
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: route_code
+                  type: varchar(5)
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropColumn:
+            tableName: route
+            columnName: route_sequence
+        - dropColumn:
+            tableName: route
+            columnName: route_code
+
+  - changeSet:
+      id: create-route-sequence-table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: route_sequence
+            columns:
+              - column:
+                  name: agency_code
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: next_value
+                  type: BIGINT
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: route_sequence
+            columnNames: agency_code
+            constraintName: pk_route_sequence
+      rollback:
+        - dropTable:
+            tableName: route_sequence

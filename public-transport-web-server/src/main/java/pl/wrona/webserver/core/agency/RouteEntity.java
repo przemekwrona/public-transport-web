@@ -40,6 +40,12 @@ public class RouteEntity {
 
     private int version;
 
+    @Column(name = "route_sequence")
+    private Integer routeSequence;
+
+    @Column(name = "route_code", length = 5)
+    private String routeCode;
+
     @Column(name = "origin_stop_id")
     private Long originStopId;
 
