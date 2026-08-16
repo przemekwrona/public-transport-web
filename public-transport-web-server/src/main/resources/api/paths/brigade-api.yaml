@@ -160,6 +160,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateCalendarSymbolBrigadeResponse'
 
+  /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{calendarSymbol}/timetable:
+    get:
+      tags:
+        - brigade-timetable
+      summary: Get brigade timetable departures for calendar symbol
+      operationId: getTimetableByBrigadeAndCalendarSymbol
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: brigadeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarSymbol
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTimetableByBrigadeResponse'
+
   /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{symbol}/resource:
     get:
       tags:
@@ -537,3 +572,50 @@ components:
       properties:
         brigadeName:
           type: string
+
+    BrigadeTimetableDeparture:
+      type: object
+      properties:
+        time:
+          type: string
+        symbol:
+          type: string
+          description: Symbol on timetable; may be empty
+
+    BrigadeTimetableSymbolExplanation:
+      type: object
+      properties:
+        symbol:
+          type: string
+        explanation:
+          type: string
+
+    BrigadeTimetableVariant:
+      type: object
+      properties:
+        departures:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrigadeTimetableDeparture'
+
+    BrigadeTimetableTrip:
+      type: object
+      properties:
+        tripId:
+          $ref: '../public-transport-core.yaml#/components/schemas/TripId'
+        front:
+          $ref: '#/components/schemas/BrigadeTimetableVariant'
+        back:
+          $ref: '#/components/schemas/BrigadeTimetableVariant'
+        symbols:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrigadeTimetableSymbolExplanation'
+
+    GetTimetableByBrigadeResponse:
+      type: object
+      properties:
+        trips:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrigadeTimetableTrip'
