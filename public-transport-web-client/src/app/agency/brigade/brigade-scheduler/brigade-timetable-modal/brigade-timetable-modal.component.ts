@@ -13,6 +13,7 @@ import {
     GetTimetableByBrigadeResponse
 } from '../../../../generated/public-transport-api';
 import {AgencyStorageService} from '../../../../auth/agency-storage.service';
+import {TimetableBoardComponent} from './timetable-board/timetable-board.component';
 
 export interface BrigadeTimetableModalData {
     brigadeCode: string;
@@ -28,7 +29,8 @@ export interface BrigadeTimetableModalData {
         MatDialogContent,
         MatDialogActions,
         MatDialogClose,
-        MatButton
+        MatButton,
+        TimetableBoardComponent
     ],
     providers: [
         AgencyStorageService,
