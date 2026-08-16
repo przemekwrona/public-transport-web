@@ -22,10 +22,17 @@ public class BrigadeEventQueryService {
     }
 
     public List<BrigadeEventEntity> findAllByAgencyAndBrigadeAndCalendarAndSymbol(String agency, String brigadeCode, String calendarCode, String calendarSymbol) {
-        return brigadeEventQueryRepository.findAllByAgencyAndBrigadeAndCalendarAndSymbol(agency, brigadeCode, calendarCode, calendarSymbol);
+        return brigadeEventQueryRepository.findAllByAgencyAndBrigadeAndCalendarAndSymbol(
+                agency, brigadeCode, calendarCode, calendarSymbol);
+    }
+
+    public List<BrigadeEventEntity> findAllWithTripByAgencyAndBrigadeAndCalendarAndSymbol(String agency, String brigadeCode, String calendarCode, String calendarSymbol) {
+        return brigadeEventQueryRepository.findAllWithTripByAgencyAndBrigadeAndCalendarAndSymbol(
+                agency, brigadeCode, calendarCode, calendarSymbol);
     }
 
     public BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(String agency, String calendarCode, String symbol, String eventCode) {
-        return brigadeEventQueryRepository.findByAgencyAndCalendarAndSymbolAndEventHex(agency, calendarCode, symbol, eventCode);
+        return brigadeEventQueryRepository.findByAgencyAndCalendarAndSymbolAndEventHex(
+                agency, calendarCode, symbol, eventCode);
     }
 }
