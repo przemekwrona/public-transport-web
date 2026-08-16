@@ -25,4 +25,15 @@ public class TripSequenceCommandService {
                 new TripSequenceId(agencyCode, routeSequence), 1L));
     }
 
+    @Transactional
+    public TripSequenceEntity saveNextValue(String agencyCode, Integer routeSequence, long nextValue) {
+        var existing = tripSequenceQueryRepository.findByAgencyCodeAndRouteSequence(agencyCode, routeSequence);
+        if (existing == null) {
+            return tripSequenceCommandRepository.save(new TripSequenceEntity(
+                    new TripSequenceId(agencyCode, routeSequence), nextValue));
+        }
+        existing.setNextValue(nextValue);
+        return tripSequenceCommandRepository.save(existing);
+    }
+
 }
