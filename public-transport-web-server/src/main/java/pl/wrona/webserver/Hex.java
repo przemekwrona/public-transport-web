@@ -26,4 +26,9 @@ public class Hex {
         return String.format("%5s", Integer.toString(sequence, RADIX_36)).replace(' ', '0');
     }
 
+    public String toHex3(Integer sequence) {
+        // Converts an Integer to a zero-padded 3-character base-36 string
+        return String.format("%3s", Integer.toString(sequence, RADIX_36)).replace(' ', '0');
+    }
+
 }
