@@ -21,9 +21,11 @@ public class BrigadeEventQueryService {
         return brigadeEventQueryRepository.findAllByResourceBrigadeResourceIdInOrderByStartSecondAsc(resourceIds);
     }
 
-    public BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(
-            String agency, String calendarCode, String symbol, String eventCode) {
-        return brigadeEventQueryRepository.findByAgencyAndCalendarAndSymbolAndEventHex(
-                agency, calendarCode, symbol, eventCode);
+    public List<BrigadeEventEntity> findAllByAgencyAndBrigadeAndCalendarAndSymbol(String agency, String brigadeCode, String calendarCode, String calendarSymbol) {
+        return brigadeEventQueryRepository.findAllByAgencyAndBrigadeAndCalendarAndSymbol(agency, brigadeCode, calendarCode, calendarSymbol);
+    }
+
+    public BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(String agency, String calendarCode, String symbol, String eventCode) {
+        return brigadeEventQueryRepository.findByAgencyAndCalendarAndSymbolAndEventHex(agency, calendarCode, symbol, eventCode);
     }
 }
