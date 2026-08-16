@@ -320,3 +320,22 @@ databaseChangeLog:
       rollback:
         - dropTable:
             tableName: brigade_event_sequence
+
+  - changeSet:
+      id: add-preferred-route-id-to-brigade-item
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: brigade_item
+            columns:
+              - column:
+                  name: preferred_route_id
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_brigade_item_preferred_route
+                    references: route(route_id)
+      rollback:
+        - dropColumn:
+            tableName: brigade_item
+            columnName: preferred_route_id
