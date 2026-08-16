@@ -87,6 +87,12 @@ public class TripEntity {
     @JoinColumn(name = "route_id", referencedColumnName = "route_id")
     private RouteEntity route;
 
+    @Column(name = "trip_sequence")
+    private Integer tripSequence;
+
+    @Column(name = "trip_code", length = 5)
+    private String tripCode;
+
     @Column(name = "geometry")
     private String geometry;
 
