@@ -578,6 +578,12 @@ components:
     BrigadeTimetableDeparture:
       type: object
       properties:
+        h:
+          type: integer
+          description: Hour of departure
+        m:
+          type: integer
+          description: Minute of departure
         time:
           type: string
         symbol:
