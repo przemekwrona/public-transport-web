@@ -7,6 +7,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
+import pl.wrona.webserver.bussiness.trip.TripCommandService;
 import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
