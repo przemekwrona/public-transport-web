@@ -64,8 +64,11 @@ public class BrigadeTimetableDetailsService {
     }
 
     private static BrigadeTimetableDeparture toDeparture(BrigadeEventEntity event) {
+        var time = LocalTime.MIN.plusSeconds(event.getStartSecond());
         return new BrigadeTimetableDeparture()
-                .time(LocalTime.MIN.plusSeconds(event.getStartSecond()).format(TIME_FORMATTER))
+                .h(time.getHour())
+                .m(time.getMinute())
+                .time(time.format(TIME_FORMATTER))
                 .symbol("");
     }
 
