@@ -64,7 +64,7 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: trip_code
-                  type: varchar(5)
+                  type: varchar(3)
                   constraints:
                     nullable: true
       rollback:
