@@ -49,4 +49,10 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
             WHERE t.route.agency.agencyCode = :agencyCode
                 AND EXISTS (SELECT 1 FROM BrigadeTripEntity bd WHERE bd.rootTrip.tripId = t.tripId)""")
     List<TripEntity> findByExistsBrigade(@Param("agencyCode") String agencyCode);
+
+    @Query("""
+            SELECT t FROM TripEntity t
+            WHERE t.route.routeId = :routeId
+            ORDER BY t.createdAt ASC NULLS LAST, t.tripId ASC""")
+    List<TripEntity> findByRouteIdOrderByCreatedAtAsc(@Param("routeId") Long routeId);
 }

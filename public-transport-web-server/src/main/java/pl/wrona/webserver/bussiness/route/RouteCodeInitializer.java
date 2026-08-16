@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.core.AgencyRepository;
@@ -12,6 +13,7 @@ import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.RouteEntity;
 
 @Slf4j
+@Order(1)
 @Service
 @AllArgsConstructor
 public class RouteCodeInitializer implements ApplicationRunner {
