@@ -15,6 +15,8 @@ components:
           type: string
         version:
           type: integer
+        routeCode:
+          type: string
 
     TrafficMode:
       type: string
@@ -39,6 +41,8 @@ components:
           $ref: '#/components/schemas/TripMode'
         trafficMode:
           $ref: '#/components/schemas/TrafficMode'
+        tripCode:
+          type: string
 
     CalendarItemId:
       type: object
