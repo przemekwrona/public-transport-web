@@ -17,8 +17,13 @@ export class TimetableBoardComponent {
 
     @Input() title: string = '';
     @Input() variant: BrigadeTimetableVariant = {};
+    @Input() excludeHours: number[] = [];
 
     readonly hours: number[] = Array.from({length: 24}, (_, hour) => hour);
+
+    get visibleHours(): number[] {
+        return this.hours.filter(hour => !this.excludeHours.includes(hour));
+    }
 
     departuresForHour(hour: number): BrigadeTimetableDeparture[] {
         return (this.variant?.departures ?? []).filter(departure => this.hourOf(departure) === hour);
