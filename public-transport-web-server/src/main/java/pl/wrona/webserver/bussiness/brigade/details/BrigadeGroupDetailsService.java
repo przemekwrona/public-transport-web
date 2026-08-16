@@ -9,6 +9,7 @@ import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolId1;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeDetailsResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId;
+import org.igeolab.iot.pt.server.api.model.RouteId1;
 import org.igeolab.iot.pt.server.api.model.TripId2;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
@@ -146,10 +147,11 @@ public class BrigadeGroupDetailsService {
             return null;
         }
         return new TripId2()
-                .routeId(new RouteId()
+                .routeId(new RouteId1()
                         .line(trip.getRoute().getLine())
                         .name(trip.getRoute().getName())
-                        .version(trip.getRoute().getVersion()))
+                        .version(trip.getRoute().getVersion())
+                        .routeCode(trip.getRoute().getRouteCode()))
                 .variantName(trip.getVariantName())
                 .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
                 .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()));

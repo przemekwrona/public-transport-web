@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.brigade.event.updater;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.PutBrigadeEventBody;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,10 @@ public class BrigadeEventUpdaterService {
 
         var tripIdBody = putBrigadeEventBody.getTripId();
         TripEntity trip = tripQueryService.findByAgencyCodeAndTripId(instance, new TripId()
-                .routeId(tripIdBody.getRouteId())
+                .routeId(new RouteId()
+                        .line(tripIdBody.getRouteId().getLine())
+                        .name(tripIdBody.getRouteId().getName())
+                        .version(tripIdBody.getRouteId().getVersion()))
                 .variantName(tripIdBody.getVariantName())
                 .variantMode(tripIdBody.getVariantMode())
                 .trafficMode(tripIdBody.getTrafficMode()));
