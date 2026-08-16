@@ -28,6 +28,21 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
 
     @Query("""
             SELECT e FROM BrigadeEventEntity e
+            JOIN FETCH e.trip t
+            JOIN FETCH t.route
+            WHERE e.resource.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
+            AND e.resource.brigadeGroup.brigadeItem.sequenceHex = :brigadeCode
+            AND e.resource.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
+            AND e.resource.brigadeGroup.calendarSymbol.designation = :calendarSymbol
+            ORDER BY e.startSecond ASC""")
+    List<BrigadeEventEntity> findAllWithTripByAgencyAndBrigadeAndCalendarAndSymbol(
+            @Param("agency") String agency,
+            @Param("brigadeCode") String brigadeCode,
+            @Param("calendarCode") String calendarCode,
+            @Param("calendarSymbol") String calendarSymbol);
+
+    @Query("""
+            SELECT e FROM BrigadeEventEntity e
             WHERE e.resource.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
             AND e.resource.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
             AND e.resource.brigadeGroup.calendarSymbol.designation = :symbol
