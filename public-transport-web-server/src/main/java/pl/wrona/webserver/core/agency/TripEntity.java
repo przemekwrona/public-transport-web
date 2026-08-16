@@ -90,7 +90,7 @@ public class TripEntity {
     @Column(name = "trip_sequence")
     private Integer tripSequence;
 
-    @Column(name = "trip_code", length = 5)
+    @Column(name = "trip_code", length = 3)
     private String tripCode;
 
     @Column(name = "geometry")
