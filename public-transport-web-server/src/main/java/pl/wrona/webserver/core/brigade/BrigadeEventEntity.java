@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.core.agency.TripEntity;
 
 @Data
 @Entity
@@ -35,6 +36,10 @@ public class BrigadeEventEntity {
     @ManyToOne
     @JoinColumn(name = "resource_id", nullable = false)
     private BrigadeResourceEntity resource;
+
+    @ManyToOne
+    @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", nullable = false)
+    private TripEntity trip;
 
     @Column(nullable = false, length = 10)
     private String line;
