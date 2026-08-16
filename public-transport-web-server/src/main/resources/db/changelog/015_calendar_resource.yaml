@@ -248,6 +248,13 @@ databaseChangeLog:
                     foreignKeyName: fk_brigade_event_brigade_resource
                     references: brigade_resource(brigade_resource_id)
               - column:
+                  name: trip_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_brigade_event_trip
+                    references: trip(trip_id)
+              - column:
                   name: line
                   type: varchar(10)
                   constraints:

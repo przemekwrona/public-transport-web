@@ -47,6 +47,7 @@ public class BrigadeEventUpdaterService {
         brigadeEvent.setStartSecond(putBrigadeEventBody.getStartSecond());
         brigadeEvent.setEndSecond(putBrigadeEventBody.getEndSecond());
         brigadeEvent.setResource(resource);
+        brigadeEvent.setTrip(trip);
         brigadeEvent.setLine(putBrigadeEventBody.getLine());
         brigadeEvent.setName(putBrigadeEventBody.getName());
 
