@@ -23,4 +23,14 @@ public class RouteSequenceCommandService {
         return routeSequenceCommandRepository.save(new RouteSequenceEntity(agencyCode, 1L));
     }
 
+    @Transactional
+    public RouteSequenceEntity saveNextValue(String agencyCode, long nextValue) {
+        var existing = routeSequenceQueryRepository.findByAgencyCode(agencyCode);
+        if (existing == null) {
+            return routeSequenceCommandRepository.save(new RouteSequenceEntity(agencyCode, nextValue));
+        }
+        existing.setNextValue(nextValue);
+        return routeSequenceCommandRepository.save(existing);
+    }
+
 }
