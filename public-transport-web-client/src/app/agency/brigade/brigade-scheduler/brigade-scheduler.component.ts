@@ -8,6 +8,9 @@ import {
     OnTimeRangeSelectedModalComponent
 } from "./on-time-range-selected-modal/on-time-range-selected-modal.component";
 import {
+    BrigadeTimetableModalComponent
+} from "./brigade-timetable-modal/brigade-timetable-modal.component";
+import {
     BrigadeBodyV2,
     BrigadeEvent,
     BrigadeResource,
@@ -167,6 +170,16 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     }
 
     // --- CREATE NEW EVENT ---
+    openTimetableModal() {
+        this.dialog.open(BrigadeTimetableModalComponent, {
+            data: {
+                brigadeCode: this.brigadeCode,
+                calendarCode: this.brigadeBody.calendarSymbolId?.calendarItemId?.code,
+                calendarSymbol: this.brigadeBody.calendarSymbolId?.symbol,
+            }
+        });
+    }
+
     openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, resource: DayPilot.ResourceId, dpControl: DayPilot.Scheduler) {
         const dialogRef = this.dialog.open(OnTimeRangeSelectedModalComponent, {
             data: {start: start.toString(), end: end.toString(), resourceId: resource.toString()}
