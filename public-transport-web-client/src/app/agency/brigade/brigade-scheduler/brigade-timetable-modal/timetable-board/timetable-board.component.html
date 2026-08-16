@@ -2,7 +2,7 @@
     <div class="text-xs font-medium text-gray-700 mb-1">{{ title }}</div>
 }
 
-@for (hour of hours; track hour) {
+@for (hour of visibleHours; track hour) {
     <div class="border-b border-zinc-200 row py-1 min-w-96">
         <div class="inline-block font-bold px-2 w-8">{{ hour | number: '2.0-0' }}</div>
         <div class="inline-flex flex-wrap gap-1.5">
