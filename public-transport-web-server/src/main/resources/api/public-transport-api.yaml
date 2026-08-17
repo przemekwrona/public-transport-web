@@ -1529,6 +1529,26 @@ components:
           items:
             $ref: '#/components/schemas/TerritoryUnit'
 
+    TripProfile:
+      type: object
+      properties:
+        trafficMode:
+          $ref: '#/components/schemas/TrafficMode'
+        travelTimeInSeconds:
+          type: integer
+        calculatedCommunicationVelocity:
+          type: integer
+        customizedCommunicationVelocity:
+          type: integer
+        isDefault:
+          type: boolean
+        isCustomized:
+          type: boolean
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/StopTime'
+
     TripsDetails:
       type: object
       properties:
@@ -1544,6 +1564,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StopTime'
+        tripProfiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TripProfile'
         geometry:
           type: array
           items:
