@@ -83,3 +83,39 @@ databaseChangeLog:
         - dropColumn:
             tableName: stop_time
             columnName: trip_profile_id
+
+  - changeSet:
+      id: migrate-trip-into-trip-profile
+      author: pwrona
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO trip_profile (
+                trip_id,
+                traffic_mode,
+                travel_time_in_seconds,
+                calculated_communication_velocity,
+                customized_communication_velocity,
+                is_default,
+                is_customized
+              )
+              SELECT
+                t.trip_id,
+                t.traffic_mode,
+                t.travel_time_in_seconds,
+                t.calculated_communication_velocity,
+                t.customized_communication_velocity,
+                CASE WHEN t.traffic_mode = 'NORMAL' THEN TRUE ELSE FALSE END,
+                COALESCE(t.is_customized, FALSE)
+              FROM trip t;
+        - sql:
+            sql: |
+              UPDATE stop_time st
+              SET trip_profile_id = tp.trip_profile_id
+              FROM trip_profile tp
+              WHERE st.trip_id = tp.trip_id;
+      rollback:
+        - sql:
+            sql: UPDATE stop_time SET trip_profile_id = NULL;
+        - sql:
+            sql: DELETE FROM trip_profile;
