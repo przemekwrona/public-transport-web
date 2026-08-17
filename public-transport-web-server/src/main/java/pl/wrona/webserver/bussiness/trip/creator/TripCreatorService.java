@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.bussiness.trip.TripProfileCommandService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.bussiness.trip.TripSequenceQueryService;
 import pl.wrona.webserver.core.StopService;
@@ -17,6 +18,7 @@ import pl.wrona.webserver.bussiness.trip.TripRepository;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
@@ -39,6 +41,7 @@ public class TripCreatorService {
     private final TripQueryService tripQueryService;
     private final RouteQueryService routeQueryService;
     private final TripSequenceQueryService tripSequenceQueryService;
+    private final TripProfileCommandService tripProfileCommandService;
 
     @Transactional
     @PreAgencyAuthorize
@@ -82,6 +85,17 @@ public class TripCreatorService {
 
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
+        TripProfileEntity tripProfile = new TripProfileEntity();
+        tripProfile.setTrip(savedTrip);
+        tripProfile.setTrafficMode(TripTrafficModeMapper.map(tripRequest.getTripId().getTrafficMode()));
+        tripProfile.setTravelTimeInSeconds(0);
+        tripProfile.setCalculatedCommunicationVelocity(0);
+        tripProfile.setCustomizedCommunicationVelocity(0);
+        tripProfile.setDefaultProfile(false);
+        tripProfile.setCustomized(false);
+
+        var savedTripProfile = tripProfileCommandService.save(tripProfile);
+
         StopTime[] stopTimes = tripRequest.getStops().toArray(StopTime[]::new);
 
         List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
@@ -99,6 +113,7 @@ public class TripCreatorService {
                     entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
                     entity.setCustomizedTimeSeconds(Optional.ofNullable(stopTime.getCustomizedSeconds()).orElse(stopTime.getCalculatedSeconds()));
                     entity.setDistanceMeters(stopTime.getMeters());
+                    entity.setTripProfile(savedTripProfile);
 
                     return entity;
                 }).toList();
