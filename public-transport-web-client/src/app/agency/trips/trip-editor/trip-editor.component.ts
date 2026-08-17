@@ -232,7 +232,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.modelForm.controls['headsign'].setValue(tripDetails.headsign);
 
             this.geometry = tripDetails.geometry;
-            (tripDetails.stops || []).forEach((stopTime: StopTime) => this.stops.push(this.createStopFromStopTimeModel(stopTime)));
+            const profile = tripDetails.tripProfiles
+                .find(profile => profile.trafficMode === tripDetails.tripId.trafficMode);
+            (profile?.stops || []).forEach((stopTime: StopTime) => this.stops.push(this.createStopFromStopTimeModel(stopTime)));
 
             this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: RouteDetails) => {
                 this.$tripVariants = tripVariants;

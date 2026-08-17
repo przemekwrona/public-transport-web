@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface StopTimeRepository extends JpaRepository<StopTimeEntity, StopTimeId> {
 
-    @Query("SELECT st FROM StopTimeEntity st WHERE st.stopTimeId.tripId = :tripId ORDER BY st.stopTimeId.stopSequence")
+    @Query("SELECT st FROM StopTimeEntity st WHERE st.tripProfile.trip.tripId = :tripId ORDER BY st.stopTimeId.stopSequence")
     List<StopTimeEntity> findAllByTripId(@Param("tripId") Long tripId);
 
     List<StopTimeEntity> findAllByTrip(TripEntity trip);
