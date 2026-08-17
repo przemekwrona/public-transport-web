@@ -80,6 +80,9 @@ public class TripEntity {
     @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
     private Set<StopTimeEntity> stopTimes;
 
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
+    private Set<TripProfileEntity> tripProfiles;
+
     @OneToMany(mappedBy = "rootTrip", cascade = CascadeType.REMOVE)
     private Set<BrigadeTripEntity> brigadeTrips;
 

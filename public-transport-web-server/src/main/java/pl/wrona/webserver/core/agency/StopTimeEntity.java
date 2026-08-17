@@ -14,7 +14,7 @@ import pl.wrona.webserver.core.entity.StopEntity;
 @Data
 @Builder
 @Entity
-@Table(name="stop_time")
+@Table(name = "stop_time")
 @NoArgsConstructor
 @AllArgsConstructor
 public class StopTimeEntity {
@@ -29,6 +29,10 @@ public class StopTimeEntity {
     @ManyToOne
     @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false, nullable = false)
     private TripEntity trip;
+
+    @ManyToOne
+    @JoinColumn(name = "trip_profile_id", referencedColumnName = "trip_profile_id")
+    private TripProfileEntity tripProfile;
 
     private int calculatedTimeSeconds;
     private int customizedTimeSeconds;
