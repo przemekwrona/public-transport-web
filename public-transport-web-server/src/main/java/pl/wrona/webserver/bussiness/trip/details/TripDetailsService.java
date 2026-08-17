@@ -11,7 +11,7 @@ import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.bussiness.trip.TripProfileQueryRepository;
+import pl.wrona.webserver.bussiness.trip.TripProfileQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class TripDetailsService {
 
     private final TripQueryService tripQueryService;
-    private final TripProfileQueryRepository tripProfileQueryRepository;
+    private final TripProfileQueryService tripProfileQueryService;
     private final StopTimeRepository stopTimeRepository;
     private final StopService stopService;
     private final ObjectMapper objectMapper;
@@ -43,7 +43,7 @@ public class TripDetailsService {
     public TripsDetails getTripByTripId(String instance, TripId tripId) {
         var tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
 
-        var profiles = tripProfileQueryRepository.findAllByTrip(tripEntity);
+        var profiles = tripProfileQueryService.findAllByTrip(tripEntity);
         var stopTimes = stopTimeRepository.findAllByTripId(tripEntity.getTripId());
         var stops = stopService.findStopByTripId(tripEntity.getTripId());
         var tripProfiles = buildTripProfiles(profiles, stopTimes, stops);
