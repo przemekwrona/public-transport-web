@@ -17,5 +17,6 @@ public interface StopTimeRepository extends JpaRepository<StopTimeEntity, StopTi
     @Query("SELECT st FROM StopTimeEntity st WHERE st.tripProfile.trip.tripId = :tripId ORDER BY st.stopTimeId.stopSequence")
     List<StopTimeEntity> findAllByTripId(@Param("tripId") Long tripId);
 
+    @Query("SELECT st FROM StopTimeEntity st JOIN st.tripProfile.trip t WHERE t = :trip")
     List<StopTimeEntity> findAllByTrip(TripEntity trip);
 }
