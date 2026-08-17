@@ -62,3 +62,7 @@ databaseChangeLog:
   - include:
       file: 016_route_and_trip_code.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 017_trip_profile.yaml
+      relativeToChangelogFile: true
