@@ -15,7 +15,7 @@ public interface GtfsStopTimeRepository extends JpaRepository<StopTimeEntity, St
 
     @Query(value = """
             SELECT st FROM StopTimeEntity st
-            JOIN st.trip t
+            JOIN st.tripProfile.trip t
             JOIN t.brigadeTrips bt WHERE bt = :brigadeTrip""")
     List<StopTimeEntity> findAllByBrigadeTrip(@Param("brigadeTrip") BrigadeTripEntity brigadeTrip);
 }
