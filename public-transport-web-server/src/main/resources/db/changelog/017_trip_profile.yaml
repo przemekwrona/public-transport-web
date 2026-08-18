@@ -211,3 +211,31 @@ databaseChangeLog:
             tableName: stop_time
             columnNames: trip_id, stop_sequence
             constraintName: pk_stop_time
+
+  - changeSet:
+      id: drop-trip-profile-columns-from-trip
+      author: pwrona
+      changes:
+        - dropColumn:
+            tableName: trip
+            columnName: calculated_communication_velocity
+        - dropColumn:
+            tableName: trip
+            columnName: customized_communication_velocity
+        - dropColumn:
+            tableName: trip
+            columnName: is_customized
+      rollback:
+        - addColumn:
+            tableName: trip
+            columns:
+              - column:
+                  name: calculated_communication_velocity
+                  type: int
+              - column:
+                  name: customized_communication_velocity
+                  type: int
+              - column:
+                  name: is_customized
+                  type: boolean
+                  defaultValueBoolean: false
