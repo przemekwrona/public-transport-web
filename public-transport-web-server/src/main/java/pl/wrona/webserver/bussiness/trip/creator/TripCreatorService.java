@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
+import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +59,8 @@ public class TripCreatorService {
         }
 
         TripsDetails tripRequest = createTripDetailsRequest.getBody();
-        List<Long> stopIds = tripRequest.getStops().stream()
+        List<Long> stopIds = tripRequest.getTripProfiles().stream()
+                .flatMap(profile -> profile.getStops().stream())
                 .map(StopTime::getStopId)
                 .toList();
 
@@ -77,48 +79,44 @@ public class TripCreatorService {
         tripEntity.setCreatedAt(now);
         tripEntity.setUpdatedAt(now);
 
-        var lastStop = tripRequest.getStops().stream()
-                .reduce((first, second) -> second);
-
-        tripEntity.setDistanceInMeters(lastStop.map(StopTime::getMeters).orElse(0));
-        tripEntity.setTravelTimeInSeconds(lastStop.map(StopTime::getCalculatedSeconds).orElse(0));
-
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
-        TripProfileEntity tripProfile = new TripProfileEntity();
-        tripProfile.setTrip(savedTrip);
-        tripProfile.setTrafficMode(TripTrafficModeMapper.map(tripRequest.getTripId().getTrafficMode()));
-        tripProfile.setTravelTimeInSeconds(0);
-        tripProfile.setCalculatedCommunicationVelocity(0);
-        tripProfile.setCustomizedCommunicationVelocity(0);
-        tripProfile.setDefaultProfile(false);
-        tripProfile.setCustomized(false);
+        for (TripProfile tripProfile : tripRequest.getTripProfiles()) {
+            TripProfileEntity tripProfileEntity = new TripProfileEntity();
+            tripProfileEntity.setTrip(savedTrip);
+            tripProfileEntity.setTrafficMode(TripTrafficModeMapper.map(tripRequest.getTripId().getTrafficMode()));
+            tripProfileEntity.setTravelTimeInSeconds(0);
+            tripProfileEntity.setCalculatedCommunicationVelocity(0);
+            tripProfileEntity.setCustomizedCommunicationVelocity(0);
+            tripProfileEntity.setDefaultProfile(tripProfile.getIsDefault());
+            tripProfileEntity.setCustomized(tripProfile.getIsCustomized());
 
-        var savedTripProfile = tripProfileCommandService.save(tripProfile);
+            var savedTripProfile = tripProfileCommandService.save(tripProfileEntity);
 
-        StopTime[] stopTimes = tripRequest.getStops().toArray(StopTime[]::new);
+            StopTime[] stopTimes = tripProfile.getStops().toArray(StopTime[]::new);
 
-        List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
-                .mapToObj(i -> {
-                    StopTime stopTime = stopTimes[i];
+            List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
+                    .mapToObj(i -> {
+                        StopTime stopTime = stopTimes[i];
 
-                    StopTimeEntity entity = new StopTimeEntity();
+                        StopTimeEntity entity = new StopTimeEntity();
 
-                    StopTimeId stopTimeId = new StopTimeId();
-                    stopTimeId.setTripProfileId(savedTripProfile.getTripProfileId());
-                    stopTimeId.setStopSequence(i + 1);
-                    entity.setStopTimeId(stopTimeId);
-                    entity.setTripProfile(savedTripProfile);
+                        StopTimeId stopTimeId = new StopTimeId();
+                        stopTimeId.setTripProfileId(savedTripProfile.getTripProfileId());
+                        stopTimeId.setStopSequence(i + 1);
+                        entity.setStopTimeId(stopTimeId);
+                        entity.setTripProfile(savedTripProfile);
 
-                    entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
-                    entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
-                    entity.setCustomizedTimeSeconds(Optional.ofNullable(stopTime.getCustomizedSeconds()).orElse(stopTime.getCalculatedSeconds()));
-                    entity.setDistanceMeters(stopTime.getMeters());
+                        entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
+                        entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
+                        entity.setCustomizedTimeSeconds(Optional.ofNullable(stopTime.getCustomizedSeconds()).orElse(stopTime.getCalculatedSeconds()));
+                        entity.setDistanceMeters(stopTime.getMeters());
 
-                    return entity;
-                }).toList();
+                        return entity;
+                    }).toList();
 
-        stopTimeRepository.saveAll(entities);
+            stopTimeRepository.saveAll(entities);
+        }
 
         return new Status()
                 .status(Status.StatusEnum.CREATED);
