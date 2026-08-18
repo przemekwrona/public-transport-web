@@ -418,8 +418,16 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             const stopTime: StopTime = {};
             stopTime.stopId = stop.controls["id"].value;
             stopTime.stopName = stop.controls["name"].value;
-            stopTime.lon = stop.controls["lon"].value;
             stopTime.lat = stop.controls["lat"].value;
+            stopTime.lon = stop.controls["lon"].value;
+            stopTime.calculatedSeconds = stop.controls["calculatedSeconds"].value;
+            if (this.modelForm.controls['isCustomized'].value) {
+                stopTime.customizedSeconds = 60 * stop.controls["customizedMinutes"].value;
+            } else {
+                stopTime.customizedSeconds = stop.controls["calculatedSeconds"].value;
+            }
+            stopTime.meters = stop.controls["meters"].value;
+
             return stopTime;
         });
         return tripMeasure;
@@ -536,7 +544,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             if (this.modelForm.controls['isCustomized'].value) {
                 stopTime.customizedSeconds = 60 * stopTimeFormGroup.controls["customizedMinutes"].value;
             } else {
-                stopTime.customizedSeconds = 60 * stopTimeFormGroup.controls["calculatedSeconds"].value;
+                stopTime.customizedSeconds = stopTimeFormGroup.controls["calculatedSeconds"].value;
             }
             stopTime.meters = stopTimeFormGroup.controls["meters"].value;
 
