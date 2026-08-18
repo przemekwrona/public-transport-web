@@ -40,7 +40,7 @@ public class TripDetailsService {
     private final ObjectMapper objectMapper;
 
     @PreAgencyAuthorize
-    public TripsDetails getTripByTripId(String instance, TripId tripId) {
+    public TripsDetails getTripVariantDetails(String instance, TripId tripId) {
         var tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
 
         var profiles = tripProfileQueryService.findAllByTrip(tripEntity);
@@ -58,17 +58,13 @@ public class TripDetailsService {
                         .variantMode(TripVariantModeMapper.map(tripEntity.getVariantMode()))
                         .trafficMode(TripTrafficModeMapper.map(tripEntity.getTrafficMode())))
                 .isMainVariant(tripEntity.isMainVariant())
-                .isCustomized(tripEntity.isCustomized())
-                .stops(List.of())
                 .tripProfiles(tripProfiles)
                 .geometry(buildGeometry(tripEntity.getGeometry()))
                 .variantDesignation(tripEntity.getVariantDesignation())
                 .variantDescription(tripEntity.getVariantDescription())
                 .originStopName(tripEntity.getOriginStopName())
                 .destinationStopName(tripEntity.getDestinationStopName())
-                .headsign(tripEntity.getHeadsign())
-                .calculatedCommunicationVelocity(tripEntity.getCalculatedCommunicationVelocity())
-                .customizedCommunicationVelocity(tripEntity.getCustomizedCommunicationVelocity());
+                .headsign(tripEntity.getHeadsign());
     }
 
     private List<TripProfile> buildTripProfiles(List<TripProfileEntity> profiles, List<StopTimeEntity> stopTimes, List<StopEntity> stops) {

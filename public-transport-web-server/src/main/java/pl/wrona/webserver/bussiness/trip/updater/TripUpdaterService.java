@@ -55,11 +55,11 @@ public class TripUpdaterService {
         TripEntity tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
 
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
-        Optional<StopTime> lastStopOptional = tripDetails.getStops().stream().reduce((first, second) -> second);
-        lastStopOptional.ifPresent(lastStop -> {
+//        Optional<StopTime> lastStopOptional = tripDetails.getStops().stream().reduce((first, second) -> second);
+//        lastStopOptional.ifPresent(lastStop -> {
 //            updatedTrip.setDistanceInMeters(lastStop.getMeters());
-            updatedTrip.setTravelTimeInSeconds(lastStop.getCalculatedSeconds());
-        });
+//            updatedTrip.setTravelTimeInSeconds(lastStop.getCalculatedSeconds());
+//        });
 
         for (TripProfile tripProfile : tripDetails.getTripProfiles()) {
             TripProfileEntity tripProfileEntity = tripProfileQueryService.findAllByTripAndTrafficMode(tripEntity, TripTrafficModeMapper.map(tripProfile.getTrafficMode()));

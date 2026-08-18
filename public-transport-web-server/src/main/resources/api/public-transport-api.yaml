@@ -618,7 +618,7 @@ paths:
       tags:
         - trip
       summary: Return details of trip for indicated variant but user and assigned to agency
-      operationId: getTripByVariant
+      operationId: getTripVariantDetails
       parameters:
         - in: path
           name: agency
@@ -1560,10 +1560,6 @@ components:
           type: string
         headsign:
           type: string
-        stops:
-          type: array
-          items:
-            $ref: '#/components/schemas/StopTime'
         tripProfiles:
           type: array
           items:
@@ -1574,12 +1570,6 @@ components:
             $ref: '#/components/schemas/Point2D'
         isMainVariant:
           type: boolean
-        isCustomized:
-          type: boolean
-        calculatedCommunicationVelocity:
-          type: integer
-        customizedCommunicationVelocity:
-          type: integer
         variantDesignation:
           type: string
         variantDescription:

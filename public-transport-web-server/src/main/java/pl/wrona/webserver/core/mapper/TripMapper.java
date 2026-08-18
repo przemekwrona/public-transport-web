@@ -3,15 +3,13 @@ package pl.wrona.webserver.core.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
-import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.RouteId1;
-import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId1;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,18 +37,6 @@ public class TripMapper {
 
         tripEntity.setHeadsign(tripsDetails.getHeadsign());
 
-//        StopTime lastStop = tripsDetails.getStops().get(tripsDetails.getStops().size() - 1);
-//        var customizedSeconds = Optional.ofNullable(lastStop.getCustomizedSeconds()).map(Integer::doubleValue).orElse(lastStop.getCalculatedSeconds().doubleValue());
-//        var velocityMetersPerSeconds = lastStop.getMeters().doubleValue() / customizedSeconds;
-//        var velocityKmPerH = Math.round(velocityMetersPerSeconds * 3600.0d / 1000.0d);
-//        tripEntity.setCustomizedCommunicationVelocity((int) velocityKmPerH);
-//        tripEntity.setCalculatedCommunicationVelocity(tripsDetails.getCalculatedCommunicationVelocity());
-//        tripEntity.setOriginStopName(tripsDetails.getOriginStopName());
-//        tripEntity.setDestinationStopName(tripsDetails.getDestinationStopName());
-//        tripEntity.setMainVariant(tripsDetails.getIsMainVariant());
-//        tripEntity.setCustomized(tripsDetails.getIsCustomized());
-//        tripEntity.setUpdatedAt(LocalDateTime.now());
-
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             List<List<Float>> geometry = tripsDetails.getGeometry().stream()
@@ -77,7 +63,7 @@ public class TripMapper {
                 .name(trip.getRoute().getName())
                 .line(trip.getRoute().getLine())
                 .variant(trip.getVariantName())
-                .calculatedCommunicationVelocity(trip.getCalculatedCommunicationVelocity())
+                .calculatedCommunicationVelocity(calculatedCommunicationVelocity(trip))
                 .variantDesignation(trip.getVariantDesignation())
                 .variantDescription(trip.getVariantDescription())
                 .travelTimeInSeconds(trip.getTravelTimeInSeconds())
@@ -91,5 +77,17 @@ public class TripMapper {
                 .createdAt(trip.getCreatedAt())
                 .updatedAt(trip.getUpdatedAt())
                 .matchAnyBrigade(tripWithBrigades.containsKey(trip.getTripId()));
+    }
+
+    private int calculatedCommunicationVelocity(TripEntity trip) {
+        if (trip.getTripProfiles() == null || trip.getTripProfiles().isEmpty()) {
+            return 0;
+        }
+        return trip.getTripProfiles().stream()
+                .filter(TripProfileEntity::isDefaultProfile)
+                .findFirst()
+                .or(() -> trip.getTripProfiles().stream().findFirst())
+                .map(TripProfileEntity::getCalculatedCommunicationVelocity)
+                .orElse(0);
     }
 }
