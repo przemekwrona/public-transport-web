@@ -46,7 +46,8 @@ public class TripUpdaterService {
         var tripId = updateTripDetailsRequest.getTripId();
         var tripDetails = updateTripDetailsRequest.getBody();
 
-        List<Long> stopIds = tripDetails.getStops().stream()
+        List<Long> stopIds = tripDetails.getTripProfiles().stream()
+                .flatMap(tripProfile -> tripProfile.getStops().stream())
                 .map(StopTime::getStopId)
                 .toList();
 
