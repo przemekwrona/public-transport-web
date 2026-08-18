@@ -14,9 +14,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class StopTimeId implements Serializable {
 
-    @Column(name = "trip_id")
-    private Long tripId;
+    @Column(name = "trip_profile_id")
+    private Long tripProfileId;
 
+    @Column(name = "stop_sequence")
     private int stopSequence;
 
 }

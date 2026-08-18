@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.trip.updater;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
+import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,8 @@ import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
+import pl.wrona.webserver.core.mapper.TripProfileMapper;
+import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -49,7 +52,6 @@ public class TripUpdaterService {
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         TripEntity tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
-        TripProfileEntity tripProfileEntity = tripProfileQueryService.findAllByTripAndTrafficMode(tripEntity, TripTrafficMode.TRAFFIC);
 
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
         Optional<StopTime> lastStopOptional = tripDetails.getStops().stream().reduce((first, second) -> second);
@@ -58,31 +60,39 @@ public class TripUpdaterService {
             updatedTrip.setTravelTimeInSeconds(lastStop.getCalculatedSeconds());
         });
 
-        stopTimeCommandService.deleteAllByTripProfile(tripProfileEntity);
+        for (TripProfile tripProfile : tripDetails.getTripProfiles()) {
+            TripProfileEntity tripProfileEntity = tripProfileQueryService.findAllByTripAndTrafficMode(tripEntity, TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
 
-        StopTime[] stopTimes = tripDetails.getStops().toArray(StopTime[]::new);
+            TripProfileEntity updatedTripProfile = TripProfileMapper.update(tripProfileEntity, tripProfile);
+            tripProfileCommandService.save(updatedTripProfile);
 
-        List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
-                .mapToObj(i -> {
-                    StopTime stopTime = stopTimes[i];
+            stopTimeCommandService.deleteAllByTripProfile(tripProfileEntity);
 
-                    StopTimeEntity entity = new StopTimeEntity();
+            StopTime[] stopTimes = tripProfile.getStops().toArray(StopTime[]::new);
 
-                    StopTimeId stopTimeId = new StopTimeId();
-                    stopTimeId.setTripId(updatedTrip.getTripId());
-                    stopTimeId.setStopSequence(i + 1);
-                    entity.setStopTimeId(stopTimeId);
+            List<StopTimeEntity> entities = IntStream.range(0, stopTimes.length)
+                    .mapToObj(i -> {
+                        StopTime stopTime = stopTimes[i];
 
-                    entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
-                    entity.setDistanceMeters(stopTime.getMeters());
-                    entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
-                    entity.setCustomizedTimeSeconds(stopTime.getCustomizedSeconds());
-                    entity.setTripProfile(tripProfileEntity);
+                        StopTimeEntity entity = new StopTimeEntity();
 
-                    return entity;
-                }).toList();
+                        StopTimeId stopTimeId = new StopTimeId();
+                        stopTimeId.setTripProfileId(tripProfileEntity.getTripProfileId());
+                        stopTimeId.setStopSequence(i + 1);
+                        entity.setStopTimeId(stopTimeId);
+                        entity.setTripProfile(tripProfileEntity);
 
-        stopTimeCommandService.saveAll(entities);
+                        entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
+                        entity.setDistanceMeters(stopTime.getMeters());
+                        entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
+                        entity.setCustomizedTimeSeconds(stopTime.getCustomizedSeconds());
+
+                        return entity;
+                    }).toList();
+
+            stopTimeCommandService.saveAll(entities);
+        }
+
         tripCommandService.save(updatedTrip);
 
         return new Status()

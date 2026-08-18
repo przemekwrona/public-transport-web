@@ -4,6 +4,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,17 +23,14 @@ public class StopTimeEntity {
     @EmbeddedId
     private StopTimeId stopTimeId;
 
-    @ManyToOne
+    @MapsId("tripProfileId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "trip_profile_id")
+    private TripProfileEntity tripProfile;
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "stop_id")
     private StopEntity stopEntity;
-
-//    @ManyToOne
-//    @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false, nullable = false)
-//    private TripEntity trip;
-
-    @ManyToOne
-    @JoinColumn(name = "trip_profile_id", referencedColumnName = "trip_profile_id")
-    private TripProfileEntity tripProfile;
 
     private int calculatedTimeSeconds;
     private int customizedTimeSeconds;
