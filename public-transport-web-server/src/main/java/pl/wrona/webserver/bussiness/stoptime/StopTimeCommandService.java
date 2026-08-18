@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.stoptime;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
 
 import java.util.List;
 
@@ -15,6 +16,11 @@ public class StopTimeCommandService {
     public void deleteByTripId(Long tripId) {
         stopTimeCommandRepository.deleteByTripId(tripId);
     }
+
+    public void deleteAllByTripProfile(TripProfileEntity tripProfile) {
+        stopTimeCommandRepository.deleteAllByTripProfile(tripProfile);
+    }
+
 
 
     public void saveAll(List<StopTimeEntity> entities) {

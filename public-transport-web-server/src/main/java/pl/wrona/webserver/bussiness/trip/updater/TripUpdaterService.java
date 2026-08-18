@@ -8,11 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.stoptime.StopTimeCommandService;
 import pl.wrona.webserver.bussiness.trip.TripCommandService;
+import pl.wrona.webserver.bussiness.trip.TripProfileCommandService;
+import pl.wrona.webserver.bussiness.trip.TripProfileQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
+import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
@@ -30,6 +34,8 @@ public class TripUpdaterService {
     private final StopTimeCommandService stopTimeCommandService;
     private final StopService stopService;
     private final TripCommandService tripCommandService;
+    private final TripProfileQueryService tripProfileQueryService;
+    private final TripProfileCommandService tripProfileCommandService;
 
     @Transactional
     @PreAgencyAuthorize
@@ -43,6 +49,8 @@ public class TripUpdaterService {
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         TripEntity tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
+        TripProfileEntity tripProfileEntity = tripProfileQueryService.findAllByTripAndTrafficMode(tripEntity, TripTrafficMode.TRAFFIC);
+
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
         Optional<StopTime> lastStopOptional = tripDetails.getStops().stream().reduce((first, second) -> second);
         lastStopOptional.ifPresent(lastStop -> {
@@ -50,8 +58,7 @@ public class TripUpdaterService {
             updatedTrip.setTravelTimeInSeconds(lastStop.getCalculatedSeconds());
         });
 
-
-        stopTimeCommandService.deleteByTripId(updatedTrip.getTripId());
+        stopTimeCommandService.deleteAllByTripProfile(tripProfileEntity);
 
         StopTime[] stopTimes = tripDetails.getStops().toArray(StopTime[]::new);
 
@@ -70,6 +77,7 @@ public class TripUpdaterService {
                     entity.setDistanceMeters(stopTime.getMeters());
                     entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
                     entity.setCustomizedTimeSeconds(stopTime.getCustomizedSeconds());
+                    entity.setTripProfile(tripProfileEntity);
 
                     return entity;
                 }).toList();

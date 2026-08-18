@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
+import pl.wrona.webserver.core.agency.TripTrafficMode;
 
 import java.util.List;
 
@@ -15,6 +16,10 @@ public class TripProfileQueryService {
 
     public List<TripProfileEntity> findAllByTrip(TripEntity trip) {
         return tripProfileQueryRepository.findAllByTrip(trip);
+    }
+
+    public TripProfileEntity findAllByTripAndTrafficMode(TripEntity trip, TripTrafficMode trafficMode) {
+        return tripProfileQueryRepository.findAllByTripAndTrafficMode(trip, trafficMode);
     }
 
 }

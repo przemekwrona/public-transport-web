@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
 
 @Repository
 public interface StopTimeCommandRepository extends JpaRepository<StopTimeEntity, Long> {
@@ -13,4 +14,6 @@ public interface StopTimeCommandRepository extends JpaRepository<StopTimeEntity,
     @Modifying
     @Query("DELETE FROM StopTimeEntity st WHERE st.stopTimeId.tripId = :tripId")
     void deleteByTripId(@Param("tripId") Long tripId);
+
+    void deleteAllByTripProfile(TripProfileEntity tripProfile);
 }

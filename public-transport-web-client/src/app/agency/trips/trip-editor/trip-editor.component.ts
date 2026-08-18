@@ -14,7 +14,7 @@ import {
     TripDistanceMeasuresService,
     TripId,
     TripMeasure,
-    TripMode,
+    TripMode, TripProfile,
     TripsDetails,
     TripService,
     UpdateTripDetailsRequest
@@ -52,9 +52,9 @@ import {BusStopData} from "../../shared/bus-stop-modal-selector/bus-stop-modal-s
     styleUrl: './trip-editor.component.scss',
     animations: [
         trigger('simpleFadeAnimation', [
-            state('in', style({ opacity: 1 })),
-            transition(':enter', [style({ opacity: 0 }), animate(500)]),
-            transition(':leave', animate(500, style({ opacity: 0 })))
+            state('in', style({opacity: 1})),
+            transition(':enter', [style({opacity: 0}), animate(500)]),
+            transition(':leave', animate(500, style({opacity: 0})))
         ]),
         trigger('heightCollapse', [
             // 1. Define the 'collapsed' state (the target style is 0 height)
@@ -379,6 +379,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private approximateDistance(zoom: boolean = false) {
         const trips: TripMeasure = this.buildTripsMeasureRequest();
 
+        if (trips.stops.length <= 1) {
+            return
+        }
+
         this.tripDistanceMeasuresService.approximateDistance(trips).subscribe(response => {
             this.stops.controls.forEach((formGroup: FormGroup, index: number) => {
                 const stopResponse: StopTime = response.stops[index];
@@ -510,7 +514,19 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.body.calculatedCommunicationVelocity = this.modelForm.controls['calculatedCommunicationVelocity'].value;
         tripDetailsRequest.body.customizedCommunicationVelocity = Math.round(this.customizedCommunicationVelocity());
 
-        tripDetailsRequest.body.stops = this.stops.controls.map((stopTimeFormGroup: FormGroup) => {
+        const profile: TripProfile = {} as TripProfile;
+        profile.trafficMode = this.modelForm.controls['tripTrafficMode'].value;
+        // profile.isCustomized = this.modelForm.controls['isCustomized'].value;
+
+        // trafficMode?: TrafficMode;
+        // travelTimeInSeconds?: number;
+        // calculatedCommunicationVelocity?: number;
+        // customizedCommunicationVelocity?: number;
+        // isDefault?: boolean;
+        // isCustomized?: boolean;
+        // stops?: Array<StopTime>;
+
+        profile.stops = this.stops.controls.map((stopTimeFormGroup: FormGroup) => {
             const stopTime: StopTime = {};
             stopTime.stopId = stopTimeFormGroup.controls["id"].value;
             stopTime.stopName = stopTimeFormGroup.controls["name"].value;
@@ -526,6 +542,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
             return stopTime;
         });
+        tripDetailsRequest.body.tripProfiles = [profile];
+
         tripDetailsRequest.body.geometry = this.geometry;
         return tripDetailsRequest;
     }
