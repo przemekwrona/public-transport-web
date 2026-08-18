@@ -119,3 +119,95 @@ databaseChangeLog:
             sql: UPDATE stop_time SET trip_profile_id = NULL;
         - sql:
             sql: DELETE FROM trip_profile;
+
+  - changeSet:
+      id: restructure-stop-time-for-trip-profile
+      author: pwrona
+      changes:
+        - dropPrimaryKey:
+            tableName: stop_time
+            constraintName: pk_stop_time
+
+        - dropForeignKeyConstraint:
+            baseTableName: stop_time
+            constraintName: fk_stop_time_trip
+
+        - sql:
+            sql: UPDATE stop_time SET trip_id = trip_profile_id;
+
+        - dropForeignKeyConstraint:
+            baseTableName: stop_time
+            constraintName: fk_stop_time_trip_profile
+
+        - dropColumn:
+            tableName: stop_time
+            columnName: trip_profile_id
+
+        - renameColumn:
+            tableName: stop_time
+            oldColumnName: trip_id
+            newColumnName: trip_profile_id
+            columnDataType: integer
+
+        - addNotNullConstraint:
+            tableName: stop_time
+            columnName: trip_profile_id
+            columnDataType: integer
+
+        - addForeignKeyConstraint:
+            constraintName: fk_stop_time_trip_profile
+            baseTableName: stop_time
+            baseColumnNames: trip_profile_id
+            referencedTableName: trip_profile
+            referencedColumnNames: trip_profile_id
+            onDelete: CASCADE
+
+        - addPrimaryKey:
+            tableName: stop_time
+            columnNames: trip_profile_id, stop_sequence
+            constraintName: pk_stop_time
+      rollback:
+        - dropPrimaryKey:
+            tableName: stop_time
+            constraintName: pk_stop_time
+
+        - dropForeignKeyConstraint:
+            baseTableName: stop_time
+            constraintName: fk_stop_time_trip_profile
+
+        - renameColumn:
+            tableName: stop_time
+            oldColumnName: trip_profile_id
+            newColumnName: trip_id
+            columnDataType: integer
+
+        - addColumn:
+            tableName: stop_time
+            columns:
+              - column:
+                  name: trip_profile_id
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_stop_time_trip_profile
+                    references: trip_profile(trip_profile_id)
+
+        - sql:
+            sql: |
+              UPDATE stop_time st
+              SET trip_profile_id = tp.trip_profile_id
+              FROM trip_profile tp
+              WHERE st.trip_id = tp.trip_id;
+
+        - addForeignKeyConstraint:
+            constraintName: fk_stop_time_trip
+            baseTableName: stop_time
+            baseColumnNames: trip_id
+            referencedTableName: trip
+            referencedColumnNames: trip_id
+            onDelete: CASCADE
+
+        - addPrimaryKey:
+            tableName: stop_time
+            columnNames: trip_id, stop_sequence
+            constraintName: pk_stop_time
