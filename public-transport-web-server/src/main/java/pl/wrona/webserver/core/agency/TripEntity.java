@@ -77,8 +77,8 @@ public class TripEntity {
     @Column(name = "destination_stop_name")
     private String destinationStopName;
 
-    @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
-    private Set<StopTimeEntity> stopTimes;
+//    @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
+//    private Set<StopTimeEntity> stopTimes;
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
     private Set<TripProfileEntity> tripProfiles;

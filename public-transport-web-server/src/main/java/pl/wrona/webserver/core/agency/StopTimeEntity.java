@@ -26,9 +26,9 @@ public class StopTimeEntity {
     @JoinColumn(name = "stop_id")
     private StopEntity stopEntity;
 
-    @ManyToOne
-    @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false, nullable = false)
-    private TripEntity trip;
+//    @ManyToOne
+//    @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false, nullable = false)
+//    private TripEntity trip;
 
     @ManyToOne
     @JoinColumn(name = "trip_profile_id", referencedColumnName = "trip_profile_id")
