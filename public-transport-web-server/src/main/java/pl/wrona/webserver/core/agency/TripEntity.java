@@ -48,18 +48,12 @@ public class TripEntity {
 
     private String headsign;
 
-    private int calculatedCommunicationVelocity;
-    private int customizedCommunicationVelocity;
-
     private int distanceInMeters;
 
     private int travelTimeInSeconds;
 
     @Column(name = "is_main_variant")
     private boolean mainVariant;
-
-    @Column(name = "is_customized")
-    private boolean customized;
 
     private String variantDesignation;
 
