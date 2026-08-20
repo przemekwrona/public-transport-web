@@ -23,6 +23,16 @@
 <div class="container-fixed">
     <!-- begin: grid -->
     <form [formGroup]="modelForm" (ngSubmit)="clickCreateOrEdit()">
+        @if (formValidationErrors.length > 0) {
+            <div id="form-errors" class="mb-5 p-4 border border-danger rounded-xl">
+                <div class="text-sm font-medium text-danger mb-2">Formularz jest niepoprawny — uzupełnij braki:</div>
+                <ul class="flex flex-col gap-1 list-disc ps-5">
+                    @for (error of formValidationErrors; track error.controlName + error.errorName) {
+                        <li class="text-danger text-2sm">{{ getFormErrorMessage(error) }}</li>
+                    }
+                </ul>
+            </div>
+        }
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
             <div class="col-span-1">
                 <div class="grid gap-5 lg:gap-7.5">
@@ -95,20 +105,26 @@
                                                    [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
                                                 <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                                     <div class="flex items-center h-11">
-                                                        <mat-icon aria-hidden="false" fontIcon="arrow_forward" class="size-48"></mat-icon>
+                                                        <mat-icon aria-hidden="false" fontIcon="arrow_forward"
+                                                                  class="size-48"></mat-icon>
                                                     </div>
                                                     <span class="text-md font-medium text-gray-900"> TAM </span>
-                                                    <mat-radio-button class="appearance-none hidden" [value]="tripModeSelectValue.Front">TAM</mat-radio-button>
+                                                    <mat-radio-button class="appearance-none hidden"
+                                                                      [value]="tripModeSelectValue.Front">TAM
+                                                    </mat-radio-button>
                                                 </div>
                                             </label>
                                             <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
                                                    [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
                                                 <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                                     <div class="flex items-center h-11">
-                                                        <mat-icon aria-hidden="false" fontIcon="arrow_back" class="size-48"></mat-icon>
+                                                        <mat-icon aria-hidden="false" fontIcon="arrow_back"
+                                                                  class="size-48"></mat-icon>
                                                     </div>
                                                     <span class="text-md font-medium text-gray-900">POWRÓT</span>
-                                                    <mat-radio-button class="appearance-none hidden" [value]="tripModeSelectValue.Back">POWRÓT</mat-radio-button>
+                                                    <mat-radio-button class="appearance-none hidden"
+                                                                      [value]="tripModeSelectValue.Back">POWRÓT
+                                                    </mat-radio-button>
                                                 </div>
                                             </label>
                                         </div>
@@ -127,7 +143,8 @@
                                                [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
                                             <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                                 <div class="flex items-center h-11">
-                                                    <mat-icon aria-hidden="false" fontIcon="directions_bus" class="size-48"></mat-icon>
+                                                    <mat-icon aria-hidden="false" fontIcon="directions_bus"
+                                                              class="size-48"></mat-icon>
                                                 </div>
                                                 <span class="text-md font-medium text-gray-900"> {{ "agency.trip.traffic." + trafficModeSelectValue.Normal | transloco }}</span>
                                                 <input class="appearance-none" name="tripTrafficMode" type="radio"
@@ -139,7 +156,8 @@
                                                [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
                                             <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
                                                 <div class="flex items-center h-11">
-                                                    <mat-icon aria-hidden="false" fontIcon="traffic_jam" class="size-48"></mat-icon>
+                                                    <mat-icon aria-hidden="false" fontIcon="traffic_jam"
+                                                              class="size-48"></mat-icon>
                                                 </div>
                                                 <span class="text-md font-medium text-gray-900"> {{ "agency.trip.traffic." + trafficModeSelectValue.Traffic | transloco }}</span>
                                                 <input class="appearance-none" name="tripTrafficMode" type="radio"
@@ -160,12 +178,15 @@
 
                                 <div class="w-full">
                                     <div class="flex items-baseline flex-wrap gap-2.5">
-                                        <label class="form-label flex items-center gap-1 w-full">Symbol kursu na rozkładzie jazdy</label>
+                                        <label class="form-label flex items-center gap-1 w-full">Symbol kursu na
+                                            rozkładzie jazdy</label>
                                         <mat-form-field appearance="outline" class="w-full custom-form-field">
                                             <mat-label>Symbol kursu na rozkładzie jazdy</mat-label>
                                             <input type="text" matInput [formControl]="variantDesignationControl">
                                             @if (variantDesignationControl.hasError('required')) {
-                                                <mat-error>Proszę o podaj symbol w jaki sposób oznaczyć kurs na rozkładzie jazdy</mat-error>
+                                                <mat-error>Proszę o podaj symbol w jaki sposób oznaczyć kurs na
+                                                    rozkładzie jazdy
+                                                </mat-error>
                                             }
                                         </mat-form-field>
                                     </div>
@@ -178,7 +199,10 @@
                                             <mat-label>Opis oznaczenia</mat-label>
                                             <input type="text" matInput [formControl]="variantDescriptionControl">
                                             @if (variantDescriptionControl.hasError('required')) {
-                                                <mat-error>Podaj w jaki sposób wyjaśnić pasazerom co oznacza oznaczenie <strong>{{ modelForm.controls['variantDesignation']?.value }}</strong> na rozkładzie </mat-error>
+                                                <mat-error>Podaj w jaki sposób wyjaśnić pasazerom co oznacza oznaczenie
+                                                    <strong>{{ modelForm.controls['variantDesignation']?.value }}</strong>
+                                                    na rozkładzie
+                                                </mat-error>
                                             }
                                         </mat-form-field>
                                     </div>
@@ -189,7 +213,8 @@
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap gap-2.5">
-                                    <label class="form-label flex items-center gap-1 w-full">Przystanek początkowy</label>
+                                    <label class="form-label flex items-center gap-1 w-full">Przystanek
+                                        początkowy</label>
                                     <mat-form-field appearance="outline" class="w-full custom-form-field">
                                         <mat-label>Przystanek początkowy</mat-label>
                                         <input type="text" matInput [formControl]="originControl">
@@ -215,7 +240,8 @@
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap gap-2.5">
-                                    <label class="form-label flex items-center gap-1 w-full">Kierunek na tablicy czołowej</label>
+                                    <label class="form-label flex items-center gap-1 w-full">Kierunek na tablicy
+                                        czołowej</label>
                                     <mat-form-field appearance="outline" class="w-full custom-form-field">
                                         <mat-label>Kierunek na tablicy czołowej</mat-label>
                                         <input type="text" matInput [formControl]="headsignControl">
@@ -264,9 +290,9 @@
                                 <tr>
                                     <td class="py-3">Dystans (Czas przejazdu)</td>
                                     <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                        {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km
-                                        ({{ getLastStop()?.controls["calculatedSeconds"].value | time | number: '1.0-0' }}
-                                        min)
+                                        <!--                                        {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km-->
+                                        <!--                                        ({{ getLastStop()?.controls["calculatedSeconds"].value | time | number: '1.0-0' }}-->
+                                        <!--                                        min)-->
                                     </td>
                                 </tr>
                                 <tr>
@@ -300,79 +326,77 @@
                                     <tr>
                                         <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
                                         <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                            {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }}
-                                            km
-                                            ({{ getLastStop()?.controls["customizedMinutes"].value | number: '1.0-0' }}
-                                            min)
+                                            <!--                                            {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }}-->
+                                            <!--                                            km-->
+                                            <!--                                            ({{ getLastStop()?.controls["customizedMinutes"].value | number: '1.0-0' }}-->
+                                            <!--                                            min)-->
                                         </td>
                                     </tr>
                                 }
                             </table>
                         </div>
+                        <div formArrayName="profiles">
 
-                        <div class="border-t border-gray-200 my-0"></div>
+                            <div class="border-t border-gray-200 my-0"></div>
 
-                        <!--<div class="card-body">-->
-                        <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-                        <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
-                              class="badge badge-sm badge-outline badge-danger w-full">
-                            <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"
-                                            (onTime)="refreshMap()"></app-count-down>
-                        </span>
+                            <!--<div class="card-body">-->
+                            <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
 
-                            <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
-                                  class="badge badge-sm badge-outline badge-success w-full">
-                                Trasa, czas przjazdu i dystans są zaktualizowane.
-                        </span>
-                            <div formArrayName="stops">
-                                <div class="px-3">
-                                    @if (checkControlHasError("stops", "required") || checkControlHasError("stops", "minlength")) {
-                                        <span class="text-danger text-2sm">Musisz dodać co najmniej 2 przystanki na trasie. Obecna liczba przystanków wynosi {{ modelForm.controls['stops']?.errors?.['minlength']?.['actualLength'] || 0 }}
-                                            .</span>
-                                    }
+                                @for (profile of profiles.controls; track profileIndex; let profileIndex = $index) {
+                                    <div [formGroupName]="profileIndex">
 
-                                    @if (stops.length == 0) {
-                                        <span class="badge badge-sm badge-outline badge-info block"
-                                              style="line-height: inherit">
-                                            Nie dodałeś jeszcze przystanków. Kliknij na przystanek na mapie poniżej i dodaj kolejne przystanki.                                    </span>
-                                    }
+                                <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
+                                      class="badge badge-sm badge-outline badge-danger w-full">
+                                    <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"
+                                                    (onTime)="refreshMap()"></app-count-down>
+                                </span>
 
-                                </div>
-
-                                @for (stopTime of stops.controls; track index; let index = $index) {
-                                    <div class="example-box" cdkDrag [@simpleFadeAnimation]="'in'"
-                                         [formGroupName]="index">
-                                        <span>
-                                            <span [ngClass]="{'blue': stopTime.controls['bdot10k'].value, 'dark-blue': !stopTime.controls['bdot10k'].value}">{{ index + 1 }}</span>
-                                            <span>{{ stopTime.controls["name"].value }} </span>
+                                        <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
+                                              class="badge badge-sm badge-outline badge-success w-full">
+                                            Trasa, czas przjazdu i dystans są zaktualizowane.
                                         </span>
-                                        <span>
-                                        <span (click)="openDialogEditStop(stopTime)">
-                                            <a class="btn btn-sm btn-icon btn-clear btn-primary">
-                                                <i class="ki-filled ki-notepad-edit"></i>
-                                            </a>
-                                        </span>
-                                        <span>{{ stopTime.controls["meters"].value | distance | number: '1.1-1' }}</span>
-                                        <span>km ({{ stopTime.controls["calculatedSeconds"].value | time | number: '1.0-0' }}
-                                            min)</span>
-
-                                            @if (isCustomized()) {
-                                                <div class="inline-block">
-                                                <div class="input-group mx-1">
-                                                    <input type="number" id="customizedMinutes" name="customizedMinutes"
-                                                           formControlName="customizedMinutes"
-                                                           class="input w-14 h-7.5"/>
-                                                    <span class="btn btn-secondary h-7.5 px-1">min</span>
-                                                </div>
-                                            </div>
-                                                <!--                                        {{stops.controls[index].controls["customizedMinutes"].errors | json }}-->
+                                        <div class="px-3">
+                                            @if (checkControlHasError("profiles", "required") || checkControlHasError("profiles", "minlength")) {
+                                                <span class="text-danger text-2sm">Musisz dodać co najmniej 2 przystanki na trasie.</span>
                                             }
-                                            <span (click)="remove(index)">
-                                                <a class="btn btn-sm btn-icon btn-clear btn-danger">
-                                                    <i class="ki-filled ki-cross-square"></i>
-                                                </a>
-                                            </span>
-                                        </span>
+                                        </div>
+
+
+                                        <div formArrayName="stops">
+                                            @for (stopTime of getStops(profile).controls; track stopTime.value.id; let stopIndex = $index) {
+                                                <div class="example-box" cdkDrag [formGroupName]="stopIndex">
+                                                    <span>
+                                                        <span [ngClass]="{'blue': stopTime.controls['bdot10k'].value, 'dark-blue': !stopTime.controls['bdot10k'].value}">{{ stopIndex + 1 }}</span>
+                                                        <span>{{ stopTime.controls["name"].value }} </span>
+                                                    </span>
+                                                    <span>
+                                                        <span (click)="openDialogEditStop(stopTime)">
+                                                            <a class="btn btn-sm btn-icon btn-clear btn-primary">
+                                                                <i class="ki-filled ki-notepad-edit"></i>
+                                                            </a>
+                                                        </span>
+
+                                                        @if (isCustomized()) {
+                                                            <div class="inline-block">
+                                                                <div class="input-group mx-1">
+                                                                    <input type="number"
+                                                                           id="customizedMinutes"
+                                                                           name="customizedMinutes"
+                                                                           formControlName="customizedMinutes"
+                                                                           class="input w-14 h-7.5"/>
+                                                                    <span class="btn btn-secondary h-7.5 px-1">min</span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        <span (click)="remove(stopIndex)">
+                                                            <a class="btn btn-sm btn-icon btn-clear btn-danger">
+                                                                <i class="ki-filled ki-cross-square"></i>
+                                                            </a>
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
                                 }
                             </div>
