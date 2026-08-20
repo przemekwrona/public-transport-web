@@ -25,6 +25,7 @@ public class TripMapper {
         tripEntity.setVariantName(tripsDetails.getTripId().getVariantName());
         tripEntity.setVariantMode(TripVariantModeMapper.map(tripsDetails.getTripId().getVariantMode()));
         tripEntity.setTrafficMode(TripTrafficModeMapper.map(tripsDetails.getTripId().getTrafficMode()));
+        tripEntity.setMainVariant(tripsDetails.getIsMainVariant());
 
         if (Optional.of(tripsDetails).map(TripsDetails::getIsMainVariant).orElse(Boolean.FALSE)) {
             tripEntity.setVariantName("MAIN");
@@ -35,6 +36,8 @@ public class TripMapper {
             tripEntity.setVariantDescription(tripsDetails.getVariantDescription());
         }
 
+        tripEntity.setOriginStopName(tripsDetails.getOriginStopName());
+        tripEntity.setDestinationStopName(tripsDetails.getDestinationStopName());
         tripEntity.setHeadsign(tripsDetails.getHeadsign());
 
         try {
