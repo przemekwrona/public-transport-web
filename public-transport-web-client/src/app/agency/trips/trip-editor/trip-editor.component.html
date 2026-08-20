@@ -258,98 +258,96 @@
             </div>
             <div class="col-span-1 lg:col-span-2">
                 <div class="flex flex-col gap-5 lg:gap-7.5">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Przystanki autobusowe
-                            </h3>
-                        </div>
+                    <div formArrayName="profiles">
+                        @for (profile of profiles.controls; track profileIndex; let profileIndex = $index) {
+                            <div [formGroupName]="profileIndex">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            Przystanki autobusowe
+                                        </h3>
+                                    </div>
 
-                        <div class="card-table scrollable-x-auto pb-3">
-                            <table class="table align-middle text-sm text-gray-500">
-                                <tr>
-                                    <td class="py-2">
-                                        <div>Prędkość komunikacyjna</div>
-                                        @if (checkControlHasError("calculatedCommunicationVelocity", "required")) {
-                                            <span class="text-danger text-2sm">Prędkość komunikacyjna jest wymagana</span>
-                                        } @else if (checkControlHasError("calculatedCommunicationVelocity", "min")) {
-                                            <span class="text-danger text-2sm">Minimalna prędkość musi być większa niż 0. Bieżąca wartość to: {{ modelForm.controls["calculatedCommunicationVelocity"].value }}</span>
-                                        }
-                                    </td>
-                                    <td class="py-2 justify-items-end">
-                                        <div class="input-group w-32">
-                                            <input type="number" formControlName="calculatedCommunicationVelocity"
-                                                   name="calculatedCommunicationVelocity"
-                                                   id="calculatedCommunicationVelocity" class="input "
-                                                   [ngClass]="{'border-t-danger border-b-danger border-l-danger': canCheckErrors('calculatedCommunicationVelocity')}">
-                                            <span class="btn btn-secondary"
-                                                  [ngClass]="{'border-t-danger border-r-danger border-b-danger': canCheckErrors('calculatedCommunicationVelocity')}">km/h</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-3">Dystans (Czas przejazdu)</td>
-                                    <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                        <!--                                        {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km-->
-                                        <!--                                        ({{ getLastStop()?.controls["calculatedSeconds"].value | time | number: '1.0-0' }}-->
-                                        <!--                                        min)-->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
-                                            <div class="flex items-center flex-wrap gap-3.5">
-                                                <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
-                                                <div class="flex flex-col gap-0.5">
-                                                    <!--                                    <span class="text-sm font-medium text-gray-900">Ręczna modyfikacja</span>-->
-                                                    <span class="text-2sm text-gray-700">
-                                        <strong>Chcę korygować ręcznie zaproponowany czas przejazdu</strong>,
-                                        chce samodzielnie zmienić lub dostosować czas trwania przejazdu,
-                                        który został wcześniej automatycznie wyliczony lub zasugerowany.</span>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-5">
-                                                <label class="switch switch-sm">
-                                                    <input type="checkbox" formControlName="isCustomized"></label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <div class="card-table scrollable-x-auto pb-3">
+                                        <table class="table align-middle text-sm text-gray-500">
+                                            <tr>
+                                                <td class="py-2">
+                                                    <div>Prędkość komunikacyjna</div>
+                                                    @if (checkControlHasError("calculatedCommunicationVelocity", "required", profile)) {
+                                                        <span class="text-danger text-2sm">Prędkość komunikacyjna jest wymagana</span>
+                                                    } @else if (checkControlHasError("calculatedCommunicationVelocity", "min", profile)) {
+                                                        <span class="text-danger text-2sm">Minimalna prędkość musi być większa niż 0. Bieżąca wartość to: {{ profile.controls["calculatedCommunicationVelocity"].value }}</span>
+                                                    }
+                                                </td>
+                                                <td class="py-2 justify-items-end">
+                                                    <div class="input-group w-32">
+                                                        <input type="number" formControlName="calculatedCommunicationVelocity"
+                                                               name="calculatedCommunicationVelocity"
+                                                               [id]="'calculatedCommunicationVelocity-' + profileIndex" class="input "
+                                                               [ngClass]="{'border-t-danger border-b-danger border-l-danger': canCheckErrors('calculatedCommunicationVelocity', profile)}">
+                                                        <span class="btn btn-secondary"
+                                                              [ngClass]="{'border-t-danger border-r-danger border-b-danger': canCheckErrors('calculatedCommunicationVelocity', profile)}">km/h</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-3">Dystans (Czas przejazdu)</td>
+                                                <td class="py-3 text-gray-700 text-2sm font-normal text-end">
+                                                    <!--                                        {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km-->
+                                                    <!--                                        ({{ getLastStop()?.controls["calculatedSeconds"].value | time | number: '1.0-0' }}-->
+                                                    <!--                                        min)-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
+                                                        <div class="flex items-center flex-wrap gap-3.5">
+                                                            <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
+                                                            <div class="flex flex-col gap-0.5">
+                                                                <!--                                    <span class="text-sm font-medium text-gray-900">Ręczna modyfikacja</span>-->
+                                                                <span class="text-2sm text-gray-700">
+                                                    <strong>Chcę korygować ręcznie zaproponowany czas przejazdu</strong>,
+                                                    chce samodzielnie zmienić lub dostosować czas trwania przejazdu,
+                                                    który został wcześniej automatycznie wyliczony lub zasugerowany.</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center gap-5">
+                                                            <label class="switch switch-sm">
+                                                                <input type="checkbox" formControlName="isCustomized"></label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
 
-                                @if (isCustomized()) {
-                                    <tr>
-                                        <td class="py-3">Rzeczywista prędkość komunikacyjna</td>
-                                        <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                            {{ customizedCommunicationVelocity() | number: '1.0-0' }} km/h
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
-                                        <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                            <!--                                            {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }}-->
-                                            <!--                                            km-->
-                                            <!--                                            ({{ getLastStop()?.controls["customizedMinutes"].value | number: '1.0-0' }}-->
-                                            <!--                                            min)-->
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                        <div formArrayName="profiles">
+                                            @if (isCustomized(profile)) {
+                                                <tr>
+                                                    <td class="py-3">Rzeczywista prędkość komunikacyjna</td>
+                                                    <td class="py-3 text-gray-700 text-2sm font-normal text-end">
+                                                        {{ customizedCommunicationVelocity(profile) | number: '1.0-0' }} km/h
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-3">Dystans (Rzeczywisty Czas przejazdu)</td>
+                                                    <td class="py-3 text-gray-700 text-2sm font-normal text-end">
+                                                        <!--                                            {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }}-->
+                                                        <!--                                            km-->
+                                                        <!--                                            ({{ getLastStop()?.controls["customizedMinutes"].value | number: '1.0-0' }}-->
+                                                        <!--                                            min)-->
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
 
-                            <div class="border-t border-gray-200 my-0"></div>
+                                    <div class="border-t border-gray-200 my-0"></div>
 
-                            <!--<div class="card-body">-->
-                            <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-
-                                @for (profile of profiles.controls; track profileIndex; let profileIndex = $index) {
-                                    <div [formGroupName]="profileIndex">
-
-                                <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
-                                      class="badge badge-sm badge-outline badge-danger w-full">
-                                    <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"
-                                                    (onTime)="refreshMap()"></app-count-down>
-                                </span>
+                                    <!--<div class="card-body">-->
+                                    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                                        <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
+                                              class="badge badge-sm badge-outline badge-danger w-full">
+                                            <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"
+                                                            (onTime)="refreshMap()"></app-count-down>
+                                        </span>
 
                                         <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
                                               class="badge badge-sm badge-outline badge-success w-full">
@@ -360,7 +358,6 @@
                                                 <span class="text-danger text-2sm">Musisz dodać co najmniej 2 przystanki na trasie.</span>
                                             }
                                         </div>
-
 
                                         <div formArrayName="stops">
                                             @for (stopTime of getStops(profile).controls; track stopTime.value.id; let stopIndex = $index) {
@@ -376,7 +373,7 @@
                                                             </a>
                                                         </span>
 
-                                                        @if (isCustomized()) {
+                                                        @if (isCustomized(profile)) {
                                                             <div class="inline-block">
                                                                 <div class="input-group mx-1">
                                                                     <input type="number"
@@ -398,30 +395,30 @@
                                             }
                                         </div>
                                     </div>
-                                }
+
+                                    <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
+                                          class="badge badge-sm badge-outline badge-danger w-full">
+                                        <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
+                                    </span>
+
+                                    <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
+                                          class="badge badge-sm badge-outline badge-success w-full">
+                                        Trasa, czas przjazdu i dystans są zaktualizowane.
+                                    </span>
+
+                                    <div class="card-body pr-2">
+                                        <div class="flex justify-end gap-2">
+                                            <button (click)="measureDistance()" class="btn btn-secondary px-3">
+                                                <i class="ki-filled ki-arrows-circle"></i>
+                                            </button>
+                                            <!--                            <button (click)="addBrake()" class="btn btn-secondary pr-2">-->
+                                            <!--                                Dodaj postój na przystanku-->
+                                            <!--                            </button>-->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
-                                  class="badge badge-sm badge-outline badge-danger w-full">
-                                <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
-                            </span>
-
-                            <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
-                                  class="badge badge-sm badge-outline badge-success w-full">
-                                Trasa, czas przjazdu i dystans są zaktualizowane.
-                            </span>
-                        </div>
-
-                        <div class="card-body pr-2">
-                            <div class="flex justify-end gap-2">
-                                <button (click)="measureDistance()" class="btn btn-secondary px-3">
-                                    <i class="ki-filled ki-arrows-circle"></i>
-                                </button>
-                                <!--                            <button (click)="addBrake()" class="btn btn-secondary pr-2">-->
-                                <!--                                Dodaj postój na przystanku-->
-                                <!--                            </button>-->
-                            </div>
-                        </div>
+                        }
                     </div>
 
                     <div class="card">
