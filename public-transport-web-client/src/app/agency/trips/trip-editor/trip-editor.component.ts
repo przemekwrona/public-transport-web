@@ -122,15 +122,23 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public modelForm: FormGroup;
     public isSubmited: boolean = false;
 
-    get stops(): FormArray<FormGroup> {
-        return this.modelForm.get('stops') as FormArray;
+    get profiles(): FormArray<FormGroup> {
+        return this.modelForm.get('profiles') as FormArray;
+    }
+
+    get tripTrafficMode(): FormControl<TrafficMode> {
+        return this.modelForm.get('tripTrafficMode') as FormControl<TrafficMode>;
+    }
+
+    public getStops(profile: FormGroup): FormArray<FormGroup> {
+        return profile.get('stops') as FormArray<FormGroup>;
     }
 
     constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
         this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
-    createStop(stop: Stop): FormGroup {
+    private createStop(stop: Stop): FormGroup {
         const stopControl: FormGroup = this.formBuilder.group({
             id: [stop.id],
             name: [stop.name],
@@ -151,12 +159,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const customizedMinutesControl: AbstractControl<number> = stopControl.controls["customizedMinutes"];
 
         customizedMinutesControl.valueChanges.pipe(startWith(customizedMinutesControl.value), pairwise()).subscribe(([prev, next]: [number, number]) => {
-            const index: number = this.stops.controls.indexOf(stopControl);
-            this.onChangeDeparture(index, next - prev);
+            // const index: number = this.stops.controls.indexOf(stopControl);
+            // this.onChangeDeparture(index, next - prev);
         });
     }
 
-    createStopFromStopTimeModel(stop: StopTime): FormGroup {
+    private createStopFromStopTimeModel(stop: StopTime): FormGroup {
         const stopControl: FormGroup = this.formBuilder.group({
             id: [stop.stopId],
             name: [stop.stopName],
@@ -199,7 +207,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 calculatedCommunicationVelocity: [null, [Validators.required, Validators.min(0)]],
 
                 isCustomized: [false, [Validators.required]],
-                stops: this.formBuilder.array([], [Validators.required, Validators.minLength(2)])
+                profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
             },
             {
                 asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.mode, this.state.trafficMode)
@@ -211,8 +219,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
             this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
-            this.modelForm.controls['isCustomized'].setValue(tripDetails.isCustomized);
-            this.modelForm.controls['calculatedCommunicationVelocity'].setValue(tripDetails.calculatedCommunicationVelocity || 30);
+            // this.modelForm.controls['isCustomized'].setValue(tripDetails.isCustomized);
+            // this.modelForm.controls['calculatedCommunicationVelocity'].setValue(tripDetails.calculatedCommunicationVelocity || 30);
 
             if (tripDetails.isMainVariant) {
                 this.modelForm.controls['tripVariantName'].disable();
@@ -232,9 +240,23 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.modelForm.controls['headsign'].setValue(tripDetails.headsign);
 
             this.geometry = tripDetails.geometry;
-            const profile = (tripDetails.tripProfiles || [])
-                .find(profile => profile.trafficMode === tripDetails.tripId.trafficMode);
-            (profile?.stops || []).forEach((stopTime: StopTime) => this.stops.push(this.createStopFromStopTimeModel(stopTime)));
+
+            const profileControls = (tripDetails.tripProfiles || []).map((profile: TripProfile) => {
+                const stopControls = (profile.stops || []).map((stop: StopTime) => this.createStopFromStopTimeModel(stop));
+                return this.formBuilder.group({
+                    trafficMode: [profile.trafficMode],
+                    calculatedCommunicationVelocity: [profile.calculatedCommunicationVelocity],
+                    customizedCommunicationVelocity: [profile.customizedCommunicationVelocity],
+                    isCustomized: [profile.isCustomized],
+                    isDefault: [profile.isDefault],
+                    travelTimeInSeconds: [profile.travelTimeInSeconds],
+                    stops: this.formBuilder.array(stopControls, [Validators.required, Validators.minLength(2)])
+                });
+            });
+            this.modelForm.setControl(
+                'profiles',
+                this.formBuilder.array(profileControls, [Validators.required, Validators.minLength(1)])
+            );
 
             this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: RouteDetails) => {
                 this.$tripVariants = tripVariants;
@@ -294,13 +316,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public onChangeDeparture(no: number, timeDifference: number): void {
-        this.stops.controls.forEach((stopTimeControl: FormGroup, index: number) => {
-            if (no < index) {
-                const customizedMinutesControl: AbstractControl<number> = stopTimeControl.controls["customizedMinutes"];
-                const value: number = customizedMinutesControl.value + timeDifference;
-                customizedMinutesControl.setValue(value, {emitEvent: false});
-            }
-        });
+        // this.stops.controls.forEach((stopTimeControl: FormGroup, index: number) => {
+        //     if (no < index) {
+        //         const customizedMinutesControl: AbstractControl<number> = stopTimeControl.controls["customizedMinutes"];
+        //         const value: number = customizedMinutesControl.value + timeDifference;
+        //         customizedMinutesControl.setValue(value, {emitEvent: false});
+        //     }
+        // });
     }
 
     private initMap(): Map {
@@ -341,7 +363,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     .on('click', (event: LeafletMouseEvent) => {
                         const stopControl: FormGroup = this.createStop(stop);
 
-                        this.stops.push(stopControl);
+                        // this.stops.push(stopControl);
 
                         this.forceRefreshIn10seconds();
 
@@ -384,13 +406,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
 
         this.tripDistanceMeasuresService.approximateDistance(trips).subscribe(response => {
-            this.stops.controls.forEach((formGroup: FormGroup, index: number) => {
-                const stopResponse: StopTime = response.stops[index];
-                if (!stopResponse) return;
-                formGroup.controls["meters"].setValue(stopResponse.meters);
-                formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
-                formGroup.controls["customizedMinutes"].setValue(Math.ceil(stopResponse.calculatedSeconds / 60));
-            });
+            // this.stops.controls.forEach((formGroup: FormGroup, index: number) => {
+            //     const stopResponse: StopTime = response.stops[index];
+            //     if (!stopResponse) return;
+            //     formGroup.controls["meters"].setValue(stopResponse.meters);
+            //     formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
+            //     formGroup.controls["customizedMinutes"].setValue(Math.ceil(stopResponse.calculatedSeconds / 60));
+            // });
 
             this.drawPolyline(response.geometry);
 
@@ -414,29 +436,78 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             tripId: tripId,
             velocity: this.modelForm.controls["calculatedCommunicationVelocity"].value
         };
-        tripMeasure.stops = this.stops.controls.map((stop: FormGroup): StopTime => {
-            const stopTime: StopTime = {};
-            stopTime.stopId = stop.controls["id"].value;
-            stopTime.stopName = stop.controls["name"].value;
-            stopTime.lat = stop.controls["lat"].value;
-            stopTime.lon = stop.controls["lon"].value;
-            stopTime.calculatedSeconds = stop.controls["calculatedSeconds"].value;
-            if (this.modelForm.controls['isCustomized'].value) {
-                stopTime.customizedSeconds = 60 * stop.controls["customizedMinutes"].value;
-            } else {
-                stopTime.customizedSeconds = stop.controls["calculatedSeconds"].value;
-            }
-            stopTime.meters = stop.controls["meters"].value;
-
-            return stopTime;
-        });
+        // tripMeasure.stops = this.stops.controls.map((stop: FormGroup): StopTime => {
+        //     const stopTime: StopTime = {};
+        //     stopTime.stopId = stop.controls["id"].value;
+        //     stopTime.stopName = stop.controls["name"].value;
+        //     stopTime.lat = stop.controls["lat"].value;
+        //     stopTime.lon = stop.controls["lon"].value;
+        //     stopTime.calculatedSeconds = stop.controls["calculatedSeconds"].value;
+        //     if (this.modelForm.controls['isCustomized'].value) {
+        //         stopTime.customizedSeconds = 60 * stop.controls["customizedMinutes"].value;
+        //     } else {
+        //         stopTime.customizedSeconds = stop.controls["calculatedSeconds"].value;
+        //     }
+        //     stopTime.meters = stop.controls["meters"].value;
+        //
+        //     return stopTime;
+        // });
         return tripMeasure;
     }
 
-    public clickCreateOrEdit(): void {
-        const errors: AllValidationErrors[] = FormUtils.getFormValidationErrors(this.modelForm);
-        console.log(errors);
+    get formValidationErrors(): AllValidationErrors[] {
+        if (!this.isSubmited || !this.modelForm) {
+            return [];
+        }
+        return FormUtils.getFormValidationErrors(this.modelForm);
+    }
 
+    public getFormErrorMessage(error: AllValidationErrors): string {
+        const label = this.getControlLabel(error.controlName);
+
+        switch (error.errorName) {
+            case 'required':
+                if (error.controlName === 'stops') {
+                    return 'Musisz dodać co najmniej 2 przystanki na trasie. Obecna liczba przystanków wynosi 0.';
+                }
+                return `${label} jest wymagane`;
+            case 'min':
+                return `${label}: wartość musi być większa lub równa ${error.errorValue?.min}. Bieżąca wartość to: ${error.errorValue?.actual}`;
+            case 'minlength':
+                return `${label}: musisz dodać co najmniej ${error.errorValue?.requiredLength} przystanki. Obecna liczba przystanków wynosi ${error.errorValue?.actualLength || 0}.`;
+            case 'variantExists':
+                return `Trasa ${this.state.line} ${this.state.name} posiada wskazany wariant.`;
+            default:
+                return `${label}: ${error.errorName}`;
+        }
+    }
+
+    private getControlLabel(controlName: string): string {
+        const customizedMinutesMatch = controlName.match(/^stops\[(\d+)\]\.customizedMinutes$/);
+        if (customizedMinutesMatch) {
+            return `Czas przejazdu na przystanku ${Number(customizedMinutesMatch[1]) + 1}`;
+        }
+
+        const labels: Record<string, string> = {
+            isMainVariant: 'Wariant podstawowy',
+            tripVariantName: 'Nazwa wariantu',
+            tripVariantMode: 'Kierunek wariantu',
+            tripTrafficMode: 'Ruch panujący na drodze',
+            variantDesignation: 'Symbol kursu na rozkładzie jazdy',
+            variantDescription: 'Opis oznaczenia',
+            origin: 'Przystanek początkowy',
+            destination: 'Przystanek końcowy',
+            headsign: 'Kierunek na tablicy czołowej',
+            calculatedCommunicationVelocity: 'Prędkość komunikacyjna',
+            isCustomized: 'Ręczna korekta czasu przejazdu',
+            stops: 'Przystanki autobusowe',
+            form: 'Formularz'
+        };
+
+        return labels[controlName] || controlName;
+    }
+
+    public clickCreateOrEdit(): void {
         this.isSubmited = true;
         if (this.modelForm.invalid) {
             this.notificationService.showError('Formularz jest niepoprawny uzupełnij braki');
@@ -510,7 +581,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.body = {};
         tripDetailsRequest.body.tripId = updatedTripId;
         tripDetailsRequest.body.isMainVariant = this.modelForm.controls['isMainVariant'].value
-        tripDetailsRequest.body.isCustomized = this.modelForm.controls['isCustomized'].value
+        // tripDetailsRequest.body.isCustomized = this.modelForm.controls['isCustomized'].value
 
         tripDetailsRequest.body.variantDesignation = this.modelForm.controls['variantDesignation'].value
         tripDetailsRequest.body.variantDescription = this.modelForm.controls['variantDescription'].value
@@ -519,8 +590,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.body.destinationStopName = this.modelForm.controls['destination'].value
         tripDetailsRequest.body.headsign = this.modelForm.controls['headsign'].value
 
-        tripDetailsRequest.body.calculatedCommunicationVelocity = this.modelForm.controls['calculatedCommunicationVelocity'].value;
-        tripDetailsRequest.body.customizedCommunicationVelocity = Math.round(this.customizedCommunicationVelocity());
+        // tripDetailsRequest.body.calculatedCommunicationVelocity = this.modelForm.controls['calculatedCommunicationVelocity'].value;
+        // tripDetailsRequest.body.customizedCommunicationVelocity = Math.round(this.customizedCommunicationVelocity());
 
         const profile: TripProfile = {} as TripProfile;
         profile.trafficMode = this.modelForm.controls['tripTrafficMode'].value;
@@ -534,22 +605,22 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         // isCustomized?: boolean;
         // stops?: Array<StopTime>;
 
-        profile.stops = this.stops.controls.map((stopTimeFormGroup: FormGroup) => {
-            const stopTime: StopTime = {};
-            stopTime.stopId = stopTimeFormGroup.controls["id"].value;
-            stopTime.stopName = stopTimeFormGroup.controls["name"].value;
-            stopTime.lat = stopTimeFormGroup.controls["lat"].value;
-            stopTime.lon = stopTimeFormGroup.controls["lon"].value;
-            stopTime.calculatedSeconds = stopTimeFormGroup.controls["calculatedSeconds"].value;
-            if (this.modelForm.controls['isCustomized'].value) {
-                stopTime.customizedSeconds = 60 * stopTimeFormGroup.controls["customizedMinutes"].value;
-            } else {
-                stopTime.customizedSeconds = stopTimeFormGroup.controls["calculatedSeconds"].value;
-            }
-            stopTime.meters = stopTimeFormGroup.controls["meters"].value;
-
-            return stopTime;
-        });
+        // profile.stops = this.stops.controls.map((stopTimeFormGroup: FormGroup) => {
+        //     const stopTime: StopTime = {};
+        //     stopTime.stopId = stopTimeFormGroup.controls["id"].value;
+        //     stopTime.stopName = stopTimeFormGroup.controls["name"].value;
+        //     stopTime.lat = stopTimeFormGroup.controls["lat"].value;
+        //     stopTime.lon = stopTimeFormGroup.controls["lon"].value;
+        //     stopTime.calculatedSeconds = stopTimeFormGroup.controls["calculatedSeconds"].value;
+        //     if (this.modelForm.controls['isCustomized'].value) {
+        //         stopTime.customizedSeconds = 60 * stopTimeFormGroup.controls["customizedMinutes"].value;
+        //     } else {
+        //         stopTime.customizedSeconds = stopTimeFormGroup.controls["calculatedSeconds"].value;
+        //     }
+        //     stopTime.meters = stopTimeFormGroup.controls["meters"].value;
+        //
+        //     return stopTime;
+        // });
         tripDetailsRequest.body.tripProfiles = [profile];
 
         tripDetailsRequest.body.geometry = this.geometry;
@@ -575,28 +646,30 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public drop(event: CdkDragDrop<string[]>) {
-        moveItemInArray(this.stops.controls, event.previousIndex, event.currentIndex);
-        this.approximateDistance();
-        this.forceRefreshIn10seconds();
+        // moveItemInArray(this.stops.controls, event.previousIndex, event.currentIndex);
+        // this.approximateDistance();
+        // this.forceRefreshIn10seconds();
     }
 
     public remove(index: number) {
-        this.stops.removeAt(index);
+        for (const profile of this.profiles.controls) {
+            this.getStops(profile).removeAt(index);
+        }
         this.forceRefreshIn10seconds();
     }
 
     public measureDistance(): Observable<TripMeasure> {
         const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest());
         refreshedStops.subscribe(response => {
-            this.stops.controls.forEach((formGroup: FormGroup, index: number) => {
-                const stopResponse: StopTime = response.stops[index];
-                if (!stopResponse) return;
-                formGroup.controls["meters"].setValue(stopResponse.meters);
-                formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
-                if (formGroup.controls["customizedMinutes"].value == 0) {
-                    formGroup.controls["customizedMinutes"].setValue(Math.ceil(stopResponse.calculatedSeconds / 60));
-                }
-            });
+            // this.stops.controls.forEach((formGroup: FormGroup, index: number) => {
+            //     const stopResponse: StopTime = response.stops[index];
+            //     if (!stopResponse) return;
+            //     formGroup.controls["meters"].setValue(stopResponse.meters);
+            //     formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
+            //     if (formGroup.controls["customizedMinutes"].value == 0) {
+            //         formGroup.controls["customizedMinutes"].setValue(Math.ceil(stopResponse.calculatedSeconds / 60));
+            //     }
+            // });
 
             this.drawPolyline(response.geometry);
             this.geometry = response.geometry;
@@ -606,17 +679,18 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public onCommunicationVelocityChange(value: number): void {
-        if (size(this.stops.controls) > 1) {
-            this.communicationVelocitySubject.next(value);
-            this.forceRefreshIn10seconds();
-        }
+        // if (size(this.stops.controls) > 1) {
+        //     this.communicationVelocitySubject.next(value);
+        //     this.forceRefreshIn10seconds();
+        // }
     }
 
-    public getLastStop(): FormGroup | null {
-        if (this.stops.length === 0) {
-            return null;
-        }
-        return this.stops.at(this.stops.length - 1);
+    public getLastStop(trafficMode: TrafficMode): FormGroup | null {
+        // if (this.stops.length === 0) {
+        //     return null;
+        // }
+        // return this.stops.at(this.stops.length - 1);
+        return null;
     }
 
     public zoomPolyline(): void {
@@ -670,8 +744,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopData | undefined) => {
             if (busStopSelectorData !== undefined) {
-                const stopTimeControl: FormGroup = this.stops.controls.find((formGroup: FormGroup) => formGroup.controls["id"].value === busStopSelectorData.stopId)
-                stopTimeControl.controls["name"].setValue(busStopSelectorData.stopName);
+                // const stopTimeControl: FormGroup = this.stops.controls.find((formGroup: FormGroup) => formGroup.controls["id"].value === busStopSelectorData.stopId)
+                // stopTimeControl.controls["name"].setValue(busStopSelectorData.stopName);
             }
         });
     }
@@ -697,16 +771,17 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public customizedCommunicationVelocity(): number | null {
-        const lastStop: FormGroup | null = this.getLastStop();
+        // const lastStop: FormGroup | null = this.getLastStop();
 
-        if (lastStop == null) {
-            return null;
-        }
-
-        const distanceInMeters: number = lastStop.controls["meters"].value;
-        const timeInMinutes: number = 60 * lastStop.controls["customizedMinutes"].value;
-        const velocityMetersPerSeconds: number = distanceInMeters / timeInMinutes;
-        return velocityMetersPerSeconds * 3600 / 1000;
+        // if (lastStop == null) {
+        //     return null;
+        // }
+        //
+        // const distanceInMeters: number = lastStop.controls["meters"].value;
+        // const timeInMinutes: number = 60 * lastStop.controls["customizedMinutes"].value;
+        // const velocityMetersPerSeconds: number = distanceInMeters / timeInMinutes;
+        // return velocityMetersPerSeconds * 3600 / 1000;
+        return null;
     }
 
     public validControl(controlName: string): ValidationErrors | null {
@@ -723,19 +798,19 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public scrollToFirstError(): void {
         setTimeout(() => {
-            const invalidControl = document.querySelector('.text-danger');
+            const invalidControl = document.querySelector('#form-errors') || document.querySelector('.text-danger');
             invalidControl?.scrollIntoView({behavior: 'smooth', block: 'center'});
         });
     }
 
     public onChangeVariantMode(tripMode: TripMode): void {
-        if (this.stops.length === 0) {
-            if (tripMode === TripMode.Front) {
-                this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
-            }
-            if (tripMode === TripMode.Back) {
-                this.map.flyTo([this.$tripVariants.route.destinationStop.lat, this.$tripVariants.route.destinationStop.lon], 15)
-            }
-        }
+        // if (this.stops.length === 0) {
+        //     if (tripMode === TripMode.Front) {
+        //         this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
+        //     }
+        //     if (tripMode === TripMode.Back) {
+        //         this.map.flyTo([this.$tripVariants.route.destinationStop.lat, this.$tripVariants.route.destinationStop.lon], 15)
+        //     }
+        // }
     }
 }

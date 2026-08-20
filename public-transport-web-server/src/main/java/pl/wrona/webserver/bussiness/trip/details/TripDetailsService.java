@@ -71,7 +71,7 @@ public class TripDetailsService {
         Map<Long, StopEntity> stopById = stops.stream()
                 .collect(Collectors.toMap(StopEntity::getStopId, Function.identity(), (left, right) -> left));
         Map<Long, List<StopTimeEntity>> stopTimesByProfileId = stopTimes.stream()
-                .collect(Collectors.groupingBy(stopTime -> stopTime.getTripProfile().getTripProfileId()));
+                .collect(Collectors.groupingBy(stopTime -> stopTime.getStopTimeId().getTripProfileId()));
 
         return profiles.stream()
                 .map(profile -> new TripProfile()
