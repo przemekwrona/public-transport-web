@@ -281,9 +281,11 @@
                                                 </td>
                                                 <td class="py-2 justify-items-end">
                                                     <div class="input-group w-32">
-                                                        <input type="number" formControlName="calculatedCommunicationVelocity"
+                                                        <input type="number"
+                                                               formControlName="calculatedCommunicationVelocity"
                                                                name="calculatedCommunicationVelocity"
-                                                               [id]="'calculatedCommunicationVelocity-' + profileIndex" class="input "
+                                                               [id]="'calculatedCommunicationVelocity-' + profileIndex"
+                                                               class="input "
                                                                [ngClass]="{'border-t-danger border-b-danger border-l-danger': canCheckErrors('calculatedCommunicationVelocity', profile)}">
                                                         <span class="btn btn-secondary"
                                                               [ngClass]="{'border-t-danger border-r-danger border-b-danger': canCheckErrors('calculatedCommunicationVelocity', profile)}">km/h</span>
@@ -293,9 +295,10 @@
                                             <tr>
                                                 <td class="py-3">Dystans (Czas przejazdu)</td>
                                                 <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                                    <!--                                        {{ getLastStop()?.controls["meters"].value | distance | number: '1.1-1' }} km-->
-                                                    <!--                                        ({{ getLastStop()?.controls["calculatedSeconds"].value | time | number: '1.0-0' }}-->
-                                                    <!--                                        min)-->
+                                                    {{ getLastStop(profile)?.controls["meters"].value | distance | number: '1.1-1' }}
+                                                    km
+                                                    ({{ getLastStop(profile)?.controls["calculatedSeconds"].value | time | number: '1.0-0' }}
+                                                    min)
                                                 </td>
                                             </tr>
                                             <tr>
@@ -313,7 +316,8 @@
                                                         </div>
                                                         <div class="flex items-center gap-5">
                                                             <label class="switch switch-sm">
-                                                                <input type="checkbox" formControlName="isCustomized"></label>
+                                                                <input type="checkbox"
+                                                                       formControlName="isCustomized"></label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -323,7 +327,8 @@
                                                 <tr>
                                                     <td class="py-3">Rzeczywista prędkość komunikacyjna</td>
                                                     <td class="py-3 text-gray-700 text-2sm font-normal text-end">
-                                                        {{ customizedCommunicationVelocity(profile) | number: '1.0-0' }} km/h
+                                                        {{ customizedCommunicationVelocity(profile) | number: '1.0-0' }}
+                                                        km/h
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -398,7 +403,8 @@
 
                                     <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
                                           class="badge badge-sm badge-outline badge-danger w-full">
-                                        <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
+                                        <app-count-down [initialSeconds]="10"
+                                                        [forceRefresh]="forceRefresh$"></app-count-down>
                                     </span>
 
                                     <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"

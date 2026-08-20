@@ -685,12 +685,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         // }
     }
 
-    public getLastStop(trafficMode: TrafficMode): FormGroup | null {
-        // if (this.stops.length === 0) {
-        //     return null;
-        // }
-        // return this.stops.at(this.stops.length - 1);
-        return null;
+    public getLastStop(profile: FormGroup): FormGroup | null {
+        const stops = this.getStops(profile);
+        if (!stops || stops.length === 0) {
+            return null;
+        }
+        return stops.at(stops.length - 1);
     }
 
     public zoomPolyline(): void {
