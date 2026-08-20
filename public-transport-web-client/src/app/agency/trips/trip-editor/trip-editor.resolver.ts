@@ -34,6 +34,6 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
         const tripService: TripService = inject(TripService);
         const routeId: RouteId = {line: line, name: name, version: version} as RouteId;
         const tripId: TripId = {routeId: routeId, variantName: variantName, variantMode: variantMode, trafficMode: trafficMode} as TripId;
-        return tripService.getTripByVariant(agencyStorageService.getInstance(), tripId);
+        return tripService.getTripVariantDetails(agencyStorageService.getInstance(), tripId);
     }
 }
