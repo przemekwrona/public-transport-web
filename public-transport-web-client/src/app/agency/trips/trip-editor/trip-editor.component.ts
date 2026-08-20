@@ -204,16 +204,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 destination: ['', [Validators.required]],
                 headsign: ['', [Validators.required]],
 
-                calculatedCommunicationVelocity: [null, [Validators.required, Validators.min(0)]],
-
-                isCustomized: [false, [Validators.required]],
                 profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
             },
             {
                 asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.mode, this.state.trafficMode)
             });
 
-        this.modelForm.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => this.onCommunicationVelocityChange(value));
         this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
         this.modelForm.get('tripVariantMode').valueChanges.subscribe((value: TripMode) => this.onChangeVariantMode(value));
 
@@ -243,15 +239,17 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
             const profileControls = (tripDetails.tripProfiles || []).map((profile: TripProfile) => {
                 const stopControls = (profile.stops || []).map((stop: StopTime) => this.createStopFromStopTimeModel(stop));
-                return this.formBuilder.group({
+                const profileControl = this.formBuilder.group({
                     trafficMode: [profile.trafficMode],
-                    calculatedCommunicationVelocity: [profile.calculatedCommunicationVelocity],
+                    calculatedCommunicationVelocity: [profile.calculatedCommunicationVelocity ?? 30, [Validators.required, Validators.min(0)]],
                     customizedCommunicationVelocity: [profile.customizedCommunicationVelocity],
                     isCustomized: [profile.isCustomized],
                     isDefault: [profile.isDefault],
                     travelTimeInSeconds: [profile.travelTimeInSeconds],
                     stops: this.formBuilder.array(stopControls, [Validators.required, Validators.minLength(2)])
                 });
+                profileControl.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => this.onCommunicationVelocityChange(value));
+                return profileControl;
             });
             this.modelForm.setControl(
                 'profiles',
@@ -434,7 +432,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         };
         const tripMeasure: TripMeasure = {
             tripId: tripId,
-            velocity: this.modelForm.controls["calculatedCommunicationVelocity"].value
+            velocity: this.getDefaultProfile()?.controls["calculatedCommunicationVelocity"].value
         };
         // tripMeasure.stops = this.stops.controls.map((stop: FormGroup): StopTime => {
         //     const stopTime: StopTime = {};
@@ -483,10 +481,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private getControlLabel(controlName: string): string {
-        const customizedMinutesMatch = controlName.match(/^stops\[(\d+)\]\.customizedMinutes$/);
+        const customizedMinutesMatch = controlName.match(/(?:^|\.)stops\[(\d+)\]\.customizedMinutes$/);
         if (customizedMinutesMatch) {
             return `Czas przejazdu na przystanku ${Number(customizedMinutesMatch[1]) + 1}`;
         }
+
+        const fieldName = controlName.includes('.') ? controlName.split('.').pop()! : controlName;
 
         const labels: Record<string, string> = {
             isMainVariant: 'Wariant podstawowy',
@@ -504,7 +504,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             form: 'Formularz'
         };
 
-        return labels[controlName] || controlName;
+        return labels[fieldName] || controlName;
     }
 
     public clickCreateOrEdit(): void {
@@ -766,34 +766,28 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return this.modelForm.controls['isMainVariant'].value;
     }
 
-    public isCustomized(): boolean {
-        return this.modelForm.controls['isCustomized'].value;
+    public isCustomized(profile: FormGroup): boolean {
+        return profile.controls['isCustomized'].value;
     }
 
-    public customizedCommunicationVelocity(): number | null {
-        // const lastStop: FormGroup | null = this.getLastStop();
-
-        // if (lastStop == null) {
-        //     return null;
-        // }
-        //
-        // const distanceInMeters: number = lastStop.controls["meters"].value;
-        // const timeInMinutes: number = 60 * lastStop.controls["customizedMinutes"].value;
-        // const velocityMetersPerSeconds: number = distanceInMeters / timeInMinutes;
-        // return velocityMetersPerSeconds * 3600 / 1000;
-        return null;
+    public customizedCommunicationVelocity(profile: FormGroup): number | null {
+        return profile.controls['customizedCommunicationVelocity'].value;
     }
 
-    public validControl(controlName: string): ValidationErrors | null {
-        return this.isSubmited && this.modelForm?.controls[controlName]?.errors;
+    private getDefaultProfile(): FormGroup | null {
+        return this.profiles.controls.find(profile => profile.controls['isDefault'].value) ?? this.profiles.at(0) ?? null;
     }
 
-    public checkControlHasError(controlName: string, errorName: string): boolean {
-        return this.isSubmited && this.validControl(controlName)?.[errorName] || false;
+    public validControl(controlName: string, group: FormGroup = this.modelForm): ValidationErrors | null {
+        return this.isSubmited && group?.controls[controlName]?.errors;
     }
 
-    public canCheckErrors(controlName: string): boolean {
-        return this.isSubmited && this.validControl(controlName) != null;
+    public checkControlHasError(controlName: string, errorName: string, group: FormGroup = this.modelForm): boolean {
+        return this.isSubmited && this.validControl(controlName, group)?.[errorName] || false;
+    }
+
+    public canCheckErrors(controlName: string, group: FormGroup = this.modelForm): boolean {
+        return this.isSubmited && this.validControl(controlName, group) != null;
     }
 
     public scrollToFirstError(): void {
