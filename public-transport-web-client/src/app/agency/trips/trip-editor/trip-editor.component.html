@@ -366,7 +366,7 @@
                                         </div>
 
                                         <div formArrayName="stops">
-                                            @for (stopTime of getStops(profile).controls; track stopTime.value.id; let stopIndex = $index) {
+                                            @for (stopTime of getStops(profile).controls; track stopTime; let stopIndex = $index) {
                                                 <div class="example-box" cdkDrag [formGroupName]="stopIndex">
                                                     <span>
                                                         <span [ngClass]="{'blue': stopTime.controls['bdot10k'].value, 'dark-blue': !stopTime.controls['bdot10k'].value}">{{ stopIndex + 1 }}</span>
