@@ -121,6 +121,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public modelForm: FormGroup;
     public isSubmited: boolean = false;
+    private isShiftingFollowingStopTimes = false;
 
     get profiles(): FormArray<FormGroup> {
         return this.modelForm.get('profiles') as FormArray;
@@ -150,18 +151,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             bdot10k: [stop.isBdot10k]
         });
 
-        this.appendValueChangesOnCustomizedMinutes(stopControl);
-
         return stopControl;
-    }
-
-    private appendValueChangesOnCustomizedMinutes(stopControl: FormGroup<any>) {
-        const customizedMinutesControl: AbstractControl<number> = stopControl.controls["customizedMinutes"];
-
-        customizedMinutesControl.valueChanges.pipe(startWith(customizedMinutesControl.value), pairwise()).subscribe(([prev, next]: [number, number]) => {
-            // const index: number = this.stops.controls.indexOf(stopControl);
-            // this.onChangeDeparture(index, next - prev);
-        });
     }
 
     private createStopFromStopTimeModel(stop: StopTime): FormGroup {
@@ -175,7 +165,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             customizedMinutes: [stop.customizedSeconds / 60, [Validators.required, Validators.min(0)]],
             bdot10k: [stop.bdot10k]
         });
-        this.appendValueChangesOnCustomizedMinutes(stopControl);
         return stopControl;
     }
 
@@ -191,6 +180,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             stops: this.formBuilder.array(stopControls, [Validators.required, Validators.minLength(2)])
         });
         profileControl.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => this.onCommunicationVelocityChange(value));
+
+        this.getStops(profileControl).controls.forEach((stopControl: FormGroup) => {
+            this.subscribeToStopTimeChanges(profileControl, stopControl);
+        });
+
         return profileControl;
     }
 
@@ -322,14 +316,42 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.onMoveEnd(this.map);
     }
 
-    public onChangeDeparture(no: number, timeDifference: number): void {
-        // this.stops.controls.forEach((stopTimeControl: FormGroup, index: number) => {
-        //     if (no < index) {
-        //         const customizedMinutesControl: AbstractControl<number> = stopTimeControl.controls["customizedMinutes"];
-        //         const value: number = customizedMinutesControl.value + timeDifference;
-        //         customizedMinutesControl.setValue(value, {emitEvent: false});
-        //     }
-        // });
+    private subscribeToStopTimeChanges(profileControl: FormGroup, stopControl: FormGroup): void {
+        const customizedMinutesControl = stopControl.controls['customizedMinutes'];
+        customizedMinutesControl.valueChanges.pipe(
+            startWith(customizedMinutesControl.value),
+            pairwise()
+        ).subscribe(([prev, next]: [number, number]) => {
+            if (this.isShiftingFollowingStopTimes) {
+                return;
+            }
+
+            const index = this.getStops(profileControl).controls.indexOf(stopControl);
+            if (index < 0) {
+                return;
+            }
+
+            this.onChangeDeparture(profileControl, index, (next ?? 0) - (prev ?? 0));
+        });
+    }
+
+    public onChangeDeparture(profile: FormGroup, no: number, timeDifference: number): void {
+        if (!timeDifference) {
+            return;
+        }
+
+        this.isShiftingFollowingStopTimes = true;
+        try {
+            this.getStops(profile).controls.forEach((stopTimeControl: FormGroup, index: number) => {
+                if (no < index) {
+                    const customizedMinutesControl: AbstractControl<number> = stopTimeControl.controls["customizedMinutes"];
+                    const value: number = (customizedMinutesControl.value ?? 0) + timeDifference;
+                    customizedMinutesControl.setValue(value);
+                }
+            });
+        } finally {
+            this.isShiftingFollowingStopTimes = false;
+        }
     }
 
     private initMap(): Map {
@@ -369,7 +391,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: stop.isBdot10k ? this.BDOT10K_STOP : this.OTP_STOP})
                     .on('click', (event: LeafletMouseEvent) => {
                         for (const profile of this.profiles.controls) {
-                            this.getStops(profile).push(this.createStop(stop));
+                            const stopControl: FormGroup = this.createStop(stop);
+                            this.subscribeToStopTimeChanges(profile, stopControl);
+                            this.getStops(profile).push(stopControl);
                         }
 
                         this.forceRefreshIn10seconds();
@@ -782,29 +806,34 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             return;
         }
 
-        for (const profile of this.profiles.controls) {
-            this.getStops(profile).controls.forEach((formGroup: FormGroup, index: number) => {
-                const stopResponse: StopTime = response.stops[index];
-                if (!stopResponse) {
-                    return;
-                }
+        this.isShiftingFollowingStopTimes = true;
+        try {
+            for (const profile of this.profiles.controls) {
+                this.getStops(profile).controls.forEach((formGroup: FormGroup, index: number) => {
+                    const stopResponse: StopTime = response.stops[index];
+                    if (!stopResponse) {
+                        return;
+                    }
 
-                formGroup.controls["meters"].setValue(stopResponse.meters);
-                formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
+                    formGroup.controls["meters"].setValue(stopResponse.meters);
+                    formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
 
-                const customizedMinutes = Math.ceil((stopResponse.calculatedSeconds || 0) / 60);
-                if (options?.updateCustomizedMinutesIfZero) {
-                    if (!formGroup.controls["customizedMinutes"].value) {
+                    const customizedMinutes = Math.ceil((stopResponse.calculatedSeconds || 0) / 60);
+                    if (options?.updateCustomizedMinutesIfZero) {
+                        if (!formGroup.controls["customizedMinutes"].value) {
+                            formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
+                        }
+                    } else {
                         formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
                     }
-                } else {
-                    formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
-                }
-            });
+                });
 
-            if (response.travelTimeInSeconds != null) {
-                profile.controls["travelTimeInSeconds"].setValue(response.travelTimeInSeconds);
+                if (response.travelTimeInSeconds != null) {
+                    profile.controls["travelTimeInSeconds"].setValue(response.travelTimeInSeconds);
+                }
             }
+        } finally {
+            this.isShiftingFollowingStopTimes = false;
         }
     }
 
