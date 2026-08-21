@@ -20,4 +20,12 @@ describe('TownRoadSignComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render town name on E-17a sign', () => {
+    component.townName = 'Zielona Góra';
+    fixture.detectChanges();
+
+    const name = fixture.nativeElement.querySelector('.e17a__name');
+    expect(name.textContent.trim()).toBe('Zielona Góra');
+  });
 });
