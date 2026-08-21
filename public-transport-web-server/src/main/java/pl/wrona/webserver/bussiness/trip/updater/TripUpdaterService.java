@@ -86,7 +86,11 @@ public class TripUpdaterService {
                         entity.setStopEntity(stopDictionary.get(stopTime.getStopId()));
                         entity.setDistanceMeters(stopTime.getMeters());
                         entity.setCalculatedTimeSeconds(stopTime.getCalculatedSeconds());
-                        entity.setCustomizedTimeSeconds(stopTime.getCustomizedSeconds());
+                        if (tripProfile.getIsCustomized()) {
+                            entity.setCustomizedTimeSeconds(stopTime.getCustomizedSeconds());
+                        } else {
+                            entity.setCustomizedTimeSeconds(stopTime.getCalculatedSeconds());
+                        }
 
                         return entity;
                     }).toList();
