@@ -1,0 +1,38 @@
+:host {
+  display: inline-block;
+  line-height: 1;
+}
+
+.e17a {
+  display: inline-block;
+  background: #1c1c1c;
+  padding: 0.12em;
+  border-radius: 0.28em;
+  box-shadow:
+    0 0.08em 0.16em rgba(0, 0, 0, 0.35),
+    0 0.18em 0.4em rgba(0, 0, 0, 0.2);
+}
+
+.e17a__plate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5.5em;
+  background: #007a33;
+  border: 0.22em solid #fff;
+  border-radius: 0.12em;
+  padding: 0.32em 0.85em 0.28em;
+  box-shadow: inset 0 0 0 0.06em #007a33;
+}
+
+.e17a__name {
+  color: #fff;
+  font-family: "Arial Narrow", "Liberation Sans Narrow", Tahoma, Arial, sans-serif;
+  font-size: 1.55em;
+  font-stretch: condensed;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  white-space: nowrap;
+  text-shadow: 0 0.04em 0 rgba(0, 0, 0, 0.18);
+}
