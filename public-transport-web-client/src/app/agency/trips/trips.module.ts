@@ -23,6 +23,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign.component";
 
 @NgModule({
     imports: [
@@ -45,6 +46,8 @@ import {MatInputModule} from "@angular/material/input";
         TranslocoPipe,
         CountDownComponent,
         ReactiveFormsModule,
+
+        TownRoadSignComponent,
 
         MatRadioModule,
         MatIconModule,

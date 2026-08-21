@@ -39,6 +39,12 @@
                     <div class="card">
                         <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
                         <div class="card-body grid gap-5">
+
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <app-town-road-sign [townName]="'Chmielnik'"></app-town-road-sign>
+                                <span>-</span>
+                                <app-town-road-sign [townName]="'Gnojno'"></app-town-road-sign>
+                            </div>
                             <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
                                 <div class="flex items-center flex-wrap gap-3.5">
                                     <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
@@ -77,11 +83,6 @@
                                     </div>
                                 </span>
                             }
-                            <div class="text-gray-800 text-2sm">
-                                <span class="text-danger uppercase">{{ 'common.attention' | transloco | uppercase }}
-                                    :</span>
-                                Linia posiada 2 warianty podstawowe (TAM i POWRÓT).
-                            </div>
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap gap-2.5">
