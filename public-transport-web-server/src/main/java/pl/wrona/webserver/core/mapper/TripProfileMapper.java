@@ -21,6 +21,8 @@ public class TripProfileMapper {
         var velocityKmPerH = Math.round(velocityMetersPerSeconds * 3600.0d / 1000.0d);
 
         tripProfileEntity.setCustomizedCommunicationVelocity((int) velocityKmPerH);
+        tripProfileEntity.setCustomized(tripProfile.getIsCustomized());
+        tripProfileEntity.setDefaultProfile(tripProfile.getIsDefault());
 //        tripProfileEntity.setCalculatedCommunicationVelocity(tripProfile.getCalculatedCommunicationVelocity());
 //        tripProfileEntity.setOriginStopName(tripsDetails.getOriginStopName());
 //        tripProfileEntity.setDestinationStopName(tripsDetails.getDestinationStopName());
