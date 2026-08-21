@@ -1,7 +1,6 @@
 package pl.wrona.webserver.bussiness.trip.measure;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.lucene.util.SloppyMath;
 import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.RouteId;
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TripDistanceMeasureService {
 
+    public static final double _10_PERCENT = 1.1;
     private final GeoapifyService geoapifyService;
 
     public TripMeasure approximateDistance(TripMeasure tripMeasure) {
@@ -34,25 +34,29 @@ public class TripDistanceMeasureService {
         int seconds = 0;
 
         List<StopTime> stopTimes = new ArrayList<>();
+        StopTime previousStopTime = null;
 
-        for (Pair<StopTime, StopTime> pairStopTime : pairConsecutiveElements(tripMeasure.getStops())) {
-            if (pairStopTime.getLeft() == null) {
+        for (StopTime stopTime : tripMeasure.getStops()) {
+            if (previousStopTime == null) {
                 stopTimes.add(new StopTime()
-                        .stopId(pairStopTime.getRight().getStopId())
-                        .stopName(pairStopTime.getRight().getStopName())
-                        .lon(pairStopTime.getRight().getLon())
-                        .lat(pairStopTime.getRight().getLat())
+                        .stopId(stopTime.getStopId())
+                        .stopName(stopTime.getStopName())
+                        .lon(stopTime.getLon())
+                        .lat(stopTime.getLat())
                         .meters(0)
-                        .calculatedSeconds(0));
+                        .calculatedSeconds(0)
+                        .customizedSeconds(stopTime.getCustomizedSeconds() == null ? 0 : stopTime.getCustomizedSeconds()));
             } else {
-                int haversinMeters = (int) SloppyMath.haversinMeters(pairStopTime.getLeft().getLat(),
-                        pairStopTime.getLeft().getLon(),
-                        pairStopTime.getRight().getLat(),
-                        pairStopTime.getRight().getLon());
+                double haversinMeters = SloppyMath.haversinMeters(previousStopTime.getLat(),
+                        previousStopTime.getLon(),
+                        stopTime.getLat(),
+                        stopTime.getLon());
 
-                meters = meters + haversinMeters;
+                int haversinMeters10Percent = (int) (haversinMeters * _10_PERCENT);
 
-                int defaultVelocityKph = 30;
+                meters = meters + haversinMeters10Percent;
+
+                int defaultVelocityKph = 50;
                 int velocityKph = Optional.ofNullable(tripMeasure.getVelocity()).orElse(defaultVelocityKph);
 
                 // Convert km/h to m/s using a clear constant
@@ -64,14 +68,16 @@ public class TripDistanceMeasureService {
                 seconds += travelTimeInSeconds;
 
                 stopTimes.add(new StopTime()
-                        .stopId(pairStopTime.getRight().getStopId())
-                        .stopName(pairStopTime.getRight().getStopName())
-                        .lon(pairStopTime.getRight().getLon())
-                        .lat(pairStopTime.getRight().getLat())
+                        .stopId(stopTime.getStopId())
+                        .stopName(stopTime.getStopName())
+                        .lon(stopTime.getLon())
+                        .lat(stopTime.getLat())
                         .meters(meters)
-                        .calculatedSeconds(seconds));
+                        .calculatedSeconds(seconds)
+                        .customizedSeconds(stopTime.getCustomizedSeconds() == null ? seconds : stopTime.getCustomizedSeconds()));
             }
 
+            previousStopTime = stopTime;
         }
 
         List<Point2D> geometry = stopTimes.stream()
@@ -99,10 +105,12 @@ public class TripDistanceMeasureService {
                 .map(stop -> "%s,%s".formatted(stop.getLat(), stop.getLon()))
                 .collect(Collectors.joining("|"));
 
-        RoutingResponse routing = geoapifyService.route(waypoints, tripMeasure.getVelocity());
-        Feature feature = routing.features().stream().findFirst().orElse(null);
-        List<Leg> legs = Optional.ofNullable(feature).map(Feature::properties).map(Properties::legs).orElse(List.of());
+//        RoutingResponse routing = geoapifyService.route(waypoints, tripMeasure.getVelocity());
+//        Feature feature = routing.features().stream().findFirst().orElse(null);
+//        List<Leg> legs = Optional.ofNullable(feature).map(Feature::properties).map(Properties::legs).orElse(List.of());
 
+        Feature feature = null;
+        List<Leg> legs = List.of();
         List<StopTime> stopTimes = new ArrayList<>(tripMeasure.getStops().size());
 
         double meters = 0;
@@ -117,7 +125,8 @@ public class TripDistanceMeasureService {
                     .lon(stopTime.getLon())
                     .lat(stopTime.getLat())
                     .meters((int) meters)
-                    .calculatedSeconds((int) seconds));
+                    .calculatedSeconds((int) seconds)
+                    .customizedSeconds(stopTime.getCustomizedSeconds() == null ? (int) seconds : stopTime.getCustomizedSeconds()));
 
             if (i < legs.size()) {
                 Leg leg = legs.get(i);
@@ -152,19 +161,5 @@ public class TripDistanceMeasureService {
                 .velocity(tripMeasure.getVelocity())
                 .geometry(geometry);
     }
-
-    private static List<Pair<StopTime, StopTime>> pairConsecutiveElements(List<StopTime> elements) {
-        List<Pair<StopTime, StopTime>> pairedElements = new ArrayList<>();
-        if (elements.isEmpty()) {
-            return List.of();
-        }
-        pairedElements.add(Pair.of(null, elements.get(0)));
-
-        for (int i = 0; i < elements.size() - 1; i++) {
-            pairedElements.add(Pair.of(elements.get(i), elements.get(i + 1)));
-        }
-        return pairedElements;
-    }
-
 
 }

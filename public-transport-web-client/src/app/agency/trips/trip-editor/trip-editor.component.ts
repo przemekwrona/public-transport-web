@@ -413,13 +413,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
 
         this.tripDistanceMeasuresService.approximateDistance(trips).subscribe(response => {
-            // this.stops.controls.forEach((formGroup: FormGroup, index: number) => {
-            //     const stopResponse: StopTime = response.stops[index];
-            //     if (!stopResponse) return;
-            //     formGroup.controls["meters"].setValue(stopResponse.meters);
-            //     formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
-            //     formGroup.controls["customizedMinutes"].setValue(Math.ceil(stopResponse.calculatedSeconds / 60));
-            // });
+            this.applyMeasureResponseToCurrentStops(response);
 
             this.drawPolyline(response.geometry);
 
@@ -460,6 +454,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                 return stopTime;
             }) : [];
+
+        console.log(tripMeasure);
         return tripMeasure;
     }
 
@@ -668,15 +664,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public measureDistance(): Observable<TripMeasure> {
         const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest());
         refreshedStops.subscribe(response => {
-            // this.stops.controls.forEach((formGroup: FormGroup, index: number) => {
-            //     const stopResponse: StopTime = response.stops[index];
-            //     if (!stopResponse) return;
-            //     formGroup.controls["meters"].setValue(stopResponse.meters);
-            //     formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
-            //     if (formGroup.controls["customizedMinutes"].value == 0) {
-            //         formGroup.controls["customizedMinutes"].setValue(Math.ceil(stopResponse.calculatedSeconds / 60));
-            //     }
-            // });
+            this.applyMeasureResponseToCurrentStops(response, {updateCustomizedMinutesIfZero: true});
 
             this.drawPolyline(response.geometry);
             this.geometry = response.geometry;
@@ -787,6 +775,37 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     private getDefaultProfile(): FormGroup | null {
         return this.profiles.controls.find(profile => profile.controls['isDefault'].value) ?? this.profiles.at(0) ?? null;
+    }
+
+    private applyMeasureResponseToCurrentStops(response: TripMeasure, options?: { updateCustomizedMinutesIfZero?: boolean }): void {
+        if (!response.stops) {
+            return;
+        }
+
+        for (const profile of this.profiles.controls) {
+            this.getStops(profile).controls.forEach((formGroup: FormGroup, index: number) => {
+                const stopResponse: StopTime = response.stops[index];
+                if (!stopResponse) {
+                    return;
+                }
+
+                formGroup.controls["meters"].setValue(stopResponse.meters);
+                formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
+
+                const customizedMinutes = Math.ceil((stopResponse.calculatedSeconds || 0) / 60);
+                if (options?.updateCustomizedMinutesIfZero) {
+                    if (!formGroup.controls["customizedMinutes"].value) {
+                        formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
+                    }
+                } else {
+                    formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
+                }
+            });
+
+            if (response.travelTimeInSeconds != null) {
+                profile.controls["travelTimeInSeconds"].setValue(response.travelTimeInSeconds);
+            }
+        }
     }
 
     public validControl(controlName: string, group: FormGroup = this.modelForm): ValidationErrors | null {
