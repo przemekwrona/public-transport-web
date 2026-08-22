@@ -105,12 +105,12 @@ public class TripDistanceMeasureService {
                 .map(stop -> "%s,%s".formatted(stop.getLat(), stop.getLon()))
                 .collect(Collectors.joining("|"));
 
-//        RoutingResponse routing = geoapifyService.route(waypoints, tripMeasure.getVelocity());
-//        Feature feature = routing.features().stream().findFirst().orElse(null);
-//        List<Leg> legs = Optional.ofNullable(feature).map(Feature::properties).map(Properties::legs).orElse(List.of());
+        RoutingResponse routing = geoapifyService.route(waypoints, tripMeasure.getVelocity());
+        Feature feature = routing.features().stream().findFirst().orElse(null);
+        List<Leg> legs = Optional.ofNullable(feature).map(Feature::properties).map(Properties::legs).orElse(List.of());
 
-        Feature feature = null;
-        List<Leg> legs = List.of();
+//        Feature feature = null;
+//        List<Leg> legs = List.of();
         List<StopTime> stopTimes = new ArrayList<>(tripMeasure.getStops().size());
 
         double meters = 0;
