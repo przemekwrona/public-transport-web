@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, linkedSignal} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline, Popup} from "leaflet";
 import {find, size} from "lodash";
@@ -199,11 +199,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             travelTimeInSeconds: [profile.travelTimeInSeconds ?? null],
             stops: this.formBuilder.array(stopControls, [Validators.required, Validators.minLength(2)])
         });
-        profileControl.get('calculatedCommunicationVelocity')!.valueChanges.subscribe((value: number) => {
+        profileControl.get('calculatedCommunicationVelocity')!.valueChanges.pipe(debounceTime(1000)).subscribe((value: number) => {
             if (value == null || size(this.getStops(profileControl).controls) <= 1) {
                 return;
             }
 
+            this.approximateDistance(profileControl);
             this.forceRefreshIn10seconds();
         });
 
@@ -453,9 +454,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private approximateDistances(zoom: boolean = false): void {
-        const defaultProfile = this.getDefaultProfile();
         for (const profile of this.profiles.controls) {
-            this.approximateDistance(profile, zoom && profile === defaultProfile);
+            this.approximateDistance(profile, zoom);
         }
     }
 
@@ -479,7 +479,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
     }
 
-    private buildTripsMeasureRequest(profile: FormGroup | null): TripMeasure {
+    private buildTripsMeasureRequest(profile: FormGroup | null = this.getActiveProfile()): TripMeasure {
+        const measuredProfile = profile ?? this.getActiveProfile();
         const tripId: TripId = {
             routeId: {
                 line: this.state.line,
@@ -487,20 +488,20 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 version: this.state.version
             },
             variantMode: this.state.mode,
-            trafficMode: this.state.trafficMode
+            trafficMode: measuredProfile?.controls['trafficMode'].value ?? this.activeTrafficMode
         };
         const tripMeasure: TripMeasure = {
             tripId: tripId,
-            velocity: profile?.controls["calculatedCommunicationVelocity"].value
+            velocity: measuredProfile?.controls["calculatedCommunicationVelocity"].value
         };
-        tripMeasure.stops = profile ? this.getStops(profile).controls.map((stop: FormGroup): StopTime => {
+        tripMeasure.stops = measuredProfile ? this.getStops(measuredProfile).controls.map((stop: FormGroup): StopTime => {
             const stopTime: StopTime = {};
             stopTime.stopId = stop.controls["id"].value;
             stopTime.stopName = stop.controls["name"].value;
             stopTime.lat = stop.controls["lat"].value;
             stopTime.lon = stop.controls["lon"].value;
             stopTime.calculatedSeconds = stop.controls["calculatedSeconds"].value;
-            if (profile.controls['isCustomized'].value) {
+            if (measuredProfile.controls['isCustomized'].value) {
                 stopTime.customizedSeconds = 60 * stop.controls["customizedMinutes"].value;
             } else {
                 stopTime.customizedSeconds = stop.controls["calculatedSeconds"].value;
@@ -510,7 +511,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             return stopTime;
         }) : [];
 
-        console.log(tripMeasure);
         return tripMeasure;
     }
 
@@ -714,13 +714,30 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public measureDistance(): Observable<TripMeasure> {
-        const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(null));
+        const primaryProfile = this.getActiveProfile();
+        const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(primaryProfile));
         refreshedStops.subscribe(response => {
-            this.applyMeasureResponseToCurrentStops(response, {updateCustomizedMinutesIfZero: true});
+            this.applyMeasureResponseToCurrentStops(response, {
+                profile: primaryProfile,
+                updateCustomizedMinutesIfZero: true
+            });
 
             this.drawPolyline(response.geometry);
             this.geometry = response.geometry;
         });
+
+        for (const profile of this.profiles.controls) {
+            if (profile === primaryProfile || this.getStops(profile).length <= 1) {
+                continue;
+            }
+
+            this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(profile)).subscribe(response => {
+                this.applyMeasureResponseToCurrentStops(response, {
+                    profile,
+                    updateCustomizedMinutesIfZero: true
+                });
+            });
+        }
 
         return refreshedStops;
     }
@@ -865,8 +882,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }));
     }
 
-    private getDefaultProfile(): FormGroup | null {
-        return this.profiles.controls.find(profile => profile.controls['isDefault'].value) ?? this.profiles.at(0) ?? null;
+    private getActiveProfile(): FormGroup | null {
+        return this.profiles.controls.find(profile => profile.controls['trafficMode'].value === this.activeTrafficMode);
     }
 
     private applyMeasureResponseToCurrentStops(response: TripMeasure, options?: {
@@ -892,7 +909,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
 
                     const customizedMinutes = Math.ceil((stopResponse.calculatedSeconds || 0) / 60);
-                    if (options?.updateCustomizedMinutesIfZero) {
+                    if (profile.controls['isCustomized'].value || options?.updateCustomizedMinutesIfZero) {
                         if (!formGroup.controls["customizedMinutes"].value) {
                             formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
                         }
