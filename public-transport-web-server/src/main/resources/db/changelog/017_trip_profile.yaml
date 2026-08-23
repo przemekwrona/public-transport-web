@@ -239,3 +239,149 @@ databaseChangeLog:
                   name: is_customized
                   type: boolean
                   defaultValueBoolean: false
+
+  - changeSet:
+      id: merge-duplicate-trips-by-traffic-mode
+      author: pwrona
+      changes:
+        - sql:
+            sql: |
+              WITH keeper AS (
+                SELECT DISTINCT ON (route_id, variant_name, variant_mode)
+                  trip_id AS keeper_trip_id,
+                  route_id,
+                  variant_name,
+                  variant_mode
+                FROM trip
+                ORDER BY route_id, variant_name, variant_mode,
+                  CASE WHEN traffic_mode = 'NORMAL' THEN 0 ELSE 1 END,
+                  trip_id
+              )
+              UPDATE trip_profile tp
+              SET trip_id = k.keeper_trip_id
+              FROM trip t
+              INNER JOIN keeper k
+                ON t.route_id = k.route_id
+               AND t.variant_name = k.variant_name
+               AND t.variant_mode = k.variant_mode
+              WHERE tp.trip_id = t.trip_id
+                AND t.trip_id <> k.keeper_trip_id;
+        - sql:
+            sql: |
+              WITH keeper AS (
+                SELECT DISTINCT ON (route_id, variant_name, variant_mode)
+                  trip_id AS keeper_trip_id,
+                  route_id,
+                  variant_name,
+                  variant_mode
+                FROM trip
+                ORDER BY route_id, variant_name, variant_mode,
+                  CASE WHEN traffic_mode = 'NORMAL' THEN 0 ELSE 1 END,
+                  trip_id
+              )
+              UPDATE brigade_event be
+              SET trip_id = k.keeper_trip_id
+              FROM trip t
+              INNER JOIN keeper k
+                ON t.route_id = k.route_id
+               AND t.variant_name = k.variant_name
+               AND t.variant_mode = k.variant_mode
+              WHERE be.trip_id = t.trip_id
+                AND t.trip_id <> k.keeper_trip_id;
+        - sql:
+            sql: |
+              WITH keeper AS (
+                SELECT DISTINCT ON (route_id, variant_name, variant_mode)
+                  trip_id AS keeper_trip_id,
+                  route_id,
+                  variant_name,
+                  variant_mode
+                FROM trip
+                ORDER BY route_id, variant_name, variant_mode,
+                  CASE WHEN traffic_mode = 'NORMAL' THEN 0 ELSE 1 END,
+                  trip_id
+              )
+              UPDATE brigade_trip bt
+              SET root_trip_id = k.keeper_trip_id
+              FROM trip t
+              INNER JOIN keeper k
+                ON t.route_id = k.route_id
+               AND t.variant_name = k.variant_name
+               AND t.variant_mode = k.variant_mode
+              WHERE bt.root_trip_id = t.trip_id
+                AND t.trip_id <> k.keeper_trip_id;
+        - sql:
+            sql: |
+              WITH keeper AS (
+                SELECT DISTINCT ON (route_id, variant_name, variant_mode)
+                  trip_id AS keeper_trip_id,
+                  route_id,
+                  variant_name,
+                  variant_mode
+                FROM trip
+                ORDER BY route_id, variant_name, variant_mode,
+                  CASE WHEN traffic_mode = 'NORMAL' THEN 0 ELSE 1 END,
+                  trip_id
+              )
+              DELETE FROM trip t
+              USING keeper k
+              WHERE t.route_id = k.route_id
+                AND t.variant_name = k.variant_name
+                AND t.variant_mode = k.variant_mode
+                AND t.trip_id <> k.keeper_trip_id;
+
+  - changeSet:
+      id: update-trip-unique-index-without-traffic-mode
+      author: pwrona
+      changes:
+        - dropIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+        - createIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+            unique: true
+            clustered: true
+            columns:
+              - column:
+                  name: route_id
+              - column:
+                  name: variant_name
+              - column:
+                  name: variant_mode
+      rollback:
+        - dropIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+        - createIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+            unique: true
+            clustered: true
+            columns:
+              - column:
+                  name: route_id
+              - column:
+                  name: variant_name
+              - column:
+                  name: variant_mode
+              - column:
+                  name: traffic_mode
+
+  - changeSet:
+      id: drop-traffic-mode-from-trip
+      author: pwrona
+      changes:
+        - dropColumn:
+            tableName: trip
+            columnName: traffic_mode
+      rollback:
+        - addColumn:
+            tableName: trip
+            columns:
+              - column:
+                  name: traffic_mode
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+                  defaultValue: NORMAL
