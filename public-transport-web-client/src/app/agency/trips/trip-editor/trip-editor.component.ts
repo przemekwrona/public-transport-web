@@ -467,11 +467,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
 
         this.tripDistanceMeasuresService.approximateDistance(trips).subscribe(response => {
-            this.applyMeasureResponseToCurrentStops(response, { profile });
+            this.applyMeasureResponseToCurrentStops(response, profile);
 
-            if (profile === this.getDefaultProfile()) {
-                this.drawPolyline(response.geometry);
-            }
+            this.drawPolyline(response.geometry);
 
             if (zoom) {
                 this.zoomPolyline();
@@ -717,10 +715,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const primaryProfile = this.getActiveProfile();
         const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(primaryProfile));
         refreshedStops.subscribe(response => {
-            this.applyMeasureResponseToCurrentStops(response, {
-                profile: primaryProfile,
-                updateCustomizedMinutesIfZero: true
-            });
+            this.applyMeasureResponseToCurrentStops(response, primaryProfile);
 
             this.drawPolyline(response.geometry);
             this.geometry = response.geometry;
@@ -732,10 +727,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             }
 
             this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(profile)).subscribe(response => {
-                this.applyMeasureResponseToCurrentStops(response, {
-                    profile,
-                    updateCustomizedMinutesIfZero: true
-                });
+                this.applyMeasureResponseToCurrentStops(response, profile);
             });
         }
 
@@ -854,15 +846,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             return;
         }
 
-        const source = this.getDefaultProfile();
         const newProfile = this.createProfile({
             trafficMode,
-            calculatedCommunicationVelocity: source?.controls['calculatedCommunicationVelocity'].value ?? 50,
-            customizedCommunicationVelocity: source?.controls['customizedCommunicationVelocity'].value ?? null,
-            isCustomized: source?.controls['isCustomized'].value ?? false,
+            calculatedCommunicationVelocity: 50,
+            customizedCommunicationVelocity: null,
+            isCustomized: false,
             isDefault: false,
-            travelTimeInSeconds: source?.controls['travelTimeInSeconds'].value ?? null,
-            stops: source ? this.mapStopsToStopTimes(source) : []
+            travelTimeInSeconds: null,
+            stops: []
         });
 
         this.profiles.push(newProfile);
@@ -886,41 +877,34 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return this.profiles.controls.find(profile => profile.controls['trafficMode'].value === this.activeTrafficMode);
     }
 
-    private applyMeasureResponseToCurrentStops(response: TripMeasure, options?: {
-        updateCustomizedMinutesIfZero?: boolean
-        profile?: FormGroup
-    }): void {
+    private applyMeasureResponseToCurrentStops(response: TripMeasure, profile?: FormGroup): void {
         if (!response.stops) {
             return;
         }
 
-        const profiles = options?.profile ? [options.profile] : this.profiles.controls;
-
         this.isShiftingFollowingStopTimes = true;
         try {
-            for (const profile of profiles) {
-                this.getStops(profile).controls.forEach((formGroup: FormGroup, index: number) => {
-                    const stopResponse: StopTime = response.stops[index];
-                    if (!stopResponse) {
-                        return;
-                    }
+            this.getStops(profile).controls.forEach((formGroup: FormGroup, index: number) => {
+                const stopResponse: StopTime = response.stops[index];
+                if (!stopResponse) {
+                    return;
+                }
 
-                    formGroup.controls["meters"].setValue(stopResponse.meters);
-                    formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
+                formGroup.controls["meters"].setValue(stopResponse.meters);
+                formGroup.controls["calculatedSeconds"].setValue(stopResponse.calculatedSeconds);
 
-                    const customizedMinutes = Math.ceil((stopResponse.calculatedSeconds || 0) / 60);
-                    if (profile.controls['isCustomized'].value || options?.updateCustomizedMinutesIfZero) {
-                        if (!formGroup.controls["customizedMinutes"].value) {
-                            formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
-                        }
-                    } else {
+                const customizedMinutes = Math.ceil((stopResponse.calculatedSeconds || 0) / 60);
+                if (profile.controls['isCustomized'].value) {
+                    if (!formGroup.controls["customizedMinutes"].value) {
                         formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
                     }
-                });
-
-                if (response.travelTimeInSeconds != null) {
-                    profile.controls["travelTimeInSeconds"].setValue(response.travelTimeInSeconds);
+                } else {
+                    formGroup.controls["customizedMinutes"].setValue(customizedMinutes);
                 }
+            });
+
+            if (response.travelTimeInSeconds != null) {
+                profile.controls["travelTimeInSeconds"].setValue(response.travelTimeInSeconds);
             }
         } finally {
             this.isShiftingFollowingStopTimes = false;
