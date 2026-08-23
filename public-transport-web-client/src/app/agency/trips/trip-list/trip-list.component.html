@@ -238,7 +238,13 @@
                     </div>
 
                     <div class="card-body lg:py-5 grid gap-2.5 lg:gap-2.5">
-                        <strong class="text-sm">TAM</strong>
+                        <div>
+                            <strong class="text-sm mt-4 mr-2">TAM</strong>
+                            <span class="mx-1 text-sm">z:</span>
+                            <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.originTerritory.name }}</span>
+                            <span class="mx-1 text-sm">do:</span>
+                            <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.destinationTerritory.name }}</span>
+                        </div>
                         @for (trip of findTripsWithDirectionFront(); track trip) {
                             <app-trip-item [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
                         }
@@ -247,7 +253,13 @@
 
 
                     <div class="card-body lg:py-7.5 grid gap-5 lg:gap-5">
-                        <strong class="text-sm">POWRÓT</strong>
+                        <div>
+                            <strong class="text-sm mt-4 mr-2">POWRÓT</strong>
+                            <span class="mx-1 text-sm">z:</span>
+                            <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.destinationTerritory.name }}</span>
+                            <span class="mx-1 text-sm">do:</span>
+                            <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.originTerritory.name }}</span>
+                        </div>
 
                         @for (trip of findTripsWithDirectionBack(); track trip) {
                             <app-trip-item [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
