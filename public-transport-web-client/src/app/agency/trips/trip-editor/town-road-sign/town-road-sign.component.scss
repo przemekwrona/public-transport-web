@@ -1,11 +1,19 @@
 :host {
   display: inline-flex;
   vertical-align: middle;
+  max-width: 100%;
   line-height: 1;
 }
 
+:host(.w-full) {
+  display: flex;
+  width: 100%;
+}
+
 .e17a {
-  display: inline-block;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
   background: #1c1c1c;
   padding: 0.12em;
   border-radius: 0.28em;
@@ -18,7 +26,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   min-width: 5.5em;
+  box-sizing: border-box;
   background: #007a33;
   border: 0.22em solid #fff;
   border-radius: 0.12em;
