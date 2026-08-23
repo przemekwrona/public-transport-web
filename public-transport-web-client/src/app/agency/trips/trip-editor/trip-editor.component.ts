@@ -123,6 +123,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public isSubmited: boolean = false;
     private isShiftingFollowingStopTimes = false;
 
+    public tripDetails: TripsDetails = {} as TripsDetails;
+
 
     get profiles(): FormArray<FormGroup> {
         return this.modelForm.get('profiles') as FormArray;
@@ -250,6 +252,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.modelForm.get('tripVariantMode').valueChanges.subscribe((value: TripMode) => this.onChangeVariantMode(value));
 
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
+            this.tripDetails = tripDetails;
             this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
 
             if (tripDetails.isMainVariant) {

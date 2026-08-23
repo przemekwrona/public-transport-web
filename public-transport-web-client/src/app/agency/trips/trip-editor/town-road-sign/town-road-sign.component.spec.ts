@@ -28,4 +28,28 @@ describe('TownRoadSignComponent', () => {
     const name = fixture.nativeElement.querySelector('.e17a__name');
     expect(name.textContent.trim()).toBe('Zielona Góra');
   });
+
+  it('should title-case uppercase Polish town names', () => {
+    component.townName = 'PIŃCZÓW';
+    fixture.detectChanges();
+
+    const name = fixture.nativeElement.querySelector('.e17a__name');
+    expect(name.textContent.trim()).toBe('Pińczów');
+  });
+
+  it('should title-case hyphenated Polish town names', () => {
+    component.townName = 'BUSKO-ZDRÓJ';
+    fixture.detectChanges();
+
+    const name = fixture.nativeElement.querySelector('.e17a__name');
+    expect(name.textContent.trim()).toBe('Busko-Zdrój');
+  });
+
+  it('should title-case multi-word Polish town names', () => {
+    component.townName = 'ŚLADKÓW DUŻY';
+    fixture.detectChanges();
+
+    const name = fixture.nativeElement.querySelector('.e17a__name');
+    expect(name.textContent.trim()).toBe('Śladków Duży');
+  });
 });
