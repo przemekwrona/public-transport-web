@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.TripEntity;
-import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
-import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -27,11 +25,11 @@ public class TripQueryService {
     }
 
     public TripEntity findByAgencyCodeAndTripId(String instance, TripId tripId) {
-        return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariantName(), TripVariantModeMapper.map(tripId.getVariantMode()), TripTrafficModeMapper.map(tripId.getTrafficMode()));
+        return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariantName(), TripVariantModeMapper.map(tripId.getVariantMode()));
     }
 
-    public boolean existsUniqueTripIndex(String agencyCode, String line, String name, String variantName, TripVariantMode tripMode, TripTrafficMode trafficMode) {
-        return tripQueryRepository.existsTripUniqueIndex(agencyCode, line, name, variantName, tripMode, trafficMode);
+    public boolean existsUniqueTripIndex(String agencyCode, String line, String name, String variantName, TripVariantMode tripMode) {
+        return tripQueryRepository.existsTripUniqueIndex(agencyCode, line, name, variantName, tripMode);
     }
 
     public List<TripEntity> findByExistsBrigade(String agency) {

@@ -17,7 +17,6 @@ import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
-import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripProfileMapper;
@@ -26,7 +25,6 @@ import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
@@ -55,11 +53,6 @@ public class TripUpdaterService {
         TripEntity tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
 
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
-//        Optional<StopTime> lastStopOptional = tripDetails.getStops().stream().reduce((first, second) -> second);
-//        lastStopOptional.ifPresent(lastStop -> {
-//            updatedTrip.setDistanceInMeters(lastStop.getMeters());
-//            updatedTrip.setTravelTimeInSeconds(lastStop.getCalculatedSeconds());
-//        });
 
         for (TripProfile tripProfile : tripDetails.getTripProfiles()) {
             TripProfileEntity tripProfileEntity = tripProfileQueryService.findAllByTripAndTrafficMode(tripEntity, TripTrafficModeMapper.map(tripProfile.getTrafficMode()));

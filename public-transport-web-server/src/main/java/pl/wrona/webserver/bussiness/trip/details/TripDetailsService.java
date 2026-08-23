@@ -56,7 +56,7 @@ public class TripDetailsService {
                                 .version(tripEntity.getRoute().getVersion()))
                         .variantName(tripEntity.getVariantName())
                         .variantMode(TripVariantModeMapper.map(tripEntity.getVariantMode()))
-                        .trafficMode(TripTrafficModeMapper.map(tripEntity.getTrafficMode())))
+                        .trafficMode(tripId.getTrafficMode()))
                 .isMainVariant(tripEntity.isMainVariant())
                 .tripProfiles(tripProfiles)
                 .geometry(buildGeometry(tripEntity.getGeometry()))
