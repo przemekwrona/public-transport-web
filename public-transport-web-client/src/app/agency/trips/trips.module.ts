@@ -24,6 +24,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatButtonModule} from '@angular/material/button';
 import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign.component";
 
 @NgModule({
@@ -54,7 +55,8 @@ import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign
         MatIconModule,
         MatFormFieldModule,
         MatInputModule,
-        MatTabsModule
+        MatTabsModule,
+        MatButtonModule
     ],
     declarations: [
         TripEditorComponent,
