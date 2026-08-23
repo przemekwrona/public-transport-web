@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.TripEntity;
-import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 
 import java.util.List;
@@ -23,9 +22,8 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
             AND t.route.line = :line
             AND t.route.name = :name
             AND t.variantName = :variantName
-            AND t.variantMode = :variantMode
-            AND t.trafficMode = :trafficMode""")
-    boolean existsTripUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode, @Param("trafficMode") TripTrafficMode trafficMode);
+            AND t.variantMode = :variantMode""")
+    boolean existsTripUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode);
 
     @Query("""
             SELECT t FROM TripEntity t
@@ -33,9 +31,8 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
             AND t.route.line = :line
             AND t.route.name = :name
             AND t.variantName = :variantName
-            AND t.variantMode = :variantMode
-            AND t.trafficMode = :trafficMode""")
-    TripEntity findTripByUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode, @Param("trafficMode") TripTrafficMode trafficMode);
+            AND t.variantMode = :variantMode""")
+    TripEntity findTripByUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode);
 
 
     @Query("""

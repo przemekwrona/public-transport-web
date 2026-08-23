@@ -51,8 +51,7 @@ public class TripCreatorService {
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getName(),
                 createTripDetailsRequest.getBody().getTripId().getVariantName(),
-                TripVariantModeMapper.map(createTripDetailsRequest.getBody().getTripId().getVariantMode()),
-                TripTrafficModeMapper.map(createTripDetailsRequest.getBody().getTripId().getTrafficMode()));
+                TripVariantModeMapper.map(createTripDetailsRequest.getBody().getTripId().getVariantMode()));
 
         if (uniqueTripIndexExists) {
             throw new BusinessException("ERROR:202510300047", "Trip index already exists");
@@ -84,7 +83,7 @@ public class TripCreatorService {
         for (TripProfile tripProfile : tripRequest.getTripProfiles()) {
             TripProfileEntity tripProfileEntity = new TripProfileEntity();
             tripProfileEntity.setTrip(savedTrip);
-            tripProfileEntity.setTrafficMode(TripTrafficModeMapper.map(tripRequest.getTripId().getTrafficMode()));
+            tripProfileEntity.setTrafficMode(TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
             tripProfileEntity.setTravelTimeInSeconds(0);
             tripProfileEntity.setCalculatedCommunicationVelocity(0);
             tripProfileEntity.setCustomizedCommunicationVelocity(0);
