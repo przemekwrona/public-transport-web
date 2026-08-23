@@ -43,7 +43,7 @@ public class TripMapper {
                     .map(point -> List.of(point.getLat(), point.getLon()))
                     .toList();
             tripEntity.setGeometry(objectMapper.writeValueAsString(geometry));
-        } catch (Exception e) {google
+        } catch (Exception e) {
         }
         return tripEntity;
     }

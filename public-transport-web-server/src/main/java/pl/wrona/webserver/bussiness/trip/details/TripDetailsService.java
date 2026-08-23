@@ -52,9 +52,8 @@ public class TripDetailsService {
         var stops = stopService.findStopByTripId(tripEntity.getTripId());
         var tripProfiles = buildTripProfiles(profiles, stopTimes, stops);
 
-        var territories = territorialUnitQueryService.findAllByStopIdIn(List.of(
-                tripEntity.getRoute().getOriginStopId(),
-                tripEntity.getRoute().getDestinationStopId()));
+        var originTerritory = territorialUnitQueryService.findAllByStopIdIn(List.of(tripEntity.getRoute().getOriginStopId())).get(0);
+        var targetTerritory = territorialUnitQueryService.findAllByStopIdIn(List.of(tripEntity.getRoute().getDestinationStopId())).get(0);
 
         return new TripsDetails()
                 .tripId(new TripId()
@@ -71,9 +70,9 @@ public class TripDetailsService {
                 .variantDesignation(tripEntity.getVariantDesignation())
                 .variantDescription(tripEntity.getVariantDescription())
                 .originTerritory(new TerritoryUnit()
-                        .name(territories.get(0).getNazwa()))
+                        .name(originTerritory.getNazwa()))
                 .targetTerritory(new TerritoryUnit()
-                        .name(territories.get(1).getNazwa()))
+                        .name(targetTerritory.getNazwa()))
                 .headsign(tripEntity.getHeadsign());
     }
 
