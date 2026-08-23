@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, linkedSignal} from '@angular/core';
 import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline, Popup} from "leaflet";
 import {find, size} from "lodash";
@@ -93,7 +93,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private routePolyline: Polyline;
     private popup: Popup;
 
-    private communicationVelocitySubject = new Subject<number>();
     private previousVariantName = '';
 
     public state: {
@@ -108,12 +107,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public tripModeSelectValue = TripMode;
     public tripEditorComponentMode: TripEditorComponentMode;
 
-    public trafficModeSelectValue = TrafficMode
     public readonly trafficModes: TrafficMode[] = [TrafficMode.Normal, TrafficMode.Traffic];
-    public selectedProfileIndex = 0;
 
     public geometry: Array<Point2D> = [];
     public $tripVariants: RouteDetails = {};
+    public activeTrafficMode: TrafficMode = TrafficMode.Normal;
 
     public forceRefreshSubject: Subject<boolean> = new Subject();
     public forceRefresh$: Observable<boolean> = this.forceRefreshSubject.asObservable();
@@ -125,6 +123,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public isSubmited: boolean = false;
     private isShiftingFollowingStopTimes = false;
 
+
     get profiles(): FormArray<FormGroup> {
         return this.modelForm.get('profiles') as FormArray;
     }
@@ -133,8 +132,31 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return profile.get('stops') as FormArray<FormGroup>;
     }
 
+    public get activeTrafficModeIndex(): number {
+        return this.getProfileIndexByTrafficMode(this.activeTrafficMode);
+    }
+
+    public setActiveTrafficMode(trafficMode: TrafficMode): void {
+        this.activeTrafficMode = trafficMode;
+    }
+
+    public onSelectedProfileIndexChange(index: number): void {
+        const profile = this.profiles.controls[index];
+        if (profile) {
+            this.setActiveTrafficMode(profile.controls['trafficMode'].value);
+        }
+    }
+
+    public getProfileIndexByTrafficMode(trafficMode: TrafficMode): number {
+        if (!this.modelForm) {
+            return 0;
+        }
+
+        const index = this.profiles.controls.findIndex(profile => profile.controls['trafficMode'].value === trafficMode);
+        return index >= 0 ? index : 0;
+    }
+
     constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
-        this.communicationVelocitySubject.pipe(debounceTime(1000)).subscribe(() => this.approximateDistance());
     }
 
     private createStop(stop: Stop): FormGroup {
@@ -182,7 +204,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 return;
             }
 
-            this.communicationVelocitySubject.next(value);
             this.forceRefreshIn10seconds();
         });
 
@@ -229,8 +250,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
             this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
-            // this.modelForm.controls['isCustomized'].setValue(tripDetails.isCustomized);
-            // this.modelForm.controls['calculatedCommunicationVelocity'].setValue(tripDetails.calculatedCommunicationVelocity || 30);
 
             if (tripDetails.isMainVariant) {
                 this.modelForm.controls['tripVariantName'].disable();
@@ -402,8 +421,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         }
 
                         this.forceRefreshIn10seconds();
-
-                        this.approximateDistance();
+                        this.approximateDistances();
 
                         this._viewportScroller.scrollToAnchor('map');
 
@@ -434,17 +452,26 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         }
     }
 
-    private approximateDistance(zoom: boolean = false) {
-        const trips: TripMeasure = this.buildTripsMeasureRequest(null);
+    private approximateDistances(zoom: boolean = false): void {
+        const defaultProfile = this.getDefaultProfile();
+        for (const profile of this.profiles.controls) {
+            this.approximateDistance(profile, zoom && profile === defaultProfile);
+        }
+    }
+
+    private approximateDistance(profile: FormGroup, zoom: boolean = false) {
+        const trips: TripMeasure = this.buildTripsMeasureRequest(profile);
 
         if (trips.stops.length <= 1) {
             return
         }
 
         this.tripDistanceMeasuresService.approximateDistance(trips).subscribe(response => {
-            this.applyMeasureResponseToCurrentStops(response);
+            this.applyMeasureResponseToCurrentStops(response, { profile });
 
-            this.drawPolyline(response.geometry);
+            if (profile === this.getDefaultProfile()) {
+                this.drawPolyline(response.geometry);
+            }
 
             if (zoom) {
                 this.zoomPolyline();
@@ -800,9 +827,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public selectProfileByTrafficMode(trafficMode: TrafficMode): void {
-        const index = this.profiles.controls.findIndex(profile => profile.controls['trafficMode'].value === trafficMode);
-        if (index >= 0) {
-            this.selectedProfileIndex = index;
+        if (this.hasProfileForTrafficMode(trafficMode)) {
+            this.setActiveTrafficMode(trafficMode);
         }
     }
 
@@ -823,7 +849,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
 
         this.profiles.push(newProfile);
-        this.selectedProfileIndex = this.profiles.length - 1;
+        this.setActiveTrafficMode(trafficMode);
     }
 
     private mapStopsToStopTimes(profile: FormGroup): StopTime[] {
@@ -845,14 +871,17 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     private applyMeasureResponseToCurrentStops(response: TripMeasure, options?: {
         updateCustomizedMinutesIfZero?: boolean
+        profile?: FormGroup
     }): void {
         if (!response.stops) {
             return;
         }
 
+        const profiles = options?.profile ? [options.profile] : this.profiles.controls;
+
         this.isShiftingFollowingStopTimes = true;
         try {
-            for (const profile of this.profiles.controls) {
+            for (const profile of profiles) {
                 this.getStops(profile).controls.forEach((formGroup: FormGroup, index: number) => {
                     const stopResponse: StopTime = response.stops[index];
                     if (!stopResponse) {
