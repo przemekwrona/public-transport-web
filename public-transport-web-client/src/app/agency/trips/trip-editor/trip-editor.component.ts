@@ -433,7 +433,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private approximateDistance(zoom: boolean = false) {
-        const trips: TripMeasure = this.buildTripsMeasureRequest();
+        const trips: TripMeasure = this.buildTripsMeasureRequest(null);
 
         if (trips.stops.length <= 1) {
             return
@@ -450,7 +450,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
     }
 
-    private buildTripsMeasureRequest(): TripMeasure {
+    private buildTripsMeasureRequest(profile: FormGroup | null): TripMeasure {
         const tripId: TripId = {
             routeId: {
                 line: this.state.line,
@@ -460,7 +460,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             variantMode: this.state.mode,
             trafficMode: this.state.trafficMode
         };
-        const profile = this.getDefaultProfile();
         const tripMeasure: TripMeasure = {
             tripId: tripId,
             velocity: profile?.controls["calculatedCommunicationVelocity"].value
@@ -623,9 +622,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.body.destinationStopName = this.modelForm.controls['destination'].value
         tripDetailsRequest.body.headsign = this.modelForm.controls['headsign'].value
 
-        // tripDetailsRequest.body.calculatedCommunicationVelocity = this.modelForm.controls['calculatedCommunicationVelocity'].value;
-        // tripDetailsRequest.body.customizedCommunicationVelocity = Math.round(this.customizedCommunicationVelocity());
-
         tripDetailsRequest.body.tripProfiles = this.profiles.controls.map((profileFormGroup: FormGroup): TripProfile => {
             const profile: TripProfile = {};
             profile.trafficMode = profileFormGroup.controls['trafficMode'].value;
@@ -689,7 +685,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public measureDistance(): Observable<TripMeasure> {
-        const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest());
+        const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(null));
         refreshedStops.subscribe(response => {
             this.applyMeasureResponseToCurrentStops(response, {updateCustomizedMinutesIfZero: true});
 
