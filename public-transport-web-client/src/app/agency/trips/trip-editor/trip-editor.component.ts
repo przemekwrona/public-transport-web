@@ -635,7 +635,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         updatedTripId.routeId = routeId;
         updatedTripId.variantName = this.modelForm.controls['tripVariantName'].value;
         updatedTripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
-        updatedTripId.trafficMode = this.modelForm.controls['trafficMode'].value;
 
         tripDetailsRequest.body = {};
         tripDetailsRequest.body.tripId = updatedTripId;
