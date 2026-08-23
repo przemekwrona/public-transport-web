@@ -30,8 +30,8 @@ public class TripDistanceMeasureService {
     private final GeoapifyService geoapifyService;
 
     public TripMeasure approximateDistance(TripMeasure tripMeasure) {
-        int meters = 0;
-        int seconds = 0;
+        double meters = 0;
+        double seconds = 0;
 
         List<StopTime> stopTimes = new ArrayList<>();
         StopTime previousStopTime = null;
@@ -52,29 +52,20 @@ public class TripDistanceMeasureService {
                         stopTime.getLat(),
                         stopTime.getLon());
 
-                int haversinMeters10Percent = (int) (haversinMeters * _10_PERCENT);
-
+                double haversinMeters10Percent = haversinMeters * _10_PERCENT;
                 meters = meters + haversinMeters10Percent;
-
-                int defaultVelocityKph = 50;
-                int velocityKph = Optional.ofNullable(tripMeasure.getVelocity()).orElse(defaultVelocityKph);
-
-                // Convert km/h to m/s using a clear constant
-                final double METERS_PER_SECOND_PER_KMPH = 1000.0 / 3600.0;
-                double velocityMps = velocityKph * METERS_PER_SECOND_PER_KMPH;
-
                 // Compute total seconds (rounded up to nearest minute)
-                int travelTimeInSeconds = (int) Math.ceil(Math.round(haversinMeters / velocityMps) / 60.0d) * 60;
-                seconds += travelTimeInSeconds;
+                double travelTimeInSeconds = convertToSeconds(meters, tripMeasure.getVelocity().doubleValue());
+                seconds = travelTimeInSeconds;
 
                 stopTimes.add(new StopTime()
                         .stopId(stopTime.getStopId())
                         .stopName(stopTime.getStopName())
                         .lon(stopTime.getLon())
                         .lat(stopTime.getLat())
-                        .meters(meters)
-                        .calculatedSeconds(seconds)
-                        .customizedSeconds(stopTime.getCustomizedSeconds() == null ? seconds : stopTime.getCustomizedSeconds()));
+                        .meters((int) meters)
+                        .calculatedSeconds((int) travelTimeInSeconds)
+                        .customizedSeconds(stopTime.getCustomizedSeconds() == null ? (int) travelTimeInSeconds : stopTime.getCustomizedSeconds()));
             }
 
             previousStopTime = stopTime;
@@ -94,8 +85,8 @@ public class TripDistanceMeasureService {
                         .variantMode(tripMeasure.getTripId().getVariantMode())
                         .trafficMode(tripMeasure.getTripId().getTrafficMode()))
                 .stops(stopTimes)
-                .distanceInMeters(meters)
-                .travelTimeInSeconds(seconds)
+                .distanceInMeters((int) meters)
+                .travelTimeInSeconds((int) seconds)
                 .velocity(tripMeasure.getVelocity())
                 .geometry(geometry);
     }
@@ -109,8 +100,6 @@ public class TripDistanceMeasureService {
         Feature feature = routing.features().stream().findFirst().orElse(null);
         List<Leg> legs = Optional.ofNullable(feature).map(Feature::properties).map(Properties::legs).orElse(List.of());
 
-//        Feature feature = null;
-//        List<Leg> legs = List.of();
         List<StopTime> stopTimes = new ArrayList<>(tripMeasure.getStops().size());
 
         double meters = 0;
@@ -131,9 +120,9 @@ public class TripDistanceMeasureService {
             if (i < legs.size()) {
                 Leg leg = legs.get(i);
 
-                meters += leg.distance();
+                double travelTimeInSeconds = convertToSeconds(leg.distance(), tripMeasure.getVelocity().doubleValue());
 
-                int travelTimeInSeconds = (int) Math.ceil(Math.round(leg.time()) / 60.0d) * 60;
+                meters += leg.distance();
                 seconds += travelTimeInSeconds;
             }
         }
@@ -160,6 +149,15 @@ public class TripDistanceMeasureService {
                 .travelTimeInSeconds((int) seconds)
                 .velocity(tripMeasure.getVelocity())
                 .geometry(geometry);
+    }
+
+    public static double convertToSeconds(double meters, double speedKmh) {
+        if (speedKmh <= 0) {
+            throw new IllegalArgumentException("Speed must be greater than zero.");
+        }
+
+        // Time in seconds = (meters * 3.6) / speed in km/h
+        return (meters * 3.6) / speedKmh;
     }
 
 }
