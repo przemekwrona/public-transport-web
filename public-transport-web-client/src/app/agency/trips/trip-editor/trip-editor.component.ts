@@ -109,6 +109,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     public tripEditorComponentMode: TripEditorComponentMode;
 
     public trafficModeSelectValue = TrafficMode
+    public readonly trafficModes: TrafficMode[] = [TrafficMode.Normal, TrafficMode.Traffic];
+    public selectedProfileIndex = 0;
 
     public geometry: Array<Point2D> = [];
     public $tripVariants: RouteDetails = {};
@@ -787,6 +789,54 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public customizedCommunicationVelocity(profile: FormGroup): number | null {
         return profile.controls['customizedCommunicationVelocity'].value;
+    }
+
+    public trafficModeIcon(trafficMode: TrafficMode): string {
+        return trafficMode === TrafficMode.Traffic ? 'traffic_jam' : 'directions_bus';
+    }
+
+    public hasProfileForTrafficMode(trafficMode: TrafficMode): boolean {
+        return this.profiles.controls.some(profile => profile.controls['trafficMode'].value === trafficMode);
+    }
+
+    public selectProfileByTrafficMode(trafficMode: TrafficMode): void {
+        const index = this.profiles.controls.findIndex(profile => profile.controls['trafficMode'].value === trafficMode);
+        if (index >= 0) {
+            this.selectedProfileIndex = index;
+        }
+    }
+
+    public addProfileForTrafficMode(trafficMode: TrafficMode): void {
+        if (this.hasProfileForTrafficMode(trafficMode)) {
+            return;
+        }
+
+        const source = this.getDefaultProfile();
+        const newProfile = this.createProfile({
+            trafficMode,
+            calculatedCommunicationVelocity: source?.controls['calculatedCommunicationVelocity'].value ?? 50,
+            customizedCommunicationVelocity: source?.controls['customizedCommunicationVelocity'].value ?? null,
+            isCustomized: source?.controls['isCustomized'].value ?? false,
+            isDefault: false,
+            travelTimeInSeconds: source?.controls['travelTimeInSeconds'].value ?? null,
+            stops: source ? this.mapStopsToStopTimes(source) : []
+        });
+
+        this.profiles.push(newProfile);
+        this.selectedProfileIndex = this.profiles.length - 1;
+    }
+
+    private mapStopsToStopTimes(profile: FormGroup): StopTime[] {
+        return this.getStops(profile).controls.map((stop: FormGroup): StopTime => ({
+            stopId: stop.controls['id'].value,
+            stopName: stop.controls['name'].value,
+            lon: stop.controls['lon'].value,
+            lat: stop.controls['lat'].value,
+            meters: stop.controls['meters'].value,
+            calculatedSeconds: stop.controls['calculatedSeconds'].value,
+            customizedSeconds: (stop.controls['customizedMinutes'].value ?? 0) * 60,
+            bdot10k: stop.controls['bdot10k'].value
+        }));
     }
 
     private getDefaultProfile(): FormGroup | null {
