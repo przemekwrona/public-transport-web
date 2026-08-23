@@ -41,9 +41,10 @@
                         <div class="card-body grid gap-5">
 
                             <div class="flex items-center gap-2 flex-wrap">
-                                <app-town-road-sign [townName]="originControl?.value || ''"></app-town-road-sign>
+
+                                <app-town-road-sign [townName]="tripDetails?.originTerritory?.name"></app-town-road-sign>
                                 <span>-</span>
-                                <app-town-road-sign [townName]="destinationControl?.value || ''"></app-town-road-sign>
+                                <app-town-road-sign [townName]="tripDetails?.targetTerritory?.name"></app-town-road-sign>
                             </div>
                             <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
                                 <div class="flex items-center flex-wrap gap-3.5">

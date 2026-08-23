@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
+import org.igeolab.iot.pt.server.api.model.TerritoryUnit;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
@@ -15,9 +16,11 @@ import pl.wrona.webserver.bussiness.trip.TripProfileQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
+import pl.wrona.webserver.core.TerritorialUnitQueryService;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
@@ -38,6 +41,7 @@ public class TripDetailsService {
     private final StopTimeRepository stopTimeRepository;
     private final StopService stopService;
     private final ObjectMapper objectMapper;
+    private final TerritorialUnitQueryService territorialUnitQueryService;
 
     @PreAgencyAuthorize
     public TripsDetails getTripVariantDetails(String instance, TripId tripId) {
@@ -47,6 +51,10 @@ public class TripDetailsService {
         var stopTimes = stopTimeRepository.findAllByTripId(tripEntity.getTripId());
         var stops = stopService.findStopByTripId(tripEntity.getTripId());
         var tripProfiles = buildTripProfiles(profiles, stopTimes, stops);
+
+        var territories = territorialUnitQueryService.findAllByStopIdIn(List.of(
+                tripEntity.getRoute().getOriginStopId(),
+                tripEntity.getRoute().getDestinationStopId()));
 
         return new TripsDetails()
                 .tripId(new TripId()
@@ -62,6 +70,10 @@ public class TripDetailsService {
                 .geometry(buildGeometry(tripEntity.getGeometry()))
                 .variantDesignation(tripEntity.getVariantDesignation())
                 .variantDescription(tripEntity.getVariantDescription())
+                .originTerritory(new TerritoryUnit()
+                        .name(territories.get(0).getNazwa()))
+                .targetTerritory(new TerritoryUnit()
+                        .name(territories.get(1).getNazwa()))
                 .originStopName(tripEntity.getOriginStopName())
                 .destinationStopName(tripEntity.getDestinationStopName())
                 .headsign(tripEntity.getHeadsign());

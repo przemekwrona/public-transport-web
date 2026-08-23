@@ -1554,6 +1554,10 @@ components:
       properties:
         tripId:
           $ref: '#/components/schemas/TripId'
+        originTerritory:
+          $ref: '#/components/schemas/TerritoryUnit'
+        targetTerritory:
+          $ref: '#/components/schemas/TerritoryUnit'
         originStopName:
           type: string
         destinationStopName:
