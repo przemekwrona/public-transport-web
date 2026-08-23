@@ -35,8 +35,6 @@ public class TripMapper {
             tripEntity.setVariantDescription(tripsDetails.getVariantDescription());
         }
 
-        tripEntity.setOriginStopName(tripsDetails.getOriginStopName());
-        tripEntity.setDestinationStopName(tripsDetails.getDestinationStopName());
         tripEntity.setHeadsign(tripsDetails.getHeadsign());
 
         try {
@@ -45,7 +43,7 @@ public class TripMapper {
                     .map(point -> List.of(point.getLat(), point.getLon()))
                     .toList();
             tripEntity.setGeometry(objectMapper.writeValueAsString(geometry));
-        } catch (Exception e) {
+        } catch (Exception e) {google
         }
         return tripEntity;
     }

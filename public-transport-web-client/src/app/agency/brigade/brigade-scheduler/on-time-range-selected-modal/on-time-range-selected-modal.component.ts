@@ -65,8 +65,6 @@ export class OnTimeRangeSelectedModalComponent {
             results.end = moment(this.data.start).add(lastStop.calculatedSeconds, 'seconds').format("yyyy-MM-DDTHH:mm:SS");
             results.resourceId = this.data.resourceId;
             results.tripId = tripId;
-            results.origin = tripDetails.originStopName;
-            results.destination = tripDetails.destinationStopName;
 
             this.dialogRef.close(results);
         });

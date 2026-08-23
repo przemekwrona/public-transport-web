@@ -268,8 +268,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 this.modelForm.controls["variantDescription"].setValidators(null);
             }
 
-            this.modelForm.controls['origin'].setValue(tripDetails.originStopName);
-            this.modelForm.controls['destination'].setValue(tripDetails.destinationStopName);
             this.modelForm.controls['headsign'].setValue(tripDetails.headsign);
 
             this.geometry = tripDetails.geometry;
@@ -647,8 +645,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.body.variantDesignation = this.modelForm.controls['variantDesignation'].value
         tripDetailsRequest.body.variantDescription = this.modelForm.controls['variantDescription'].value
 
-        tripDetailsRequest.body.originStopName = this.modelForm.controls['origin'].value
-        tripDetailsRequest.body.destinationStopName = this.modelForm.controls['destination'].value
         tripDetailsRequest.body.headsign = this.modelForm.controls['headsign'].value
 
         tripDetailsRequest.body.tripProfiles = this.profiles.controls.map((profileFormGroup: FormGroup): TripProfile => {
