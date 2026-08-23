@@ -330,6 +330,23 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return this.modelForm.get('headsign') as FormControl;
     }
 
+    get fromTerritoryName(): string {
+        return (this.isFrontVariantMode()
+            ? this.tripDetails?.originTerritory?.name
+            : this.tripDetails?.targetTerritory?.name) ?? '';
+    }
+
+    get toTerritoryName(): string {
+        return (this.isFrontVariantMode()
+            ? this.tripDetails?.targetTerritory?.name
+            : this.tripDetails?.originTerritory?.name) ?? '';
+    }
+
+    public isFrontVariantMode(): boolean {
+        const variantMode = this.modelForm?.controls['tripVariantMode']?.value ?? this.state?.mode;
+        return variantMode === TripMode.Front;
+    }
+
     ngAfterViewInit(): void {
         this.map = this.initMap();
         if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
