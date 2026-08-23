@@ -5,6 +5,7 @@ import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.junit.jupiter.api.Test;
 import pl.wrona.webserver.BaseIntegrationTest;
@@ -23,14 +24,15 @@ class TripEntityControllerIntegrationTest extends BaseIntegrationTest {
                                 .name("CHMIELNIK - PIERZCHNICA")
                                 .line("202")))
                         .headsign("PIERZCHNICA")
-                        .addStopsItem(new StopTime()
-                                .stopId(10033L)
-                                .meters(0)
-                                .calculatedSeconds(0))
-                        .addStopsItem(new StopTime()
-                                .stopId(10032L)
-                                .meters(2)
-                                .calculatedSeconds(300)))
+                        .addTripProfilesItem(new TripProfile()
+                                .addStopsItem(new StopTime()
+                                        .stopId(10033L)
+                                        .meters(0)
+                                        .calculatedSeconds(0))
+                                .addStopsItem(new StopTime()
+                                        .stopId(10032L)
+                                        .meters(2)
+                                        .calculatedSeconds(300))))
                 .when()
                 .post("/api/v1/trips")
                 .then()
