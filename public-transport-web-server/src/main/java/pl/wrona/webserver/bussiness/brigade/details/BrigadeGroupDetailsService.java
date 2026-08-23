@@ -8,7 +8,6 @@ import org.igeolab.iot.pt.server.api.model.BrigadeResource;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolId1;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeDetailsResponse;
-import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.RouteId1;
 import org.igeolab.iot.pt.server.api.model.TripId2;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemQueryRepository;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
-import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -153,7 +151,6 @@ public class BrigadeGroupDetailsService {
                         .version(trip.getRoute().getVersion())
                         .routeCode(trip.getRoute().getRouteCode()))
                 .variantName(trip.getVariantName())
-                .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
-                .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()));
+                .variantMode(TripVariantModeMapper.map(trip.getVariantMode()));
     }
 }

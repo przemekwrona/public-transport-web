@@ -67,8 +67,7 @@ public class TimetableTripPaginationService {
                                 .name(trip.getRoute().getName())
                                 .version(trip.getRoute().getVersion()))
                         .variantName(trip.getVariantName())
-                        .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
-                        .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode())))
+                        .variantMode(TripVariantModeMapper.map(trip.getVariantMode())))
                 .designation(trip.getVariantDesignation())
                 .description(trip.getVariantDescription());
     }
