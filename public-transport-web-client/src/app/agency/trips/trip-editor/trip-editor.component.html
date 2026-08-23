@@ -40,12 +40,20 @@
                         <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
                         <div class="card-body grid gap-5">
 
-                            <div class="flex items-center gap-2 flex-wrap">
-
-                                <app-town-road-sign [townName]="tripDetails?.originTerritory?.name"></app-town-road-sign>
-                                <span>-</span>
-                                <app-town-road-sign [townName]="tripDetails?.targetTerritory?.name"></app-town-road-sign>
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 w-full">Jadę Z</label>
+                                    <app-town-road-sign [townName]="tripDetails?.originTerritory?.name"></app-town-road-sign>
+                                </div>
                             </div>
+
+                            <div class="w-full">
+                                <div class="flex items-baseline flex-wrap gap-2.5">
+                                    <label class="form-label flex items-center gap-1 w-full">Jadę DO</label>
+                                    <app-town-road-sign [townName]="tripDetails?.targetTerritory?.name"></app-town-road-sign>
+                                </div>
+                            </div>
+
                             <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
                                 <div class="flex items-center flex-wrap gap-3.5">
                                     <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
