@@ -40,6 +40,45 @@
                         <div class="card-header"><h3 class="card-title">Informacje Podstawowe</h3></div>
                         <div class="card-body grid gap-5">
 
+                            <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
+                                <div class="grid gap-7">
+                                    <label class="form-label max-w-56">Kierunek wariantu</label>
+                                    <mat-radio-group formControlName="tripVariantMode">
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+                                            <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
+                                                   [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
+                                                <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
+                                                    <div class="flex items-center h-11">
+                                                        <mat-icon aria-hidden="false" fontIcon="arrow_forward"
+                                                                  class="size-48"></mat-icon>
+                                                    </div>
+                                                    <span class="text-md font-medium text-gray-900"> TAM </span>
+                                                    <mat-radio-button class="appearance-none hidden"
+                                                                      [value]="tripModeSelectValue.Front">TAM
+                                                    </mat-radio-button>
+                                                </div>
+                                            </label>
+                                            <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
+                                                   [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
+                                                <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
+                                                    <div class="flex items-center h-11">
+                                                        <mat-icon aria-hidden="false" fontIcon="arrow_back"
+                                                                  class="size-48"></mat-icon>
+                                                    </div>
+                                                    <span class="text-md font-medium text-gray-900">POWRÓT</span>
+                                                    <mat-radio-button class="appearance-none hidden"
+                                                                      [value]="tripModeSelectValue.Back">POWRÓT
+                                                    </mat-radio-button>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </mat-radio-group>
+                                    @if (checkControlHasError("tripTrafficMode", "required")) {
+                                        <span class="text-danger text-2sm">Ruch panujący jest na drodze jest wymagany</span>
+                                    }
+                                </div>
+                            </div>
+
                             <div class="w-full">
                                 <div class="flex flex-col items-stretch gap-2.5">
                                     <label class="form-label flex items-center gap-1 w-full">Jadę Z</label>
@@ -107,48 +146,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col gap-7.5 divide-y divide-gray-200">
-                                <div class="grid gap-7">
-                                    <label class="form-label max-w-56">Kierunek wariantu</label>
-                                    <mat-radio-group formControlName="tripVariantMode">
-                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
-                                            <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
-                                                   [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
-                                                <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
-                                                    <div class="flex items-center h-11">
-                                                        <mat-icon aria-hidden="false" fontIcon="arrow_forward"
-                                                                  class="size-48"></mat-icon>
-                                                    </div>
-                                                    <span class="text-md font-medium text-gray-900"> TAM </span>
-                                                    <mat-radio-button class="appearance-none hidden"
-                                                                      [value]="tripModeSelectValue.Front">TAM
-                                                    </mat-radio-button>
-                                                </div>
-                                            </label>
-                                            <label class="flex align-stretch cursor-pointer bg-center h-32 bg-no-repeat border rounded-xl border-dashed has-[:checked]:border-primary bg-[length:500px] sso-active singl-sign-on-bg"
-                                                   [ngClass]="canCheckErrors('tripTrafficMode') ?'border-danger': 'border-gray-300'">
-                                                <div class="flex flex-col place-items-center place-content-center rounded-xl grow">
-                                                    <div class="flex items-center h-11">
-                                                        <mat-icon aria-hidden="false" fontIcon="arrow_back"
-                                                                  class="size-48"></mat-icon>
-                                                    </div>
-                                                    <span class="text-md font-medium text-gray-900">POWRÓT</span>
-                                                    <mat-radio-button class="appearance-none hidden"
-                                                                      [value]="tripModeSelectValue.Back">POWRÓT
-                                                    </mat-radio-button>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </mat-radio-group>
-                                    @if (checkControlHasError("tripTrafficMode", "required")) {
-                                        <span class="text-danger text-2sm">Ruch panujący jest na drodze jest wymagany</span>
-                                    }
-                                </div>
-                            </div>
-
                             @if (!isMainVariant()) {
-                                <div class="border-t border-gray-200 my-2.5"></div>
-
                                 <div class="w-full">
                                     <div class="flex items-baseline flex-wrap gap-2.5">
                                         <label class="form-label flex items-center gap-1 w-full">Symbol kursu na
@@ -182,7 +180,7 @@
                                 </div>
 
                             }
-                            <div class="border-t border-gray-200 my-2.5"></div>
+                            <div class="border-t border-gray-200 my-0.5"></div>
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap gap-2.5">
