@@ -16,13 +16,16 @@ public class TripProfileMapper {
 
     public TripProfileEntity update(TripProfileEntity tripProfileEntity, TripProfile tripProfile) {
         StopTime lastStop = tripProfile.getStops().get(tripProfile.getStops().size() - 1);
-        var customizedSeconds = Optional.ofNullable(lastStop.getCustomizedSeconds()).map(Integer::doubleValue).orElse(lastStop.getCalculatedSeconds().doubleValue());
-        var velocityMetersPerSeconds = lastStop.getMeters().doubleValue() / customizedSeconds;
-        var velocityKmPerH = Math.round(velocityMetersPerSeconds * 3600.0d / 1000.0d);
 
-        tripProfileEntity.setCustomizedCommunicationVelocity((int) velocityKmPerH);
+        var distanceInMeters = lastStop.getMeters().doubleValue();
+        var timeCustomizedInSeconds = lastStop.getCustomizedSeconds().doubleValue();
+
+        tripProfileEntity.setCalculatedCommunicationVelocity(tripProfile.getCalculatedCommunicationVelocity());
+        tripProfileEntity.setCustomizedCommunicationVelocity((int) convertToKmH(distanceInMeters, timeCustomizedInSeconds));
+
         tripProfileEntity.setCustomized(tripProfile.getIsCustomized());
         tripProfileEntity.setDefaultProfile(tripProfile.getIsDefault());
+
 //        tripProfileEntity.setCalculatedCommunicationVelocity(tripProfile.getCalculatedCommunicationVelocity());
 //        tripProfileEntity.setOriginStopName(tripsDetails.getOriginStopName());
 //        tripProfileEntity.setDestinationStopName(tripsDetails.getDestinationStopName());
@@ -40,5 +43,14 @@ public class TripProfileMapper {
 //        }
 
         return tripProfileEntity;
+    }
+
+    public static double convertToKmH(double meters, double seconds) {
+        if (seconds <= 0) {
+            throw new IllegalArgumentException("Time in seconds must be greater than zero.");
+        }
+
+        // Speed in meters per second (m/s) multiplied by 3.6 to get km/h
+        return (meters / seconds) * 3.6;
     }
 }
