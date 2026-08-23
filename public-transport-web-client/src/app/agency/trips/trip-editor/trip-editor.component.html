@@ -54,25 +54,26 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
-                                <div class="flex items-center flex-wrap gap-3.5">
-                                    <!--                                <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">-->
-                                    <div class="flex flex-col gap-0.5">
+                            <div class="flex flex-col border border-gray-200 rounded-xl gap-1 px-3.5 py-2.5">
+                                <div class="flex items-center justify-between gap-2">
                                     <span class="text-sm font-medium text-gray-900">Wariant
                                         Podstawowy</span>
-                                        <span class="text-2sm text-gray-700">
-                                        <strong>Wariant podstawowy trasy autobusowej</strong> to główny, standardowy
-                                        przebieg trasy, którą dany autobus pokonuje zgodnie z rozkładem jazdy. Jest to
-                                        najbardziej typowa i regularna wersja trasy, która obowiązuje przez większość
-                                        kursów danej linii.
-                                    </span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-5">
                                     <label class="switch switch-sm">
                                         <input type="checkbox" formControlName="isMainVariant"/>
                                     </label>
                                 </div>
+                                <span [@heightCollapse]="isMainVariantDescriptionExpanded ? 'expanded' : 'collapsed'"
+                                      class="overflow-hidden text-2sm text-gray-700">
+                                    <strong>Wariant podstawowy trasy autobusowej</strong> to główny, standardowy
+                                    przebieg trasy, którą dany autobus pokonuje zgodnie z rozkładem jazdy. Jest to
+                                    najbardziej typowa i regularna wersja trasy, która obowiązuje przez większość
+                                    kursów danej linii.
+                                </span>
+                                <button type="button"
+                                        class="self-end text-2sm text-primary"
+                                        (click)="isMainVariantDescriptionExpanded = !isMainVariantDescriptionExpanded">
+                                    {{ isMainVariantDescriptionExpanded ? 'mniej' : 'więcej' }}
+                                </button>
                             </div>
 
                             @if (modelForm?.errors?.["variantExists"]) {

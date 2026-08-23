@@ -118,6 +118,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public isRefreshExpanded: boolean = false;
     public isRefreshingExpanded: boolean = false;
+    public isMainVariantDescriptionExpanded = false;
 
     public modelForm: FormGroup;
     public isSubmited: boolean = false;
