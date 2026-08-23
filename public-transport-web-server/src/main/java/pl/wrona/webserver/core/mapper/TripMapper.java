@@ -24,7 +24,6 @@ public class TripMapper {
     public TripEntity update(TripEntity tripEntity, TripsDetails tripsDetails) {
         tripEntity.setVariantName(tripsDetails.getTripId().getVariantName());
         tripEntity.setVariantMode(TripVariantModeMapper.map(tripsDetails.getTripId().getVariantMode()));
-        tripEntity.setTrafficMode(TripTrafficModeMapper.map(tripsDetails.getTripId().getTrafficMode()));
         tripEntity.setMainVariant(tripsDetails.getIsMainVariant());
 
         if (Optional.of(tripsDetails).map(TripsDetails::getIsMainVariant).orElse(Boolean.FALSE)) {
@@ -61,7 +60,6 @@ public class TripMapper {
                                 .routeCode(trip.getRoute().getRouteCode()))
                         .variantName(trip.getVariantName())
                         .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
-                        .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()))
                         .tripCode(trip.getTripCode()))
                 .name(trip.getRoute().getName())
                 .line(trip.getRoute().getLine())
@@ -72,7 +70,6 @@ public class TripMapper {
                 .travelTimeInSeconds(trip.getTravelTimeInSeconds())
                 .distanceInMeters(trip.getDistanceInMeters())
                 .mode(TripVariantModeMapper.map(trip.getVariantMode()))
-                .trafficMode(TripTrafficModeMapper.map(trip.getTrafficMode()))
                 .origin(trip.getOriginStopName())
                 .destination(trip.getDestinationStopName())
                 .isMainVariant(trip.isMainVariant())
