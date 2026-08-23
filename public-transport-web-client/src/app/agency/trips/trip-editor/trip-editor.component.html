@@ -43,14 +43,14 @@
                             <div class="w-full">
                                 <div class="flex flex-col items-stretch gap-2.5">
                                     <label class="form-label flex items-center gap-1 w-full">Jadę Z</label>
-                                    <app-town-road-sign class="w-full" [townName]="tripDetails?.originTerritory?.name"></app-town-road-sign>
+                                    <app-town-road-sign class="w-full" [townName]="fromTerritoryName"></app-town-road-sign>
                                 </div>
                             </div>
 
                             <div class="w-full">
                                 <div class="flex flex-col items-stretch gap-2.5">
                                     <label class="form-label flex items-center gap-1 w-full">Jadę DO</label>
-                                    <app-town-road-sign class="w-full" [townName]="tripDetails?.targetTerritory?.name"></app-town-road-sign>
+                                    <app-town-road-sign class="w-full" [townName]="toTerritoryName"></app-town-road-sign>
                                 </div>
                             </div>
 
