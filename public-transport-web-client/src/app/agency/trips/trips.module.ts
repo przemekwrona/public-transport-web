@@ -23,6 +23,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {MatTabsModule} from '@angular/material/tabs';
 import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign.component";
 
 @NgModule({
@@ -52,7 +53,8 @@ import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign
         MatRadioModule,
         MatIconModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        MatTabsModule
     ],
     declarations: [
         TripEditorComponent,
