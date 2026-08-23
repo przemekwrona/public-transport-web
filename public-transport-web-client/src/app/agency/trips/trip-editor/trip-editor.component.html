@@ -11,9 +11,9 @@
             </div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a [routerLink]="['/agency/trips']"
-               [queryParams]="{line: state.line, name: state.name, version: state.version}"
-               class="btn btn-sm btn-secondary">Wróć do lini</a>
+            <a mat-stroked-button
+               [routerLink]="['/agency/trips']"
+               [queryParams]="{line: state.line, name: state.name, version: state.version}">Wróć do lini</a>
         </div>
     </div>
 </div>
