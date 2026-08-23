@@ -74,8 +74,6 @@ public class TripDetailsService {
                         .name(territories.get(0).getNazwa()))
                 .targetTerritory(new TerritoryUnit()
                         .name(territories.get(1).getNazwa()))
-                .originStopName(tripEntity.getOriginStopName())
-                .destinationStopName(tripEntity.getDestinationStopName())
                 .headsign(tripEntity.getHeadsign());
     }
 

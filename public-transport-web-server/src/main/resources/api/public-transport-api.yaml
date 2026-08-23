@@ -1558,10 +1558,6 @@ components:
           $ref: '#/components/schemas/TerritoryUnit'
         targetTerritory:
           $ref: '#/components/schemas/TerritoryUnit'
-        originStopName:
-          type: string
-        destinationStopName:
-          type: string
         headsign:
           type: string
         tripProfiles:

@@ -177,33 +177,6 @@
 
                             <div class="w-full">
                                 <div class="flex items-baseline flex-wrap gap-2.5">
-                                    <label class="form-label flex items-center gap-1 w-full">Przystanek
-                                        początkowy</label>
-                                    <mat-form-field appearance="outline" class="w-full custom-form-field">
-                                        <mat-label>Przystanek początkowy</mat-label>
-                                        <input type="text" matInput [formControl]="originControl">
-                                        @if (originControl.hasError('required')) {
-                                            <mat-error>Proszę wprowadź przystanek początkowy</mat-error>
-                                        }
-                                    </mat-form-field>
-                                </div>
-                            </div>
-
-                            <div class="w-full">
-                                <div class="flex items-baseline flex-wrap gap-2.5">
-                                    <label class="form-label flex items-center gap-1 w-full">Przystanek końcowy</label>
-                                    <mat-form-field appearance="outline" class="w-full custom-form-field">
-                                        <mat-label>Przystanek końcowy</mat-label>
-                                        <input type="text" matInput [formControl]="destinationControl">
-                                        @if (destinationControl.hasError('required')) {
-                                            <mat-error>Proszę wprowadź przystanek końcowy</mat-error>
-                                        }
-                                    </mat-form-field>
-                                </div>
-                            </div>
-
-                            <div class="w-full">
-                                <div class="flex items-baseline flex-wrap gap-2.5">
                                     <label class="form-label flex items-center gap-1 w-full">Kierunek na tablicy
                                         czołowej</label>
                                     <mat-form-field appearance="outline" class="w-full custom-form-field">
