@@ -10,23 +10,22 @@ export class TripIdExistenceValidator {
     constructor(private agencyStorageService: AgencyStorageService, private tripService: TripService) {
     }
 
-    variantExistsValidator(line: string, name: string, variantName: string, tripMode: TripMode, trafficMode: TrafficMode): AsyncValidatorFn {
+    variantExistsValidator(line: string, name: string, variantName: string, tripMode: TripMode): AsyncValidatorFn {
         return (control: FormGroup): Observable<{ variantExists: boolean } | null> => {
 
             const variantNameControl: AbstractControl = control.get('tripVariantName');
             const variantModeControl: AbstractControl = control.get('tripVariantMode');
             const trafficModeControl: AbstractControl = control.get('tripTrafficMode');
 
-            if (variantNameControl.pristine && variantModeControl.pristine && trafficModeControl.pristine) {
+            if (variantNameControl.pristine && variantModeControl.pristine) {
                 return of(null);
             }
 
             const variantNameControlValue: string = variantNameControl?.value;
             const variantModeControlValue: TripMode = variantModeControl?.value;
-            const trafficModeControlValue: TrafficMode = trafficModeControl?.value;
 
             // Return True if it is the same trip
-            if (variantName === variantNameControlValue && tripMode === variantModeControlValue && trafficMode === trafficModeControlValue) {
+            if (variantName === variantNameControlValue && tripMode === variantModeControlValue) {
                 return of(null);
             }
 
@@ -41,7 +40,6 @@ export class TripIdExistenceValidator {
 
             tripId.variantName = variantNameControlValue;
             tripId.variantMode = variantModeControlValue;
-            tripId.trafficMode = trafficModeControlValue;
 
             return of(control.value).pipe(
                 // Delay processing to debounce user input

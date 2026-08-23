@@ -127,10 +127,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return this.modelForm.get('profiles') as FormArray;
     }
 
-    get tripTrafficMode(): FormControl<TrafficMode> {
-        return this.modelForm.get('tripTrafficMode') as FormControl<TrafficMode>;
-    }
-
     public getStops(profile: FormGroup): FormArray<FormGroup> {
         return profile.get('stops') as FormArray<FormGroup>;
     }
@@ -171,7 +167,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private createProfile(profile: Partial<TripProfile> = {}): FormGroup {
         const stopControls = (profile.stops || []).map((stop: StopTime) => this.createStopFromStopTimeModel(stop));
         const profileControl = this.formBuilder.group({
-            trafficMode: [profile.trafficMode ?? this.tripTrafficMode?.value ?? TrafficMode.Normal],
+            trafficMode: [profile.trafficMode ?? profile.trafficMode ?? TrafficMode.Normal],
             calculatedCommunicationVelocity: [profile.calculatedCommunicationVelocity ?? 30, [Validators.required, Validators.min(0)]],
             customizedCommunicationVelocity: [profile.customizedCommunicationVelocity ?? null],
             isCustomized: [profile.isCustomized ?? false],
@@ -212,7 +208,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 isMainVariant: [true, [Validators.required]],
                 tripVariantName: [this.state.variant, [Validators.required]],
                 tripVariantMode: [this.state.mode, [Validators.required]],
-                tripTrafficMode: [this.state.trafficMode, [Validators.required]],
 
                 variantDesignation: ['', [Validators.required]],
                 variantDescription: ['', [Validators.required]],
@@ -224,7 +219,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
             },
             {
-                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.mode, this.state.trafficMode)
+                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.mode)
             });
 
         this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
@@ -265,7 +260,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
                     this.profiles.push(this.createProfile({
-                        trafficMode: this.tripTrafficMode.value ?? TrafficMode.Normal,
+                        trafficMode: TrafficMode.Normal,
                         calculatedCommunicationVelocity: 50,
                         isCustomized: false,
                         isDefault: true
@@ -275,7 +270,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.modelForm.controls["isMainVariant"].setValue(true);
                         this.modelForm.controls["tripVariantName"].setValue("MAIN");
                         this.modelForm.controls["tripVariantMode"].setValue(TripMode.Front);
-                        this.modelForm.controls["tripTrafficMode"].setValue(TrafficMode.Normal);
+                        this.modelForm.controls["trafficMode"].setValue(TrafficMode.Normal);
                         this.modelForm.controls["variantDesignation"].setValidators(null);
                         this.modelForm.controls["variantDescription"].setValidators(null);
 
@@ -530,7 +525,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             isMainVariant: 'Wariant podstawowy',
             tripVariantName: 'Nazwa wariantu',
             tripVariantMode: 'Kierunek wariantu',
-            tripTrafficMode: 'Ruch panujący na drodze',
+            trafficMode: 'Ruch panujący na drodze',
             variantDesignation: 'Symbol kursu na rozkładzie jazdy',
             variantDescription: 'Opis oznaczenia',
             origin: 'Przystanek początkowy',
@@ -614,7 +609,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         updatedTripId.routeId = routeId;
         updatedTripId.variantName = this.modelForm.controls['tripVariantName'].value;
         updatedTripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
-        updatedTripId.trafficMode = this.modelForm.controls['tripTrafficMode'].value;
+        updatedTripId.trafficMode = this.modelForm.controls['trafficMode'].value;
 
         tripDetailsRequest.body = {};
         tripDetailsRequest.body.tripId = updatedTripId;
