@@ -10,7 +10,6 @@ public class TripComparatorUtils {
 
     public static Comparator<TripEntity> tripEntityComparator() {
         return Comparator.comparing(TripEntity::isMainVariant)
-                .thenComparingInt((TripEntity t) -> t.getVariantMode().getWeight())
-                .thenComparing((TripEntity t) -> t.getTrafficMode().getWeight()).reversed();
+                .thenComparingInt((TripEntity t) -> t.getVariantMode().getWeight());
     }
 }
