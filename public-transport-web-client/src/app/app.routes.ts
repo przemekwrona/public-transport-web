@@ -57,7 +57,7 @@ export const routes: Routes = [
             {path: 'stops', component: StopsComponent, resolve: { centerPoint: centerPointResolver }},
             {path: 'routes', component: RouteListComponent, resolve: { routes: RoutesResolver }},
             {path: 'routes/create', component: CreateRouteComponent},
-            {path: 'trips', component: TripListComponent, resolve: {trips: tripsResolver}},
+            {path: 'routes/:routeCode/trips', component: TripListComponent, resolve: {trips: tripsResolver}},
             {path: 'trips/create', component: TripEditorComponent, resolve: { trip: tripEditorResolver, variants:  tripsResolver}, data: { mode: TripEditorComponentMode.CREATE }},
             {path: 'trips/edit', component: TripEditorComponent,  resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
             {path: 'timetables', component: TimetableListComponent, resolve: { timetables: generatedTimetablesResolver }},

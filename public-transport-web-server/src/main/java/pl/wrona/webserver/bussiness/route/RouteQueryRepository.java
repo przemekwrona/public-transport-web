@@ -23,8 +23,12 @@ public interface RouteQueryRepository extends JpaRepository<RouteEntity, String>
             ORDER BY r.createdAt ASC NULLS LAST, r.routeId ASC""")
     List<RouteEntity> findByAgencyCodeOrderByCreatedAtAsc(@Param("agencyCode") String agencyCode);
 
+    @Deprecated
     @Query("SELECT r FROM RouteEntity r WHERE r.agency.agencyCode = :agencyCode AND r.line = :line AND r.name = :name AND r.version = :version")
     RouteEntity findByAgencyCodeAndLineAndName(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("version") int version);
+
+    @Query("SELECT r FROM RouteEntity r WHERE r.agency.agencyCode = :agencyCode AND r.routeCode = :routeCode")
+    RouteEntity findByAgencyCodeAndRouteCode(@Param("agencyCode") String agencyCode, @Param("routeCode") String routeCode);
 
     @Deprecated
     @Query("SELECT r FROM RouteEntity r WHERE r.agency = :agency AND r.name = :name AND r.line = :line")

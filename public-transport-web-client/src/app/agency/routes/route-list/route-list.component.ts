@@ -38,8 +38,7 @@ export class RouteListComponent implements OnInit {
     }
 
     public openRoute(route: Route) {
-        const state = {line: route.routeId.line, name: route.routeId.name, version: route.routeId.version};
-        this.router.navigate(['/agency/trips'], {queryParams: state}).then();
+        this.router.navigate([`/agency/routes/${route.routeCode}/trips`]).then();
     }
 
     public downloadPdf(route: Route): void {
