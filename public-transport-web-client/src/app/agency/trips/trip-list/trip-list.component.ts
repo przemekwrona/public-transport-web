@@ -23,6 +23,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {TripItemComponent} from "./trip-item/trip-item.component";
 import {MatIconModule} from "@angular/material/icon";
 import {MatError, MatFormField, MatInput, MatLabel} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
     selector: 'app-trip-list',
@@ -41,8 +42,7 @@ import {MatError, MatFormField, MatInput, MatLabel} from "@angular/material/inpu
         MatFormField,
         MatInput,
         MatLabel,
-        MatError,
-        MatFormField
+        MatButtonModule
     ],
     providers: [
         TripService,

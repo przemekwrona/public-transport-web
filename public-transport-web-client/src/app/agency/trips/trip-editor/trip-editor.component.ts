@@ -239,8 +239,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 variantDesignation: ['', [Validators.required]],
                 variantDescription: ['', [Validators.required]],
 
-                origin: ['', [Validators.required]],
-                destination: ['', [Validators.required]],
                 headsign: ['', [Validators.required]],
 
                 profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
@@ -294,12 +292,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.modelForm.controls["isMainVariant"].setValue(true);
                         this.modelForm.controls["tripVariantName"].setValue("MAIN");
                         this.modelForm.controls["tripVariantMode"].setValue(TripMode.Front);
-                        this.modelForm.controls["trafficMode"].setValue(TrafficMode.Normal);
                         this.modelForm.controls["variantDesignation"].setValidators(null);
                         this.modelForm.controls["variantDescription"].setValidators(null);
 
-                        this.modelForm.controls["origin"].setValue(tripVariants.route.originStop.name);
-                        this.modelForm.controls["destination"].setValue(tripVariants.route.destinationStop.name);
                         this.modelForm.controls["headsign"].setValue(tripVariants.route.destinationStop.name);
                     }
                 }
@@ -317,14 +312,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     get variantDescriptionControl(): FormControl {
         return this.modelForm.get('variantDescription') as FormControl;
-    }
-
-    get originControl(): FormControl {
-        return this.modelForm.get('origin') as FormControl;
-    }
-
-    get destinationControl(): FormControl {
-        return this.modelForm.get('destination') as FormControl;
     }
 
     get headsignControl(): FormControl {
