@@ -175,10 +175,10 @@
                                       placeholder="Kielce - Częstochowa - Wrocław" rows="3"></textarea>
                         </div>
                         <div class="flex justify-end w-full gap-2.5">
-                            <button [routerLink]="['/agency/routes']" class="btn btn-secondary">Wróć do listy linii
-                            </button>
-                            <button (click)="saveBasicInfo()" [disabled]="isUpdatingBasicInformation"
-                                    class="btn btn-success">
+                            <a mat-stroked-button [routerLink]="['/agency/routes']">Wróć do listy linii</a>
+                            <button mat-flat-button color="primary"
+                                    (click)="saveBasicInfo()"
+                                    [disabled]="isUpdatingBasicInformation">
                                 Zapisz Informacje Podstawowe
                                 @if (isUpdatingBasicInformation) {
                                     <fa-icon [icon]="faSpinner" [animation]="'spin'"/>
