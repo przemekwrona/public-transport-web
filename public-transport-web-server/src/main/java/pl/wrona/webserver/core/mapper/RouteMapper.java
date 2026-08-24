@@ -29,6 +29,7 @@ public class RouteMapper {
                                 .line(routeEntity.getLine())
                                 .name(routeEntity.getName())
                                 .version(routeEntity.getVersion()))
+                        .routeCode(routeEntity.getRouteCode())
                         .google(routeEntity.isGoogle())
                         .active(routeEntity.isActive())
                         .originStop(new Stop()

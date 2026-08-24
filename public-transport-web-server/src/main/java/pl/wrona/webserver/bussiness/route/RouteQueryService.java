@@ -26,6 +26,12 @@ public class RouteQueryService {
     }
 
     @PreAgencyAuthorize
+    public RouteEntity findRouteByAgencyCodeAndRouteId(String instance, String routeCode) {
+        return this.routeQueryRepository.findByAgencyCodeAndRouteCode(instance, routeCode);
+    }
+
+    @Deprecated
+    @PreAgencyAuthorize
     public RouteEntity findRouteByAgencyCodeAndRouteId(String instance, RouteId routeId) {
         return this.routeQueryRepository.findByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName(), routeId.getVersion());
     }

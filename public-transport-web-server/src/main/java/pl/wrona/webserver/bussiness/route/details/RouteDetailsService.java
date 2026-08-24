@@ -36,11 +36,11 @@ public class RouteDetailsService {
     private final TerritorialUnitQueryService territorialUnitQueryService;
 
     @PreAgencyAuthorize
-    public RouteDetails getRouteDetails(String instance, RouteId routeId) {
-        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, routeId);
+    public RouteDetails getRouteDetails(String instance, String routeCode) {
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, routeCode);
         var tripWithBrigades = tripQueryService.mapByExistsBrigade(instance);
 
-        var tripEntities = tripQueryService.findByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName());
+        var tripEntities = tripQueryService.findByAgencyCodeAndLineAndName(instance, route.getLine(), route.getName());
 
         var trips = tripEntities.stream()
                 .map(tripEntity -> TripMapper.map(tripEntity, tripWithBrigades))

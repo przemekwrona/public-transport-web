@@ -40,13 +40,13 @@ public class RouteController implements RouteApi {
     }
 
     @Override
-    public ResponseEntity<Routes> getRoutes(String agency) {
-        return ResponseEntity.ok(routePaginationService.getRoutes(agency));
+    public ResponseEntity<RouteDetails> getRouteDetails(String agency, String routeCode) {
+        return ResponseEntity.ok(routeDetailsService.getRouteDetails(agency, routeCode));
     }
 
     @Override
-    public ResponseEntity<RouteDetails> getRouteDetails(String agency, RouteId routeId) {
-        return ResponseEntity.ok(routeDetailsService.getRouteDetails(agency, routeId));
+    public ResponseEntity<Routes> getRoutes(String agency) {
+        return ResponseEntity.ok(routePaginationService.getRoutes(agency));
     }
 
     @Override

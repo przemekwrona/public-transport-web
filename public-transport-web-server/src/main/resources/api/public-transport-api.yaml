@@ -489,8 +489,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Routes'
 
-  /agency/{agency}/routes/route-details:
-    post:
+  /agency/{agency}/routes/{routeCode}/route-details:
+    get:
       tags:
         - route
       summary: Return list of trips create but user and assigned to agency
@@ -501,11 +501,11 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RouteId'
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -1361,6 +1361,8 @@ components:
       properties:
         routeId:
           $ref: '#/components/schemas/RouteId'
+        routeCode:
+          type: string
         google:
           type: boolean
         active:
