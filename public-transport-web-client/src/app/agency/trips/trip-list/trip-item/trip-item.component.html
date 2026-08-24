@@ -2,7 +2,7 @@
      class="relative flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg">
 
     <div class="flex items-center gap-4">
-        @if (!isEmpty(trip.line)) {
+        @if (!trip?.isMainVariant) {
             <div class="relative size-[50px] shrink-0">
                 <svg class="w-full h-full stroke-brand-clarity fill-brand-light"
                      width="44"
@@ -14,28 +14,24 @@
                           stroke=""></path>
                 </svg>
                 <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4 text-sm">
-                    @if (trip.trafficMode === TrafficMode.Normal) {
-                        <mat-icon aria-hidden="false" fontIcon="directions_bus" class="size-12"></mat-icon>
-                    } @else if (trip.trafficMode === TrafficMode.Traffic) {
-                        <mat-icon aria-hidden="false" fontIcon="traffic_jam" class="size-12"></mat-icon>
-                    }
+                    {{ trip?.variantDesignation }}
                 </div>
             </div>
         }
+
         <div class="flex flex-col gap-1.5">
-            <div class="flex items-center flex-wrap gap-2.5">
-                <a (click)="editTrip(trip)"
-                   class="text-base font-medium text-gray-900 hover:text-primary-active">
-                    {{ trip.origin }} - {{ trip.destination }}
-                </a>
-            </div>
+            <!--            <div class="flex items-center flex-wrap gap-2.5">-->
+            <!--                <a (click)="editTrip(trip)" class="text-base font-medium text-gray-900 hover:text-primary-active">-->
+            <!--                    {{ trip.origin }} - {{ trip.destination }}-->
+            <!--                </a>-->
+            <!--            </div>-->
             @if (trip.isMainVariant) {
                 <div class="form-info text-gray-800 font-normal">
-                    {{ 'agency.trip.mainVariant' | transloco }}
+                    <strong>{{ 'agency.trip.mainVariant' | transloco }}</strong>
                 </div>
             } @else {
                 <div class="form-info text-gray-800 font-normal">
-                    {{ trip?.variantDescription }} ({{ trip?.variantDesignation }})
+                    {{ trip?.variantDescription }}
                 </div>
             }
 
