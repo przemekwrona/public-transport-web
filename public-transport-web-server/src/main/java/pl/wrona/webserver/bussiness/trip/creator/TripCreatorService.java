@@ -85,8 +85,8 @@ public class TripCreatorService {
             tripProfileEntity.setTrip(savedTrip);
             tripProfileEntity.setTrafficMode(TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
             tripProfileEntity.setTravelTimeInSeconds(0);
-            tripProfileEntity.setCalculatedCommunicationVelocity(0);
-            tripProfileEntity.setCustomizedCommunicationVelocity(0);
+            tripProfileEntity.setCalculatedCommunicationVelocity(tripProfile.getCustomizedCommunicationVelocity());
+            tripProfileEntity.setCustomizedCommunicationVelocity(tripProfile.getCustomizedCommunicationVelocity());
             tripProfileEntity.setDefaultProfile(tripProfile.getIsDefault());
             tripProfileEntity.setCustomized(tripProfile.getIsCustomized());
 
