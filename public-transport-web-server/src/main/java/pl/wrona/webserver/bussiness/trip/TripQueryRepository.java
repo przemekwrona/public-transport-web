@@ -34,6 +34,13 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
             AND t.variantMode = :variantMode""")
     TripEntity findTripByUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode);
 
+    @Query("""
+            SELECT t FROM TripEntity t
+            WHERE t.route.agency.agencyCode = :agencyCode
+            AND t.route.routeCode = :routeCode
+            AND t.tripCode = :tripCode""")
+    TripEntity findTripByAgencyAndRouteCodeAndTripCode(@Param("agencyCode") String agencyCode, @Param("routeCode") String routeCode, @Param("tripCode") String tripCode);
+
 
     @Query("""
             SELECT CASE WHEN (COUNT(*) > 0) THEN TRUE ELSE FALSE END

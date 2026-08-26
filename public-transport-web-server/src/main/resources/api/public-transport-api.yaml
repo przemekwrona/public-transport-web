@@ -613,8 +613,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
-  /agency/{agency}/trips/variant-details:
-    post:
+  /agency/{agency}/routes/{routeCode}/trips/{tripCode}/variant-details:
+    get:
       tags:
         - trip
       summary: Return details of trip for indicated variant but user and assigned to agency
@@ -625,11 +625,16 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TripId'
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: tripCode
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -1555,7 +1560,7 @@ components:
       type: object
       properties:
         tripId:
-          $ref: '#/components/schemas/TripId'
+          $ref: './public-transport-core.yaml#/components/schemas/TripId'
         originTerritory:
           $ref: '#/components/schemas/TerritoryUnit'
         targetTerritory:

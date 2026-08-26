@@ -65,7 +65,7 @@ public class TripCreatorService {
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
 
-        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, createTripDetailsRequest.getBody().getTripId().getRouteId());
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, createTripDetailsRequest.getBody().getTripId().getRouteId().getRouteCode());
 
         TripEntity tripEntity = TripMapper.map(tripRequest);
         tripEntity.setRoute(route);

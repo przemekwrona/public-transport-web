@@ -28,6 +28,10 @@ public class TripQueryService {
         return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariantName(), TripVariantModeMapper.map(tripId.getVariantMode()));
     }
 
+    public TripEntity findTripByAgencyAndRouteCodeAndTripCode(String instance, String routeCode, String tripCode) {
+        return tripQueryRepository.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
+    }
+
     public boolean existsUniqueTripIndex(String agencyCode, String line, String name, String variantName, TripVariantMode tripMode) {
         return tripQueryRepository.existsTripUniqueIndex(agencyCode, line, name, variantName, tripMode);
     }
