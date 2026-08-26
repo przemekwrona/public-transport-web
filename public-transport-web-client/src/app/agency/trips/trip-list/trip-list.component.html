@@ -3,7 +3,7 @@
         <div class="flex flex-col justify-center gap-2">
             <h1 class="text-xl font-medium leading-none text-gray-900">
                 Linia {{ state?.line || '' }} {{ state?.name || '' }}
-                <span class="badge badge-sm badge-outline badge-info">v{{ state.version }}.0</span>
+                <span class="badge badge-sm badge-outline badge-info">v{{ versionControl.value }}.0</span>
             </h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
                 Konfiguracja lini autobusowej
@@ -60,7 +60,7 @@
 
                     <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label class="form-label flex items-center gap-1 max-w-56">Wersja</label>
-                        <span class="badge badge-sm badge-outline badge-info">v{{ state.version }}.0</span>
+                        <span class="badge badge-sm badge-outline badge-info">v{{ versionControl.value }}.0</span>
                     </div>
 
                     <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
@@ -246,7 +246,7 @@
                             <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.destinationTerritory.name }}</span>
                         </div>
                         @for (trip of findTripsWithDirectionFront(); track trip) {
-                            <app-trip-item [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
+                            <app-trip-item [routeCode]="trips.route.routeCode" [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
                         }
                         <p class="text-2sm text-gray-800"></p>
                     </div>

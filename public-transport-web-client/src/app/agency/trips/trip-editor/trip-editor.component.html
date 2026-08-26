@@ -11,9 +11,8 @@
             </div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a mat-stroked-button
-               [routerLink]="['/agency/trips']"
-               [queryParams]="{line: state.line, name: state.name, version: state.version}">Wróć do lini</a>
+            <a mat-stroked-button [routerLink]="['/agency/routes/', tripDetails.tripId.routeId.routeCode, 'trips']">Wróć do
+                lini</a>
         </div>
     </div>
 </div>
@@ -82,14 +81,16 @@
                             <div class="w-full">
                                 <div class="flex flex-col items-stretch gap-2.5">
                                     <label class="form-label flex items-center gap-1 w-full">Jadę Z</label>
-                                    <app-town-road-sign class="w-full" [townName]="fromTerritoryName"></app-town-road-sign>
+                                    <app-town-road-sign class="w-full"
+                                                        [townName]="fromTerritoryName"></app-town-road-sign>
                                 </div>
                             </div>
 
                             <div class="w-full">
                                 <div class="flex flex-col items-stretch gap-2.5">
                                     <label class="form-label flex items-center gap-1 w-full">Jadę DO</label>
-                                    <app-town-road-sign class="w-full" [townName]="toTerritoryName"></app-town-road-sign>
+                                    <app-town-road-sign class="w-full"
+                                                        [townName]="toTerritoryName"></app-town-road-sign>
                                 </div>
                             </div>
 

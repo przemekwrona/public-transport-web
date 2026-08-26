@@ -13,27 +13,20 @@ import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TripsDetails> => {
-    const line: string = route.queryParams['line'];
-    const name: string = route.queryParams['name'];
-    const version: number = route.queryParams['version'];
-    const variantName: string = route.queryParams['variant'];
-    const variantMode: TripMode = route.queryParams['mode'];
-    const trafficMode: TrafficMode = route.queryParams['trafficMode'];
-
     const agencyStorageService: AgencyStorageService = inject(AgencyStorageService);
+    const routeCode: string = route.params['routeCode'];
+    const tripCode: string = route.params['tripCode'];
 
     const tripEditorComponentMode: TripEditorComponentMode = route.data['mode'];
 
     if (tripEditorComponentMode === TripEditorComponentMode.CREATE) {
         return of({
-            tripId: {routeId: {line: line, name: name, version: version}, variant: '', mode: TripMode.Front, trafficMode: TrafficMode.Normal},
+            tripId: {variant: '', mode: TripMode.Front, trafficMode: TrafficMode.Normal},
             isMainVariant: true,
             isCustomized: false,
-            item: {stops: [], line: line, name: name, isMainVariant: false}} as TripsDetails)
+            item: {stops: [], isMainVariant: false}} as TripsDetails)
     } else {
         const tripService: TripService = inject(TripService);
-        const routeId: RouteId = {line: line, name: name, version: version} as RouteId;
-        const tripId: TripId = {routeId: routeId, variantName: variantName, variantMode: variantMode, trafficMode: trafficMode} as TripId;
-        return tripService.getTripVariantDetails(agencyStorageService.getInstance(), tripId);
+        return tripService.getTripVariantDetails(agencyStorageService.getInstance(), routeCode, tripCode);
     }
 }

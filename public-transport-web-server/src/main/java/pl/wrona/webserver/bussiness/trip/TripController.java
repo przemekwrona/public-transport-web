@@ -44,13 +44,13 @@ public class TripController implements TripApi {
     }
 
     @Override
-    public ResponseEntity<Status> updateTrip(String agency, UpdateTripDetailsRequest updateTripDetailsRequest) {
-        return ResponseEntity.status(CREATED).body(tripUpdaterService.updateTrip(agency, updateTripDetailsRequest));
+    public ResponseEntity<TripsDetails> getTripVariantDetails(String agency, String routeCode, String tripCode) {
+        return ResponseEntity.ok(tripDetailsService.getTripVariantDetails(agency, routeCode, tripCode));
     }
 
     @Override
-    public ResponseEntity<TripsDetails> getTripVariantDetails(String agency, TripId tripId) {
-        return ResponseEntity.ok(tripDetailsService.getTripVariantDetails(agency, tripId));
+    public ResponseEntity<Status> updateTrip(String agency, UpdateTripDetailsRequest updateTripDetailsRequest) {
+        return ResponseEntity.status(CREATED).body(tripUpdaterService.updateTrip(agency, updateTripDetailsRequest));
     }
 
     @Override

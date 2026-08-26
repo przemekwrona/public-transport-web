@@ -71,7 +71,9 @@ export class TripListComponent implements OnInit {
     constructor(private tripService: TripService, private agencyStorageService: AgencyStorageService, private routeService: RouteService, private _router: Router, private _route: ActivatedRoute, private dialog: MatDialog, private fb: FormBuilder) {
         this.modelForm = this.fb.group({
             line: ['', [Validators.required]],
-            name: ['', [Validators.required]]
+            name: ['', [Validators.required]],
+            version: ['', [Validators.required]],
+            routeCode: ['', [Validators.required]]
         });
     }
 
@@ -79,6 +81,8 @@ export class TripListComponent implements OnInit {
         this._route.data.pipe(map((data: Data) => data['trips'])).subscribe(trips => {
             this.getNameControl().setValue(trips.route.routeId.name);
             this.getLineControl().setValue(trips.route.routeId.line);
+            this.versionControl.setValue(trips.route.routeId.version);
+            this.routeCode.setValue(trips.route.routeCode);
             this.trips = trips;
         });
         this._route.queryParams.subscribe(params => this.state = params as {
@@ -89,7 +93,8 @@ export class TripListComponent implements OnInit {
     }
 
     public createTrip() {
-        this._router.navigate(['/agency/trips/create'], {queryParams: this.state});
+        console.log(this.routeCode.value);
+        this._router.navigate(['/agency/routes', this.routeCode.value, 'trips', 'create'], {queryParams: { tripMode: 'FRONT' }}).then(() => {});
     }
 
     public hasVariants(): boolean {
@@ -199,5 +204,13 @@ export class TripListComponent implements OnInit {
 
     public getNameControl(): FormControl<string> {
         return this.getControl("name") as FormControl<string>;
+    }
+
+    get routeCode(): FormControl<string> {
+        return this.getControl("routeCode") as FormControl<string>;
+    }
+
+    get versionControl(): FormControl<string> {
+        return this.getControl("version") as FormControl<string>;
     }
 }

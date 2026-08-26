@@ -19,6 +19,7 @@ import {MatIconModule} from "@angular/material/icon";
 })
 export class TripItemComponent {
 
+    @Input() routeCode: string = '';
     @Input() trip: Trip = {} as Trip;
     @Input() state: { line: string, name: string, version: number };
 
@@ -34,15 +35,7 @@ export class TripItemComponent {
     }
 
     public editTrip(trip: Trip) {
-        const queryParams = {
-            name: this.state.name,
-            line: this.state.line,
-            version: this.state.version,
-            variant: trip.variant,
-            mode: trip.mode,
-            trafficMode: trip.trafficMode
-        };
-        this.router.navigate(['/agency/trips/edit'], {queryParams: queryParams}).then(() => {
+        this.router.navigate(['/agency/routes', this.routeCode, 'trips', trip.tripId.tripCode, 'edit']).then(() => {
         });
     }
 

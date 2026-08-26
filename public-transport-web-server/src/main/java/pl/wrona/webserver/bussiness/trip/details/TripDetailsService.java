@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.RouteId;
+import org.igeolab.iot.pt.server.api.model.RouteId1;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.TerritoryUnit;
 import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripId2;
 import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.jspecify.annotations.NonNull;
@@ -44,8 +46,8 @@ public class TripDetailsService {
     private final TerritorialUnitQueryService territorialUnitQueryService;
 
     @PreAgencyAuthorize
-    public TripsDetails getTripVariantDetails(String instance, TripId tripId) {
-        var tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
+    public TripsDetails getTripVariantDetails(String instance, String routeCode, String tripCode) {
+        var tripEntity = tripQueryService.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
 
         var profiles = tripProfileQueryService.findAllByTrip(tripEntity);
         var stopTimes = stopTimeRepository.findAllByTripId(tripEntity.getTripId());
@@ -56,14 +58,14 @@ public class TripDetailsService {
         var targetTerritory = territorialUnitQueryService.findAllByStopIdIn(List.of(tripEntity.getRoute().getDestinationStopId())).get(0);
 
         return new TripsDetails()
-                .tripId(new TripId()
-                        .routeId(new RouteId()
+                .tripId(new TripId2()
+                        .routeId(new RouteId1()
                                 .line(tripEntity.getRoute().getLine())
                                 .name(tripEntity.getRoute().getName())
-                                .version(tripEntity.getRoute().getVersion()))
+                                .version(tripEntity.getRoute().getVersion())
+                                .routeCode(tripEntity.getRoute().getRouteCode()))
                         .variantName(tripEntity.getVariantName())
-                        .variantMode(TripVariantModeMapper.map(tripEntity.getVariantMode()))
-                        .trafficMode(tripId.getTrafficMode()))
+                        .variantMode(TripVariantModeMapper.map(tripEntity.getVariantMode())))
                 .isMainVariant(tripEntity.isMainVariant())
                 .tripProfiles(tripProfiles)
                 .geometry(buildGeometry(tripEntity.getGeometry()))
