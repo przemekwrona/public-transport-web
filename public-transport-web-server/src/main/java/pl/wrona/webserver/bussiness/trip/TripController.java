@@ -34,12 +34,12 @@ public class TripController implements TripApi {
     private final TripExistenceService tripExistenceService;
 
     @Override
-    public ResponseEntity<Status> createTrip(String agency, CreateTripDetailsRequest createTripDetailsRequest) {
-        return ResponseEntity.status(CREATED).body(tripCreatorService.createTrip(agency, createTripDetailsRequest));
+    public ResponseEntity<Status> createTrip(String agency, String routeCode, CreateTripDetailsRequest createTripDetailsRequest) {
+        return ResponseEntity.status(CREATED).body(tripCreatorService.createTrip(agency, routeCode, createTripDetailsRequest));
     }
 
     @Override
-    public ResponseEntity<Status> deleteTripByTripId(String agency, TripId tripId) {
+    public ResponseEntity<Status> deleteTripByTripId(String agency, String routeCode, String tripCode, TripId tripId) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(tripDeletionService.deleteTripByTripId(agency, tripId));
     }
 
@@ -49,17 +49,17 @@ public class TripController implements TripApi {
     }
 
     @Override
-    public ResponseEntity<Status> updateTrip(String agency, UpdateTripDetailsRequest updateTripDetailsRequest) {
-        return ResponseEntity.status(CREATED).body(tripUpdaterService.updateTrip(agency, updateTripDetailsRequest));
-    }
-
-    @Override
-    public ResponseEntity<GetAllTripsResponse> getTripsByLineOrName(String agency, String filter) {
+    public ResponseEntity<GetAllTripsResponse> getTripsByLineOrName(String agency, String routeCode, String filter) {
         return ResponseEntity.ok(tripPaginationService.getTripsByLineOrName(agency, filter));
     }
 
     @Override
     public ResponseEntity<Status> hasVariantDetails(String agency, TripId tripId) {
         return ResponseEntity.ok(tripExistenceService.hasVariantDetails(agency, tripId));
+    }
+
+    @Override
+    public ResponseEntity<Status> updateTrip(String agency, String routeCode, String tripCode, UpdateTripDetailsRequest updateTripDetailsRequest) {
+        return ResponseEntity.status(CREATED).body(tripUpdaterService.updateTrip(agency, updateTripDetailsRequest));
     }
 }

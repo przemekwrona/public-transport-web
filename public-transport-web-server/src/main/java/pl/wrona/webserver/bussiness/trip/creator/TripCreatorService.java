@@ -46,7 +46,7 @@ public class TripCreatorService {
 
     @Transactional
     @PreAgencyAuthorize
-    public Status createTrip(String instance, CreateTripDetailsRequest createTripDetailsRequest) {
+    public Status createTrip(String instance, String routeCode, CreateTripDetailsRequest createTripDetailsRequest) {
         boolean uniqueTripIndexExists = tripQueryService.existsUniqueTripIndex(instance,
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getName(),
@@ -65,7 +65,7 @@ public class TripCreatorService {
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
 
-        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, createTripDetailsRequest.getBody().getTripId().getRouteId().getRouteCode());
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);
 
         TripEntity tripEntity = TripMapper.map(tripRequest);
         tripEntity.setRoute(route);

@@ -3,7 +3,7 @@ import {ActivatedRoute, Data, Params, Router, RouterModule} from "@angular/route
 import {
     Route, RouteDetails,
     RouteId, RouteService, Stop, Trip,
-    TripId, TripMode,
+    TripId, TripId1, TripMode,
     TripService,
     UpdateRouteRequest
 } from "../../../generated/public-transport-api";
@@ -172,9 +172,9 @@ export class TripListComponent implements OnInit {
         });
     }
 
-    public onDelete($event: TripId): void {
+    public onDelete($event: TripId1): void {
         const agency: string = this.agencyStorageService.getInstance();
-        this.tripService.deleteTripByTripId(agency, $event).subscribe({
+        this.tripService.deleteTripByTripId(agency, this.routeCode.value, $event.tripCode, $event).subscribe({
             next: (response) => remove(this.trips.trips, {
                 line: $event.routeId.line,
                 name: $event.routeId.name,

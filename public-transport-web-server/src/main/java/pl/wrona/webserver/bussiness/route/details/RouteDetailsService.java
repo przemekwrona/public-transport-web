@@ -2,7 +2,6 @@ package pl.wrona.webserver.bussiness.route.details;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
-import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.TerritoryUnit;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
@@ -37,7 +36,7 @@ public class RouteDetailsService {
 
     @PreAgencyAuthorize
     public RouteDetails getRouteDetails(String instance, String routeCode) {
-        var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, routeCode);
+        var route = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);
         var tripWithBrigades = tripQueryService.mapByExistsBrigade(instance);
 
         var tripEntities = tripQueryService.findByAgencyCodeAndLineAndName(instance, route.getLine(), route.getName());

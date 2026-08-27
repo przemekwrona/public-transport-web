@@ -581,7 +581,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             const tripDetailsRequest: UpdateTripDetailsRequest = this.buildCreateOrUpdateTripRequest();
 
             if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
-                this.tripService.createTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
+                this.tripService.createTrip(this.agencyStorageService.getInstance(), this.$tripVariants.route.routeId.routeCode, tripDetailsRequest).subscribe({
                     next: () => {
                         this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została utworzona`);
                         this.router.navigate(['/agency/trips'], {
@@ -598,7 +598,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     }
                 });
             } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
-                this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest).subscribe({
+                this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest.body.tripId.routeId.routeCode, tripDetailsRequest.body.tripId.tripCode, tripDetailsRequest).subscribe({
                     next: () => {
                         this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została zaktualizowana`);
                         this.router.navigate(['/agency/trips'], {
