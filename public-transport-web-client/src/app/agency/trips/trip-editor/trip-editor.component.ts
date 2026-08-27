@@ -6,7 +6,7 @@ import {
     ErrorResponse,
     Point2D,
     RouteDetails,
-    RouteId,
+    RouteId, RouteId1,
     Stop,
     StopsService,
     StopTime,
@@ -619,16 +619,16 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private buildCreateOrUpdateTripRequest() {
-        const routeId: RouteId = {};
-        routeId.name = this.state.name;
-        routeId.line = this.state.line;
-        routeId.version = this.state.version;
+        const routeId: RouteId1 = {};
+        routeId.name = this.$tripVariants.route.routeId.name;
+        routeId.line = this.$tripVariants.route.routeId.line;
+        routeId.version = this.$tripVariants.route.routeId.version;
+        routeId.routeCode = this.$tripVariants.route.routeId.routeCode;
 
         const tripId: TripId = {};
         tripId.routeId = routeId;
-        tripId.variantName = this.state.variant;
-        tripId.variantMode = this.state.mode;
-        tripId.trafficMode = this.state.trafficMode;
+        tripId.variantName = this.modelForm.controls['tripVariantName'].value;
+        tripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
 
         const tripDetailsRequest: UpdateTripDetailsRequest = {};
         tripDetailsRequest.tripId = tripId;
