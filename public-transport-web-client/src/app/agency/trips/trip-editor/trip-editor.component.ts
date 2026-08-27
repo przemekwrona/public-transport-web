@@ -845,14 +845,17 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             return;
         }
 
+        const sourceProfile = this.profiles.controls[0];
+        const copiedStops = sourceProfile ? this.mapStopsToStopTimes(sourceProfile) : [];
+
         const newProfile = this.createProfile({
             trafficMode,
             calculatedCommunicationVelocity: 50,
             customizedCommunicationVelocity: null,
-            isCustomized: false,
+            isCustomized: sourceProfile ? this.isCustomized(sourceProfile) : false,
             isDefault: false,
             travelTimeInSeconds: null,
-            stops: []
+            stops: copiedStops
         });
 
         this.profiles.push(newProfile);
