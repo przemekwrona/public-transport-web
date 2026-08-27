@@ -93,7 +93,6 @@ export class TripListComponent implements OnInit {
     }
 
     public createTrip() {
-        console.log(this.routeCode.value);
         this._router.navigate(['/agency/routes', this.routeCode.value, 'trips', 'create'], {queryParams: { tripMode: 'FRONT' }}).then(() => {});
     }
 

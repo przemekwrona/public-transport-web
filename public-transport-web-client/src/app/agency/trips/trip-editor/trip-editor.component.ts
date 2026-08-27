@@ -280,6 +280,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: RouteDetails) => {
                 this.$tripVariants = tripVariants;
 
+                this.modelForm?.controls['tripVariantMode'].setValue(TripMode.Front);
+
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
                     this.profiles.push(this.createProfile({
                         trafficMode: TrafficMode.Normal,
@@ -298,6 +300,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.modelForm.controls["headsign"].setValue(tripVariants.route.destinationStop.name);
                     }
                 }
+
             });
         });
     }
@@ -320,14 +323,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     get fromTerritoryName(): string {
         return (this.isFrontVariantMode()
-            ? this.tripDetails?.originTerritory?.name
-            : this.tripDetails?.targetTerritory?.name) ?? '';
+            ? this.$tripVariants.route.originTerritory.name
+            : this.$tripVariants.route.destinationTerritory.name) ?? '';
     }
 
     get toTerritoryName(): string {
         return (this.isFrontVariantMode()
-            ? this.tripDetails?.targetTerritory?.name
-            : this.tripDetails?.originTerritory?.name) ?? '';
+            ? this.$tripVariants.route.destinationTerritory.name
+            : this.$tripVariants.route.originTerritory.name) ?? '';
     }
 
     public isFrontVariantMode(): boolean {

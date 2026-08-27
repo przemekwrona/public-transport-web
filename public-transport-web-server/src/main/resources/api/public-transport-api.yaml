@@ -1365,7 +1365,7 @@ components:
       type: object
       properties:
         routeId:
-          $ref: '#/components/schemas/RouteId'
+          $ref: './public-transport-core.yaml/#/components/schemas/RouteId'
         routeCode:
           type: string
         google:
