@@ -174,7 +174,7 @@ export class TripListComponent implements OnInit {
 
     public onDelete($event: TripId1): void {
         const agency: string = this.agencyStorageService.getInstance();
-        this.tripService.deleteTripByTripId(agency, this.routeCode.value, $event.tripCode, $event).subscribe({
+        this.tripService.deleteTripByTripId(agency, this.routeCode.value, $event.tripCode).subscribe({
             next: (response) => remove(this.trips.trips, {
                 line: $event.routeId.line,
                 name: $event.routeId.name,
