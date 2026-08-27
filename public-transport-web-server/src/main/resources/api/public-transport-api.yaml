@@ -1538,8 +1538,6 @@ components:
     UpdateTripDetailsRequest:
       type: object
       properties:
-        tripId:
-          $ref: '#/components/schemas/TripId'
         body:
           $ref: '#/components/schemas/TripsDetails'
 

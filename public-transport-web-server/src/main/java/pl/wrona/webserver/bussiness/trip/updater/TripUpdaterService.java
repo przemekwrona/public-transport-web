@@ -40,8 +40,7 @@ public class TripUpdaterService {
 
     @Transactional
     @PreAgencyAuthorize
-    public Status updateTrip(String instance, UpdateTripDetailsRequest updateTripDetailsRequest) {
-        var tripId = updateTripDetailsRequest.getTripId();
+    public Status updateTrip(String instance, String routeCode, String tripCode, UpdateTripDetailsRequest updateTripDetailsRequest) {
         var tripDetails = updateTripDetailsRequest.getBody();
 
         List<Long> stopIds = tripDetails.getTripProfiles().stream()
@@ -50,7 +49,7 @@ public class TripUpdaterService {
                 .toList();
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
-        TripEntity tripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
+        TripEntity tripEntity = tripQueryService.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
 
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
 
