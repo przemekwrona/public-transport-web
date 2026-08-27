@@ -55,7 +55,7 @@ export class OnTimeRangeSelectedModalComponent {
     public selectTrip() {
         const instance = this.agencyStorageService.getInstance();
         const tripId: TripId = this.modelForm.controls['tripId'].value;
-        this.tripService.getTripVariantDetails(instance, tripId).subscribe(tripDetails => {
+        this.tripService.getTripVariantDetails(instance, 'tripId', 'tripId').subscribe(tripDetails => {
 
             const lastStop = tripDetails?.tripProfiles[0]?.stops?.reduce((curr, next) =>
                 curr.calculatedSeconds > next.calculatedSeconds ? curr : next);
