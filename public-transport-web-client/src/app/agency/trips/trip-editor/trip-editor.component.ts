@@ -277,8 +277,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 this.formBuilder.array(profileControls, [Validators.required, Validators.minLength(1)])
             );
 
-            this._route.data.pipe(map((data: Data) => data['variants'])).subscribe((tripVariants: RouteDetails) => {
-                this.$tripVariants = tripVariants;
+            this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe((routeDetails: RouteDetails) => {
+                this.$tripVariants = routeDetails;
 
                 this.modelForm?.controls['tripVariantMode'].setValue(TripMode.Front);
 
@@ -297,7 +297,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.modelForm.controls["variantDesignation"].setValidators(null);
                         this.modelForm.controls["variantDescription"].setValidators(null);
 
-                        this.modelForm.controls["headsign"].setValue(tripVariants.route.destinationStop.name);
+                        this.modelForm.controls["headsign"].setValue(this.$tripVariants.route.destinationStop.name);
                     }
                 }
 

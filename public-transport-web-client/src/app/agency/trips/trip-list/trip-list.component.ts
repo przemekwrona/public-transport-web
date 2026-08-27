@@ -78,7 +78,7 @@ export class TripListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this._route.data.pipe(map((data: Data) => data['trips'])).subscribe(trips => {
+        this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe(trips => {
             this.getNameControl().setValue(trips.route.routeId.name);
             this.getLineControl().setValue(trips.route.routeId.line);
             this.versionControl.setValue(trips.route.routeId.version);
