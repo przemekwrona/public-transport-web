@@ -630,12 +630,6 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TripId'
-        required: true
       responses:
         204:
           description: Deleted

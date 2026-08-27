@@ -19,15 +19,15 @@ public class TripDeletionService {
     private final TripQueryService tripQueryService;
 
     @Transactional
-    public Status deleteTripByTripId(String instance, TripId tripId) {
-        TripEntity savedTripEntity = tripQueryService.findByAgencyCodeAndTripId(instance, tripId);
+    public Status deleteTripByTripId(String instance, String routeCode, String tripCode) {
+        TripEntity savedTripEntity = tripQueryService.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
 
         if (savedTripEntity == null) {
-            throw new BusinessException("ERROR:202510301510", "Trip with id " + tripId + " not found");
+            throw new BusinessException("ERROR:202510301510", "Trip with route code " + routeCode + " and trip code " + tripCode + " not found");
         }
 
         if (tripQueryService.existsTripInBrigade(savedTripEntity)) {
-            throw new BusinessException("ERROR:202510301511", "Trip with id " + tripId + " already exists in Brigade");
+            throw new BusinessException("ERROR:202510301511", "Trip with route code " + routeCode + " and trip code " + tripCode + "  already exists in Brigade");
         } else {
             tripCommandService.deleteTrip(savedTripEntity);
         }

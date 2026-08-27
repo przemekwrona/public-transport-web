@@ -39,8 +39,8 @@ public class TripController implements TripApi {
     }
 
     @Override
-    public ResponseEntity<Status> deleteTripByTripId(String agency, String routeCode, String tripCode, TripId tripId) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(tripDeletionService.deleteTripByTripId(agency, tripId));
+    public ResponseEntity<Status> deleteTripByTripId(String agency, String routeCode, String tripCode) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(tripDeletionService.deleteTripByTripId(agency, routeCode, tripCode));
     }
 
     @Override
