@@ -26,7 +26,7 @@ public class RouteQueryService {
     }
 
     @PreAgencyAuthorize
-    public RouteEntity findRouteByAgencyCodeAndRouteId(String instance, String routeCode) {
+    public RouteEntity findRouteByAgencyCodeAndRouteCode(String instance, String routeCode) {
         return this.routeQueryRepository.findByAgencyCodeAndRouteCode(instance, routeCode);
     }
 

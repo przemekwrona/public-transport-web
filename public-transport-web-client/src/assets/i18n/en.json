@@ -8,7 +8,6 @@
   "signin.notification.lack-of-account": "Missing value for 'signin.notification.lack-of-account'",
   "signin.login.button": "Missing value for 'signin.login.button'",
   "agency.trip.listOfVariants": "Missing value for 'agency.trip.listOfVariants'",
-  "agency.trip.addNewVariant": "Missing value for 'agency.trip.addNewVariant'",
   "agency.trip.mainVariant": "Missing value for 'agency.trip.mainVariant'",
   "agency.trip.variantDetails": "Missing value for 'agency.trip.variantDetails'",
   "agency.profile.title": "Missing value for 'agency.profile.title'",
@@ -25,6 +24,7 @@
   "common.date.months.10": "Missing value for 'common.date.months.10'",
   "common.date.months.11": "Missing value for 'common.date.months.11'",
   "common.date.months.12": "Missing value for 'common.date.months.12'",
+  "agency.trip.addNewVariant": "Missing value for 'agency.trip.addNewVariant'",
   "common.attention": "Missing value for 'common.attention'",
   "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
   "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'"
