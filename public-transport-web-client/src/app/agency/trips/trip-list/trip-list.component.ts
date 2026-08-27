@@ -92,8 +92,8 @@ export class TripListComponent implements OnInit {
         });
     }
 
-    public createTrip() {
-        this._router.navigate(['/agency/routes', this.routeCode.value, 'trips', 'create'], {queryParams: { tripMode: 'FRONT' }}).then(() => {});
+    public createTrip(tripMode: TripMode = TripMode.Front) {
+        this._router.navigate(['/agency/routes', this.routeCode.value, 'trips', 'create'], {queryParams: { tripMode }}).then(() => {});
     }
 
     public hasVariants(): boolean {
@@ -212,4 +212,6 @@ export class TripListComponent implements OnInit {
     get versionControl(): FormControl<string> {
         return this.getControl("version") as FormControl<string>;
     }
+
+    protected readonly TripMode = TripMode;
 }
