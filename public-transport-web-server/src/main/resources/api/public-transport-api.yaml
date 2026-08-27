@@ -575,6 +575,34 @@ paths:
                 $ref: '#/components/schemas/Status'
 
   /agency/{agency}/routes/{routeCode}/trips/{tripCode}:
+    get:
+      tags:
+        - trip
+      summary: Return details of trip for indicated variant but user and assigned to agency
+      operationId: getTripVariantDetails
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: tripCode
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripsDetails'
     put:
       tags:
         - trip
@@ -637,36 +665,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-
-  /agency/{agency}/routes/{routeCode}/trips/{tripCode}/variant-details:
-    get:
-      tags:
-        - trip
-      summary: Return details of trip for indicated variant but user and assigned to agency
-      operationId: getTripVariantDetails
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: routeCode
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: tripCode
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TripsDetails'
 
   /agency/{agency}/trips/variant-details-existance:
     post:
