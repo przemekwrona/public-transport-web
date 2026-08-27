@@ -260,7 +260,7 @@
                         </div>
 
                         @for (trip of findTripsWithDirectionBack(); track trip) {
-                            <app-trip-item [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
+                            <app-trip-item [routeCode]="trips.route.routeCode" [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
                         } @empty {
                             <a (click)="createTrip(TripMode.Back)" class="btn btn-sm btn-primary">Dodaj nowy wariant</a>
                         }
