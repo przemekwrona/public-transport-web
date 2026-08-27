@@ -16,6 +16,7 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
     const tripCode: string = route.params['tripCode'];
 
     const tripEditorComponentMode: TripEditorComponentMode = route.data['mode'];
+    const tripMode: TripMode = (route.queryParams['tripMode'] as TripMode) ?? TripMode.Front;
     if (tripEditorComponentMode === TripEditorComponentMode.CREATE) {
         return of({
             tripId: {
@@ -23,7 +24,7 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
                     routeCode: routeCode
                 },
                 variant: '',
-                mode: TripMode.Front,
+                mode: tripMode,
                 trafficMode: TrafficMode.Normal
             },
             isMainVariant: true,
