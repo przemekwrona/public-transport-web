@@ -283,13 +283,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 this.modelForm?.controls['tripVariantMode'].setValue(TripMode.Front);
 
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
-                    this.profiles.push(this.createProfile({
-                        trafficMode: TrafficMode.Normal,
-                        calculatedCommunicationVelocity: 50,
-                        isCustomized: false,
-                        isDefault: true
-                    }));
-
                     if (size(this.$tripVariants?.trips) === 0) {
                         this.modelForm.controls["isMainVariant"].setValue(true);
                         this.modelForm.controls["tripVariantName"].setValue("MAIN");
