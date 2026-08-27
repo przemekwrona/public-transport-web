@@ -60,6 +60,6 @@ public class TripController implements TripApi {
 
     @Override
     public ResponseEntity<Status> updateTrip(String agency, String routeCode, String tripCode, UpdateTripDetailsRequest updateTripDetailsRequest) {
-        return ResponseEntity.status(CREATED).body(tripUpdaterService.updateTrip(agency, updateTripDetailsRequest));
+        return ResponseEntity.status(CREATED).body(tripUpdaterService.updateTrip(agency, routeCode, tripCode, updateTripDetailsRequest));
     }
 }
