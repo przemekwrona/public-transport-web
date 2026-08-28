@@ -1510,8 +1510,6 @@ components:
     TripMeasure:
       type: object
       properties:
-        tripId:
-          $ref: '#/components/schemas/TripId'
         velocity:
           type: integer
         distanceInMeters:
