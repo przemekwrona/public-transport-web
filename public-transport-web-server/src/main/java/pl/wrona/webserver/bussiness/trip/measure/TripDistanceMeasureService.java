@@ -78,12 +78,6 @@ public class TripDistanceMeasureService {
                 .toList();
 
         return new TripMeasure()
-                .tripId(new TripId()
-                        .routeId(new RouteId()
-                                .line(tripMeasure.getTripId().getRouteId().getLine())
-                                .name(tripMeasure.getTripId().getRouteId().getName()))
-                        .variantMode(tripMeasure.getTripId().getVariantMode())
-                        .trafficMode(tripMeasure.getTripId().getTrafficMode()))
                 .stops(stopTimes)
                 .distanceInMeters((int) meters)
                 .travelTimeInSeconds((int) seconds)
@@ -138,12 +132,6 @@ public class TripDistanceMeasureService {
                 .toList();
 
         return new TripMeasure()
-                .tripId(new TripId()
-                        .routeId(new RouteId()
-                                .line(tripMeasure.getTripId().getRouteId().getLine())
-                                .name(tripMeasure.getTripId().getRouteId().getName()))
-                        .variantName(tripMeasure.getTripId().getVariantName())
-                        .trafficMode(tripMeasure.getTripId().getTrafficMode()))
                 .stops(stopTimes)
                 .distanceInMeters((int) meters)
                 .travelTimeInSeconds((int) seconds)

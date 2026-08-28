@@ -501,7 +501,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             trafficMode: measuredProfile?.controls['trafficMode'].value ?? this.activeTrafficMode
         };
         const tripMeasure: TripMeasure = {
-            tripId: tripId,
             velocity: measuredProfile?.controls["calculatedCommunicationVelocity"].value
         };
         tripMeasure.stops = measuredProfile ? this.getStops(measuredProfile).controls.map((stop: FormGroup): StopTime => {
