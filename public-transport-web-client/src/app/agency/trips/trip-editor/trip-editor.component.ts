@@ -234,8 +234,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         this.modelForm = this.formBuilder.group({
                 isMainVariant: [true, [Validators.required]],
-                tripVariantName: [this.state.variant, [Validators.required]],
-                tripVariantMode: [this.state.tripMode, [Validators.required]],
+                tripVariantName: ['', [Validators.required]],
+                tripVariantMode: ['', [Validators.required]],
 
                 variantDesignation: ['', [Validators.required]],
                 variantDescription: ['', [Validators.required]],
@@ -250,6 +250,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
         this.modelForm.get('tripVariantMode').valueChanges.subscribe((value: TripMode) => this.onChangeVariantMode(value));
+
+        this._route.queryParams.subscribe(params => {
+            const tripMode: TripMode = params['tripMode'];
+            this.tripVariantModeControl.setValue(tripMode);
+        });
 
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
             this.tripDetails = tripDetails;
@@ -297,6 +302,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
             });
         });
+    }
+
+    get tripVariantModeControl(): FormControl {
+        return this.modelForm.get('tripVariantMode') as FormControl;
     }
 
     get tripVariantNameControl(): FormControl {
