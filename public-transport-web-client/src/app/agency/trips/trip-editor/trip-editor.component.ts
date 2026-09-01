@@ -178,6 +178,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
             },
             {
+                // TODO uncomment
                 // asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.tripMode)
             });
 
@@ -833,7 +834,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const newProfile = this.createProfile({
             trafficMode,
             calculatedCommunicationVelocity: 50,
-            customizedCommunicationVelocity: null,
+            customizedCommunicationVelocity: this.isCustomized(sourceProfile) ? this.customizedCommunicationVelocity(sourceProfile) : 50,
             isCustomized: sourceProfile ? this.isCustomized(sourceProfile) : false,
             isDefault: false,
             travelTimeInSeconds: null,
