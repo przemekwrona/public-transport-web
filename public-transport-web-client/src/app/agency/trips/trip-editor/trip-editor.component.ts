@@ -167,6 +167,15 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.routeCode = this._route.snapshot.paramMap.get('routeCode')!;
         this.tripCode = this._route.snapshot.paramMap.get('tripCode')!;
+        this.tripEditorComponentMode = this._route.snapshot.data['mode'];
+        this.state = this._route.snapshot.queryParams as {
+            line: string,
+            name: string,
+            version: number,
+            variant: string,
+            tripMode: TripMode,
+            trafficMode: TrafficMode
+        };
 
         this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
 
@@ -179,10 +188,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             trafficMode: TrafficMode
         });
 
+        const resolvedTripDetails: TripsDetails = this._route.snapshot.data['trip'];
+        const initialTripMode = this.resolveTripVariantMode(resolvedTripDetails);
+
         this.modelForm = this.formBuilder.group({
                 isMainVariant: [true, [Validators.required]],
                 tripVariantName: ['', [Validators.required]],
-                tripVariantMode: [TripMode.Front, [Validators.required]],
+                tripVariantMode: [initialTripMode, [Validators.required]],
 
                 variantDesignation: ['', [Validators.required]],
                 variantDescription: ['', [Validators.required]],
@@ -200,7 +212,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
             this.tripDetails = tripDetails;
-            this.tripVariantModeControl.setValue(tripDetails.tripId.variantMode);
+            this.tripVariantModeControl.setValue(this.resolveTripVariantMode(tripDetails));
 
             this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
 
@@ -230,13 +242,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe((routeDetails: RouteDetails) => {
                 this.$tripVariants = routeDetails;
 
-                this.modelForm?.controls['tripVariantMode'].setValue(this.state.tripMode ?? TripMode.Front);
-
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
                     if (size(this.$tripVariants?.trips) === 0) {
                         this.modelForm.controls["isMainVariant"].setValue(true);
                         this.modelForm.controls["tripVariantName"].setValue("MAIN");
-                        this.modelForm.controls["tripVariantMode"].setValue(this.state.tripMode ?? TripMode.Front);
                         this.modelForm.controls["variantDesignation"].setValidators(null);
                         this.modelForm.controls["variantDescription"].setValidators(null);
 
@@ -246,6 +255,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
             });
         });
+    }
+
+    private resolveTripVariantMode(tripDetails?: TripsDetails): TripMode {
+        return tripDetails?.tripId?.variantMode ?? this.state?.tripMode ?? TripMode.Front;
     }
 
 
