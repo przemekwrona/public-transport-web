@@ -681,9 +681,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public drop(event: CdkDragDrop<string[]>) {
-        // moveItemInArray(this.stops.controls, event.previousIndex, event.currentIndex);
-        // this.approximateDistance();
-        // this.forceRefreshIn10seconds();
+        for (const profile of this.profiles.controls) {
+            moveItemInArray(this.getStops(profile).controls, event.previousIndex, event.currentIndex);
+        }
+
+        this.approximateDistances();
+        this.forceRefreshIn10seconds();
     }
 
     public remove(index: number) {
