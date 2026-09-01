@@ -243,9 +243,8 @@
                         </div>
                         @for (trip of findTripsWithDirectionFront(); track trip) {
                             <app-trip-item [routeCode]="trips.route.routeCode" [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
-                        } @empty {
-                            <a (click)="createTrip(TripMode.Front)" class="btn btn-sm btn-primary">Dodaj nowy wariant</a>
                         }
+                        <a (click)="createTrip(TripMode.Front)" class="btn btn-sm btn-primary">Dodaj nowy wariant Tam</a>
                         <p class="text-2sm text-gray-800"></p>
                     </div>
 
@@ -261,9 +260,9 @@
 
                         @for (trip of findTripsWithDirectionBack(); track trip) {
                             <app-trip-item [routeCode]="trips.route.routeCode" [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
-                        } @empty {
-                            <a (click)="createTrip(TripMode.Back)" class="btn btn-sm btn-primary">Dodaj nowy wariant</a>
                         }
+                        <a (click)="createTrip(TripMode.Back)" class="btn btn-sm btn-primary">Dodaj nowy wariant Powrotny</a>
+
                         <p class="text-2sm text-gray-800"></p>
                     </div>
                 </div>
