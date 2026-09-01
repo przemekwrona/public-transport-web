@@ -5,8 +5,7 @@ import {find, size} from "lodash";
 import {
     ErrorResponse,
     Point2D,
-    RouteDetails,
-    RouteId, RouteId1,
+    RouteDetails, RouteId1,
     Stop,
     StopsService,
     StopTime,
@@ -126,6 +125,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public tripDetails: TripsDetails = {} as TripsDetails;
 
+    public routeCode: string = '';
+    public tripCode: string = '';
+
 
     get profiles(): FormArray<FormGroup> {
         return this.modelForm.get('profiles') as FormArray;
@@ -161,6 +163,91 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
     }
+
+    ngOnInit(): void {
+        this.routeCode = this._route.snapshot.paramMap.get('routeCode')!;
+        this.tripCode = this._route.snapshot.paramMap.get('tripCode')!;
+
+        this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
+
+        this._route.queryParams.subscribe(params => this.state = params as {
+            line: string,
+            name: string,
+            version: number,
+            variant: string,
+            tripMode: TripMode,
+            trafficMode: TrafficMode
+        });
+
+        this.modelForm = this.formBuilder.group({
+                isMainVariant: [true, [Validators.required]],
+                tripVariantName: ['', [Validators.required]],
+                tripVariantMode: [TripMode.Front, [Validators.required]],
+
+                variantDesignation: ['', [Validators.required]],
+                variantDescription: ['', [Validators.required]],
+
+                headsign: ['', [Validators.required]],
+
+                profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
+            },
+            {
+                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.tripMode)
+            });
+
+        this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
+        this.modelForm.get('tripVariantMode').valueChanges.subscribe((value: TripMode) => this.onChangeVariantMode(value));
+
+        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
+            this.tripDetails = tripDetails;
+            this.tripVariantModeControl.setValue(tripDetails.tripId.variantMode);
+
+            this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
+
+            if (tripDetails.isMainVariant) {
+                this.modelForm.controls['tripVariantName'].disable();
+                this.modelForm.controls['tripVariantName'].setValue('MAIN');
+            }
+
+            this.modelForm.controls['variantDesignation'].setValue(tripDetails.variantDesignation);
+            this.modelForm.controls['variantDescription'].setValue(tripDetails.variantDescription);
+
+            if (tripDetails.isMainVariant) {
+                this.modelForm.controls["variantDesignation"].setValidators(null);
+                this.modelForm.controls["variantDescription"].setValidators(null);
+            }
+
+            this.modelForm.controls['headsign'].setValue(tripDetails.headsign);
+
+            this.geometry = tripDetails.geometry;
+
+            const profileControls = (tripDetails.tripProfiles || []).map((profile: TripProfile) => this.createProfile(profile));
+            this.modelForm.setControl(
+                'profiles',
+                this.formBuilder.array(profileControls, [Validators.required, Validators.minLength(1)])
+            );
+
+            this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe((routeDetails: RouteDetails) => {
+                this.$tripVariants = routeDetails;
+
+                this.modelForm?.controls['tripVariantMode'].setValue(this.state.tripMode ?? TripMode.Front);
+
+                if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
+                    if (size(this.$tripVariants?.trips) === 0) {
+                        this.modelForm.controls["isMainVariant"].setValue(true);
+                        this.modelForm.controls["tripVariantName"].setValue("MAIN");
+                        this.modelForm.controls["tripVariantMode"].setValue(this.state.tripMode ?? TripMode.Front);
+                        this.modelForm.controls["variantDesignation"].setValidators(null);
+                        this.modelForm.controls["variantDescription"].setValidators(null);
+
+                        this.modelForm.controls["headsign"].setValue(this.$tripVariants.route.destinationStop.name);
+                    }
+                }
+
+            });
+        });
+    }
+
 
     private createStop(stop: Stop): FormGroup {
         const stopControl: FormGroup = this.formBuilder.group({
@@ -217,91 +304,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
 
         return profileControl;
-    }
-
-    ngOnInit(): void {
-        this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
-
-        
-        this._route.queryParams.subscribe(params => this.state = params as {
-            line: string,
-            name: string,
-            version: number,
-            variant: string,
-            tripMode: TripMode,
-            trafficMode: TrafficMode
-        });
-
-        this.modelForm = this.formBuilder.group({
-                isMainVariant: [true, [Validators.required]],
-                tripVariantName: ['', [Validators.required]],
-                tripVariantMode: ['', [Validators.required]],
-
-                variantDesignation: ['', [Validators.required]],
-                variantDescription: ['', [Validators.required]],
-
-                headsign: ['', [Validators.required]],
-
-                profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
-            },
-            {
-                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.tripMode)
-            });
-
-        this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
-        this.modelForm.get('tripVariantMode').valueChanges.subscribe((value: TripMode) => this.onChangeVariantMode(value));
-
-        this._route.queryParams.subscribe(params => {
-            const tripMode: TripMode = params['tripMode'];
-            this.tripVariantModeControl.setValue(tripMode);
-        });
-
-        this._route.data.pipe(map((data: Data) => data['trip'])).subscribe((tripDetails: TripsDetails) => {
-            this.tripDetails = tripDetails;
-            this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
-
-            if (tripDetails.isMainVariant) {
-                this.modelForm.controls['tripVariantName'].disable();
-                this.modelForm.controls['tripVariantName'].setValue('MAIN');
-            }
-
-            this.modelForm.controls['variantDesignation'].setValue(tripDetails.variantDesignation);
-            this.modelForm.controls['variantDescription'].setValue(tripDetails.variantDescription);
-
-            if (tripDetails.isMainVariant) {
-                this.modelForm.controls["variantDesignation"].setValidators(null);
-                this.modelForm.controls["variantDescription"].setValidators(null);
-            }
-
-            this.modelForm.controls['headsign'].setValue(tripDetails.headsign);
-
-            this.geometry = tripDetails.geometry;
-
-            const profileControls = (tripDetails.tripProfiles || []).map((profile: TripProfile) => this.createProfile(profile));
-            this.modelForm.setControl(
-                'profiles',
-                this.formBuilder.array(profileControls, [Validators.required, Validators.minLength(1)])
-            );
-
-            this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe((routeDetails: RouteDetails) => {
-                this.$tripVariants = routeDetails;
-
-                this.modelForm?.controls['tripVariantMode'].setValue(this.state.tripMode ?? TripMode.Front);
-
-                if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
-                    if (size(this.$tripVariants?.trips) === 0) {
-                        this.modelForm.controls["isMainVariant"].setValue(true);
-                        this.modelForm.controls["tripVariantName"].setValue("MAIN");
-                        this.modelForm.controls["tripVariantMode"].setValue(this.state.tripMode ?? TripMode.Front);
-                        this.modelForm.controls["variantDesignation"].setValidators(null);
-                        this.modelForm.controls["variantDescription"].setValidators(null);
-
-                        this.modelForm.controls["headsign"].setValue(this.$tripVariants.route.destinationStop.name);
-                    }
-                }
-
-            });
-        });
     }
 
     get tripVariantModeControl(): FormControl {
@@ -607,7 +609,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     }
                 });
             } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
-                this.tripService.updateTrip(this.agencyStorageService.getInstance(), tripDetailsRequest.body.tripId.routeId.routeCode, tripDetailsRequest.body.tripId.tripCode, tripDetailsRequest).subscribe({
+                this.tripService.updateTrip(this.agencyStorageService.getInstance(), this.routeCode, this.tripCode, tripDetailsRequest).subscribe({
                     next: () => {
                         this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została zaktualizowana`);
                         this.router.navigate(['/agency/trips'], {
