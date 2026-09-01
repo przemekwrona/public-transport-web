@@ -94,15 +94,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     private previousVariantName = '';
 
-    public state: {
-        name: string,
-        line: string,
-        version: number,
-        variant: string,
-        tripMode: TripMode,
-        trafficMode: TrafficMode
-    };
-
     public tripModeSelectValue = TripMode;
     public tripEditorComponentMode: TripEditorComponentMode;
 
@@ -168,25 +159,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.routeCode = this._route.snapshot.paramMap.get('routeCode')!;
         this.tripCode = this._route.snapshot.paramMap.get('tripCode')!;
         this.tripEditorComponentMode = this._route.snapshot.data['mode'];
-        this.state = this._route.snapshot.queryParams as {
-            line: string,
-            name: string,
-            version: number,
-            variant: string,
-            tripMode: TripMode,
-            trafficMode: TrafficMode
-        };
 
         this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
-
-        this._route.queryParams.subscribe(params => this.state = params as {
-            line: string,
-            name: string,
-            version: number,
-            variant: string,
-            tripMode: TripMode,
-            trafficMode: TrafficMode
-        });
 
         const resolvedTripDetails: TripsDetails = this._route.snapshot.data['trip'];
         const initialTripMode = this.resolveTripVariantMode(resolvedTripDetails);
@@ -204,7 +178,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
             },
             {
-                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.tripMode)
+                // asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.tripMode)
             });
 
         this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
@@ -258,7 +232,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private resolveTripVariantMode(tripDetails?: TripsDetails): TripMode {
-        return tripDetails?.tripId?.variantMode ?? this.state?.tripMode ?? TripMode.Front;
+        return tripDetails?.tripId?.variantMode ?? TripMode.Front;
     }
 
 
@@ -352,7 +326,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public isFrontVariantMode(): boolean {
-        const variantMode = this.modelForm?.controls['tripVariantMode']?.value ?? this.state?.tripMode;
+        const variantMode = this.modelForm?.controls['tripVariantMode']?.value;
         return variantMode === TripMode.Front;
     }
 
@@ -506,15 +480,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     private buildTripsMeasureRequest(profile: FormGroup | null = this.getActiveProfile()): TripMeasure {
         const measuredProfile = profile ?? this.getActiveProfile();
-        const tripId: TripId = {
-            routeId: {
-                line: this.state.line,
-                name: this.state.name,
-                version: this.state.version
-            },
-            variantMode: this.modelForm?.controls['tripVariantMode']?.value ?? this.state.tripMode,
-            trafficMode: measuredProfile?.controls['trafficMode'].value ?? this.activeTrafficMode
-        };
         const tripMeasure: TripMeasure = {
             velocity: measuredProfile?.controls["calculatedCommunicationVelocity"].value
         };
@@ -559,7 +524,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             case 'minlength':
                 return `${label}: musisz dodać co najmniej ${error.errorValue?.requiredLength} przystanki. Obecna liczba przystanków wynosi ${error.errorValue?.actualLength || 0}.`;
             case 'variantExists':
-                return `Trasa ${this.state.line} ${this.state.name} posiada wskazany wariant.`;
+                return `Trasa ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} posiada wskazany wariant.`;
             default:
                 return `${label}: ${error.errorName}`;
         }
@@ -607,14 +572,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
                 this.tripService.createTrip(this.agencyStorageService.getInstance(), this.$tripVariants.route.routeId.routeCode, tripDetailsRequest).subscribe({
                     next: () => {
-                        this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została utworzona`);
-                        this.router.navigate(['/agency/trips'], {
-                            queryParams: {
-                                line: this.state.line,
-                                name: this.state.name,
-                                version: this.state.version
-                            }
-                        }).then();
+                        this.notificationService.showSuccess(`Linia ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} została utworzona`);
+                        this.router.navigate(['/agency/routes', this.routeCode, 'trips'], {}).then();
                     },
                     error: (response: HttpErrorResponse) => {
                         const payload: ErrorResponse = response.error;
@@ -624,14 +583,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
                 this.tripService.updateTrip(this.agencyStorageService.getInstance(), this.routeCode, this.tripCode, tripDetailsRequest).subscribe({
                     next: () => {
-                        this.notificationService.showSuccess(`Linia ${this.state.line} ${this.state.name} została zaktualizowana`);
-                        this.router.navigate(['/agency/trips'], {
-                            queryParams: {
-                                line: this.state.line,
-                                name: this.state.name,
-                                version: this.state.version
-                            }
-                        }).then();
+                        this.notificationService.showSuccess(`Linia ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} została zaktualizowana`);
+                        this.router.navigate(['/agency/routes', this.routeCode, 'trips'], {}).then();
                     },
                     error: (response: HttpErrorResponse) => {
                         const payload: ErrorResponse = response.error;
