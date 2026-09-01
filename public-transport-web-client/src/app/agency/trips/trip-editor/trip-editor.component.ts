@@ -573,7 +573,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 this.tripService.createTrip(this.agencyStorageService.getInstance(), this.$tripVariants.route.routeId.routeCode, tripDetailsRequest).subscribe({
                     next: () => {
                         this.notificationService.showSuccess(`Linia ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} została utworzona`);
-                        this.router.navigate(['/agency/routes', this.routeCode, 'trips'], {}).then();
+                        this.router.navigate(['/agency/routes', this.routeCode, 'trips'], { replaceUrl: true }).then(() => {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        });
+                   
                     },
                     error: (response: HttpErrorResponse) => {
                         const payload: ErrorResponse = response.error;
@@ -584,7 +587,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 this.tripService.updateTrip(this.agencyStorageService.getInstance(), this.routeCode, this.tripCode, tripDetailsRequest).subscribe({
                     next: () => {
                         this.notificationService.showSuccess(`Linia ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} została zaktualizowana`);
-                        this.router.navigate(['/agency/routes', this.routeCode, 'trips'], {}).then();
+                        this.router.navigate(['/agency/routes', this.routeCode, 'trips'], {}).then(() => {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        });
+                   
                     },
                     error: (response: HttpErrorResponse) => {
                         const payload: ErrorResponse = response.error;
