@@ -25,6 +25,7 @@ public class TripProfileMapper {
 
         tripProfileEntity.setCustomized(tripProfile.getIsCustomized());
         tripProfileEntity.setDefaultProfile(tripProfile.getIsDefault());
+        tripProfileEntity.setTrafficMode(TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
 
 //        tripProfileEntity.setCalculatedCommunicationVelocity(tripProfile.getCalculatedCommunicationVelocity());
 //        tripProfileEntity.setOriginStopName(tripsDetails.getOriginStopName());
