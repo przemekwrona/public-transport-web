@@ -1,0 +1,35 @@
+<mat-form-field appearance="outline" class="w-full custom-form-field">
+    <mat-label>{{ label() }}</mat-label>
+    <mat-select [ngModel]="value"
+                [disabled]="isDisabled"
+                [compareWith]="compareByRouteId"
+                (ngModelChange)="onSelectionChange($event)"
+                (openedChange)="onDropdownClose($event)"
+                placeholder="Numer i nazwa linii">
+        <mat-select-trigger>
+            @if (selectedRoute; as route) {
+                <strong>{{ route.routeId?.line }}</strong>
+                {{ (route.routeId?.name ?? '') | routeNameNorm }}
+            }
+        </mat-select-trigger>
+
+        <mat-option>
+            <ngx-mat-select-search [formControl]="searchControl"
+                                   [placeholderLabel]="'Szukaj po numerze lub nazwie linii'"
+                                   [noEntriesFoundLabel]="'Nie znaleziono linii'">
+            </ngx-mat-select-search>
+        </mat-option>
+
+        @for (route of filteredRoutes; track trackRoute(route)) {
+            <mat-option [value]="route.routeId">
+                <div class="my-2">
+                    <strong>{{ route.routeId?.line }}</strong>
+                    {{ (route.routeId?.name ?? '') | routeNameNorm }}
+                    @if (route.routeId?.version) {
+                        (v{{ route.routeId.version }}.0)
+                    }
+                </div>
+            </mat-option>
+        }
+    </mat-select>
+</mat-form-field>
