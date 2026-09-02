@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-default-route-to-brigade-group
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: brigade_group
+            columns:
+              - column:
+                  name: default_route
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_brigade_group_default_route
+                    references: route(route_id)
+      rollback:
+        - dropColumn:
+            tableName: brigade_group
+            columnName: default_route

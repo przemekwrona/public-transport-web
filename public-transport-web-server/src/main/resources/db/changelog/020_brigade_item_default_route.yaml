@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: move-default-route-from-brigade-group-to-brigade-item
+      author: pwrona
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: brigade_group
+            constraintName: fk_brigade_group_default_route
+
+        - dropColumn:
+            tableName: brigade_group
+            columnName: default_route
+
+        - addColumn:
+            tableName: brigade_item
+            columns:
+              - column:
+                  name: default_route
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_brigade_item_default_route
+                    references: route(route_id)
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: brigade_item
+            constraintName: fk_brigade_item_default_route
+
+        - dropColumn:
+            tableName: brigade_item
+            columnName: default_route
+
+        - addColumn:
+            tableName: brigade_group
+            columns:
+              - column:
+                  name: default_route
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_brigade_group_default_route
+                    references: route(route_id)

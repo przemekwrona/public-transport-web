@@ -70,3 +70,11 @@ databaseChangeLog:
   - include:
       file: 018_brigade_profile.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 019_brigade_group_default_route.yaml
+      relativeToChangelogFile: true
+
+  - include:
+      file: 020_brigade_item_default_route.yaml
+      relativeToChangelogFile: true
