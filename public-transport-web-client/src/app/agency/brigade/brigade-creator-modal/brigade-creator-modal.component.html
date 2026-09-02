@@ -32,6 +32,21 @@
             <div class="flex flex-wrap justify-between gap-5">
                 <div class="flex flex-col">
                     <div class="text-gray-900 text-sm font-medium">
+                        Wspierana linia
+                    </div>
+                    <span class="text-gray-700 text-2sm">Unikalna nazwa identyfikująca brygadę w systemie.</span>
+                </div>
+
+                <span class="sm:max-w-full xl:min-w-96">
+                    <app-route-select></app-route-select>
+                </span>
+            </div>
+        </div>
+
+        <div class="lg:py-5 py-2.5">
+            <div class="flex flex-wrap justify-between gap-5">
+                <div class="flex flex-col">
+                    <div class="text-gray-900 text-sm font-medium">
                         Kalendarz
                     </div>
                     <span class="text-gray-700 text-2sm">Wybierz kalendarz, na którym brygada ma obowiązywać.</span>
@@ -44,7 +59,8 @@
                             @for (calendar of calendarsResponse.calendars || []; track calendar) {
                                 <mat-option [value]="calendar.calendarId">
                                     <div>
-                                        <div>{{ calendar.designation }} - ({{ calendar.startDate }} -- {{ calendar.endDate }})</div>
+                                        <div>{{ calendar.designation }} - ({{ calendar.startDate }}
+                                            -- {{ calendar.endDate }})</div>
                                         <div>{{ calendar.description }}</div>
                                     </div>
                                 </mat-option>
