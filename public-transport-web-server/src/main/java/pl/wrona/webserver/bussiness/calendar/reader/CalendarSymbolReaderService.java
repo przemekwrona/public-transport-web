@@ -22,7 +22,7 @@ public class CalendarSymbolReaderService {
     @PreAgencyAuthorize
     public CalendarSymbolBody getCalendarSymbol(String instance, String calendarCode, String calendarSymbol) {
         var calendarItemEntity =  calendarItemQueryService.findByAgencyCalendarCode(instance, calendarCode);
-        var calendarSymbolEntity =  calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, "",calendarCode, calendarSymbol);
+        var calendarSymbolEntity =  calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);
         var calendarDatesEntity = calendarDatesQueryService.findAllByCalendar(calendarSymbolEntity);
         var calendarDateDictionary = calendarDatesEntity.stream()
                 .collect(Collectors.groupingBy(it -> it.getCalendar().getServiceId()));
