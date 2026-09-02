@@ -37,7 +37,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BrigadeBody'
+              $ref: '#/components/schemas/CreateBrigadeBody'
       responses:
         201:
           description: CREATED
@@ -511,6 +511,16 @@ components:
         departureTime:
           type: integer
 
+    CreateBrigadeBody:
+      type: object
+      properties:
+        brigadeName:
+          type: string
+        selectedRouteCode:
+          type: string
+        calendarCode:
+          type: string
+
     BrigadeBody:
       type: object
       properties:
@@ -518,6 +528,8 @@ components:
           type: string
         calendarSymbolId:
           $ref: '../public-transport-core.yaml#/components/schemas/CalendarSymbolId'
+        selectedRouteCode:
+          type: string
         trips:
           type: array
           items:

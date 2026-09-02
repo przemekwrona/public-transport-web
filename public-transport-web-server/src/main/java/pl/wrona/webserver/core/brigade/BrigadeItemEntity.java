@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.wrona.webserver.core.agency.AgencyEntity;
+import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 
 @Data
@@ -35,6 +36,10 @@ public class BrigadeItemEntity {
     @ManyToOne
     @JoinColumn(name = "calendar_item_id", nullable = false)
     private CalendarItemEntity calendarItem;
+
+    @ManyToOne
+    @JoinColumn(name = "default_route")
+    private RouteEntity defaultRoute;
 
     @Column(nullable = false, length = 50)
     private String name;
