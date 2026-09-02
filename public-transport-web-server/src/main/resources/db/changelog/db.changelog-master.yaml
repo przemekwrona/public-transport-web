@@ -66,3 +66,7 @@ databaseChangeLog:
   - include:
       file: 017_trip_profile.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 018_brigade_profile.yaml
+      relativeToChangelogFile: true
