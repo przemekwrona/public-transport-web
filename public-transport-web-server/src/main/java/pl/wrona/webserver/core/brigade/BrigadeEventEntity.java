@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
 
 @Data
 @Entity
@@ -38,8 +38,8 @@ public class BrigadeEventEntity {
     private BrigadeResourceEntity resource;
 
     @ManyToOne
-    @JoinColumn(name = "trip_id", referencedColumnName = "trip_id", nullable = false)
-    private TripEntity trip;
+    @JoinColumn(name = "trip_profile_id", referencedColumnName = "trip_profile_id", nullable = false)
+    private TripProfileEntity tripProfile;
 
     @Column(nullable = false, length = 10)
     private String line;

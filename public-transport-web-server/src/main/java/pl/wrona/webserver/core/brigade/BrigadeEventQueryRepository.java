@@ -11,7 +11,15 @@ import java.util.List;
 @Repository
 public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventEntity, Long> {
 
-    List<BrigadeEventEntity> findAllByResourceBrigadeResourceIdInOrderByStartSecondAsc(Collection<Long> resourceIds);
+    @Query("""
+            SELECT e FROM BrigadeEventEntity e
+            JOIN FETCH e.tripProfile tp
+            JOIN FETCH tp.trip t
+            JOIN FETCH t.route
+            WHERE e.resource.brigadeResourceId IN :resourceIds
+            ORDER BY e.startSecond ASC""")
+    List<BrigadeEventEntity> findAllByResourceBrigadeResourceIdInOrderByStartSecondAsc(
+            @Param("resourceIds") Collection<Long> resourceIds);
 
     @Query("""
             SELECT e FROM BrigadeEventEntity e
@@ -28,7 +36,8 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
 
     @Query("""
             SELECT e FROM BrigadeEventEntity e
-            JOIN FETCH e.trip t
+            JOIN FETCH e.tripProfile tp
+            JOIN FETCH tp.trip t
             JOIN FETCH t.route
             WHERE e.resource.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
             AND e.resource.brigadeGroup.brigadeItem.sequenceHex = :brigadeCode

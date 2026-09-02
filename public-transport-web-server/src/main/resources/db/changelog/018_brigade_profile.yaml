@@ -1,0 +1,99 @@
+databaseChangeLog:
+  - changeSet:
+      id: restructure-brigade-event-for-trip-profile
+      author: pwrona
+      changes:
+        - addColumn:
+            tableName: brigade_event
+            columns:
+              - column:
+                  name: trip_profile_id
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_brigade_event_trip_profile
+                    references: trip_profile(trip_profile_id)
+
+        - sql:
+            sql: |
+              UPDATE brigade_event be
+              SET trip_profile_id = tp.trip_profile_id
+              FROM trip_profile tp
+              WHERE be.trip_id = tp.trip_id;
+
+        - dropForeignKeyConstraint:
+            baseTableName: brigade_event
+            constraintName: fk_brigade_event_trip
+
+        - sql:
+            sql: UPDATE brigade_event SET trip_id = trip_profile_id;
+
+        - dropForeignKeyConstraint:
+            baseTableName: brigade_event
+            constraintName: fk_brigade_event_trip_profile
+
+        - dropColumn:
+            tableName: brigade_event
+            columnName: trip_profile_id
+
+        - renameColumn:
+            tableName: brigade_event
+            oldColumnName: trip_id
+            newColumnName: trip_profile_id
+            columnDataType: integer
+
+        - addNotNullConstraint:
+            tableName: brigade_event
+            columnName: trip_profile_id
+            columnDataType: integer
+
+        - addForeignKeyConstraint:
+            constraintName: fk_brigade_event_trip_profile
+            baseTableName: brigade_event
+            baseColumnNames: trip_profile_id
+            referencedTableName: trip_profile
+            referencedColumnNames: trip_profile_id
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: brigade_event
+            constraintName: fk_brigade_event_trip_profile
+
+        - renameColumn:
+            tableName: brigade_event
+            oldColumnName: trip_profile_id
+            newColumnName: trip_id
+            columnDataType: integer
+
+        - addColumn:
+            tableName: brigade_event
+            columns:
+              - column:
+                  name: trip_profile_id
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_brigade_event_trip_profile
+                    references: trip_profile(trip_profile_id)
+
+        - sql:
+            sql: |
+              UPDATE brigade_event be
+              SET trip_profile_id = be.trip_id,
+                  trip_id = tp.trip_id
+              FROM trip_profile tp
+              WHERE be.trip_id = tp.trip_profile_id;
+
+        - addForeignKeyConstraint:
+            constraintName: fk_brigade_event_trip
+            baseTableName: brigade_event
+            baseColumnNames: trip_id
+            referencedTableName: trip
+            referencedColumnNames: trip_id
+
+        - dropForeignKeyConstraint:
+            baseTableName: brigade_event
+            constraintName: fk_brigade_event_trip_profile
+
+        - dropColumn:
+            tableName: brigade_event
+            columnName: trip_profile_id
