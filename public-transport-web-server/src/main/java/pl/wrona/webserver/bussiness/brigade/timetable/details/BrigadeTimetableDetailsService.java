@@ -60,7 +60,7 @@ public class BrigadeTimetableDetailsService {
 
     private static BrigadeTimetableVariant toVariant(List<BrigadeEventEntity> events, TripVariantMode variantMode) {
         List<BrigadeTimetableDeparture> departures = events.stream()
-                .filter(event -> variantMode.equals(event.getTrip().getVariantMode()))
+                .filter(event -> variantMode.equals(event.getTripProfile().getTrip().getVariantMode()))
                 .map(BrigadeTimetableDetailsService::toDeparture)
                 .toList();
 
@@ -78,7 +78,7 @@ public class BrigadeTimetableDetailsService {
 
     private static RouteId toRouteId(BrigadeEventEntity event) {
         return new RouteId()
-                .line(event.getTrip().getRoute().getLine())
-                .name(event.getTrip().getRoute().getName());
+                .line(event.getTripProfile().getTrip().getRoute().getLine())
+                .name(event.getTripProfile().getTrip().getRoute().getName());
     }
 }
