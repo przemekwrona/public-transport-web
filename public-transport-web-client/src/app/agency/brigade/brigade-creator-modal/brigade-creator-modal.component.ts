@@ -14,6 +14,7 @@ import {
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatInput} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
+import {RouteSelectComponent} from "../../routes/route-select/route-select.component";
 
 @Component({
     selector: 'app-brigade-creator-modal',
@@ -24,7 +25,8 @@ import {MatSelectModule} from "@angular/material/select";
         MatFormFieldModule,
         ReactiveFormsModule,
         MatInput,
-        MatSelectModule
+        MatSelectModule,
+        RouteSelectComponent
     ],
     providers: [
         AgencyStorageService,
