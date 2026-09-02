@@ -9,10 +9,14 @@ import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
+import pl.wrona.webserver.bussiness.trip.TripProfileQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
+import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
+import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 @Service
@@ -23,6 +27,7 @@ public class BrigadeEventUpdaterService {
     private final BrigadeEventQueryService brigadeEventQueryService;
     private final BrigadeResourceQueryService brigadeResourceQueryService;
     private final TripQueryService tripQueryService;
+    private final TripProfileQueryService tripProfileQueryService;
 
     @PreAgencyAuthorize
     @Transactional
@@ -37,8 +42,12 @@ public class BrigadeEventUpdaterService {
                         .name(tripIdBody.getRouteId().getName())
                         .version(tripIdBody.getRouteId().getVersion()))
                 .variantName(tripIdBody.getVariantName())
-                .variantMode(tripIdBody.getVariantMode())
-                .trafficMode(tripIdBody.getTrafficMode()));
+                .variantMode(tripIdBody.getVariantMode()));
+        var trafficMode = TripTrafficModeMapper.map(tripIdBody.getTrafficMode());
+        if (trafficMode == null) {
+            trafficMode = TripTrafficMode.NORMAL;
+        }
+        TripProfileEntity tripProfile = tripProfileQueryService.findAllByTripAndTrafficMode(trip, trafficMode);
 
         var brigadeEvent = brigadeEventQueryService.findByAgencyAndCalendarAndSymbolAndEventHex(
                 instance, calendarCode, symbol, putBrigadeEventBody.getSequenceHex());
@@ -51,7 +60,7 @@ public class BrigadeEventUpdaterService {
         brigadeEvent.setStartSecond(putBrigadeEventBody.getStartSecond());
         brigadeEvent.setEndSecond(putBrigadeEventBody.getEndSecond());
         brigadeEvent.setResource(resource);
-        brigadeEvent.setTrip(trip);
+        brigadeEvent.setTripProfile(tripProfile);
         brigadeEvent.setLine(putBrigadeEventBody.getLine());
         brigadeEvent.setName(putBrigadeEventBody.getName());
 

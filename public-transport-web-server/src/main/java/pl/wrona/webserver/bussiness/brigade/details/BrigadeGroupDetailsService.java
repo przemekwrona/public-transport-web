@@ -14,12 +14,13 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
-import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemQueryRepository;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
+import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -137,13 +138,14 @@ public class BrigadeGroupDetailsService {
                 .name(brigadeEventEntity.getName())
                 .sequence(brigadeEventEntity.getSequence())
                 .sequenceHex(brigadeEventEntity.getSequenceHex())
-                .tripId(mapTripId(brigadeEventEntity.getTrip()));
+                .tripId(mapTripId(brigadeEventEntity.getTripProfile()));
     }
 
-    private static TripId2 mapTripId(TripEntity trip) {
-        if (trip == null || trip.getRoute() == null) {
+    private static TripId2 mapTripId(TripProfileEntity tripProfile) {
+        if (tripProfile == null || tripProfile.getTrip() == null || tripProfile.getTrip().getRoute() == null) {
             return null;
         }
+        var trip = tripProfile.getTrip();
         return new TripId2()
                 .routeId(new RouteId1()
                         .line(trip.getRoute().getLine())
@@ -151,6 +153,7 @@ public class BrigadeGroupDetailsService {
                         .version(trip.getRoute().getVersion())
                         .routeCode(trip.getRoute().getRouteCode()))
                 .variantName(trip.getVariantName())
-                .variantMode(TripVariantModeMapper.map(trip.getVariantMode()));
+                .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
+                .trafficMode(TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
     }
 }
