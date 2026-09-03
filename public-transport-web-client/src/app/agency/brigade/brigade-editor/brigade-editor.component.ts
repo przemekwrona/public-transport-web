@@ -39,7 +39,7 @@ export class BrigadeEditorComponent implements OnInit {
 
     private componentMode: BrigadeEditorComponentMode = null;
 
-    public tripsResponse: GetAllTripsResponse = {filter: '', lines: []};
+    public tripsResponse: GetAllTripsResponse = {lines: []};
     public calendarsResponse: GetCalendarsResponse = {};
     public brigaderResponse: GetBrigadeDetailsResponse= {} as GetBrigadeDetailsResponse;
 
@@ -95,8 +95,7 @@ export class BrigadeEditorComponent implements OnInit {
                 return brigadeModel;
             });
 
-            this.tripService.getTripsByLineOrName(this.agencyStorageService.getInstance(), getBrigadeDetailsResponse.brigade.defaultRouteCode).subscribe((response: GetAllTripsResponse) => response === null ? {
-                filter: '',
+            this.tripService.getTripsByRouteAndFilterLineOrName(this.agencyStorageService.getInstance(), getBrigadeDetailsResponse.brigade.defaultRouteCode).subscribe((response: GetAllTripsResponse) => response === null ? {
                 lines: []
             } : this.tripsResponse = response);
         });
