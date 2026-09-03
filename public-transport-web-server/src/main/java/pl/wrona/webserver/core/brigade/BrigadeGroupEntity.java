@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,10 @@ import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "brigade_group")
+@Table(name = "brigade_group", uniqueConstraints = {
+        @UniqueConstraint(name = "uq_brigade_group_item_calendar_symbol",
+                columnNames = {"brigade_item_id", "calendar_symbol_id"})
+})
 public class BrigadeGroupEntity {
 
     @Id

@@ -30,8 +30,8 @@ public class BrigadeResourceCommandService {
     public NextCalendarResourceSequenceResponse getNextCalendarResourceSequence(String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
         var savedResource = init(instance, brigadeCode, calendarCode, calendarSymbol);
         return new NextCalendarResourceSequenceResponse()
-                .sequence(savedResource.getSequence())
-                .sequenceHex(savedResource.getSequenceHex());
+                .sequence(savedResource.getResourceSequence())
+                .sequenceHex(savedResource.getResourceCode());
     }
 
     @Transactional
@@ -43,8 +43,8 @@ public class BrigadeResourceCommandService {
 
         var brigadeResourceEntity = new BrigadeResourceEntity();
         brigadeResourceEntity.setBrigadeGroup(savedBrigadeGroup);
-        brigadeResourceEntity.setSequence(nextResourceSequence);
-        brigadeResourceEntity.setSequenceHex(nextResourceSequenceCode);
+        brigadeResourceEntity.setResourceSequence(nextResourceSequence);
+        brigadeResourceEntity.setResourceCode(nextResourceSequenceCode);
         brigadeResourceEntity.setCreationDate(LocalDateTime.now());
 
         return save(brigadeResourceEntity);

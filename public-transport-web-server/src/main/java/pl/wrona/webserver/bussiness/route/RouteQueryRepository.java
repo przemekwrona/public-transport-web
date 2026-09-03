@@ -37,7 +37,7 @@ public interface RouteQueryRepository extends JpaRepository<RouteEntity, String>
     @Query("""
             SELECT r FROM TripEntity t JOIN t.route r
             WHERE r.agency.agencyCode = :agencyCode
-                AND EXISTS (SELECT 1 FROM BrigadeTripEntity bd WHERE bd.rootTrip.tripId = t.tripId)""")
+                AND EXISTS (SELECT 1 FROM BrigadeEventEntity e WHERE e.tripProfile.trip.tripId = t.tripId)""")
     List<RouteEntity> findByExistsBrigade(@Param("agencyCode") String agencyCode);
 
     @Query("""
