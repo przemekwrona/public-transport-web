@@ -17,8 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.wrona.webserver.core.brigade.BrigadeTripEntity;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -73,9 +71,6 @@ public class TripEntity {
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
     private Set<TripProfileEntity> tripProfiles;
-
-    @OneToMany(mappedBy = "rootTrip", cascade = CascadeType.REMOVE)
-    private Set<BrigadeTripEntity> brigadeTrips;
 
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "route_id")
