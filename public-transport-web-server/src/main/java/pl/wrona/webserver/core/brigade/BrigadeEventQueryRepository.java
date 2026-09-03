@@ -24,7 +24,7 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
     @Query("""
             SELECT e FROM BrigadeEventEntity e
             WHERE e.resource.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
-            AND e.resource.brigadeGroup.brigadeItem.sequenceHex = :brigadeCode
+            AND e.resource.brigadeGroup.brigadeItem.brigadeItemCode = :brigadeCode
             AND e.resource.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
             AND e.resource.brigadeGroup.calendarSymbol.designation = :calendarSymbol
             ORDER BY e.startSecond ASC""")
@@ -40,7 +40,7 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
             JOIN FETCH tp.trip t
             JOIN FETCH t.route
             WHERE e.resource.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
-            AND e.resource.brigadeGroup.brigadeItem.sequenceHex = :brigadeCode
+            AND e.resource.brigadeGroup.brigadeItem.brigadeItemCode = :brigadeCode
             AND e.resource.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
             AND e.resource.brigadeGroup.calendarSymbol.designation = :calendarSymbol
             ORDER BY e.startSecond ASC""")
@@ -55,7 +55,7 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
             WHERE e.resource.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
             AND e.resource.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
             AND e.resource.brigadeGroup.calendarSymbol.designation = :symbol
-            AND e.sequenceHex = :eventCode""")
+            AND e.eventCode = :eventCode""")
     BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(
             @Param("agency") String agency,
             @Param("calendarCode") String calendarCode,

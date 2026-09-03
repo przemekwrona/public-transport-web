@@ -10,14 +10,14 @@ import java.util.List;
 @Repository
 public interface BrigadeResourceQueryRepository extends JpaRepository<BrigadeResourceEntity, Long> {
 
-    List<BrigadeResourceEntity> findAllByBrigadeGroupBrigadeGroupIdOrderBySequenceAsc(Long brigadeGroupId);
+    List<BrigadeResourceEntity> findAllByBrigadeGroupBrigadeGroupIdOrderByResourceSequenceAsc(Long brigadeGroupId);
 
     @Query("""
             SELECT r FROM BrigadeResourceEntity r
             WHERE r.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
             AND r.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
             AND r.brigadeGroup.calendarSymbol.designation = :symbol
-            AND r.sequenceHex = :resourceCode""")
+            AND r.resourceCode = :resourceCode""")
     BrigadeResourceEntity findByAgencyAndCalendarAndSymbolAndResourceCode(
             @Param("agency") String agency,
             @Param("calendarCode") String calendarCode,

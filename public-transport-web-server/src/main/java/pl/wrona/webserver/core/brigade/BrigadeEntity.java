@@ -1,6 +1,5 @@
 package pl.wrona.webserver.core.brigade;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,16 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.agency.AgencyEntity;
-
-import java.util.Set;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 @Data
 @Entity
@@ -41,7 +37,4 @@ public class BrigadeEntity {
     private CalendarSymbolEntity calendar;
 
     private String brigadeNumber;
-
-    @OneToMany(mappedBy = "brigade", cascade = CascadeType.ALL)
-    private Set<BrigadeTripEntity> brigadeTrips;
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,10 @@ import pl.wrona.webserver.core.agency.TripProfileEntity;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "brigade_event")
+@Table(name = "brigade_event", uniqueConstraints = {
+        @UniqueConstraint(name = "uq_brigade_event_resource_sequence",
+                columnNames = {"resource_id", "event_sequence"})
+})
 public class BrigadeEventEntity {
 
     @Id
@@ -47,10 +51,10 @@ public class BrigadeEventEntity {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false)
-    private Integer sequence;
+    @Column(name = "event_sequence", nullable = false)
+    private Integer eventSequence;
 
-    @Column(name = "sequence_hex", nullable = false, length = 4)
-    private String sequenceHex;
+    @Column(name = "event_code", nullable = false, length = 4)
+    private String eventCode;
 
 }

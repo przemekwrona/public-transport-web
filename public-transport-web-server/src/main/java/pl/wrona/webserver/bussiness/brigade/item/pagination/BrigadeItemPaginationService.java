@@ -44,8 +44,8 @@ public class BrigadeItemPaginationService {
     private static BrigadeItemBody mapItem(BrigadeItemEntity brigadeItem, List<BrigadeGroupEntity> brigadeGroups) {
         return new BrigadeItemBody()
                 .brigadeName(brigadeItem.getName())
-                .sequence(brigadeItem.getSequence())
-                .sequenceHex(brigadeItem.getSequenceHex())
+                .sequence(brigadeItem.getBrigadeItemSequence())
+                .sequenceHex(brigadeItem.getBrigadeItemCode())
                 .brigades(brigadeGroups.stream()
                         .map(BrigadeItemPaginationService::map)
                         .toList());

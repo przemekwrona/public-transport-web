@@ -86,8 +86,8 @@ public class BrigadeGroupDetailsService {
         return new BrigadeItemBody()
                 .brigadeName(brigadeItem.getName())
                 .defaultRouteCode(brigadeItem.getDefaultRoute().getRouteCode())
-                .sequence(brigadeItem.getSequence())
-                .sequenceHex(brigadeItem.getSequenceHex())
+                .sequence(brigadeItem.getBrigadeItemSequence())
+                .sequenceHex(brigadeItem.getBrigadeItemCode())
                 .brigades(brigadeGroups.stream()
                         .map(group -> mapGroup(
                                 group,
@@ -124,8 +124,8 @@ public class BrigadeGroupDetailsService {
 
     private static BrigadeResource map(BrigadeResourceEntity brigadeResourceEntity, List<BrigadeEventEntity> events) {
         return new BrigadeResource()
-                .sequence(brigadeResourceEntity.getSequence())
-                .sequenceHex(brigadeResourceEntity.getSequenceHex())
+                .sequence(brigadeResourceEntity.getResourceSequence())
+                .sequenceHex(brigadeResourceEntity.getResourceCode())
                 .events(events.stream().map(BrigadeGroupDetailsService::map).toList());
     }
 
@@ -135,8 +135,8 @@ public class BrigadeGroupDetailsService {
                 .endSecond(brigadeEventEntity.getEndSecond())
                 .line(brigadeEventEntity.getLine())
                 .name(brigadeEventEntity.getName())
-                .sequence(brigadeEventEntity.getSequence())
-                .sequenceHex(brigadeEventEntity.getSequenceHex())
+                .sequence(brigadeEventEntity.getEventSequence())
+                .sequenceHex(brigadeEventEntity.getEventCode())
                 .tripId(mapTripId(brigadeEventEntity.getTripProfile()));
     }
 

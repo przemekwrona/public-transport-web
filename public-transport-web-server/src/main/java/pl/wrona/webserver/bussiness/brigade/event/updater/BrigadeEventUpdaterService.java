@@ -53,8 +53,8 @@ public class BrigadeEventUpdaterService {
                 instance, calendarCode, symbol, putBrigadeEventBody.getSequenceHex());
         if (brigadeEvent == null) {
             brigadeEvent = new BrigadeEventEntity();
-            brigadeEvent.setSequence(putBrigadeEventBody.getSequence());
-            brigadeEvent.setSequenceHex(putBrigadeEventBody.getSequenceHex());
+            brigadeEvent.setEventSequence(putBrigadeEventBody.getSequence());
+            brigadeEvent.setEventCode(putBrigadeEventBody.getSequenceHex());
         }
 
         brigadeEvent.setStartSecond(putBrigadeEventBody.getStartSecond());

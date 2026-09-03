@@ -38,7 +38,7 @@ public interface CalendarSymbolQueryRepository extends JpaRepository<CalendarSym
             SELECT g.calendarSymbol FROM BrigadeGroupEntity g
             JOIN g.calendarSymbol s
             WHERE g.brigadeItem.agency.agencyCode = :agency
-            AND g.brigadeItem.sequenceHex = :brigadeCode
+            AND g.brigadeItem.brigadeItemCode = :brigadeCode
             AND s.calendarItem.sequenceHex = :calendarCode
             AND s.designation = :calendarSymbol""")
     CalendarSymbolEntity findByAgencyAndBrigadeAndCalendarAndSymbol(@Param("agency") String agency, @Param("brigadeCode") String brigadeCode, @Param("calendarCode") String calendarCode, @Param("calendarSymbol") String calendarSymbol);

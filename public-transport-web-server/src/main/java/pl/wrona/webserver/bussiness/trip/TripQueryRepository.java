@@ -44,14 +44,14 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
 
     @Query("""
             SELECT CASE WHEN (COUNT(*) > 0) THEN TRUE ELSE FALSE END
-            FROM BrigadeTripEntity b
-            WHERE b.rootTrip = :trip""")
+            FROM BrigadeEventEntity e
+            WHERE e.tripProfile.trip = :trip""")
     boolean existsTripInBrigade(@Param("trip") TripEntity trip);
 
     @Query("""
             SELECT t FROM TripEntity t
             WHERE t.route.agency.agencyCode = :agencyCode
-                AND EXISTS (SELECT 1 FROM BrigadeTripEntity bd WHERE bd.rootTrip.tripId = t.tripId)""")
+                AND EXISTS (SELECT 1 FROM BrigadeEventEntity e WHERE e.tripProfile.trip.tripId = t.tripId)""")
     List<TripEntity> findByExistsBrigade(@Param("agencyCode") String agencyCode);
 
     @Query("""

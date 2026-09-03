@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,10 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "brigade_resource")
+@Table(name = "brigade_resource", uniqueConstraints = {
+        @UniqueConstraint(name = "uq_brigade_resource_group_sequence",
+                columnNames = {"brigade_group_id", "resource_sequence"})
+})
 public class BrigadeResourceEntity {
 
     @Id
@@ -32,9 +36,11 @@ public class BrigadeResourceEntity {
     @JoinColumn(name = "brigade_group_id", nullable = false)
     private BrigadeGroupEntity brigadeGroup;
 
-    private Integer sequence;
+    @Column(name = "resource_sequence", nullable = false)
+    private Integer resourceSequence;
 
-    private String sequenceHex;
+    @Column(name = "resource_code", nullable = false, length = 4)
+    private String resourceCode;
 
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;

@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,10 @@ import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "brigade_item")
+@Table(name = "brigade_item", uniqueConstraints = {
+        @UniqueConstraint(name = "uq_brigade_item_agency_calendar_sequence",
+                columnNames = {"agency_id", "calendar_item_id", "brigade_item_sequence"})
+})
 public class BrigadeItemEntity {
 
     @Id
@@ -44,8 +48,10 @@ public class BrigadeItemEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    private Integer sequence;
+    @Column(name = "brigade_item_sequence", nullable = false)
+    private Integer brigadeItemSequence;
 
-    private String sequenceHex;
+    @Column(name = "brigade_item_code", nullable = false, length = 4)
+    private String brigadeItemCode;
 
 }

@@ -47,8 +47,8 @@ public class BrigadeItemCreatorService {
         brigadeItemEntity.setDefaultRoute(routeEntity);
 
         var nextSequence = brigadeItemSequenceQueryService.findNextValue(instance, calendarCode);
-        brigadeItemEntity.setSequence(nextSequence);
-        brigadeItemEntity.setSequenceHex(Hex.toHex(nextSequence));
+        brigadeItemEntity.setBrigadeItemSequence(nextSequence);
+        brigadeItemEntity.setBrigadeItemCode(Hex.toHex(nextSequence));
 
         var savedBrigade = brigadeItemCommandService.save(brigadeItemEntity);
 

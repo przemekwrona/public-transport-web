@@ -18,7 +18,7 @@ public class BrigadeResourceQueryService {
     }
 
     public List<BrigadeResourceEntity> findAllByBrigadeGroupId(Long brigadeGroupId) {
-        return brigadeResourceQueryRepository.findAllByBrigadeGroupBrigadeGroupIdOrderBySequenceAsc(brigadeGroupId);
+        return brigadeResourceQueryRepository.findAllByBrigadeGroupBrigadeGroupIdOrderByResourceSequenceAsc(brigadeGroupId);
     }
 
     public BrigadeResourceEntity findByAgencyAndCalendarAndSymbolAndResourceCode(
