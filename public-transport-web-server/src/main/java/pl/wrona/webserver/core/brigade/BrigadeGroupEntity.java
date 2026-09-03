@@ -35,7 +35,4 @@ public class BrigadeGroupEntity {
     @JoinColumn(name = "calendar_symbol_id", nullable = false)
     private CalendarSymbolEntity calendarSymbol;
 
-    @Column(nullable = false, length = 50)
-    private String name;
-
 }

@@ -42,7 +42,6 @@ public class BrigadeGroupCreatorService {
         var brigadeGroup = new BrigadeGroupEntity();
         brigadeGroup.setBrigadeItem(brigadeItemEntity);
         brigadeGroup.setCalendarSymbol(calendarSymbolEntity);
-        brigadeGroup.setName(request.getBrigadeName());
         brigadeGroupCommandRepository.save(brigadeGroup);
 
         var savedBrigadeResource = brigadeResourceCommandService.init(instance, brigadeCode, calendarCode, calendarSymbol);
