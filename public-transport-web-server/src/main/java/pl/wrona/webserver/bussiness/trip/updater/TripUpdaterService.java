@@ -54,14 +54,14 @@ public class TripUpdaterService {
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
 
         for (TripProfile tripProfile : tripDetails.getTripProfiles()) {
-            TripProfileEntity tripProfileEntity2 = tripProfileQueryService.findAllByTripAndTrafficMode(tripEntity, TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
+            TripProfileEntity existedTripProfileEntity = tripProfileQueryService.findAllByTripAndTrafficMode(tripEntity, TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
 
-            if (tripProfileEntity2 == null) {
+            if (existedTripProfileEntity == null) {
                 TripProfileEntity updatedTripProfile = TripProfileMapper.map(tripProfile);
                 updatedTripProfile.setTrip(tripEntity);
                 tripProfileCommandService.save(updatedTripProfile);
             } else {
-                TripProfileEntity updatedTripProfile = TripProfileMapper.update(tripProfileEntity2, tripProfile);
+                TripProfileEntity updatedTripProfile = TripProfileMapper.update(existedTripProfileEntity, tripProfile);
                 tripProfileCommandService.save(updatedTripProfile);
             }
 

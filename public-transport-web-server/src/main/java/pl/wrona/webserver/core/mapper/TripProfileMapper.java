@@ -18,20 +18,18 @@ public class TripProfileMapper {
         StopTime lastStop = tripProfile.getStops().get(tripProfile.getStops().size() - 1);
 
         var distanceInMeters = lastStop.getMeters().doubleValue();
-        var timeCustomizedInSeconds = lastStop.getCustomizedSeconds().doubleValue();
+        var timeCalculatedInSeconds = lastStop.getCalculatedSeconds();
+        var timeCustomizedInSeconds = lastStop.getCustomizedSeconds();
 
         tripProfileEntity.setCalculatedCommunicationVelocity(tripProfile.getCalculatedCommunicationVelocity());
         tripProfileEntity.setCustomizedCommunicationVelocity((int) convertToKmH(distanceInMeters, timeCustomizedInSeconds));
+        tripProfileEntity.setTravelTimeInSeconds(timeCalculatedInSeconds);
 
         tripProfileEntity.setCustomized(tripProfile.getIsCustomized());
         tripProfileEntity.setDefaultProfile(tripProfile.getIsDefault());
         tripProfileEntity.setTrafficMode(TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
 
-//        tripProfileEntity.setCalculatedCommunicationVelocity(tripProfile.getCalculatedCommunicationVelocity());
-//        tripProfileEntity.setOriginStopName(tripsDetails.getOriginStopName());
-//        tripProfileEntity.setDestinationStopName(tripsDetails.getDestinationStopName());
 //        tripProfileEntity.setMainVariant(tripsDetails.getIsMainVariant());
-//        tripProfileEntity.setCustomized(tripProfile.getIsCustomized());
 //        tripProfileEntity.setUpdatedAt(LocalDateTime.now());
 
 //        try {
