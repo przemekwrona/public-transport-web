@@ -38,8 +38,7 @@ public class BrigadeEventUpdaterService {
         var resource = brigadeResourceQueryService.findByAgencyAndCalendarAndSymbolAndResourceCode(instance, brigadeCode, calendarCode, symbol, resourceCode);
         var profile = tripProfileQueryService.findByAgencyAndRouteCodeAndTripCodeAndTrafficMode(instance, putBrigadeEventBody.getTripId().getRouteId().getRouteCode(), putBrigadeEventBody.getTripId().getTripCode(), TripTrafficModeMapper.map(putBrigadeEventBody.getTripId().getTrafficMode()));
 
-        var brigadeEvent = brigadeEventQueryService.findByAgencyAndCalendarAndSymbolAndEventHex(
-                instance, calendarCode, symbol, putBrigadeEventBody.getSequenceHex());
+        var brigadeEvent = brigadeEventQueryService.findByAgencyAndCalendarAndSymbolAndEventHex(resource, putBrigadeEventBody.getSequenceHex());
         if (brigadeEvent == null) {
             brigadeEvent = new BrigadeEventEntity();
             brigadeEvent.setEventSequence(putBrigadeEventBody.getSequence());
