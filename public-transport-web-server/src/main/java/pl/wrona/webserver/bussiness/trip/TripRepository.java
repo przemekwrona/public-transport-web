@@ -13,8 +13,8 @@ import java.util.List;
 @Repository
 public interface TripRepository extends JpaRepository<TripEntity, Long> {
 
-    @Query("SELECT t FROM TripEntity t WHERE t.route.agency = :agency AND t.route.line LIKE CONCAT(:lineOrName,'%') OR t.route.name = CONCAT(:lineOrName,'%')")
-    List<TripEntity> findByLineOrNameContainingIgnoreCase(@Param("lineOrName") String lineOrName, @Param("agency") AgencyEntity agencyEntity);
+    @Query("SELECT t FROM TripEntity t JOIN t.tripProfiles WHERE t.route.agency = :agency AND t.route.routeCode = :routeCode")
+    List<TripEntity> findByAgencyAndRouteCode(@Param("agency") AgencyEntity agencyEntity, @Param("routeCode") String routeCode);
 
     @Query("SELECT t FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variantName = :variantName AND t.variantMode = :variantMode")
     TripEntity findByLineAndNameAndVariantAndMode(@Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode);
