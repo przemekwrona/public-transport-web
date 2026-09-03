@@ -1,9 +1,12 @@
 package pl.wrona.webserver.bussiness.brigade.event;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.BrigadeResource;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEventQueryRepository;
+import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,8 +34,7 @@ public class BrigadeEventQueryService {
                 agency, brigadeCode, calendarCode, calendarSymbol);
     }
 
-    public BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(String agency, String calendarCode, String symbol, String eventCode) {
-        return brigadeEventQueryRepository.findByAgencyAndCalendarAndSymbolAndEventHex(
-                agency, calendarCode, symbol, eventCode);
+    public BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(BrigadeResourceEntity brigadeResource, String eventCode) {
+        return brigadeEventQueryRepository.findByAgencyAndCalendarAndSymbolAndEventHex(brigadeResource, Hex.fromHex(eventCode));
     }
 }

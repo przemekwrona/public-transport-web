@@ -2,11 +2,14 @@ package pl.wrona.webserver.bussiness.brigade.event.deletion;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.BrigadeResource;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
+import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
+import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 @Service
@@ -15,12 +18,15 @@ public class BrigadeEventDeletionService {
 
     private final BrigadeEventCommandRepository brigadeEventCommandRepository;
     private final BrigadeEventQueryService brigadeEventQueryService;
+    private final BrigadeResourceQueryService brigadeResourceQueryService;
 
     @PreAgencyAuthorize
     @Transactional
-    public Status deleteBrigadeEvent(String instance, String calendarCode, String symbol, String eventCode) {
-        BrigadeEventEntity brigadeEvent = brigadeEventQueryService.findByAgencyAndCalendarAndSymbolAndEventHex(
-                instance, calendarCode, symbol, eventCode);
+    public Status deleteBrigadeEvent(String instance, String brigadeCode, String calendarCode, String symbol, String resourceCode, String eventCode) {
+        BrigadeResourceEntity brigadeResource = brigadeResourceQueryService.findByAgencyAndCalendarAndSymbolAndResourceCode(
+                instance, brigadeCode, calendarCode, symbol, resourceCode);
+
+        BrigadeEventEntity brigadeEvent = brigadeEventQueryService.findByAgencyAndCalendarAndSymbolAndEventHex(brigadeResource, eventCode);
 
         if (brigadeEvent != null) {
             brigadeEventCommandRepository.delete(brigadeEvent);

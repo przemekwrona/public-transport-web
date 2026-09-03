@@ -70,7 +70,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<Status> deleteBrigadeEvent(String agency, String brigadeCode, String calendarCode, String symbol, String resourceCode, String eventCode) {
-        return ResponseEntity.ok(brigadeEventDeletionService.deleteBrigadeEvent(agency, calendarCode, symbol, eventCode));
+        return ResponseEntity.ok(brigadeEventDeletionService.deleteBrigadeEvent(agency, brigadeCode, calendarCode, symbol, resourceCode, eventCode));
     }
 
     @Override
