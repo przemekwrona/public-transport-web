@@ -7,7 +7,7 @@ import {
     MatDialogContent, MatDialogRef,
     MatDialogTitle
 } from "@angular/material/dialog";
-import {TripId, TripId1, TripService} from "../../../../generated/public-transport-api";
+import {GetAllTripsResponse, TripId, TripId1, TripService} from "../../../../generated/public-transport-api";
 import {CommonModule} from "@angular/common";
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
@@ -43,7 +43,7 @@ export class OnTimeRangeSelectedModalComponent {
 
     private formBuilder: FormBuilder = inject(FormBuilder);
 
-    data = inject<{ start: string, end: string, resourceId: string }>(MAT_DIALOG_DATA);
+    data = inject<{ start: string, end: string, resourceId: string, defaultRoutes: GetAllTripsResponse }>(MAT_DIALOG_DATA);
 
     modelForm = this.formBuilder.group({
         tripId: [null, [Validators.required]]
