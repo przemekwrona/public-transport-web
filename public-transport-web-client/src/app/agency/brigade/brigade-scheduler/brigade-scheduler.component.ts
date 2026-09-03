@@ -11,10 +11,9 @@ import {
     BrigadeTimetableModalComponent
 } from "./brigade-timetable-modal/brigade-timetable-modal.component";
 import {
-    BrigadeBodyV2,
-    BrigadeEvent,
+    BrigadeEvent, BrigadeGroupBody,
     BrigadeResource,
-    BrigadeService,
+    BrigadeService, GetAllTripsResponse,
     NextCalendarResourceSequenceResponse,
     PutBrigadeEventBody, TripId2
 } from "../../../generated/public-transport-api";
@@ -36,7 +35,8 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     scheduler!: DayPilotSchedulerComponent;
 
     @Input() brigadeCode: string = '';
-    @Input() brigadeBody: BrigadeBodyV2 = {} as BrigadeBodyV2;
+    @Input() brigadeBody: BrigadeGroupBody = {} as BrigadeGroupBody;
+    @Input() defaultRoutes: GetAllTripsResponse = {} as GetAllTripsResponse;
 
     events: DayPilot.EventData[] = [];
 
@@ -183,7 +183,8 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
 
     openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, resource: DayPilot.ResourceId, dpControl: DayPilot.Scheduler) {
         const dialogRef = this.dialog.open(OnTimeRangeSelectedModalComponent, {
-            data: {start: start.toString(), end: end.toString(), resourceId: resource.toString()}
+            width: '760px',
+            data: {start: start.toString(), end: end.toString(), resourceId: resource.toString(), defaultRoutes: this.defaultRoutes}
         });
 
         dialogRef.afterClosed().subscribe((result: OnTimeRangeAndTripSelected) => {
