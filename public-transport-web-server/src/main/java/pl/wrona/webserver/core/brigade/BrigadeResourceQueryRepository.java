@@ -13,14 +13,16 @@ public interface BrigadeResourceQueryRepository extends JpaRepository<BrigadeRes
     List<BrigadeResourceEntity> findAllByBrigadeGroupBrigadeGroupIdOrderByResourceSequenceAsc(Long brigadeGroupId);
 
     @Query("""
-            SELECT r FROM BrigadeResourceEntity r
-            WHERE r.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
-            AND r.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
-            AND r.brigadeGroup.calendarSymbol.designation = :symbol
-            AND r.resourceCode = :resourceCode""")
+        SELECT r FROM BrigadeResourceEntity r JOIN FETCH r.brigadeGroup g
+        WHERE g.brigadeItem.agency.agencyCode = :agency
+        AND g.brigadeItem.brigadeItemSequence = :brigadeItemSequence
+        AND g.calendarSymbol.calendarItem.sequence = :calendarSequence
+        AND g.calendarSymbol.designation = :symbol
+        AND r.resourceSequence = :resourceSequence""")
     BrigadeResourceEntity findByAgencyAndCalendarAndSymbolAndResourceCode(
             @Param("agency") String agency,
-            @Param("calendarCode") String calendarCode,
+            @Param("brigadeItemSequence") int brigadeItemSequence,
+            @Param("calendarSequence") int calendarSequence,
             @Param("symbol") String symbol,
-            @Param("resourceCode") String resourceCode);
+            @Param("resourceSequence") int resourceSequence);
 }

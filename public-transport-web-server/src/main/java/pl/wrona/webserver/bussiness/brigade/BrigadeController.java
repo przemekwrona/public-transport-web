@@ -65,7 +65,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<Status> putBrigadeEvent(String agency, String brigadeCode, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
-        return ResponseEntity.ok(brigadeEventUpdaterService.putBrigadeEvent(agency, calendarCode, symbol, resourceCode, putBrigadeEventBody));
+        return ResponseEntity.ok(brigadeEventUpdaterService.putBrigadeEvent(agency, brigadeCode, calendarCode, symbol, resourceCode, putBrigadeEventBody));
     }
 
     @Override

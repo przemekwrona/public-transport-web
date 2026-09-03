@@ -2,6 +2,7 @@ package pl.wrona.webserver.bussiness.trip;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
@@ -30,6 +31,10 @@ public class TripProfileQueryService {
 
     public TripProfileEntity findAllByTripAndTrafficMode(TripEntity trip, TripTrafficMode trafficMode) {
         return tripProfileQueryRepository.findAllByTripAndTrafficMode(trip, trafficMode);
+    }
+
+    public TripProfileEntity findByAgencyAndRouteCodeAndTripCodeAndTrafficMode(String agency, String routeCode, String tripCode, TripTrafficMode trafficMode) {
+        return tripProfileQueryRepository.findByAgencyAndRouteCodeAndTripCodeAndTrafficMode(agency, Hex.fromHex(routeCode), Hex.fromHex(tripCode), trafficMode);
     }
 
 }

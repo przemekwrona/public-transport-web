@@ -7,10 +7,13 @@ import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
+import pl.wrona.webserver.bussiness.brigade.item.BrigadeItemQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
 import pl.wrona.webserver.bussiness.trip.TripProfileQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
+import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.agency.TripTrafficMode;
@@ -31,23 +34,9 @@ public class BrigadeEventUpdaterService {
 
     @PreAgencyAuthorize
     @Transactional
-    public Status putBrigadeEvent(String instance, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
-        var resource = brigadeResourceQueryService.findByAgencyAndCalendarAndSymbolAndResourceCode(
-                instance, calendarCode, symbol, resourceCode);
-
-        var tripIdBody = putBrigadeEventBody.getTripId();
-        TripEntity trip = tripQueryService.findByAgencyCodeAndTripId(instance, new TripId()
-                .routeId(new RouteId()
-                        .line(tripIdBody.getRouteId().getLine())
-                        .name(tripIdBody.getRouteId().getName())
-                        .version(tripIdBody.getRouteId().getVersion()))
-                .variantName(tripIdBody.getVariantName())
-                .variantMode(tripIdBody.getVariantMode()));
-        var trafficMode = TripTrafficModeMapper.map(tripIdBody.getTrafficMode());
-        if (trafficMode == null) {
-            trafficMode = TripTrafficMode.NORMAL;
-        }
-        TripProfileEntity tripProfile = tripProfileQueryService.findAllByTripAndTrafficMode(trip, trafficMode);
+    public Status putBrigadeEvent(String instance, String brigadeCode, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
+        var resource = brigadeResourceQueryService.findByAgencyAndCalendarAndSymbolAndResourceCode(instance, brigadeCode, calendarCode, symbol, resourceCode);
+        var profile = tripProfileQueryService.findByAgencyAndRouteCodeAndTripCodeAndTrafficMode(instance, putBrigadeEventBody.getTripId().getRouteId().getRouteCode(), putBrigadeEventBody.getTripId().getTripCode(), TripTrafficModeMapper.map(putBrigadeEventBody.getTripId().getTrafficMode()));
 
         var brigadeEvent = brigadeEventQueryService.findByAgencyAndCalendarAndSymbolAndEventHex(
                 instance, calendarCode, symbol, putBrigadeEventBody.getSequenceHex());
@@ -60,7 +49,7 @@ public class BrigadeEventUpdaterService {
         brigadeEvent.setStartSecond(putBrigadeEventBody.getStartSecond());
         brigadeEvent.setEndSecond(putBrigadeEventBody.getEndSecond());
         brigadeEvent.setResource(resource);
-        brigadeEvent.setTripProfile(tripProfile);
+        brigadeEvent.setTripProfile(profile);
         brigadeEvent.setLine(putBrigadeEventBody.getLine());
         brigadeEvent.setName(putBrigadeEventBody.getName());
 

@@ -2,6 +2,7 @@ package pl.wrona.webserver.bussiness.brigade.item;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemQueryRepository;
 
