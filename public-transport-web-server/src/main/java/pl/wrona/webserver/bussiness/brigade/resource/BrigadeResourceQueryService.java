@@ -2,6 +2,7 @@ package pl.wrona.webserver.bussiness.brigade.resource;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 import pl.wrona.webserver.core.brigade.BrigadeResourceQueryRepository;
 
@@ -22,9 +23,9 @@ public class BrigadeResourceQueryService {
     }
 
     public BrigadeResourceEntity findByAgencyAndCalendarAndSymbolAndResourceCode(
-            String agency, String calendarCode, String symbol, String resourceCode) {
+            String agency, String brigadeItemCode, String calendarCode, String symbol, String resourceCode) {
         return brigadeResourceQueryRepository.findByAgencyAndCalendarAndSymbolAndResourceCode(
-                agency, calendarCode, symbol, resourceCode);
+                agency, Hex.fromHex(brigadeItemCode), Hex.fromHex(calendarCode), symbol, Hex.fromHex(resourceCode));
     }
 
 }
