@@ -1,0 +1,223 @@
+databaseChangeLog:
+  - changeSet:
+      id: update-brigades
+      author: pwrona
+      changes:
+        - renameColumn:
+            tableName: brigade_item
+            oldColumnName: sequence
+            newColumnName: brigade_item_sequence
+            columnDataType: int
+
+        - renameColumn:
+            tableName: brigade_item
+            oldColumnName: sequence_hex
+            newColumnName: brigade_item_code
+            columnDataType: varchar(4)
+
+        - addUniqueConstraint:
+            tableName: brigade_item
+            columnNames: agency_id, calendar_item_id, brigade_item_sequence
+            constraintName: uq_brigade_item_agency_calendar_sequence
+      rollback:
+        - dropUniqueConstraint:
+            tableName: brigade_item
+            constraintName: uq_brigade_item_agency_calendar_sequence
+
+        - renameColumn:
+            tableName: brigade_item
+            oldColumnName: brigade_item_code
+            newColumnName: sequence_hex
+            columnDataType: varchar(4)
+
+        - renameColumn:
+            tableName: brigade_item
+            oldColumnName: brigade_item_sequence
+            newColumnName: sequence
+            columnDataType: int
+
+  - changeSet:
+      id: add-unique-on-brigade-group
+      author: pwrona
+      changes:
+        - addUniqueConstraint:
+            tableName: brigade_group
+            columnNames: brigade_item_id, calendar_symbol_id
+            constraintName: uq_brigade_group_item_calendar_symbol
+      rollback:
+        - dropUniqueConstraint:
+            tableName: brigade_group
+            constraintName: uq_brigade_group_item_calendar_symbol
+
+  - changeSet:
+      id: update-brigade-resource
+      author: pwrona
+      changes:
+        - renameColumn:
+            tableName: brigade_resource
+            oldColumnName: sequence
+            newColumnName: resource_sequence
+            columnDataType: int
+
+        - renameColumn:
+            tableName: brigade_resource
+            oldColumnName: sequence_hex
+            newColumnName: resource_code
+            columnDataType: varchar(4)
+
+        - addUniqueConstraint:
+            tableName: brigade_resource
+            columnNames: brigade_group_id, resource_sequence
+            constraintName: uq_brigade_resource_group_sequence
+      rollback:
+        - dropUniqueConstraint:
+            tableName: brigade_resource
+            constraintName: uq_brigade_resource_group_sequence
+
+        - renameColumn:
+            tableName: brigade_resource
+            oldColumnName: resource_code
+            newColumnName: sequence_hex
+            columnDataType: varchar(4)
+
+        - renameColumn:
+            tableName: brigade_resource
+            oldColumnName: resource_sequence
+            newColumnName: sequence
+            columnDataType: int
+
+  - changeSet:
+      id: update-brigade-event
+      author: pwrona
+      changes:
+        - renameColumn:
+            tableName: brigade_event
+            oldColumnName: sequence
+            newColumnName: event_sequence
+            columnDataType: int
+
+        - renameColumn:
+            tableName: brigade_event
+            oldColumnName: sequence_hex
+            newColumnName: event_code
+            columnDataType: varchar(4)
+
+        - addUniqueConstraint:
+            tableName: brigade_event
+            columnNames: resource_id, event_sequence
+            constraintName: uq_brigade_event_resource_sequence
+      rollback:
+        - dropUniqueConstraint:
+            tableName: brigade_event
+            constraintName: uq_brigade_event_resource_sequence
+
+        - renameColumn:
+            tableName: brigade_event
+            oldColumnName: event_code
+            newColumnName: sequence_hex
+            columnDataType: varchar(4)
+
+        - renameColumn:
+            tableName: brigade_event
+            oldColumnName: event_sequence
+            newColumnName: sequence
+            columnDataType: int
+
+  - changeSet:
+      id: drop-brigade-trip
+      author: pwrona
+      changes:
+        - dropTable:
+            tableName: brigade_trip
+        - dropSequence:
+            sequenceName: brigade_trip_id_seq
+      rollback:
+        - createSequence:
+            sequenceName: brigade_trip_id_seq
+            startValue: 1
+            incrementBy: 1
+        - createTable:
+            tableName: brigade_trip
+            columns:
+              - column:
+                  name: brigade_trip_id
+                  type: varchar(255)
+                  defaultValueSequenceNext: brigade_trip_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_brigade_trip
+                    nullable: false
+              - column:
+                  name: line
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: variant
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mode
+                  type: varchar(8)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: trip_sequence
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: root_trip_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_brigade_trip_root_trip
+                    references: trip(trip_id)
+                    nullable: false
+              - column:
+                  name: departure_time_in_second
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: headsign
+                  type: varchar(30)
+              - column:
+                  name: variant_designation
+                  type: varchar(30)
+              - column:
+                  name: variant_description
+                  type: varchar(255)
+              - column:
+                  name: communication_velocity
+                  type: int
+              - column:
+                  name: distance_in_meters
+                  type: int
+              - column:
+                  name: travel_time_in_seconds
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_main_variant
+                  type: boolean
+              - column:
+                  name: origin
+                  type: varchar(30)
+              - column:
+                  name: destination
+                  type: varchar(30)
+              - column:
+                  name: brigade_id
+                  type: integer
+                  constraints:
+                    foreignKeyName: fk_brigade_trip_brigade
+                    references: brigade(brigade_id)
+                    deleteCascade: true
+                    nullable: false

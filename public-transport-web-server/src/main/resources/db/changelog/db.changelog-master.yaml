@@ -82,3 +82,8 @@ databaseChangeLog:
   - include:
       file: 021_drop_brigade_group_name.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 022_update_brigades.yaml
+      relativeToChangelogFile: true
+
