@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-name-from-brigade-group
+      author: pwrona
+      changes:
+        - dropColumn:
+            tableName: brigade_group
+            columnName: name
+      rollback:
+        - addColumn:
+            tableName: brigade_group
+            columns:
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
