@@ -3,6 +3,7 @@ package pl.wrona.webserver.core.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
+import org.igeolab.iot.pt.server.api.model.ProfileShortcut;
 import org.igeolab.iot.pt.server.api.model.RouteId1;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId1;
@@ -74,10 +75,15 @@ public class TripMapper {
                 .headsign(trip.getHeadsign())
                 .createdAt(trip.getCreatedAt())
                 .updatedAt(trip.getUpdatedAt())
-                .matchAnyBrigade(tripWithBrigades.containsKey(trip.getTripId()));
+                .matchAnyBrigade(tripWithBrigades.containsKey(trip.getTripId()))
+                .profile(trip.getTripProfiles().stream()
+                        .map(profile -> new ProfileShortcut()
+                                .trafficMode(TripTrafficModeMapper.map(profile.getTrafficMode()))
+                                .travelTime(profile.getTravelTimeInSeconds()))
+                        .toList());
     }
 
-    private int calculatedCommunicationVelocity(TripEntity trip) {
+    public int calculatedCommunicationVelocity(TripEntity trip) {
         if (trip.getTripProfiles() == null || trip.getTripProfiles().isEmpty()) {
             return 0;
         }

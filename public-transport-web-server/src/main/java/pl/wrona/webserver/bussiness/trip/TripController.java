@@ -49,8 +49,8 @@ public class TripController implements TripApi {
     }
 
     @Override
-    public ResponseEntity<GetAllTripsResponse> getTripsByLineOrName(String agency, String routeCode, String filter) {
-        return ResponseEntity.ok(tripPaginationService.getTripsByLineOrName(agency, filter));
+    public ResponseEntity<GetAllTripsResponse> getTripsByRouteAndFilterLineOrName(String agency, String routeCode) {
+        return ResponseEntity.ok(tripPaginationService.getTripsByRouteAndFilterLineOrName(agency, routeCode));
     }
 
     @Override

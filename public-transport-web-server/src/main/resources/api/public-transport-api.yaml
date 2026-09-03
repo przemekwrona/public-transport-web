@@ -519,7 +519,7 @@ paths:
       tags:
         - trip
       summary: Return all trips by filter line
-      operationId: getTripsByLineOrName
+      operationId: getTripsByRouteAndFilterLineOrName
       parameters:
         - in: path
           name: agency
@@ -531,12 +531,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: filter
-          in: query
-          required: false
-          schema:
-            type: string
-            default: ''
       responses:
         200:
           description: OK
@@ -1498,6 +1492,10 @@ components:
         updatedAt:
           type: string
           format: date-time
+        profile:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileShortcut'
         matchAnyBrigade:
           type: boolean
 
@@ -1534,8 +1532,6 @@ components:
     GetAllTripsResponse:
       type: object
       properties:
-        filter:
-          type: string
         lines:
           type: array
           items:
@@ -1600,6 +1596,15 @@ components:
           type: string
         variantDescription:
           type: string
+
+    ProfileShortcut:
+      type: object
+      properties:
+        trafficMode:
+          $ref: './public-transport-core.yaml#/components/schemas/TrafficMode'
+        travelTime:
+          type: integer
+          format: int32
 
     UpdateCalendarRequest:
       type: object
