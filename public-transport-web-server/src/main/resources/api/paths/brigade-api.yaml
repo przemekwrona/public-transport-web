@@ -228,7 +228,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BrigadeBodyV2'
+                $ref: '#/components/schemas/BrigadeGroupBody'
 
     post:
       tags:
@@ -468,7 +468,9 @@ components:
     BrigadeItemBody:
       type: object
       properties:
-        name:
+        brigadeName:
+          type: string
+        defaultRouteCode:
           type: string
         sequence:
           type: integer
@@ -477,7 +479,7 @@ components:
         brigades:
           type: array
           items:
-            $ref: '#/components/schemas/BrigadeBodyV2'
+            $ref: '#/components/schemas/BrigadeGroupBody'
 
     GetBrigadeDetailsResponse:
       type: object
@@ -551,11 +553,9 @@ components:
           items:
             $ref: '#/components/schemas/BrigadeEvent'
 
-    BrigadeBodyV2:
+    BrigadeGroupBody:
       type: object
       properties:
-        brigadeName:
-          type: string
         calendarSymbolId:
           $ref: '../public-transport-core.yaml#/components/schemas/CalendarSymbolId'
         calendarDesignation:

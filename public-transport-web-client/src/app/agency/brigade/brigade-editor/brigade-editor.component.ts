@@ -1,11 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {
-    BrigadeBody, BrigadeBodyV2, BrigadePatchBody,
-    BrigadePayload, BrigadeResource, BrigadeService,
-    BrigadeTrip, CalendarSymbolId, ErrorResponse,
-    GetAllTripsResponse, GetBrigadeDetailsResponse, GetCalendarsResponse, RouteId,
-    Trip,
-    TripId, TripMode, TripService
+    BrigadeService, BrigadeTrip, CalendarSymbolId, ErrorResponse,
+    GetAllTripsResponse, GetBrigadeDetailsResponse, GetCalendarsResponse,
+    Trip, TripService
 } from "../../../generated/public-transport-api";
 import {CdkDrag, CdkDragDrop, CdkDragEnter, CdkDragExit, moveItemInArray} from "@angular/cdk/drag-drop";
 import {BrigadeModel} from "./brigade-editor.model";
@@ -14,7 +11,6 @@ import {first, last} from "lodash";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BrigadeEditorComponentMode} from "./brigade-editor-component-mode";
-import {HttpErrorResponse} from "@angular/common/http";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
@@ -72,11 +68,6 @@ export class BrigadeEditorComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.tripService.getTripsByLineOrName(this.agencyStorageService.getInstance(), '').subscribe((response: GetAllTripsResponse) => response === null ? {
-            filter: '',
-            lines: []
-        } : this.tripsResponse = response);
-
         this._route.queryParams.subscribe(params => this.queryBrigadeName = params['name']);
 
         this._route.data.subscribe(data => this.componentMode = data['mode']);
@@ -103,6 +94,11 @@ export class BrigadeEditorComponent implements OnInit {
 
                 return brigadeModel;
             });
+
+            this.tripService.getTripsByLineOrName(this.agencyStorageService.getInstance(), getBrigadeDetailsResponse.brigade.defaultRouteCode).subscribe((response: GetAllTripsResponse) => response === null ? {
+                filter: '',
+                lines: []
+            } : this.tripsResponse = response);
         });
 
         this._route.data.subscribe(data => this.calendarsResponse = data['calendars']);
@@ -178,7 +174,7 @@ export class BrigadeEditorComponent implements OnInit {
         const dialogRef = this.dialog.open(BrigadeGroupCreatorModalComponent, {
             data: {
                 brigadeCode: brigade.sequenceHex,
-                brigadeName: brigade.name
+                brigadeName: brigade.brigadeName
             }
         });
 

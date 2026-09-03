@@ -1,8 +1,8 @@
 package pl.wrona.webserver.bussiness.brigade.details;
 
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.BrigadeBodyV2;
 import org.igeolab.iot.pt.server.api.model.BrigadeEvent;
+import org.igeolab.iot.pt.server.api.model.BrigadeGroupBody;
 import org.igeolab.iot.pt.server.api.model.BrigadeItemBody;
 import org.igeolab.iot.pt.server.api.model.BrigadeResource;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
@@ -38,7 +38,7 @@ public class BrigadeGroupDetailsService {
     private final BrigadeEventQueryService brigadeEventQueryService;
 
     @PreAgencyAuthorize
-    public BrigadeBodyV2 getCalendarSymbolBrigadeResources(String instance, String brigadeCode) {
+    public BrigadeGroupBody getCalendarSymbolBrigadeResources(String instance, String brigadeCode) {
         var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode);
         if (brigadeGroup == null) {
             return null;
@@ -47,8 +47,7 @@ public class BrigadeGroupDetailsService {
         var resourceEntities = brigadeResourceQueryService.findAllByBrigadeGroupId(brigadeGroup.getBrigadeGroupId());
         var eventsByResourceId = groupEventsByResourceId(resourceEntities);
 
-        return new BrigadeBodyV2()
-                .brigadeName(brigadeGroup.getName())
+        return new BrigadeGroupBody()
                 .calendarSymbolId(mapCalendarSymbolId(brigadeGroup))
                 .brigadeResources(mapResources(resourceEntities, eventsByResourceId));
     }
@@ -85,7 +84,8 @@ public class BrigadeGroupDetailsService {
             Map<Long, List<BrigadeResourceEntity>> resourcesByGroupId,
             Map<Long, List<BrigadeEventEntity>> eventsByResourceId) {
         return new BrigadeItemBody()
-                .name(brigadeItem.getName())
+                .brigadeName(brigadeItem.getName())
+                .defaultRouteCode(brigadeItem.getDefaultRoute().getRouteCode())
                 .sequence(brigadeItem.getSequence())
                 .sequenceHex(brigadeItem.getSequenceHex())
                 .brigades(brigadeGroups.stream()
@@ -96,12 +96,11 @@ public class BrigadeGroupDetailsService {
                         .toList());
     }
 
-    private static BrigadeBodyV2 mapGroup(
+    private static BrigadeGroupBody mapGroup(
             BrigadeGroupEntity brigadeGroupEntity,
             List<BrigadeResourceEntity> resourceEntities,
             Map<Long, List<BrigadeEventEntity>> eventsByResourceId) {
-        return new BrigadeBodyV2()
-                .brigadeName(brigadeGroupEntity.getName())
+        return new BrigadeGroupBody()
                 .calendarSymbolId(mapCalendarSymbolId(brigadeGroupEntity))
                 .calendarDesignation(brigadeGroupEntity.getCalendarSymbol().getDesignation())
                 .calendarDescription(brigadeGroupEntity.getCalendarSymbol().getDescription())
