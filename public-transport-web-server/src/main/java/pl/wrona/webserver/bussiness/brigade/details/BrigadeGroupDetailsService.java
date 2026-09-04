@@ -5,7 +5,7 @@ import org.igeolab.iot.pt.server.api.model.BrigadeEvent;
 import org.igeolab.iot.pt.server.api.model.BrigadeGroupBody;
 import org.igeolab.iot.pt.server.api.model.BrigadeItemBody;
 import org.igeolab.iot.pt.server.api.model.BrigadeResource;
-import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
+import org.igeolab.iot.pt.server.api.model.CalendarItemId;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolId1;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeDetailsResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId1;
@@ -117,7 +117,7 @@ public class BrigadeGroupDetailsService {
 
     private static CalendarSymbolId1 mapCalendarSymbolId(BrigadeGroupEntity brigadeGroup) {
         return new CalendarSymbolId1()
-                .calendarItemId(new CalendarItemId1()
+                .calendarItemId(new CalendarItemId()
                         .code(brigadeGroup.getCalendarSymbol().getCalendarItem().getSequenceHex()))
                 .symbol(brigadeGroup.getCalendarSymbol().getDesignation());
     }

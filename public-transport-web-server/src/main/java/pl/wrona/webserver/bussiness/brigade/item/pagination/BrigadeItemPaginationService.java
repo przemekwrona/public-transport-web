@@ -3,7 +3,7 @@ package pl.wrona.webserver.bussiness.brigade.item.pagination;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.BrigadeGroupBody;
 import org.igeolab.iot.pt.server.api.model.BrigadeItemBody;
-import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
+import org.igeolab.iot.pt.server.api.model.CalendarItemId;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolId1;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeResponse;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class BrigadeItemPaginationService {
     private static BrigadeGroupBody map(BrigadeGroupEntity brigadeGroupEntity) {
         return new BrigadeGroupBody()
                 .calendarSymbolId(new CalendarSymbolId1()
-                        .calendarItemId(new CalendarItemId1()
+                        .calendarItemId(new CalendarItemId()
                                 .code(brigadeGroupEntity.getCalendarSymbol().getCalendarItem().getSequenceHex()))
                         .symbol(brigadeGroupEntity.getCalendarSymbol().getDesignation()))
                 .calendarDesignation(brigadeGroupEntity.getCalendarSymbol().getDesignation())

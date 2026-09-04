@@ -33,7 +33,7 @@ public class CalendarCreatorService {
     public Status createCalendar(String instance, CalendarPayload calendarPayload) {
         var calendarBody = calendarPayload.getBody();
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
-        var alreadySavedCalendarItem = calendarItemQueryService.findByAgencyAndStartDateAndEndDate(agencyEntity.getAgencyCode(), calendarBody.getStartDate(), calendarBody.getEndDate());
+        var alreadySavedCalendarItem = calendarItemQueryService.findByAgencyCalendarCode(agencyEntity.getAgencyCode(), calendarBody.getCalendarSymbolId().getCalendarItemId().getCode());
 
         var calendarSymbolEntity = CalendarSymbolEntityMapper.apply(calendarBody, agencyEntity);
         calendarSymbolEntity.setCalendarItem(alreadySavedCalendarItem);
