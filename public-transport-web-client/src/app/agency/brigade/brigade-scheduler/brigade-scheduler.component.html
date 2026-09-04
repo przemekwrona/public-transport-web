@@ -6,26 +6,35 @@
         </div>
     </div>
     <div class="flex items-center gap-2">
-        <button (click)="clearGroup()">Wyczyść </button>
-        <div class="btn-group">
-            <button (click)="alignToMinutes(5)" class="btn btn-xs btn-secondary">
-                5m
+        <button (click)="clearGroup()" mat-icon-button color="warn" aria-label="Wyczyść">
+            <mat-icon>delete</mat-icon>
+        </button>
+
+        <div class="relative">
+            <button type="button" (click)="toggleAlignAccordion()" class="btn btn-sm btn-secondary">
+                <mat-icon class="me-1">access_time</mat-icon>
+
+                @if (selectedAlignMinutes) {
+                    <span class="badge badge-sm badge-outline badge-primary">{{ alignLabel(selectedAlignMinutes) }}</span>
+                }
+                <i class="ki-filled ki-down text-xs ms-1 transition-transform duration-200"
+                   [class.rotate-180]="alignAccordionOpen"></i>
             </button>
-            <button (click)="alignToMinutes(10)" class="btn btn-xs btn-secondary">
-                10m
-            </button>
-            <button (click)="alignToMinutes(15)" class="btn btn-xs btn-secondary">
-                15m
-            </button>
-            <button (click)="alignToMinutes(20)" class="btn btn-xs btn-secondary">
-                20m
-            </button>
-            <button (click)="alignToMinutes(30)" class="btn btn-xs btn-secondary">
-                30m
-            </button>
-            <button (click)="alignToMinutes(60)" class="btn btn-xs btn-secondary">
-                1h
-            </button>
+            @if (alignAccordionOpen) {
+                <div class="absolute end-0 top-full z-20 mt-1 rounded-lg border border-gray-200 bg-white p-1 shadow-md">
+                    <div class="btn-group">
+                        @for (option of alignOptions; track option.minutes) {
+                            <button type="button"
+                                    (click)="alignToMinutes(option.minutes)"
+                                    class="btn btn-xs"
+                                    [class.btn-primary]="selectedAlignMinutes === option.minutes"
+                                    [class.btn-secondary]="selectedAlignMinutes !== option.minutes">
+                                {{ option.label }}
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
         </div>
         <button (click)="openTimetableModal()" class="btn btn-sm btn-secondary">
             Pokaż rozkład

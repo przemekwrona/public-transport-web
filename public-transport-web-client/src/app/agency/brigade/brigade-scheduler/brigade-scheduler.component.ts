@@ -18,12 +18,16 @@ import {
     PutBrigadeEventBody, ResourceService, TripId2
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
     selector: 'app-brigade-scheduler',
     imports: [
         CommonModule,
         DayPilotModule,
+        MatIconModule,
+        MatButtonModule,
     ],
     providers: [],
     templateUrl: './brigade-scheduler.component.html',
@@ -39,6 +43,18 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     @Input() defaultRoutes: GetAllTripsResponse = {} as GetAllTripsResponse;
 
     events: DayPilot.EventData[] = [];
+
+    readonly alignOptions: { minutes: number; label: string }[] = [
+        { minutes: 5, label: '5m' },
+        { minutes: 10, label: '10m' },
+        { minutes: 15, label: '15m' },
+        { minutes: 20, label: '20m' },
+        { minutes: 30, label: '30m' },
+        { minutes: 60, label: '1h' },
+    ];
+
+    alignAccordionOpen = false;
+    selectedAlignMinutes: number | null = null;
 
     config: DayPilot.SchedulerConfig = {
         locale: "pl-pl",
@@ -336,11 +352,21 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         this.scheduler.control.scrollTo(firstDate.format('yyyy-MM-DDTHH:mm:SS'));
     }
 
+    public toggleAlignAccordion(): void {
+        this.alignAccordionOpen = !this.alignAccordionOpen;
+    }
+
+    public alignLabel(minutes: number): string {
+        return this.alignOptions.find(option => option.minutes === minutes)?.label ?? `${minutes}m`;
+    }
+
     public alignToMinutes(minutes: number): void {
-        const allowedMinutes = [5, 10, 15, 20, 30, 60];
+        const allowedMinutes = this.alignOptions.map(option => option.minutes);
         if (!allowedMinutes.includes(minutes)) {
             return;
         }
+
+        this.selectedAlignMinutes = minutes;
 
         const scheduler = this.scheduler.control;
         const resources = scheduler.resources ?? [];
