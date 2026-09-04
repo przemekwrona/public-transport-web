@@ -12,7 +12,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {
     BrigadeService,
     CalendarService,
-    CalendarSymbolId,
+    CalendarSymbolId, CalendarSymbolService,
     CreateCalendarSymbolBrigadeRequest,
     CreateCalendarSymbolBrigadeResponse,
     GetCalendarsResponse
@@ -20,6 +20,7 @@ import {
 import {AgencyStorageService} from '../../../auth/agency-storage.service';
 
 export interface BrigadeGroupCreatorModalData {
+    calendarCode: string;
     brigadeCode: string;
     brigadeName: string;
 }
@@ -53,7 +54,7 @@ export class BrigadeGroupCreatorModalComponent implements OnInit {
         private formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<BrigadeGroupCreatorModalComponent>,
         private agencyStorageService: AgencyStorageService,
-        private calendarService: CalendarService,
+        private calendarSymbolService: CalendarSymbolService,
         private brigadeService: BrigadeService) {
         this.modelForm = this.formBuilder.group({
             calendarId: [null, [Validators.required]]
@@ -61,7 +62,7 @@ export class BrigadeGroupCreatorModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.calendarService.getCalendars(this.agencyStorageService.getInstance())
+        this.calendarSymbolService.getCalendarSymbolsByCalendarCode(this.agencyStorageService.getInstance(), this.data.calendarCode)
             .subscribe(response => this.calendarsResponse = response ?? {});
     }
 
