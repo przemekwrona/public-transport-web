@@ -22,7 +22,7 @@ public class CalendarItemDeletionService {
         var calendarSymbols = calendarSymbolQueryService.findAllByAgencyAndCalendarItemId(instance, deleteCalendarItemRequest.getCalendarItemId());
 
         if (calendarSymbols.isEmpty()) {
-            var calendarItem = calendarItemQueryService.findByAgencyAndStartDateAndEndDate(instance, deleteCalendarItemRequest.getCalendarItemId().getStartDate(), deleteCalendarItemRequest.getCalendarItemId().getEndDate());
+            var calendarItem = calendarItemQueryService.findByAgencyCalendarCode(instance, deleteCalendarItemRequest.getCalendarItemId().getCode());
             calendarItemCommandService.deleteCalendarItem(calendarItem);
             return new Status().status(Status.StatusEnum.DELETED);
         } else {

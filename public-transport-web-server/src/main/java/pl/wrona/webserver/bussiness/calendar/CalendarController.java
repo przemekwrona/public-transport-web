@@ -66,11 +66,6 @@ public class CalendarController implements CalendarApi {
     }
 
     @Override
-    public ResponseEntity<CalendarSymbolBody> getCalendarByCalendarName(String agency, CalendarSymbolQuery calendarSymbolQuery) {
-        return ResponseEntity.status(HttpStatus.OK).body(calendarReaderService.getCalendarByCalendarName(agency, calendarSymbolQuery));
-    }
-
-    @Override
     public ResponseEntity<GetCalendarItemResponse> getCalendarItems(String agency) {
         return ResponseEntity.ok(calendarItemReaderService.getCalendarItems(agency));
     }

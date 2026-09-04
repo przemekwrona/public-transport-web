@@ -44,14 +44,4 @@ public class CalendarReaderService {
                 .calendars(calendars);
     }
 
-    @PreAgencyAuthorize
-    public CalendarSymbolBody getCalendarByCalendarName(String instance, CalendarSymbolQuery calendarQuery) {
-        var item = calendarItemQueryService.findByAgencyAndStartDateAndEndDate(instance, calendarQuery.getStartDate(), calendarQuery.getEndDate());
-        var symbol = calendarSymbolQueryService.findCalendarByCalendarCode(item, calendarQuery.getDesignation());
-        var dates = calendarDatesQueryService.findAllByCalendar(symbol);
-
-        Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = Map.of(symbol.getServiceId(), dates);
-        return CalendarBodyMapper.apply(item, symbol, calendarDatesDictionary);
-    }
-
 }

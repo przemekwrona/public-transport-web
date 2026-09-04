@@ -1,6 +1,6 @@
 package pl.wrona.webserver.bussiness.calendar.mapper;
 
-import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
+import org.igeolab.iot.pt.server.api.model.CalendarItemId;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolId;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
@@ -26,7 +26,7 @@ public class CalendarBodyMapper {
         return new CalendarSymbolBody()
                 .calendarName(item.getCalendarName())
                 .calendarSymbolId(new CalendarSymbolId()
-                        .calendarItemId(new CalendarItemId1()
+                        .calendarItemId(new CalendarItemId()
                                 .code(item.getSequenceHex()))
                         .symbol(symbol.getDesignation()))
                 .designation(symbol.getDesignation())
@@ -55,7 +55,7 @@ public class CalendarBodyMapper {
 
         return new CalendarSymbolBody()
                 .calendarSymbolId(new CalendarSymbolId()
-                        .calendarItemId(new CalendarItemId1()
+                        .calendarItemId(new CalendarItemId()
                                 .code(item.getSequenceHex()))
                         .symbol(calendar.getDesignation()))
                 .calendarName(item.getCalendarName())

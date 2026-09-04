@@ -2,7 +2,7 @@ package pl.wrona.webserver.bussiness.calendar.reader;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CalendarItemBody;
-import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
+import org.igeolab.iot.pt.server.api.model.CalendarItemId;
 import org.igeolab.iot.pt.server.api.model.GetCalendarItemResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
@@ -45,7 +45,7 @@ public class CalendarItemReaderService {
                             .toList();
 
                     return new CalendarItemBody()
-                            .calendarItemId(new CalendarItemId1()
+                            .calendarItemId(new CalendarItemId()
                                     .code(item.getSequenceHex()))
                             .calendarName(item.getCalendarName())
                             .startDate(item.getStartDate())
@@ -62,7 +62,7 @@ public class CalendarItemReaderService {
     public CalendarItemBody getCalendarByCalendarCode(String instance, String calendarCode) {
         var calendarItem = calendarItemQueryService.findByAgencyCalendarCode(instance, calendarCode);
         return new CalendarItemBody()
-                .calendarItemId(new CalendarItemId1()
+                .calendarItemId(new CalendarItemId()
                         .code(calendarItem.getSequenceHex()))
                 .startDate(calendarItem.getStartDate())
                 .endDate(calendarItem.getEndDate());

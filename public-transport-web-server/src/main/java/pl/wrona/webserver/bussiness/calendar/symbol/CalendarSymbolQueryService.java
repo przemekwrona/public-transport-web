@@ -34,7 +34,8 @@ public class CalendarSymbolQueryService {
     }
 
     public List<CalendarSymbolEntity> findAllByAgencyAndCalendarItemId(String agencyCode, CalendarItemId calendarItemId) {
-        return calendarSymbolQueryRepository.findAllByAgencyAndStartDateAndEndDate(agencyCode, calendarItemId.getStartDate(), calendarItemId.getEndDate());
+        var calendarCode = Hex.fromHex(calendarItemId.getCode());
+        return calendarSymbolQueryRepository.findAllByAgencyAndStartDateAndEndDate(agencyCode, calendarCode);
     }
     public List<CalendarSymbolEntity> findByAgencyAndCalendarCode(String agency, String calendarCode) {
         return calendarSymbolQueryRepository.findByAgencyAndCalendarCode(agency, Hex.fromHex(calendarCode));

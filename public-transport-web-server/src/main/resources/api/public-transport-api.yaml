@@ -935,30 +935,6 @@ paths:
               schema:
                 $ref: './paths/calendars-api.yaml#/components/schemas/CalendarSymbolBody'
 
-  /agency/{agency}/calendar/details:
-    post:
-      tags:
-        - calendar
-      operationId: getCalendarByCalendarName
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CalendarSymbolQuery'
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: './paths/calendars-api.yaml#/components/schemas/CalendarSymbolBody'
-
   /agency/{agency}/calendar-item/{calendarCode}/calendar-symbol:
     $ref: './paths/calendars-api.yaml#/paths/~1agency~1{agency}~1calendar-item~1{calendarCode}~1calendar-symbol'
 
@@ -1637,21 +1613,11 @@ components:
         calendarName:
           type: string
 
-    CalendarItemId:
-      type: object
-      properties:
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-
     DeleteCalendarItemRequest:
       type: object
       properties:
         calendarItemId:
-          $ref: '#/components/schemas/CalendarItemId'
+          $ref: './public-transport-core.yaml/#/components/schemas/CalendarItemId'
 
     CreateCalendarItemRequest:
       type: object
