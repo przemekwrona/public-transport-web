@@ -21,10 +21,6 @@ class TripDistanceMeasureServiceIntegrationTest extends BaseIntegrationTest {
     void shouldCalculateRealDistance() {
         // given
         TripMeasure trip = new TripMeasure()
-                .tripId(new TripId()
-                        .routeId(new RouteId()
-                                .line("L1")
-                                .name("")))
                 .velocity(27)
                 .stops(List.of(
                         new StopTime().stopId(142902L).stopName("Chmielnik").lon(20.751886f).lat(50.614586f),
