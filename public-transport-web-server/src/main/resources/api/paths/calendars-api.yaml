@@ -2,6 +2,26 @@ openapi: 3.0.0
 info:
 
 paths:
+  /agency/{agency}/calendar-item:
+    get:
+      tags:
+        - calendar
+      summary: Return active calendars items and theirs symbols
+      operationId: getCalendarItems
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCalendarItemResponse'
+
   /agency/{agency}/calendar-item/{calendarCode}/calendar-symbol:
     get:
       tags:
@@ -88,6 +108,33 @@ paths:
 
 components:
   schemas:
+
+    CalendarItemBody:
+      type: object
+      properties:
+        calendarItemId:
+          $ref: '../public-transport-core.yaml/#/components/schemas/CalendarItemId'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        calendarName:
+          type: string
+        symbols:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalendarSymbolBody'
+
+    GetCalendarItemResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalendarItemBody'
+
     GetCalendarSymbolsResponse:
       type: object
       properties:

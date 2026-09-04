@@ -1,4 +1,4 @@
-package pl.wrona.webserver.bussiness.calendar.reader;
+package pl.wrona.webserver.bussiness.calendar.item.reader;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
