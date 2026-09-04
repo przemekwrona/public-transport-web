@@ -5,9 +5,31 @@
             {{ brigadeBody.calendarDescription }}
         </div>
     </div>
-    <button (click)="openTimetableModal()" class="btn btn-sm btn-secondary">
-        Pokaż rozkład
-    </button>
+    <div class="flex items-center gap-2">
+        <div class="btn-group">
+            <button (click)="alignToMinutes(5)" class="btn btn-xs btn-secondary">
+                5m
+            </button>
+            <button (click)="alignToMinutes(10)" class="btn btn-xs btn-secondary">
+                10m
+            </button>
+            <button (click)="alignToMinutes(15)" class="btn btn-xs btn-secondary">
+                15m
+            </button>
+            <button (click)="alignToMinutes(20)" class="btn btn-xs btn-secondary">
+                20m
+            </button>
+            <button (click)="alignToMinutes(30)" class="btn btn-xs btn-secondary">
+                30m
+            </button>
+            <button (click)="alignToMinutes(60)" class="btn btn-xs btn-secondary">
+                1h
+            </button>
+        </div>
+        <button (click)="openTimetableModal()" class="btn btn-sm btn-secondary">
+            Pokaż rozkład
+        </button>
+    </div>
 </div>
 
 <daypilot-scheduler
