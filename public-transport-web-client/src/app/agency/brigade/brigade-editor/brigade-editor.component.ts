@@ -172,7 +172,8 @@ export class BrigadeEditorComponent implements OnInit {
         const brigade = this.brigaderResponse.brigade;
         const dialogRef = this.dialog.open(BrigadeGroupCreatorModalComponent, {
             data: {
-                brigadeCode: brigade.sequenceHex,
+                calendarCode: brigade.calendarCode,
+                brigadeCode: brigade.brigadeCode,
                 brigadeName: brigade.brigadeName
             }
         });
@@ -183,7 +184,7 @@ export class BrigadeEditorComponent implements OnInit {
             }
 
             const instance: string = this.agencyStorageService.getInstance();
-            this.brigadeService.getBrigadeDetails(instance, brigade.sequenceHex)
+            this.brigadeService.getBrigadeDetails(instance, brigade.brigadeCode)
                 .subscribe(details => this.brigaderResponse = details);
         });
     }

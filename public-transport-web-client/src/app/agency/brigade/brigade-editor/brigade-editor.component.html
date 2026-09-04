@@ -60,7 +60,7 @@
     <div class="border-t border-white my-2.5"></div>
 
     @for (brigade of brigaderResponse?.brigade?.brigades || []; track brigade) {
-        <app-brigade-scheduler [defaultRoutes]="tripsResponse" [brigadeBody]="brigade" [brigadeCode]="brigaderResponse.brigade.sequenceHex"></app-brigade-scheduler>
+        <app-brigade-scheduler [defaultRoutes]="tripsResponse" [brigadeBody]="brigade" [brigadeCode]="brigaderResponse.brigade.brigadeCode"></app-brigade-scheduler>
     }
 
     <button (click)="addCalendar()" class="btn btn-sm btn-success w-full my-2 justify-center">Dodaj Kalendarz</button>

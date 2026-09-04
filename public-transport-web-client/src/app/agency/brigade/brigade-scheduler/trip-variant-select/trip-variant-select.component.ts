@@ -62,7 +62,7 @@ export class TripVariantSelectComponent implements OnInit, ControlValueAccessor 
             // Ignore new term if it's the same as the previous term
             distinctUntilChanged(),
             // switchMap cancels the previous API request if a new one is made
-            switchMap(value => this.tripService.getTripsByLineOrName(instance, value || '')),
+            switchMap(value => this.tripService.getTripsByRouteAndFilterLineOrName(instance, value || '')),
             map(response => response.lines)
         );
     }

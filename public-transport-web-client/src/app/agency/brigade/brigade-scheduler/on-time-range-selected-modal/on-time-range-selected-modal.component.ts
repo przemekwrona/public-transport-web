@@ -39,7 +39,6 @@ export interface TripProfileChoice {
     selector: 'app-on-time-range-selected-modal',
     imports: [
         CommonModule,
-        TripVariantSelectComponent,
         FormatSecondsPipe,
         MatDialogContent,
         MatDialogTitle,
