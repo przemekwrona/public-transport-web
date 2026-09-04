@@ -12,6 +12,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CalendarItemModalComponent} from "../calendar-item-modal/calendar-item-modal.component";
 import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
+import moment from "moment";
 
 @Component({
     selector: 'app-calendars',
@@ -49,6 +50,31 @@ export class CalendarListComponent implements OnInit {
 
     public hasCalendar(): boolean {
         return size(this.calendarsResponse.items) > 0;
+    }
+
+    public isStartInFuture(startDate?: string): boolean {
+        return this.daysUntilStart(startDate) > 0;
+    }
+
+    public isActive(startDate?: string, endDate?: string): boolean {
+        if (!startDate || !endDate) {
+            return false;
+        }
+        const today = moment().startOf('day');
+        return today.isSameOrAfter(moment(startDate).startOf('day'))
+            && today.isSameOrBefore(moment(endDate).startOf('day'));
+    }
+
+    public daysUntilStartText(startDate?: string): string {
+        const days: number = this.daysUntilStart(startDate);
+        return days === 1 ? '1 dzień' : `${days} dni`;
+    }
+
+    private daysUntilStart(startDate?: string): number {
+        if (!startDate) {
+            return 0;
+        }
+        return moment(startDate).startOf('day').diff(moment().startOf('day'), 'days');
     }
 
     openDialog() {
