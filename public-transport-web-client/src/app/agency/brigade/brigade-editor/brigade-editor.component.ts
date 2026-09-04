@@ -61,10 +61,6 @@ export class BrigadeEditorComponent implements OnInit {
         this.modelForm = this.formBuilder.group({
             brigadeName: ['', [Validators.required]]
         });
-
-        this._route.queryParams.subscribe(params => {
-            this.getBrigadeName().patchValue(params['name']);
-        });
     }
 
     ngOnInit(): void {
@@ -76,6 +72,7 @@ export class BrigadeEditorComponent implements OnInit {
 
             this.brigaderResponse = getBrigadeDetailsResponse;
             // this.calendarId = brigadeV2?.calendarSymbolId;
+            this.getBrigadeName().patchValue(this.brigaderResponse.brigade.brigadeName);
 
             this.brigadeItems = data['brigade'];
             this.brigadeItems = (data['brigade']?.trips || []).map((trip: BrigadeTrip) => {
