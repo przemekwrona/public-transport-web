@@ -10,6 +10,7 @@ import org.igeolab.iot.pt.server.api.model.RouteId1;
 import org.igeolab.iot.pt.server.api.model.TripId2;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
+import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
@@ -27,6 +28,7 @@ public class BrigadeTimetableDetailsService {
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
+    private final BrigadeResourceQueryService brigadeResourceQueryService;
     private final BrigadeEventQueryService brigadeEventQueryService;
 
     @PreAgencyAuthorize

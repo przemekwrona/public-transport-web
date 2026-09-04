@@ -36,23 +36,25 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
 
     @Query("""
             SELECT e FROM BrigadeEventEntity e
-            JOIN FETCH e.tripProfile tp
-            JOIN FETCH tp.trip t
+            JOIN FETCH e.resource r
+            JOIN FETCH r.brigadeGroup g
+            JOIN FETCH e.tripProfile p
+            JOIN FETCH p.trip t
             JOIN FETCH t.route
-            WHERE e.resource.brigadeGroup.calendarSymbol.calendarItem.agency.agencyCode = :agency
-            AND e.resource.brigadeGroup.brigadeItem.brigadeItemCode = :brigadeCode
-            AND e.resource.brigadeGroup.calendarSymbol.calendarItem.sequenceHex = :calendarCode
-            AND e.resource.brigadeGroup.calendarSymbol.designation = :calendarSymbol
+            WHERE g.calendarSymbol.calendarItem.agency.agencyCode = :agency
+            AND g.brigadeItem.brigadeItemSequence = :brigadeSequence
+            AND g.calendarSymbol.calendarItem.sequence = :calendarSequence
+            AND g.calendarSymbol.designation = :calendarSymbol
             ORDER BY e.startSecond ASC""")
     List<BrigadeEventEntity> findAllWithTripByAgencyAndBrigadeAndCalendarAndSymbol(
             @Param("agency") String agency,
-            @Param("brigadeCode") String brigadeCode,
-            @Param("calendarCode") String calendarCode,
+            @Param("brigadeSequence") int brigadeSequence,
+            @Param("calendarSequence") int calendarSequence,
             @Param("calendarSymbol") String calendarSymbol);
 
     @Query("""
-            SELECT e FROM BrigadeEventEntity e
-            WHERE e.resource = :resource
-            AND e.eventCode = :eventSequence""")
+        SELECT e FROM BrigadeEventEntity e
+        WHERE e.resource = :resource
+        AND e.eventSequence = :eventSequence""")
     BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(@Param("resource") BrigadeResourceEntity resource, @Param("eventSequence") int eventSequence);
 }
