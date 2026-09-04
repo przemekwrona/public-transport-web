@@ -264,6 +264,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/NextCalendarResourceSequenceResponse'
 
+    delete:
+      tags:
+        - resource
+      summary: Delete brigade resource and event and set counters 0
+      operationId: deleteResource
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: brigadeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: symbol
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '../public-transport-api.yaml/#/components/schemas/Status'
+
   /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{symbol}/resource/{resourceCode}/event:
     post:
       tags:
