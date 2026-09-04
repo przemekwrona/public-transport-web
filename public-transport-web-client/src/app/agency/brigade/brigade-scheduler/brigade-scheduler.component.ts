@@ -19,7 +19,6 @@ import {
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatIconModule} from "@angular/material/icon";
-import {MatButtonModule} from "@angular/material/button";
 
 @Component({
     selector: 'app-brigade-scheduler',
@@ -27,7 +26,6 @@ import {MatButtonModule} from "@angular/material/button";
         CommonModule,
         DayPilotModule,
         MatIconModule,
-        MatButtonModule,
     ],
     providers: [],
     templateUrl: './brigade-scheduler.component.html',
@@ -367,6 +365,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         }
 
         this.selectedAlignMinutes = minutes;
+        this.alignAccordionOpen = false;
 
         const scheduler = this.scheduler.control;
         const resources = scheduler.resources ?? [];
