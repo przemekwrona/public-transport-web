@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
 import pl.wrona.webserver.bussiness.brigade.item.BrigadeItemQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceCommandService;
-import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
+import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeGroupCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
-import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
-import pl.wrona.webserver.core.brigade.BrigadeItemQueryRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 @Service

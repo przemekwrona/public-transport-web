@@ -86,8 +86,8 @@ public class BrigadeGroupDetailsService {
         return new BrigadeItemBody()
                 .brigadeName(brigadeItem.getName())
                 .defaultRouteCode(brigadeItem.getDefaultRoute().getRouteCode())
-                .sequence(brigadeItem.getBrigadeItemSequence())
-                .sequenceHex(brigadeItem.getBrigadeItemCode())
+                .brigadeCode(brigadeItem.getBrigadeItemCode())
+                .calendarCode(brigadeItem.getCalendarItem().getSequenceHex())
                 .brigades(brigadeGroups.stream()
                         .map(group -> mapGroup(
                                 group,

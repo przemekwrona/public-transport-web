@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
-import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
+import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.bussiness.calendar.mapper.CalendarBodyMapper;
 import pl.wrona.webserver.bussiness.calendar.CalendarDatesQueryService;
 import pl.wrona.webserver.security.PreAgencyAuthorize;

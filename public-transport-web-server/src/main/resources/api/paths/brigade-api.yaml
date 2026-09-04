@@ -472,9 +472,9 @@ components:
           type: string
         defaultRouteCode:
           type: string
-        sequence:
-          type: integer
-        sequenceHex:
+        calendarCode:
+          type: string
+        brigadeCode:
           type: string
         brigades:
           type: array

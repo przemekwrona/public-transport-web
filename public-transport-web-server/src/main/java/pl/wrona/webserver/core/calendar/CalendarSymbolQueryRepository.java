@@ -42,4 +42,11 @@ public interface CalendarSymbolQueryRepository extends JpaRepository<CalendarSym
             AND s.calendarItem.sequenceHex = :calendarCode
             AND s.designation = :calendarSymbol""")
     CalendarSymbolEntity findByAgencyAndBrigadeAndCalendarAndSymbol(@Param("agency") String agency, @Param("brigadeCode") String brigadeCode, @Param("calendarCode") String calendarCode, @Param("calendarSymbol") String calendarSymbol);
+
+    @Query("""
+            SELECT s FROM CalendarSymbolEntity s
+            WHERE s.calendarItem.agency.agencyCode = :agencyCode
+            AND s.calendarItem.sequence = :calendarSequence""")
+    List<CalendarSymbolEntity> findByAgencyAndCalendarCode(@Param("agencyCode") String agencyCode, @Param("calendarSequence") int calendarSequence);
+
 }

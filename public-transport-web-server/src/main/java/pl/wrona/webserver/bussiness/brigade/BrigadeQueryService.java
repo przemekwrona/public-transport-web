@@ -6,7 +6,7 @@ import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
+import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.brigade.BrigadeEntity;
 import pl.wrona.webserver.core.brigade.BrigadeRepository;
