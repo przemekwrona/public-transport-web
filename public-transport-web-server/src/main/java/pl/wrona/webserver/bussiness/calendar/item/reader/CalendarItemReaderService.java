@@ -1,4 +1,4 @@
-package pl.wrona.webserver.bussiness.calendar.reader;
+package pl.wrona.webserver.bussiness.calendar.item.reader;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CalendarItemBody;
@@ -59,12 +59,13 @@ public class CalendarItemReaderService {
     }
 
     @PreAgencyAuthorize
-    public CalendarItemBody getCalendarByCalendarCode(String instance, String calendarCode) {
+    public GetCalendarItemResponse getCalendarByCalendarCode(String instance, String calendarCode) {
         var calendarItem = calendarItemQueryService.findByAgencyCalendarCode(instance, calendarCode);
-        return new CalendarItemBody()
-                .calendarItemId(new CalendarItemId()
-                        .code(calendarItem.getSequenceHex()))
-                .startDate(calendarItem.getStartDate())
-                .endDate(calendarItem.getEndDate());
+        return new GetCalendarItemResponse()
+                .items(List.of(new CalendarItemBody()
+                        .calendarItemId(new CalendarItemId()
+                                .code(calendarItem.getSequenceHex()))
+                        .startDate(calendarItem.getStartDate())
+                        .endDate(calendarItem.getEndDate())));
     }
 }

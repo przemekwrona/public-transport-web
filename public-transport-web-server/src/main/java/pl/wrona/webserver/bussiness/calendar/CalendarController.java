@@ -2,10 +2,8 @@ package pl.wrona.webserver.bussiness.calendar;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.CalendarApi;
-import org.igeolab.iot.pt.server.api.model.CalendarItemBody;
 import org.igeolab.iot.pt.server.api.model.CalendarPayload;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
-import org.igeolab.iot.pt.server.api.model.CalendarSymbolQuery;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarItemRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarItemResponse;
 import org.igeolab.iot.pt.server.api.model.DeleteCalendarItemRequest;
@@ -21,9 +19,9 @@ import pl.wrona.webserver.bussiness.calendar.creator.CalendarCreatorService;
 import pl.wrona.webserver.bussiness.calendar.creator.CalendarItemCreatorService;
 import pl.wrona.webserver.bussiness.calendar.deletion.CalendarDeletionService;
 import pl.wrona.webserver.bussiness.calendar.deletion.CalendarItemDeletionService;
-import pl.wrona.webserver.bussiness.calendar.reader.CalendarSymbolReaderService;
-import pl.wrona.webserver.bussiness.calendar.reader.CalendarItemReaderService;
-import pl.wrona.webserver.bussiness.calendar.reader.CalendarReaderService;
+import pl.wrona.webserver.bussiness.calendar.item.reader.CalendarSymbolReaderService;
+import pl.wrona.webserver.bussiness.calendar.item.reader.CalendarItemReaderService;
+import pl.wrona.webserver.bussiness.calendar.item.reader.CalendarReaderService;
 import pl.wrona.webserver.bussiness.calendar.updater.CalendarUpdaterService;
 
 @RestController
@@ -60,7 +58,7 @@ public class CalendarController implements CalendarApi {
     }
 
     @Override
-    public ResponseEntity<CalendarItemBody> getCalendarByCalendarCode(String agency, String calendarCode) {
+    public ResponseEntity<GetCalendarItemResponse> getCalendarByCalendarCode(String agency, String calendarCode) {
         return ResponseEntity.ok(calendarItemReaderService.getCalendarByCalendarCode(agency, calendarCode));
     }
 
