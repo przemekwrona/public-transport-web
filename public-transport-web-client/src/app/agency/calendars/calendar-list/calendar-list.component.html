@@ -18,13 +18,27 @@
         @if (hasCalendar()) {
             <mat-accordion>
                 @for (calendarItem of calendarsResponse.items || []; track calendarItem; ) {
-                    <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                    <mat-expansion-panel [expanded]="isActive(calendarItem?.startDate, calendarItem?.endDate)"
+                                        (opened)="panelOpenState.set(true)"
+                                        (closed)="panelOpenState.set(false)">
                         <mat-expansion-panel-header>
                             <mat-panel-title class="min-w-96">
-                                Obowiązuje od<strong>&nbsp;{{ calendarItem?.startDate }}&nbsp;</strong> do <strong>&nbsp;{{ calendarItem?.endDate }}</strong>.
+                                <span>
+<!--                                    Obowiązuje-->
+                                    <div>od<strong>&nbsp;{{ calendarItem?.startDate | date:'dd.MM.yy' }}</strong> do <strong>{{ calendarItem?.endDate | date:'dd.MM.yy' }}</strong></div>
+                                </span>
+                                @if (isStartInFuture(calendarItem?.startDate)) {
+                                    <span class="ml-2 text-sm font-normal text-gray-700">
+                                        Aktywny za
+                                        <span class="badge badge-sm badge-outline badge-info">{{ daysUntilStartText(calendarItem?.startDate) }}</span>
+                                    </span>
+                                }
+                                @if (isActive(calendarItem?.startDate, calendarItem?.endDate)) {
+                                    <span class="badge badge-sm badge-outline badge-success ml-2">Aktywny</span>
+                                }
                             </mat-panel-title>
                             <mat-panel-description class="justify-end">
-                                <button (click)="deleteItem(calendarItem)" mat-stroked-button color="warn mr-2">Usuń Kalendarz</button>
+                                <button (click)="deleteItem(calendarItem)" mat-stroked-button color="warn mr-2">Usuń</button>
                                 <a [routerLink]="['/agency/calendars/', calendarItem?.calendarItemId.code, 'symbol', 'create']" mat-flat-button color="primary">Dodaj Nowy Symbol</a>
                             </mat-panel-description>
                         </mat-expansion-panel-header>
