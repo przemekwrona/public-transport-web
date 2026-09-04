@@ -318,4 +318,65 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         });
     }
 
+    public alignToMinutes(minutes: number): void {
+        const allowedMinutes = [5, 10, 15, 20, 30, 60];
+        if (!allowedMinutes.includes(minutes)) {
+            return;
+        }
+
+        const scheduler = this.scheduler.control;
+        const resources = scheduler.resources ?? [];
+        const events = [...(scheduler.events.list ?? [])];
+        const intervalSeconds = minutes * 60;
+        const instance = this.agencyStorage.getInstance();
+
+        for (const resource of resources) {
+            const resourceId = String(resource.id);
+            const resourceEvents = events.filter(event => String(event.resource) === resourceId);
+
+            for (const event of resourceEvents) {
+                const start = moment(event.start.toString());
+                const end = moment(event.end.toString());
+                const midnight = start.clone().startOf('day');
+                const durationSeconds = end.diff(start, 'seconds');
+                const startSeconds = start.diff(midnight, 'seconds');
+                const alignedStartSeconds = Math.round(startSeconds / intervalSeconds) * intervalSeconds;
+
+                if (alignedStartSeconds === startSeconds) {
+                    continue;
+                }
+
+                const alignedEndSeconds = alignedStartSeconds + durationSeconds;
+                const alignedStart = midnight.clone().add(alignedStartSeconds, 'seconds');
+                const alignedEnd = midnight.clone().add(alignedEndSeconds, 'seconds');
+                const tags = event.tags ?? {};
+
+                event.start = alignedStart.format('YYYY-MM-DDTHH:mm:ss');
+                event.end = alignedEnd.format('YYYY-MM-DDTHH:mm:ss');
+                event.text = `${alignedStart.format('HH:mm')}-${alignedEnd.format('HH:mm')}\n${tags.line} ${tags.name}`;
+
+                const putBrigadeEventBody: PutBrigadeEventBody = {
+                    startSecond: alignedStartSeconds,
+                    endSecond: alignedEndSeconds,
+                    line: tags.line,
+                    name: tags.name,
+                    sequence: tags.sequence,
+                    sequenceHex: tags.sequenceHex ?? String(event.id),
+                    tripId: tags.tripId
+                };
+
+                this.brigadeService.putBrigadeEvent(
+                    instance,
+                    this.brigadeCode,
+                    this.brigadeBody.calendarSymbolId.calendarItemId.code,
+                    this.brigadeBody.calendarSymbolId.symbol,
+                    resourceId,
+                    putBrigadeEventBody
+                ).subscribe();
+            }
+        }
+
+        scheduler.update({events});
+    }
+
 }
