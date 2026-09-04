@@ -13,9 +13,9 @@ import {
 import {
     BrigadeEvent, BrigadeGroupBody,
     BrigadeResource,
-    BrigadeService, GetAllTripsResponse,
+    BrigadeService, GetAllTripsResponse, GetBrigadeDetailsResponse,
     NextCalendarResourceSequenceResponse,
-    PutBrigadeEventBody, TripId2
+    PutBrigadeEventBody, ResourceService, TripId2
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
@@ -117,57 +117,14 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         }),
     };
 
-    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private dialog: MatDialog) {
+    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private resourceService: ResourceService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
     }
 
     ngAfterViewInit(): void {
-        var from = this.scheduler.control.visibleStart();
-        var to = this.scheduler.control.visibleEnd();
-
-        // 1. Update resources directly on the control
-        const resources = this.brigadeBody.brigadeResources
-            .map((resource: BrigadeResource) => {
-                return {name: `#${resource.sequenceHex}`, id: resource.sequenceHex, expanded: true};
-            }) as any[];
-        this.scheduler.control.update({resources: resources});
-
-        const events: DayPilot.EventData[] = this.brigadeBody.brigadeResources.flatMap((resource: BrigadeResource) => {
-            return resource.events.map((event: BrigadeEvent) => {
-                const departureTime = moment().startOf('day').add(event.startSecond, 'seconds');
-                const arrivalTime = moment().startOf('day').add(event.endSecond, 'seconds');
-
-                return {
-                    id: event.sequenceHex,
-                    resource: resource.sequenceHex,
-                    start: departureTime.format('YYYY-MM-DDTHH:mm:ss'),
-                    end: arrivalTime.format('YYYY-MM-DDTHH:mm:ss'),
-                    text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${event.tripId.variantMode} ${event.line} ${event.name}`,
-                    color: '#e69138',
-                    tags: {
-                        line: event.line,
-                        name: event.name,
-                        sequence: event.sequence,
-                        sequenceHex: event.sequenceHex,
-                        tripId: event.tripId,
-                    }
-                } as DayPilot.EventData;
-            });
-        });
-
-        // 2. Update events directly on the control
-        this.scheduler.control.update({events: events});
-
-        const minStartSeconds: number = this.brigadeBody.brigadeResources
-            .flatMap(brigade => brigade.events)
-            .map(departureTime => departureTime.startSecond)
-            .reduce((current, next) => current <= next ? current : next);
-
-        const firstDate = moment().startOf('day').add(minStartSeconds, 'seconds').subtract(45, 'minutes');
-
-        this.scheduler.control.scrollTo(firstDate.format('yyyy-MM-DDTHH:mm:SS'));
+        this.applyBrigadeToScheduler(this.brigadeBody);
     }
 
     // --- CREATE NEW EVENT ---
@@ -184,7 +141,12 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, resource: DayPilot.ResourceId, dpControl: DayPilot.Scheduler) {
         const dialogRef = this.dialog.open(OnTimeRangeSelectedModalComponent, {
             width: '920px',
-            data: {start: start.toString(), end: end.toString(), resourceId: resource.toString(), defaultRoutes: this.defaultRoutes}
+            data: {
+                start: start.toString(),
+                end: end.toString(),
+                resourceId: resource.toString(),
+                defaultRoutes: this.defaultRoutes
+            }
         });
 
         dialogRef.afterClosed().subscribe((result: OnTimeRangeAndTripSelected) => {
@@ -258,7 +220,6 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         const startMoment = moment(args.newStart.toString());
         const endMoment = moment(args.newEnd.toString());
         const midnight = startMoment.clone().startOf('day');
-        console.log(tripId);
         const putBrigadeEventBody: PutBrigadeEventBody = {
             startSecond: startMoment.diff(midnight, 'seconds'),
             endSecond: endMoment.diff(midnight, 'seconds'),
@@ -316,6 +277,60 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                 resources: [...(this.scheduler.control.resources ?? []), resource]
             });
         });
+    }
+
+    public clearGroup(): void {
+        this.resourceService.deleteResource(this.agencyStorage.getInstance(), this.brigadeCode, this.brigadeBody.calendarSymbolId.calendarItemId.code, this.brigadeBody.calendarSymbolId.symbol).subscribe(() => {
+            this.brigadeService.getBrigadeDetails(this.agencyStorage.getInstance(), this.brigadeCode).subscribe((brigadeDetails: GetBrigadeDetailsResponse) => {
+                const updatedBrigade = brigadeDetails.brigade.brigades.find((brigade) => brigade.calendarSymbolId.symbol === this.brigadeBody.calendarSymbolId.symbol);
+                if (updatedBrigade) {
+                    this.applyBrigadeToScheduler(updatedBrigade);
+                }
+            });
+        });
+    }
+
+    private applyBrigadeToScheduler(brigade: BrigadeGroupBody): void {
+        const resources = (brigade.brigadeResources ?? []).map((resource: BrigadeResource) => {
+            return {name: `#${resource.sequenceHex}`, id: resource.sequenceHex, expanded: true};
+        }) as any[];
+
+        const events: DayPilot.EventData[] = (brigade.brigadeResources ?? []).flatMap((resource: BrigadeResource) => {
+            return (resource.events ?? []).map((event: BrigadeEvent) => {
+                const departureTime = moment().startOf('day').add(event.startSecond, 'seconds');
+                const arrivalTime = moment().startOf('day').add(event.endSecond, 'seconds');
+
+                return {
+                    id: event.sequenceHex,
+                    resource: resource.sequenceHex,
+                    start: departureTime.format('YYYY-MM-DDTHH:mm:ss'),
+                    end: arrivalTime.format('YYYY-MM-DDTHH:mm:ss'),
+                    text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${event.tripId.variantMode} ${event.line} ${event.name}`,
+                    color: '#e69138',
+                    tags: {
+                        line: event.line,
+                        name: event.name,
+                        sequence: event.sequence,
+                        sequenceHex: event.sequenceHex,
+                        tripId: event.tripId,
+                    }
+                } as DayPilot.EventData;
+            });
+        });
+
+        this.scheduler.control.update({resources, events});
+
+        const startSeconds = (brigade.brigadeResources ?? [])
+            .flatMap(resource => resource.events ?? [])
+            .map(event => event.startSecond);
+
+        if (startSeconds.length === 0) {
+            return;
+        }
+
+        const minStartSeconds = startSeconds.reduce((current, next) => current <= next ? current : next);
+        const firstDate = moment().startOf('day').add(minStartSeconds, 'seconds').subtract(45, 'minutes');
+        this.scheduler.control.scrollTo(firstDate.format('yyyy-MM-DDTHH:mm:SS'));
     }
 
     public alignToMinutes(minutes: number): void {
