@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeGroupQueryRepository;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 import java.util.List;
 
@@ -27,6 +28,10 @@ public class BrigadeGroupQueryService {
 
     public List<BrigadeGroupEntity> findAllByBrigadeCode(String instance, String brigadeCode) {
         return brigadeGroupQueryRepository.findAllByAgencyCodeAndBrigadeCode(instance, brigadeCode);
+    }
+
+    public boolean existsByCalendarSymbol(CalendarSymbolEntity calendarSymbol) {
+        return brigadeGroupQueryRepository.existsByCalendarSymbol(calendarSymbol);
     }
 
 }
