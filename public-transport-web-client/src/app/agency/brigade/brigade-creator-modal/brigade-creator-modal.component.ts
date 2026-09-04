@@ -5,7 +5,7 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {CommonModule} from "@angular/common";
 import {
-    BrigadeService,
+    BrigadeService, CalendarItemId,
     CalendarService,
     CalendarSymbolId, CreateBrigadeBody, CreateCalendarSymbolBrigadeRequest, CreateCalendarSymbolBrigadeResponse,
     GetCalendarItemResponse, RouteId1, Status
@@ -67,17 +67,13 @@ export class BrigadeCreatorModalComponent implements OnInit {
         }
 
         const brigadeName: string = this.brigadeNameControl.value;
-        const calendarSymbolId: CalendarSymbolId = this.modelForm.get('calendarId').value;
-
-        const createCalendarSymbolBrigadeRequest: CreateCalendarSymbolBrigadeRequest = {} as CreateCalendarSymbolBrigadeRequest;
-        createCalendarSymbolBrigadeRequest.brigadeName = brigadeName;
-        createCalendarSymbolBrigadeRequest.calendarSymbolId = calendarSymbolId;
+        const calendarSymbolId: CalendarItemId = this.modelForm.get('calendarId').value;
 
         const instance: string = this.agencyStorageService.getInstance();
 
         const brigadeBody: CreateBrigadeBody = {} as CreateBrigadeBody;
         brigadeBody.brigadeName = brigadeName;
-        brigadeBody.calendarCode = calendarSymbolId.calendarItemId.code;
+        brigadeBody.calendarCode = calendarSymbolId.code;
         brigadeBody.selectedRouteCode = (this.defaultRouteCodeControl.value as RouteId1).routeCode;
 
         this.brigadeService.createBrigade(instance, brigadeBody).subscribe((response: Status) => {
