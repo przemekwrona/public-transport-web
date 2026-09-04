@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { BrigadeService, CalendarService } from '../../../generated/public-transport-api';
+import { BrigadeService, CalendarSymbolService } from '../../../generated/public-transport-api';
 import { AgencyStorageService } from '../../../auth/agency-storage.service';
 
 import { BrigadeGroupCreatorModalComponent } from './brigade-group-creator-modal.component';
@@ -15,9 +15,9 @@ describe('BrigadeGroupCreatorModalComponent', () => {
       imports: [BrigadeGroupCreatorModalComponent],
       providers: [
         { provide: MatDialogRef, useValue: { close: jasmine.createSpy('close') } },
-        { provide: MAT_DIALOG_DATA, useValue: { brigadeCode: '01', brigadeName: 'Test' } },
+        { provide: MAT_DIALOG_DATA, useValue: { calendarCode: 'cal-1', brigadeCode: '01', brigadeName: 'Test' } },
         { provide: AgencyStorageService, useValue: { getInstance: () => 'test' } },
-        { provide: CalendarService, useValue: { getCalendars: () => of({ calendars: [] }) } },
+        { provide: CalendarSymbolService, useValue: { getCalendarSymbolsByCalendarCode: () => of({ calendars: [] }) } },
         { provide: BrigadeService, useValue: { createCalendarSymbolBrigade: () => of({}) } }
       ]
     })

@@ -58,7 +58,7 @@
                         <mat-label>Kalendarz</mat-label>
                         <mat-select formControlName="calendarId" [compareWith]="compareByCalendarId">
                             @for (calendar of calendarsResponse.calendars || []; track calendar) {
-                                <mat-option [value]="calendar.calendarId">
+                                <mat-option [value]="calendar.calendarSymbolId">
                                     <div>
                                         <div>{{ calendar.designation }} - ({{ calendar.startDate }}
                                             -- {{ calendar.endDate }})</div>

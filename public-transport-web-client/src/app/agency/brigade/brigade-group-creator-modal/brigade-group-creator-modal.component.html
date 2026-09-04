@@ -19,11 +19,10 @@
                     <mat-form-field appearance="outline" class="w-full custom-form-field">
                         <mat-label>Kalendarz</mat-label>
                         <mat-select formControlName="calendarId" [compareWith]="compareByCalendarId">
-                            @for (calendar of calendarsResponse.calendars || []; track calendar) {
-                                <mat-option [value]="calendar.calendarId">
+                            @for (calendar of calendarsResponse.calendars || []; track calendar.calendarSymbolId) {
+                                <mat-option [value]="calendar.calendarSymbolId">
                                     <div>
-                                        <div>{{ calendar.designation }} - ({{ calendar.startDate }} -- {{ calendar.endDate }})</div>
-                                        <div>{{ calendar.description }}</div>
+                                        <div>{{ calendar.designation }} - {{ calendar.description }}</div>
                                     </div>
                                 </mat-option>
                             }

@@ -12,7 +12,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {
     BrigadeService,
     CalendarService,
-    CalendarSymbolId, CalendarSymbolService,
+    CalendarSymbolId,
+    CalendarSymbolService,
     CreateCalendarSymbolBrigadeRequest,
     CreateCalendarSymbolBrigadeResponse,
     GetCalendarSymbolsResponse
@@ -98,10 +99,8 @@ export class BrigadeGroupCreatorModalComponent implements OnInit {
     }
 
     public compareByCalendarId(current: CalendarSymbolId, option: CalendarSymbolId): boolean {
-        return current && option
-            ? current.calendarItemId.code === option.calendarItemId.code
-            && current.symbol === option.symbol
-            : current === option;
+        return current?.calendarItemId?.code === option?.calendarItemId?.code
+            && current?.symbol === option?.symbol;
     }
 
 }
