@@ -1,9 +1,9 @@
 package pl.wrona.webserver.bussiness.calendar.reader;
 
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.CalendarBody;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolQuery;
-import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
+import org.igeolab.iot.pt.server.api.model.GetCalendarSymbolsResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
 import pl.wrona.webserver.core.AgencyService;
@@ -31,7 +31,7 @@ public class CalendarReaderService {
     private final CalendarDatesQueryService calendarDatesQueryService;
 
     @PreAgencyAuthorize
-    public GetCalendarsResponse getCalendars(String instance) {
+    public GetCalendarSymbolsResponse getCalendars(String instance) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesRepository.findAllByAgency(agencyEntity).stream()
                 .collect(Collectors.groupingBy(calendarDates -> calendarDates.getCalendarDatesId().getServiceId()));
@@ -40,12 +40,12 @@ public class CalendarReaderService {
                 .map(calendar -> CalendarBodyMapper.apply(calendar.getCalendarItem(), calendar, calendarDatesDictionary))
                 .toList();
 
-        return new GetCalendarsResponse()
+        return new GetCalendarSymbolsResponse()
                 .calendars(calendars);
     }
 
     @PreAgencyAuthorize
-    public CalendarBody getCalendarByCalendarName(String instance, CalendarSymbolQuery calendarQuery) {
+    public CalendarSymbolBody getCalendarByCalendarName(String instance, CalendarSymbolQuery calendarQuery) {
         var item = calendarItemQueryService.findByAgencyAndStartDateAndEndDate(instance, calendarQuery.getStartDate(), calendarQuery.getEndDate());
         var symbol = calendarSymbolQueryService.findCalendarByCalendarCode(item, calendarQuery.getDesignation());
         var dates = calendarDatesQueryService.findAllByCalendar(symbol);

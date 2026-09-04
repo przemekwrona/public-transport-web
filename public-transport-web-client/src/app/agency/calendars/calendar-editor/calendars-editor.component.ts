@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {uniq, isEmpty} from "lodash";
 import moment from "moment";
 import {
-    CalendarBody,
+    CalendarSymbolBody,
     CalendarPayload,
     CalendarService,
     UpdateCalendarRequest
@@ -104,7 +104,7 @@ export class CalendarsEditorComponent implements OnInit {
         this.modelForm.get('sunday').valueChanges.subscribe((selected: boolean) => this.onChangeDateOfWeek(selected, 7))
 
         this._route.data.subscribe(data => {
-            const calendar: CalendarBody = data['calendar'];
+            const calendar: CalendarSymbolBody = data['calendar'];
             this.modelForm.get('designation').setValue(calendar.designation);
             this.modelForm.get('description').setValue(calendar.description);
             this.modelForm.get('startDate').setValue(calendar.startDate);
@@ -223,7 +223,7 @@ export class CalendarsEditorComponent implements OnInit {
             return;
         }
 
-        const body: CalendarBody = this.buildCalendarBodyReuest();
+        const body: CalendarSymbolBody = this.buildCalendarBodyReuest();
         const payload: CalendarPayload = {};
         payload.body = body;
 
@@ -242,7 +242,7 @@ export class CalendarsEditorComponent implements OnInit {
             return;
         }
 
-        const body: CalendarBody = this.buildCalendarBodyReuest();
+        const body: CalendarSymbolBody = this.buildCalendarBodyReuest();
         const request: UpdateCalendarRequest = {};
         request.calendarName = this.queryCalendarName;
         request.body = body;
@@ -257,7 +257,7 @@ export class CalendarsEditorComponent implements OnInit {
     }
 
     private buildCalendarBodyReuest() {
-        const body: CalendarBody = {}
+        const body: CalendarSymbolBody = {}
         body.calendarName = this.queryCalendarName;
         body.designation = this.modelForm.get('designation').value;
         body.description = this.modelForm.get('description').value;

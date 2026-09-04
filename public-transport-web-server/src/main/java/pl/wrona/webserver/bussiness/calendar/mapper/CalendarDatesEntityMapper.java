@@ -1,6 +1,6 @@
 package pl.wrona.webserver.bussiness.calendar.mapper;
 
-import org.igeolab.iot.pt.server.api.model.CalendarBody;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
 import pl.wrona.webserver.core.calendar.CalendarDatesId;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class CalendarDatesEntityMapper {
 
-    public static Set<CalendarDatesEntity> apply(CalendarBody calendarBody, CalendarSymbolEntity savedCalendar) {
+    public static Set<CalendarDatesEntity> apply(CalendarSymbolBody calendarBody, CalendarSymbolEntity savedCalendar) {
         Set<CalendarDatesEntity> calendarDatesIncluded = calendarBody.getIncluded().stream()
                 .map(includeDate -> CalendarDatesEntity.builder()
                         .calendarDatesId(CalendarDatesId.builder()

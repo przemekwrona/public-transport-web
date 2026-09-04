@@ -2,7 +2,7 @@ package pl.wrona.webserver.bussiness.calendar.symbol;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.CalendarSymbolApi;
-import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
+import org.igeolab.iot.pt.server.api.model.GetCalendarSymbolsResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +16,7 @@ public class CalendarSymbolController implements CalendarSymbolApi {
     private final CalendarSymbolPaginationService paginationService;
 
     @Override
-    public ResponseEntity<GetCalendarsResponse> getCalendarSymbolsByCalendarCode(String agency, String calendarCode) {
+    public ResponseEntity<GetCalendarSymbolsResponse> getCalendarSymbolsByCalendarCode(String agency, String calendarCode) {
         return ResponseEntity.ok(paginationService.getCalendarSymbolsByCalendarCode(agency, calendarCode));
     }
 }
