@@ -31,7 +31,7 @@ public class BrigadeEventQueryService {
 
     public List<BrigadeEventEntity> findAllWithTripByAgencyAndBrigadeAndCalendarAndSymbol(String agency, String brigadeCode, String calendarCode, String calendarSymbol) {
         return brigadeEventQueryRepository.findAllWithTripByAgencyAndBrigadeAndCalendarAndSymbol(
-                agency, brigadeCode, calendarCode, calendarSymbol);
+                agency, Hex.fromHex(brigadeCode), Hex.fromHex(calendarCode), calendarSymbol);
     }
 
     public BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(BrigadeResourceEntity brigadeResource, String eventCode) {
