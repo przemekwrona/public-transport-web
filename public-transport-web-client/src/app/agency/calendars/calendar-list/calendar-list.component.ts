@@ -89,8 +89,7 @@ export class CalendarListComponent implements OnInit {
 
     public deleteItem(calendarItemBody: CalendarItemBody) {
         const calendarItemId: CalendarItemId = {} as CalendarItemId;
-        calendarItemId.startDate = calendarItemBody.startDate;
-        calendarItemId.endDate = calendarItemBody.endDate;
+        calendarItemId.code = calendarItemBody.calendarItemId.code;
 
         const request: DeleteCalendarItemRequest = {} as DeleteCalendarItemRequest;
         request.calendarItemId = calendarItemId;
