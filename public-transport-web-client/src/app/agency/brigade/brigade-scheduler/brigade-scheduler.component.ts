@@ -282,10 +282,13 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     public clearGroup(): void {
         this.resourceService.deleteResource(this.agencyStorage.getInstance(), this.brigadeCode, this.brigadeBody.calendarSymbolId.calendarItemId.code, this.brigadeBody.calendarSymbolId.symbol).subscribe(() => {
             this.brigadeService.getBrigadeDetails(this.agencyStorage.getInstance(), this.brigadeCode).subscribe((brigadeDetails: GetBrigadeDetailsResponse) => {
-                const updatedBrigade = brigadeDetails.brigade.brigades.find((brigade) => brigade.calendarSymbolId.symbol === this.brigadeBody.calendarSymbolId.symbol);
-                if (updatedBrigade) {
-                    this.applyBrigadeToScheduler(updatedBrigade);
+                const brigadeBody = brigadeDetails.brigade.brigades.find((brigade) => brigade.calendarSymbolId.symbol === this.brigadeBody.calendarSymbolId.symbol);
+                if (!brigadeBody) {
+                    return;
                 }
+
+                this.brigadeBody = brigadeBody;
+                this.applyBrigadeToScheduler(this.brigadeBody);
             });
         });
     }
