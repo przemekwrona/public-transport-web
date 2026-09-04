@@ -2,9 +2,11 @@ package pl.wrona.webserver.agency;
 
 import io.restassured.http.ContentType;
 import org.igeolab.iot.pt.server.api.model.RouteId;
+import org.igeolab.iot.pt.server.api.model.RouteId1;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripId2;
 import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ class TripEntityControllerIntegrationTest extends BaseIntegrationTest {
         with().contentType(ContentType.JSON)
                 .header(authHeader)
                 .body(new TripsDetails()
-                        .tripId(new TripId().routeId(new RouteId()
+                        .tripId(new TripId2().routeId(new RouteId1()
                                 .name("CHMIELNIK - PIERZCHNICA")
                                 .line("202")))
                         .headsign("PIERZCHNICA")
