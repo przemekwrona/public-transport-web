@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+
+paths:
+  /agency/{agency}/calendar-item/{calendarCode}/calendar-symbol:
+    get:
+      tags:
+        - calendar-symbol
+      summary: Return calendars symbols by calendarCode
+      operationId: getCalendarSymbolsByCalendarCode
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCalendarSymbolsResponse'
+
+components:
+  schemas:
+    GetCalendarSymbolsResponse:
+      type: object
+      properties:
+        calendars:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalendarSymbolBody'
+
+    CalendarSymbolBody:
+      type: object
+      properties:
+        calendarSymbolId:
+          $ref: '../public-transport-core.yaml/#/components/schemas/CalendarSymbolId'
+        calendarName:
+          type: string
+        description:
+          type: string
+        designation:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        monday:
+          type: boolean
+        tuesday:
+          type: boolean
+        wednesday:
+          type: boolean
+        thursday:
+          type: boolean
+        friday:
+          type: boolean
+        saturday:
+          type: boolean
+        sunday:
+          type: boolean
+        included:
+          type: array
+          items:
+            type: string
+            format: date
+        excluded:
+          type: array
+          items:
+            type: string
+            format: date
+
+
+
+
+  

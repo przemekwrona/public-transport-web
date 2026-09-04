@@ -15,7 +15,7 @@ import {
     CalendarSymbolId, CalendarSymbolService,
     CreateCalendarSymbolBrigadeRequest,
     CreateCalendarSymbolBrigadeResponse,
-    GetCalendarsResponse
+    GetCalendarSymbolsResponse
 } from '../../../generated/public-transport-api';
 import {AgencyStorageService} from '../../../auth/agency-storage.service';
 
@@ -48,7 +48,7 @@ export class BrigadeGroupCreatorModalComponent implements OnInit {
     readonly data = inject<BrigadeGroupCreatorModalData>(MAT_DIALOG_DATA);
 
     public modelForm: FormGroup;
-    public calendarsResponse: GetCalendarsResponse = {};
+    public calendarsResponse: GetCalendarSymbolsResponse = {};
 
     constructor(
         private formBuilder: FormBuilder,

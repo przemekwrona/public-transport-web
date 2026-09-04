@@ -1,16 +1,16 @@
 package pl.wrona.webserver.bussiness.calendar.mapper;
 
-import org.igeolab.iot.pt.server.api.model.CalendarBody;
+import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 public class CalendarSymbolEntityMapper {
 
-    public static CalendarSymbolEntity apply(CalendarBody calendarBody, AgencyEntity agencyEntity) {
+    public static CalendarSymbolEntity apply(CalendarSymbolBody calendarBody, AgencyEntity agencyEntity) {
         return apply(new CalendarSymbolEntity(), calendarBody, agencyEntity);
     }
 
-    public static CalendarSymbolEntity apply(CalendarSymbolEntity calendarSymbolEntity, CalendarBody calendarBody, AgencyEntity agencyEntity) {
+    public static CalendarSymbolEntity apply(CalendarSymbolEntity calendarSymbolEntity, CalendarSymbolBody calendarBody, AgencyEntity agencyEntity) {
         calendarSymbolEntity.setAgency(agencyEntity);
 
         calendarSymbolEntity.setDesignation(calendarBody.getDesignation());

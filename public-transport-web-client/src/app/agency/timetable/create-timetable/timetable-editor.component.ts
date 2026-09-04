@@ -11,9 +11,9 @@ import {
     Validators
 } from "@angular/forms";
 import {
-    CalendarBody,
+    CalendarSymbolBody,
     CreateTimetableGeneratorRequest,
-    GetCalendarsResponse, GetTimetableGeneratorDetailsResponse, RouteId,
+    GetCalendarSymbolsResponse, GetTimetableGeneratorDetailsResponse, RouteId,
     TimetableGeneratorFilterByRoutesResponse,
     TimetableGeneratorPayload,
     TimetableGeneratorService,
@@ -56,7 +56,7 @@ export enum TimetableEditorComponentMode {
 export class TimetableEditorComponent implements OnInit {
 
     public formGroup: FormGroup;
-    public calendarsResponse: GetCalendarsResponse = {};
+    public calendarsResponse: GetCalendarSymbolsResponse = {};
     public routes: TimetableGeneratorFilterByRoutesResponse = {};
     public tripResponse: TripResponse = {front: {}, back: {}};
     public isSubmitted: boolean = false;
@@ -203,7 +203,7 @@ export class TimetableEditorComponent implements OnInit {
         return this.timetableEditorComponentMode === TimetableEditorComponentMode.EDIT;
     }
 
-    public findCalendarByName(calendarName: string): CalendarBody  {
+    public findCalendarByName(calendarName: string): CalendarSymbolBody  {
         return this.calendarsResponse.calendars.filter(calendar => calendar.calendarName === calendarName)[0];
     }
 

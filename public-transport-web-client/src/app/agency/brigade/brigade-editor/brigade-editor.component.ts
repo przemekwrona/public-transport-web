@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {
     BrigadeService, BrigadeTrip, CalendarSymbolId, ErrorResponse,
-    GetAllTripsResponse, GetBrigadeDetailsResponse, GetCalendarsResponse,
+    GetAllTripsResponse, GetBrigadeDetailsResponse, GetCalendarSymbolsResponse,
     Trip, TripService
 } from "../../../generated/public-transport-api";
 import {CdkDrag, CdkDragDrop, CdkDragEnter, CdkDragExit, moveItemInArray} from "@angular/cdk/drag-drop";
@@ -40,7 +40,7 @@ export class BrigadeEditorComponent implements OnInit {
     private componentMode: BrigadeEditorComponentMode = null;
 
     public tripsResponse: GetAllTripsResponse = {lines: []};
-    public calendarsResponse: GetCalendarsResponse = {};
+    public calendarsResponse: GetCalendarSymbolsResponse = {};
     public brigaderResponse: GetBrigadeDetailsResponse= {} as GetBrigadeDetailsResponse;
 
     public queryBrigadeName: string = '';

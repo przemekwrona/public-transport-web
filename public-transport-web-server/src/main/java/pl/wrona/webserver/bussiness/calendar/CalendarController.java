@@ -2,7 +2,6 @@ package pl.wrona.webserver.bussiness.calendar;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.CalendarApi;
-import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import org.igeolab.iot.pt.server.api.model.CalendarItemBody;
 import org.igeolab.iot.pt.server.api.model.CalendarPayload;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
@@ -11,7 +10,7 @@ import org.igeolab.iot.pt.server.api.model.CreateCalendarItemRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarItemResponse;
 import org.igeolab.iot.pt.server.api.model.DeleteCalendarItemRequest;
 import org.igeolab.iot.pt.server.api.model.GetCalendarItemResponse;
-import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
+import org.igeolab.iot.pt.server.api.model.GetCalendarSymbolsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.UpdateCalendarRequest;
 import org.springframework.http.HttpStatus;
@@ -67,7 +66,7 @@ public class CalendarController implements CalendarApi {
     }
 
     @Override
-    public ResponseEntity<CalendarBody> getCalendarByCalendarName(String agency, CalendarSymbolQuery calendarSymbolQuery) {
+    public ResponseEntity<CalendarSymbolBody> getCalendarByCalendarName(String agency, CalendarSymbolQuery calendarSymbolQuery) {
         return ResponseEntity.status(HttpStatus.OK).body(calendarReaderService.getCalendarByCalendarName(agency, calendarSymbolQuery));
     }
 
@@ -82,7 +81,7 @@ public class CalendarController implements CalendarApi {
     }
 
     @Override
-    public ResponseEntity<GetCalendarsResponse> getCalendars(String agency) {
+    public ResponseEntity<GetCalendarSymbolsResponse> getCalendars(String agency) {
         return ResponseEntity.ok(calendarReaderService.getCalendars(agency));
     }
 

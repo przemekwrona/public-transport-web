@@ -879,7 +879,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCalendarsResponse'
+                $ref: './paths/calendars-api.yaml#/components/schemas/GetCalendarSymbolsResponse'
     delete:
       tags:
         - calendar
@@ -904,31 +904,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-
-  /agency/{agency}/calendar-item/{calendarCode}/calendar-symbol:
-    get:
-      tags:
-        - calendar-symbol
-      summary: Return calendars symbols by calendarCode
-      operationId: getCalendarSymbolsByCalendarCode
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: calendarCode
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCalendarsResponse'
 
   /agency/{agency}/calendar-item/{calendarCode}/calendar-symbol/{calendarSymbol}:
     get:
@@ -958,7 +933,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CalendarSymbolBody'
+                $ref: './paths/calendars-api.yaml#/components/schemas/CalendarSymbolBody'
 
   /agency/{agency}/calendar/details:
     post:
@@ -982,7 +957,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CalendarBody'
+                $ref: './paths/calendars-api.yaml#/components/schemas/CalendarSymbolBody'
+
+  /agency/{agency}/calendar-item/{calendarCode}/calendar-symbol:
+    $ref: './paths/calendars-api.yaml#/paths/~1agency~1{agency}~1calendar-item~1{calendarCode}~1calendar-symbol'
 
   /agency/{agency}/brigades:
     $ref: './paths/brigade-api.yaml#/paths/~1agency~1{agency}~1brigades'
@@ -1637,13 +1615,13 @@ components:
         calendarName:
           type: string
         body:
-          $ref: '#/components/schemas/CalendarBody'
+          $ref: './paths/calendars-api.yaml#/components/schemas/CalendarSymbolBody'
 
     CalendarPayload:
       type: object
       properties:
         body:
-          $ref: '#/components/schemas/CalendarBody'
+          $ref: './paths/calendars-api.yaml#/components/schemas/CalendarSymbolBody'
 
     CalendarSymbolQuery:
       type: object
@@ -1658,56 +1636,6 @@ components:
           format: date
         calendarName:
           type: string
-
-    CalendarBody:
-      type: object
-      properties:
-        calendarId:
-          $ref: './public-transport-core.yaml/#/components/schemas/CalendarSymbolId'
-        calendarName:
-          type: string
-        description:
-          type: string
-        designation:
-          type: string
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        monday:
-          type: boolean
-        tuesday:
-          type: boolean
-        wednesday:
-          type: boolean
-        thursday:
-          type: boolean
-        friday:
-          type: boolean
-        saturday:
-          type: boolean
-        sunday:
-          type: boolean
-        included:
-          type: array
-          items:
-            type: string
-            format: date
-        excluded:
-          type: array
-          items:
-            type: string
-            format: date
-
-    GetCalendarsResponse:
-      type: object
-      properties:
-        calendars:
-          type: array
-          items:
-            $ref: '#/components/schemas/CalendarBody'
 
     CalendarItemId:
       type: object
@@ -1741,48 +1669,6 @@ components:
         calendarName:
           type: string
 
-    CalendarSymbolBody:
-      type: object
-      properties:
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        calendarSymbolId:
-          $ref: './public-transport-core.yaml/#/components/schemas/CalendarSymbolId'
-        calendarName:
-          type: string
-        description:
-          type: string
-        designation:
-          type: string
-        monday:
-          type: boolean
-        tuesday:
-          type: boolean
-        wednesday:
-          type: boolean
-        thursday:
-          type: boolean
-        friday:
-          type: boolean
-        saturday:
-          type: boolean
-        sunday:
-          type: boolean
-        included:
-          type: array
-          items:
-            type: string
-            format: date
-        excluded:
-          type: array
-          items:
-            type: string
-            format: date
-
     CalendarItemBody:
       type: object
       properties:
@@ -1799,7 +1685,7 @@ components:
         symbols:
           type: array
           items:
-            $ref: '#/components/schemas/CalendarSymbolBody'
+            $ref: './paths/calendars-api.yaml#/components/schemas/CalendarSymbolBody'
 
     GetCalendarItemResponse:
       type: object

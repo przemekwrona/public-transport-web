@@ -8,7 +8,7 @@ import {
     BrigadeService,
     CalendarService,
     CalendarSymbolId, CreateBrigadeBody, CreateCalendarSymbolBrigadeRequest, CreateCalendarSymbolBrigadeResponse,
-    GetCalendarsResponse, RouteId, RouteId1, Status
+    GetCalendarSymbolsResponse, RouteId1, Status
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatInput} from "@angular/material/input";
@@ -38,7 +38,7 @@ import {RouteSelectComponent} from "../../routes/route-select/route-select.compo
 export class BrigadeCreatorModalComponent implements OnInit {
 
     public modelForm: FormGroup;
-    public calendarsResponse: GetCalendarsResponse = {};
+    public calendarsResponse: GetCalendarSymbolsResponse = {};
 
     constructor(
         private formBuilder: FormBuilder,

@@ -1,6 +1,5 @@
 package pl.wrona.webserver.bussiness.calendar.mapper;
 
-import org.igeolab.iot.pt.server.api.model.CalendarBody;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId1;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolBody;
 import org.igeolab.iot.pt.server.api.model.CalendarSymbolId;
@@ -15,7 +14,7 @@ import java.util.Map;
 
 public class CalendarBodyMapper {
 
-    public static CalendarBody apply(CalendarItemEntity item, CalendarSymbolEntity symbol, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
+    public static CalendarSymbolBody apply(CalendarItemEntity item, CalendarSymbolEntity symbol, Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary) {
         List<LocalDate> included = calendarDatesDictionary.getOrDefault(symbol.getServiceId(), List.of()).stream()
                 .filter(calendarDate -> ExceptionType.ADDED.equals(calendarDate.getExceptionType()))
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
@@ -24,9 +23,9 @@ public class CalendarBodyMapper {
                 .filter(calendarDate -> ExceptionType.REMOVED.equals(calendarDate.getExceptionType()))
                 .map(cd -> cd.getCalendarDatesId().getDate()).toList();
 
-        return new CalendarBody()
+        return new CalendarSymbolBody()
                 .calendarName(item.getCalendarName())
-                .calendarId(new CalendarSymbolId()
+                .calendarSymbolId(new CalendarSymbolId()
                         .calendarItemId(new CalendarItemId1()
                                 .code(item.getSequenceHex()))
                         .symbol(symbol.getDesignation()))

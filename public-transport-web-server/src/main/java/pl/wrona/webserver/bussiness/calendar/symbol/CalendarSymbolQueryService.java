@@ -2,7 +2,6 @@ package pl.wrona.webserver.bussiness.calendar.symbol;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId;
-import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.core.AgencyService;
