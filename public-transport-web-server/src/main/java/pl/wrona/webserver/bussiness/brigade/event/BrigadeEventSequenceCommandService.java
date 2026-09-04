@@ -16,6 +16,12 @@ public class BrigadeEventSequenceCommandService {
     private final BrigadeEventSequenceQueryRepository brigadeEventSequenceQueryRepository;
 
     @Transactional
+    public void delete(BrigadeEventSequenceEntity entity) {
+        brigadeEventSequenceCommandRepository.delete(entity);
+        brigadeEventSequenceCommandRepository.flush();
+    }
+
+    @Transactional
     public BrigadeEventSequenceEntity init(String agencyCode, Integer brigadeItemSequence, String calendarCode, String calendarSymbol) {
         var existing = brigadeEventSequenceQueryRepository.findByAgencyCodeAndBrigadeItemSequenceAndCalendarCodeAndCalendarSymbol(
                 agencyCode, brigadeItemSequence, calendarCode, calendarSymbol);

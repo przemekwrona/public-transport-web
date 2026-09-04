@@ -11,6 +11,7 @@ import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +24,18 @@ public class BrigadeResourceCommandService {
     @Transactional
     public BrigadeResourceEntity save(BrigadeResourceEntity brigadeGroupEntity) {
         return brigadeResourceCommandRepository.save(brigadeGroupEntity);
+    }
+
+    @Transactional
+    public void delete(BrigadeResourceEntity brigadeResourceEntity) {
+        brigadeResourceCommandRepository.delete(brigadeResourceEntity);
+        brigadeResourceCommandRepository.flush();
+    }
+
+    @Transactional
+    public void deleteAll(Collection<BrigadeResourceEntity> brigadeResourceEntities) {
+        brigadeResourceCommandRepository.deleteAll(brigadeResourceEntities);
+        brigadeResourceCommandRepository.flush();
     }
 
     @PreAgencyAuthorize

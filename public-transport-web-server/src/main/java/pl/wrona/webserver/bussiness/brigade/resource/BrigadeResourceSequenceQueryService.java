@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.Hex;
+import pl.wrona.webserver.core.brigade.BrigadeResourceSequenceEntity;
 import pl.wrona.webserver.core.brigade.BrigadeResourceSequenceQueryRepository;
 
 @Service
@@ -12,6 +13,11 @@ public class BrigadeResourceSequenceQueryService {
 
     private final BrigadeResourceSequenceQueryRepository brigadeResourceSequenceQueryRepository;
     private final BrigadeResourceSequenceCommandService brigadeResourceSequenceCommandService;
+
+    public BrigadeResourceSequenceEntity find(String agencyCode, String brigadeCode, String calendarCode, String calendarSymbol) {
+        return brigadeResourceSequenceQueryRepository.findByAgencyCodeAndBrigadeItemSequenceAndCalendarItemSequenceAndCalendarSymbol(
+                agencyCode, Hex.fromHex(brigadeCode), Hex.fromHex(calendarCode), calendarSymbol);
+    }
 
     @Transactional
     public Integer findNextValue(String agencyCode, String brigadeCode, Integer calendarItemSequence, String calendarSymbol) {

@@ -3,6 +3,8 @@ package pl.wrona.webserver.bussiness.brigade.event;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
+import pl.wrona.webserver.core.brigade.BrigadeEventSequenceEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEventSequenceQueryRepository;
 
 @Service
@@ -11,6 +13,11 @@ public class BrigadeEventSequenceQueryService {
 
     private final BrigadeEventSequenceQueryRepository brigadeEventSequenceQueryRepository;
     private final BrigadeEventSequenceCommandService brigadeEventSequenceCommandService;
+
+    public BrigadeEventSequenceEntity find(String agencyCode, String brigadeCode, String calendarCode, String calendarSymbol) {
+        return brigadeEventSequenceQueryRepository.findByAgencyCodeAndBrigadeItemSequenceAndCalendarCodeAndCalendarSymbol(
+                agencyCode, Hex.fromHex(brigadeCode), calendarCode, calendarSymbol);
+    }
 
     @Transactional
     public Integer findNextValue(String agencyCode, Integer brigadeItemSequence, String calendarCode, String calendarSymbol) {
