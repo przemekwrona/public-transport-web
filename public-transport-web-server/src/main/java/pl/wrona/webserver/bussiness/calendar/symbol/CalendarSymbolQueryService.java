@@ -1,8 +1,10 @@
-package pl.wrona.webserver.bussiness.calendar;
+package pl.wrona.webserver.bussiness.calendar.symbol;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.CalendarItemId;
+import org.igeolab.iot.pt.server.api.model.GetCalendarsResponse;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
@@ -34,6 +36,9 @@ public class CalendarSymbolQueryService {
 
     public List<CalendarSymbolEntity> findAllByAgencyAndCalendarItemId(String agencyCode, CalendarItemId calendarItemId) {
         return calendarSymbolQueryRepository.findAllByAgencyAndStartDateAndEndDate(agencyCode, calendarItemId.getStartDate(), calendarItemId.getEndDate());
+    }
+    public List<CalendarSymbolEntity> findByAgencyAndCalendarCode(String agency, String calendarCode) {
+        return calendarSymbolQueryRepository.findByAgencyAndCalendarCode(agency, Hex.fromHex(calendarCode));
     }
 
     public CalendarSymbolEntity findByAgencyAndBrigadeAndCalendarAndSymbol(String agencyCode, String calendarCode, String calendarSymbol) {

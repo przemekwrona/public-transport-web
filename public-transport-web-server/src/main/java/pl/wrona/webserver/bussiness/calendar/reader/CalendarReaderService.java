@@ -11,7 +11,7 @@ import pl.wrona.webserver.bussiness.calendar.mapper.CalendarBodyMapper;
 import pl.wrona.webserver.core.calendar.CalendarDatesEntity;
 import pl.wrona.webserver.bussiness.calendar.CalendarDatesQueryService;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
-import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
+import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.calendar.CalendarSymbolQueryRepository;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 

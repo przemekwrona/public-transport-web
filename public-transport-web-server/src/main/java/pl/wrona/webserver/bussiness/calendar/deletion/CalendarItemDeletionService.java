@@ -6,7 +6,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemCommandService;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
-import pl.wrona.webserver.bussiness.calendar.CalendarSymbolQueryService;
+import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.exception.BusinessException;
 
 @Service
