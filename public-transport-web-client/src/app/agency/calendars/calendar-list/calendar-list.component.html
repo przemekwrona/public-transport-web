@@ -25,7 +25,7 @@
                             <mat-panel-title class="min-w-96">
                                 <span>
 <!--                                    Obowiązuje-->
-                                    <div>od<strong>&nbsp;{{ calendarItem?.startDate | date:'dd.MM.yy' }}</strong> do <strong>{{ calendarItem?.endDate | date:'dd.MM.yy' }}</strong></div>
+                                    <div><strong>&nbsp;{{ calendarItem?.startDate | date:'dd.MM.yy' }}</strong> - <strong>{{ calendarItem?.endDate | date:'dd.MM.yy' }}</strong></div>
                                 </span>
                                 @if (isStartInFuture(calendarItem?.startDate)) {
                                     <span class="ml-2 text-sm font-normal text-gray-700">
