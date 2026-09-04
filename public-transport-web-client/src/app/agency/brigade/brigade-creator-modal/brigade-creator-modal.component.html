@@ -40,7 +40,7 @@
                 <span class="sm:max-w-full xl:min-w-96">
                     <app-route-select formControlName="defaultRouteCode"></app-route-select>
                 </span>
-        
+
             </div>
         </div>
 
@@ -57,13 +57,22 @@
                     <mat-form-field appearance="outline" class="w-full custom-form-field">
                         <mat-label>Kalendarz</mat-label>
                         <mat-select formControlName="calendarId" [compareWith]="compareByCalendarId">
-                            @for (calendar of calendarsResponse.calendars || []; track calendar) {
-                                <mat-option [value]="calendar.calendarSymbolId">
-                                    <div>
-                                        <div>{{ calendar.designation }} - ({{ calendar.startDate }}
-                                            -- {{ calendar.endDate }})</div>
-                                        <div>{{ calendar.description }}</div>
-                                    </div>
+                            @for (calendar of calendarsResponse.items || []; track calendar) {
+                                <mat-option [value]="calendar.calendarItemId">
+                                        <div class="flex items-center gap-2">
+                                            <span>{{ calendar.startDate | date : 'dd.MM.yyyy' }}
+                                                - {{ calendar.endDate | date : 'dd.MM.yyyy' }}
+                                            </span>
+                                            @if (isCalendarUpcoming(calendar.startDate)) {
+                                                <span class="badge badge-sm badge-outline badge-info">{{ calendarUpcomingLabel(calendar.startDate) }}</span>
+                                            }
+                                            @if (isCalendarActive(calendar.startDate, calendar.endDate)) {
+                                                <span class="badge badge-sm badge-outline badge-success">aktywny</span>
+                                            }
+                                            @if (isCalendarExpired(calendar.endDate)) {
+                                                <span class="badge badge-sm badge-outline badge-danger">{{ calendarExpiredLabel(calendar.endDate) }}</span>
+                                            }
+                                        </div>
                                 </mat-option>
                             }
                         </mat-select>

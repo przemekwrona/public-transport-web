@@ -8,12 +8,13 @@ import {
     BrigadeService,
     CalendarService,
     CalendarSymbolId, CreateBrigadeBody, CreateCalendarSymbolBrigadeRequest, CreateCalendarSymbolBrigadeResponse,
-    GetCalendarSymbolsResponse, RouteId1, Status
+    GetCalendarItemResponse, RouteId1, Status
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatInput} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {RouteSelectComponent} from "../../routes/route-select/route-select.component";
+import moment from "moment";
 
 @Component({
     selector: 'app-brigade-creator-modal',
@@ -38,7 +39,7 @@ import {RouteSelectComponent} from "../../routes/route-select/route-select.compo
 export class BrigadeCreatorModalComponent implements OnInit {
 
     public modelForm: FormGroup;
-    public calendarsResponse: GetCalendarSymbolsResponse = {};
+    public calendarsResponse: GetCalendarItemResponse = {};
 
     constructor(
         private formBuilder: FormBuilder,
@@ -54,8 +55,8 @@ export class BrigadeCreatorModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.calendarService.getCalendars(this.agencyStorageService.getInstance())
-            .subscribe(response => this.calendarsResponse = response ?? {});
+        this.calendarService.getCalendarItems(this.agencyStorageService.getInstance())
+            .subscribe((response: GetCalendarItemResponse) => this.calendarsResponse = response ?? {});
     }
 
     public createBrigade(): void {
@@ -93,6 +94,44 @@ export class BrigadeCreatorModalComponent implements OnInit {
             ? current.calendarItemId.code === option.calendarItemId.code
             && current.symbol === option.symbol
             : current === option;
+    }
+
+    public isCalendarActive(startDate?: string, endDate?: string): boolean {
+        if (!startDate || !endDate) {
+            return false;
+        }
+        const today = moment().startOf('day');
+        return today.isSameOrAfter(moment(startDate).startOf('day'))
+            && today.isSameOrBefore(moment(endDate).startOf('day'));
+    }
+
+    public isCalendarUpcoming(startDate?: string): boolean {
+        return this.daysUntil(startDate) > 0;
+    }
+
+    public isCalendarExpired(endDate?: string): boolean {
+        return this.daysUntil(endDate) < 0;
+    }
+
+    public calendarUpcomingLabel(startDate?: string): string {
+        const days: number = this.daysUntil(startDate);
+        return `aktywny za ${this.formatDays(days)}`;
+    }
+
+    public calendarExpiredLabel(endDate?: string): string {
+        const days: number = Math.abs(this.daysUntil(endDate));
+        return `nieaktywny od ${this.formatDays(days)}`;
+    }
+
+    private daysUntil(date?: string): number {
+        if (!date) {
+            return 0;
+        }
+        return moment(date).startOf('day').diff(moment().startOf('day'), 'days');
+    }
+
+    private formatDays(days: number): string {
+        return days === 1 ? '1 dzień' : `${days} dni`;
     }
 
     get brigadeNameControl(): FormControl {
