@@ -9,7 +9,109 @@
             widniejącymi we wniosku o oficjalne pozwolenie. Dzięki temu brygady zostaną utworzone wyłącznie na czas
             realnego, usankcjonowanego prawnie działania, co ułatwi rozliczenia i kontrolę nad projektem.
         </p>
+
+        <div class="flex flex-col gap-5">
+            @for (route of data.defaultRoutes.lines; track route.route.routeCode) {
+                <div>
+                    <div class="card-table scrollable-x-auto">
+                        <table class="table align-middle text-sm text-gray-600 w-full">
+                            <thead>
+                            <tr class="bg-gray-100">
+                                <th class="text-start font-medium">FRONT</th>
+                                <th class="text-start font-medium">BACK</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="align-top">
+                                    <div class="profile-cell-grid">
+                                        @for (trip of route.trips; track trip.tripId.tripCode) {
+                                            @if (trip.tripId.variantMode === 'FRONT' && trip.isMainVariant) {
+                                                @for (profile of trip.profile; track profile.trafficMode) {
+                                                    <button type="button"
+                                                            class="profile-choice-btn"
+                                                            [class.profile-choice-btn-active]="modelForm.controls.tripId.value?.tripCode === trip.tripId.tripCode && modelForm.controls.tripId.value?.trafficMode === profile.trafficMode"
+                                                            [title]="(trip.origin || '') + ' → ' + (trip.destination || '')"
+                                                            (click)="selectProfile({trip, profile})">
+                                                        <span class="profile-choice-mode">{{ profile.trafficMode === 'TRAFFIC' ? 'Jazda w korku' : 'Normalny ruch' }}</span>
+                                                        <span class="profile-choice-time">{{ profile.travelTime | formatSeconds }}</span>
+                                                    </button>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                                <td class="align-top">
+                                    <div class="profile-cell-grid">
+                                        @for (trip of route.trips; track trip.tripId.tripCode) {
+                                            @if (trip.tripId.variantMode === 'BACK' && trip.isMainVariant) {
+                                                @for (profile of trip.profile; track profile.trafficMode) {
+                                                    <button type="button"
+                                                            class="profile-choice-btn"
+                                                            [class.profile-choice-btn-active]="modelForm.controls.tripId.value?.tripCode === trip.tripId.tripCode && modelForm.controls.tripId.value?.trafficMode === profile.trafficMode"
+                                                            [title]="(trip.origin || '') + ' → ' + (trip.destination || '')"
+                                                            (click)="selectProfile({trip, profile})">
+                                                        <span class="profile-choice-mode">{{ profile.trafficMode === 'TRAFFIC' ? 'Jazda w korku' : 'Normalny ruch' }}</span>
+                                                        <span class="profile-choice-time">{{ profile.travelTime | formatSeconds }}</span>
+                                                    </button>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-top">
+                                    <div class="profile-cell-grid">
+                                        @for (trip of route.trips; track trip.tripId.tripCode) {
+                                            @if (trip.tripId.variantMode === 'FRONT' && !trip.isMainVariant) {
+                                                @for (profile of trip.profile; track profile.trafficMode) {
+                                                    <button type="button"
+                                                            class="profile-choice-btn"
+                                                            [class.profile-choice-btn-active]="modelForm.controls.tripId.value?.tripCode === trip.tripId.tripCode && modelForm.controls.tripId.value?.trafficMode === profile.trafficMode"
+                                                            [title]="(trip.origin || '') + ' → ' + (trip.destination || '')"
+                                                            (click)="selectProfile({trip, profile})">
+                                                        @if (trip.variantDesignation) {
+                                                            <span class="profile-choice-variant">{{ trip.variantDesignation }}</span>
+                                                        }
+                                                        <span class="profile-choice-mode">{{ profile.trafficMode === 'TRAFFIC' ? 'Jazda w korku' : 'Normalny ruch' }}</span>
+                                                        <span class="profile-choice-time">{{ profile.travelTime | formatSeconds }}</span>
+                                                    </button>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                                <td class="align-top">
+                                    <div class="profile-cell-grid">
+                                        @for (trip of route.trips; track trip.tripId.tripCode) {
+                                            @if (trip.tripId.variantMode === 'BACK' && !trip.isMainVariant) {
+                                                @for (profile of trip.profile; track profile.trafficMode) {
+                                                    <button type="button"
+                                                            class="profile-choice-btn"
+                                                            [class.profile-choice-btn-active]="modelForm.controls.tripId.value?.tripCode === trip.tripId.tripCode && modelForm.controls.tripId.value?.trafficMode === profile.trafficMode"
+                                                            [title]="(trip.origin || '') + ' → ' + (trip.destination || '')"
+                                                            (click)="selectProfile({trip, profile})">
+                                                        @if (trip.variantDesignation) {
+                                                            <span class="profile-choice-variant">{{ trip.variantDesignation }}</span>
+                                                        }
+                                                        <span class="profile-choice-mode">{{ profile.trafficMode === 'TRAFFIC' ? 'Jazda w korku' : 'Normalny ruch' }}</span>
+                                                        <span class="profile-choice-time">{{ profile.travelTime | formatSeconds }}</span>
+                                                    </button>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
         <div class="lg:py-5 py-2.5">
+
             <div class="flex flex-wrap justify-between gap-5">
                 <div class="flex flex-col">
                     <div class="text-gray-900 text-sm font-medium">
@@ -21,54 +123,15 @@
                 <span class="sm:max-w-full xl:min-w-96">
 
                     <!-- Pass the Observable directly to the input -->
-                    <app-trip-variant-select
-                            formControlName="tripId"
-                            label="Numer lini"
-                            (onChange)="selectTrip()">
-                    </app-trip-variant-select>
+<!--                    <app-trip-variant-select-->
+<!--                            formControlName="tripId"-->
+<!--                            label="Numer lini"-->
+<!--                            (onChange)="selectTrip()">-->
+<!--                    </app-trip-variant-select>-->
 
-                    <!--                    <mat-form-field appearance="outline" class="w-full custom-form-field">-->
-                    <!--                        <mat-label>Rozkład Obowiązuje OD</mat-label>-->
-                    <!--                        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">-->
-                    <!--                        <mat-datepicker-toggle matIconSuffix-->
-                    <!--                                               [for]="startDatePicker"></mat-datepicker-toggle>-->
-                    <!--                        <mat-datepicker #startDatePicker></mat-datepicker>-->
-                    <!--                        @if (hasError('startDate', 'required')) {-->
-                    <!--                            <mat-error>Data początkowa obowiązywania rozklad jest <strong>wymagana</strong></mat-error>-->
-                    <!--                        }-->
-                    <!--                    </mat-form-field>-->
                 </span>
             </div>
         </div>
-
-        <!--        <div class="lg:py-5 py-2.5">-->
-        <!--            <div class="flex flex-wrap justify-between gap-5">-->
-        <!--                <div class="flex flex-col">-->
-        <!--                    <div class="text-gray-900 text-sm font-medium">-->
-        <!--                        Rozkład Obowiązuje DO-->
-        <!--                    </div>-->
-        <!--                    <span class="text-gray-700 text-2sm">DO kiedy dany rozkład jazdy jest aktualny.</span>-->
-        <!--                </div>-->
-        <!--                <span class="sm:max-w-full xl:min-w-96">-->
-        <!--                    <mat-form-field appearance="outline" class="w-full custom-form-field">-->
-        <!--                        <mat-label>Rozkład Obowiązuje DO</mat-label>-->
-        <!--                        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">-->
-        <!--                        <mat-datepicker-toggle matIconSuffix [for]="endDatePicker"></mat-datepicker-toggle>-->
-        <!--                        <mat-datepicker #endDatePicker></mat-datepicker>-->
-        <!--                        @if (hasError('endDate', 'required')) {-->
-        <!--                            <mat-error>Data końcowa obowiązywania rozklad jest <strong>wymagana</strong></mat-error>-->
-        <!--                        }-->
-        <!--                    </mat-form-field>-->
-        <!--                </span>-->
-        <!--            </div>-->
-        <!--        </div>-->
-
-        <!--        @if (modelForm.valid) {-->
-        <!--            <span>Kalendarz będzie obowiązywać-->
-        <!--                od {{ startDateControl.value | date :'yyyy-MM-dd' }}-->
-        <!--                do {{ endDateControl.value | date :'yyyy-MM-dd' }}-->
-        <!--            </span>-->
-        <!--        }-->
 
     </mat-dialog-content>
     <mat-dialog-actions align="end">

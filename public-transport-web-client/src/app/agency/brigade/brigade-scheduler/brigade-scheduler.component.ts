@@ -183,7 +183,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
 
     openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, resource: DayPilot.ResourceId, dpControl: DayPilot.Scheduler) {
         const dialogRef = this.dialog.open(OnTimeRangeSelectedModalComponent, {
-            width: '760px',
+            width: '920px',
             data: {start: start.toString(), end: end.toString(), resourceId: resource.toString(), defaultRoutes: this.defaultRoutes}
         });
 
