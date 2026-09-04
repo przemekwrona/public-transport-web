@@ -6,13 +6,17 @@
         </div>
     </div>
     <div class="flex items-center gap-2">
-        <button (click)="clearGroup()" mat-icon-button color="warn" aria-label="Wyczyść">
-            <mat-icon>delete</mat-icon>
+        <button 
+            type="button" 
+            (click)="clearGroup()" 
+            class="btn btn-sm btn-icon btn-clear btn-danger border border-red-500 border-w-s"
+            aria-label="Wyczyść">
+            <mat-icon class="font-sm">delete</mat-icon>
         </button>
 
         <div class="relative">
             <button type="button" (click)="toggleAlignAccordion()" class="btn btn-sm btn-secondary">
-                <mat-icon class="me-1">access_time</mat-icon>
+                <mat-icon class="me-1 font-sm">access_time</mat-icon>
 
                 @if (selectedAlignMinutes) {
                     <span class="badge badge-sm badge-outline badge-primary">{{ alignLabel(selectedAlignMinutes) }}</span>
