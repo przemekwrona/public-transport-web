@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 
 import java.util.List;
 
@@ -42,5 +43,11 @@ public interface BrigadeGroupQueryRepository extends JpaRepository<BrigadeGroupE
     List<BrigadeGroupEntity> findAllByAgencyCodeAndBrigadeCode(
             @Param("instance") String instance,
             @Param("brigadeCode") String brigadeCode);
+
+    @Query("""
+            SELECT CASE WHEN (COUNT(*) > 0) THEN TRUE ELSE FALSE END
+            FROM BrigadeGroupEntity g
+            WHERE g.calendarSymbol = :calendarSymbol""")
+    boolean existsByCalendarSymbol(@Param("calendarSymbol") CalendarSymbolEntity calendarSymbol);
 
 }

@@ -33,12 +33,10 @@ export class CalendarListComponent implements OnInit {
     }
 
     public deleteByCalendarSymbol(calendarSymbol: CalendarSymbolBody) {
-        const query: CalendarSymbolQuery = {};
-        query.calendarName = calendarSymbol.calendarName;
-        query.designation = calendarSymbol.designation;
-        query.startDate = calendarSymbol.startDate;
-        query.endDate = calendarSymbol.endDate;
-        this.calendarService.deleteCalendarByCalendarNameAndSymbol(this.loginService.getInstance(), query).subscribe((response: Status) => {
+        const calendarCode = calendarSymbol.calendarSymbolId.calendarItemId.code;
+        const calendarSymbolCode = calendarSymbol.calendarSymbolId.symbol;
+
+        this.calendarService.deleteCalendarByCalendarNameAndSymbol(this.loginService.getInstance(), calendarCode, calendarSymbolCode).subscribe((response: Status) => {
             this.calendarService.getCalendarItems(this.loginService.getInstance())
                 .subscribe((calendarResponse: GetCalendarItemResponse) => this.calendarsResponse = calendarResponse);
         });

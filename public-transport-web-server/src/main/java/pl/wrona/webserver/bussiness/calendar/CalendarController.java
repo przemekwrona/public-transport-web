@@ -51,9 +51,8 @@ public class CalendarController implements CalendarApi {
     }
 
     @Override
-    public ResponseEntity<Status> deleteCalendarByCalendarNameAndSymbol(String agency, CalendarSymbolQuery calendarSymbolQuery) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(calendarDeletionService.deleteCalendarByCalendarName(agency, calendarSymbolQuery));
-    }
+    public ResponseEntity<Status> deleteCalendarByCalendarNameAndSymbol(String agency, String calendarCode, String calendarSymbol) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(calendarDeletionService.deleteCalendarByCalendarName(agency, calendarCode, calendarSymbol));    }
 
     @Override
     public ResponseEntity<Status> deleteCalendarItem(String agency, DeleteCalendarItemRequest deleteCalendarItemRequest) {

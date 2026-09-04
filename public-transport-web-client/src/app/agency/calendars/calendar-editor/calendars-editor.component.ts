@@ -5,7 +5,7 @@ import {
     CalendarSymbolBody,
     CalendarPayload,
     CalendarService,
-    UpdateCalendarRequest
+    UpdateCalendarRequest, CalendarSymbolId, CalendarItemId
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CalendarEditorComponentMode} from "./calendar-editor-component-mode";
@@ -26,6 +26,7 @@ export class CalendarsEditorComponent implements OnInit {
 
     private componentMode: CalendarEditorComponentMode;
     private queryCalendarName: string = '';
+    private calendarCode: string = '';
 
     public modelForm: FormGroup;
 
@@ -76,7 +77,8 @@ export class CalendarsEditorComponent implements OnInit {
     ngOnInit(): void {
         this._route.data.subscribe(data => this.componentMode = data['mode']);
         this._route.paramMap.subscribe(params => this.queryCalendarName = params.get('calendarName'));
-
+        this.calendarCode = this._route.snapshot.paramMap.get('calendarCode');
+   
         this.modelForm = this.formBuilder.group({
             designation: ['', [Validators.required]],
             description: ['', [Validators.required]],
@@ -258,6 +260,13 @@ export class CalendarsEditorComponent implements OnInit {
 
     private buildCalendarBodyReuest() {
         const body: CalendarSymbolBody = {}
+
+        const calendarSymbolId = {} as CalendarSymbolId;
+        calendarSymbolId.calendarItemId = {} as CalendarItemId;
+        calendarSymbolId.symbol = this.modelForm.get('designation').value;
+        calendarSymbolId.calendarItemId.code = this.calendarCode;
+
+        body.calendarSymbolId = calendarSymbolId;
         body.calendarName = this.queryCalendarName;
         body.designation = this.modelForm.get('designation').value;
         body.description = this.modelForm.get('description').value;
