@@ -9,7 +9,7 @@ import {
 } from '../../../generated/public-transport-api';
 import {AgencyStorageService} from '../../../auth/agency-storage.service';
 
-export const defaultTripResolver: ResolveFn<Observable<GetAllTripsResponse>> = (route, state) => {
+export const defaultRouteResolver: ResolveFn<Observable<GetAllTripsResponse>> = (route, state) => {
     const brigadeService: BrigadeService = inject(BrigadeService);
     const tripService: TripService = inject(TripService);
     const agencyStorageService: AgencyStorageService = inject(AgencyStorageService);
