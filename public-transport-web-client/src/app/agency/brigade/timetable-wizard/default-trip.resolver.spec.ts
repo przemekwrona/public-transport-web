@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
 
-import {defaultTripResolver} from './default-trip.resolver';
+import {defaultRouteResolver} from './default-route.resolver';
 import {
     BrigadeService,
     GetAllTripsResponse,
@@ -12,7 +12,7 @@ import {AgencyStorageService} from '../../../auth/agency-storage.service';
 
 describe('defaultTripResolver', () => {
     const executeResolver: ResolveFn<Observable<GetAllTripsResponse>> = (...resolverParameters) =>
-        TestBed.runInInjectionContext(() => defaultTripResolver(...resolverParameters));
+        TestBed.runInInjectionContext(() => defaultRouteResolver(...resolverParameters));
 
     const tripsResponse: GetAllTripsResponse = {
         lines: [{
