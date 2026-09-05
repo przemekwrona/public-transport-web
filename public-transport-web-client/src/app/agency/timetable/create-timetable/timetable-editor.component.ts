@@ -13,7 +13,8 @@ import {
 import {
     CalendarSymbolBody,
     CreateTimetableGeneratorRequest,
-    GetCalendarSymbolsResponse, GetTimetableGeneratorDetailsResponse, RouteId,
+    GetBrigadeDetailsResponse,
+    GetCalendarSymbolsResponse, GetTimetableGeneratorDetailsResponse, ResourceService, RouteId,
     TimetableGeneratorFilterByRoutesResponse,
     TimetableGeneratorPayload,
     TimetableGeneratorService,
@@ -64,6 +65,7 @@ export class TimetableEditorComponent implements OnInit {
     public timetableGeneratorDetailsResponse: GetTimetableGeneratorDetailsResponse | null;
     public brigadeCode: string | null = null;
     public calendarSymbol: string | null = null;
+    public brigadeDetails: GetBrigadeDetailsResponse | null = null;
 
     /** control for the MatSelect filter keyword */
     public bankFilterCtrl: FormControl<string> = new FormControl<string>('');
@@ -72,7 +74,7 @@ export class TimetableEditorComponent implements OnInit {
         return this.formGroup.get('timetables') as FormArray<FormGroup>;
     }
 
-    constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService) {
+    constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private timetableGeneratorService: TimetableGeneratorService, private agencyStorageService: AgencyStorageService, private notificationService: NotificationService, private resourceService: ResourceService) {
         this.formGroup = this.formBuilder.group({
             routeId: [null, [Validators.required]],
             timetables: this.formBuilder.array([this.buildTimetable()])
@@ -88,6 +90,7 @@ export class TimetableEditorComponent implements OnInit {
         this.route.data.subscribe((data: Data) => this.timetableEditorComponentMode = data['mode']);
         this.route.data.subscribe(data => this.calendarsResponse = data['calendars']);
         this.route.data.subscribe(data => this.routes = data['routes']);
+        this.route.data.subscribe(data => this.brigadeDetails = data['brigade'] ?? null);
         this.route.data.subscribe(data => {
             this.timetableGeneratorDetailsResponse = data['timetableGenerator'] as GetTimetableGeneratorDetailsResponse;
             if (!this.timetableGeneratorDetailsResponse) {
@@ -216,7 +219,7 @@ export class TimetableEditorComponent implements OnInit {
         return this.timetableEditorComponentMode === TimetableEditorComponentMode.GENERATE;
     }
 
-    public findCalendarByName(calendarName: string): CalendarSymbolBody  {
+    public findCalendarByName(calendarName: string): CalendarSymbolBody {
         return this.calendarsResponse.calendars.filter(calendar => calendar.calendarName === calendarName)[0];
     }
 
@@ -226,6 +229,25 @@ export class TimetableEditorComponent implements OnInit {
         tripFilter.routeId = routeId;
         this.timetableGeneratorService.findTrips(agency, tripFilter).subscribe((response: TripResponse) => {
             this.tripResponse = response;
+        });
+    }
+
+    public generate(): void {
+        const brigadeCode = this.brigadeCode;
+        const symbol = this.calendarSymbol;
+        const calendarCode = this.brigadeDetails?.brigade?.brigades
+            ?.find(group => group.calendarSymbolId?.symbol === symbol)
+            ?.calendarSymbolId?.calendarItemId?.code;
+
+        if (!brigadeCode || !calendarCode || !symbol) {
+            return;
+        }
+
+        this.resourceService.deleteResource(
+            this.agencyStorageService.getInstance(), brigadeCode, calendarCode, symbol).subscribe(() => {
+            this.router.navigate(['/agency/brigades', brigadeCode, 'edit'], {
+                queryParams: {symbol: this.calendarSymbol}
+            }).then();
         });
     }
 
