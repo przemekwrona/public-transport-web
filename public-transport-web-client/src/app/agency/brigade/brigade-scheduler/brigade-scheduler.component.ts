@@ -152,6 +152,34 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         });
     }
 
+    public openCreateEventPanel(): void {
+        const resources = this.scheduler.control.resources ?? [];
+        const lastResource = resources[resources.length - 1];
+
+        if (lastResource) {
+            this.openCreateModalForResource(String(lastResource.id));
+            return;
+        }
+
+        this.createResource((resourceId) => this.openCreateModalForResource(resourceId));
+    }
+
+    private openCreateModalForResource(resourceId: string): void {
+        const scheduler = this.scheduler.control;
+        const resourceEvents = (scheduler.events.list ?? [])
+            .filter(event => String(event.resource) === resourceId);
+
+        let start = new DayPilot.Date(this.config.startDate).addHours(6);
+        if (resourceEvents.length > 0) {
+            start = resourceEvents.reduce((latest, event) => {
+                const eventEnd = new DayPilot.Date(event.end);
+                return eventEnd.getTime() > latest.getTime() ? eventEnd : latest;
+            }, new DayPilot.Date(resourceEvents[0].end));
+        }
+
+        this.openMyCreateModal(start, start.addMinutes(15), resourceId, scheduler);
+    }
+
     openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, resource: DayPilot.ResourceId, dpControl: DayPilot.Scheduler) {
         const dialogRef = this.dialog.open(OnTimeRangeSelectedModalComponent, {
             width: '920px',
@@ -278,6 +306,10 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     }
 
     public addResource(): void {
+        this.createResource();
+    }
+
+    private createResource(afterCreate?: (resourceId: string) => void): void {
         const instance: string = this.agencyStorage.getInstance();
 
         this.brigadeService.getNextCalendarResourceSequence(instance, this.brigadeCode, this.brigadeBody.calendarSymbolId.calendarItemId.code, this.brigadeBody.calendarSymbolId.symbol).subscribe((response: NextCalendarResourceSequenceResponse) => {
@@ -290,6 +322,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
             this.scheduler.control.update({
                 resources: [...(this.scheduler.control.resources ?? []), resource]
             });
+            afterCreate?.(response.sequenceHex);
         });
     }
 

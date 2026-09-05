@@ -40,8 +40,17 @@
                 </div>
             }
         </div>
-        <button (click)="openTimetableModal()" class="btn btn-sm btn-secondary">
-            Pokaż rozkład
+        <button type="button"
+                (click)="openTimetableModal()"
+                class="btn btn-sm btn-icon btn-secondary"
+                aria-label="Pokaż rozkład">
+            <mat-icon class="font-sm">calendar_month</mat-icon>
+        </button>
+        <button type="button"
+                (click)="openCreateEventPanel()"
+                class="btn btn-sm btn-icon btn-secondary"
+                aria-label="Dodaj kurs">
+            <mat-icon class="font-sm">add</mat-icon>
         </button>
     </div>
 </div>
