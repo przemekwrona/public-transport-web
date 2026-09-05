@@ -73,7 +73,7 @@ export const routes: Routes = [
             {path: 'calendars/:calendarCode/symbol/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
             {path: 'calendars/:calendarCode/symbol/:calendarSymbol/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
             {path: 'brigades/:brigadeCode/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
-            {path: 'brigades/:brigadeCode/symbol/:calendarSymbol/timetable', component: TimetableEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver }, data: { mode: TimetableEditorComponentMode.GENERATE }},
+            {path: 'brigades/:brigadeCode/symbol/:calendarSymbol/timetable', component: TimetableEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, brigade: brigadeResolver }, data: { mode: TimetableEditorComponentMode.GENERATE }},
             {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
         ]
     },

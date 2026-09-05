@@ -212,7 +212,12 @@
                     @if (isModeCreator()) {
                         <button type="submit" class="btn btn-success">Wygeneruj brygady</button>
                     }
+
+                    @if (isModeGenerator()) {
+                        <button type="button" class="btn btn-success" (click)="generate()">Generuj</button>
+                    }
                 </div>
+                
             </div>
         </div>
         <!-- end: grid -->
