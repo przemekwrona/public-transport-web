@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 
 import { TimetableWizardComponent } from './timetable-wizard.component';
 import {
+  BrigadeService,
   GetAllTripsResponse,
   GetBrigadeDetailsResponse,
   ResourceService,
@@ -17,6 +18,9 @@ describe('TimetableWizardComponent', () => {
   let component: TimetableWizardComponent;
   let fixture: ComponentFixture<TimetableWizardComponent>;
   let deleteResource: jasmine.Spy;
+  let getCalendarSymbolBrigadeResources: jasmine.Spy;
+  let getNextBrigadeEventSequence: jasmine.Spy;
+  let putBrigadeEvent: jasmine.Spy;
   let router: Router;
 
   const brigadeDetails: GetBrigadeDetailsResponse = {
@@ -35,7 +39,9 @@ describe('TimetableWizardComponent', () => {
       route: {routeCode: 'R1'},
       trips: [
         {
-          tripId: {tripCode: 'T-FRONT', variantMode: TripMode.Front, routeId: {routeCode: 'R1'}},
+          tripId: {tripCode: 'T-FRONT', variantMode: TripMode.Front, routeId: {routeCode: 'R1', line: '1', name: 'Centrum'}},
+          line: '1',
+          name: 'Centrum',
           mode: TripMode.Front,
           isMainVariant: true,
           travelTimeInSeconds: 600,
@@ -45,7 +51,9 @@ describe('TimetableWizardComponent', () => {
           ]
         },
         {
-          tripId: {tripCode: 'T-BACK', variantMode: TripMode.Back, routeId: {routeCode: 'R1'}},
+          tripId: {tripCode: 'T-BACK', variantMode: TripMode.Back, routeId: {routeCode: 'R1', line: '1', name: 'Dworzec'}},
+          line: '1',
+          name: 'Dworzec',
           mode: TripMode.Back,
           isMainVariant: false,
           travelTimeInSeconds: 540,
@@ -57,6 +65,11 @@ describe('TimetableWizardComponent', () => {
 
   beforeEach(async () => {
     deleteResource = jasmine.createSpy('deleteResource').and.returnValue(of({}));
+    getCalendarSymbolBrigadeResources = jasmine.createSpy('getCalendarSymbolBrigadeResources')
+      .and.returnValue(of({brigadeResources: [{sequenceHex: 'RES-1', sequence: 1}]}));
+    getNextBrigadeEventSequence = jasmine.createSpy('getNextBrigadeEventSequence')
+      .and.returnValues(of({sequence: 1, sequenceHex: 'EVT-1'}), of({sequence: 2, sequenceHex: 'EVT-2'}));
+    putBrigadeEvent = jasmine.createSpy('putBrigadeEvent').and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
       imports: [TimetableWizardComponent],
@@ -64,6 +77,10 @@ describe('TimetableWizardComponent', () => {
         provideRouter([]),
         {provide: AgencyStorageService, useValue: {getInstance: () => 'test-agency'}},
         {provide: ResourceService, useValue: {deleteResource}},
+        {
+          provide: BrigadeService,
+          useValue: {getCalendarSymbolBrigadeResources, getNextBrigadeEventSequence, putBrigadeEvent}
+        },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -120,6 +137,39 @@ describe('TimetableWizardComponent', () => {
       {time: '07:30', designation: undefined, routeCode: 'R1', tripCode: 'T-BACK', trafficMode: TrafficMode.Normal}
     ]);
     expect(deleteResource).toHaveBeenCalledWith('test-agency', 'B1', 'CAL-1', 'C');
+    expect(getCalendarSymbolBrigadeResources).toHaveBeenCalledWith('test-agency', 'B1', 'CAL-1', 'C');
+    expect(getNextBrigadeEventSequence).toHaveBeenCalledTimes(2);
+    expect(putBrigadeEvent).toHaveBeenCalledTimes(2);
+    expect(putBrigadeEvent).toHaveBeenCalledWith('test-agency', 'B1', 'CAL-1', 'C', 'RES-1', {
+      startSecond: 6 * 3600 + 15 * 60,
+      endSecond: 6 * 3600 + 15 * 60 + 600,
+      line: '1',
+      name: 'Centrum',
+      sequence: 1,
+      sequenceHex: 'EVT-1',
+      tripId: {
+        routeId: {routeCode: 'R1', line: '1', name: 'Centrum', version: undefined},
+        variantName: undefined,
+        variantMode: TripMode.Front,
+        trafficMode: TrafficMode.Normal,
+        tripCode: 'T-FRONT'
+      }
+    });
+    expect(putBrigadeEvent).toHaveBeenCalledWith('test-agency', 'B1', 'CAL-1', 'C', 'RES-1', {
+      startSecond: 7 * 3600 + 30 * 60,
+      endSecond: 7 * 3600 + 30 * 60 + 540,
+      line: '1',
+      name: 'Dworzec',
+      sequence: 2,
+      sequenceHex: 'EVT-2',
+      tripId: {
+        routeId: {routeCode: 'R1', line: '1', name: 'Dworzec', version: undefined},
+        variantName: undefined,
+        variantMode: TripMode.Back,
+        trafficMode: TrafficMode.Normal,
+        tripCode: 'T-BACK'
+      }
+    });
     expect(router.navigate).toHaveBeenCalledWith(['/agency/brigades', 'B1', 'edit'], {
       queryParams: {symbol: 'C'}
     });
