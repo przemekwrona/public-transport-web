@@ -2,8 +2,17 @@ import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterModule} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {TimetableBoardComponent} from '../../timetable/create-timetable/timetable-board/timetable-board.component';
-import {GetAllTripsResponse, TripResponse} from '../../../generated/public-transport-api';
+import {
+    AvailableTripProfile,
+    TimetableBoardComponent
+} from '../../timetable/create-timetable/timetable-board/timetable-board.component';
+import {
+    GetAllTripsResponse,
+    TrafficMode,
+    Trip,
+    TripMode,
+    TripResponse
+} from '../../../generated/public-transport-api';
 
 @Component({
     selector: 'app-timetable-wizard',
@@ -23,6 +32,7 @@ export class TimetableWizardComponent implements OnInit {
     public isSubmitted: boolean = false;
     public tripResponse: TripResponse = {front: {}, back: {}};
     public defaultRoute: GetAllTripsResponse | null = null;
+    public tripProfiles: { front: AvailableTripProfile[]; back: AvailableTripProfile[] } = {front: [], back: []};
     public formGroup: FormGroup;
 
     constructor(private route: ActivatedRoute, private formBuilder: FormBuilder) {
@@ -37,7 +47,10 @@ export class TimetableWizardComponent implements OnInit {
             this.brigadeCode = params.get('brigadeCode');
             this.calendarSymbol = params.get('calendarSymbol');
         });
-        this.route.data.subscribe(data => this.defaultRoute = data['defaultRoute'] ?? null);
+        this.route.data.subscribe(data => {
+            this.defaultRoute = data['defaultRoute'] ?? null;
+            this.tripProfiles = this.buildTripProfiles(this.defaultRoute);
+        });
     }
 
     public getFrontTimetable(): FormGroup {
@@ -55,6 +68,38 @@ export class TimetableWizardComponent implements OnInit {
             interval,
             departures: this.formBuilder.array([])
         });
+    }
+
+    private buildTripProfiles(defaultRoute: GetAllTripsResponse | null): { front: AvailableTripProfile[]; back: AvailableTripProfile[] } {
+        const trips = (defaultRoute?.lines ?? []).flatMap(line => line.trips ?? []);
+        return {
+            front: this.mapTripProfiles(trips, TripMode.Front),
+            back: this.mapTripProfiles(trips, TripMode.Back)
+        };
+    }
+
+    private mapTripProfiles(trips: Trip[], variantMode: TripMode): AvailableTripProfile[] {
+        return trips
+            .filter(trip => (trip.tripId?.variantMode ?? trip.mode) === variantMode)
+            .flatMap(trip => this.toAvailableTripProfiles(trip));
+    }
+
+    private toAvailableTripProfiles(trip: Trip): AvailableTripProfile[] {
+        const routeCode = trip.tripId?.routeId?.routeCode ?? '';
+        const tripCode = trip.tripId?.tripCode ?? '';
+        const profiles = trip.profile?.length
+            ? trip.profile
+            : [{trafficMode: trip.trafficMode ?? TrafficMode.Normal}];
+
+        return profiles.map(profile => ({
+            routeCode,
+            tripCode,
+            trafficMode: profile.trafficMode ?? TrafficMode.Normal,
+            isMainVariant: trip.isMainVariant ?? false,
+            variantDesignation: trip.variantDesignation,
+            variantDescription: trip.variantDescription,
+            travelTimeInSeconds: profile.travelTime ?? trip.travelTimeInSeconds ?? 0
+        }));
     }
 
 }

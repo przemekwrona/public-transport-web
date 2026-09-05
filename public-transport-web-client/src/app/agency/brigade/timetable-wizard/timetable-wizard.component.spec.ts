@@ -3,10 +3,36 @@ import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/route
 import { of } from 'rxjs';
 
 import { TimetableWizardComponent } from './timetable-wizard.component';
+import { GetAllTripsResponse, TrafficMode, TripMode } from '../../../generated/public-transport-api';
 
 describe('TimetableWizardComponent', () => {
   let component: TimetableWizardComponent;
   let fixture: ComponentFixture<TimetableWizardComponent>;
+
+  const defaultRoute: GetAllTripsResponse = {
+    lines: [{
+      route: {routeCode: 'R1'},
+      trips: [
+        {
+          tripId: {tripCode: 'T-FRONT', variantMode: TripMode.Front, routeId: {routeCode: 'R1'}},
+          mode: TripMode.Front,
+          isMainVariant: true,
+          travelTimeInSeconds: 600,
+          profile: [
+            {trafficMode: TrafficMode.Normal, travelTime: 600},
+            {trafficMode: TrafficMode.Traffic, travelTime: 900}
+          ]
+        },
+        {
+          tripId: {tripCode: 'T-BACK', variantMode: TripMode.Back, routeId: {routeCode: 'R1'}},
+          mode: TripMode.Back,
+          isMainVariant: false,
+          travelTimeInSeconds: 540,
+          profile: [{trafficMode: TrafficMode.Normal, travelTime: 540}]
+        }
+      ]
+    }]
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,7 +46,7 @@ describe('TimetableWizardComponent', () => {
               brigadeCode: 'B1',
               calendarSymbol: 'C'
             })),
-            data: of({defaultTrip: {}})
+            data: of({defaultRoute})
           }
         }
       ]
@@ -39,5 +65,15 @@ describe('TimetableWizardComponent', () => {
   it('should render two timetable boards', () => {
     const boards = fixture.nativeElement.querySelectorAll('app-timetable-board');
     expect(boards.length).toBe(2);
+  });
+
+  it('should map defaultRoute profiles into front and back tripProfiles', () => {
+    expect(component.tripProfiles.front).toEqual([
+      {routeCode: 'R1', tripCode: 'T-FRONT', trafficMode: TrafficMode.Normal, isMain: true, travelTimeInSeconds: 600},
+      {routeCode: 'R1', tripCode: 'T-FRONT', trafficMode: TrafficMode.Traffic, isMain: true, travelTimeInSeconds: 900}
+    ]);
+    expect(component.tripProfiles.back).toEqual([
+      {routeCode: 'R1', tripCode: 'T-BACK', trafficMode: TrafficMode.Normal, isMain: false, travelTimeInSeconds: 540}
+    ]);
   });
 });
