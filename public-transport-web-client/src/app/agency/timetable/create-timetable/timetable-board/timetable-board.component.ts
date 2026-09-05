@@ -14,9 +14,30 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {
     TimetablePayload,
     TimetableStopTime,
-    TimetableTrip, TripDepartures
+    TimetableTrip, TrafficMode, TripDepartures
 } from "../../../../generated/public-transport-api";
 import {size} from "lodash";
+import {FormatSecondsPipe} from "../../../brigade/brigade-scheduler/trip-variant-select/format-seconds.pipe";
+
+export interface TimetableBoardEvent {
+    time: string;
+    designation?: string;
+    routeCode: string;
+    tripCode: string;
+    trafficMode: TrafficMode;
+}
+
+export interface AvailableTripProfile {
+    routeCode: string;
+    tripCode: string;
+    trafficMode: TrafficMode;
+
+    isMainVariant?: boolean;
+    variantDesignation?: string;
+    variantDescription?: string;
+
+    travelTimeInSeconds: number;
+}
 
 @Component({
     selector: 'app-timetable-board',
@@ -25,7 +46,8 @@ import {size} from "lodash";
         FormsModule,
         ReactiveFormsModule,
         NgxMaterialTimepickerModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        FormatSecondsPipe
     ],
     templateUrl: './timetable-board.component.html',
     styleUrl: './timetable-board.component.scss'
