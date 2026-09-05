@@ -1,14 +1,34 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormGroup } from '@angular/forms';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { TimetableWizardComponent } from './timetable-wizard.component';
-import { GetAllTripsResponse, TrafficMode, TripMode } from '../../../generated/public-transport-api';
+import {
+  GetAllTripsResponse,
+  GetBrigadeDetailsResponse,
+  ResourceService,
+  TrafficMode,
+  TripMode
+} from '../../../generated/public-transport-api';
+import { AgencyStorageService } from '../../../auth/agency-storage.service';
 
 describe('TimetableWizardComponent', () => {
   let component: TimetableWizardComponent;
   let fixture: ComponentFixture<TimetableWizardComponent>;
+  let deleteResource: jasmine.Spy;
+  let router: Router;
+
+  const brigadeDetails: GetBrigadeDetailsResponse = {
+    brigade: {
+      brigades: [{
+        calendarSymbolId: {
+          symbol: 'C',
+          calendarItemId: {code: 'CAL-1'}
+        }
+      }]
+    }
+  };
 
   const defaultRoute: GetAllTripsResponse = {
     lines: [{
@@ -36,10 +56,14 @@ describe('TimetableWizardComponent', () => {
   };
 
   beforeEach(async () => {
+    deleteResource = jasmine.createSpy('deleteResource').and.returnValue(of({}));
+
     await TestBed.configureTestingModule({
       imports: [TimetableWizardComponent],
       providers: [
         provideRouter([]),
+        {provide: AgencyStorageService, useValue: {getInstance: () => 'test-agency'}},
+        {provide: ResourceService, useValue: {deleteResource}},
         {
           provide: ActivatedRoute,
           useValue: {
@@ -47,7 +71,7 @@ describe('TimetableWizardComponent', () => {
               brigadeCode: 'B1',
               calendarSymbol: 'C'
             })),
-            data: of({defaultRoute})
+            data: of({defaultRoute, brigade: brigadeDetails})
           }
         }
       ]
@@ -56,6 +80,8 @@ describe('TimetableWizardComponent', () => {
 
     fixture = TestBed.createComponent(TimetableWizardComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.returnValue(Promise.resolve(true));
     fixture.detectChanges();
   });
 
@@ -82,14 +108,10 @@ describe('TimetableWizardComponent', () => {
     setDepartureMinutes(component.getFrontTimetable(), 6, 15);
     setDepartureMinutes(component.getBackTimetable(), 7, 30);
 
-    const log = spyOn(console, 'log');
     const button: HTMLButtonElement | null = fixture.nativeElement.querySelector('.card.min-w-full button.btn-success');
     expect(button?.textContent?.trim()).toBe('Generuj');
 
     button?.click();
-
-    expect(log).toHaveBeenCalledWith(component.frontDepartures);
-    expect(log).toHaveBeenCalledWith(component.backDepartures);
 
     expect(component.frontDepartures).toEqual([
       {time: '06:15', designation: undefined, routeCode: 'R1', tripCode: 'T-FRONT', trafficMode: TrafficMode.Normal}
@@ -97,6 +119,10 @@ describe('TimetableWizardComponent', () => {
     expect(component.backDepartures).toEqual([
       {time: '07:30', designation: undefined, routeCode: 'R1', tripCode: 'T-BACK', trafficMode: TrafficMode.Normal}
     ]);
+    expect(deleteResource).toHaveBeenCalledWith('test-agency', 'B1', 'CAL-1', 'C');
+    expect(router.navigate).toHaveBeenCalledWith(['/agency/brigades', 'B1', 'edit'], {
+      queryParams: {symbol: 'C'}
+    });
   });
 });
 

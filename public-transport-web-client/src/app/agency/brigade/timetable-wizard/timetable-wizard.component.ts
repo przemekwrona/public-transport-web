@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ActivatedRoute, RouterModule} from '@angular/router';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {
     AvailableTripProfile,
@@ -9,11 +9,14 @@ import {
 } from '../../timetable/create-timetable/timetable-board/timetable-board.component';
 import {
     GetAllTripsResponse,
+    GetBrigadeDetailsResponse,
+    ResourceService,
     TrafficMode,
     Trip,
     TripMode,
     TripResponse
 } from '../../../generated/public-transport-api';
+import {AgencyStorageService} from '../../../auth/agency-storage.service';
 
 @Component({
     selector: 'app-timetable-wizard',
@@ -30,6 +33,7 @@ export class TimetableWizardComponent implements OnInit {
 
     public brigadeCode: string | null = null;
     public calendarSymbol: string | null = null;
+    public brigadeDetails: GetBrigadeDetailsResponse | null = null;
     public isSubmitted: boolean = false;
     public tripResponse: TripResponse = {front: {}, back: {}};
     public defaultRoute: GetAllTripsResponse | null = null;
@@ -41,7 +45,13 @@ export class TimetableWizardComponent implements OnInit {
     @ViewChild('frontBoard') frontBoard?: TimetableBoardComponent;
     @ViewChild('backBoard') backBoard?: TimetableBoardComponent;
 
-    constructor(private route: ActivatedRoute, private formBuilder: FormBuilder) {
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private formBuilder: FormBuilder,
+        private resourceService: ResourceService,
+        private agencyStorageService: AgencyStorageService
+    ) {
         this.formGroup = this.formBuilder.group({
             front: this.buildDirectionGroup(15),
             back: this.buildDirectionGroup(18)
@@ -56,6 +66,7 @@ export class TimetableWizardComponent implements OnInit {
         this.route.data.subscribe(data => {
             this.defaultRoute = data['defaultRoute'] ?? null;
             this.tripProfiles = this.buildTripProfiles(this.defaultRoute);
+            this.brigadeDetails = data['brigade'] ?? null;
         });
     }
 
@@ -76,7 +87,10 @@ export class TimetableWizardComponent implements OnInit {
         });
     }
 
-    private buildTripProfiles(defaultRoute: GetAllTripsResponse | null): { front: AvailableTripProfile[]; back: AvailableTripProfile[] } {
+    private buildTripProfiles(defaultRoute: GetAllTripsResponse | null): {
+        front: AvailableTripProfile[];
+        back: AvailableTripProfile[]
+    } {
         const trips = (defaultRoute?.lines ?? []).flatMap(line => line.trips ?? []);
         return {
             front: this.mapTripProfiles(trips, TripMode.Front),
@@ -109,27 +123,29 @@ export class TimetableWizardComponent implements OnInit {
     }
 
     public generate() {
+        const brigadeCode = this.brigadeCode;
+        const symbol = this.calendarSymbol;
+
         this.frontDepartures = this.frontBoard?.getDepartures() ?? [];
         this.backDepartures = this.backBoard?.getDepartures() ?? [];
-        console.log(this.frontDepartures);
-        console.log(this.backDepartures);
 
-        // const brigadeCode = this.brigadeCode;
-        // const symbol = this.calendarSymbol;
-        // const calendarCode = this.brigadeDetails?.brigade?.brigades
-        //     ?.find(group => group.calendarSymbolId?.symbol === symbol)
-        //     ?.calendarSymbolId?.calendarItemId?.code;
-        //
-        // if (!brigadeCode || !calendarCode || !symbol) {
-        //     return;
-        // }
-        //
-        // this.resourceService.deleteResource(
-        //     this.agencyStorageService.getInstance(), brigadeCode, calendarCode, symbol).subscribe(() => {
-        //     this.router.navigate(['/agency/brigades', brigadeCode, 'edit'], {
-        //         queryParams: {symbol: this.calendarSymbol}
-        //     }).then();
-        // });
+        const calendarCode = this.brigadeDetails?.brigade?.brigades
+            ?.find(group => group.calendarSymbolId?.symbol === symbol)
+            ?.calendarSymbolId?.calendarItemId?.code;
+
+        if (!brigadeCode || !calendarCode || !symbol) {
+            return;
+        }
+
+        this.resourceService.deleteResource(
+            this.agencyStorageService.getInstance(), brigadeCode, calendarCode, symbol).subscribe(() => {
+            console.log(this.frontDepartures);
+            console.log(this.backDepartures);
+
+            this.router.navigate(['/agency/brigades', brigadeCode, 'edit'], {
+                queryParams: {symbol: this.calendarSymbol}
+            }).then();
+        });
     }
 
 }
