@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterModule} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {
     AvailableTripProfile,
-    TimetableBoardComponent
+    TimetableBoardComponent,
+    TimetableBoardEvent
 } from '../../timetable/create-timetable/timetable-board/timetable-board.component';
 import {
     GetAllTripsResponse,
@@ -34,6 +35,11 @@ export class TimetableWizardComponent implements OnInit {
     public defaultRoute: GetAllTripsResponse | null = null;
     public tripProfiles: { front: AvailableTripProfile[]; back: AvailableTripProfile[] } = {front: [], back: []};
     public formGroup: FormGroup;
+    public frontDepartures: TimetableBoardEvent[] = [];
+    public backDepartures: TimetableBoardEvent[] = [];
+
+    @ViewChild('frontBoard') frontBoard?: TimetableBoardComponent;
+    @ViewChild('backBoard') backBoard?: TimetableBoardComponent;
 
     constructor(private route: ActivatedRoute, private formBuilder: FormBuilder) {
         this.formGroup = this.formBuilder.group({
@@ -103,6 +109,11 @@ export class TimetableWizardComponent implements OnInit {
     }
 
     public generate() {
+        this.frontDepartures = this.frontBoard?.getDepartures() ?? [];
+        this.backDepartures = this.backBoard?.getDepartures() ?? [];
+        console.log(this.frontDepartures);
+        console.log(this.backDepartures);
+
         // const brigadeCode = this.brigadeCode;
         // const symbol = this.calendarSymbol;
         // const calendarCode = this.brigadeDetails?.brigade?.brigades
