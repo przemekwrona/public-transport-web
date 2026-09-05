@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterModule} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {
     TimetableBoardComponent,
-    TimetableBoardEvent
 } from '../../timetable/create-timetable/timetable-board/timetable-board.component';
-import {TripResponse} from '../../../generated/public-transport-api';
+import {TripResponse, TripsDetails} from '../../../generated/public-transport-api';
 
 @Component({
     selector: 'app-timetable-wizard',
     imports: [
+        CommonModule,
         RouterModule,
         ReactiveFormsModule,
         TimetableBoardComponent
@@ -23,6 +24,7 @@ export class TimetableWizardComponent implements OnInit {
     public calendarSymbol: string | null = null;
     public isSubmitted: boolean = false;
     public tripResponse: TripResponse = {front: {}, back: {}};
+    public defaultTrip: TripsDetails | null = null;
     public formGroup: FormGroup;
 
     constructor(private route: ActivatedRoute, private formBuilder: FormBuilder) {
@@ -37,6 +39,7 @@ export class TimetableWizardComponent implements OnInit {
             this.brigadeCode = params.get('brigadeCode');
             this.calendarSymbol = params.get('calendarSymbol');
         });
+        this.route.data.subscribe(data => this.defaultTrip = data['defaultTrip'] ?? null);
     }
 
     public getFrontTimetable(): FormGroup {

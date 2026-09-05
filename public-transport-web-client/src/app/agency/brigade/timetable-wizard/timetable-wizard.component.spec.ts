@@ -19,7 +19,8 @@ describe('TimetableWizardComponent', () => {
             paramMap: of(convertToParamMap({
               brigadeCode: 'B1',
               calendarSymbol: 'C'
-            }))
+            })),
+            data: of({defaultTrip: {}})
           }
         }
       ]
