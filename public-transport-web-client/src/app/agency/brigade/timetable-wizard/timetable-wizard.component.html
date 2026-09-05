@@ -25,7 +25,7 @@
                     </div>
                     <div class="card-body py-2.5 flex flex-col">
                         <app-timetable-board [group]="getFrontTimetable()" [submitted]="isSubmitted"
-                                             [tripDepartures]="tripResponse.front"></app-timetable-board>
+                                             [tripDepartures]="tripResponse.front" [tripProfiles]="tripProfiles.front"></app-timetable-board>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="card-body py-2.5 flex flex-col">
                         <app-timetable-board [group]="getBackTimetable()" [submitted]="isSubmitted"
-                                             [tripDepartures]="tripResponse.back"></app-timetable-board>
+                                             [tripDepartures]="tripResponse.back" [tripProfiles]="tripProfiles.back"></app-timetable-board>
                     </div>
                 </div>
             </div>
