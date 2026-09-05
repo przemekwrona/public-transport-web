@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 
 import { TimetableWizardComponent } from './timetable-wizard.component';
 
@@ -8,7 +10,19 @@ describe('TimetableWizardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TimetableWizardComponent]
+      imports: [TimetableWizardComponent],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of(convertToParamMap({
+              brigadeCode: 'B1',
+              calendarSymbol: 'C'
+            }))
+          }
+        }
+      ]
     })
     .compileComponents();
 
