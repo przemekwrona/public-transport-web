@@ -17,6 +17,6 @@ public class ResourceController implements ResourceApi {
 
     @Override
     public ResponseEntity<Status> deleteResource(String agency, String brigadeCode, String calendarCode, String symbol) {
-        return ResponseEntity.ok(resourceDeletionService.deleteResource(agency, brigadeCode, calendarCode, symbol));
+        return ResponseEntity.ok(resourceDeletionService.deleteResourceAndAppendOne(agency, brigadeCode, calendarCode, symbol));
     }
 }

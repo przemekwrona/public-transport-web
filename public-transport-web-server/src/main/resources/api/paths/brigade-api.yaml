@@ -94,7 +94,7 @@ paths:
               schema:
                 $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
-  /agency/{agency}/brigades/{brigadeCode}/details:
+  /agency/{agency}/brigades/{brigadeCode}:
     get:
       tags:
         - brigade
@@ -118,6 +118,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetBrigadeDetailsResponse'
+
+    delete:
+      tags:
+        - brigade
+      summary: Get brigade item details by brigade code
+      operationId: deleteBrigadeByBrigadeCode
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: brigadeCode
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
   /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{calendarSymbol}/brigade:
     post:

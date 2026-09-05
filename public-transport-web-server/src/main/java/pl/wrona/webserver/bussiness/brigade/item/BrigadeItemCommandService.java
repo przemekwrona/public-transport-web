@@ -17,4 +17,10 @@ public class BrigadeItemCommandService {
         return brigadeItemCommandRepository.save(brigadeItemEntity);
     }
 
+    @Transactional
+    public void delete(BrigadeItemEntity brigadeItemEntity) {
+        brigadeItemCommandRepository.delete(brigadeItemEntity);
+        brigadeItemCommandRepository.flush();
+    }
+
 }

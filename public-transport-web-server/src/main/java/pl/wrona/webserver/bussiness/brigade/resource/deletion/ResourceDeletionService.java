@@ -29,6 +29,14 @@ public class ResourceDeletionService {
 
     @Transactional
     @PreAgencyAuthorize
+    public Status deleteResourceAndAppendOne(String instance, String brigadeCode, String calendarCode, String symbol) {
+        var deleteStatus = deleteResource(instance, brigadeCode, calendarCode, symbol);
+        brigadeResourceCommandService.init(instance, brigadeCode, calendarCode, symbol);
+        return deleteStatus;
+    }
+
+    @Transactional
+    @PreAgencyAuthorize
     public Status deleteResource(String instance, String brigadeCode, String calendarCode, String symbol) {
         var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);
         if (brigadeGroup == null) {
@@ -54,8 +62,6 @@ public class ResourceDeletionService {
         if (!resources.isEmpty()) {
             brigadeResourceCommandService.deleteAll(resources);
         }
-
-        brigadeResourceCommandService.init(instance, brigadeCode, calendarCode, symbol);
 
         return new Status().status(Status.StatusEnum.DELETED);
     }
