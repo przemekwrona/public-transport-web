@@ -11,3 +11,26 @@ databaseChangeLog:
         - dropUniqueConstraint:
             tableName: brigade_item
             constraintName: uq_brigade_item_agency_sequence
+
+  - changeSet:
+      id: drop-preferred-route-id-from-brigade-item
+      author: pwrona
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: brigade_item
+            constraintName: fk_brigade_item_preferred_route
+
+        - dropColumn:
+            tableName: brigade_item
+            columnName: preferred_route_id
+      rollback:
+        - addColumn:
+            tableName: brigade_item
+            columns:
+              - column:
+                  name: preferred_route_id
+                  type: integer
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_brigade_item_preferred_route
+                    references: route(route_id)
