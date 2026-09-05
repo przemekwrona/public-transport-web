@@ -5,13 +5,11 @@ import {
     BrigadeService,
     GetAllTripsResponse,
     GetBrigadeDetailsResponse,
-    Trip,
-    TripService,
-    TripsDetails
+    TripService
 } from '../../../generated/public-transport-api';
 import {AgencyStorageService} from '../../../auth/agency-storage.service';
 
-export const defaultTripResolver: ResolveFn<Observable<TripsDetails>> = (route, state) => {
+export const defaultTripResolver: ResolveFn<Observable<GetAllTripsResponse>> = (route, state) => {
     const brigadeService: BrigadeService = inject(BrigadeService);
     const tripService: TripService = inject(TripService);
     const agencyStorageService: AgencyStorageService = inject(AgencyStorageService);
@@ -22,14 +20,7 @@ export const defaultTripResolver: ResolveFn<Observable<TripsDetails>> = (route, 
     return brigadeService.getBrigadeDetails(instance, brigadeCode).pipe(
         switchMap((brigadeDetails: GetBrigadeDetailsResponse) => {
             const routeCode: string = brigadeDetails.brigade.defaultRouteCode;
-            return tripService.getTripsByRouteAndFilterLineOrName(instance, routeCode).pipe(
-                switchMap((tripsResponse: GetAllTripsResponse) => {
-                    const trips: Trip[] = tripsResponse.lines?.[0]?.trips ?? [];
-                    const defaultTrip: Trip = trips.find(trip => trip.isMainVariant) ?? trips[0];
-                    const tripCode: string = defaultTrip?.tripId?.tripCode;
-                    return tripService.getTripVariantDetails(instance, routeCode, tripCode);
-                })
-            );
+            return tripService.getTripsByRouteAndFilterLineOrName(instance, routeCode);
         })
     );
 };
