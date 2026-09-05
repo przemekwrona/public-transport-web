@@ -1,1 +1,22 @@
-<p>timetable-wizard works!</p>
+<div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+        <div class="flex flex-col justify-center gap-2">
+            <h1 class="text-xl font-medium leading-none text-gray-900">Generator Rozkładów jazdy i Brygad</h1>
+            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
+                Wygeneruj kursy brygady na podstawie rozkładu jazdy.
+            </div>
+        </div>
+        <div class="flex items-center gap-2.5">
+            <a [routerLink]="['/agency/brigades', brigadeCode, 'edit']"
+               [queryParams]="{ symbol: calendarSymbol }"
+               class="btn btn-sm btn-secondary">Anuluj i wróć do brygady</a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+    </div>
+    <!-- end: grid -->
+</div>
