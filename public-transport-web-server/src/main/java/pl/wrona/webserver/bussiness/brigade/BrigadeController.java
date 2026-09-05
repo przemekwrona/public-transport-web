@@ -51,7 +51,7 @@ public class BrigadeController implements BrigadeApi {
 
     @Override
     public ResponseEntity<BrigadeGroupBody> getCalendarSymbolBrigadeResources(String agency, String brigadeCode, String calendarCode, String symbol) {
-        return ResponseEntity.ok(brigadeGroupDetailsService.getCalendarSymbolBrigadeResources(agency, brigadeCode));
+        return ResponseEntity.ok(brigadeGroupDetailsService.getCalendarSymbolBrigadeResources(agency, brigadeCode, calendarCode, symbol));
     }
 
     @Override

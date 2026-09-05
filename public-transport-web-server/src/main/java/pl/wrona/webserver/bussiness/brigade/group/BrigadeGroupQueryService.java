@@ -14,10 +14,6 @@ public class BrigadeGroupQueryService {
 
     private final BrigadeGroupQueryRepository brigadeGroupQueryRepository;
 
-    public BrigadeGroupEntity findByBrigadeCode(String instance, String brigadeCode) {
-        return brigadeGroupQueryRepository.findBtBrigadeCode(instance, brigadeCode);
-    }
-
     public BrigadeGroupEntity findByBrigadeCode(String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
         return brigadeGroupQueryRepository.findBtBrigadeCode(instance, brigadeCode, calendarCode, calendarSymbol);
     }

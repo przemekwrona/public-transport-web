@@ -8,15 +8,20 @@ import {
     TimetableBoardEvent
 } from '../../timetable/create-timetable/timetable-board/timetable-board.component';
 import {
+    BrigadeGroupBody,
+    BrigadeService,
     GetAllTripsResponse,
     GetBrigadeDetailsResponse,
+    PutBrigadeEventBody,
     ResourceService,
     TrafficMode,
     Trip,
+    TripId2,
     TripMode,
     TripResponse
 } from '../../../generated/public-transport-api';
 import {AgencyStorageService} from '../../../auth/agency-storage.service';
+import {concatMap, from, of, switchMap, toArray} from 'rxjs';
 
 @Component({
     selector: 'app-timetable-wizard',
@@ -50,6 +55,7 @@ export class TimetableWizardComponent implements OnInit {
         private router: Router,
         private formBuilder: FormBuilder,
         private resourceService: ResourceService,
+        private brigadeService: BrigadeService,
         private agencyStorageService: AgencyStorageService
     ) {
         this.formGroup = this.formBuilder.group({
@@ -137,15 +143,99 @@ export class TimetableWizardComponent implements OnInit {
             return;
         }
 
-        this.resourceService.deleteResource(
-            this.agencyStorageService.getInstance(), brigadeCode, calendarCode, symbol).subscribe(() => {
-            console.log(this.frontDepartures);
-            console.log(this.backDepartures);
+        const instance = this.agencyStorageService.getInstance();
 
+        this.resourceService.deleteResource(instance, brigadeCode, calendarCode, symbol).pipe(
+            switchMap(() => this.brigadeService.getCalendarSymbolBrigadeResources(
+                instance, brigadeCode, calendarCode, symbol)),
+            switchMap((group: BrigadeGroupBody) => {
+                const resourceCode = group.brigadeResources?.[0]?.sequenceHex;
+                if (!resourceCode) {
+                    return of([]);
+                }
+
+                const departures = [
+                    ...this.frontDepartures.map(departure => ({departure, variantMode: TripMode.Front})),
+                    ...this.backDepartures.map(departure => ({departure, variantMode: TripMode.Back}))
+                ];
+
+                return from(departures).pipe(
+                    concatMap(({departure, variantMode}) =>
+                        this.createBrigadeEvent(instance, brigadeCode, calendarCode, symbol, resourceCode, departure, variantMode)),
+                    toArray()
+                );
+            })
+        ).subscribe(() => {
             this.router.navigate(['/agency/brigades', brigadeCode, 'edit'], {
                 queryParams: {symbol: this.calendarSymbol}
             }).then();
         });
+    }
+
+    private createBrigadeEvent(
+        instance: string,
+        brigadeCode: string,
+        calendarCode: string,
+        symbol: string,
+        resourceCode: string,
+        departure: TimetableBoardEvent,
+        variantMode: TripMode
+    ) {
+        return this.brigadeService.getNextBrigadeEventSequence(
+            instance, brigadeCode, calendarCode, symbol, resourceCode
+        ).pipe(
+            switchMap(sequence => {
+                const trip = this.findTrip(departure.routeCode, departure.tripCode);
+                const startSecond = this.timeToSeconds(departure.time);
+                const travelTime = this.findTravelTime(departure, variantMode);
+                const tripId: TripId2 = {
+                    routeId: {
+                        routeCode: departure.routeCode,
+                        line: trip?.line ?? trip?.tripId?.routeId?.line,
+                        name: trip?.name ?? trip?.tripId?.routeId?.name,
+                        version: trip?.tripId?.routeId?.version
+                    },
+                    variantName: trip?.tripId?.variantName ?? trip?.variant,
+                    variantMode,
+                    trafficMode: departure.trafficMode,
+                    tripCode: departure.tripCode
+                };
+                const body: PutBrigadeEventBody = {
+                    startSecond,
+                    endSecond: startSecond + travelTime,
+                    line: tripId.routeId?.line ?? trip?.line,
+                    name: tripId.routeId?.name ?? trip?.name,
+                    sequence: sequence.sequence,
+                    sequenceHex: sequence.sequenceHex,
+                    tripId
+                };
+
+                return this.brigadeService.putBrigadeEvent(
+                    instance, brigadeCode, calendarCode, symbol, resourceCode, body);
+            })
+        );
+    }
+
+    private findTrip(routeCode: string, tripCode: string): Trip | undefined {
+        return (this.defaultRoute?.lines ?? [])
+            .flatMap(line => line.trips ?? [])
+            .find(trip =>
+                (trip.tripId?.routeId?.routeCode ?? '') === routeCode
+                && (trip.tripId?.tripCode ?? '') === tripCode);
+    }
+
+    private findTravelTime(departure: TimetableBoardEvent, variantMode: TripMode): number {
+        const profiles = variantMode === TripMode.Front ? this.tripProfiles.front : this.tripProfiles.back;
+        return profiles.find(profile =>
+            profile.routeCode === departure.routeCode
+            && profile.tripCode === departure.tripCode
+            && profile.trafficMode === departure.trafficMode
+        )?.travelTimeInSeconds ?? 0;
+    }
+
+    private timeToSeconds(time: string): number {
+        const [hours, minutes] = time.split(':').map(Number);
+        return (hours * 3600) + (minutes * 60);
     }
 
 }
