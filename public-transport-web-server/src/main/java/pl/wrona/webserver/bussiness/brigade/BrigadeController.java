@@ -24,6 +24,7 @@ import pl.wrona.webserver.bussiness.brigade.event.creator.BrigadeEventCreatorSer
 import pl.wrona.webserver.bussiness.brigade.event.deletion.BrigadeEventDeletionService;
 import pl.wrona.webserver.bussiness.brigade.event.updater.BrigadeEventUpdaterService;
 import pl.wrona.webserver.bussiness.brigade.group.creator.BrigadeGroupCreatorService;
+import pl.wrona.webserver.bussiness.brigade.item.BrigadeDeletionService;
 import pl.wrona.webserver.bussiness.brigade.item.pagination.BrigadeItemPaginationService;
 import pl.wrona.webserver.bussiness.brigade.item.creator.BrigadeItemCreatorService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceCommandService;
@@ -42,6 +43,7 @@ public class BrigadeController implements BrigadeApi {
     private final BrigadeEventUpdaterService brigadeEventUpdaterService;
     private final BrigadeEventDeletionService brigadeEventDeletionService;
     private final BrigadeResourceCommandService brigadeResourceCommandService;
+    private final BrigadeDeletionService brigadeDeletionService;
 
     @Override
     public ResponseEntity<GetBrigadeResponse> getBrigades(String agency) {
@@ -86,6 +88,11 @@ public class BrigadeController implements BrigadeApi {
     @Override
     public ResponseEntity<Status> deleteBrigade(String agency, BrigadeDeleteBody brigadeDeleteBody) {
         return ResponseEntity.status(HttpStatus.OK).body(brigadeQueryService.deleteBrigade(agency, brigadeDeleteBody));
+    }
+
+    @Override
+    public ResponseEntity<Status> deleteBrigadeByBrigadeCode(String agency, String brigadeCode) {
+        return ResponseEntity.ok(brigadeDeletionService.deleteBrigadeByBrigadeCode(agency, brigadeCode));
     }
 
     @Override
