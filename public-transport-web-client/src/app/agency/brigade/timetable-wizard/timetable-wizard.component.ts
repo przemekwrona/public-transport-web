@@ -102,4 +102,23 @@ export class TimetableWizardComponent implements OnInit {
         }));
     }
 
+    public generate() {
+        // const brigadeCode = this.brigadeCode;
+        // const symbol = this.calendarSymbol;
+        // const calendarCode = this.brigadeDetails?.brigade?.brigades
+        //     ?.find(group => group.calendarSymbolId?.symbol === symbol)
+        //     ?.calendarSymbolId?.calendarItemId?.code;
+        //
+        // if (!brigadeCode || !calendarCode || !symbol) {
+        //     return;
+        // }
+        //
+        // this.resourceService.deleteResource(
+        //     this.agencyStorageService.getInstance(), brigadeCode, calendarCode, symbol).subscribe(() => {
+        //     this.router.navigate(['/agency/brigades', brigadeCode, 'edit'], {
+        //         queryParams: {symbol: this.calendarSymbol}
+        //     }).then();
+        // });
+    }
+
 }
