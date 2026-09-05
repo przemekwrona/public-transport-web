@@ -23,7 +23,9 @@ import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 @AllArgsConstructor
 @Table(name = "brigade_item", uniqueConstraints = {
         @UniqueConstraint(name = "uq_brigade_item_agency_calendar_sequence",
-                columnNames = {"agency_id", "calendar_item_id", "brigade_item_sequence"})
+                columnNames = {"agency_id", "calendar_item_id", "brigade_item_sequence"}),
+        @UniqueConstraint(name = "uq_brigade_item_agency_sequence",
+                columnNames = {"agency_id", "brigade_item_sequence"})
 })
 public class BrigadeItemEntity {
 

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-unique-on-brigade-item-agency-sequence
+      author: pwrona
+      changes:
+        - addUniqueConstraint:
+            tableName: brigade_item
+            columnNames: agency_id, brigade_item_sequence
+            constraintName: uq_brigade_item_agency_sequence
+      rollback:
+        - dropUniqueConstraint:
+            tableName: brigade_item
+            constraintName: uq_brigade_item_agency_sequence

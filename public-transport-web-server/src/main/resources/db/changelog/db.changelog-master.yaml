@@ -87,3 +87,7 @@ databaseChangeLog:
       file: 022_update_brigades.yaml
       relativeToChangelogFile: true
 
+  - include:
+      file: 023_brigade_item_agency_sequence_unique.yaml
+      relativeToChangelogFile: true
+
