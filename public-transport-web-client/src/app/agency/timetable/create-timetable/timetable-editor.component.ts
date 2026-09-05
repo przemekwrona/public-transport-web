@@ -33,7 +33,7 @@ import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
 import {NotificationService} from "../../../shared/notification.service";
 
 export enum TimetableEditorComponentMode {
-    CREATE, EDIT
+    CREATE, EDIT, GENERATE
 }
 
 @Component({
@@ -62,6 +62,8 @@ export class TimetableEditorComponent implements OnInit {
     public isSubmitted: boolean = false;
     public timetableEditorComponentMode: TimetableEditorComponentMode;
     public timetableGeneratorDetailsResponse: GetTimetableGeneratorDetailsResponse | null;
+    public brigadeCode: string | null = null;
+    public calendarSymbol: string | null = null;
 
     /** control for the MatSelect filter keyword */
     public bankFilterCtrl: FormControl<string> = new FormControl<string>('');
@@ -79,11 +81,18 @@ export class TimetableEditorComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.route.paramMap.subscribe(params => {
+            this.brigadeCode = params.get('brigadeCode');
+            this.calendarSymbol = params.get('calendarSymbol');
+        });
         this.route.data.subscribe((data: Data) => this.timetableEditorComponentMode = data['mode']);
         this.route.data.subscribe(data => this.calendarsResponse = data['calendars']);
         this.route.data.subscribe(data => this.routes = data['routes']);
         this.route.data.subscribe(data => {
             this.timetableGeneratorDetailsResponse = data['timetableGenerator'] as GetTimetableGeneratorDetailsResponse;
+            if (!this.timetableGeneratorDetailsResponse) {
+                return;
+            }
             this.getRouteIdFormControl().setValue(this.timetableGeneratorDetailsResponse.timetableGeneratorId.routeId);
             this.getCalendarNameFormControl().setValue(this.timetableGeneratorDetailsResponse.timetables.calendarName);
         });
@@ -201,6 +210,10 @@ export class TimetableEditorComponent implements OnInit {
 
     public isModeEditor(): boolean {
         return this.timetableEditorComponentMode === TimetableEditorComponentMode.EDIT;
+    }
+
+    public isModeGenerator(): boolean {
+        return this.timetableEditorComponentMode === TimetableEditorComponentMode.GENERATE;
     }
 
     public findCalendarByName(calendarName: string): CalendarSymbolBody  {
