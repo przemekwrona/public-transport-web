@@ -14,7 +14,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {
     TimetablePayload,
     TimetableStopTime,
-    TimetableTrip, TrafficMode, TripDepartures
+    TimetableTrip, TrafficMode, TripDepartures, TripProfile
 } from "../../../../generated/public-transport-api";
 import {size} from "lodash";
 import {FormatSecondsPipe} from "../../../brigade/brigade-scheduler/trip-variant-select/format-seconds.pipe";
@@ -57,6 +57,8 @@ export class TimetableBoardComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() submitted: boolean = false;
     @Input() tripDepartures: TripDepartures = {};
+
+    @Input() tripProfiles: AvailableTripProfile[] = [];
 
     @Input()
     set timetablePayload(timetablePayload: TimetablePayload | null) {
