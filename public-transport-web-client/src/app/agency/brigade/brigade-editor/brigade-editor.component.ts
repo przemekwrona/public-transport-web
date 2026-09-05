@@ -201,4 +201,8 @@ export class BrigadeEditorComponent implements OnInit {
         return this.getControl("brigadeName") as FormControl<string>;
     }
 
+    get defaultRoute() {
+        return this.tripsResponse?.lines?.[0]?.route ?? null;
+    }
+
 }

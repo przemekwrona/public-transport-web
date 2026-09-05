@@ -32,6 +32,25 @@
                 </div>
             </div>
 
+            <div class="w-full">
+                <div class="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label flex items-center gap-1 max-w-56">Domyślna linia</label>
+                    <div class="w-full">
+                        @if (defaultRoute; as route) {
+                            <div class="flex items-center flex-wrap gap-2">
+                                <span class="text-sm text-gray-900">
+                                    <strong>{{ route.routeId?.line }}</strong>
+                                    {{ (route.routeId?.name ?? '') | routeNameNorm }}
+                                </span>
+                                @if (route.routeId?.version) {
+                                    <span class="badge badge-sm badge-outline badge-info">v{{ route.routeId.version }}.0</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
 <!--            <div class="w-full">-->
 <!--                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">-->
 <!--                    <label class="form-label flex items-center gap-1 max-w-56">Kalendarz</label>-->
