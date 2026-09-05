@@ -10,7 +10,7 @@ import {
 } from '../../../generated/public-transport-api';
 import {AgencyStorageService} from '../../../auth/agency-storage.service';
 
-describe('defaultTripResolver', () => {
+describe('defaultRouteResolver', () => {
     const executeResolver: ResolveFn<Observable<GetAllTripsResponse>> = (...resolverParameters) =>
         TestBed.runInInjectionContext(() => defaultRouteResolver(...resolverParameters));
 
