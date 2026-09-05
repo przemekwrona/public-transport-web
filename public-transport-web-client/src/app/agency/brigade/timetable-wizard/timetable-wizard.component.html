@@ -17,6 +17,32 @@
 <div class="container-fixed">
     <!-- begin: grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+        <div class="col-span-1">
+            <div class="grid gap-5 lg:gap-7.5">
+                <div class="card">
+                    <div class="card-header gap-2">
+                        <h3 class="card-title">Kierunek: TAM</h3>
+                    </div>
+                    <div class="card-body py-2.5 flex flex-col">
+                        <app-timetable-board [group]="getFrontTimetable()" [submitted]="isSubmitted"
+                                             [tripDepartures]="tripResponse.front"></app-timetable-board>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-1 lg:col-span-1">
+            <div class="flex flex-col gap-5 lg:gap-7.5 h-full">
+                <div class="card">
+                    <div class="card-header gap-2">
+                        <h3 class="card-title">Kierunek: POWRÓT</h3>
+                    </div>
+                    <div class="card-body py-2.5 flex flex-col">
+                        <app-timetable-board [group]="getBackTimetable()" [submitted]="isSubmitted"
+                                             [tripDepartures]="tripResponse.back"></app-timetable-board>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- end: grid -->
 </div>

@@ -34,4 +34,9 @@ describe('TimetableWizardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render two timetable boards', () => {
+    const boards = fixture.nativeElement.querySelectorAll('app-timetable-board');
+    expect(boards.length).toBe(2);
+  });
 });
