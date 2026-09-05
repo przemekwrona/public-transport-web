@@ -70,30 +70,6 @@ paths:
               schema:
                 $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
-    delete:
-      tags:
-        - brigade
-      summary: Delete brigade
-      operationId: deleteBrigade
-      parameters:
-        - in: path
-          name: agency
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BrigadeDeleteBody'
-      responses:
-        200:
-          description: DELETED
-          content:
-            application/json:
-              schema:
-                $ref: '../public-transport-api.yaml/#/components/schemas/Status'
-
   /agency/{agency}/brigades/{brigadeCode}:
     get:
       tags:
@@ -640,12 +616,6 @@ components:
           type: string
         calendarSymbolId:
           $ref: '../public-transport-core.yaml#/components/schemas/CalendarSymbolId'
-
-    BrigadeDeleteBody:
-      type: object
-      properties:
-        brigadeName:
-          type: string
 
     BrigadeTimetableDeparture:
       type: object

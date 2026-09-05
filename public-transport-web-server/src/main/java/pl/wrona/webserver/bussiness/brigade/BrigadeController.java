@@ -2,7 +2,6 @@ package pl.wrona.webserver.bussiness.brigade;
 
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.BrigadeApi;
-import org.igeolab.iot.pt.server.api.model.BrigadeDeleteBody;
 import org.igeolab.iot.pt.server.api.model.BrigadeGroupBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.CreateBrigadeBody;
@@ -83,11 +82,6 @@ public class BrigadeController implements BrigadeApi {
     @Override
     public ResponseEntity<CreateCalendarSymbolBrigadeResponse> createCalendarSymbolBrigade(String agency, String brigadeCode, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest createCalendarSymbolBrigadeRequest) {
         return ResponseEntity.ok(brigadeGroupCreatorService.createBrigadeGroup(agency, brigadeCode, calendarCode, calendarSymbol, createCalendarSymbolBrigadeRequest));
-    }
-
-    @Override
-    public ResponseEntity<Status> deleteBrigade(String agency, BrigadeDeleteBody brigadeDeleteBody) {
-        return ResponseEntity.status(HttpStatus.OK).body(brigadeQueryService.deleteBrigade(agency, brigadeDeleteBody));
     }
 
     @Override

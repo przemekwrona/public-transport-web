@@ -11,6 +11,7 @@ import {BrigadeSchedulerComponent} from "./brigade-scheduler/brigade-scheduler.c
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import {MatDialogModule} from "@angular/material/dialog";
         ReactiveFormsModule,
         MatInputModule,
         MatSelectModule,
-        MatDialogModule
+        MatDialogModule,
+        MatIconModule
     ],
     declarations: [
         BrigadeListComponent,

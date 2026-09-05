@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {BrigadeDeleteBody, BrigadeService, GetBrigadeResponse} from "../../../generated/public-transport-api";
+import {BrigadeService, GetBrigadeResponse} from "../../../generated/public-transport-api";
 import {size} from "lodash";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatDialog} from "@angular/material/dialog";
@@ -28,12 +28,10 @@ export class BrigadeListComponent {
         });
     }
 
-    public deleteBrigadeByName(brigadeName: string): void {
+    public deleteBrigadeByBrigadeCode(brigadeCode: string): void {
         const agency = this.agencyStorageService.getInstance();
-        const brigadeDeleteBody = {} as BrigadeDeleteBody;
-        brigadeDeleteBody.brigadeName = brigadeName;
 
-        this.brigadeService.deleteBrigade(agency, brigadeDeleteBody).subscribe(() => {
+        this.brigadeService.deleteBrigadeByBrigadeCode(agency, brigadeCode).subscribe(() => {
             this.brigadeService.getBrigades(agency).subscribe(response => this.brigadesResponse = response);
         });
     }

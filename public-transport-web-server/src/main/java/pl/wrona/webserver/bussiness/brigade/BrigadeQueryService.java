@@ -1,7 +1,6 @@
 package pl.wrona.webserver.bussiness.brigade;
 
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.BrigadeDeleteBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
@@ -37,9 +36,4 @@ public class BrigadeQueryService {
         return new Status().status(Status.StatusEnum.SUCCESS);
     }
 
-    @PreAgencyAuthorize
-    public Status deleteBrigade(String instance, BrigadeDeleteBody brigadeDeleteBody) {
-        brigadeRepository.findBrigadeEntitiesByAgencyAndBrigadeNumber(agencyService.getLoggedAgency(), brigadeDeleteBody.getBrigadeName()).ifPresent(brigadeRepository::delete);
-        return new Status().status(Status.StatusEnum.DELETED);
-    }
 }

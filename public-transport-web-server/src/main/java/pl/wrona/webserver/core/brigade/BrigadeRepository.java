@@ -12,7 +12,4 @@ public interface BrigadeRepository extends JpaRepository<BrigadeEntity, Long> {
 
     Optional<BrigadeEntity> findBrigadeEntitiesByAgencyAndBrigadeNumber(AgencyEntity agencyEntity, String brigadeNumber);
 
-    List<BrigadeEntity> findAllByAgency(AgencyEntity agencyEntity);
-
-    boolean existsBrigadeEntitiesByAgencyAndBrigadeNumber(AgencyEntity agencyEntity, String brigadeNumber);
 }
