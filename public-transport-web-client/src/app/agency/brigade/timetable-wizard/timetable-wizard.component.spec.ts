@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
@@ -77,15 +78,30 @@ describe('TimetableWizardComponent', () => {
     ]);
   });
 
-  it('should render a generate button that calls getFirstProfile', () => {
-    const getFirstProfile = spyOn(component, 'getFirstProfile').and.callThrough();
+  it('should collect filled departures from both timetable boards', () => {
+    setDepartureMinutes(component.getFrontTimetable(), 6, 15);
+    setDepartureMinutes(component.getBackTimetable(), 7, 30);
 
+    const log = spyOn(console, 'log');
     const button: HTMLButtonElement | null = fixture.nativeElement.querySelector('.card.min-w-full button.btn-success');
     expect(button?.textContent?.trim()).toBe('Generuj');
 
     button?.click();
 
-    expect(getFirstProfile).toHaveBeenCalledWith(component.tripProfiles.front);
-    expect(getFirstProfile).toHaveBeenCalledWith(component.tripProfiles.back);
+    expect(log).toHaveBeenCalledWith(component.frontDepartures);
+    expect(log).toHaveBeenCalledWith(component.backDepartures);
+
+    expect(component.frontDepartures).toEqual([
+      {time: '06:15', designation: undefined, routeCode: 'R1', tripCode: 'T-FRONT', trafficMode: TrafficMode.Normal}
+    ]);
+    expect(component.backDepartures).toEqual([
+      {time: '07:30', designation: undefined, routeCode: 'R1', tripCode: 'T-BACK', trafficMode: TrafficMode.Normal}
+    ]);
   });
 });
+
+function setDepartureMinutes(directionGroup: FormGroup, hour: number, minutes: number): void {
+  const departures = directionGroup.get('departures') as FormArray<FormGroup>;
+  const departure = departures.controls.find(group => group.get('hour')?.value === hour);
+  departure?.get('minutes')?.setValue(minutes);
+}

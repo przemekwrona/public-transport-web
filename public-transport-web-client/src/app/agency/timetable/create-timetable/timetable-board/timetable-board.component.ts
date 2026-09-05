@@ -155,6 +155,24 @@ export class TimetableBoardComponent implements OnInit {
         this.mapDepartures(times, true);
     }
 
+    public getDepartures(): TimetableBoardEvent[] {
+        const defaultProfile = this.getFirstProfile(this.tripProfiles);
+        return this.controlDepartures.controls
+            .filter((group: FormGroup): boolean => group.get('minutes')?.value != null)
+            .map((group: FormGroup): TimetableBoardEvent => ({
+                time: moment()
+                    .hours(Number(group.get('hour')?.value))
+                    .minutes(Number(group.get('minutes')?.value))
+                    .seconds(0)
+                    .format('HH:mm'),
+                designation: group.get('symbol')?.value || undefined,
+                routeCode: group.get('routeCode')?.value || defaultProfile?.routeCode || '',
+                tripCode: group.get('tripCode')?.value || defaultProfile?.tripCode || '',
+                trafficMode: defaultProfile?.trafficMode ?? TrafficMode.Normal
+            }))
+            .sort((left, right) => left.time.localeCompare(right.time));
+    }
+
     public getFirstProfile(availableProfiles: AvailableTripProfile[]): AvailableTripProfile | undefined {
         return [...availableProfiles].sort((left, right) => this.compareProfiles(left, right))[0];
     }

@@ -24,7 +24,7 @@
                         <h3 class="card-title">Kierunek: TAM</h3>
                     </div>
                     <div class="card-body py-2.5 flex flex-col">
-                        <app-timetable-board [group]="getFrontTimetable()" [submitted]="isSubmitted"
+                        <app-timetable-board #frontBoard [group]="getFrontTimetable()" [submitted]="isSubmitted"
                                              [tripDepartures]="tripResponse.front" [tripProfiles]="tripProfiles.front"></app-timetable-board>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                         <h3 class="card-title">Kierunek: POWRÓT</h3>
                     </div>
                     <div class="card-body py-2.5 flex flex-col">
-                        <app-timetable-board [group]="getBackTimetable()" [submitted]="isSubmitted"
+                        <app-timetable-board #backBoard [group]="getBackTimetable()" [submitted]="isSubmitted"
                                              [tripDepartures]="tripResponse.back" [tripProfiles]="tripProfiles.back"></app-timetable-board>
                     </div>
                 </div>
