@@ -100,14 +100,15 @@ export class TimetableBoardComponent implements OnInit {
     }
 
     public mapDepartures(generatedDepartures: Moment[], appendEmpty: boolean = false) {
+        const defaultProfile: AvailableTripProfile = this.getFirstProfile(this.tripProfiles);
         for (const departure of generatedDepartures) {
-            const departureControl: FormGroup = this.buildDepartureControl(departure.hour(), departure.minutes());
+            const departureControl: FormGroup = this.buildDepartureControl(defaultProfile.routeCode, defaultProfile.tripCode, defaultProfile.variantDesignation, departure.hour(), departure.minutes());
             this.controlDepartures.push(departureControl);
         }
 
         if (appendEmpty) {
             for (const hour of this.hours) {
-                this.controlDepartures.push(this.buildEmptyDepartureControl(hour));
+                this.controlDepartures.push(this.buildEmptyDepartureControl(defaultProfile.routeCode, defaultProfile.tripCode, defaultProfile.variantDesignation, hour));
             }
         }
     }
@@ -117,15 +118,18 @@ export class TimetableBoardComponent implements OnInit {
         return this.buildDepartureControl(hours, minutes, departure.designation);
     }
 
-    private buildEmptyDepartureControl(hour: number, symbol: string = '') {
-        return this.buildDepartureControl(hour, null, symbol);
+    private buildEmptyDepartureControl(routeCode: string, tripCode: string, symbol: string = '', hour: number) {
+        return this.buildDepartureControl(routeCode, tripCode, symbol, hour, null);
     }
 
-    private buildDepartureControl(hour: number, minutes: number | null, symbol: string = '') {
+    private buildDepartureControl(routeCode: string, tripCode: string, symbol: string = '', hour: number, minutes: number | null) {
         const departureControl: FormGroup = this.formBuilder.group({
+            routeCode: [routeCode, [Validators.required]],
+            tripCode: [tripCode, [Validators.required]],
+            symbol: [symbol, []],
+
             hour: [hour, [Validators.min(0), Validators.max(24)]],
             minutes: [minutes, [Validators.min(0), Validators.max(59)]],
-            symbol: [symbol, []]
         });
 
         departureControl.get('minutes')?.valueChanges.subscribe(value => {
@@ -180,14 +184,32 @@ export class TimetableBoardComponent implements OnInit {
         this.mapDepartures(times, true);
     }
 
-    public findTripDesignation(): TimetableTrip[] {
-        return (this.tripDepartures?.departures || [])
-            .filter((trip: TimetableTrip): boolean => trip.tripId !== null)
-            .filter((trip: TimetableTrip): boolean => trip.tripId?.variantName !== 'MAIN');
+    public getFirstProfile(availableProfiles: AvailableTripProfile[]): AvailableTripProfile | undefined {
+        return [...availableProfiles].sort((left, right) => this.compareProfiles(left, right))[0];
     }
 
-    public hasTripDesignation(): boolean {
-        return size(this.findTripDesignation()) > 0;
+    private compareProfiles(left: AvailableTripProfile, right: AvailableTripProfile): number {
+        const mainOrder = Number(!!right.isMainVariant) - Number(!!left.isMainVariant);
+        if (mainOrder !== 0) {
+            return mainOrder;
+        }
+
+        const symbolOrder = (left.variantDesignation ?? '').localeCompare(right.variantDesignation ?? '');
+        if (symbolOrder !== 0) {
+            return symbolOrder;
+        }
+
+        return this.trafficModeOrder(left.trafficMode) - this.trafficModeOrder(right.trafficMode);
+    }
+
+    private trafficModeOrder(trafficMode: TrafficMode): number {
+        if (trafficMode === TrafficMode.Normal) {
+            return 0;
+        }
+        if (trafficMode === TrafficMode.Traffic) {
+            return 1;
+        }
+        return 2;
     }
 
 }
