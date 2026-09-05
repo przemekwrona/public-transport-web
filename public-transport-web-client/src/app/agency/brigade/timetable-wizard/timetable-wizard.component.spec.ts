@@ -69,11 +69,23 @@ describe('TimetableWizardComponent', () => {
 
   it('should map defaultRoute profiles into front and back tripProfiles', () => {
     expect(component.tripProfiles.front).toEqual([
-      {routeCode: 'R1', tripCode: 'T-FRONT', trafficMode: TrafficMode.Normal, isMain: true, travelTimeInSeconds: 600},
-      {routeCode: 'R1', tripCode: 'T-FRONT', trafficMode: TrafficMode.Traffic, isMain: true, travelTimeInSeconds: 900}
+      {routeCode: 'R1', tripCode: 'T-FRONT', trafficMode: TrafficMode.Normal, isMainVariant: true, variantDesignation: undefined, variantDescription: undefined, travelTimeInSeconds: 600},
+      {routeCode: 'R1', tripCode: 'T-FRONT', trafficMode: TrafficMode.Traffic, isMainVariant: true, variantDesignation: undefined, variantDescription: undefined, travelTimeInSeconds: 900}
     ]);
     expect(component.tripProfiles.back).toEqual([
-      {routeCode: 'R1', tripCode: 'T-BACK', trafficMode: TrafficMode.Normal, isMain: false, travelTimeInSeconds: 540}
+      {routeCode: 'R1', tripCode: 'T-BACK', trafficMode: TrafficMode.Normal, isMainVariant: false, variantDesignation: undefined, variantDescription: undefined, travelTimeInSeconds: 540}
     ]);
+  });
+
+  it('should render a generate button that calls getFirstProfile', () => {
+    const getFirstProfile = spyOn(component, 'getFirstProfile').and.callThrough();
+
+    const button: HTMLButtonElement | null = fixture.nativeElement.querySelector('.card.min-w-full button.btn-success');
+    expect(button?.textContent?.trim()).toBe('Generuj');
+
+    button?.click();
+
+    expect(getFirstProfile).toHaveBeenCalledWith(component.tripProfiles.front);
+    expect(getFirstProfile).toHaveBeenCalledWith(component.tripProfiles.back);
   });
 });
