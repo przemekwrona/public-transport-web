@@ -47,9 +47,12 @@
                         </div>
                     </div>
                     <div class="flex items-center flex-wrap md:flex-nowrap gap-1.5">
-<!--                        <button (click)="deleteBrigadeByName(brigade?.brigadeName)"-->
-<!--                                class="btn btn-sm btn-dark shrink-0">Usuń-->
-<!--                        </button>-->
+                        <button (click)="deleteBrigadeByBrigadeCode(brigadeGroup.brigadeCode)"
+                                class="btn btn-sm btn-dark shrink-0">
+                            <span class="mt-0.5">Usuń</span>
+                            <i class="ki-filled ki-trash"></i>
+                        </button>
+                
                         <a [routerLink]="['/agency/brigades', brigadeGroup.brigadeCode, 'edit']"
                            class="btn btn-sm shrink-0 btn-secondary">Pokaż szczegóły</a>
                     </div>

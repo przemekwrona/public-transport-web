@@ -21,19 +21,19 @@ public class BrigadeDeletionService {
 
     @Transactional
     @PreAgencyAuthorize()
-    public Status deleteBrigadeByBrigadeCode(String agency, String brigadeCode) {
-        var brigadeGroups = brigadeGroupQueryService.findAllByBrigadeCode(agency, brigadeCode);
+    public Status deleteBrigadeByBrigadeCode(String instance, String brigadeCode) {
+        var brigadeGroups = brigadeGroupQueryService.findAllByBrigadeCode(instance, brigadeCode);
         for (var brigadeGroup : brigadeGroups) {
             var calendarCode = brigadeGroup.getCalendarSymbol().getCalendarItem().getSequenceHex();
             var symbol = brigadeGroup.getCalendarSymbol().getDesignation();
-            resourceDeletionService.deleteResource(agency, brigadeCode, calendarCode, symbol);
+            resourceDeletionService.deleteResource(instance, brigadeCode, calendarCode, symbol);
         }
 
         if (!brigadeGroups.isEmpty()) {
             brigadeGroupCommandService.deleteAll(brigadeGroups);
         }
 
-        var brigadeItem = brigadeItemQueryService.findByBrigadeCode(agency, brigadeCode);
+        var brigadeItem = brigadeItemQueryService.findByBrigadeCode(instance, brigadeCode);
         if (brigadeItem != null) {
             brigadeItemCommandService.delete(brigadeItem);
         }
