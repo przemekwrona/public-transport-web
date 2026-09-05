@@ -5,8 +5,14 @@
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700"></div>
         </div>
         <div class="flex items-center gap-2.5">
-            <a [routerLink]="['/agency/timetables']" class="btn btn-sm btn-secondary">Anuluj i wróć do listy Rozkładów
-                Jazdy</a>
+            @if (isModeGenerator()) {
+                <a [routerLink]="['/agency/brigades', brigadeCode, 'edit']"
+                   [queryParams]="{ symbol: calendarSymbol }"
+                   class="btn btn-sm btn-secondary">Anuluj i wróć do listy brygad</a>
+            } @else {
+                <a [routerLink]="['/agency/timetables']" class="btn btn-sm btn-secondary">Anuluj i wróć do listy Rozkładów
+                    Jazdy</a>
+            }
         </div>
 
         <span class="badge badge-sm badge-outline badge-info w-full" style="line-height: inherit">
@@ -194,8 +200,14 @@
         <div class="card min-w-full">
             <div class="card-body lg:py-7.5 py-5">
                 <div class="flex flex-wrap justify-end gap-5">
-                    <a [routerLink]="['/agency/timetables']" class="btn btn-secondary">Anuluj i wróć do listy Rozkładów
-                        Jazdy</a>
+                    @if (isModeGenerator()) {
+                        <a [routerLink]="['/agency/brigades', brigadeCode, 'edit']"
+                           [queryParams]="{ symbol: calendarSymbol }"
+                           class="btn btn-secondary">Anuluj i wróć do listy brygad</a>
+                    } @else {
+                        <a [routerLink]="['/agency/timetables']" class="btn btn-secondary">Anuluj i wróć do listy Rozkładów
+                            Jazdy</a>
+                    }
 
                     @if (isModeCreator()) {
                         <button type="submit" class="btn btn-success">Wygeneruj brygady</button>

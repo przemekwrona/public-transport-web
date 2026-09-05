@@ -19,6 +19,7 @@ import {
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatIconModule} from "@angular/material/icon";
+import {RouterModule} from "@angular/router";
 
 @Component({
     selector: 'app-brigade-scheduler',
@@ -26,6 +27,7 @@ import {MatIconModule} from "@angular/material/icon";
         CommonModule,
         DayPilotModule,
         MatIconModule,
+        RouterModule,
     ],
     providers: [],
     templateUrl: './brigade-scheduler.component.html',
