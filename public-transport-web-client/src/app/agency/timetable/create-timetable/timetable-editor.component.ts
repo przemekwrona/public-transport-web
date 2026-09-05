@@ -1,7 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {TimetableBoardComponent} from "./timetable-board/timetable-board.component";
 import {
-    AbstractControl,
     FormArray,
     FormBuilder,
     FormControl,
@@ -66,6 +65,9 @@ export class TimetableEditorComponent implements OnInit {
     public brigadeCode: string | null = null;
     public calendarSymbol: string | null = null;
     public brigadeDetails: GetBrigadeDetailsResponse | null = null;
+
+    @ViewChildren(TimetableBoardComponent)
+    public timetableBoards: QueryList<TimetableBoardComponent>;
 
     /** control for the MatSelect filter keyword */
     public bankFilterCtrl: FormControl<string> = new FormControl<string>('');
@@ -233,22 +235,6 @@ export class TimetableEditorComponent implements OnInit {
     }
 
     public generate(): void {
-        const brigadeCode = this.brigadeCode;
-        const symbol = this.calendarSymbol;
-        const calendarCode = this.brigadeDetails?.brigade?.brigades
-            ?.find(group => group.calendarSymbolId?.symbol === symbol)
-            ?.calendarSymbolId?.calendarItemId?.code;
-
-        if (!brigadeCode || !calendarCode || !symbol) {
-            return;
-        }
-
-        this.resourceService.deleteResource(
-            this.agencyStorageService.getInstance(), brigadeCode, calendarCode, symbol).subscribe(() => {
-            this.router.navigate(['/agency/brigades', brigadeCode, 'edit'], {
-                queryParams: {symbol: this.calendarSymbol}
-            }).then();
-        });
     }
 
     compareByRouteId = (a: RouteId, b: RouteId): boolean => a && b ? a.line === b.line && a.name === b.name && a.version === b.version : a === b;
