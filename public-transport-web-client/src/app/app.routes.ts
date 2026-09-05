@@ -44,6 +44,8 @@ import {routesInGeneratedTimetableResolver} from "./agency/timetable/create-time
 import {generatedTimetablesResolver} from "./agency/timetable/timetables.resolver";
 import {timetableEditorResolver} from "./agency/timetable/create-timetable/timetable-editor.resolver";
 import {calendarEmptyResolver} from "./agency/calendars/calendar-editor/calendar-empty.resolver";
+import {TimetableWizardComponent} from "./agency/brigade/timetable-wizard/timetable-wizard.component";
+import {defaultTripResolver} from "./agency/brigade/timetable-wizard/default-trip.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -73,7 +75,7 @@ export const routes: Routes = [
             {path: 'calendars/:calendarCode/symbol/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
             {path: 'calendars/:calendarCode/symbol/:calendarSymbol/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
             {path: 'brigades/:brigadeCode/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
-            {path: 'brigades/:brigadeCode/symbol/:calendarSymbol/timetable', component: TimetableEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, brigade: brigadeResolver }, data: { mode: TimetableEditorComponentMode.GENERATE }},
+            {path: 'brigades/:brigadeCode/symbol/:calendarSymbol/timetable', component: TimetableWizardComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, brigade: brigadeResolver, defaultTrip: defaultTripResolver }, data: { mode: TimetableEditorComponentMode.GENERATE }},
             {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
         ]
     },
