@@ -12,6 +12,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatIconModule} from "@angular/material/icon";
+import {RouteNameNormPipe} from "../timetable/create-timetable/route-id-normalization.pipe";
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import {MatIconModule} from "@angular/material/icon";
         MatInputModule,
         MatSelectModule,
         MatDialogModule,
-        MatIconModule
+        MatIconModule,
+        RouteNameNormPipe
     ],
     declarations: [
         BrigadeListComponent,
