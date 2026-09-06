@@ -298,6 +298,37 @@ paths:
               schema:
                 $ref: '../public-transport-api.yaml/#/components/schemas/Status'
 
+  /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{symbol}/resource/optimizer:
+    post:
+      tags:
+        - resource-optimizer
+      summary: Optimize brigades
+      operationId: optimizeBrigades
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: brigadeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: calendarCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: symbol
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+
   /agency/{agency}/brigades/{brigadeCode}/calendar/{calendarCode}/symbol/{symbol}/resource/{resourceCode}/event:
     post:
       tags:
