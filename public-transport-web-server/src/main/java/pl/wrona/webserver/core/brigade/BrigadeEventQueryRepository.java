@@ -57,4 +57,11 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
         WHERE e.resource = :resource
         AND e.eventSequence = :eventSequence""")
     BrigadeEventEntity findByAgencyAndCalendarAndSymbolAndEventHex(@Param("resource") BrigadeResourceEntity resource, @Param("eventSequence") int eventSequence);
+
+    @Query("""
+        SELECT e FROM BrigadeEventEntity e
+        WHERE e.resource.brigadeGroup = :group
+        AND e.eventSequence = :eventSequence""")
+    BrigadeEventEntity findByBrigadeGroupAndEventCode(@Param("group") BrigadeGroupEntity group, @Param("eventSequence") int eventSequence);
+
 }

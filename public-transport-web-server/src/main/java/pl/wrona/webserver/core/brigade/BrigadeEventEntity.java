@@ -2,6 +2,7 @@ package pl.wrona.webserver.core.brigade;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,11 +38,11 @@ public class BrigadeEventEntity {
     @Column(name = "end_second", nullable = false)
     private Integer endSecond;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resource_id", nullable = false)
     private BrigadeResourceEntity resource;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_profile_id", referencedColumnName = "trip_profile_id", nullable = false)
     private TripProfileEntity tripProfile;
 
