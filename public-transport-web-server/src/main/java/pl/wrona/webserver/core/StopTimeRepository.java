@@ -9,6 +9,7 @@ import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -25,4 +26,24 @@ public interface StopTimeRepository extends JpaRepository<StopTimeEntity, StopTi
 
     @Query("SELECT st FROM StopTimeEntity st JOIN st.tripProfile.trip t WHERE t = :trip")
     List<StopTimeEntity> findAllByTrip(TripEntity trip);
+
+    @Query("""
+            SELECT st FROM StopTimeEntity st
+            JOIN FETCH st.stopEntity
+            JOIN FETCH st.tripProfile tp
+            WHERE tp.tripProfileId IN :tripProfileIds
+            AND (
+                st.stopTimeId.stopSequence = (
+                    SELECT MIN(stMin.stopTimeId.stopSequence)
+                    FROM StopTimeEntity stMin
+                    WHERE stMin.tripProfile.tripProfileId = tp.tripProfileId
+                )
+                OR st.stopTimeId.stopSequence = (
+                    SELECT MAX(stMax.stopTimeId.stopSequence)
+                    FROM StopTimeEntity stMax
+                    WHERE stMax.tripProfile.tripProfileId = tp.tripProfileId
+                )
+            )
+            """)
+    List<StopTimeEntity> findFirstAndLastByTripProfileIds(@Param("tripProfileIds") Collection<Long> tripProfileIds);
 }
