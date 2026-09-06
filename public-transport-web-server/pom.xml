@@ -204,6 +204,12 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.ortools</groupId>
+            <artifactId>ortools-java</artifactId>
+            <version>9.8.3296</version> <!-- lub nowższa stabilna wersja -->
+        </dependency>
     </dependencies>
 
     <build>
