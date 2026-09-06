@@ -1,0 +1,170 @@
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Data, RouterModule} from "@angular/router";
+import {
+    Route,
+    RouteDetails,
+    RouteId,
+    RouteService,
+    Stop,
+    UpdateRouteRequest
+} from "../../../../generated/public-transport-api";
+import {faCircleXmark, faMap, faSpinner, IconDefinition} from '@fortawesome/free-solid-svg-icons';
+import {map} from "rxjs";
+import {CommonModule} from "@angular/common";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {AgencyStorageService} from "../../../../auth/agency-storage.service";
+import {
+    BusStopData,
+    BusStopModalSelectorComponent,
+    BusStopSelectorConfig,
+    BusStopSelectorData
+} from "../../../shared/bus-stop-modal-selector/bus-stop-modal-selector.component";
+import {MatDialog} from "@angular/material/dialog";
+import {MatError, MatFormField, MatInput, MatLabel} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
+
+@Component({
+    selector: 'app-trip-list-info',
+    templateUrl: './trip-list-info.component.html',
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FaIconComponent,
+        MatError,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        MatButtonModule
+    ],
+    providers: [
+        RouteService
+    ]
+})
+export class TripListInfoComponent implements OnInit {
+    protected readonly faMap: IconDefinition = faMap;
+    protected readonly faSpinner = faSpinner;
+    public faCircleXmark: IconDefinition = faCircleXmark;
+
+    public trips: RouteDetails = {route: {routeId: {line: '', name: ''}}};
+    public state: { line: string, name: string, version: number };
+    public isUpdatingBasicInformation: boolean = false;
+    public modelForm: FormGroup;
+
+    constructor(
+        private agencyStorageService: AgencyStorageService,
+        private routeService: RouteService,
+        private _route: ActivatedRoute,
+        private dialog: MatDialog,
+        private fb: FormBuilder
+    ) {
+        this.modelForm = this.fb.group({
+            line: ['', [Validators.required]],
+            name: ['', [Validators.required]],
+            version: ['', [Validators.required]],
+            routeCode: ['', [Validators.required]]
+        });
+    }
+
+    ngOnInit(): void {
+        this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe(trips => {
+            this.getNameControl().setValue(trips.route.routeId.name);
+            this.getLineControl().setValue(trips.route.routeId.line);
+            this.versionControl.setValue(trips.route.routeId.version);
+            this.routeCode.setValue(trips.route.routeCode);
+            this.trips = trips;
+            this.state = {
+                line: trips.route.routeId.line,
+                name: trips.route.routeId.name,
+                version: trips.route.routeId.version
+            };
+        });
+        this._route.queryParams.subscribe(params => {
+            if (params['line'] || params['name'] || params['version']) {
+                this.state = params as { line: string, name: string, version: number };
+            }
+        });
+    }
+
+    public saveBasicInfo(): void {
+        this.isUpdatingBasicInformation = true;
+
+        const routeId: RouteId = {
+            line: this.state.line,
+            name: this.state.name,
+            version: this.state.version
+        };
+
+        const route: Route = {
+            routeId: {
+                line: this.getLineControl().value,
+                name: this.getNameControl().value,
+                version: this.trips.route.routeId.version
+            },
+            google: this.trips.route.google,
+            active: this.trips.route.active,
+            description: this.trips.route.description
+        };
+
+        const updateRouteRequest: UpdateRouteRequest = {
+            routeId: routeId,
+            route: route
+        };
+
+        this.routeService.updateRoute(this.agencyStorageService.getInstance(), updateRouteRequest).subscribe({
+            next: () => {
+                this.state = {
+                    line: route.routeId.line,
+                    name: route.routeId.name,
+                    version: route.routeId.version
+                };
+            },
+            complete: () => this.isUpdatingBasicInformation = false
+        });
+    }
+
+    public mapPreview(stop: Stop): void {
+        const busStopData: BusStopData = {} as BusStopData;
+        busStopData.stopId = stop.id;
+        busStopData.stopName = stop.name;
+        busStopData.stopLon = stop.lon;
+        busStopData.stopLat = stop.lat;
+
+        const config: BusStopSelectorConfig = {} as BusStopSelectorConfig;
+        config.showTitle = false;
+        config.fullScreen = true;
+        config.scrollable = false;
+
+        const busStopSelectorData: BusStopSelectorData = {} as BusStopSelectorData;
+        busStopSelectorData.busStop = busStopData;
+        busStopSelectorData.config = config;
+
+        this.dialog.open(BusStopModalSelectorComponent, {
+            width: '90%',
+            height: '70%',
+            data: busStopSelectorData
+        });
+    }
+
+    public getControl(control: string): FormControl {
+        return this.modelForm.get(control) as FormControl;
+    }
+
+    public getLineControl(): FormControl<string> {
+        return this.getControl("line") as FormControl<string>;
+    }
+
+    public getNameControl(): FormControl<string> {
+        return this.getControl("name") as FormControl<string>;
+    }
+
+    get routeCode(): FormControl<string> {
+        return this.getControl("routeCode") as FormControl<string>;
+    }
+
+    get versionControl(): FormControl<string> {
+        return this.getControl("version") as FormControl<string>;
+    }
+}

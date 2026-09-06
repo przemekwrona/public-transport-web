@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 import { TripListComponent } from './trip-list.component';
 
@@ -8,10 +10,20 @@ describe('TripListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TripListComponent]
+      imports: [TripListComponent],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { data: {}, pathFromRoot: [] },
+            pathFromRoot: [],
+            data: of({})
+          }
+        }
+      ]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(TripListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
