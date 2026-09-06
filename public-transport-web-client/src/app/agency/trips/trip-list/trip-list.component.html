@@ -2,8 +2,8 @@
     <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
         <div class="flex flex-col justify-center gap-2">
             <h1 class="text-xl font-medium leading-none text-gray-900">
-                Linia {{ state?.line || '' }} {{ state?.name || '' }}
-                <span class="badge badge-sm badge-outline badge-info">v{{ versionControl.value }}.0</span>
+                Linia {{ trips?.route?.routeId?.line || '' }} {{ trips?.route?.routeId?.name || '' }}
+                <span class="badge badge-sm badge-outline badge-info">v{{ trips?.route?.routeId?.version }}.0</span>
             </h1>
             <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
                 Konfiguracja lini autobusowej
@@ -11,266 +11,22 @@
         </div>
         <div class="flex items-center gap-2.5">
             <a [routerLink]="['/agency/routes']" class="btn btn-sm btn-secondary">Wróć do listy linii</a>
-            <a *ngIf="!hasVariants()" (click)="scrollNoVariants()" class="btn btn-sm btn-primary pr-0">
-                Pokaż warianty
-                <img src="assets/gif/arrow-down.gif" alt="Computer man" style="width:2rem;height:2rem;">
-            </a>
-            <a *ngIf="hasVariants()" (click)="scrollVariants()" class="btn btn-sm btn-primary pr-0">
-                Pokaż warianty
-                <img src="assets/gif/arrow-down.gif" alt="Computer man" style="width:2rem;height:2rem;">
-            </a>
         </div>
     </div>
 
-    <!-- begin: projects -->
-    <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
-        <!-- begin: cards -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Informacje podstawowe</h3>
-                </div>
-                <div class="card-body lg:py-7.5 grid gap-5 lg:gap-5">
-
-                    <div class="w-full">
-                        <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                            <label class="form-label flex items-center gap-1 max-w-56">Numer Linii</label>
-                            <mat-form-field appearance="outline" class="w-full custom-form-field">
-                                <mat-label>Numer Linii</mat-label>
-                                <input type="text" matInput [formControl]="getLineControl()">
-                                @if (getLineControl().hasError('required')) {
-                                    <mat-error>Proszę wprowadź numer linii</mat-error>
-                                }
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-full">
-                        <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                            <label class="form-label flex items-center gap-1 max-w-56">Nazwa lini</label>
-                            <mat-form-field appearance="outline" class="w-full custom-form-field">
-                                <mat-label>Nazwa lini</mat-label>
-                                <input type="text" matInput [formControl]="getNameControl()">
-                                @if (getNameControl().hasError('required')) {
-                                    <mat-error>Proszę wprowadź nazwę linii</mat-error>
-                                }
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label class="form-label flex items-center gap-1 max-w-56">Wersja</label>
-                        <span class="badge badge-sm badge-outline badge-info">v{{ versionControl.value }}.0</span>
-                    </div>
-
-                    <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
-                        <div class="flex items-center flex-wrap gap-3.5">
-                            <img src="/assets/media/brand-logos/google.svg" class="size-6 shrink-0" alt="">
-                            <div class="flex flex-col gap-0.5">
-                                <a class="text-sm font-medium text-gray-900 hover:text-primary-active">Google</a>
-                                <a *ngIf="trips.route.google" class="text-2sm text-gray-700 hover:text-primary-active">
-                                    Udostępniaj linie w Google Maps
-                                </a>
-                                <a *ngIf="!trips.route.google" class="text-2sm text-gray-700 hover:text-primary-active">
-                                    NIE Udostępniaj linie w Google Maps
-                                </a>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-5"><label class="switch switch-sm">
-                            <input type="checkbox" [(ngModel)]="trips.route.google"></label>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between flex-wrap border border-gray-200 rounded-xl gap-2 px-3.5 py-2.5">
-                        <div class="flex items-center flex-wrap gap-3.5">
-                            <span *ngIf="trips.route.active"
-                                  class="menu-icon items-start w-[25px] text-green-700 dark:text-green-700">
-                                <i class="ki-filled ki-check-circle text-3xl"></i>
-                            </span>
-                            <div *ngIf="trips.route.active" class="flex flex-col gap-0.5">
-                                <a class="text-2sm text-gray-700 hover:text-primary-active"> Linia jest aktywna </a>
-                            </div>
-
-                            <span *ngIf="!trips.route.active"
-                                  class="menu-icon items-start w-[25px] text-red-800 dark:text-red-800">
-                                <fa-icon [icon]="faCircleXmark" [class]="'text-3xl'"></fa-icon>
-                            </span>
-                            <div *ngIf="!trips.route.active" class="flex flex-col gap-0.5">
-                                <a class="text-2sm text-gray-700 hover:text-primary-active"> Linia nie jest aktywna </a>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-5">
-                            <label class="switch switch-sm" data-dashlane-label="true">
-                                <input type="checkbox" [(ngModel)]="trips.route.active">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-gray-200 my-2.5"></div>
-
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                        <div class="flex items-center flex-wrap gap-3.5">
-                            <label class="form-label flex items-center gap-1 max-w-56">Start</label>
-                        </div>
-                        <div class="flex items-center gap-0.5">
-                            <span class="badge badge-sm badge-outline badge-dark">{{ trips.route.originStop.name }}</span>
-                            <span class="badge badge-sm badge-outline badge-dark">{{ trips.route.originTerritory.name }}</span>
-                            <label class="switch switch-sm" data-dashlane-label="true">
-                                <button type="button"
-                                        (click)="mapPreview(trips.route.originStop)"
-                                        class="shrink-0 select-none text-base text-gray-600 sm:text-sm/6 mx-2 justify-end">
-                                    <span>Mapa &nbsp;</span>
-                                    <fa-icon [icon]="faMap"></fa-icon>
-                                </button>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                        <div class="flex items-center flex-wrap gap-3.5">
-                            <label class="form-label flex items-center gap-1 max-w-56">Kierunek</label>
-                        </div>
-                        <div class="flex items-center gap-0.5">
-                            <span class="badge badge-sm badge-outline badge-dark">{{ trips.route.destinationStop.name }}</span>
-                            <span class="badge badge-sm badge-outline badge-dark">{{ trips.route.destinationTerritory.name }}</span>
-                            <label class="switch switch-sm" data-dashlane-label="true">
-                                <button type="button"
-                                        (click)="mapPreview(trips.route.destinationStop)"
-                                        class="shrink-0 select-none text-base text-gray-600 sm:text-sm/6 mx-2 justify-end">
-                                    <span>Mapa &nbsp;</span>
-                                    <fa-icon [icon]="faMap"></fa-icon>
-                                </button>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-gray-200 my-2.5"></div>
-
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">Przez</div>
-                            <span class="text-gray-700 text-2sm">Miejscowości przez które prowadzi linia autobusowa dla głównego wariantu</span>
-                        </div>
-
-                        <div class="flex flex-col w-full gap-1">
-                            <div class="inline-block">
-                                @for (territory of trips.territories; track territory; let isLast = $last) {
-                                    <span class="badge badge-sm badge-outline badge-dark">{{ territory?.name }}</span>
-                                    @if (!isLast) {
-                                        <span>-</span>
-                                    }
-                                }
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="flex flex-wrap justify-between gap-5">
-                        <div class="flex flex-col">
-                            <div class="text-gray-900 text-sm font-medium">Opis linii</div>
-                            <span class="text-gray-700 text-2sm">Opis linii lub przystanki pośrednie przez które jedzie linia</span>
-                        </div>
-                        <div class="flex flex-col w-full gap-1">
-                            <textarea [(ngModel)]="trips.route.description" class="textarea"
-                                      placeholder="Kielce - Częstochowa - Wrocław" rows="3"></textarea>
-                        </div>
-                        <div class="flex justify-end w-full gap-2.5">
-                            <a mat-stroked-button [routerLink]="['/agency/routes']">Wróć do listy linii</a>
-                            <button mat-flat-button color="primary"
-                                    (click)="saveBasicInfo()"
-                                    [disabled]="isUpdatingBasicInformation">
-                                Zapisz Informacje Podstawowe
-                                @if (isUpdatingBasicInformation) {
-                                    <fa-icon [icon]="faSpinner" [animation]="'spin'"/>
-                                }
-                            </button>
-                        </div>
-                    </div>
-
-                    <p class="text-2sm text-gray-800">
-                        Dodaj nowe warianty trasy i zacznij publikować rozkłady jazdy. Bądź widoczny w Google Maps i
-                        w
-                        naszej aplikacji – ułatwiaj pasażerom podróżowanie i docieraj do większej liczby klientów!
-                    </p>
-                </div>
-            </div>
-
-            <!-- Container -->
-            <div #noVariants *ngIf="!hasVariants()" class="card">
-                <div class="card-body flex flex-col items-center gap-2.5 py-7.5">
-                    <div class="flex justify-center p-7.5 py-9">
-                        <img alt="image" class="dark:hidden max-h-[230px]" src="assets/media/illustrations/22.svg"/>
-                        <img alt="image" class="light:hidden max-h-[230px]"
-                             src="assets/media/illustrations/22-dark.svg"/>
-                    </div>
-                    <div class="flex flex-col gap-5 lg:gap-7.5">
-                        <div class="flex flex-col gap-3 text-center">
-                            <h2 class="text-1.5xl font-semibold text-gray-900">
-                                Zdefiniuj i skonfiguruj nowy wariant
-                            </h2>
-                            <p class="text-sm text-gray-800">
-                                Wygląda na to że dodałeś Nową Linię bez wariantu trasy
-                                <br/>
-                                Kliknij poniżej Dodaj Nowy Wariant
-                            </p>
-                        </div>
-                        <div class="flex justify-center mb-5">
-                            <a (click)="createTrip()" class="btn btn-primary">
-                                Dodaj Nowy Wariant
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Container -->
-
-            <!-- Container -->
-            <div class="flex flex-col gap-2">
-                <div #variants *ngIf="hasVariants()" class="card">
-                    <div class="card-header">
-                        <h3 (click)="createTrip()" class="card-title">
-                            {{ 'agency.trip.listOfVariants' | transloco }} ({{ (trips?.trips || []).length || 0 }})
-                        </h3>
-                    </div>
-
-                    <div class="card-body lg:py-5 grid gap-2.5 lg:gap-2.5">
-                        <div>
-                            <strong class="text-sm mt-4 mr-2">TAM</strong>
-                            <span class="mx-1 text-sm">z:</span>
-                            <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.originTerritory.name }}</span>
-                            <span class="mx-1 text-sm">do:</span>
-                            <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.destinationTerritory.name }}</span>
-                        </div>
-                        @for (trip of findTripsWithDirectionFront(); track trip) {
-                            <app-trip-item [routeCode]="trips.route.routeCode" [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
-                        }
-                        <a (click)="createTrip(TripMode.Front)" class="btn btn-sm btn-primary">Dodaj nowy wariant Tam</a>
-                        <p class="text-2sm text-gray-800"></p>
-                    </div>
-
-
-                    <div class="card-body lg:py-7.5 grid gap-5 lg:gap-5">
-                        <div>
-                            <strong class="text-sm mt-4 mr-2">POWRÓT</strong>
-                            <span class="mx-1 text-sm">z:</span>
-                            <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.destinationTerritory.name }}</span>
-                            <span class="mx-1 text-sm">do:</span>
-                            <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.originTerritory.name }}</span>
-                        </div>
-
-                        @for (trip of findTripsWithDirectionBack(); track trip) {
-                            <app-trip-item [routeCode]="trips.route.routeCode" [trip]="trip" [state]="state" (onDelete)="onDelete($event)"></app-trip-item>
-                        }
-                        <a (click)="createTrip(TripMode.Back)" class="btn btn-sm btn-primary">Dodaj nowy wariant Powrotny</a>
-
-                        <p class="text-2sm text-gray-800"></p>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Container -->
-        </div>
-        <!-- end: cards -->
-    </div>
-    <!-- end: projects -->
-
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="mb-5">
+        @for (tab of tabs; track tab.path) {
+            <a mat-tab-link
+               [routerLink]="tab.path"
+               routerLinkActive
+               #rla="routerLinkActive"
+               [active]="rla.isActive"
+               [routerLinkActiveOptions]="{exact: true}">
+                {{ tab.label }}
+            </a>
+        }
+    </nav>
+    <mat-tab-nav-panel #tabPanel>
+        <router-outlet></router-outlet>
+    </mat-tab-nav-panel>
 </div>

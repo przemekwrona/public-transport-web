@@ -1,0 +1,108 @@
+<div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+        @if (!hasVariants()) {
+            <div class="card">
+                <div class="card-body flex flex-col items-center gap-2.5 py-7.5">
+                    <div class="flex justify-center p-7.5 py-9">
+                        <img alt="image" class="dark:hidden max-h-[230px]" src="assets/media/illustrations/22.svg"/>
+                        <img alt="image" class="light:hidden max-h-[230px]"
+                             src="assets/media/illustrations/22-dark.svg"/>
+                    </div>
+                    <div class="flex flex-col gap-5 lg:gap-7.5">
+                        <div class="flex flex-col gap-3 text-center">
+                            <h2 class="text-1.5xl font-semibold text-gray-900">
+                                Zdefiniuj i skonfiguruj nowy wariant
+                            </h2>
+                            <p class="text-sm text-gray-800">
+                                Wygląda na to że dodałeś Nową Linię bez wariantu trasy
+                                <br/>
+                                Kliknij poniżej Dodaj Nowy Wariant
+                            </p>
+                        </div>
+                        <div class="flex justify-center mb-5">
+                            <a (click)="createTrip()" class="btn btn-primary">
+                                Dodaj Nowy Wariant
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body flex flex-col items-center gap-2.5 py-7.5">
+                    <div class="flex justify-center p-7.5 py-9">
+                        <img alt="image" class="dark:hidden max-h-[230px]" src="assets/media/illustrations/22.svg"/>
+                        <img alt="image" class="light:hidden max-h-[230px]"
+                             src="assets/media/illustrations/22-dark.svg"/>
+                    </div>
+                    <div class="flex flex-col gap-5 lg:gap-7.5">
+                        <div class="flex flex-col gap-3 text-center">
+                            <h2 class="text-1.5xl font-semibold text-gray-900">
+                                Dodaj wariant powrotny
+                            </h2>
+                            <p class="text-sm text-gray-800">
+                                Skonfiguruj wariant w kierunku powrotnym
+                                <br/>
+                                Kliknij poniżej Dodaj Nowy Wariant
+                            </p>
+                        </div>
+                        <div class="flex justify-center mb-5">
+                            <a (click)="createTrip(TripMode.Back)" class="btn btn-primary">
+                                Dodaj nowy wariant Powrotny
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        } @else {
+            <div class="card">
+                <div class="card-header">
+                    <h3 (click)="createTrip(TripMode.Front)" class="card-title">
+                        TAM ({{ findTripsWithDirectionFront().length }})
+                    </h3>
+                </div>
+
+                <div class="card-body lg:py-5 grid gap-2.5 lg:gap-2.5">
+                    <div>
+                        <strong class="text-sm mt-4 mr-2">TAM</strong>
+                        <span class="mx-1 text-sm">z:</span>
+                        <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.originTerritory.name }}</span>
+                        <span class="mx-1 text-sm">do:</span>
+                        <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.destinationTerritory.name }}</span>
+                    </div>
+                    @for (trip of findTripsWithDirectionFront(); track trip) {
+                        <app-trip-item [routeCode]="trips.route.routeCode" [trip]="trip" [state]="state"
+                                       (onDelete)="onDelete($event)"></app-trip-item>
+                    }
+                    <a (click)="createTrip(TripMode.Front)" class="btn btn-sm btn-primary">Dodaj nowy wariant Tam</a>
+                    <p class="text-2sm text-gray-800"></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 (click)="createTrip(TripMode.Back)" class="card-title">
+                        POWRÓT ({{ findTripsWithDirectionBack().length }})
+                    </h3>
+                </div>
+
+                <div class="card-body lg:py-7.5 grid gap-5 lg:gap-5">
+                    <div>
+                        <strong class="text-sm mt-4 mr-2">POWRÓT</strong>
+                        <span class="mx-1 text-sm">z:</span>
+                        <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.destinationTerritory.name }}</span>
+                        <span class="mx-1 text-sm">do:</span>
+                        <span class="badge badge-sm badge-outline badge-primary">{{ trips.route.originTerritory.name }}</span>
+                    </div>
+
+                    @for (trip of findTripsWithDirectionBack(); track trip) {
+                        <app-trip-item [routeCode]="trips.route.routeCode" [trip]="trip" [state]="state"
+                                       (onDelete)="onDelete($event)"></app-trip-item>
+                    }
+                    <a (click)="createTrip(TripMode.Back)" class="btn btn-sm btn-primary">Dodaj nowy wariant Powrotny</a>
+
+                    <p class="text-2sm text-gray-800"></p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
