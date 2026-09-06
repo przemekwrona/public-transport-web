@@ -312,6 +312,53 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     }
 
     public removeLastResource(): void {
+        const scheduler = this.scheduler.control;
+        const resources = [...(scheduler.resources ?? [])];
+        if (resources.length < 2) {
+            return;
+        }
+
+        const lastResourceId = String(resources[resources.length - 1].id);
+        const previousResourceId = String(resources[resources.length - 2].id);
+        const events = [...(scheduler.events.list ?? [])];
+        const instance = this.agencyStorage.getInstance();
+
+        for (const event of events) {
+            if (String(event.resource) !== lastResourceId) {
+                continue;
+            }
+
+            event.resource = previousResourceId;
+
+            const tags = event.tags ?? {};
+            const startMoment = moment(event.start.toString());
+            const endMoment = moment(event.end.toString());
+            const midnight = startMoment.clone().startOf('day');
+
+            const putBrigadeEventBody: PutBrigadeEventBody = {
+                startSecond: startMoment.diff(midnight, 'seconds'),
+                endSecond: endMoment.diff(midnight, 'seconds'),
+                line: tags.line,
+                name: tags.name,
+                sequence: tags.sequence,
+                sequenceHex: tags.sequenceHex ?? String(event.id),
+                tripId: tags.tripId
+            };
+
+            this.brigadeService.putBrigadeEvent(
+                instance,
+                this.brigadeCode,
+                this.brigadeBody.calendarSymbolId.calendarItemId.code,
+                this.brigadeBody.calendarSymbolId.symbol,
+                previousResourceId,
+                putBrigadeEventBody
+            ).subscribe();
+        }
+
+        scheduler.update({
+            resources: resources.slice(0, -1),
+            events
+        });
     }
 
     private createResource(afterCreate?: (resourceId: string) => void): void {
