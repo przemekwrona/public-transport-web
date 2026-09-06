@@ -46,6 +46,12 @@ export class CalendarListComponent implements OnInit {
         return array.length !== 0;
     }
 
+    public dayTileClass(active?: boolean): string {
+        return active
+            ? 'inline-flex items-center justify-center min-w-7 rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/30 ring-inset mr-1'
+            : 'inline-flex items-center justify-center min-w-7 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset mr-1';
+    }
+
     public hasCalendar(): boolean {
         return size(this.calendarsResponse.items) > 0;
     }

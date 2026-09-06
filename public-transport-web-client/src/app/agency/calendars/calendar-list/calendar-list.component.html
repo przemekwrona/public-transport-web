@@ -70,27 +70,13 @@
                                         <div class="form-info text-gray-800 font-normal">
                                             <div class="mt-1">
                                                 <span><strong>Kursuje w DNI: </strong></span>
-                                                @if (calendarSymbol.monday) {
-                                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/30 ring-inset mr-1">PONIEDZIAŁEK</span>
-                                                }
-                                                @if (calendarSymbol.tuesday) {
-                                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/30 ring-inset mr-1">WTOREK</span>
-                                                }
-                                                @if (calendarSymbol.wednesday) {
-                                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/30 ring-inset mr-1">ŚRODA</span>
-                                                }
-                                                @if (calendarSymbol.thursday) {
-                                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/30 ring-inset mr-1">CZWARTEK</span>
-                                                }
-                                                @if (calendarSymbol.friday) {
-                                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/30 ring-inset mr-1">PIĄTEK</span>
-                                                }
-                                                @if (calendarSymbol.saturday) {
-                                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/30 ring-inset mr-1">SOBOTA</span>
-                                                }
-                                                @if (calendarSymbol.sunday) {
-                                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/30 ring-inset mr-1">NIEDZIELA</span>
-                                                }
+                                                <span [class]="dayTileClass(calendarSymbol.monday)">P</span>
+                                                <span [class]="dayTileClass(calendarSymbol.tuesday)">W</span>
+                                                <span [class]="dayTileClass(calendarSymbol.wednesday)">Ś</span>
+                                                <span [class]="dayTileClass(calendarSymbol.thursday)">C</span>
+                                                <span [class]="dayTileClass(calendarSymbol.friday)">P</span>
+                                                <span [class]="dayTileClass(calendarSymbol.saturday)">S</span>
+                                                <span [class]="dayTileClass(calendarSymbol.sunday)">N</span>
                                             </div>
 
                                             @if (hasElements(calendarSymbol.included)) {
