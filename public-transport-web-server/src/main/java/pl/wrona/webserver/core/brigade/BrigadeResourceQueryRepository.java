@@ -25,4 +25,10 @@ public interface BrigadeResourceQueryRepository extends JpaRepository<BrigadeRes
             @Param("calendarSequence") int calendarSequence,
             @Param("symbol") String symbol,
             @Param("resourceSequence") int resourceSequence);
+
+    @Query("""
+            SELECT r FROM BrigadeResourceEntity r
+            WHERE r.brigadeGroup = :brigadeGroup
+            AND r.resourceSequence = :resourceSequence""")
+    BrigadeResourceEntity findByAgencyAndCalendarAndSymbolAndResourceCode(@Param("brigadeGroup") BrigadeGroupEntity brigadeGroup, @Param("resourceSequence") int resourceSequence);
 }

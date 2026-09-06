@@ -2,6 +2,7 @@ package pl.wrona.webserver.bussiness.brigade.group;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeGroupQueryRepository;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
@@ -15,7 +16,9 @@ public class BrigadeGroupQueryService {
     private final BrigadeGroupQueryRepository brigadeGroupQueryRepository;
 
     public BrigadeGroupEntity findByBrigadeCode(String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
-        return brigadeGroupQueryRepository.findBtBrigadeCode(instance, brigadeCode, calendarCode, calendarSymbol);
+        var brigadeSequence = Hex.fromHex(brigadeCode);
+        var calendarSequence = Hex.fromHex(calendarCode);
+        return brigadeGroupQueryRepository.findBtBrigadeCode(instance, brigadeSequence, calendarSequence, calendarSymbol);
     }
 
     public List<BrigadeGroupEntity> findAll(String instance) {

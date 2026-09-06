@@ -20,10 +20,10 @@ public interface BrigadeGroupQueryRepository extends JpaRepository<BrigadeGroupE
     @Query("""
             SELECT b FROM BrigadeGroupEntity b
             WHERE b.calendarSymbol.calendarItem.agency.agencyCode = :instance
-            AND b.brigadeItem.brigadeItemCode = :brigadeCode
-            AND b.calendarSymbol.calendarItem.sequenceHex = :calendarCode
+            AND b.brigadeItem.brigadeItemSequence = :brigadeSequence
+            AND b.calendarSymbol.calendarItem.sequence = :calendarSequence
             AND b.calendarSymbol.designation = :calendarSymbol""")
-    BrigadeGroupEntity findBtBrigadeCode(@Param("instance") String instance, @Param("brigadeCode") String brigadeCode, @Param("calendarCode") String calendarCode, @Param("calendarSymbol") String calendarSymbol);
+    BrigadeGroupEntity findBtBrigadeCode(@Param("instance") String instance, @Param("brigadeSequence") int brigadeSequence, @Param("calendarSequence") int calendarSequence, @Param("calendarSymbol") String calendarSymbol);
 
     @Query("""
             SELECT b FROM BrigadeGroupEntity b
