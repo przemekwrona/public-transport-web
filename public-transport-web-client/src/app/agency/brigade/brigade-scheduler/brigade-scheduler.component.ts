@@ -15,7 +15,7 @@ import {
     BrigadeResource,
     BrigadeService, GetAllTripsResponse, GetBrigadeDetailsResponse,
     NextCalendarResourceSequenceResponse,
-    PutBrigadeEventBody, ResourceService, TripId2
+    PutBrigadeEventBody, ResourceOptimizerService, ResourceService, TripId2
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatIconModule} from "@angular/material/icon";
@@ -55,6 +55,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
 
     alignAccordionOpen = false;
     selectedAlignMinutes: number | null = null;
+    isOptimizing = false;
 
     config: DayPilot.SchedulerConfig = {
         locale: "pl-pl",
@@ -133,7 +134,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         }),
     };
 
-    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private resourceService: ResourceService, private dialog: MatDialog) {
+    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private resourceService: ResourceService, private resourceOptimizerService: ResourceOptimizerService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -325,6 +326,45 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
                 resources: [...(this.scheduler.control.resources ?? []), resource]
             });
             afterCreate?.(response.sequenceHex);
+        });
+    }
+
+    public optimizeBrigades(): void {
+        if (this.isOptimizing) {
+            return;
+        }
+
+        const calendarCode = this.brigadeBody.calendarSymbolId?.calendarItemId?.code;
+        const symbol = this.brigadeBody.calendarSymbolId?.symbol;
+        if (!this.brigadeCode || !calendarCode || !symbol) {
+            return;
+        }
+
+        this.isOptimizing = true;
+        this.resourceOptimizerService.optimizeBrigades(
+            this.agencyStorage.getInstance(),
+            this.brigadeCode,
+            calendarCode,
+            symbol
+        ).subscribe({
+            next: () => {
+                this.brigadeService.getBrigadeDetails(this.agencyStorage.getInstance(), this.brigadeCode).subscribe({
+                    next: (brigadeDetails: GetBrigadeDetailsResponse) => {
+                        const brigadeBody = brigadeDetails.brigade.brigades.find((brigade) => brigade.calendarSymbolId.symbol === symbol);
+                        if (brigadeBody) {
+                            this.brigadeBody = brigadeBody;
+                            this.applyBrigadeToScheduler(this.brigadeBody);
+                        }
+                        this.isOptimizing = false;
+                    },
+                    error: () => {
+                        this.isOptimizing = false;
+                    }
+                });
+            },
+            error: () => {
+                this.isOptimizing = false;
+            }
         });
     }
 
