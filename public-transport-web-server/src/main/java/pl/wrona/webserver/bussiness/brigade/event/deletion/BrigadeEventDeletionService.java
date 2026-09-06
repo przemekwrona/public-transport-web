@@ -22,7 +22,7 @@ public class BrigadeEventDeletionService {
     @PreAgencyAuthorize
     @Transactional
     public Status deleteBrigadeEvent(String instance, String brigadeCode, String calendarCode, String symbol, String resourceCode, String eventCode) {
-        BrigadeResourceEntity brigadeResource = brigadeResourceQueryService.findByBrigadeGroupAndResourceCode(
+        BrigadeResourceEntity brigadeResource = brigadeResourceQueryService.findByAgencyAndBrigadeCodeAndCalendarCodeAndSymbolAndResourceCode(
                 instance, brigadeCode, calendarCode, symbol, resourceCode);
 
         BrigadeEventEntity brigadeEvent = brigadeEventQueryService.findByAgencyAndCalendarAndSymbolAndEventHex(brigadeResource, eventCode);
