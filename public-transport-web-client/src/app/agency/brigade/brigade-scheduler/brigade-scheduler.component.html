@@ -30,13 +30,20 @@
 
         <div class="brigade-ribbon__group">
             <div class="brigade-ribbon__commands">
-                <button type="button"
-                        class="brigade-ribbon__cmd brigade-ribbon__cmd--large"
-                        (click)="addResource()"
-                        title="Dodaj kolejną brygadę">
-                    <mat-icon>directions_bus</mat-icon>
-                    <span>Dodaj<br>brygadę</span>
-                </button>
+                    <button type="button"
+                            class="brigade-ribbon__cmd brigade-ribbon__cmd--large"
+                            (click)="addResource()"
+                            title="Dodaj kolejną brygadę">
+                        <mat-icon>directions_bus</mat-icon>
+                        <span>Dodaj<br>brygadę</span>
+                    </button>
+                    <button type="button"
+                            class="brigade-ribbon__cmd brigade-ribbon__cmd--large brigade-ribbon__cmd--danger"
+                            (click)="removeLastResource()"
+                            title="Usuń ostatnią brygadę">
+                        <mat-icon>remove_circle_outline</mat-icon>
+                        <span>Usuń<br>ostatnią</span>
+                    </button>
             </div>
             <div class="brigade-ribbon__label">Harmonogram</div>
         </div>

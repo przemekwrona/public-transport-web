@@ -311,6 +311,9 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         this.createResource();
     }
 
+    public removeLastResource(): void {
+    }
+
     private createResource(afterCreate?: (resourceId: string) => void): void {
         const instance: string = this.agencyStorage.getInstance();
 
