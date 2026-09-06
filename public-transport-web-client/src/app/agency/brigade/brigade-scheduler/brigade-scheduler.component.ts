@@ -53,7 +53,6 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         { minutes: 60, label: '1h' },
     ];
 
-    alignAccordionOpen = false;
     selectedAlignMinutes: number | null = null;
     isOptimizing = false;
 
@@ -425,14 +424,6 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         this.scheduler.control.scrollTo(firstDate.format('yyyy-MM-DDTHH:mm:SS'));
     }
 
-    public toggleAlignAccordion(): void {
-        this.alignAccordionOpen = !this.alignAccordionOpen;
-    }
-
-    public alignLabel(minutes: number): string {
-        return this.alignOptions.find(option => option.minutes === minutes)?.label ?? `${minutes}m`;
-    }
-
     public alignToMinutes(minutes: number): void {
         const allowedMinutes = this.alignOptions.map(option => option.minutes);
         if (!allowedMinutes.includes(minutes)) {
@@ -440,7 +431,6 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         }
 
         this.selectedAlignMinutes = minutes;
-        this.alignAccordionOpen = false;
 
         const scheduler = this.scheduler.control;
         const resources = scheduler.resources ?? [];

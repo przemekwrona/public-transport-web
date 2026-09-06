@@ -1,72 +1,123 @@
-<div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+<div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-4">
     <div class="flex flex-col justify-center gap-2">
         <h3 class="text-xl font-medium leading-none text-gray-900">Symbol #{{ brigadeBody.calendarDesignation }}</h3>
         <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
             {{ brigadeBody.calendarDescription }}
         </div>
     </div>
-    <div class="flex items-center gap-2">
-        <button 
-            type="button" 
-            (click)="clearGroup()" 
-            class="btn btn-sm btn-icon btn-clear btn-danger border border-red-500 border-w-s"
-            aria-label="Wyczyść">
-            <mat-icon class="font-sm">delete</mat-icon>
-        </button>
+</div>
 
-        <div class="relative">
-            <button type="button" (click)="toggleAlignAccordion()" class="btn btn-sm btn-secondary">
-                <mat-icon class="me-1 font-sm">access_time</mat-icon>
+<div class="brigade-ribbon" role="toolbar" aria-label="Wstążka harmonogramu brygad">
+    <div class="brigade-ribbon__tabs">
+        <span class="brigade-ribbon__tab is-active">Brygady</span>
+    </div>
 
-                @if (selectedAlignMinutes) {
-                    <span class="badge badge-sm badge-outline badge-primary">{{ alignLabel(selectedAlignMinutes) }}</span>
-                }
-                <i class="ki-filled ki-down text-xs ms-1 transition-transform duration-200"
-                   [class.rotate-180]="alignAccordionOpen"></i>
-            </button>
-            @if (alignAccordionOpen) {
-                <div class="absolute end-0 top-full z-20 mt-1 rounded-lg border border-gray-200 bg-white p-1 shadow-md">
-                    <div class="btn-group">
-                        @for (option of alignOptions; track option.minutes) {
-                            <button type="button"
-                                    (click)="alignToMinutes(option.minutes)"
-                                    class="btn btn-xs"
-                                    [class.btn-primary]="selectedAlignMinutes === option.minutes"
-                                    [class.btn-secondary]="selectedAlignMinutes !== option.minutes">
-                                {{ option.label }}
-                            </button>
-                        }
-                    </div>
-                </div>
-            }
+    <div class="brigade-ribbon__body">
+        <div class="brigade-ribbon__group">
+            <div class="brigade-ribbon__commands">
+                <button type="button"
+                        class="brigade-ribbon__cmd brigade-ribbon__cmd--large"
+                        (click)="openCreateEventPanel()"
+                        title="Dodaj kurs do ostatniej brygady">
+                    <mat-icon>add</mat-icon>
+                    <span>Dodaj<br>kurs</span>
+                </button>
+            </div>
+            <div class="brigade-ribbon__label">Kursy</div>
         </div>
-        <button type="button"
-                (click)="openTimetableModal()"
-                class="btn btn-sm btn-icon btn-secondary"
-                aria-label="Pokaż rozkład">
-            <mat-icon class="font-sm">calendar_month</mat-icon>
-        </button>
-        <button type="button"
-                (click)="openCreateEventPanel()"
-                class="btn btn-sm btn-icon btn-secondary"
-                aria-label="Dodaj kurs">
-            <mat-icon class="font-sm">add</mat-icon>
-        </button>
-        <a [routerLink]="['/agency/brigades', brigadeCode, 'symbol', brigadeBody.calendarSymbolId.symbol, 'timetable']"
-           class="btn btn-sm btn-icon btn-secondary"
-           aria-label="Generator danych">
-            <mat-icon class="font-sm">auto_fix_high</mat-icon>
-        </a>
-        <button type="button"
-                (click)="optimizeBrigades()"
-                class="btn btn-sm btn-ai"
-                [disabled]="isOptimizing"
-                [class.is-optimizing]="isOptimizing"
-                aria-label="Optymalizuj brygady"
-                title="Optymalizuj brygady">
-            <mat-icon class="font-sm">auto_awesome</mat-icon>
-            <span>AI</span>
-        </button>
+
+        <div class="brigade-ribbon__divider" aria-hidden="true"></div>
+
+        <div class="brigade-ribbon__group">
+            <div class="brigade-ribbon__commands">
+                <button type="button"
+                        class="brigade-ribbon__cmd brigade-ribbon__cmd--large"
+                        (click)="addResource()"
+                        title="Dodaj kolejną brygadę">
+                    <mat-icon>directions_bus</mat-icon>
+                    <span>Dodaj<br>brygadę</span>
+                </button>
+            </div>
+            <div class="brigade-ribbon__label">Harmonogram</div>
+        </div>
+
+        <div class="brigade-ribbon__divider" aria-hidden="true"></div>
+
+        <div class="brigade-ribbon__group">
+            <div class="brigade-ribbon__align">
+                @for (option of alignOptions; track option.minutes) {
+                    <button type="button"
+                            class="brigade-ribbon__align-btn"
+                            [class.is-active]="selectedAlignMinutes === option.minutes"
+                            (click)="alignToMinutes(option.minutes)"
+                            [title]="'Wyrównaj odjazdy do ' + option.label">
+                        {{ option.label }}
+                    </button>
+                }
+            </div>
+            <div class="brigade-ribbon__label">Wyrównanie</div>
+        </div>
+
+        <div class="brigade-ribbon__divider" aria-hidden="true"></div>
+
+        <div class="brigade-ribbon__group">
+            <div class="brigade-ribbon__commands">
+                <button type="button"
+                        class="brigade-ribbon__cmd brigade-ribbon__cmd--large brigade-ribbon__cmd--danger"
+                        (click)="clearGroup()"
+                        title="Wyczyść wszystkie brygady w tym symbolu">
+                    <mat-icon>delete</mat-icon>
+                    <span>Wyczyść</span>
+                </button>
+            </div>
+            <div class="brigade-ribbon__label">Zarządzanie</div>
+        </div>
+
+        <div class="brigade-ribbon__divider" aria-hidden="true"></div>
+
+        <div class="brigade-ribbon__group">
+            <div class="brigade-ribbon__commands">
+                <button type="button"
+                        class="brigade-ribbon__cmd brigade-ribbon__cmd--large"
+                        (click)="openTimetableModal()"
+                        title="Pokaż rozkład jazdy">
+                    <mat-icon>calendar_month</mat-icon>
+                    <span>Pokaż<br>rozkład</span>
+                </button>
+            </div>
+            <div class="brigade-ribbon__label">Rozkład</div>
+        </div>
+
+        <div class="brigade-ribbon__divider" aria-hidden="true"></div>
+
+        <div class="brigade-ribbon__group">
+            <div class="brigade-ribbon__commands">
+                <a [routerLink]="['/agency/brigades', brigadeCode, 'symbol', brigadeBody.calendarSymbolId.symbol, 'timetable']"
+                   class="brigade-ribbon__cmd brigade-ribbon__cmd--large"
+                   title="Generator danych rozkładu">
+                    <mat-icon>auto_fix_high</mat-icon>
+                    <span>Generator<br>danych</span>
+                </a>
+            </div>
+            <div class="brigade-ribbon__label">Dane</div>
+        </div>
+
+        <div class="brigade-ribbon__divider" aria-hidden="true"></div>
+
+        <div class="brigade-ribbon__group">
+            <div class="brigade-ribbon__commands">
+                <button type="button"
+                        class="brigade-ribbon__cmd brigade-ribbon__cmd--large brigade-ribbon__cmd--ai"
+                        (click)="optimizeBrigades()"
+                        [disabled]="isOptimizing"
+                        [class.is-optimizing]="isOptimizing"
+                        title="Optymalizuj przydział brygad">
+                    <mat-icon>auto_awesome</mat-icon>
+                    <span>{{ isOptimizing ? 'Trwa…' : 'Optymalizuj' }}</span>
+                </button>
+            </div>
+            <div class="brigade-ribbon__label">Optymalizacja</div>
+        </div>
     </div>
 </div>
 

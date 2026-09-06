@@ -1,32 +1,204 @@
-.font-sm {
-  font-size: 16px;
-  height: 16px;
-  width: 16px;
+:host {
+  display: block;
 }
 
-.border-w-s {
-  border-width: 1px;
-  border-style: solid;
-  border-color: #ef4444;
+.brigade-ribbon {
+  --ribbon-border: #d8dde6;
+  --ribbon-surface: #f4f6f8;
+  --ribbon-panel: #ffffff;
+  --ribbon-hover: #e8eef5;
+  --ribbon-active: #d7e6f8;
+  --ribbon-text: #2f3341;
+  --ribbon-muted: #7a8194;
+  --ribbon-accent: var(--tw-primary, #1b84ff);
+  --ribbon-danger: #e11d48;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--ribbon-border);
+  border-radius: 8px;
+  background: var(--ribbon-surface);
+  overflow: hidden;
 }
 
-.btn-ai {
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
-  color: #fff;
-  border: none;
-  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.28), 0 4px 12px rgba(99, 102, 241, 0.28);
+.brigade-ribbon__tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 4px 10px 0;
+  background: var(--ribbon-surface);
+  border-bottom: 1px solid var(--ribbon-border);
+}
+
+.brigade-ribbon__tab {
+  position: relative;
+  min-width: 88px;
+  padding: 7px 16px 9px;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+
+  &.is-active {
+    background: var(--ribbon-panel);
+    border-color: var(--ribbon-border);
+    color: var(--ribbon-accent);
+    margin-bottom: -1px;
+  }
+}
+
+.brigade-ribbon__body {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  min-height: 96px;
+  padding: 8px 8px 4px;
+  overflow-x: auto;
+  background: var(--ribbon-panel);
+}
+
+.brigade-ribbon__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  min-width: 72px;
+  padding: 0 10px 2px;
+}
+
+.brigade-ribbon__commands {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex: 1;
+}
+
+.brigade-ribbon__cmd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ribbon-text);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  mat-icon {
+    display: block;
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    color: var(--ribbon-accent);
+  }
 
   &:hover:not(:disabled) {
-    filter: brightness(1.08);
+    background: var(--ribbon-hover);
+    border-color: #d0d7e2;
   }
 
   &:disabled {
-    opacity: 0.7;
+    opacity: 0.65;
     cursor: wait;
+  }
+}
+
+.brigade-ribbon__cmd--large {
+  flex-direction: column;
+  min-width: 72px;
+  min-height: 68px;
+}
+
+.brigade-ribbon__cmd--danger {
+  mat-icon {
+    color: var(--ribbon-danger);
+  }
+
+  &:hover:not(:disabled) {
+    background: #fff1f2;
+    border-color: #fecdd3;
+  }
+}
+
+.brigade-ribbon__cmd--ai {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.22), 0 4px 10px rgba(99, 102, 241, 0.22);
+
+  mat-icon {
+    color: #fff;
+  }
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.06);
+    border-color: transparent;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
   }
 
   &.is-optimizing mat-icon {
     animation: ai-pulse 1s ease-in-out infinite;
+  }
+}
+
+.brigade-ribbon__label {
+  width: 100%;
+  margin-top: 4px;
+  padding-top: 3px;
+  border-top: 1px solid #edf0f4;
+  color: var(--ribbon-muted);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.brigade-ribbon__divider {
+  width: 1px;
+  margin: 2px 4px 18px;
+  background: #e4e8ee;
+  align-self: stretch;
+}
+
+.brigade-ribbon__align {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(38px, 1fr));
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.brigade-ribbon__align-btn {
+  min-width: 38px;
+  padding: 5px 6px;
+  border: 1px solid #d5dbe4;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ribbon-text);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover:not(.is-active) {
+    background: var(--ribbon-hover);
+    border-color: #c5cedb;
+  }
+
+  &.is-active {
+    background: var(--ribbon-active);
+    border-color: var(--ribbon-accent);
+    color: var(--ribbon-accent);
   }
 }
 
