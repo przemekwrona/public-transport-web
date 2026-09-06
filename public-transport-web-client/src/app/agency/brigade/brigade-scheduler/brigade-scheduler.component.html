@@ -57,6 +57,16 @@
            aria-label="Generator danych">
             <mat-icon class="font-sm">auto_fix_high</mat-icon>
         </a>
+        <button type="button"
+                (click)="optimizeBrigades()"
+                class="btn btn-sm btn-ai"
+                [disabled]="isOptimizing"
+                [class.is-optimizing]="isOptimizing"
+                aria-label="Optymalizuj brygady"
+                title="Optymalizuj brygady">
+            <mat-icon class="font-sm">auto_awesome</mat-icon>
+            <span>AI</span>
+        </button>
     </div>
 </div>
 

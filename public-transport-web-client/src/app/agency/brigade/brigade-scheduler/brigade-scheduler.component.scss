@@ -9,3 +9,34 @@
   border-style: solid;
   border-color: #ef4444;
 }
+
+.btn-ai {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.28), 0 4px 12px rgba(99, 102, 241, 0.28);
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  &.is-optimizing mat-icon {
+    animation: ai-pulse 1s ease-in-out infinite;
+  }
+}
+
+@keyframes ai-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.7;
+  }
+}
