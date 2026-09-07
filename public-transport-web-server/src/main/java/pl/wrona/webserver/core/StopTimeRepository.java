@@ -1,7 +1,6 @@
 package pl.wrona.webserver.core;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -26,6 +25,15 @@ public interface StopTimeRepository extends JpaRepository<StopTimeEntity, StopTi
 
     @Query("SELECT st FROM StopTimeEntity st JOIN st.tripProfile.trip t WHERE t = :trip")
     List<StopTimeEntity> findAllByTrip(TripEntity trip);
+
+    @Query("""
+            SELECT DISTINCT st FROM StopTimeEntity st
+            JOIN FETCH st.tripProfile tp
+            JOIN FETCH tp.trip t
+            JOIN FETCH st.stopEntity
+            WHERE t.tripId IN :tripIds
+            """)
+    List<StopTimeEntity> findAllByTripIdIn(@Param("tripIds") Collection<Long> tripIds);
 
     @Query("""
             SELECT st FROM StopTimeEntity st
