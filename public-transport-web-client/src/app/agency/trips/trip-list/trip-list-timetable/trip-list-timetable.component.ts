@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Data} from "@angular/router";
 import {map} from "rxjs";
-import {RouteDetails} from "../../../../generated/public-transport-api";
+import {RouteStops} from "../../../../generated/public-transport-api";
+import {buildStopSequence, StopSequenceItem} from "./stop-sequence";
 
 @Component({
     selector: 'app-trip-list-timetable',
@@ -9,14 +10,34 @@ import {RouteDetails} from "../../../../generated/public-transport-api";
     standalone: true
 })
 export class TripListTimetableComponent implements OnInit {
-    public trips: RouteDetails = {route: {routeId: {line: '', name: ''}}};
+    public frontStops: StopSequenceItem[] = [];
+    public backStops: StopSequenceItem[] = [];
+    public selectedStop: StopSequenceItem | null = null;
+    public selectedDirection: string | null = null;
+
+    public get columns(): { title: string; stops: StopSequenceItem[] }[] {
+        return [
+            {title: 'TAM', stops: this.frontStops},
+            {title: 'POWRÓT', stops: this.backStops}
+        ];
+    }
 
     constructor(private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
-        this.route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe((trips: RouteDetails) => {
-            this.trips = trips;
+        this.route.data.pipe(map((data: Data) => data['response'] as RouteStops)).subscribe(response => {
+            this.frontStops = buildStopSequence(response?.front);
+            this.backStops = buildStopSequence(response?.back);
         });
+    }
+
+    public isSelected(stop: StopSequenceItem, direction: string): boolean {
+        return this.selectedStop?.stopId === stop.stopId && this.selectedDirection === direction;
+    }
+
+    public loadStopTimetable(stop: StopSequenceItem, direction: string): void {
+        this.selectedStop = stop;
+        this.selectedDirection = direction;
     }
 }
