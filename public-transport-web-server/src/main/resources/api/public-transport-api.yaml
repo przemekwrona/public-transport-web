@@ -514,6 +514,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/RouteDetails'
 
+  /agency/{agency}/routes/{routeCode}/stops:
+    get:
+      tags:
+        - route
+      summary: Return graph of stops for route
+      operationId: getRouteStops
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteStops'
+
   /agency/{agency}/routes/{routeCode}/trips:
     get:
       tags:
@@ -1466,6 +1491,145 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TerritoryUnit'
+
+    RouteStops:
+      type: object
+      properties:
+        front:
+          $ref: '#/components/schemas/RouteStopGraph'
+        back:
+          $ref: '#/components/schemas/RouteStopGraph'
+
+    RouteStopGraph:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/TripMode'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteStopGraphNode'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteStopGraphEdge'
+        spineStopIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        spineTripCode:
+          type: string
+        branches:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteStopGraphBranch'
+
+    RouteStopGraphNodeRole:
+      type: string
+      description: |
+        Role of a stop in the union graph of all trips in one direction (FRONT or BACK).
+        Describes topology after merging variants, not trip timing.
+        A stop may have more than one role at once, e.g. ORIGIN and FORK.
+
+        - ORIGIN: a trip starts here (terminal or alternate start); in-degree 0
+        - DESTINATION: a trip ends here (terminal or shortcut end); out-degree 0
+        - FORK: more than one outgoing path; out-degree > 1
+        - JOIN: more than one incoming path; in-degree > 1
+        - TRUNK: single in and single out (shared spine or a stop on a branch)
+        - ISOLATED: no edges (empty or broken sequence); in-degree 0 and out-degree 0
+
+        Shortcut variants do not mark the last shared stop as DESTINATION in the union
+        graph if the main spine continues past it. That case is SHORTCUT on the branch.
+      enum:
+        - ORIGIN
+        - DESTINATION
+        - FORK
+        - JOIN
+        - TRUNK
+        - ISOLATED
+
+    RouteStopGraphBranchType:
+      type: string
+      description: |
+        How a non-spine trip differs from the spine (main variant, otherwise the longest sequence).
+        Compared by shared prefix and shared suffix. An identical sequence is not a branch.
+
+        - DETOUR: leaves the spine and rejoins it (A-B-S-D-E vs A-B-C-D-E)
+        - SHORTCUT: same start, ends earlier (A-B-C vs A-B-C-D-E)
+        - EXTENSION: spine plus extra stops at the end (A-B-C-D-E-F vs A-B-C-D-E)
+        - DIFFERENT_ORIGIN: other start, then joins the spine (X-Y-C-D-E vs A-B-C-D-E)
+        - DIFFERENT_DESTINATION: shared start, other end (A-B-X-Y vs A-B-C-D-E)
+        - ALTERNATE: almost no shared stops (X-Y-Z vs A-B-C-D-E)
+      enum:
+        - DETOUR
+        - SHORTCUT
+        - EXTENSION
+        - DIFFERENT_ORIGIN
+        - DIFFERENT_DESTINATION
+        - ALTERNATE
+
+    RouteStopGraphNode:
+      type: object
+      properties:
+        stopId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        lat:
+          type: number
+          format: double
+        lon:
+          type: number
+          format: double
+        inDegree:
+          type: integer
+        outDegree:
+          type: integer
+        layer:
+          type: integer
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteStopGraphNodeRole'
+
+    RouteStopGraphEdge:
+      type: object
+      properties:
+        fromStopId:
+          type: integer
+          format: int64
+        toStopId:
+          type: integer
+          format: int64
+        tripCodes:
+          type: array
+          items:
+            type: string
+
+    RouteStopGraphBranch:
+      type: object
+      properties:
+        tripCode:
+          type: string
+        variantName:
+          type: string
+        variantDesignation:
+          type: string
+        type:
+          $ref: '#/components/schemas/RouteStopGraphBranchType'
+        divergeFromStopId:
+          type: integer
+          format: int64
+        rejoinAtStopId:
+          type: integer
+          format: int64
+        stopIds:
+          type: array
+          items:
+            type: integer
+            format: int64
 
     TripProfile:
       type: object
