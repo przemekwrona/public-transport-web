@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 
@@ -14,6 +15,12 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
 
     @Query("SELECT t FROM TripEntity t WHERE t.route.agency.agencyCode = :agencyCode AND t.route.line = :line AND t.route.name = :name")
     List<TripEntity> findByAgencyCodeAndLineAndName(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name);
+
+    @Query("""
+            SELECT t FROM TripEntity t
+            WHERE t.route.agency.agencyCode = :agencyCode
+            AND t.route = :route""")
+    List<TripEntity> findByAgencyCodeAndRoute(@Param("agencyCode") String agencyCode, @Param("route") RouteEntity route);
 
     @Query("""
             SELECT CASE WHEN (COUNT(*) > 0) THEN TRUE ELSE FALSE END

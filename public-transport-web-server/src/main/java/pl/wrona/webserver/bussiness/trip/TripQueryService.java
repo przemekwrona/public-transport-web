@@ -1,11 +1,10 @@
 package pl.wrona.webserver.bussiness.trip;
 
 import lombok.AllArgsConstructor;
-import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripVariantMode;
-import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -24,8 +23,9 @@ public class TripQueryService {
         return tripQueryRepository.findByAgencyCodeAndLineAndName(instance, line, name);
     }
 
-    public TripEntity findByAgencyCodeAndTripId(String instance, TripId tripId) {
-        return tripQueryRepository.findTripByUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariantName(), TripVariantModeMapper.map(tripId.getVariantMode()));
+    @PreAgencyAuthorize
+    public List<TripEntity> findByAgencyCodeAndRoute(String instance, RouteEntity route) {
+        return tripQueryRepository.findByAgencyCodeAndRoute(instance, route);
     }
 
     public TripEntity findTripByAgencyAndRouteCodeAndTripCode(String instance, String routeCode, String tripCode) {
