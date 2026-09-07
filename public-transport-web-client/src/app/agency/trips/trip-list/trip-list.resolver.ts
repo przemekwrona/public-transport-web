@@ -16,7 +16,7 @@ export const tripsResolver: ResolveFn<Observable<RouteDetails>> = (route: Activa
     return routeService.getRouteDetails(authService.getInstance(), routeCode);
 }
 
-function getRouteParam(route: ActivatedRouteSnapshot, key: string): string | null {
+export function getRouteParam(route: ActivatedRouteSnapshot, key: string): string | null {
     let current: ActivatedRouteSnapshot | null = route;
     while (current) {
         const value = current.paramMap.get(key);

@@ -10,5 +10,5 @@ export const tripListChildRoutes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'info'},
     {path: 'info', component: TripListInfoComponent, resolve: {routeDetails: tripListInfoResolver}},
     {path: 'variants', component: TripListVariantsComponent, resolve: {routeDetails: tripListVariantsResolver}},
-    {path: 'timetable', component: TripListTimetableComponent, resolve: {routeDetails: tripListTimetableResolver}},
+    {path: 'timetable', component: TripListTimetableComponent, resolve: {response: tripListTimetableResolver}},
 ];
