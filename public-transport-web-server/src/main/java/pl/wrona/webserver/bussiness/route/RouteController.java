@@ -6,6 +6,7 @@ import org.igeolab.iot.pt.server.api.model.ModificationRouteResponse;
 import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
 import org.igeolab.iot.pt.server.api.model.RouteId;
+import org.igeolab.iot.pt.server.api.model.RouteStops;
 import org.igeolab.iot.pt.server.api.model.Routes;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.UpdateRouteRequest;
@@ -17,6 +18,7 @@ import pl.wrona.webserver.bussiness.route.deletion.RouteDeletionService;
 import pl.wrona.webserver.bussiness.route.pagination.RoutePaginationService;
 import pl.wrona.webserver.bussiness.route.updater.RouteUpdaterService;
 import pl.wrona.webserver.bussiness.route.details.RouteDetailsService;
+import pl.wrona.webserver.bussiness.route.stop.sequencer.RouteStopsService;
 
 @RestController
 @AllArgsConstructor
@@ -26,6 +28,7 @@ public class RouteController implements RouteApi {
     private final RouteCreatorService routeCreatorService;
     private final RoutePaginationService routePaginationService;
     private final RouteDetailsService routeDetailsService;
+    private final RouteStopsService routeStopsService;
     private final RouteUpdaterService routeUpdaterService;
     private final RouteDeletionService routeDeletionService;
 
@@ -42,6 +45,11 @@ public class RouteController implements RouteApi {
     @Override
     public ResponseEntity<RouteDetails> getRouteDetails(String agency, String routeCode) {
         return ResponseEntity.ok(routeDetailsService.getRouteDetails(agency, routeCode));
+    }
+
+    @Override
+    public ResponseEntity<RouteStops> getRouteStops(String agency, String routeCode) {
+        return ResponseEntity.ok(routeStopsService.getRouteStops(agency, routeCode));
     }
 
     @Override
