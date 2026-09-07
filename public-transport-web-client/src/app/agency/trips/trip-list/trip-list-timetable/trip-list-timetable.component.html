@@ -1,23 +1,50 @@
 <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+        @for (column of columns; track column.title) {
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ column.title }}</h3>
+                </div>
+                <div class="card-body flex flex-col gap-1.5">
+                    @for (stop of column.stops; track $index) {
+                        <div class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 border border-gray-200"
+                             [class.bg-gray-200]="stop.variant"
+                             [class.border-primary]="isSelected(stop, column.title)"
+                             [class.text-gray-600]="stop.variant">
+                            <span class="text-2sm text-gray-500 tabular-nums w-6">{{ $index + 1 }}</span>
+                            <a class="text-sm font-medium cursor-pointer hover:text-primary-active hover:underline underline-offset-2"
+                               [class.text-gray-900]="!stop.variant"
+                               (click)="loadStopTimetable(stop, column.title)">{{ stop.name }}</a>
+                            @if (stop.variant && stop.designation) {
+                                <span class="badge badge-sm badge-outline">{{ stop.designation }}</span>
+                            }
+                        </div>
+                    } @empty {
+                        <p class="text-sm text-gray-700">Brak przystanków</p>
+                    }
+                </div>
+            </div>
+        }
+
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Rozkład jazdy TAM</h3>
+                <h3 class="card-title">Tabliczka z odjazdami</h3>
             </div>
             <div class="card-body">
-                <p class="text-sm text-gray-700">
-                    Rozkład jazdy w kierunku TAM dla linii {{ trips?.route?.routeId?.line }} {{ trips?.route?.routeId?.name }}.
-                </p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Rozkład jazdy POWRÓT</h3>
-            </div>
-            <div class="card-body">
-                <p class="text-sm text-gray-700">
-                    Rozkład jazdy w kierunku POWRÓT dla linii {{ trips?.route?.routeId?.line }} {{ trips?.route?.routeId?.name }}.
-                </p>
+                @if (selectedStop) {
+                    <div class="border border-gray-300 rounded-xl overflow-hidden">
+                        <div class="bg-gray-900 text-white px-3.5 py-2.5">
+                            <div class="text-2xs uppercase tracking-wide text-gray-400">Przystanek</div>
+                            <div class="text-sm font-semibold">{{ selectedStop.name }}</div>
+                            <div class="text-2xs text-gray-400 mt-0.5">{{ selectedDirection }}</div>
+                        </div>
+                        <div class="px-3.5 py-6 text-center text-sm text-gray-600 bg-gray-50">
+                            Brak odjazdów
+                        </div>
+                    </div>
+                } @else {
+                    <p class="text-sm text-gray-700">Kliknij przystanek, aby pobrać rozkład jazdy</p>
+                }
             </div>
         </div>
     </div>
