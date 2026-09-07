@@ -37,7 +37,9 @@ public class SecurityConfiguration {
             "/assets/**",
             "/media/**",
             "/actuator",
-            "/actuator/health"
+            "/actuator/health",
+            "/actuator/health/**",
+            "/actuator/info"
     };
 
     @Bean
