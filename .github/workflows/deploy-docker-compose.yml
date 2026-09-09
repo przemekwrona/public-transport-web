@@ -24,6 +24,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: YAML Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'docker-compose.yml'
+        env:
+          services.app-db.environment.POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          services.app-db.environment.POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          services.web-client.environment.SPRING_DATASOURCE_USERNAME: ${{ secrets.POSTGRES_USER }}
+          services.web-client.environment.SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
       - name: Prepare docker-compose.yaml from repository
         run: cp docker-compose.yml docker-compose.yaml
 
