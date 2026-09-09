@@ -1,0 +1,61 @@
+name: Deploy public-transport-web
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker image tag'
+        required: true
+        default: 'latest'
+        type: string
+
+env:
+  MODULE: public-transport-web-server
+  IMAGE_NAME: public-transport-web
+  DOCKER_REGISTRY: registry.digitalocean.com/public-transport-registry
+
+jobs:
+  docker:
+    name: Build and push Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build Maven project
+        run: mvn clean package -DskipTests
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Build docker ${{ env.IMAGE_NAME }}:${{ inputs.tag }}
+        run: |
+          cd ${{ env.MODULE }}
+          docker build \
+            -t igeolab/${{ env.IMAGE_NAME }}:${{ inputs.tag }} \
+            -t igeolab/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            .
+
+      - name: Tag image for DigitalOcean Container Registry
+        run: |
+          docker tag igeolab/${{ env.IMAGE_NAME }}:${{ inputs.tag }} \
+            ${{ env.DOCKER_REGISTRY }}/igeolab/${{ env.IMAGE_NAME }}:${{ inputs.tag }}
+          docker tag igeolab/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            ${{ env.DOCKER_REGISTRY }}/igeolab/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 1200
+
+      - name: Push docker image
+        run: |
+          docker push ${{ env.DOCKER_REGISTRY }}/igeolab/${{ env.IMAGE_NAME }}:${{ inputs.tag }}
+          docker push ${{ env.DOCKER_REGISTRY }}/igeolab/${{ env.IMAGE_NAME }}:${{ github.sha }}
