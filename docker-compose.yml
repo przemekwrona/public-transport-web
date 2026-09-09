@@ -18,12 +18,25 @@ services:
       - '8080:8080'
     environment:
       PROFILE: dev
-      JAVA_OPTS: -Xmx512m
+      JAVA_OPTS: -Xmx512m -Xms256m
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: welcome1
       GEOAPIFY_KEY: ${GEOAPIFY_KEY}
     depends_on:
       - app-db
+
+#  web-client:
+#    build:
+#      context: ./public-transport-web-server
+#      dockerfile: Dockerfile
+#    container_name: web-client
+#    ports:
+#      - '8080:8080'
+#    environment:
+#      PROFILE: dev-docker
+#      JAVA_OPTS: -Xmx1G
+#    depends_on:
+#      - app-db
 
 #  gtfs-warszawa:
 #    build:
