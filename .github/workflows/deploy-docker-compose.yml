@@ -1,0 +1,60 @@
+name: Deploy docker-compose to Droplet
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose where you want to publish the build'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  COMPOSE_DIR: /opt/public-transport
+
+jobs:
+  droplet:
+    name: Sync docker-compose on Droplet
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare docker-compose.yaml from repository
+        run: cp docker-compose.yml docker-compose.yaml
+
+      - name: Stop containers if docker-compose exists on Droplet
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            mkdir -p "${{ env.COMPOSE_DIR }}"
+            cd "${{ env.COMPOSE_DIR }}"
+
+            if [ -f docker-compose.yaml ] || [ -f docker-compose.yml ]; then
+              echo "docker-compose found in ${{ env.COMPOSE_DIR }}, stopping containers"
+              if [ -f docker-compose.yaml ]; then
+                docker compose -f docker-compose.yaml down
+              else
+                docker compose -f docker-compose.yml down
+              fi
+            else
+              echo "docker-compose not found in ${{ env.COMPOSE_DIR }}, it will be copied from GitHub"
+            fi
+
+      - name: Overwrite docker-compose.yaml from GitHub repository
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          source: docker-compose.yaml
+          target: ${{ env.COMPOSE_DIR }}
+          overwrite: true
