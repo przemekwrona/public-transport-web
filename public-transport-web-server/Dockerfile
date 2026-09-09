@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim-buster
+FROM eclipse-temurin:17-jre-alpine
 MAINTAINER igeolab.pl
 WORKDIR /app
 EXPOSE 8080
