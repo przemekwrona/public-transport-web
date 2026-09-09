@@ -12,16 +12,16 @@ services:
       POSTGRES_PASSWORD: welcome1
 
   web-client:
-    image: igeolab/public-transport-web:latest
+    image: registry.digitalocean.com/public-transport-registry/public-transport-web:latest
     container_name: web-client
     ports:
       - '8080:8080'
     environment:
       PROFILE: dev
-      JAVA_OPTS: -Xmx1G
+      JAVA_OPTS: -Xmx512m
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: welcome1
-      GEOAPIFY_KEY: welcome1
+      GEOAPIFY_KEY: ${GEOAPIFY_KEY}
     depends_on:
       - app-db
 
