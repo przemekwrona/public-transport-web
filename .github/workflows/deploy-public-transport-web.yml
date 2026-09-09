@@ -3,6 +3,14 @@ name: Deploy public-transport-web
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        description: 'Choose where you want to publish the build'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - dev
+          - prod
       tag:
         description: 'Docker image tag'
         required: true
@@ -18,6 +26,7 @@ jobs:
   docker:
     name: Build and push Docker image
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,7 +44,7 @@ jobs:
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          token: ${{ secrets.DIGITALOCEAN_REGISTRY_ACCESS_TOKEN }}
 
       - name: Build docker ${{ env.IMAGE_NAME }}:${{ inputs.tag }}
         run: |
