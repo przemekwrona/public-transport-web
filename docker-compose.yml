@@ -12,6 +12,9 @@ services:
       POSTGRES_PASSWORD: welcome1
 
   public-transport-app:
+#    build:
+#      context: ./public-transport-web-server
+#      dockerfile: Dockerfile
     image: registry.digitalocean.com/public-transport-registry/public-transport-web:latest
     container_name: public-transport-app
     ports:
