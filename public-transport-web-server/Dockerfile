@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jre-alpinesudo
+FROM eclipse-temurin:17
 MAINTAINER igeolab.pl
 WORKDIR /app
 EXPOSE 8080
