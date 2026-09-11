@@ -51,8 +51,19 @@
     <div class="card min-w-full">
         <div class="card-body lg:py-7.5 py-5">
             <div class="flex flex-wrap justify-end gap-5">
-                <button type="button" class="btn btn-success" (click)="generate()">Generuj</button>
+                <button type="button" class="btn btn-success" (click)="generate()" [disabled]="isGenerating">Generuj</button>
             </div>
         </div>
     </div>
 </div>
+
+<ngx-spinner
+    name="timetable-wizard"
+    bdColor="rgba(51,51,51,0.8)"
+    size="large"
+    color="#fff"
+    type="ball-scale-multiple"
+    [fullScreen]="true"
+    [disableAnimation]="false">
+    <p class="text-white text-lg mt-4">{{ completedRequests }} / {{ totalRequests }}</p>
+</ngx-spinner>
