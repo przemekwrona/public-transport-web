@@ -69,3 +69,14 @@ jobs:
           source: docker-compose.yaml
           target: ${{ env.COMPOSE_DIR }}
           overwrite: true
+
+      - name: Copy nginx config to Droplet
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          source: nginx/${{ inputs.environment }}/*
+          target: ${{ env.COMPOSE_DIR }}/nginx
+          strip_components: 1
+          overwrite: true
