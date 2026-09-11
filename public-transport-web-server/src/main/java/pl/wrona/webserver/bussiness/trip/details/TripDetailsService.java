@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.RouteId;
-import org.igeolab.iot.pt.server.api.model.RouteId1;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.TerritoryUnit;
 import org.igeolab.iot.pt.server.api.model.TripId;
@@ -59,7 +59,7 @@ public class TripDetailsService {
 
         return new TripsDetails()
                 .tripId(new TripId2()
-                        .routeId(new RouteId1()
+                        .routeId(new RouteId()
                                 .line(tripEntity.getRoute().getLine())
                                 .name(tripEntity.getRoute().getName())
                                 .version(tripEntity.getRoute().getVersion())

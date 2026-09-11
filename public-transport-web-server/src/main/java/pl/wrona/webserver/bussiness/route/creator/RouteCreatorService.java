@@ -73,7 +73,8 @@ public class RouteCreatorService {
                 .routeId(new RouteId()
                         .line(savedRoute.getLine())
                         .name(savedRoute.getName())
-                        .version(savedRoute.getVersion()));
+                        .version(savedRoute.getVersion())
+                        .routeCode(savedRoute.getRouteCode()));
     }
 
 

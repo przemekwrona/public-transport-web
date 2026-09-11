@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
 import org.igeolab.iot.pt.server.api.model.ProfileShortcut;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
-import org.igeolab.iot.pt.server.api.model.RouteId1;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId1;
 import org.igeolab.iot.pt.server.api.model.TripProfile;
@@ -83,7 +83,7 @@ public class TripPaginationService {
     public static Trip map(TripEntity trip, Map<TripEntity, Set<TripProfileEntity>> dictProfiles, Map<Long, TripEntity> tripWithBrigades) {
         return new Trip()
                 .tripId(new TripId1()
-                        .routeId(new RouteId1()
+                        .routeId(new RouteId()
                                 .line(trip.getRoute().getLine())
                                 .name(trip.getRoute().getName())
                                 .version(trip.getRoute().getVersion())

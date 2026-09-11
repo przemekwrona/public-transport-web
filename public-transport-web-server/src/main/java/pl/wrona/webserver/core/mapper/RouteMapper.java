@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.RouteId;
-import org.igeolab.iot.pt.server.api.model.RouteId1;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Stop;
 import org.igeolab.iot.pt.server.api.model.TerritoryRoute;
 import pl.wrona.webserver.core.agency.RouteEntity;
@@ -26,7 +26,7 @@ public class RouteMapper {
 
         return Optional.ofNullable(routeEntity)
                 .map(routeOptional -> new Route()
-                        .routeId(new RouteId1()
+                        .routeId(new RouteId()
                                 .line(routeEntity.getLine())
                                 .name(routeEntity.getName())
                                 .version(routeEntity.getVersion())
