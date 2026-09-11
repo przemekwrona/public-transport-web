@@ -50,7 +50,9 @@
     "ngx-mask": "^20.0.3",
     "ngx-mat-select-search": "^8.0.4",
     "ngx-material-timepicker": "^13.1.1",
+    "ngx-progressbar": "^14.0.0",
     "ngx-sortable": "^2.1.0",
+    "ngx-spinner": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"
