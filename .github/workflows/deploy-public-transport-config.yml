@@ -1,4 +1,4 @@
-name: Deploy public-transport config
+name: Deploy public-transport config on Droplet and restart Docker containers
 
 on:
   workflow_dispatch:
@@ -73,3 +73,14 @@ jobs:
           target: ${{ env.COMPOSE_DIR }}/nginx
           strip_components: 1
           overwrite: true
+
+      - name: Start docker compose on Droplet
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd "${{ env.COMPOSE_DIR }}"
+            docker compose -f docker-compose.yml up -d
