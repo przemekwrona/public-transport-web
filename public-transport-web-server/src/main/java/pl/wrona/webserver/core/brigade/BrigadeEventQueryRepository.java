@@ -64,4 +64,12 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
         AND e.eventSequence = :eventSequence""")
     BrigadeEventEntity findByBrigadeGroupAndEventCode(@Param("group") BrigadeGroupEntity group, @Param("eventSequence") int eventSequence);
 
+    @Query("""
+            SELECT e FROM BrigadeEventEntity e
+            JOIN FETCH e.tripProfile tp
+            JOIN FETCH tp.trip t
+            WHERE t.tripId IN :tripIds
+            ORDER BY e.startSecond ASC""")
+    List<BrigadeEventEntity> findAllByTripIdInOrderByStartSecondAsc(@Param("tripIds") Collection<Long> tripIds);
+
 }

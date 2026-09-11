@@ -37,6 +37,16 @@ public interface StopTimeRepository extends JpaRepository<StopTimeEntity, StopTi
 
     @Query("""
             SELECT st FROM StopTimeEntity st
+            JOIN FETCH st.tripProfile tp
+            JOIN FETCH st.stopEntity
+            WHERE tp.trip.tripId IN :tripIds
+            AND st.stopEntity.stopId = :stopId
+            ORDER BY st.stopTimeId.stopSequence
+            """)
+    List<StopTimeEntity> findAllByTripIdInAndStopId(@Param("tripIds") Collection<Long> tripIds, @Param("stopId") Long stopId);
+
+    @Query("""
+            SELECT st FROM StopTimeEntity st
             JOIN FETCH st.stopEntity
             JOIN FETCH st.tripProfile tp
             WHERE tp.tripProfileId IN :tripProfileIds
