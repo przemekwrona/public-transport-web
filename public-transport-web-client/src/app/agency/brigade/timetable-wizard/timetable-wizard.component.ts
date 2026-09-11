@@ -1,7 +1,8 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
 import {
     AvailableTripProfile,
     TimetableBoardComponent,
@@ -21,7 +22,7 @@ import {
     TripResponse
 } from '../../../generated/public-transport-api';
 import {AgencyStorageService} from '../../../auth/agency-storage.service';
-import {concatMap, from, of, switchMap, toArray} from 'rxjs';
+import {concatMap, finalize, from, of, switchMap, tap, toArray} from 'rxjs';
 
 @Component({
     selector: 'app-timetable-wizard',
@@ -29,8 +30,10 @@ import {concatMap, from, of, switchMap, toArray} from 'rxjs';
         CommonModule,
         RouterModule,
         ReactiveFormsModule,
-        TimetableBoardComponent
+        TimetableBoardComponent,
+        NgxSpinnerModule
     ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     templateUrl: './timetable-wizard.component.html',
     styleUrl: './timetable-wizard.component.scss'
 })
@@ -46,9 +49,13 @@ export class TimetableWizardComponent implements OnInit {
     public formGroup: FormGroup;
     public frontDepartures: TimetableBoardEvent[] = [];
     public backDepartures: TimetableBoardEvent[] = [];
+    public isGenerating = false;
+    public totalRequests = 0;
+    public completedRequests = 0;
 
     @ViewChild('frontBoard') frontBoard?: TimetableBoardComponent;
     @ViewChild('backBoard') backBoard?: TimetableBoardComponent;
+    private readonly spinnerName = 'timetable-wizard';
 
     constructor(
         private route: ActivatedRoute,
@@ -56,7 +63,8 @@ export class TimetableWizardComponent implements OnInit {
         private formBuilder: FormBuilder,
         private resourceService: ResourceService,
         private brigadeService: BrigadeService,
-        private agencyStorageService: AgencyStorageService
+        private agencyStorageService: AgencyStorageService,
+        private spinner: NgxSpinnerService
     ) {
         this.formGroup = this.formBuilder.group({
             front: this.buildDirectionGroup(15),
@@ -139,11 +147,19 @@ export class TimetableWizardComponent implements OnInit {
             ?.find(group => group.calendarSymbolId?.symbol === symbol)
             ?.calendarSymbolId?.calendarItemId?.code;
 
-        if (!brigadeCode || !calendarCode || !symbol) {
+        if (!brigadeCode || !calendarCode || !symbol || this.isGenerating) {
             return;
         }
 
         const instance = this.agencyStorageService.getInstance();
+        const departures = [
+            ...this.frontDepartures.map(departure => ({departure, variantMode: TripMode.Front})),
+            ...this.backDepartures.map(departure => ({departure, variantMode: TripMode.Back}))
+        ];
+
+        this.totalRequests = departures.length;
+        this.completedRequests = 0;
+        this.showSpinner();
 
         this.resourceService.deleteResource(instance, brigadeCode, calendarCode, symbol).pipe(
             switchMap(() => this.brigadeService.getCalendarSymbolBrigadeResources(
@@ -154,22 +170,36 @@ export class TimetableWizardComponent implements OnInit {
                     return of([]);
                 }
 
-                const departures = [
-                    ...this.frontDepartures.map(departure => ({departure, variantMode: TripMode.Front})),
-                    ...this.backDepartures.map(departure => ({departure, variantMode: TripMode.Back}))
-                ];
-
                 return from(departures).pipe(
                     concatMap(({departure, variantMode}) =>
-                        this.createBrigadeEvent(instance, brigadeCode, calendarCode, symbol, resourceCode, departure, variantMode)),
+                        this.createBrigadeEvent(instance, brigadeCode, calendarCode, symbol, resourceCode, departure, variantMode).pipe(
+                            tap(() => this.completedRequests++)
+                        )),
                     toArray()
                 );
-            })
+            }),
+            finalize(() => this.hideSpinner())
         ).subscribe(() => {
             this.router.navigate(['/agency/brigades', brigadeCode, 'edit'], {
                 queryParams: {symbol: this.calendarSymbol}
             }).then();
         });
+    }
+
+    private showSpinner(): void {
+        this.isGenerating = true;
+        this.spinner.show(this.spinnerName, {
+            type: 'ball-scale-multiple',
+            size: 'large',
+            bdColor: 'rgba(51,51,51,0.8)',
+            color: '#fff',
+            fullScreen: true
+        });
+    }
+
+    private hideSpinner(): void {
+        this.isGenerating = false;
+        this.spinner.hide(this.spinnerName);
     }
 
     private createBrigadeEvent(

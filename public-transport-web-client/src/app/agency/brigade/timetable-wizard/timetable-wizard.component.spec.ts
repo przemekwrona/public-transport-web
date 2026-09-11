@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormGroup } from '@angular/forms';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 
@@ -13,6 +14,7 @@ import {
   TripMode
 } from '../../../generated/public-transport-api';
 import { AgencyStorageService } from '../../../auth/agency-storage.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 describe('TimetableWizardComponent', () => {
   let component: TimetableWizardComponent;
@@ -21,6 +23,8 @@ describe('TimetableWizardComponent', () => {
   let getCalendarSymbolBrigadeResources: jasmine.Spy;
   let getNextBrigadeEventSequence: jasmine.Spy;
   let putBrigadeEvent: jasmine.Spy;
+  let spinnerShow: jasmine.Spy;
+  let spinnerHide: jasmine.Spy;
   let router: Router;
 
   const brigadeDetails: GetBrigadeDetailsResponse = {
@@ -75,6 +79,7 @@ describe('TimetableWizardComponent', () => {
       imports: [TimetableWizardComponent],
       providers: [
         provideRouter([]),
+        provideNoopAnimations(),
         {provide: AgencyStorageService, useValue: {getInstance: () => 'test-agency'}},
         {provide: ResourceService, useValue: {deleteResource}},
         {
@@ -98,6 +103,9 @@ describe('TimetableWizardComponent', () => {
     fixture = TestBed.createComponent(TimetableWizardComponent);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
+    const spinner = TestBed.inject(NgxSpinnerService);
+    spinnerShow = spyOn(spinner, 'show').and.returnValue(Promise.resolve());
+    spinnerHide = spyOn(spinner, 'hide').and.returnValue(Promise.resolve());
     spyOn(router, 'navigate').and.returnValue(Promise.resolve(true));
     fixture.detectChanges();
   });
@@ -170,6 +178,17 @@ describe('TimetableWizardComponent', () => {
         tripCode: 'T-BACK'
       }
     });
+    expect(component.totalRequests).toBe(2);
+    expect(component.completedRequests).toBe(2);
+    expect(component.isGenerating).toBeFalse();
+    expect(spinnerShow).toHaveBeenCalledWith('timetable-wizard', {
+      type: 'ball-scale-multiple',
+      size: 'large',
+      bdColor: 'rgba(51,51,51,0.8)',
+      color: '#fff',
+      fullScreen: true
+    });
+    expect(spinnerHide).toHaveBeenCalledWith('timetable-wizard');
     expect(router.navigate).toHaveBeenCalledWith(['/agency/brigades', 'B1', 'edit'], {
       queryParams: {symbol: 'C'}
     });
