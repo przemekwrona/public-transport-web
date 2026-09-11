@@ -9,8 +9,8 @@
         }
     </nav>
     <mat-tab-nav-panel #tabPanel>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
-            <div class="card">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+            <div class="card lg:col-span-1">
                 <div class="card-header">
                     <h3 class="card-title">{{ activeTab.label }}</h3>
                 </div>
@@ -35,7 +35,7 @@
             </div>
 
             @if (selectedStop) {
-                <div class="border border-gray-300 rounded-xl overflow-hidden">
+                <div class="border border-gray-300 rounded-xl overflow-hidden lg:col-span-2">
                     <div class="bg-gray-900 text-white px-3.5 py-2.5">
                         <div class="text-2xs uppercase tracking-wide text-gray-400">Przystanek</div>
                         <div class="text-sm font-semibold">{{ selectedStop.name }}</div>
@@ -52,7 +52,7 @@
                     }
                 </div>
             } @else {
-                <p class="text-sm text-gray-700">Kliknij przystanek, aby pobrać rozkład jazdy</p>
+                <p class="text-sm text-gray-700 lg:col-span-2">Kliknij przystanek, aby pobrać rozkład jazdy</p>
             }
         </div>
     </mat-tab-nav-panel>
