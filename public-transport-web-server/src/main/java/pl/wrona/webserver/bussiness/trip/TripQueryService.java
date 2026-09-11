@@ -32,6 +32,11 @@ public class TripQueryService {
         return tripQueryRepository.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
     }
 
+    @PreAgencyAuthorize
+    public List<TripEntity> findByAgencyAndRouteCodeAndVariantMode(String instance, String routeCode, TripVariantMode variantMode) {
+        return tripQueryRepository.findByAgencyAndRouteCodeAndVariantMode(instance, routeCode, variantMode);
+    }
+
     public boolean existsUniqueTripIndex(String agencyCode, String line, String name, String variantName, TripVariantMode tripMode) {
         return tripQueryRepository.existsTripUniqueIndex(agencyCode, line, name, variantName, tripMode);
     }
