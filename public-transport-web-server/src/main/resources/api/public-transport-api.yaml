@@ -539,6 +539,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/RouteStops'
 
+  /agency/{agency}/routes/{routeCode}/stops/{stopCode}/timetable:
+    get:
+      tags:
+        - route-stop-timetable
+      summary: Return departures at a stop for trips in FRONT or BACK mode
+      operationId: getRouteStopTimetable
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: stopCode
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: tripMode
+          required: true
+          schema:
+            $ref: '#/components/schemas/TripMode'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteStopTimetable'
+
   /agency/{agency}/routes/{routeCode}/trips:
     get:
       tags:
@@ -1499,6 +1534,35 @@ components:
           $ref: '#/components/schemas/RouteStopGraph'
         back:
           $ref: '#/components/schemas/RouteStopGraph'
+
+    RouteStopTimetableDeparture:
+      type: object
+      properties:
+        h:
+          type: integer
+          description: Hour of departure
+        m:
+          type: integer
+          description: Minute of departure
+        time:
+          type: string
+        symbol:
+          type: string
+          description: Symbol on timetable; may be empty
+        tripCode:
+          type: string
+
+    RouteStopTimetable:
+      type: object
+      properties:
+        stopCode:
+          type: string
+        tripMode:
+          $ref: '#/components/schemas/TripMode'
+        departures:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteStopTimetableDeparture'
 
     RouteStopGraph:
       type: object
