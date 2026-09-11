@@ -1329,6 +1329,8 @@ components:
           type: string
         version:
           type: integer
+        routeCode:
+          type: string
 
     TrafficMode:
       type: string

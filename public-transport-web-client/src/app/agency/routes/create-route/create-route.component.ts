@@ -3,7 +3,7 @@ import {
     AgencyAddress,
     ModificationRouteResponse,
     Route, RouteId,
-    RouteService, Stop
+    RouteService, Stop, TripMode
 } from "../../../generated/public-transport-api";
 import {Router} from "@angular/router";
 import {NotificationService} from "../../../shared/notification.service";
@@ -135,11 +135,9 @@ export class CreateRouteComponent implements OnInit {
 
         this.routeService.createRoute(this.agencyStorageService.getInstance(), createRouteRequest).subscribe((response: ModificationRouteResponse) => {
             this.notificationService.showSuccess(`Linia ${this.route.routeId.line} (${this.route.routeId.name}) została pomyślnie utworzona`);
-            this._router.navigate(['/agency/trips/create'], {
+            this._router.navigate(['/agency/routes', response.routeId.routeCode, 'trips', 'create'], {
                 queryParams: {
-                    line: response.routeId.line,
-                    name: response.routeId.name,
-                    version: response.routeId.version
+                    tripMode: TripMode.Front
                 }
             }).then();
         });

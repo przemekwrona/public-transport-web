@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.igeolab.iot.pt.server.api.model.ProfileShortcut;
-import org.igeolab.iot.pt.server.api.model.RouteId1;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId1;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
@@ -52,7 +52,7 @@ public class TripMapper {
     public Trip map(TripEntity trip, Map<Long, TripEntity> tripWithBrigades) {
         return new Trip()
                 .tripId(new TripId1()
-                        .routeId(new RouteId1()
+                        .routeId(new RouteId()
                                 .line(trip.getRoute().getLine())
                                 .name(trip.getRoute().getName())
                                 .version(trip.getRoute().getVersion())

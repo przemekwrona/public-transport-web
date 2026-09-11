@@ -8,7 +8,7 @@ import {
     BrigadeService, CalendarItemId,
     CalendarService,
     CalendarSymbolId, CreateBrigadeBody, CreateCalendarSymbolBrigadeRequest, CreateCalendarSymbolBrigadeResponse,
-    GetCalendarItemResponse, RouteId1, Status
+    GetCalendarItemResponse, RouteId, Status
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatInput} from "@angular/material/input";
@@ -74,7 +74,7 @@ export class BrigadeCreatorModalComponent implements OnInit {
         const brigadeBody: CreateBrigadeBody = {} as CreateBrigadeBody;
         brigadeBody.brigadeName = brigadeName;
         brigadeBody.calendarCode = calendarSymbolId.code;
-        brigadeBody.selectedRouteCode = (this.defaultRouteCodeControl.value as RouteId1).routeCode;
+        brigadeBody.selectedRouteCode = (this.defaultRouteCodeControl.value as RouteId).routeCode;
 
         this.brigadeService.createBrigade(instance, brigadeBody).subscribe((response: Status) => {
             this.dialogRef.close(response);

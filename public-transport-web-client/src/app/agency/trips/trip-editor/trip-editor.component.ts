@@ -5,7 +5,7 @@ import {find, size} from "lodash";
 import {
     ErrorResponse,
     Point2D,
-    RouteDetails, RouteId1,
+    RouteDetails, RouteId,
     Stop,
     StopsService,
     StopTime,
@@ -603,7 +603,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private buildCreateOrUpdateTripRequest() {
-        const routeId: RouteId1 = {};
+        const routeId: RouteId = {};
         routeId.name = this.$tripVariants.route.routeId.name;
         routeId.line = this.$tripVariants.route.routeId.line;
         routeId.version = this.$tripVariants.route.routeId.version;

@@ -6,7 +6,7 @@ import org.igeolab.iot.pt.server.api.model.BrigadeTimetableTrip;
 import org.igeolab.iot.pt.server.api.model.BrigadeTimetableVariant;
 import org.igeolab.iot.pt.server.api.model.GetTimetableByBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId;
-import org.igeolab.iot.pt.server.api.model.RouteId1;
+import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.TripId2;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
@@ -52,7 +52,7 @@ public class BrigadeTimetableDetailsService {
 
     private static BrigadeTimetableTrip toBrigadeTimetableTrip(RouteId routeId, List<BrigadeEventEntity> events) {
         return new BrigadeTimetableTrip()
-                .tripId(new TripId2().routeId(new RouteId1()
+                .tripId(new TripId2().routeId(new RouteId()
                         .line(routeId.getLine())
                         .name(routeId.getName())
                         .version(routeId.getVersion())))
