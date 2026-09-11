@@ -1,4 +1,4 @@
-import {APP_ID, InjectionToken, NgModule} from '@angular/core';
+import {APP_ID, CUSTOM_ELEMENTS_SCHEMA, InjectionToken, NgModule} from '@angular/core';
 import {AppComponent} from "./app.component";
 import {LandingModule} from "./landing/landing.module";
 import {BrowserModule} from "@angular/platform-browser";
@@ -19,6 +19,7 @@ import {UserListComponent} from "./agency/user/user-list/user-list.component";
 import {CreateUserComponent} from "./agency/user/create-user/create-user.component";
 import {provideEnvironmentNgxMask} from "ngx-mask";
 import {DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter} from "@angular/material/core";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 export class MondayDateAdapter extends NativeDateAdapter {
     override getFirstDayOfWeek(): number {
@@ -40,11 +41,13 @@ export class MondayDateAdapter extends NativeDateAdapter {
         FormsModule,
         TranslocoRootModule,
         UserListComponent,
-        CreateUserComponent
+        CreateUserComponent,
+        NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
     ],
     declarations: [
         AppComponent
     ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         { provide: APP_ID, useValue: 'nastepna-stacja' },
         {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
