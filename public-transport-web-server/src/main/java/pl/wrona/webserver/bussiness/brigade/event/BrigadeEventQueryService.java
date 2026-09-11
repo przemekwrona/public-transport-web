@@ -44,4 +44,11 @@ public class BrigadeEventQueryService {
     public BrigadeEventEntity findByBrigadeGroupAndEventCode(BrigadeGroupEntity brigadeGroup, String eventCode) {
         return brigadeEventQueryRepository.findByBrigadeGroupAndEventCode(brigadeGroup, Hex.fromHex(eventCode));
     }
+
+    public List<BrigadeEventEntity> findAllByTripIds(Collection<Long> tripIds) {
+        if (tripIds == null || tripIds.isEmpty()) {
+            return List.of();
+        }
+        return brigadeEventQueryRepository.findAllByTripIdInOrderByStartSecondAsc(tripIds);
+    }
 }
