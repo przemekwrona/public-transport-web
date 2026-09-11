@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Data} from "@angular/router";
 import {map} from "rxjs";
+import {MatTabsModule} from "@angular/material/tabs";
 import {
     BrigadeTimetableVariant,
     RouteStopTimetable,
@@ -13,13 +14,23 @@ import {LoginService} from "../../../../auth/login.service";
 import {getRouteParam} from "../trip-list.resolver";
 import {TimetableBoardComponent} from "../../../brigade/brigade-scheduler/brigade-timetable-modal/timetable-board/timetable-board.component";
 
+export interface TimetableDirectionTab {
+    label: string;
+    tripMode: TripMode;
+}
+
 @Component({
     selector: 'app-trip-list-timetable',
     templateUrl: './trip-list-timetable.component.html',
     standalone: true,
-    imports: [TimetableBoardComponent]
+    imports: [TimetableBoardComponent, MatTabsModule]
 })
 export class TripListTimetableComponent implements OnInit {
+    public readonly tabs: TimetableDirectionTab[] = [
+        {label: 'FRONT', tripMode: TripMode.Front},
+        {label: 'BACK', tripMode: TripMode.Back}
+    ];
+    public activeTab = this.tabs[0];
     public frontStops: StopSequenceItem[] = [];
     public backStops: StopSequenceItem[] = [];
     public selectedStop: StopSequenceItem | null = null;
@@ -27,11 +38,8 @@ export class TripListTimetableComponent implements OnInit {
     public timetable: RouteStopTimetable | null = null;
     public loading = false;
 
-    public get columns(): { title: string; tripMode: TripMode; stops: StopSequenceItem[] }[] {
-        return [
-            {title: 'TAM', tripMode: TripMode.Front, stops: this.frontStops},
-            {title: 'POWRÓT', tripMode: TripMode.Back, stops: this.backStops}
-        ];
+    public get activeStops(): StopSequenceItem[] {
+        return this.activeTab.tripMode === TripMode.Front ? this.frontStops : this.backStops;
     }
 
     public get timetableVariant(): BrigadeTimetableVariant {
@@ -52,13 +60,24 @@ export class TripListTimetableComponent implements OnInit {
         });
     }
 
-    public isSelected(stop: StopSequenceItem, direction: string): boolean {
-        return this.selectedStop?.stopId === stop.stopId && this.selectedDirection === direction;
+    public selectTab(tab: TimetableDirectionTab): void {
+        if (this.activeTab.tripMode === tab.tripMode) {
+            return;
+        }
+        this.activeTab = tab;
+        this.selectedStop = null;
+        this.selectedDirection = null;
+        this.timetable = null;
+        this.loading = false;
     }
 
-    public loadStopTimetable(stop: StopSequenceItem, tripMode: TripMode, direction: string): void {
+    public isSelected(stop: StopSequenceItem): boolean {
+        return this.selectedStop?.stopId === stop.stopId && this.selectedDirection === this.activeTab.label;
+    }
+
+    public loadStopTimetable(stop: StopSequenceItem): void {
         this.selectedStop = stop;
-        this.selectedDirection = direction;
+        this.selectedDirection = this.activeTab.label;
         this.loading = true;
         this.timetable = null;
 
@@ -66,7 +85,7 @@ export class TripListTimetableComponent implements OnInit {
             this.loginService.getInstance(),
             getRouteParam(this.route.snapshot, 'routeCode')!,
             String(stop.stopId),
-            tripMode
+            this.activeTab.tripMode
         ).subscribe({
             next: response => {
                 this.timetable = response;
