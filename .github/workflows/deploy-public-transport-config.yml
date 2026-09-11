@@ -1,4 +1,4 @@
-name: Deploy docker-compose to Droplet
+name: Deploy public-transport config
 
 on:
   workflow_dispatch:
@@ -35,9 +35,6 @@ jobs:
           services.public-transport-app.environment.SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           services.public-transport-app.environment.GEOAPIFY_KEY: ${{ secrets.GEOAPIFY_KEY }}
 
-      - name: Prepare docker-compose.yaml from repository
-        run: cp docker-compose.yml docker-compose.yaml
-
       - name: Stop containers if docker-compose exists on Droplet
         uses: appleboy/ssh-action@v1.2.2
         with:
@@ -49,24 +46,20 @@ jobs:
             mkdir -p "${{ env.COMPOSE_DIR }}"
             cd "${{ env.COMPOSE_DIR }}"
 
-            if [ -f docker-compose.yaml ] || [ -f docker-compose.yml ]; then
+            if [ -f docker-compose.yml ]; then
               echo "docker-compose found in ${{ env.COMPOSE_DIR }}, stopping containers"
-              if [ -f docker-compose.yaml ]; then
-                docker compose -f docker-compose.yaml down
-              else
-                docker compose -f docker-compose.yml down
-              fi
+              docker compose -f docker-compose.yml down
             else
               echo "docker-compose not found in ${{ env.COMPOSE_DIR }}, it will be copied from GitHub"
             fi
 
-      - name: Overwrite docker-compose.yaml from GitHub repository
+      - name: Overwrite docker-compose.yml from GitHub repository
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DROPLET_HOST }}
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_SSH_KEY }}
-          source: docker-compose.yaml
+          source: docker-compose.yml
           target: ${{ env.COMPOSE_DIR }}
           overwrite: true
 
