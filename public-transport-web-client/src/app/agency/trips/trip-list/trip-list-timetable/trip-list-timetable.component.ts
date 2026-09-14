@@ -37,6 +37,7 @@ export class TripListTimetableComponent implements OnInit {
     public selectedDirection: string | null = null;
     public timetable: RouteStopTimetable | null = null;
     public loading = false;
+    public downloadingPdf = false;
 
     public get activeStops(): StopSequenceItem[] {
         return this.activeTab.tripMode === TripMode.Front ? this.frontStops : this.backStops;
@@ -69,6 +70,7 @@ export class TripListTimetableComponent implements OnInit {
         this.selectedDirection = null;
         this.timetable = null;
         this.loading = false;
+        this.downloadingPdf = false;
     }
 
     public isSelected(stop: StopSequenceItem): boolean {
@@ -88,12 +90,44 @@ export class TripListTimetableComponent implements OnInit {
             this.activeTab.tripMode
         ).subscribe({
             next: response => {
-                this.timetable = response;
+                this.timetable = response as RouteStopTimetable;
                 this.loading = false;
             },
             error: () => {
                 this.timetable = {departures: []};
                 this.loading = false;
+            }
+        });
+    }
+
+    public downloadPdf(): void {
+        if (!this.selectedStop || this.downloadingPdf) {
+            return;
+        }
+        this.downloadingPdf = true;
+        this.routeStopTimetableService.getRouteStopTimetable(
+            this.loginService.getInstance(),
+            getRouteParam(this.route.snapshot, 'routeCode')!,
+            String(this.selectedStop.stopId),
+            this.activeTab.tripMode,
+            'body',
+            false,
+            {httpHeaderAccept: 'application/pdf'}
+        ).subscribe({
+            next: response => {
+                const blob = response instanceof Blob
+                    ? response
+                    : new Blob([response as BlobPart], {type: 'application/pdf'});
+                const objectUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = objectUrl;
+                link.download = `rozklad-${this.selectedStop?.stopId}-${this.activeTab.tripMode}.pdf`;
+                link.click();
+                URL.revokeObjectURL(objectUrl);
+                this.downloadingPdf = false;
+            },
+            error: () => {
+                this.downloadingPdf = false;
             }
         });
     }
