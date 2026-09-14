@@ -543,7 +543,7 @@ paths:
     get:
       tags:
         - route-stop-timetable
-      summary: Return departures at a stop for trips in FRONT or BACK mode
+      summary: Return departures at a stop as JSON or PDF for trips in FRONT or BACK mode
       operationId: getRouteStopTimetable
       parameters:
         - in: path
@@ -568,11 +568,15 @@ paths:
             $ref: '#/components/schemas/TripMode'
       responses:
         200:
-          description: OK
+          description: Stop timetable as JSON or PDF, depending on the Accept header
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RouteStopTimetable'
+            application/pdf:
+              schema:
+                type: string
+                format: binary
 
   /agency/{agency}/routes/{routeCode}/trips:
     get:
