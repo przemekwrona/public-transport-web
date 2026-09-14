@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm;
+        }
+
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            color: #111;
+            font-size: 11px;
+        }
+
+        .header {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        .header td {
+            vertical-align: top;
+            padding: 0 0 6px 0;
+        }
+
+        .line-box {
+            width: 72px;
+            border: 2px solid #111;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px 6px;
+        }
+
+        .meta {
+            padding-left: 12px;
+        }
+
+        .agency {
+            font-size: 11px;
+        }
+
+        .stop-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 4px 0;
+        }
+
+        .direction {
+            font-size: 13px;
+        }
+
+        .generated {
+            text-align: right;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .calendar {
+            margin-top: 14px;
+        }
+
+        .calendar-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin: 0 0 6px 0;
+            border-bottom: 1px solid #111;
+            padding-bottom: 3px;
+        }
+
+        .departures {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .departures th,
+        .departures td {
+            border: 1px solid #333;
+            padding: 3px 5px;
+            vertical-align: top;
+        }
+
+        .departures th {
+            background-color: #efefef;
+            text-align: left;
+        }
+
+        .hour {
+            width: 48px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .minute {
+            display: inline-block;
+            min-width: 22px;
+            margin-right: 8px;
+        }
+
+        .symbol {
+            font-size: 8px;
+            vertical-align: super;
+        }
+
+        .empty {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .legend {
+            margin-top: 16px;
+        }
+
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+<table class="header">
+    <tr>
+        <td class="line-box" th:text="${timetable.line}">L1</td>
+        <td class="meta">
+            <div class="agency" th:text="${timetable.agencyName}">Przewoźnik</div>
+            <div class="stop-name" th:text="${timetable.stopName}">Przystanek</div>
+            <div class="direction">
+                <span>Kierunek: </span>
+                <span th:text="${timetable.direction}">Cel</span>
+            </div>
+        </td>
+        <td class="generated">
+            <div th:text="${timetable.tripMode}">FRONT</div>
+            <div>Przygotowano: <span th:text="${#temporals.format(now, 'yyyy-MM-dd HH:mm')}">2026-09-11 18:00</span></div>
+        </td>
+    </tr>
+</table>
+
+<div class="empty" th:if="${#lists.isEmpty(timetable.calendars)}">Brak odjazdów</div>
+
+<div class="calendar" th:each="calendar : ${timetable.calendars}">
+    <div class="calendar-title" th:text="${calendar.title}">Dni robocze</div>
+    <table class="departures">
+        <thead>
+        <tr>
+            <th class="hour">Godz.</th>
+            <th>Minuty</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hour : ${calendar.hours}">
+            <td class="hour" th:text="${hour.hour}">06</td>
+            <td>
+                <span class="minute" th:each="minute : ${hour.minutes}">
+                    <span th:text="${minute.minute}">05</span><span class="symbol" th:if="${minute.symbol != null and !#strings.isEmpty(minute.symbol)}" th:text="${minute.symbol}">A</span>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="legend" th:if="${!#lists.isEmpty(timetable.legend)}">
+    <div class="legend-title">Oznaczenia</div>
+    <div th:each="item : ${timetable.legend}">
+        <strong th:text="${item.symbol}">A</strong>
+        <span th:if="${item.description != null and !#strings.isEmpty(item.description)}" th:text="${' — ' + item.description}"> — wariant</span>
+    </div>
+</div>
+</body>
+</html>
