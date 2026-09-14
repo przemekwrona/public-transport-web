@@ -68,6 +68,9 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
             SELECT e FROM BrigadeEventEntity e
             JOIN FETCH e.tripProfile tp
             JOIN FETCH tp.trip t
+            JOIN FETCH e.resource r
+            JOIN FETCH r.brigadeGroup g
+            JOIN FETCH g.calendarSymbol
             WHERE t.tripId IN :tripIds
             ORDER BY e.startSecond ASC""")
     List<BrigadeEventEntity> findAllByTripIdInOrderByStartSecondAsc(@Param("tripIds") Collection<Long> tripIds);
