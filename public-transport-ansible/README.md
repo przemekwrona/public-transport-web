@@ -1,6 +1,6 @@
 # public-transport Ansible
 
-Sets up a DigitalOcean Ubuntu/Debian droplet via the `setup` role. Tasks: `certbot` (snap).
+Sets up a DigitalOcean Ubuntu/Debian droplet via the `setup` role. Tasks: `directory`, `docker` (apt), `certbot` (snap).
 
 Environments live in `inventories/dev` and `inventories/prod` (set the droplet IP in each `hosts.ini`).
 
