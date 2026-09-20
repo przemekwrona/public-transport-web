@@ -42,12 +42,12 @@ jobs:
             mkdir -p "${{ env.APP_DIR }}"
             cd "${{ env.APP_DIR }}"
 
-#            if [ -f docker-compose.yml ]; then
-#              echo "docker-compose found in ${{ env.APP_DIR }}, stopping containers"
-#              docker compose -f docker-compose.yml down
-#            else
-#              echo "docker-compose not found in ${{ env.APP_DIR }}, it will be copied from GitHub"
-#            fi
+            if [ -f docker-compose.traccar.yml ]; then
+              echo "docker-compose found in ${{ env.APP_DIR }}, stopping containers"
+              docker compose -f docker-compose.traccar.yml down
+            else
+              echo "docker-compose not found in ${{ env.APP_DIR }}, it will be copied from GitHub"
+            fi
 
 #      - name: Overwrite docker-compose.yml from GitHub repository
 #        uses: appleboy/scp-action@v0.1.7
