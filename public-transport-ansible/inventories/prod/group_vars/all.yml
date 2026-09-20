@@ -1,5 +1,6 @@
 ---
 env_name: prod
+app_root_dir: /opt/public-transport
 certbot_domains:
   - example.com
   - www.example.com
