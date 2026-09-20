@@ -26,7 +26,7 @@ jobs:
       - name: YAML Variable Substitution
         uses: microsoft/variable-substitution@v1
         with:
-          files: 'docker-compose.traccar.yaml'
+          files: 'docker-compose.traccar.yml'
         env:
           services.database.environment.POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           services.database.environment.POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
