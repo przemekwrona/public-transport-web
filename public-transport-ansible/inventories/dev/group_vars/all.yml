@@ -1,5 +1,6 @@
 ---
 env_name: dev
+app_root_dir: /opt/public-transport
 certbot_domains:
   - dev.nastepnastacja.pl
 ansible_host: 165.227.133.71

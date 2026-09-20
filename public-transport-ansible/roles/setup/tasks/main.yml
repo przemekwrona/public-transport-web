@@ -1,4 +1,8 @@
 ---
+- name: Create application directory
+  ansible.builtin.import_tasks: directory.yml
+  tags: directory
+
 - name: Install certbot
   ansible.builtin.import_tasks: certbot.yml
   tags: certbot
