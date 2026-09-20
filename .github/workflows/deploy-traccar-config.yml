@@ -31,17 +31,17 @@ jobs:
           services.database.environment.POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           services.database.environment.POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
-#      - name: Stop containers if docker-compose exists on Droplet
-#        uses: appleboy/ssh-action@v1.2.2
-#        with:
-#          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
-#          username: ${{ secrets.DROPLET_TRACCAR_USER }}
-#          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
-#          script: |
-#            set -euo pipefail
-#            mkdir -p "${{ env.APP_DIR }}"
-#            cd "${{ env.APP_DIR }}"
-#
+      - name: Stop containers if docker-compose exists on Droplet
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            mkdir -p "${{ env.APP_DIR }}"
+            cd "${{ env.APP_DIR }}"
+
 #            if [ -f docker-compose.yml ]; then
 #              echo "docker-compose found in ${{ env.APP_DIR }}, stopping containers"
 #              docker compose -f docker-compose.yml down
