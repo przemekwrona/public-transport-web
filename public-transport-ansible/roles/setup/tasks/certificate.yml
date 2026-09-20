@@ -1,0 +1,24 @@
+---
+- name: Check certbot variables
+  ansible.builtin.assert:
+    that:
+      - certbot_domains | length > 0
+      - certbot_email | length > 0
+    fail_msg: "Set certbot_domains and certbot_email for this environment"
+
+- name: Create webroot directory for ACME challenge
+  ansible.builtin.file:
+    path: "{{ certbot_webroot }}"
+    state: directory
+    mode: "0755"
+
+# nginx (docker) must already be running and serving
+# /.well-known/acme-challenge/ from {{ certbot_webroot }} on port 80.
+- name: Request certificate (webroot)
+  ansible.builtin.command: >-
+    certbot certonly --webroot -w {{ certbot_webroot }}
+    --email {{ certbot_email }} --agree-tos --non-interactive
+    {{ certbot_domains | map('regex_replace', '^', '-d ') | join(' ') }}
+    {{ '--staging' if certbot_staging else '' }}
+  args:
+    creates: "/etc/letsencrypt/live/{{ certbot_domains[0] }}/fullchain.pem"
