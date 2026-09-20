@@ -4,9 +4,9 @@ services:
     image: timescale/timescaledb:latest-pg17
     restart: unless-stopped
     environment:
-      POSTGRES_DB: traccar
-      POSTGRES_USER: traccar
-      POSTGRES_PASSWORD: traccar
+      POSTGRES_DB: traccar_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: welcome1
     volumes:
       - /opt/traccar/data:/var/lib/postgresql/data
     healthcheck:
@@ -24,9 +24,9 @@ services:
     environment:
       CONFIG_USE_ENVIRONMENT_VARIABLES: "true"
       DATABASE_DRIVER: org.postgresql.Driver
-      DATABASE_URL: jdbc:postgresql://database:5432/traccar
-      DATABASE_USER: traccar
-      DATABASE_PASSWORD: traccar
+      DATABASE_URL: jdbc:postgresql://database:5432/traccar_db
+      DATABASE_USER: user
+      DATABASE_PASSWORD: welcome1
     healthcheck:
       test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8082/api/health" ]
       interval: 2m
