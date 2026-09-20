@@ -1,0 +1,49 @@
+services:
+
+  database:
+    image: timescale/timescaledb:latest-pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: traccar
+      POSTGRES_USER: traccar
+      POSTGRES_PASSWORD: traccar
+    volumes:
+      - /opt/traccar/data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U traccar -d traccar" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  traccar:
+    image: traccar/traccar:latest
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      CONFIG_USE_ENVIRONMENT_VARIABLES: "true"
+      DATABASE_DRIVER: org.postgresql.Driver
+      DATABASE_URL: jdbc:postgresql://database:5432/traccar
+      DATABASE_USER: traccar
+      DATABASE_PASSWORD: traccar
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8082/api/health" ]
+      interval: 2m
+      timeout: 5s
+      start_period: 1h
+      retries: 3
+    volumes:
+      - /opt/traccar/logs:/opt/traccar/logs
+
+  nginx:
+    image: nginx:stable
+    restart: unless-stopped
+    depends_on:
+      - traccar
+    ports:
+      - "8082:8082"
+      - "5000-5500:5000-5500"
+      - "5000-5500:5000-5500/udp"
+    volumes:
+      - ./nginx/dev/nginx.conf:/etc/nginx/nginx.conf:ro
