@@ -31,52 +31,52 @@ jobs:
           services.public-transport-db.environment.POSTGRES_TIMESCALE_USER: ${{ secrets.POSTGRES_USER }}
           services.public-transport-db.environment.POSTGRES_TIMESCALE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
-      - name: Stop containers if docker-compose exists on Droplet
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
-          username: ${{ secrets.DROPLET_TRACCAR_USER }}
-          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
-          script: |
-            set -euo pipefail
-            mkdir -p "${{ env.APP_DIR }}"
-            cd "${{ env.APP_DIR }}"
+#      - name: Stop containers if docker-compose exists on Droplet
+#        uses: appleboy/ssh-action@v1.2.2
+#        with:
+#          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
+#          username: ${{ secrets.DROPLET_TRACCAR_USER }}
+#          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
+#          script: |
+#            set -euo pipefail
+#            mkdir -p "${{ env.APP_DIR }}"
+#            cd "${{ env.APP_DIR }}"
+#
+#            if [ -f docker-compose.yml ]; then
+#              echo "docker-compose found in ${{ env.APP_DIR }}, stopping containers"
+#              docker compose -f docker-compose.yml down
+#            else
+#              echo "docker-compose not found in ${{ env.APP_DIR }}, it will be copied from GitHub"
+#            fi
 
-            if [ -f docker-compose.yml ]; then
-              echo "docker-compose found in ${{ env.APP_DIR }}, stopping containers"
-              docker compose -f docker-compose.yml down
-            else
-              echo "docker-compose not found in ${{ env.APP_DIR }}, it will be copied from GitHub"
-            fi
+#      - name: Overwrite docker-compose.yml from GitHub repository
+#        uses: appleboy/scp-action@v0.1.7
+#        with:
+#          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
+#          username: ${{ secrets.DROPLET_RACCAR_USER }}
+#          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
+#          source: docker-compose.yml
+#          target: ${{ env.APP_DIR }}
+#          overwrite: true
 
-      - name: Overwrite docker-compose.yml from GitHub repository
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
-          username: ${{ secrets.DROPLET_RACCAR_USER }}
-          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
-          source: docker-compose.yml
-          target: ${{ env.APP_DIR }}
-          overwrite: true
+#      - name: Copy nginx config to Droplet
+#        uses: appleboy/scp-action@v0.1.7
+#        with:
+#          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
+#          username: ${{ secrets.DROPLET_RACCAR_USER }}
+#          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
+#          source: nginx/${{ inputs.environment }}/*
+#          target: ${{ env.APP_DIR }}/nginx
+#          strip_components: 2
+#          overwrite: true
 
-      - name: Copy nginx config to Droplet
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
-          username: ${{ secrets.DROPLET_RACCAR_USER }}
-          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
-          source: nginx/${{ inputs.environment }}/*
-          target: ${{ env.APP_DIR }}/nginx
-          strip_components: 2
-          overwrite: true
-
-      - name: Start docker compose on Droplet
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
-          username: ${{ secrets.DROPLET_RACCAR_USER }}
-          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
-          script: |
-            set -euo pipefail
-            cd "${{ env.APP_DIR }}"
-            docker compose -f docker-compose.yml up -d
+#      - name: Start docker compose on Droplet
+#        uses: appleboy/ssh-action@v1.2.2
+#        with:
+#          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
+#          username: ${{ secrets.DROPLET_RACCAR_USER }}
+#          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
+#          script: |
+#            set -euo pipefail
+#            cd "${{ env.APP_DIR }}"
+#            docker compose -f docker-compose.yml up -d
