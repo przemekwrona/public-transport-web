@@ -1,0 +1,6 @@
+---
+- name: Set up DigitalOcean droplet
+  hosts: droplets
+  become: true
+  roles:
+    - setup

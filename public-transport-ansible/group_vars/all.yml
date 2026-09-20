@@ -1,0 +1,9 @@
+---
+# Certbot
+certbot_email: przemekwrona25@gmail.com
+# Leave empty to only install certbot. Fill to also request certificates.
+certbot_domains: []
+#  - example.com
+#  - www.example.com
+# Use Let's Encrypt staging while testing (avoids rate limits)
+certbot_staging: false
