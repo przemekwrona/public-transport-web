@@ -1,3 +1,7 @@
 ---
 certbot_snap_classic: true
 certbot_domains: []
+certbot_email: ""
+certbot_webroot: /var/www/certbot
+# Use Let's Encrypt staging while testing (avoids rate limits)
+certbot_staging: false

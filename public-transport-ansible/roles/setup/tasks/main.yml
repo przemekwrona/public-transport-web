@@ -2,3 +2,7 @@
 - name: Install certbot
   ansible.builtin.import_tasks: certbot.yml
   tags: certbot
+
+- name: Request SSL certificate
+  ansible.builtin.import_tasks: certificate.yml
+  tags: certificate
