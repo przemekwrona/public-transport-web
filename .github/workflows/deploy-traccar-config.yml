@@ -70,13 +70,13 @@ jobs:
           strip_components: 2
           overwrite: true
 
-#      - name: Start docker compose on Droplet
-#        uses: appleboy/ssh-action@v1.2.2
-#        with:
-#          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
-#          username: ${{ secrets.DROPLET_RACCAR_USER }}
-#          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
-#          script: |
-#            set -euo pipefail
-#            cd "${{ env.APP_DIR }}"
-#            docker compose -f docker-compose.yml up -d
+      - name: Start docker compose on Droplet
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd "${{ env.APP_DIR }}"
+            docker compose -f docker-compose.traccar.yml up -d
