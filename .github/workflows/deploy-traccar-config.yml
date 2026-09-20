@@ -49,15 +49,15 @@ jobs:
               echo "docker-compose not found in ${{ env.APP_DIR }}, it will be copied from GitHub"
             fi
 
-#      - name: Overwrite docker-compose.yml from GitHub repository
-#        uses: appleboy/scp-action@v0.1.7
-#        with:
-#          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
-#          username: ${{ secrets.DROPLET_RACCAR_USER }}
-#          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
-#          source: docker-compose.yml
-#          target: ${{ env.APP_DIR }}
-#          overwrite: true
+      - name: Overwrite docker-compose.traccar.yml from GitHub repository
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          source: docker-compose.traccar.yml
+          target: ${{ env.APP_DIR }}
+          overwrite: true
 
 #      - name: Copy nginx config to Droplet
 #        uses: appleboy/scp-action@v0.1.7
