@@ -1,0 +1,63 @@
+name: Renew SSL certificate on Droplet
+
+on:
+  schedule:
+    # Let's Encrypt recommends running renewal often; only renews when cert is near expiry
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment (uses GitHub Environment secrets)'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+      force_renewal:
+        description: 'Force renewal even if not due (use sparingly; rate limits apply)'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  COMPOSE_DIR: /opt/public-transport
+  NGINX_CONTAINER: nginx-proxy
+
+jobs:
+  renew:
+    name: Renew certificate and reload nginx
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'prod' }}
+    steps:
+      - name: Renew Let's Encrypt certificate on Droplet
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            set -euo pipefail
+
+            if ! command -v certbot >/dev/null 2>&1; then
+              echo "certbot is not installed on the Droplet. Install it and obtain an initial certificate first."
+              exit 1
+            fi
+
+            RELOAD_NGINX='docker exec '"${{ env.NGINX_CONTAINER }}"' nginx -s reload'
+
+            CERTBOT_ARGS=(renew --non-interactive --no-random-sleep-on-renew)
+            if [ "${{ inputs.force_renewal }}" = "true" ]; then
+              CERTBOT_ARGS+=(--force-renewal)
+            fi
+
+            sudo certbot "${CERTBOT_ARGS[@]}" --deploy-hook "$RELOAD_NGINX"
+
+            if docker ps --format '{{.Names}}' | grep -qx "${{ env.NGINX_CONTAINER }}"; then
+              docker exec "${{ env.NGINX_CONTAINER }}" nginx -t
+            else
+              echo "Warning: nginx container '${{ env.NGINX_CONTAINER }}' is not running; skipped nginx -t"
+            fi
+
+            echo "Certificate status:"
+            sudo certbot certificates || true
