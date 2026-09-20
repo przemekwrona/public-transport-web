@@ -6,14 +6,13 @@ on:
       environment:
         description: 'Choose where you want to publish the build'
         required: true
-        default: 'prod'
+        default: 'traccar-dev'
         type: choice
         options:
-          - dev
-          - prod
+          - traccar-dev
 
 env:
-  COMPOSE_DIR: /opt/traccar
+  APP_DIR: /opt/traccar
 
 jobs:
   droplet:
@@ -27,60 +26,57 @@ jobs:
       - name: YAML Variable Substitution
         uses: microsoft/variable-substitution@v1
         with:
-          files: 'docker-compose.yml'
+          files: 'docker-compose.traccar.yaml'
         env:
-          services.public-transport-db.environment.POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          services.public-transport-db.environment.POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          services.public-transport-app.environment.SPRING_DATASOURCE_USERNAME: ${{ secrets.POSTGRES_USER }}
-          services.public-transport-app.environment.SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          services.public-transport-app.environment.GEOAPIFY_KEY: ${{ secrets.GEOAPIFY_KEY }}
+          services.public-transport-db.environment.POSTGRES_TIMESCALE_USER: ${{ secrets.POSTGRES_USER }}
+          services.public-transport-db.environment.POSTGRES_TIMESCALE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
       - name: Stop containers if docker-compose exists on Droplet
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: ${{ secrets.DROPLET_HOST }}
-          username: ${{ secrets.DROPLET_USER }}
-          key: ${{ secrets.DROPLET_SSH_KEY }}
+          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
+          username: ${{ secrets.DROPLET_TRACCAR_USER }}
+          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
           script: |
             set -euo pipefail
-            mkdir -p "${{ env.COMPOSE_DIR }}"
-            cd "${{ env.COMPOSE_DIR }}"
+            mkdir -p "${{ env.APP_DIR }}"
+            cd "${{ env.APP_DIR }}"
 
             if [ -f docker-compose.yml ]; then
-              echo "docker-compose found in ${{ env.COMPOSE_DIR }}, stopping containers"
+              echo "docker-compose found in ${{ env.APP_DIR }}, stopping containers"
               docker compose -f docker-compose.yml down
             else
-              echo "docker-compose not found in ${{ env.COMPOSE_DIR }}, it will be copied from GitHub"
+              echo "docker-compose not found in ${{ env.APP_DIR }}, it will be copied from GitHub"
             fi
 
       - name: Overwrite docker-compose.yml from GitHub repository
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.DROPLET_HOST }}
-          username: ${{ secrets.DROPLET_USER }}
-          key: ${{ secrets.DROPLET_SSH_KEY }}
+          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
+          username: ${{ secrets.DROPLET_RACCAR_USER }}
+          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
           source: docker-compose.yml
-          target: ${{ env.COMPOSE_DIR }}
+          target: ${{ env.APP_DIR }}
           overwrite: true
 
       - name: Copy nginx config to Droplet
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.DROPLET_HOST }}
-          username: ${{ secrets.DROPLET_USER }}
-          key: ${{ secrets.DROPLET_SSH_KEY }}
+          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
+          username: ${{ secrets.DROPLET_RACCAR_USER }}
+          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
           source: nginx/${{ inputs.environment }}/*
-          target: ${{ env.COMPOSE_DIR }}/nginx
+          target: ${{ env.APP_DIR }}/nginx
           strip_components: 2
           overwrite: true
 
       - name: Start docker compose on Droplet
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: ${{ secrets.DROPLET_HOST }}
-          username: ${{ secrets.DROPLET_USER }}
-          key: ${{ secrets.DROPLET_SSH_KEY }}
+          host: ${{ secrets.DROPLET_TRACCAR_HOST }}
+          username: ${{ secrets.DROPLET_RACCAR_USER }}
+          key: ${{ secrets.DROPLET_TRACCAR_SSH_KEY }}
           script: |
             set -euo pipefail
-            cd "${{ env.COMPOSE_DIR }}"
+            cd "${{ env.APP_DIR }}"
             docker compose -f docker-compose.yml up -d
