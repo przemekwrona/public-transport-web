@@ -14,6 +14,7 @@ on:
         options:
           - dev
           - prod
+          - traccar-dev
       force_renewal:
         description: 'Force renewal even if not due (use sparingly; rate limits apply)'
         required: false
