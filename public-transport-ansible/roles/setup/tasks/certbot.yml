@@ -1,0 +1,39 @@
+---
+- name: Install snapd
+  ansible.builtin.apt:
+    name: snapd
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure snapd is running
+  ansible.builtin.service:
+    name: snapd
+    state: started
+    enabled: true
+
+- name: Install snap core
+  community.general.snap:
+    name: core
+    state: present
+
+- name: Install certbot via snap
+  community.general.snap:
+    name: certbot
+    classic: "{{ certbot_snap_classic }}"
+    state: present
+
+- name: Symlink certbot into PATH
+  ansible.builtin.file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
+
+- name: Verify certbot
+  ansible.builtin.command: certbot --version
+  register: certbot_version
+  changed_when: false
+
+- name: Show certbot version
+  ansible.builtin.debug:
+    msg: "{{ certbot_version.stdout | default(certbot_version.stderr) }}"
