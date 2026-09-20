@@ -3,6 +3,10 @@
   ansible.builtin.import_tasks: directory.yml
   tags: directory
 
+- name: Install Docker
+  ansible.builtin.import_tasks: docker.yml
+  tags: docker
+
 - name: Install certbot
   ansible.builtin.import_tasks: certbot.yml
   tags: certbot
