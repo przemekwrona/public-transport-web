@@ -3,6 +3,7 @@ import {ActivatedRoute, Data, RouterModule} from "@angular/router";
 import {
     Route,
     RouteDetails,
+    RouteGtfsService,
     RouteId,
     RouteService,
     Stop,
@@ -40,7 +41,8 @@ import {MatButtonModule} from "@angular/material/button";
         MatButtonModule
     ],
     providers: [
-        RouteService
+        RouteService,
+        RouteGtfsService
     ]
 })
 export class TripListInfoComponent implements OnInit {
@@ -51,11 +53,13 @@ export class TripListInfoComponent implements OnInit {
     public trips: RouteDetails = {route: {routeId: {line: '', name: ''}}};
     public state: { line: string, name: string, version: number };
     public isUpdatingBasicInformation: boolean = false;
+    public downloadingGtfs: boolean = false;
     public modelForm: FormGroup;
 
     constructor(
         private agencyStorageService: AgencyStorageService,
         private routeService: RouteService,
+        private routeGtfsService: RouteGtfsService,
         private _route: ActivatedRoute,
         private dialog: MatDialog,
         private fb: FormBuilder
@@ -122,6 +126,36 @@ export class TripListInfoComponent implements OnInit {
                 };
             },
             complete: () => this.isUpdatingBasicInformation = false
+        });
+    }
+
+    public downloadGtfs(): void {
+        if (this.downloadingGtfs) {
+            return;
+        }
+        this.downloadingGtfs = true;
+        this.routeGtfsService.downloadRouteGtfs(
+            this.agencyStorageService.getInstance(),
+            this.trips.route.routeCode,
+            'body',
+            false,
+            {httpHeaderAccept: 'application/zip'}
+        ).subscribe({
+            next: response => {
+                const blob = response instanceof Blob
+                    ? response
+                    : new Blob([response as BlobPart], {type: 'application/zip'});
+                const objectUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = objectUrl;
+                link.download = `gtfs-${this.trips.route.routeCode}.zip`;
+                link.click();
+                URL.revokeObjectURL(objectUrl);
+                this.downloadingGtfs = false;
+            },
+            error: () => {
+                this.downloadingGtfs = false;
+            }
         });
     }
 
