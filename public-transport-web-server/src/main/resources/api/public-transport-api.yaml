@@ -578,6 +578,32 @@ paths:
                 type: string
                 format: binary
 
+  /agency/{agency}/routes/{routeCode}/gtfs:
+    get:
+      tags:
+        - route-gtfs
+      summary: Generate and download a GTFS feed for a single route
+      operationId: downloadRouteGtfs
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: GTFS feed for the route, packaged as a zip archive
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
   /agency/{agency}/routes/{routeCode}/trips:
     get:
       tags:
