@@ -2,32 +2,55 @@ services:
   public-transport-db:
     image: postgres:18.6-alpine
     container_name: public-transport-db
-    ports:
-      - '5432:5432'
+    restart: unless-stopped
+    # SECURITY: do NOT publish 5432 to the internet. The app container
+    # reaches Postgres over the internal docker network by service name
+    # ("public-transport-db"), it does not need a host port at all.
+    # If you occasionally need a psql/DBeaver connection from your own
+    # machine, tunnel in instead of opening the port, e.g.:
+    #   ssh -L 5432:localhost:5432 user@your-server
+    # (leave the "ports:" section removed, or at most bind to
+    # 127.0.0.1:5432:5432 — never 0.0.0.0)
     environment:
       POSTGRES_DB: public_transport_db
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: welcome1
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    # Only on the internal network: nginx and the host cannot reach it.
+    networks:
+      - db_internal
+    security_opt:
+      - no-new-privileges:true
 
   public-transport-app:
-#    build:
-#      context: ./public-transport-web-server
-#      dockerfile: Dockerfile
+    #    build:
+    #      context: ./public-transport-web-server
+    #      dockerfile: Dockerfile
     image: registry.digitalocean.com/public-transport-registry/public-transport-web:latest
     container_name: public-transport-app
-    ports:
-      - '8080:8080'
+    restart: unless-stopped
+    # SECURITY: no host port published here either. nginx talks to this
+    # container over the docker network (http://public-transport-app:8080).
+    # Publishing 8080 to the host would let anyone reach the app directly,
+    # bypassing TLS and nginx entirely.
     environment:
       PROFILE: dev
       JAVA_OPTS: -Xmx512m -Xms256m
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: welcome1
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       GEOAPIFY_KEY: ${GEOAPIFY_KEY}
     depends_on:
       - public-transport-db
+    # db_internal -> Postgres, web -> nginx + outbound internet (Geoapify)
+    networks:
+      - db_internal
+      - web
+    security_opt:
+      - no-new-privileges:true
 
   nginx:
-    image: nginx:alpine
+    image: nginx:1.27-alpine
     container_name: nginx-proxy
     restart: always
     ports:
@@ -39,40 +62,54 @@ services:
       - /var/www/certbot:/var/www/certbot:ro
     depends_on:
       - public-transport-app
+    networks:
+      - web
+    security_opt:
+      - no-new-privileges:true
 
-#  web-client:
-#    build:
-#      context: ./public-transport-web-server
-#      dockerfile: Dockerfile
-#    container_name: web-client
-#    ports:
-#      - '8080:8080'
-#    environment:
-#      PROFILE: dev-docker
-#      JAVA_OPTS: -Xmx1G
-#    depends_on:
-#      - app-db
+networks:
+  # internal: true = no route to/from outside the docker host,
+  # only containers attached to this network can talk to Postgres.
+  db_internal:
+    internal: true
+  web:
 
-#  gtfs-warszawa:
-#    build:
-#      context: ../public-transport-otp
-#      dockerfile: Dockerfile.warszawa
-#    container_name: gtfs-warszawa
-#    ports:
-#      - '8082:8080'
-#    environment:
-#      - JAVA_OPTS=-Xmx5G
+volumes:
+  db_data:
 
-#  otp_berlin:
-#    image: docker.io/opentripplanner/opentripplanner:latest
-#    container_name: otp_berlin
-#    ports:
-#      - '8082:8080'
-#    environment:
-#      - JAVA_OPTS=-Xmx5G
-#      -
+  #  web-client:
+  #    build:
+  #      context: ./public-transport-web-server
+  #      dockerfile: Dockerfile
+  #    container_name: web-client
+  #    ports:
+  #      - '8080:8080'
+  #    environment:
+  #      PROFILE: dev-docker
+  #      JAVA_OPTS: -Xmx1G
+  #    depends_on:
+  #      - app-db
 
-        #  docker run -it --rm -p 8080:8080 -e JAVA_TOOL_OPTIONS='-Xmx10g' -v "$(pwd)/berlin:/var/opentripplanner" docker.io/opentripplanner/opentripplanner:latest --build --serve
+  #  gtfs-warszawa:
+  #    build:
+  #      context: ../public-transport-otp
+  #      dockerfile: Dockerfile.warszawa
+  #    container_name: gtfs-warszawa
+  #    ports:
+  #      - '8082:8080'
+  #    environment:
+  #      - JAVA_OPTS=-Xmx5G
+
+  #  otp_berlin:
+  #    image: docker.io/opentripplanner/opentripplanner:latest
+  #    container_name: otp_berlin
+  #    ports:
+  #      - '8082:8080'
+  #    environment:
+  #      - JAVA_OPTS=-Xmx5G
+  #      -
+
+  #  docker run -it --rm -p 8080:8080 -e JAVA_TOOL_OPTIONS='-Xmx10g' -v "$(pwd)/berlin:/var/opentripplanner" docker.io/opentripplanner/opentripplanner:latest --build --serve
 
 #  gtfs-krakow:
 #    build:
