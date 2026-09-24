@@ -1,0 +1,9 @@
+:host ::ng-deep .mat-mdc-tab-link {
+  &.mdc-tab--active {
+    background-color: #111827; // gray-900, matches the dark header used elsewhere on this page
+
+    .mdc-tab__text-label {
+      color: #ffffff;
+    }
+  }
+}
