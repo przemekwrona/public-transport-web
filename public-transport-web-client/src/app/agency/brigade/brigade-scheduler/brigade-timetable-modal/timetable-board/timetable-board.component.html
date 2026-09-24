@@ -7,7 +7,7 @@
         <div class="inline-block font-bold px-2 w-8 mr-4">{{ hour | number: '2.0-0' }}</div>
         <div class="inline-flex flex-wrap gap-1.5">
             @for (departure of departuresForHour(hour); track $index) {
-                <span class="text-sm mr-2">
+                <span class="text-sm mr-2 minute" [class.minute-updating]="isUpdating">
                     {{ departure.m != null ? (departure.m | number: '2.0-0') : departure.time }}{{ departure.symbol }}
                 </span>
             }

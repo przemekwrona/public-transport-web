@@ -49,15 +49,14 @@
                             {{ downloadingPdf ? 'Pobieranie...' : 'Pobierz PDF' }}
                         </button>
                     </div>
-                    @if (loading) {
-                        <div class="px-3.5 py-6 text-center text-sm text-gray-600 bg-gray-50">
-                            Ładowanie odjazdów...
-                        </div>
-                    } @else {
-                        <div class="px-2 py-2 bg-white overflow-x-auto">
-                            <app-timetable-board [variant]="timetableVariant"></app-timetable-board>
-                        </div>
-                    }
+<!--                    @if (loading) {-->
+<!--                        <div class="px-3.5 py-1 text-center text-2xs text-gray-500 bg-gray-50 border-b border-gray-200">-->
+<!--                            Aktualizowanie odjazdów...-->
+<!--                        </div>-->
+<!--                    }-->
+                    <div class="px-2 py-2 bg-white overflow-x-auto">
+                        <app-timetable-board [variant]="timetableVariant"></app-timetable-board>
+                    </div>
                 </div>
             } @else {
                 <p class="text-sm text-gray-700 lg:col-span-2">Kliknij przystanek, aby pobrać rozkład jazdy</p>
