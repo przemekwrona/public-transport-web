@@ -58,6 +58,10 @@ export class TripListTimetableComponent implements OnInit {
         this.route.data.pipe(map((data: Data) => data['response'] as RouteStops)).subscribe(response => {
             this.frontStops = buildStopSequence(response?.front);
             this.backStops = buildStopSequence(response?.back);
+
+            if (this.activeTab.tripMode === TripMode.Front && this.frontStops.length > 0) {
+                this.loadStopTimetable(this.frontStops[0]);
+            }
         });
     }
 
@@ -71,6 +75,10 @@ export class TripListTimetableComponent implements OnInit {
         this.timetable = null;
         this.loading = false;
         this.downloadingPdf = false;
+
+        if (this.activeStops.length > 0) {
+            this.loadStopTimetable(this.activeStops[0]);
+        }
     }
 
     public isSelected(stop: StopSequenceItem): boolean {
