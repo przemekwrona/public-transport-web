@@ -22,6 +22,7 @@ export interface TimetableDirectionTab {
 @Component({
     selector: 'app-trip-list-timetable',
     templateUrl: './trip-list-timetable.component.html',
+    styleUrl: './trip-list-timetable.component.scss',
     standalone: true,
     imports: [TimetableBoardComponent, MatTabsModule]
 })
