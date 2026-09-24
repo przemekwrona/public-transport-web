@@ -28,6 +28,8 @@
   "common.attention": "Missing value for 'common.attention'",
   "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
   "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'",
+  "agency.trip.timetable.FRONT": "TAM",
+  "agency.trip.timetable.BACK": "POWRÓT",
   "common": {
     "attention": "Uwaga"
   },
