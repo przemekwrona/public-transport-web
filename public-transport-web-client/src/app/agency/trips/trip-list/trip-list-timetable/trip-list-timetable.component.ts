@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Data} from "@angular/router";
 import {map} from "rxjs";
 import {MatTabsModule} from "@angular/material/tabs";
+import {TranslocoPipe} from "@jsverse/transloco";
 import {
     BrigadeTimetableVariant,
     RouteStopTimetable,
@@ -24,7 +25,7 @@ export interface TimetableDirectionTab {
     templateUrl: './trip-list-timetable.component.html',
     styleUrl: './trip-list-timetable.component.scss',
     standalone: true,
-    imports: [TimetableBoardComponent, MatTabsModule]
+    imports: [TimetableBoardComponent, MatTabsModule, TranslocoPipe]
 })
 export class TripListTimetableComponent implements OnInit {
     public readonly tabs: TimetableDirectionTab[] = [

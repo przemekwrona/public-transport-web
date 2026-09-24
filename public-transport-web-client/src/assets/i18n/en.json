@@ -27,5 +27,7 @@
   "agency.trip.addNewVariant": "Missing value for 'agency.trip.addNewVariant'",
   "common.attention": "Missing value for 'common.attention'",
   "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
-  "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'"
+  "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'",
+  "agency.trip.timetable.FRONT": "FRONT",
+  "agency.trip.timetable.BACK": "BACK"
 }
