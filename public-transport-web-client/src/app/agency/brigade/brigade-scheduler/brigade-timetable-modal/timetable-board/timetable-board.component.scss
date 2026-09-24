@@ -1,0 +1,22 @@
+// The board stays mounted while a stop's timetable reloads (see trip-list-timetable),
+// so instead of the previous "delete and rebuild" flow, freshly-updated minutes
+// briefly flash to draw the eye to what changed.
+@keyframes minute-flash {
+  0% {
+    color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.14);
+  }
+  100% {
+    color: inherit;
+    background-color: transparent;
+  }
+}
+
+.minute {
+  border-radius: 4px;
+  padding: 0 2px;
+}
+
+.minute-updating {
+  animation: minute-flash 900ms ease-out;
+}

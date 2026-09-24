@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
     BrigadeTimetableDeparture,
@@ -13,7 +13,7 @@ import {
     templateUrl: './timetable-board.component.html',
     styleUrl: './timetable-board.component.scss'
 })
-export class TimetableBoardComponent {
+export class TimetableBoardComponent implements OnChanges {
 
     @Input() title: string = '';
     @Input() variant: BrigadeTimetableVariant = {};
@@ -38,6 +38,21 @@ export class TimetableBoardComponent {
             return Number.isFinite(hours) ? hours : null;
         }
         return null;
+    }
+
+    // Departures reload in place (the board itself is never destroyed), so re-trigger
+    // a short flash animation on the minute values whenever fresh data comes in,
+    // instead of the previous "delete and rebuild the whole table" flow.
+    public isUpdating = false;
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (!changes['variant'] || changes['variant'].firstChange) {
+            return;
+        }
+        this.isUpdating = false;
+        requestAnimationFrame(() => {
+            this.isUpdating = true;
+        });
     }
 
 }

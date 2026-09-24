@@ -38,15 +38,12 @@ export class TripListTimetableComponent implements OnInit {
     public selectedStop: StopSequenceItem | null = null;
     public selectedDirection: string | null = null;
     public timetable: RouteStopTimetable | null = null;
+    public timetableVariant: BrigadeTimetableVariant = {departures: []};
     public loading = false;
     public downloadingPdf = false;
 
     public get activeStops(): StopSequenceItem[] {
         return this.activeTab.tripMode === TripMode.Front ? this.frontStops : this.backStops;
-    }
-
-    public get timetableVariant(): BrigadeTimetableVariant {
-        return {departures: this.timetable?.departures ?? []};
     }
 
     constructor(
@@ -74,7 +71,6 @@ export class TripListTimetableComponent implements OnInit {
         this.activeTab = tab;
         this.selectedStop = null;
         this.selectedDirection = null;
-        this.timetable = null;
         this.loading = false;
         this.downloadingPdf = false;
 
@@ -91,7 +87,6 @@ export class TripListTimetableComponent implements OnInit {
         this.selectedStop = stop;
         this.selectedDirection = this.activeTab.label;
         this.loading = true;
-        this.timetable = null;
 
         this.routeStopTimetableService.getRouteStopTimetable(
             this.loginService.getInstance(),
@@ -101,10 +96,12 @@ export class TripListTimetableComponent implements OnInit {
         ).subscribe({
             next: response => {
                 this.timetable = response as RouteStopTimetable;
+                this.timetableVariant = {departures: this.timetable.departures ?? []};
                 this.loading = false;
             },
             error: () => {
                 this.timetable = {departures: []};
+                this.timetableVariant = {departures: []};
                 this.loading = false;
             }
         });
