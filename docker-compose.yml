@@ -1,94 +1,56 @@
+name: public-transport
+
 services:
   public-transport-db:
     image: postgres:18.6-alpine
     container_name: public-transport-db
     restart: unless-stopped
-    # SECURITY: do NOT publish 5432 to the internet. The app container
-    # reaches Postgres over the internal docker network by service name
-    # ("public-transport-db"), it does not need a host port at all.
-    # If you occasionally need a psql/DBeaver connection from your own
-    # machine, tunnel in instead of opening the port, e.g.:
-    #   ssh -L 5432:localhost:5432 user@your-server
-    # (leave the "ports:" section removed, or at most bind to
-    # 127.0.0.1:5432:5432 — never 0.0.0.0)
+    ports:
+      - "5432:5432"
     environment:
-      POSTGRES_DB: public_transport_db
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-public_transport_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
-      - db_data:/var/lib/postgresql/data
-    # Only on the internal network: nginx and the host cannot reach it.
-    networks:
-      - db_internal
-    security_opt:
-      - no-new-privileges:true
+      - ./data/public-transport-db:/var/lib/postgresql
+    # $$ keeps the expansion in the container's shell instead of compose.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
 
   public-transport-app:
-    #    build:
-    #      context: ./public-transport-web-server
-    #      dockerfile: Dockerfile
-    image: registry.digitalocean.com/public-transport-registry/public-transport-web:latest
+    # Dockerfile only copies target/public-transport-web-server-*.jar,
+    # so `mvn clean package -DskipTests` in the repo root must run first.
+    build:
+      context: ./public-transport-web-server
+      dockerfile: Dockerfile
+    # image: registry.digitalocean.com/public-transport-registry/public-transport-web:latest
     container_name: public-transport-app
     restart: unless-stopped
-    # SECURITY: no host port published here either. nginx talks to this
-    # container over the docker network (http://public-transport-app:8080).
-    # Publishing 8080 to the host would let anyone reach the app directly,
-    # bypassing TLS and nginx entirely.
-    environment:
-      PROFILE: dev
-      JAVA_OPTS: -Xmx512m -Xms256m
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      GEOAPIFY_KEY: ${GEOAPIFY_KEY}
-    depends_on:
-      - public-transport-db
-    # db_internal -> Postgres, web -> nginx + outbound internet (Geoapify)
-    networks:
-      - db_internal
-      - web
-    security_opt:
-      - no-new-privileges:true
-
-  nginx:
-    image: nginx:1.27-alpine
-    container_name: nginx-proxy
-    restart: always
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - /var/www/certbot:/var/www/certbot:ro
+      - "8084:8080"
+    environment:
+      PROFILE: ${PROFILE:-dev}
+      JAVA_OPTS: -Xmx512m -Xms256m
+      SPRING_DATASOURCE_URL: jdbc:postgresql://public-transport-db:5432/${POSTGRES_DB:-public_transport_db}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      GEOAPIFY_KEY: ${GEOAPIFY_KEY:-}
+    # Liquibase runs at startup, so Postgres has to accept connections first.
     depends_on:
-      - public-transport-app
-    networks:
-      - web
+      public-transport-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
     security_opt:
       - no-new-privileges:true
-
-networks:
-  # internal: true = no route to/from outside the docker host,
-  # only containers attached to this network can talk to Postgres.
-  db_internal:
-    internal: true
-  web:
-
-volumes:
-  db_data:
-
-  #  web-client:
-  #    build:
-  #      context: ./public-transport-web-server
-  #      dockerfile: Dockerfile
-  #    container_name: web-client
-  #    ports:
-  #      - '8080:8080'
-  #    environment:
-  #      PROFILE: dev-docker
-  #      JAVA_OPTS: -Xmx1G
-  #    depends_on:
-  #      - app-db
 
   #  gtfs-warszawa:
   #    build:
