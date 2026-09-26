@@ -13,7 +13,7 @@ import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class BrigadeEventUpdaterService {
     private final TripQueryService tripQueryService;
     private final TripProfileQueryService tripProfileQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     @Transactional
     public Status putBrigadeEvent(String instance, String brigadeCode, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
         var group = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);

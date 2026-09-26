@@ -4,6 +4,7 @@ import org.igeolab.iot.pt.server.api.model.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -20,5 +21,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .errorCode(ex.getExceptionCode());
 
         return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDenied(final AccessDeniedException ex, final WebRequest request) {
+        var errorResponse = new ErrorResponse()
+                .message("Access denied")
+                .errorCode("ERROR:ACCESS_DENIED");
+        return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 }

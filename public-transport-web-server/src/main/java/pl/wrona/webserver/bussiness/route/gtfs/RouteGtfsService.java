@@ -28,7 +28,7 @@ import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.exception.BusinessException;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -71,7 +71,7 @@ public class RouteGtfsService {
     private final StopTimeRepository stopTimeRepository;
     private final CalendarDatesQueryService calendarDatesQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> downloadRouteGtfs(String instance, String routeCode) {
         AgencyEntity agency = agencyRepository.findByAgencyCodeEquals(instance);

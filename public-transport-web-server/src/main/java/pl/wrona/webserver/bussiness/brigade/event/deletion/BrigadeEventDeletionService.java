@@ -9,7 +9,7 @@ import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService
 import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 @Service
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class BrigadeEventDeletionService {
     private final BrigadeEventQueryService brigadeEventQueryService;
     private final BrigadeResourceQueryService brigadeResourceQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     @Transactional
     public Status deleteBrigadeEvent(String instance, String brigadeCode, String calendarCode, String symbol, String resourceCode, String eventCode) {
         BrigadeResourceEntity brigadeResource = brigadeResourceQueryService.findByAgencyAndBrigadeCodeAndCalendarCodeAndSymbolAndResourceCode(

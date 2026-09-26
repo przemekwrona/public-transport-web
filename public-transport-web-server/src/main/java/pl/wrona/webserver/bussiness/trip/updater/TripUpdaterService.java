@@ -21,7 +21,7 @@ import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripProfileMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 import java.util.List;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class TripUpdaterService {
     private final TripProfileCommandService tripProfileCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public Status updateTrip(String instance, String routeCode, String tripCode, UpdateTripDetailsRequest updateTripDetailsRequest) {
         var tripDetails = updateTripDetailsRequest.getBody();
 

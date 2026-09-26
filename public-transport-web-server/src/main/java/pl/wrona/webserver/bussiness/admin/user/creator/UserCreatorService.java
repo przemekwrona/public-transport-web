@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
 import pl.wrona.webserver.security.AppUserRepository;
+import pl.wrona.webserver.security.PreAuthorizeSuperUser;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class UserCreatorService {
     private final UserCreatorAppRolesRepository userCreatorAppRolesRepository;
 
 
+    @PreAuthorizeSuperUser
     @Transactional
     public CreateAppUserResponse createUser(CreateAppUserRequest createAppUserRequest) {
         Set<AppRole> defaultAgencyRole = userCreatorAppRolesRepository.findAllByRoleIsIn(Set.of("AGENCY_OWNER"));

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupCommandService;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.deletion.ResourceDeletionService;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class BrigadeDeletionService {
     private final BrigadeItemCommandService brigadeItemCommandService;
 
     @Transactional
-    @PreAgencyAuthorize()
+    @PreAgencyDispatcher
     public Status deleteBrigadeByBrigadeCode(String instance, String brigadeCode) {
         var brigadeGroups = brigadeGroupQueryService.findAllByBrigadeCode(instance, brigadeCode);
         for (var brigadeGroup : brigadeGroups) {

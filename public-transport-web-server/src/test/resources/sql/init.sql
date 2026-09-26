@@ -26,7 +26,7 @@ INSERT INTO stop (stop_id, bdot10k_id, osm_id, name, lon, lat, is_osm, is_bdot10
 INSERT INTO app_user (username, email, password, created_at, updated_at, account_non_expired, account_non_locked, credentials_non_expired, enabled)
 VALUES ( 'jkowalski', 'jkowalski@ns.pl', '$2a$10$yPoPJ9H4MAm5PP/.hIU/uebkqnFMiTGHb3/I.AMqpkDILHdwxi456', '2025-01-04 11:36:40.937926', '2025-01-04 11:36:40.937949', true, true, true, true);
 
-INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), 'SUPER_USER');
+INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), 'super_user');
 INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), 'AGENCY_OWNER');
 
 INSERT INTO agency (agency_code, agency_name, agency_url, agency_timetable_url, agency_phone, agency_owner_id)

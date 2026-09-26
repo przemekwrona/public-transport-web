@@ -8,6 +8,7 @@ import pl.wrona.webserver.bussiness.calendar.CalendarItemCommandService;
 import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
 import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.exception.BusinessException;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +19,7 @@ public class CalendarItemDeletionService {
 
     private final CalendarSymbolQueryService calendarSymbolQueryService;
 
+    @PreAgencyPlanner
     public Status deleteCalendarItem(String instance, DeleteCalendarItemRequest deleteCalendarItemRequest) {
         var calendarSymbols = calendarSymbolQueryService.findAllByAgencyAndCalendarItemId(instance, deleteCalendarItemRequest.getCalendarItemId());
 

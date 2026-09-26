@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.AppUser;
 import org.igeolab.iot.pt.server.api.model.AppUsersResponse;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.security.PreAuthorizeSuperUser;
 
 @Service
 @AllArgsConstructor
@@ -11,6 +12,7 @@ public class UserPaginationService {
 
     private final UserPaginationRepository userPaginationRepository;
 
+    @PreAuthorizeSuperUser
     public AppUsersResponse findAllAppUsers(String search) {
         AppUsersResponse appUsersResponse = new AppUsersResponse();
 

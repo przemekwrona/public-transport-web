@@ -19,7 +19,7 @@ import pl.wrona.webserver.core.calendar.CalendarQueryService;
 import pl.wrona.webserver.core.timetable.TimetableDeparture;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorEntity;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -37,7 +37,7 @@ public class CreateTimetableGeneratorService {
     private final TimetableGeneratorItemCommandService timetableGeneratorItemCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public CreateTimetableGeneratorRequest createTimetableGenerator(String instance, CreateTimetableGeneratorRequest request) {
         AgencyEntity agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         CalendarSymbolEntity calendarSymbolEntity = calendarQueryService.getCalendar(instance, request.getTimetables().getCalendarName(), "");

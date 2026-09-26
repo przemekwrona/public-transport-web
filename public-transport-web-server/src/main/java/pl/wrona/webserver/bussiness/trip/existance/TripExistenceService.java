@@ -6,7 +6,7 @@ import org.igeolab.iot.pt.server.api.model.TripId;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.trip.TripQueryRepository;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 @Service
 @AllArgsConstructor
@@ -14,7 +14,7 @@ public class TripExistenceService {
 
     private final TripQueryRepository tripQueryRepository;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public Status hasVariantDetails(String instance, TripId tripId) {
         boolean variantAlreadyExists = tripQueryRepository.existsTripUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariantName(), TripVariantModeMapper.map(tripId.getVariantMode()));
         return variantAlreadyExists ? new Status().status(Status.StatusEnum.EXISTS) : new Status().status(Status.StatusEnum.NOT_EXIST);

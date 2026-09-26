@@ -10,7 +10,7 @@ import pl.wrona.webserver.bussiness.route.RouteCommandService;
 import pl.wrona.webserver.bussiness.trip.TripCommandService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class RouteDeletionService {
     private final RouteCommandService routeCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public ModificationRouteResponse deleteRoute(String instance, RouteId routeId) {
         RouteEntity preDeletedRoute = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, routeId);
         tripCommandService.deleteTripByRoute(preDeletedRoute);

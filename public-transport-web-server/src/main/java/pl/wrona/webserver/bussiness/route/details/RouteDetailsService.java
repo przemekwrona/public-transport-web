@@ -15,7 +15,7 @@ import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.core.mapper.TripMapper;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,7 +34,7 @@ public class RouteDetailsService {
     private final StopService stopService;
     private final TerritorialUnitQueryService territorialUnitQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public RouteDetails getRouteDetails(String instance, String routeCode) {
         var route = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);
         var tripWithBrigades = tripQueryService.mapByExistsBrigade(instance);

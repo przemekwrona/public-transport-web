@@ -11,7 +11,7 @@ import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
 import pl.wrona.webserver.bussiness.brigade.item.BrigadeItemQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadDispatch;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ public class BrigadeItemPaginationService {
     private final BrigadeGroupQueryService brigadeGroupQueryService;
     private final BrigadeItemQueryService brigadeItemQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadDispatch
     public GetBrigadeResponse findBrigades(String instance) {
         Map<Long, List<BrigadeGroupEntity>> groupsByItemId = brigadeGroupQueryService.findAll(instance).stream()
                 .collect(Collectors.groupingBy(

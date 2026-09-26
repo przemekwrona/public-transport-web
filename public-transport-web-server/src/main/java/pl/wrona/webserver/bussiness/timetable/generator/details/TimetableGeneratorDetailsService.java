@@ -14,7 +14,7 @@ import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorQueryS
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,7 +30,7 @@ public class TimetableGeneratorDetailsService {
     private final TimetableGeneratorItemQueryService timetableGeneratorItemQueryService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public GetTimetableGeneratorDetailsResponse findTimetableGeneratorDetails(String instance, TimetableGeneratorId timetableGeneratorId) {
         var timetable = timetableGeneratorQueryService.findByAgencyAndRouteIdAndCreateDate(instance, timetableGeneratorId.getRouteId(), timetableGeneratorId.getCreatedAt());
         var items = timetableGeneratorItemQueryService.findAllByTimetableGenerator(timetable);

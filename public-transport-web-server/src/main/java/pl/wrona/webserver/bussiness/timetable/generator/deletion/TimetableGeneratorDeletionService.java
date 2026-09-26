@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorCommandService;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorItemCommandService;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorQueryService;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 import java.util.Optional;
 
@@ -21,7 +21,7 @@ public class TimetableGeneratorDeletionService {
     private final TimetableGeneratorCommandService timetableGeneratorCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public Status agencyAgencyTimetableGeneratorDelete(String instance, TimetableGeneratorDeletionRequest timetableGeneratorDeletionRequest) {
         Optional.ofNullable(timetableGeneratorQueryService.findByAgencyAndRouteIdAndCreateDate(instance, timetableGeneratorDeletionRequest.getRouteId(), timetableGeneratorDeletionRequest.getCreatedDate())).ifPresent(timetableGenerator -> {
             timetableGeneratorItemCommandService.deleteAllByTimetableGenerator(timetableGenerator);

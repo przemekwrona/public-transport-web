@@ -22,7 +22,7 @@ import pl.wrona.webserver.core.brigade.BrigadeItemQueryRepository;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadDispatch;
 
 import java.util.List;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class BrigadeGroupDetailsService {
     private final BrigadeResourceQueryService brigadeResourceQueryService;
     private final BrigadeEventQueryService brigadeEventQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadDispatch
     public BrigadeGroupBody getCalendarSymbolBrigadeResources(String instance, String brigadeCode, String calendarCode, String symbol) {
         var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);
         if (brigadeGroup == null) {
@@ -52,7 +52,7 @@ public class BrigadeGroupDetailsService {
                 .brigadeResources(mapResources(resourceEntities, eventsByResourceId));
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyReadDispatch
     public GetBrigadeDetailsResponse getBrigadeDetails(String instance, String brigadeCode) {
         var brigadeItem = brigadeItemQueryRepository.findByAgencyCodeAndSequenceHex(instance, brigadeCode);
         if (brigadeItem == null) {

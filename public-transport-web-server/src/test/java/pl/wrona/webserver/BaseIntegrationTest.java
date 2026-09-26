@@ -17,10 +17,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.images.builder.Transferable;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 import pl.wrona.webserver.security.AppUserService;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
 
 @ActiveProfiles("test")
 @Testcontainers
@@ -38,6 +46,20 @@ public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.
             .withUsername("test")
             .withPassword("welcome1");
 
+    @SuppressWarnings("resource")
+    public static final GenericContainer<?> keycloak = new GenericContainer<>(DockerImageName.parse("quay.io/keycloak/keycloak:26.7.4"))
+            .withEnv("KC_BOOTSTRAP_ADMIN_USERNAME", "admin")
+            .withEnv("KC_BOOTSTRAP_ADMIN_PASSWORD", "admin")
+            .withEnv("KC_HTTP_ENABLED", "true")
+            .withCopyToContainer(Transferable.of(readRealmImport()), "/opt/keycloak/data/import/public-transport-realm.json")
+            .withCommand("start-dev", "--import-realm")
+            .withExposedPorts(8080)
+            .waitingFor(Wait.forHttp("/realms/public-transport").forPort(8080).forStatusCode(200).withStartupTimeout(Duration.ofMinutes(3)));
+
+    static {
+        keycloak.start();
+    }
+
     @Autowired
     protected WireMockServer mockGeoapifyClient;
 
@@ -46,6 +68,26 @@ public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("keycloak.enabled", () -> "true");
+        registry.add("keycloak.server-url", BaseIntegrationTest::keycloakUrl);
+        registry.add("keycloak.issuer-uri", () -> keycloakUrl() + "/realms/public-transport");
+        registry.add("keycloak.jwk-set-uri", () -> keycloakUrl() + "/realms/public-transport/protocol/openid-connect/certs");
+    }
+
+    private static String keycloakUrl() {
+        return "http://localhost:" + keycloak.getMappedPort(8080);
+    }
+
+    private static byte[] readRealmImport() {
+        Path cwd = Path.of("").toAbsolutePath();
+        Path inModule = cwd.resolve("../keycloak/import/public-transport-realm.json").normalize();
+        Path inRepo = cwd.resolve("keycloak/import/public-transport-realm.json").normalize();
+        Path realm = Files.exists(inModule) ? inModule : inRepo;
+        try {
+            return Files.readAllBytes(realm);
+        } catch (Exception exception) {
+            throw new IllegalStateException("Cannot read Keycloak realm import from " + realm, exception);
+        }
     }
 
     @Autowired

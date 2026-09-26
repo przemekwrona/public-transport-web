@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.route.LineNameCleaner;
 import pl.wrona.webserver.bussiness.route.RouteCommandService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +20,7 @@ public class RouteUpdaterService {
     private final RouteCommandService routeCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public Status updateRoute(String instance, UpdateRouteRequest updateRouteRequest) {
         var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, updateRouteRequest.getRouteId());
         route.setLine(updateRouteRequest.getRoute().getRouteId().getLine());

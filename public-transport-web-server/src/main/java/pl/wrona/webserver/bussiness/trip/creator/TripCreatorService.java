@@ -25,7 +25,7 @@ import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,7 +45,7 @@ public class TripCreatorService {
     private final TripProfileCommandService tripProfileCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public Status createTrip(String instance, String routeCode, CreateTripDetailsRequest createTripDetailsRequest) {
         boolean uniqueTripIndexExists = tripQueryService.existsUniqueTripIndex(instance,
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),

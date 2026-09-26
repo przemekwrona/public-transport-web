@@ -13,7 +13,7 @@ import pl.wrona.webserver.bussiness.calendar.CalendarDatesQueryService;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.calendar.CalendarSymbolQueryRepository;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class CalendarReaderService {
     private final CalendarSymbolQueryService calendarSymbolQueryService;
     private final CalendarDatesQueryService calendarDatesQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public GetCalendarSymbolsResponse getCalendars(String instance) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         Map<Long, List<CalendarDatesEntity>> calendarDatesDictionary = calendarDatesRepository.findAllByAgency(agencyEntity).stream()

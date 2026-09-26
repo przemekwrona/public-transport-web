@@ -26,7 +26,7 @@ import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class TripDetailsService {
     private final ObjectMapper objectMapper;
     private final TerritorialUnitQueryService territorialUnitQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public TripsDetails getTripVariantDetails(String instance, String routeCode, String tripCode) {
         var tripEntity = tripQueryService.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
 

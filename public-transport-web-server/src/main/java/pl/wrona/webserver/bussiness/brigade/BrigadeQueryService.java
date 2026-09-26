@@ -9,7 +9,7 @@ import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.brigade.BrigadeEntity;
 import pl.wrona.webserver.core.brigade.BrigadeRepository;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class BrigadeQueryService {
     private final BrigadeRepository brigadeRepository;
     private final CalendarSymbolQueryService calendarSymbolQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     @Transactional
     public Status updateBrigade(String instance, BrigadePatchBody brigadePatchBody) {
         String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();

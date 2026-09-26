@@ -12,7 +12,7 @@ import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
 import pl.wrona.webserver.bussiness.calendar.mapper.CalendarSymbolEntityMapper;
 import pl.wrona.webserver.core.calendar.CalendarSymbolQueryRepository;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 import java.util.Set;
 
@@ -26,7 +26,7 @@ public class CalendarUpdaterService {
     private final AgencyService agencyService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public Status updateCalendar(String instance, UpdateCalendarRequest updateCalendarRequest) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         calendarSymbolRepository.findByAgencyAndCalendarNameAndDesignation(instance, updateCalendarRequest.getCalendarName(), updateCalendarRequest.getBody().getDesignation()).ifPresent(calendarEntity -> {

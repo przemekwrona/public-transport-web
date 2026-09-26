@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, HostBinding, OnInit} from '@angular/core';
-import KTComponents from "../metronic/core";
-import KTLayout from '../metronic/app/layouts/demo1';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
+import {LoginService} from "./auth/login.service";
+import {KEYCLOAK_LOGIN_RETURN_KEY} from "./auth/keycloak-auth.service";
 
 @Component({
     selector: 'app-root',
@@ -10,13 +11,20 @@ import KTLayout from '../metronic/app/layouts/demo1';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'public-transport-web-client';
-  // @HostBinding('class') hostClass = 'flex grow';
+
+  constructor(private router: Router, private loginService: LoginService) {
+  }
 
   ngAfterViewInit(): void {
-    // KTComponents.init();
-    // KTLayout.init();
   }
 
   ngOnInit(): void {
+    if (sessionStorage.getItem(KEYCLOAK_LOGIN_RETURN_KEY) !== '1') {
+      return;
+    }
+    sessionStorage.removeItem(KEYCLOAK_LOGIN_RETURN_KEY);
+    if (this.loginService.isLoggedIn()) {
+      this.router.navigate(['/agency/profile']);
+    }
   }
 }

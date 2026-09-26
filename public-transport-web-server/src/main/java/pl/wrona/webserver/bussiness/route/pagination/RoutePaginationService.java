@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.mapper.RouteMapper;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class RoutePaginationService {
     private final RouteQueryService routeQueryService;
     private final StopService stopService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public Routes getRoutes(String instance) {
         var routes = routeQueryService.findByAgencyCode(instance);
 

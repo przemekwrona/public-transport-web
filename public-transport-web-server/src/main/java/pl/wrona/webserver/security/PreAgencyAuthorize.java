@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("@agencyAccessSecurity.checkAccess(#instance)")
+@PreAuthorize("@agencyAccessSecurity.canRead(#instance)")
 public @interface PreAgencyAuthorize {
 }

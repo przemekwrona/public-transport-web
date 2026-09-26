@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../login.service";
-import {LoginAppUserRequest, LoginAppUserResponse} from "../../generated/public-transport-api";
 import {Router} from "@angular/router";
 
 @Component({
@@ -11,36 +10,21 @@ import {Router} from "@angular/router";
 })
 export class SigninComponent implements OnInit {
 
-    public loginAppUserRequest: LoginAppUserRequest = {};
-
-    public passwordInputType
+    public loginFailed = false;
 
     constructor(private authService: LoginService, private router: Router) {
     }
 
     ngOnInit(): void {
-        this.setPasswordInputPassword();
-    }
-
-    public login() {
-        this.authService.login(this.loginAppUserRequest).subscribe((response: LoginAppUserResponse) => {
+        if (this.authService.isLoggedIn()) {
             this.router.navigate(['/agency/profile']);
-        });
-    }
-
-    public revertPasswordTypeInput(): void {
-        if (this.passwordInputType === 'password') {
-            this.setPasswordInputText();
-        } else {
-            this.setPasswordInputPassword();
+            return;
         }
+        this.login();
     }
 
-    public setPasswordInputPassword() {
-        this.passwordInputType = 'password';
-    }
-
-    public setPasswordInputText() {
-        this.passwordInputType = 'text';
+    public login(): void {
+        this.loginFailed = false;
+        this.authService.loginWithKeycloak().catch(() => this.loginFailed = true);
     }
 }

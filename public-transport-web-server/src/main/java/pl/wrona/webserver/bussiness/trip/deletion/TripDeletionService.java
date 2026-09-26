@@ -10,6 +10,7 @@ import pl.wrona.webserver.bussiness.trip.TripCommandService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.exception.BusinessException;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +19,7 @@ public class TripDeletionService {
     private final TripCommandService tripCommandService;
     private final TripQueryService tripQueryService;
 
+    @PreAgencyPlanner
     @Transactional
     public Status deleteTripByTripId(String instance, String routeCode, String tripCode) {
         TripEntity savedTripEntity = tripQueryService.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);

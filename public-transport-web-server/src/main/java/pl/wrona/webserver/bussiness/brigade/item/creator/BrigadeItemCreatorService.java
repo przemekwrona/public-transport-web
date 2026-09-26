@@ -16,7 +16,7 @@ import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeItemEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +28,7 @@ public class BrigadeItemCreatorService {
     private final BrigadeItemCommandService brigadeItemCommandService;
     private final RouteQueryService routeQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     @Transactional
     public Status createBrigade(String instance, CreateBrigadeBody request) {
 

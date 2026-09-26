@@ -15,7 +15,7 @@ import pl.wrona.webserver.bussiness.route.RouteSequenceQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.agency.RouteEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,7 +31,7 @@ public class RouteCreatorService {
     private final RouteSequenceQueryService routeSequenceQueryService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public ModificationRouteResponse createRoute(String instance, Route route) {
         var stopDictionary = stopService.mapStopByIdsIn(List.of(route.getOriginStop().getId(), route.getDestinationStop().getId()));
 

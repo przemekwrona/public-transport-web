@@ -9,8 +9,10 @@ import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.client.geoapify.geocode.Feature;
 import pl.wrona.webserver.client.geoapify.GeoapifyService;
 import pl.wrona.webserver.client.geoapify.geocode.Geometry;
+import pl.wrona.webserver.keycloak.KeycloakIdentityProvisioner;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
+import pl.wrona.webserver.security.PreAuthorizeSuperUser;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -21,13 +23,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class ProfileCreatorService {
 
-    public static final String SUPER_USER = "SUPER_USER";
+    public static final String SUPER_USER = "super_user";
 
     private final ProfileCreatorAppUserRepository profileCreatorAppUserRepository;
     private final ProfileCreatorAgencyRepository profileCreatorAgencyRepository;
     private final ProfileCreatorAppRolesRepository profileCreatorAppRolesRepository;
     private final GeoapifyService geoapifyService;
+    private final KeycloakIdentityProvisioner keycloakIdentityProvisioner;
 
+    @PreAuthorizeSuperUser
     @Transactional
     public Status createNewAccount(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
         Feature addressFeature = geoapifyService.mostProbableAddress(agencyAdminCreateAccountRequest.getStreet(), agencyAdminCreateAccountRequest.getHouseNumber(), agencyAdminCreateAccountRequest.getFlatNumber(), agencyAdminCreateAccountRequest.getPostalCode(), agencyAdminCreateAccountRequest.getPostalCity());
@@ -54,7 +58,8 @@ public class ProfileCreatorService {
         agencyEntity.setUsers(agencyVisibility);
         agencyEntity.setCreatedAt(LocalDateTime.now());
 
-        AgencyEntity savedAgencyEntity = profileCreatorAgencyRepository.save(agencyEntity);
+        keycloakIdentityProvisioner.provisionAgency(agencyAdminCreateAccountRequest.getCompanyCode(), user);
+        profileCreatorAgencyRepository.save(agencyEntity);
 
         return new Status().status(Status.StatusEnum.CREATED);
     }

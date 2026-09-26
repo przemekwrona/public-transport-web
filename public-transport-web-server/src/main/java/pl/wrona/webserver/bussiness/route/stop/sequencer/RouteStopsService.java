@@ -8,7 +8,7 @@ import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripVariantMode;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class RouteStopsService {
     private final TripQueryService tripQueryService;
     private final StopGraphSequencerService stopGraphSequencerService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public RouteStops getRouteStops(String instance, String routeCode) {
         RouteEntity route = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);
         List<TripEntity> trips = tripQueryService.findByAgencyCodeAndRoute(instance, route);
