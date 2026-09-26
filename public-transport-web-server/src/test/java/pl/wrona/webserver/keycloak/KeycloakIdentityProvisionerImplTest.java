@@ -37,7 +37,7 @@ class KeycloakIdentityProvisionerImplTest {
 
         new KeycloakIdentityProvisionerImpl(keycloakAdminClient).provisionAgency("NS", owner);
 
-        verify(keycloakAdminClient).assignClientRole("owners-id", "AGENCY_OWNER");
+        verify(keycloakAdminClient).assignClientRole("owners-id", "owner");
         verify(keycloakAdminClient).assignClientRole("planners-id", "planner");
         verify(keycloakAdminClient).assignClientRole("dispatchers-id", "dispatcher");
         verify(keycloakAdminClient).assignClientRole("viewers-id", "viewer");

@@ -20,8 +20,8 @@
     "client": {
       "public-transport-web": [
         {
-          "name": "AGENCY_OWNER",
-          "description": "Role for the owner of a transit agency"
+          "name": "owner",
+          "description": "Whole agency"
         },
         {
           "name": "planner",
@@ -158,11 +158,6 @@
       "realmRoles": [
         "super_user"
       ],
-      "clientRoles": {
-        "public-transport-web": [
-          "AGENCY_OWNER"
-        ]
-      },
       "groups": [
         "/agencies/NEXTSTOP/owners"
       ]
@@ -184,7 +179,7 @@
               "name": "owners",
               "clientRoles": {
                 "public-transport-web": [
-                  "AGENCY_OWNER"
+                  "owner"
                 ]
               }
             },

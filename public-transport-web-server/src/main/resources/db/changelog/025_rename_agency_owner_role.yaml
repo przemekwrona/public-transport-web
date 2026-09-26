@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename-agency-owner-role
+      author: pwrona
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO app_role (app_role_id, description)
+              SELECT 'agency_owner', description
+              FROM app_role
+              WHERE app_role_id = 'AGENCY_OWNER'
+                AND NOT EXISTS (SELECT 1 FROM app_role WHERE app_role_id = 'agency_owner');
+              UPDATE app_user_app_role SET app_role_id = 'agency_owner' WHERE app_role_id = 'AGENCY_OWNER';
+              DELETE FROM app_role WHERE app_role_id = 'AGENCY_OWNER';

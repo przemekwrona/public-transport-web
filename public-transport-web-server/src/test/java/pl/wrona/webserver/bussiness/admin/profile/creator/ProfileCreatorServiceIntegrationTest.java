@@ -67,7 +67,7 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
         assertThat(createdAgencyEntity.getLatitude()).isEqualTo(52.230207);
         assertThat(createdAgencyEntity.getUsers().stream().map(AppUser::getUsername).toList()).hasSize(2).hasSameElementsAs(List.of(appUsername, "pwrona"));
 
-        Set<AppRole> createdUserAppRoles = appRoleRepository.findAppRolesByRoleIsIn(Set.of("AGENCY_OWNER"));
+        Set<AppRole> createdUserAppRoles = appRoleRepository.findAppRolesByRoleIsIn(Set.of("agency_owner"));
         AppUser appUser = appUserRepository.findByUsername(appUsername).orElse(null);
         assertThat(appUser).isNotNull();
         assertThat(appUser.getUsername()).isEqualTo(appUsername);

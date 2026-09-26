@@ -34,6 +34,8 @@ jobs:
           services.public-transport-app.environment.SPRING_DATASOURCE_USERNAME: ${{ secrets.POSTGRES_USER }}
           services.public-transport-app.environment.SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           services.public-transport-app.environment.GEOAPIFY_KEY: ${{ secrets.GEOAPIFY_KEY }}
+          services.keycloak.environment.KC_DB_USERNAME: ${{ secrets.POSTGRES_USER }}
+          services.keycloak.environment.KC_DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
       - name: Stop containers if docker-compose exists on Droplet
         uses: appleboy/ssh-action@v1.2.2

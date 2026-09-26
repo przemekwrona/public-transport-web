@@ -61,7 +61,7 @@ export class LoginService {
     }
 
     hasRoleAgencyOwner(): boolean {
-        return this.getRoles().includes('AGENCY_OWNER');
+        return this.getRoles().includes('agency_owner');
     }
 
 }

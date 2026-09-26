@@ -26,7 +26,7 @@ public class UserCreatorService {
     @PreAuthorizeSuperUser
     @Transactional
     public CreateAppUserResponse createUser(CreateAppUserRequest createAppUserRequest) {
-        Set<AppRole> defaultAgencyRole = userCreatorAppRolesRepository.findAllByRoleIsIn(Set.of("AGENCY_OWNER"));
+        Set<AppRole> defaultAgencyRole = userCreatorAppRolesRepository.findAllByRoleIsIn(Set.of("agency_owner"));
 
         AppUser appUser = new AppUser();
         appUser.setUsername(createAppUserRequest.getUsername());
