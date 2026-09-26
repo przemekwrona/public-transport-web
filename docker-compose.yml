@@ -13,6 +13,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
       - ./data/public-transport-db:/var/lib/postgresql
+      - ./docker/postgres/init-schemas.sql:/docker-entrypoint-initdb.d/010-init-schemas.sql:ro
     # $$ keeps the expansion in the container's shell instead of compose.
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
@@ -35,7 +36,7 @@ services:
     environment:
       PROFILE: ${PROFILE:-dev}
       JAVA_OPTS: -Xmx512m -Xms256m
-      SPRING_DATASOURCE_URL: jdbc:postgresql://public-transport-db:5432/${POSTGRES_DB:-public_transport_db}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://public-transport-db:5432/${POSTGRES_DB:-public_transport_db}?currentSchema=public_transport
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       GEOAPIFY_KEY: ${GEOAPIFY_KEY:-}
