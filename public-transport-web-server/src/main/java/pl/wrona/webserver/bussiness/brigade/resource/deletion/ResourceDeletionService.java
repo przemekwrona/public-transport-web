@@ -12,7 +12,7 @@ import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceSequenceCommandService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceSequenceQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +28,7 @@ public class ResourceDeletionService {
     private final BrigadeEventCommandRepository brigadeEventCommandRepository;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     public Status deleteResourceAndAppendOne(String instance, String brigadeCode, String calendarCode, String symbol) {
         var deleteStatus = deleteResource(instance, brigadeCode, calendarCode, symbol);
         brigadeResourceCommandService.init(instance, brigadeCode, calendarCode, symbol);
@@ -36,7 +36,7 @@ public class ResourceDeletionService {
     }
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     public Status deleteResource(String instance, String brigadeCode, String calendarCode, String symbol) {
         var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);
         if (brigadeGroup == null) {

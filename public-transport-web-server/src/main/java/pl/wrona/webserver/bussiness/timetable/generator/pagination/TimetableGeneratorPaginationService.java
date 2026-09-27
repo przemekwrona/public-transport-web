@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorItemQueryService;
 import pl.wrona.webserver.bussiness.timetable.generator.TimetableGeneratorQueryService;
 import pl.wrona.webserver.core.timetable.TimetableGeneratorItemEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class TimetableGeneratorPaginationService {
     private final TimetableGeneratorQueryService timetableGeneratorQueryService;
     private final TimetableGeneratorItemQueryService timetableGeneratorItemQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     @Transactional(readOnly = true)
     public TimetableGeneratorFindAllResponse findAllPaginated(String instance, int page, int size) {
         var items = this.timetableGeneratorQueryService.findAll(instance).stream()

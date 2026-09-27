@@ -6,7 +6,7 @@ import org.igeolab.iot.pt.server.api.model.NextBrigadeEventSequenceResponse;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventSequenceQueryService;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 @Service
 @AllArgsConstructor
@@ -14,7 +14,7 @@ public class BrigadeEventCreatorService {
 
     private final BrigadeEventSequenceQueryService brigadeEventSequenceQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     @Transactional
     public NextBrigadeEventSequenceResponse getNextBrigadeEventSequence(String instance, Integer brigadeItemSequence, String calendarCode, String symbol, String resourceCode) {
         var nextSequence = brigadeEventSequenceQueryService.findNextValue(instance, brigadeItemSequence, calendarCode, symbol);

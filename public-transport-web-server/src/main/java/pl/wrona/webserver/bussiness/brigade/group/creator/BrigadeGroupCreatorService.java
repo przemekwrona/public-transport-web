@@ -12,7 +12,7 @@ import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceCommandServi
 import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeGroupCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +24,7 @@ public class BrigadeGroupCreatorService {
     private final BrigadeGroupQueryService brigadeGroupQueryService;
     private final BrigadeResourceCommandService brigadeResourceCommandService;
 
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     @Transactional
     public CreateCalendarSymbolBrigadeResponse createBrigadeGroup(String instance, String brigadeCode, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest request) {
         var usedCalendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, brigadeCode, calendarCode, calendarSymbol);

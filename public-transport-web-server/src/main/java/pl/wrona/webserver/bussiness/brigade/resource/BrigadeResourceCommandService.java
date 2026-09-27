@@ -8,7 +8,7 @@ import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.brigade.group.BrigadeGroupQueryService;
 import pl.wrona.webserver.core.brigade.BrigadeResourceCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -38,7 +38,7 @@ public class BrigadeResourceCommandService {
         brigadeResourceCommandRepository.flush();
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     @Transactional
     public NextCalendarResourceSequenceResponse getNextCalendarResourceSequence(String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
         var savedResource = init(instance, brigadeCode, calendarCode, calendarSymbol);

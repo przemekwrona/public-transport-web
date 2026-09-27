@@ -1,7 +1,7 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {LoginService} from "../../auth/login.service";
 import {TranslocoPipe} from "@jsverse/transloco";
-import {ActivatedRoute, Data, Router, RouterModule} from "@angular/router";
+import {ActivatedRoute, Data, RouterModule} from "@angular/router";
 import {AgencyStorageService} from "../../auth/agency-storage.service";
 import {AgencyDetails, AgencyService, TripsDetails} from "../../generated/public-transport-api";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
     public agencyDetails: AgencyDetails | null;
     public image: SafeUrl;
 
-    constructor(private authService: LoginService, private router: Router, private route: ActivatedRoute, private agencyStorageService: AgencyStorageService, private agencyService: AgencyService, private sanitizer: DomSanitizer) {
+    constructor(private authService: LoginService, private route: ActivatedRoute, private agencyStorageService: AgencyStorageService, private agencyService: AgencyService, private sanitizer: DomSanitizer) {
     }
 
     ngOnInit(): void {
@@ -45,7 +45,5 @@ export class HeaderComponent implements OnInit {
 
     public logout(): void {
         this.authService.logout();
-        this.router.navigate(['/signin']).then(() => {
-        });
     }
 }

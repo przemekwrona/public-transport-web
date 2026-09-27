@@ -16,7 +16,7 @@ import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyDispatcher;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,7 +36,7 @@ public class OrToolsResourceOptimizerService {
     private final StopQueryService stopQueryService;
     private final BrigadeEventCommandRepository brigadeEventCommandRepository;
 
-    @PreAgencyAuthorize
+    @PreAgencyDispatcher
     @Transactional
     public void optimizeBrigades(String instance, String brigadeCode, String calendarCode, String symbol) {
         var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);

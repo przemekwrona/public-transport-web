@@ -15,6 +15,7 @@ import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.AgencyPhotoEntity;
 import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyOwner;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ public class AgencyPhotoService {
     private AgencyPhotoRepository agencyPhotoRepository;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyOwner
     public Status putAgencyPhoto(String instance, MultipartFile file) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
 

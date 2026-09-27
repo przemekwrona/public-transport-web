@@ -10,7 +10,7 @@ import pl.wrona.webserver.bussiness.calendar.CalendarItemCommandService;
 import pl.wrona.webserver.bussiness.calendar.CalendarSequenceQueryService;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class CalendarItemCreatorService {
     private CalendarSequenceQueryService calendarSequenceQueryService;
     private CalendarItemCommandService calendarItemCommandService;
 
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     @Transactional
     public CreateCalendarItemResponse createCalendarItem(String instance, CreateCalendarItemRequest createCalendarItemRequest) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);

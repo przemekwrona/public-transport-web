@@ -9,7 +9,7 @@ import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.calendar.CalendarDatesRepository;
 import pl.wrona.webserver.core.calendar.CalendarSymbolQueryRepository;
 import pl.wrona.webserver.exception.BusinessException;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyPlanner;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class CalendarDeletionService {
     private final BrigadeGroupQueryService brigadeGroupQueryService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyPlanner
     public Status deleteCalendarByCalendarName(String instance, String calendarCode, String calendarSymbol) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         var calendarSymbolEntity = calendarSymbolRepository.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);

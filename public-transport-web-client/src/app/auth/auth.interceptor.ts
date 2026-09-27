@@ -1,15 +1,15 @@
 import {
     HttpErrorResponse,
     HttpEvent,
-    HttpHandler, HttpHeaders,
+    HttpHandler,
     HttpInterceptor,
     HttpInterceptorFn,
-    HttpRequest, HttpResponse
+    HttpRequest
 } from '@angular/common/http';
 import {Injectable} from "@angular/core";
-import {catchError, Observable, of, tap, throwError} from "rxjs";
-import {LoginService} from "./login.service";
+import {catchError, from, Observable, of, switchMap, throwError} from "rxjs";
 import {Router} from "@angular/router";
+import {KeycloakAuthService} from "./keycloak-auth.service";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
@@ -18,34 +18,35 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 @Injectable()
 export class AddHeaderInterceptor implements HttpInterceptor {
 
-    constructor(private _router: Router) {
+    constructor(private router: Router, private keycloakAuth: KeycloakAuthService) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // Get token
-        const token: string = sessionStorage.getItem(LoginService.SESSION_STORAGE_AUTH_TOKEN_KEY) || '';
-
-        // Clone the request to add the new header
-        const clonedRequest = req.clone({
-            // url: `/api/v1${req.url}`,
-            headers: req.headers.append('Authorization', `Bearer ${token}`)
-        });
-
-        // Pass the cloned request instead of the original request to the next handle
-        return next.handle(clonedRequest)
-            .pipe(tap((event: HttpEvent<any>) => {
-                if (event instanceof HttpResponse) {
-                    const headers: HttpHeaders = event.headers;
-                }
-            }))
-            .pipe(catchError((error: HttpErrorResponse) => {
-                const httpStatus: number = error.status;
-                if (httpStatus === 401) {
-                    this._router.navigate(['/signin']);
-                    return of();
-                } else {
+        if (!this.keycloakAuth.isLoggedIn()) {
+            return this.handle(req, next, '');
+        }
+        return from(this.keycloakAuth.updateToken(30)).pipe(
+            switchMap(token => this.handle(req, next, token)),
+            catchError((error: unknown) => {
+                if (error instanceof HttpErrorResponse) {
                     return throwError(() => error);
                 }
-            }));
+                this.router.navigate(['/signin']);
+                return of();
+            })
+        );
+    }
+
+    private handle(req: HttpRequest<any>, next: HttpHandler, token: string): Observable<HttpEvent<any>> {
+        const request = token
+            ? req.clone({headers: req.headers.set('Authorization', `Bearer ${token}`)})
+            : req;
+        return next.handle(request).pipe(catchError((error: HttpErrorResponse) => {
+            if (error.status === 401 && !this.keycloakAuth.isLoggedIn()) {
+                this.router.navigate(['/signin']);
+                return of();
+            }
+            return throwError(() => error);
+        }));
     }
 }

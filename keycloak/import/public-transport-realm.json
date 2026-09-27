@@ -1,0 +1,215 @@
+{
+  "realm": "public-transport",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "bruteForceProtected": true,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "roles": {
+    "realm": [
+      {
+        "name": "super_user",
+        "description": "Role for system owner"
+      }
+    ],
+    "client": {
+      "public-transport-web": [
+        {
+          "name": "owner",
+          "description": "Whole agency"
+        },
+        {
+          "name": "planner",
+          "description": "Routes, trips, calendars and timetable"
+        },
+        {
+          "name": "dispatcher",
+          "description": "Brigades and resources"
+        },
+        {
+          "name": "viewer",
+          "description": "Read-only access to an agency"
+        }
+      ]
+    }
+  },
+  "clients": [
+    {
+      "clientId": "public-transport-web",
+      "name": "Public Transport Web",
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "frontchannelLogout": true,
+      "fullScopeAllowed": true,
+      "redirectUris": [
+        "http://localhost:4200/*",
+        "http://localhost:8080/*",
+        "http://localhost:8084/*",
+        "https://dev.nastepnastacja.pl/*"
+      ],
+      "webOrigins": [
+        "+"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "+"
+      },
+      "protocolMappers": [
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "full.path": "true",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "multivalued": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "public-transport-provisioner",
+      "name": "Public Transport Provisioner",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "provisioner-dev-secret",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true
+    },
+    {
+      "clientId": "public-transport-login",
+      "name": "Public Transport Login",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "login-dev-secret",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "protocolMappers": [
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "full.path": "true",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "multivalued": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "service-account-public-transport-provisioner",
+      "enabled": true,
+      "serviceAccountClientId": "public-transport-provisioner",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-users",
+          "query-users",
+          "manage-groups",
+          "query-groups",
+          "view-clients",
+          "query-clients",
+          "manage-clients"
+        ]
+      }
+    },
+    {
+      "username": "pwrona",
+      "enabled": true,
+      "email": "biuro@nastepnastacja.pl",
+      "emailVerified": true,
+      "firstName": "pwrona",
+      "lastName": "pwrona",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "welcome1",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "super_user"
+      ],
+      "groups": [
+        "/agencies/NEXTSTOP/owners"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "name": "agencies",
+      "subGroups": [
+        {
+          "name": "NEXTSTOP",
+          "attributes": {
+            "agency_code": [
+              "NEXTSTOP"
+            ]
+          },
+          "subGroups": [
+            {
+              "name": "owners",
+              "clientRoles": {
+                "public-transport-web": [
+                  "owner"
+                ]
+              }
+            },
+            {
+              "name": "planners",
+              "clientRoles": {
+                "public-transport-web": [
+                  "planner"
+                ]
+              }
+            },
+            {
+              "name": "dispatchers",
+              "clientRoles": {
+                "public-transport-web": [
+                  "dispatcher"
+                ]
+              }
+            },
+            {
+              "name": "viewers",
+              "clientRoles": {
+                "public-transport-web": [
+                  "viewer"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

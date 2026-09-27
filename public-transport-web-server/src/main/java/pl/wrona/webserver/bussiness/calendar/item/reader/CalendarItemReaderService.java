@@ -11,7 +11,7 @@ import pl.wrona.webserver.bussiness.calendar.mapper.CalendarBodyMapper;
 import pl.wrona.webserver.bussiness.calendar.CalendarDatesQueryService;
 import pl.wrona.webserver.core.calendar.CalendarItemEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +24,7 @@ public class CalendarItemReaderService {
     private final CalendarSymbolQueryService calendarSymbolQueryService;
     private final CalendarDatesQueryService calendarDatesQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public GetCalendarItemResponse getCalendarItems(String instance) {
         var items = calendarItemQueryService.findByStartDateAndEndDate(instance);
 
@@ -58,7 +58,7 @@ public class CalendarItemReaderService {
                 .items(responseItems);
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public GetCalendarItemResponse getCalendarByCalendarCode(String instance, String calendarCode) {
         var calendarItem = calendarItemQueryService.findByAgencyCalendarCode(instance, calendarCode);
         return new GetCalendarItemResponse()

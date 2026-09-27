@@ -10,6 +10,7 @@ import pl.wrona.webserver.security.AppUser;
 import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminDetail;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAuthorizeSuperUser;
 
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ public class AgencyService {
         return agencyRepository.findByAppUser(appUser).orElse(null);
     }
 
+    @PreAuthorizeSuperUser
     public AgenciesAdminResponse findAllAgencies() {
         var agencies = agencyRepository.countRoutesByAgency().stream().map(groupedAgency -> new AgencyAdminDetail()
                         .agencyCode(groupedAgency.getAgency().getAgencyCode())

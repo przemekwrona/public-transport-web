@@ -23,7 +23,7 @@ import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +43,7 @@ public class TripPaginationService {
     private TripProfileQueryService tripProfileQueryService;
     private RouteQueryService routeQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public GetAllTripsResponse getTripsByRouteAndFilterLineOrName(String instance, String routeCode) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         var routeEntity = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);

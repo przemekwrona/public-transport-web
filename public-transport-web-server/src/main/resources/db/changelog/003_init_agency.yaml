@@ -389,6 +389,7 @@ databaseChangeLog:
   - changeSet:
       id: init-user
       author: pwrona
+      validCheckSum: ANY
       changes:
         - sqlFile:
             path: db/init_user.sql

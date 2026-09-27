@@ -11,7 +11,7 @@ import pl.wrona.webserver.client.geoapify.GeoapifyService;
 import pl.wrona.webserver.client.geoapify.geocode.GeoResponse;
 import pl.wrona.webserver.core.AgencyRepository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyOwner;
 
 import java.util.Optional;
 
@@ -23,7 +23,7 @@ public class AgencyUpdaterService {
     private final GeoapifyService geoapifyService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyOwner
     public Status updateAgency(String instance, AgencyDetails agencyDetails) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
         agencyEntity.setAgencyName(agencyDetails.getAgencyName());

@@ -40,6 +40,7 @@
     "font-awesome": "^4.7.0",
     "google-polyline": "^1.0.3",
     "haversine-distance": "^1.2.4",
+    "keycloak-js": "^26.2.0",
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "mini-svg-data-uri": "^1.4.4",

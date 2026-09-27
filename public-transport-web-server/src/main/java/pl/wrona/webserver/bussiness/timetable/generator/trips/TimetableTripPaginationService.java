@@ -13,7 +13,7 @@ import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class TimetableTripPaginationService {
 
     private final TripQueryService tripQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public TripResponse findTrips(String instance, TripFilter tripFilter) {
         var trips = tripQueryService.findByAgencyCodeAndLineAndName(instance, tripFilter.getRouteId().getLine(), tripFilter.getRouteId().getName());
 

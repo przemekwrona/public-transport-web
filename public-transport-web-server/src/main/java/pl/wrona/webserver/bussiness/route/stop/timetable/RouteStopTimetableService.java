@@ -28,7 +28,7 @@ import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.exception.BusinessException;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -55,7 +55,7 @@ public class RouteStopTimetableService {
     private final AgencyRepository agencyRepository;
     private final RouteStopTimetablePdfRenderer routeStopTimetablePdfRenderer;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public RouteStopTimetable getRouteStopTimetable(String instance, String routeCode, String stopCode, TripMode tripMode) {
         List<Departure> departures = loadDepartures(instance, routeCode, stopCode, tripMode);
         return new RouteStopTimetable()
@@ -64,7 +64,7 @@ public class RouteStopTimetableService {
                 .departures(departures.stream().map(Departure::toApi).toList());
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getRouteStopTimetablePdf(String instance, String routeCode, String stopCode, TripMode tripMode) {
         long stopId = parseStopCode(stopCode);

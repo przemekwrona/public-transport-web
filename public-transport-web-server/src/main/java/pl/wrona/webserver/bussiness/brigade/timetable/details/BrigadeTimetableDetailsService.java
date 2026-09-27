@@ -13,7 +13,7 @@ import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
 import pl.wrona.webserver.bussiness.brigade.resource.BrigadeResourceQueryService;
 import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadDispatch;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +31,7 @@ public class BrigadeTimetableDetailsService {
     private final BrigadeResourceQueryService brigadeResourceQueryService;
     private final BrigadeEventQueryService brigadeEventQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadDispatch
     public GetTimetableByBrigadeResponse getTimetableByBrigadeAndCalendarSymbol(
             String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
         List<BrigadeEventEntity> events = brigadeEventQueryService.findAllWithTripByAgencyAndBrigadeAndCalendarAndSymbol(

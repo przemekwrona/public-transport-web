@@ -7,7 +7,7 @@ import pl.wrona.webserver.bussiness.calendar.CalendarItemQueryService;
 import pl.wrona.webserver.bussiness.calendar.symbol.CalendarSymbolQueryService;
 import pl.wrona.webserver.bussiness.calendar.mapper.CalendarBodyMapper;
 import pl.wrona.webserver.bussiness.calendar.CalendarDatesQueryService;
-import pl.wrona.webserver.security.PreAgencyAuthorize;
+import pl.wrona.webserver.security.PreAgencyReadPlan;
 
 import java.util.stream.Collectors;
 
@@ -19,7 +19,7 @@ public class CalendarSymbolReaderService {
     private final CalendarSymbolQueryService calendarSymbolQueryService;
     private final CalendarDatesQueryService calendarDatesQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyReadPlan
     public CalendarSymbolBody getCalendarSymbol(String instance, String calendarCode, String calendarSymbol) {
         var calendarItemEntity =  calendarItemQueryService.findByAgencyCalendarCode(instance, calendarCode);
         var calendarSymbolEntity =  calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);
