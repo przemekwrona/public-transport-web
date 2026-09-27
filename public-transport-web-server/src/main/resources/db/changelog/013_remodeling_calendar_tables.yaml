@@ -57,7 +57,7 @@ databaseChangeLog:
       author: pwona
       changes:
         - sql:
-            sql: INSERT INTO public.calendar_item(agency_id, calendar_name, start_date, end_date) SELECT cs.agency_id, cs.calendar_name, cs.start_date, cs.end_date FROM calendar_symbol cs;
+            sql: INSERT INTO calendar_item(agency_id, calendar_name, start_date, end_date) SELECT cs.agency_id, cs.calendar_name, cs.start_date, cs.end_date FROM calendar_symbol cs;
 
   - changeSet:
       id: add-column-calendar-item-id-into-calendar-symbol

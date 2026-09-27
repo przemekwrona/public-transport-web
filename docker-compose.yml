@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
       - ./data/public-transport-db:/var/lib/postgresql
-      - ./docker/postgres/init-schemas.sql:/opt/init-schemas.sql:ro
+      - ./docker/postgres/init-schemas.sql:/docker-entrypoint-initdb.d/010-init-schemas.sql:ro
     # $$ keeps the expansion in the container's shell instead of compose.
     # Schemas are created here so an existing data volume picks them up.
     # docker-entrypoint-initdb.d runs only on an empty data directory.
