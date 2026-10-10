@@ -37,6 +37,7 @@ export class BusStopSelectorComponent implements OnInit {
     @Input() stopControl: FormGroup;
     @Input() placeholderLabel: string = '';
     @Input() suggestedLocation: LonLat = {} as LonLat;
+    @Input() highlightMapButton: boolean = false;
 
     get stopIdControl(): FormControl {
         return this.stopControl.get('id') as FormControl;
