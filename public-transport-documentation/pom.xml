@@ -46,6 +46,13 @@
                             <sourceDirectory>${project.basedir}/src/docs/user</sourceDirectory>
                             <outputDirectory>${docs.output}/user</outputDirectory>
                             <backend>html5</backend>
+                            <attributes>
+                                <!-- Enables the left-hand sidebar table of contents -->
+                                <toc>left</toc>
+                                <toclevels>3</toclevels>
+                                <icons>font</icons>
+                                <source-highlighter>highlightjs</source-highlighter>
+                            </attributes>
                         </configuration>
                     </execution>
                     <execution>
@@ -58,6 +65,25 @@
                             <sourceDirectory>${project.basedir}/src/docs/user</sourceDirectory>
                             <outputDirectory>${docs.output}/user</outputDirectory>
                             <backend>pdf</backend>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>client-html</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/docs/user</sourceDirectory>
+                            <outputDirectory>${project.basedir}/../public-transport-web-client/src/app/generated-doc</outputDirectory>
+                            <backend>html5</backend>
+                            <attributes>
+                                <!-- Enables the left-hand sidebar table of contents -->
+                                <toc>left</toc>
+                                <toclevels>3</toclevels>
+                                <icons>font</icons>
+                                <source-highlighter>highlightjs</source-highlighter>
+                            </attributes>
                         </configuration>
                     </execution>
                     <execution>
@@ -88,25 +114,6 @@
                             <sourceDirectory>${project.basedir}/src/docs/technical</sourceDirectory>
                             <outputDirectory>${docs.output}/technical</outputDirectory>
                             <backend>pdf</backend>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>output-html</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirectory>${project.basedir}/src/docs/user</sourceDirectory>
-                            <outputDirectory>${project.build.directory}/generated-docs</outputDirectory>
-                            <backend>html5</backend>
-                            <attributes>
-                                <!-- Enables the left-hand sidebar table of contents -->
-                                <toc>left</toc>
-                                <toclevels>3</toclevels>
-                                <icons>font</icons>
-                                <source-highlighter>highlightjs</source-highlighter>
-                            </attributes>
                         </configuration>
                     </execution>
                 </executions>
