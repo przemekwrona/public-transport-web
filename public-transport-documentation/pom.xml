@@ -53,6 +53,14 @@
                                 <icons>font</icons>
                                 <source-highlighter>highlightjs</source-highlighter>
                             </attributes>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/docs/user</directory>
+                                    <includes>
+                                        <include>**/*.png</include>
+                                    </includes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -84,6 +92,14 @@
                                 <icons>font</icons>
                                 <source-highlighter>highlightjs</source-highlighter>
                             </attributes>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/docs/user</directory>
+                                    <includes>
+                                        <include>**/*.png</include>
+                                    </includes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>

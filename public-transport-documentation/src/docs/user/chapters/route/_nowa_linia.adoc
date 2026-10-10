@@ -1,0 +1,90 @@
+=== Dodawanie nowej linii
+
+Nowa linia powstaje na ekranie *Dodajesz nową linię*.
+Otworzysz go z menu *Rozkład jazdy*, pozycja *Linie*, przyciskiem *Dodaj nową linię*.
+
+Na tym ekranie podajesz numer i nazwę linii oraz przystanek początkowy i końcowy.
+Po zapisaniu przejdziesz do konfiguracji pierwszego wariantu przebiegu trasy.
+
+.Ekran dodawania nowej linii
+image::chapters/route/images/01_nowa_linia.png[Ekran „Dodajesz nową linię”,pdfwidth=100%]
+
+==== Numer i nazwa linii
+
+Żółta ramka przypomina, żeby sprawdzić numer i nazwę.
+Numer linii nie jest wymagany — wystarczy nazwa linii.
+
+.Numer linii i nazwa linii
+image::chapters/route/images/03_google.png[Pola Numer Linii i Nazwa lini,pdfwidth=80%]
+
+|===
+|Pole |Znaczenie
+
+|Numer Linii
+|Numer, pod którym pasażer rozpoznaje linię, na przykład `12` albo `L1`.
+
+|Nazwa lini
+|Nazwa relacji, na przykład `Kielce - Warszawa`.
+|===
+
+==== Google Maps i aktywność linii
+
+.Udostępnienie linii w Google Maps oraz przełącznik aktywności
+image::chapters/route/images/02_nazwa_linii.png[Przełączniki Google i Linia jest aktywna,pdfwidth=80%]
+
+|===
+|Pole |Znaczenie
+
+|Google
+|Włącz, jeśli rozkład tej linii ma być udostępniony w Google Maps. Domyślnie przełącznik jest wyłączony.
+
+|Linia jest aktywna
+|Wyłączona linia nie jest używana w rozkładzie. Nowa linia jest od razu aktywna.
+|===
+
+==== Miejscowość
+
+Miejscowość zawęża listę przystanków.
+Wpisz fragment nazwy. Na liście widać miejscowość oraz województwo i powiat, żeby odróżnić miejscowości o tej samej nazwie.
+Krzyżyk czyści wpisane hasło.
+
+Ten sam sposób działa dla miejscowości początkowej i końcowej.
+
+.Wybór miejscowości
+image::chapters/route/images/04_wybor_miasta.png[Lista miejscowości po wpisaniu nazwy,pdfwidth=60%]
+
+|===
+|Pole |Znaczenie
+
+|Miejscowość początkowa
+|Miejscowość, w której linia zaczyna kurs.
+
+|Miejscowość końcowa
+|Miejscowość, w której linia kończy kurs.
+|===
+
+==== Przystanek
+
+Przystanek możesz wpisać albo wskazać na mapie.
+Przycisk *Wybierz z mapy* otwiera okno *Wybierz Przystanek*.
+Niebieskie znaczniki to przystanki. Kliknięcie znacznika wybiera przystanek.
+
+Ten sam sposób działa dla przystanku początkowego i końcowego.
+
+.Wybór przystanku na mapie
+image::chapters/route/images/05_wybor_przystanku.png[Mapa z przystankami w oknie Wybierz Przystanek,pdfwidth=100%]
+
+|===
+|Pole |Znaczenie
+
+|Przystanek początkowy
+|Pierwszy przystanek wariantu.
+
+|Przystanek końcowy
+|Ostatni przystanek wariantu.
+|===
+
+==== Zapis
+
+* *Anuluj i wróć do listy linii* porzuca formularz i wraca do listy linii. Ten sam przycisk jest u góry ekranu.
+* *Zapisz linię i dodaj wariant* tworzy linię i otwiera ekran pierwszego wariantu trasy.
