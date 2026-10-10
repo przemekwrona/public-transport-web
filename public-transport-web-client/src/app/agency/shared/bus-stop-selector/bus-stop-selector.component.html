@@ -29,7 +29,9 @@
             type="button"
             (click)="openDialog($event)"
             (pointerdown)="stopPropagation($event)"
-            class="shrink-0 select-none text-base text-gray-600 sm:text-sm/6 mx-2">
+            class="shrink-0 select-none text-base sm:text-sm/6 mx-2"
+            [class.text-gray-600]="!highlightMapButton"
+            [class.map-picker-highlight]="highlightMapButton">
         <span>Wybierz z mapy&nbsp;</span>
         <fa-icon [icon]="faMap"></fa-icon>
     </button>
