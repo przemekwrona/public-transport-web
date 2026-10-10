@@ -47,6 +47,7 @@ import {timetableEditorResolver} from "./agency/timetable/create-timetable/timet
 import {calendarEmptyResolver} from "./agency/calendars/calendar-editor/calendar-empty.resolver";
 import {TimetableWizardComponent} from "./agency/brigade/timetable-wizard/timetable-wizard.component";
 import {defaultRouteResolver} from "./agency/brigade/timetable-wizard/default-route.resolver";
+import {DocumentationComponent} from "./documentation/documentation.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -79,6 +80,9 @@ export const routes: Routes = [
             {path: 'brigades/:brigadeCode/symbol/:calendarSymbol/timetable', component: TimetableWizardComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, brigade: brigadeResolver, defaultRoute: defaultRouteResolver }, data: { mode: TimetableEditorComponentMode.GENERATE }},
             {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
         ]
+    },
+    {
+        path: 'documentation', component: DocumentationComponent
     },
     {
         path: 'admin/agency', component: AgencyComponent, children: [
