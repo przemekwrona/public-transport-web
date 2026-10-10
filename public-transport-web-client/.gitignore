@@ -4,6 +4,7 @@ node_modules/
 node/
 build/
 src/app/generated/
+src/app/generated-doc/
 metronic-v8.2.9
 metronic-v9.1.2
 *.zip
