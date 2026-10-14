@@ -1,0 +1,66 @@
+Każdy użytkownik agencji ma jedną lub więcej ról.
+Rola decyduje, które ekrany może otwierać i co może na nich zmienić.
+Użytkownik pracuje tylko w agencjach, do których został przypisany.
+
+|===
+|Rola |Nazwa |Zakres
+
+|`AGENCY_OWNER`
+|Właściciel agencji
+|Pełny dostęp do własnej agencji, łącznie z kontem firmy i użytkownikami.
+
+|`AGENCY_ADMIN`
+|Administrator agencji
+|Użytkownicy agencji, dane firmy i zdjęcie. Bez rozkładu i bez brygad.
+
+|`PLANNER`
+|Planista
+|Linie, trasy, kursy, kalendarze, generator rozkładów i eksport GTFS.
+
+|`BRIGADE_LEADER`
+|Brygadzista
+|Brygady, obsady, zdarzenia na służbie i optymalizacja brygad. Odczyt gotowego rozkładu.
+
+|`DISPATCHER`
+|Dyspozytor
+|Bieżąca dyspozycja: podmiany, zdarzenia i obsada na dany dzień. Odczyt brygad i rozkładu.
+
+|`DRIVER`
+|Kierowca
+|Podgląd własnej brygady i rozkładu jazdy. Bez edycji.
+|===
+
+=== Właściciel agencji
+
+`AGENCY_OWNER` prowadzi jedną agencję.
+Ma dostęp do rozkładu, brygad, dyspozycji oraz do danych firmy i użytkowników tej agencji.
+
+=== Administrator agencji
+
+`AGENCY_ADMIN` prowadzi konto agencji.
+Dodaje użytkowników, uzupełnia dane firmy i zdjęcie.
+Nie układa rozkładu i nie prowadzi brygad.
+
+=== Planista
+
+`PLANNER` układa ofertę przewozową.
+Dodaje linie, warianty tras i kursy, ustawia kalendarze kursowania i generuje rozkład.
+Może wyeksportować rozkład do GTFS.
+Nie prowadzi brygad ani dyspozycji dnia.
+
+=== Brygadzista
+
+`BRIGADE_LEADER` układa służby z gotowego rozkładu.
+Tworzy brygady, przypisuje obsadę, zapisuje zdarzenia na służbie i uruchamia optymalizację brygad.
+Rozkład jazdy tylko odczytuje.
+
+=== Dyspozytor
+
+`DISPATCHER` prowadzi służby w danym dniu.
+Wprowadza podmiany, zdarzenia i zmiany obsady.
+Brygady i rozkład jazdy tylko odczytuje.
+
+=== Kierowca
+
+`DRIVER` widzi własną brygadę i rozkład jazdy na swoją służbę.
+Nie zmienia rozkładu, brygad ani danych agencji.

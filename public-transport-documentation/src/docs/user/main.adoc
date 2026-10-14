@@ -4,3 +4,7 @@
 == Linie
 
 include::chapters/route/_nowa_linia.adoc[]
+
+== Role
+
+include::chapters/roles/_role.adoc[]
