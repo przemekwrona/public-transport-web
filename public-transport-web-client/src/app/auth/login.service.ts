@@ -48,4 +48,24 @@ export class LoginService {
         return this.getRoles().includes('AGENCY_OWNER');
     }
 
+    hasRoleAgencyAdmin(): boolean {
+        return this.getRoles().includes('AGENCY_ADMIN');
+    }
+
+    hasRolePlanner(): boolean {
+        return this.getRoles().includes('PLANNER');
+    }
+
+    hasRoleBrigadeLeader(): boolean {
+        return this.getRoles().includes('BRIGADE_LEADER');
+    }
+
+    hasRoleDispatcher(): boolean {
+        return this.getRoles().includes('DISPATCHER');
+    }
+
+    hasRoleDriver(): boolean {
+        return this.getRoles().includes('DRIVER');
+    }
+
 }
