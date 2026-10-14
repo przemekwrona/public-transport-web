@@ -1,14 +1,28 @@
 package pl.wrona.webserver.security;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("@agencyAccessSecurity.checkAccess(#instance)")
 public @interface PreAgencyAuthorize {
+
+    /**
+     * Roles that grant access. The user must have at least one of them.
+     * An empty list does not restrict by role.
+     */
+    Role[] roles() default {};
+
+    enum Role {
+        SUPER_USER,
+        AGENCY_OWNER,
+        AGENCY_ADMIN,
+        PLANNER,
+        BRIGADE_LEADER,
+        DISPATCHER,
+        DRIVER
+    }
+
 }
