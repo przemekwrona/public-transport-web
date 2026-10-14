@@ -113,6 +113,11 @@
   }
 }
 
+.brigade-ribbon__cmd--zoom:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 .brigade-ribbon__cmd--large {
   flex-direction: column;
   min-width: 72px;

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
 import {CommonModule} from "@angular/common";
 import moment from "moment";
@@ -21,6 +21,27 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatIconModule} from "@angular/material/icon";
 import {RouterModule} from "@angular/router";
 
+const SCHEDULER_TIME_HEADERS: DayPilot.TimeHeaderData[] = [
+    {groupBy: "Day", format: "Dzień 1"},
+    {groupBy: "Hour"},
+    {groupBy: "Cell", format: "mm"},
+];
+
+const SCHEDULER_ZOOM_STEPS: { cellWidth: number; label: string }[] = [
+    {cellWidth: 120, label: "400%"},
+    {cellWidth: 90, label: "300%"},
+    {cellWidth: 60, label: "200%"},
+    {cellWidth: 45, label: "150%"},
+    {cellWidth: 30, label: "100%"},
+    {cellWidth: 27, label: "90%"},
+    {cellWidth: 24, label: "80%"},
+    {cellWidth: 21, label: "70%"},
+    {cellWidth: 18, label: "60%"},
+    {cellWidth: 15, label: "50%"},
+];
+
+const DEFAULT_SCHEDULER_ZOOM = SCHEDULER_ZOOM_STEPS.findIndex(step => step.cellWidth === 30);
+
 @Component({
     selector: 'app-brigade-scheduler',
     imports: [
@@ -33,10 +54,13 @@ import {RouterModule} from "@angular/router";
     templateUrl: './brigade-scheduler.component.html',
     styleUrl: './brigade-scheduler.component.scss'
 })
-export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
+export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild("scheduler")
     scheduler!: DayPilotSchedulerComponent;
+
+    @ViewChild("schedulerViewport")
+    schedulerViewport?: ElementRef<HTMLElement>;
 
     @Input() brigadeCode: string = '';
     @Input() brigadeBody: BrigadeGroupBody = {} as BrigadeGroupBody;
@@ -56,24 +80,29 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
     selectedAlignMinutes: number | null = null;
     isOptimizing = false;
 
+    readonly zoomSteps = SCHEDULER_ZOOM_STEPS;
+    zoomIndex = DEFAULT_SCHEDULER_ZOOM;
+
+    private zoomWheelLocked = false;
+    private pointerClientX: number | null = null;
+    private removeZoomWheelListener?: () => void;
+
     config: DayPilot.SchedulerConfig = {
         locale: "pl-pl",
         // cellWidthSpec: "Fixed",
-        cellWidth: 30,
-        timeHeaders: [
-            {
-                groupBy: "Day",
-                // format: "dddd, d MMMM yyyy",
-                format: "Dzień 1",
+        cellWidth: SCHEDULER_ZOOM_STEPS[DEFAULT_SCHEDULER_ZOOM].cellWidth,
+        timeHeaders: SCHEDULER_TIME_HEADERS,
+        zoomPosition: "middle",
+        zoom: DEFAULT_SCHEDULER_ZOOM,
+        zoomLevels: SCHEDULER_ZOOM_STEPS.map(step => ({
+            name: step.label,
+            properties: {
+                scale: "CellDuration",
+                cellDuration: 15,
+                cellWidth: step.cellWidth,
+                timeHeaders: SCHEDULER_TIME_HEADERS,
             },
-            {
-                groupBy: "Hour",
-            },
-            {
-                groupBy: "Cell",
-                format: "mm",
-            },
-        ],
+        })),
         useEventBoxes: "Never",
         scale: "CellDuration",
         // scale: "Minute",
@@ -133,7 +162,7 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
         }),
     };
 
-    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private resourceService: ResourceService, private resourceOptimizerService: ResourceOptimizerService, private dialog: MatDialog) {
+    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private resourceService: ResourceService, private resourceOptimizerService: ResourceOptimizerService, private dialog: MatDialog, private ngZone: NgZone) {
     }
 
     ngOnInit(): void {
@@ -141,6 +170,141 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.applyBrigadeToScheduler(this.brigadeBody);
+        this.bindZoomWheel();
+    }
+
+    ngOnDestroy(): void {
+        this.removeZoomWheelListener?.();
+    }
+
+    get zoomLabel(): string {
+        return this.zoomSteps[this.zoomIndex].label;
+    }
+
+    get canZoomIn(): boolean {
+        return this.zoomIndex > 0;
+    }
+
+    get canZoomOut(): boolean {
+        return this.zoomIndex < this.zoomSteps.length - 1;
+    }
+
+    zoomIn(): void {
+        this.setZoom(this.zoomIndex - 1);
+    }
+
+    zoomOut(): void {
+        this.setZoom(this.zoomIndex + 1);
+    }
+
+    private setZoom(index: number, clientX: number | null = this.pointerClientX): void {
+        const control = this.scheduler?.control;
+        if (!control || index < 0 || index >= this.zoomSteps.length || index === this.zoomIndex) {
+            return;
+        }
+
+        const anchor = this.captureTimelineAnchor(clientX);
+        this.zoomIndex = index;
+        control.zoom.setActive(index, "left");
+        this.restoreTimelineAnchor(anchor);
+    }
+
+    private captureTimelineAnchor(clientX: number | null): { date: DayPilot.Date; offsetX: number } | null {
+        const control = this.scheduler?.control;
+        const scrollElement = this.timelineScrollElement();
+        if (!control || !scrollElement) {
+            return null;
+        }
+
+        const rect = scrollElement.getBoundingClientRect();
+        if (rect.width <= 0) {
+            return null;
+        }
+
+        const pointerX = clientX ?? rect.left + rect.width / 2;
+        const offsetX = Math.min(Math.max(pointerX - rect.left, 0), rect.width);
+        const date = control.getDate(control.getScrollX() + offsetX, true);
+        if (!date) {
+            return null;
+        }
+
+        return {date, offsetX};
+    }
+
+    private restoreTimelineAnchor(anchor: { date: DayPilot.Date; offsetX: number } | null): void {
+        const control = this.scheduler?.control;
+        const scrollElement = this.timelineScrollElement();
+        if (!control || !scrollElement || !anchor) {
+            return;
+        }
+
+        const timelineEnd = new DayPilot.Date(control.startDate).addDays(control.days ?? 1);
+        const contentWidth = this.timelinePixel(control, timelineEnd);
+        const nextScroll = this.timelinePixel(control, anchor.date) - anchor.offsetX;
+        const maxScroll = Math.max(0, contentWidth - scrollElement.clientWidth);
+        const scrollX = Math.min(Math.max(0, nextScroll), maxScroll);
+        const timeScroll = (control as DayPilot.Scheduler & { divTimeScroll?: HTMLElement }).divTimeScroll;
+        if (timeScroll) {
+            timeScroll.scrollLeft = scrollX;
+        }
+        scrollElement.scrollLeft = scrollX;
+        control.setScrollX(scrollX);
+    }
+
+    private timelinePixel(control: DayPilot.Scheduler, date: DayPilot.Date): number {
+        const start = new DayPilot.Date(control.startDate);
+        const cellDurationMs = (control.cellDuration ?? 15) * 60 * 1000;
+        const cellWidth = control.cellWidth ?? 30;
+        return Math.floor(cellWidth * (date.getTime() - start.getTime()) / cellDurationMs);
+    }
+
+    private timelineScrollElement(): HTMLElement | null {
+        const control = this.scheduler?.control as (DayPilot.Scheduler & { nav?: { scroll?: HTMLElement } }) | undefined;
+        return control?.nav?.scroll ?? null;
+    }
+
+    private bindZoomWheel(): void {
+        const element = this.schedulerViewport?.nativeElement;
+        if (!element) {
+            return;
+        }
+
+        const onMouseMove = (event: MouseEvent) => {
+            const scrollElement = this.timelineScrollElement();
+            if (!scrollElement) {
+                return;
+            }
+
+            const rect = scrollElement.getBoundingClientRect();
+            if (event.clientX >= rect.left && event.clientX <= rect.right) {
+                this.pointerClientX = event.clientX;
+            }
+        };
+        const onWheel = (event: WheelEvent) => {
+            if (!event.ctrlKey && !event.metaKey) {
+                return;
+            }
+
+            event.preventDefault();
+            this.pointerClientX = event.clientX;
+            if (this.zoomWheelLocked) {
+                return;
+            }
+
+            this.zoomWheelLocked = true;
+            const nextIndex = event.deltaY < 0 ? this.zoomIndex - 1 : this.zoomIndex + 1;
+            this.ngZone.run(() => this.setZoom(nextIndex, event.clientX));
+            window.setTimeout(() => {
+                this.zoomWheelLocked = false;
+            }, 140);
+        };
+
+        element.addEventListener("mousemove", onMouseMove);
+        element.addEventListener("wheel", onWheel, {passive: false});
+        this.removeZoomWheelListener = () => {
+            element.removeEventListener("mousemove", onMouseMove);
+            element.removeEventListener("wheel", onWheel);
+        };
     }
 
     // --- CREATE NEW EVENT ---

@@ -70,6 +70,30 @@
         <div class="brigade-ribbon__group">
             <div class="brigade-ribbon__commands">
                 <button type="button"
+                        class="brigade-ribbon__cmd brigade-ribbon__cmd--large brigade-ribbon__cmd--zoom"
+                        (click)="zoomIn()"
+                        [disabled]="!canZoomIn"
+                        title="Powiększ skalę harmonogramu (Ctrl + kółko myszy)">
+                    <mat-icon>zoom_in</mat-icon>
+                    <span>Powiększ</span>
+                </button>
+                <button type="button"
+                        class="brigade-ribbon__cmd brigade-ribbon__cmd--large brigade-ribbon__cmd--zoom"
+                        (click)="zoomOut()"
+                        [disabled]="!canZoomOut"
+                        title="Pomniejsz skalę harmonogramu (Ctrl + kółko myszy)">
+                    <mat-icon>zoom_out</mat-icon>
+                    <span>Pomniejsz</span>
+                </button>
+            </div>
+            <div class="brigade-ribbon__label">Widok {{ zoomLabel }}</div>
+        </div>
+
+        <div class="brigade-ribbon__divider" aria-hidden="true"></div>
+
+        <div class="brigade-ribbon__group">
+            <div class="brigade-ribbon__commands">
+                <button type="button"
                         class="brigade-ribbon__cmd brigade-ribbon__cmd--large brigade-ribbon__cmd--danger"
                         (click)="clearGroup()"
                         title="Wyczyść wszystkie brygady w tym symbolu">
@@ -128,8 +152,10 @@
     </div>
 </div>
 
-<daypilot-scheduler
-        [config]="config"
-        [events]="events"
-        #scheduler>
-</daypilot-scheduler>
+<div #schedulerViewport class="brigade-scheduler">
+    <daypilot-scheduler
+            [config]="config"
+            [events]="events"
+            #scheduler>
+    </daypilot-scheduler>
+</div>
