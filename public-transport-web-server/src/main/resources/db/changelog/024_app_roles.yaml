@@ -7,10 +7,10 @@ databaseChangeLog:
             sql: |
               INSERT INTO app_role (app_role_id, description) VALUES ('AGENCY_ADMIN', 'Role for the administrator of a transit agency');
               INSERT INTO app_role (app_role_id, description) VALUES ('PLANNER', 'Role for the planner of lines, routes and timetables');
-              INSERT INTO app_role (app_role_id, description) VALUES ('BRIGADE_LEADER', 'Role for the brigade leader');
+              INSERT INTO app_role (app_role_id, description) VALUES ('BRIGADIER', 'Role for the brigadier');
               INSERT INTO app_role (app_role_id, description) VALUES ('DISPATCHER', 'Role for the dispatcher');
               INSERT INTO app_role (app_role_id, description) VALUES ('DRIVER', 'Role for the driver');
       rollback:
         - sql:
             sql: |
-              DELETE FROM app_role WHERE app_role_id IN ('AGENCY_ADMIN', 'PLANNER', 'BRIGADE_LEADER', 'DISPATCHER', 'DRIVER');
+              DELETE FROM app_role WHERE app_role_id IN ('AGENCY_ADMIN', 'PLANNER', 'BRIGADIER', 'DISPATCHER', 'DRIVER');

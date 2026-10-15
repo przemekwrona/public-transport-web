@@ -56,8 +56,8 @@ export class LoginService {
         return this.getRoles().includes('PLANNER');
     }
 
-    hasRoleBrigadeLeader(): boolean {
-        return this.getRoles().includes('BRIGADE_LEADER');
+    hasRoleBrigadier(): boolean {
+        return this.getRoles().includes('BRIGADIER');
     }
 
     hasRoleDispatcher(): boolean {
