@@ -21,7 +21,11 @@ public class TimetableGeneratorDeletionService {
     private final TimetableGeneratorCommandService timetableGeneratorCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public Status agencyAgencyTimetableGeneratorDelete(String instance, TimetableGeneratorDeletionRequest timetableGeneratorDeletionRequest) {
         Optional.ofNullable(timetableGeneratorQueryService.findByAgencyAndRouteIdAndCreateDate(instance, timetableGeneratorDeletionRequest.getRouteId(), timetableGeneratorDeletionRequest.getCreatedDate())).ifPresent(timetableGenerator -> {
             timetableGeneratorItemCommandService.deleteAllByTimetableGenerator(timetableGenerator);

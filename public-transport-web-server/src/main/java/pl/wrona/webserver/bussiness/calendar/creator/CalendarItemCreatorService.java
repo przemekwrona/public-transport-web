@@ -20,7 +20,11 @@ public class CalendarItemCreatorService {
     private CalendarSequenceQueryService calendarSequenceQueryService;
     private CalendarItemCommandService calendarItemCommandService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     @Transactional
     public CreateCalendarItemResponse createCalendarItem(String instance, CreateCalendarItemRequest createCalendarItemRequest) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);

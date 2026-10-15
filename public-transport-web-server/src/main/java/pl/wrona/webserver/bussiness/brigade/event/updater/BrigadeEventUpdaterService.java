@@ -26,7 +26,12 @@ public class BrigadeEventUpdaterService {
     private final TripQueryService tripQueryService;
     private final TripProfileQueryService tripProfileQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER
+    })
     @Transactional
     public Status putBrigadeEvent(String instance, String brigadeCode, String calendarCode, String symbol, String resourceCode, PutBrigadeEventBody putBrigadeEventBody) {
         var group = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);

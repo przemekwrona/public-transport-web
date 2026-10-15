@@ -14,7 +14,12 @@ public class BrigadeEventCreatorService {
 
     private final BrigadeEventSequenceQueryService brigadeEventSequenceQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER
+    })
     @Transactional
     public NextBrigadeEventSequenceResponse getNextBrigadeEventSequence(String instance, Integer brigadeItemSequence, String calendarCode, String symbol, String resourceCode) {
         var nextSequence = brigadeEventSequenceQueryService.findNextValue(instance, brigadeItemSequence, calendarCode, symbol);

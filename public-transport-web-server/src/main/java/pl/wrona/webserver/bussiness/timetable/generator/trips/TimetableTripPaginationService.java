@@ -21,7 +21,11 @@ public class TimetableTripPaginationService {
 
     private final TripQueryService tripQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public TripResponse findTrips(String instance, TripFilter tripFilter) {
         var trips = tripQueryService.findByAgencyCodeAndLineAndName(instance, tripFilter.getRouteId().getLine(), tripFilter.getRouteId().getName());
 

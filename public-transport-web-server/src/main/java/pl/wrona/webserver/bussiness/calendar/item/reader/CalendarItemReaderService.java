@@ -24,7 +24,14 @@ public class CalendarItemReaderService {
     private final CalendarSymbolQueryService calendarSymbolQueryService;
     private final CalendarDatesQueryService calendarDatesQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public GetCalendarItemResponse getCalendarItems(String instance) {
         var items = calendarItemQueryService.findByStartDateAndEndDate(instance);
 
@@ -58,7 +65,14 @@ public class CalendarItemReaderService {
                 .items(responseItems);
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public GetCalendarItemResponse getCalendarByCalendarCode(String instance, String calendarCode) {
         var calendarItem = calendarItemQueryService.findByAgencyCalendarCode(instance, calendarCode);
         return new GetCalendarItemResponse()

@@ -37,7 +37,13 @@ public class BrigadeGroupDetailsService {
     private final BrigadeResourceQueryService brigadeResourceQueryService;
     private final BrigadeEventQueryService brigadeEventQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public BrigadeGroupBody getCalendarSymbolBrigadeResources(String instance, String brigadeCode, String calendarCode, String symbol) {
         var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);
         if (brigadeGroup == null) {
@@ -52,7 +58,13 @@ public class BrigadeGroupDetailsService {
                 .brigadeResources(mapResources(resourceEntities, eventsByResourceId));
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public GetBrigadeDetailsResponse getBrigadeDetails(String instance, String brigadeCode) {
         var brigadeItem = brigadeItemQueryRepository.findByAgencyCodeAndSequenceHex(instance, brigadeCode);
         if (brigadeItem == null) {

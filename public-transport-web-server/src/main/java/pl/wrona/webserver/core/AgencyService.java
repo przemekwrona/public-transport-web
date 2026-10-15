@@ -19,7 +19,15 @@ public class AgencyService {
 
     private final AgencyRepository agencyRepository;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.AGENCY_ADMIN,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public AgencyEntity findAgencyByAgencyCode(String instance) {
         return agencyRepository.findByAgencyCodeEquals(instance);
     }

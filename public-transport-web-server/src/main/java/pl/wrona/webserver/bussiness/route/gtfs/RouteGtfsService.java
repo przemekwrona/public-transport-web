@@ -71,7 +71,11 @@ public class RouteGtfsService {
     private final StopTimeRepository stopTimeRepository;
     private final CalendarDatesQueryService calendarDatesQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> downloadRouteGtfs(String instance, String routeCode) {
         AgencyEntity agency = agencyRepository.findByAgencyCodeEquals(instance);

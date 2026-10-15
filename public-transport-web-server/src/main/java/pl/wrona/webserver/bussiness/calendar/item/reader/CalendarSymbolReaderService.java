@@ -19,7 +19,14 @@ public class CalendarSymbolReaderService {
     private final CalendarSymbolQueryService calendarSymbolQueryService;
     private final CalendarDatesQueryService calendarDatesQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public CalendarSymbolBody getCalendarSymbol(String instance, String calendarCode, String calendarSymbol) {
         var calendarItemEntity =  calendarItemQueryService.findByAgencyCalendarCode(instance, calendarCode);
         var calendarSymbolEntity =  calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);

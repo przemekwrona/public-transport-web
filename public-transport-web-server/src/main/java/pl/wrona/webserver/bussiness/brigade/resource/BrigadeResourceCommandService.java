@@ -38,7 +38,12 @@ public class BrigadeResourceCommandService {
         brigadeResourceCommandRepository.flush();
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER
+    })
     @Transactional
     public NextCalendarResourceSequenceResponse getNextCalendarResourceSequence(String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
         var savedResource = init(instance, brigadeCode, calendarCode, calendarSymbol);

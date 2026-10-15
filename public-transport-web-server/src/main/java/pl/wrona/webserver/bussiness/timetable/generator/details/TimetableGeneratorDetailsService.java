@@ -30,7 +30,11 @@ public class TimetableGeneratorDetailsService {
     private final TimetableGeneratorItemQueryService timetableGeneratorItemQueryService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public GetTimetableGeneratorDetailsResponse findTimetableGeneratorDetails(String instance, TimetableGeneratorId timetableGeneratorId) {
         var timetable = timetableGeneratorQueryService.findByAgencyAndRouteIdAndCreateDate(instance, timetableGeneratorId.getRouteId(), timetableGeneratorId.getCreatedAt());
         var items = timetableGeneratorItemQueryService.findAllByTimetableGenerator(timetable);

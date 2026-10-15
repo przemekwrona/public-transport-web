@@ -24,7 +24,11 @@ public class BrigadeGroupCreatorService {
     private final BrigadeGroupQueryService brigadeGroupQueryService;
     private final BrigadeResourceCommandService brigadeResourceCommandService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER
+    })
     @Transactional
     public CreateCalendarSymbolBrigadeResponse createBrigadeGroup(String instance, String brigadeCode, String calendarCode, String calendarSymbol, CreateCalendarSymbolBrigadeRequest request) {
         var usedCalendarSymbolEntity = calendarSymbolQueryService.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, brigadeCode, calendarCode, calendarSymbol);

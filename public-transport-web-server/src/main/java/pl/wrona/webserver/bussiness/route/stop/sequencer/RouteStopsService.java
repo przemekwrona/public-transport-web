@@ -20,7 +20,14 @@ public class RouteStopsService {
     private final TripQueryService tripQueryService;
     private final StopGraphSequencerService stopGraphSequencerService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public RouteStops getRouteStops(String instance, String routeCode) {
         RouteEntity route = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);
         List<TripEntity> trips = tripQueryService.findByAgencyCodeAndRoute(instance, route);

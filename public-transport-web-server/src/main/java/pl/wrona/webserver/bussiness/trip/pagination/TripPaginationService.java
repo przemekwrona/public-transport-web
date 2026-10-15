@@ -43,7 +43,14 @@ public class TripPaginationService {
     private TripProfileQueryService tripProfileQueryService;
     private RouteQueryService routeQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public GetAllTripsResponse getTripsByRouteAndFilterLineOrName(String instance, String routeCode) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         var routeEntity = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);

@@ -20,7 +20,11 @@ public class BrigadeQueryService {
     private final BrigadeRepository brigadeRepository;
     private final CalendarSymbolQueryService calendarSymbolQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER
+    })
     @Transactional
     public Status updateBrigade(String instance, BrigadePatchBody brigadePatchBody) {
         String brigadeId = brigadePatchBody.getBrigadePayload().getBrigadeName();

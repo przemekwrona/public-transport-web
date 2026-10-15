@@ -36,7 +36,11 @@ public class OrToolsResourceOptimizerService {
     private final StopQueryService stopQueryService;
     private final BrigadeEventCommandRepository brigadeEventCommandRepository;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER
+    })
     @Transactional
     public void optimizeBrigades(String instance, String brigadeCode, String calendarCode, String symbol) {
         var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);

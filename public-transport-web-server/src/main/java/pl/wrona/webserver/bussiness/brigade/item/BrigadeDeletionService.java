@@ -20,7 +20,11 @@ public class BrigadeDeletionService {
     private final BrigadeItemCommandService brigadeItemCommandService;
 
     @Transactional
-    @PreAgencyAuthorize()
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER
+    })
     public Status deleteBrigadeByBrigadeCode(String instance, String brigadeCode) {
         var brigadeGroups = brigadeGroupQueryService.findAllByBrigadeCode(instance, brigadeCode);
         for (var brigadeGroup : brigadeGroups) {

@@ -19,7 +19,12 @@ public class BrigadeEventDeletionService {
     private final BrigadeEventQueryService brigadeEventQueryService;
     private final BrigadeResourceQueryService brigadeResourceQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER
+    })
     @Transactional
     public Status deleteBrigadeEvent(String instance, String brigadeCode, String calendarCode, String symbol, String resourceCode, String eventCode) {
         BrigadeResourceEntity brigadeResource = brigadeResourceQueryService.findByAgencyAndBrigadeCodeAndCalendarCodeAndSymbolAndResourceCode(

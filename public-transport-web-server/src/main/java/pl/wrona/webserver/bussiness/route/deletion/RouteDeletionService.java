@@ -21,7 +21,11 @@ public class RouteDeletionService {
     private final RouteCommandService routeCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public ModificationRouteResponse deleteRoute(String instance, RouteId routeId) {
         RouteEntity preDeletedRoute = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, routeId);
         tripCommandService.deleteTripByRoute(preDeletedRoute);

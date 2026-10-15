@@ -37,7 +37,11 @@ public class CreateTimetableGeneratorService {
     private final TimetableGeneratorItemCommandService timetableGeneratorItemCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public CreateTimetableGeneratorRequest createTimetableGenerator(String instance, CreateTimetableGeneratorRequest request) {
         AgencyEntity agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         CalendarSymbolEntity calendarSymbolEntity = calendarQueryService.getCalendar(instance, request.getTimetables().getCalendarName(), "");

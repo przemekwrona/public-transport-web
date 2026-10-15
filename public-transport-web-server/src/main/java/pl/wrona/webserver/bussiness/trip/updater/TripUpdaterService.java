@@ -39,7 +39,11 @@ public class TripUpdaterService {
     private final TripProfileCommandService tripProfileCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public Status updateTrip(String instance, String routeCode, String tripCode, UpdateTripDetailsRequest updateTripDetailsRequest) {
         var tripDetails = updateTripDetailsRequest.getBody();
 

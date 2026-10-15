@@ -29,7 +29,11 @@ public class AgencyPhotoService {
     private AgencyPhotoRepository agencyPhotoRepository;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.AGENCY_ADMIN
+    })
     public Status putAgencyPhoto(String instance, MultipartFile file) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
 
@@ -52,7 +56,15 @@ public class AgencyPhotoService {
         return new Status().status(Status.StatusEnum.SUCCESS);
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.AGENCY_ADMIN,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getAgencyPhoto(String instance) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
