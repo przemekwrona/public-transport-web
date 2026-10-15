@@ -20,7 +20,7 @@ public @interface PreAgencyAuthorize {
         AGENCY_OWNER,
         AGENCY_ADMIN,
         PLANNER,
-        BRIGADE_LEADER,
+        BRIGADIER,
         DISPATCHER,
         DRIVER
     }

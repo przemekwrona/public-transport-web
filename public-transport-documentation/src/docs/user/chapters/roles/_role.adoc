@@ -17,7 +17,7 @@ Użytkownik pracuje tylko w agencjach, do których został przypisany.
 |Planista
 |Linie, trasy, kursy, kalendarze, generator rozkładów i eksport GTFS.
 
-|`BRIGADE_LEADER`
+|`BRIGADIER`
 |Brygadzista
 |Brygady, obsady, zdarzenia na służbie i optymalizacja brygad. Odczyt gotowego rozkładu.
 
@@ -50,7 +50,7 @@ Nie prowadzi brygad ani dyspozycji dnia.
 
 === Brygadzista
 
-`BRIGADE_LEADER` układa służby z gotowego rozkładu.
+`BRIGADIER` układa służby z gotowego rozkładu.
 Tworzy brygady, przypisuje obsadę, zapisuje zdarzenia na służbie i uruchamia optymalizację brygad.
 Rozkład jazdy tylko odczytuje.
 
