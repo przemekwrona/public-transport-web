@@ -31,7 +31,13 @@ public class BrigadeTimetableDetailsService {
     private final BrigadeResourceQueryService brigadeResourceQueryService;
     private final BrigadeEventQueryService brigadeEventQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public GetTimetableByBrigadeResponse getTimetableByBrigadeAndCalendarSymbol(
             String instance, String brigadeCode, String calendarCode, String calendarSymbol) {
         List<BrigadeEventEntity> events = brigadeEventQueryService.findAllWithTripByAgencyAndBrigadeAndCalendarAndSymbol(

@@ -21,7 +21,11 @@ public class CalendarDeletionService {
     private final BrigadeGroupQueryService brigadeGroupQueryService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public Status deleteCalendarByCalendarName(String instance, String calendarCode, String calendarSymbol) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         var calendarSymbolEntity = calendarSymbolRepository.findByAgencyAndBrigadeAndCalendarAndSymbol(instance, calendarCode, calendarSymbol);

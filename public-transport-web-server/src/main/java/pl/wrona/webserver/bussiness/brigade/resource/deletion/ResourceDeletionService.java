@@ -28,7 +28,12 @@ public class ResourceDeletionService {
     private final BrigadeEventCommandRepository brigadeEventCommandRepository;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER
+    })
     public Status deleteResourceAndAppendOne(String instance, String brigadeCode, String calendarCode, String symbol) {
         var deleteStatus = deleteResource(instance, brigadeCode, calendarCode, symbol);
         brigadeResourceCommandService.init(instance, brigadeCode, calendarCode, symbol);
@@ -36,7 +41,12 @@ public class ResourceDeletionService {
     }
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER
+    })
     public Status deleteResource(String instance, String brigadeCode, String calendarCode, String symbol) {
         var brigadeGroup = brigadeGroupQueryService.findByBrigadeCode(instance, brigadeCode, calendarCode, symbol);
         if (brigadeGroup == null) {

@@ -34,7 +34,14 @@ public class RouteDetailsService {
     private final StopService stopService;
     private final TerritorialUnitQueryService territorialUnitQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public RouteDetails getRouteDetails(String instance, String routeCode) {
         var route = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);
         var tripWithBrigades = tripQueryService.mapByExistsBrigade(instance);

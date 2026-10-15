@@ -20,18 +20,39 @@ public class RouteQueryService {
 
     private final RouteQueryRepository routeQueryRepository;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public List<RouteEntity> findByAgencyCode(String instance) {
         return this.routeQueryRepository.findByAgencyCode(instance);
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public RouteEntity findRouteByAgencyCodeAndRouteCode(String instance, String routeCode) {
         return this.routeQueryRepository.findByAgencyCodeAndRouteCode(instance, routeCode);
     }
 
     @Deprecated
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public RouteEntity findRouteByAgencyCodeAndRouteId(String instance, RouteId routeId) {
         return this.routeQueryRepository.findByAgencyCodeAndLineAndName(instance, routeId.getLine(), routeId.getName(), routeId.getVersion());
     }

@@ -23,7 +23,11 @@ public class AgencyUpdaterService {
     private final GeoapifyService geoapifyService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.AGENCY_ADMIN
+    })
     public Status updateAgency(String instance, AgencyDetails agencyDetails) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
         agencyEntity.setAgencyName(agencyDetails.getAgencyName());

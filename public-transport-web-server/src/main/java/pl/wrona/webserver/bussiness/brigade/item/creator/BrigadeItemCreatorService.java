@@ -28,7 +28,11 @@ public class BrigadeItemCreatorService {
     private final BrigadeItemCommandService brigadeItemCommandService;
     private final RouteQueryService routeQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER
+    })
     @Transactional
     public Status createBrigade(String instance, CreateBrigadeBody request) {
 

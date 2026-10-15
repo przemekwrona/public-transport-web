@@ -45,7 +45,11 @@ public class TripCreatorService {
     private final TripProfileCommandService tripProfileCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public Status createTrip(String instance, String routeCode, CreateTripDetailsRequest createTripDetailsRequest) {
         boolean uniqueTripIndexExists = tripQueryService.existsUniqueTripIndex(instance,
                 createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),

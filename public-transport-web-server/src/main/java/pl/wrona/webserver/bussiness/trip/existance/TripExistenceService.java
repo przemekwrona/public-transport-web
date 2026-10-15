@@ -14,7 +14,11 @@ public class TripExistenceService {
 
     private final TripQueryRepository tripQueryRepository;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public Status hasVariantDetails(String instance, TripId tripId) {
         boolean variantAlreadyExists = tripQueryRepository.existsTripUniqueIndex(instance, tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariantName(), TripVariantModeMapper.map(tripId.getVariantMode()));
         return variantAlreadyExists ? new Status().status(Status.StatusEnum.EXISTS) : new Status().status(Status.StatusEnum.NOT_EXIST);

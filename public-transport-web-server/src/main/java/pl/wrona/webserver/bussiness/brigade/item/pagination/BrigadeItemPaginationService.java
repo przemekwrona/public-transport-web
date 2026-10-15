@@ -25,7 +25,13 @@ public class BrigadeItemPaginationService {
     private final BrigadeGroupQueryService brigadeGroupQueryService;
     private final BrigadeItemQueryService brigadeItemQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public GetBrigadeResponse findBrigades(String instance) {
         Map<Long, List<BrigadeGroupEntity>> groupsByItemId = brigadeGroupQueryService.findAll(instance).stream()
                 .collect(Collectors.groupingBy(

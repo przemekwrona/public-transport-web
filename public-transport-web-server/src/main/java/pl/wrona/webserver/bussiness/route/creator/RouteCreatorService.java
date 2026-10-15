@@ -31,7 +31,11 @@ public class RouteCreatorService {
     private final RouteSequenceQueryService routeSequenceQueryService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public ModificationRouteResponse createRoute(String instance, Route route) {
         var stopDictionary = stopService.mapStopByIdsIn(List.of(route.getOriginStop().getId(), route.getDestinationStop().getId()));
 

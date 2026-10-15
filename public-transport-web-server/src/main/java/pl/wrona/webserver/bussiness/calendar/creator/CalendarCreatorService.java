@@ -29,7 +29,11 @@ public class CalendarCreatorService {
     private final CalendarItemQueryService calendarItemQueryService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public Status createCalendar(String instance, CalendarPayload calendarPayload) {
         var calendarBody = calendarPayload.getBody();
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);

@@ -55,7 +55,14 @@ public class RouteStopTimetableService {
     private final AgencyRepository agencyRepository;
     private final RouteStopTimetablePdfRenderer routeStopTimetablePdfRenderer;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public RouteStopTimetable getRouteStopTimetable(String instance, String routeCode, String stopCode, TripMode tripMode) {
         List<Departure> departures = loadDepartures(instance, routeCode, stopCode, tripMode);
         return new RouteStopTimetable()
@@ -64,7 +71,14 @@ public class RouteStopTimetableService {
                 .departures(departures.stream().map(Departure::toApi).toList());
     }
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getRouteStopTimetablePdf(String instance, String routeCode, String stopCode, TripMode tripMode) {
         long stopId = parseStopCode(stopCode);

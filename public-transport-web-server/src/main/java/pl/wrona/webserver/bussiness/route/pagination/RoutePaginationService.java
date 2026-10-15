@@ -18,7 +18,14 @@ public class RoutePaginationService {
     private final RouteQueryService routeQueryService;
     private final StopService stopService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER,
+            PreAgencyAuthorize.Role.BRIGADIER,
+            PreAgencyAuthorize.Role.DISPATCHER,
+            PreAgencyAuthorize.Role.DRIVER
+    })
     public Routes getRoutes(String instance) {
         var routes = routeQueryService.findByAgencyCode(instance);
 

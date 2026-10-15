@@ -20,7 +20,11 @@ public class TimetableGeneratorPaginationService {
     private final TimetableGeneratorQueryService timetableGeneratorQueryService;
     private final TimetableGeneratorItemQueryService timetableGeneratorItemQueryService;
 
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     @Transactional(readOnly = true)
     public TimetableGeneratorFindAllResponse findAllPaginated(String instance, int page, int size) {
         var items = this.timetableGeneratorQueryService.findAll(instance).stream()

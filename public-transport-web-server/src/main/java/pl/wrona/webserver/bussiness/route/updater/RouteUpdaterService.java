@@ -20,7 +20,11 @@ public class RouteUpdaterService {
     private final RouteCommandService routeCommandService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public Status updateRoute(String instance, UpdateRouteRequest updateRouteRequest) {
         var route = routeQueryService.findRouteByAgencyCodeAndRouteId(instance, updateRouteRequest.getRouteId());
         route.setLine(updateRouteRequest.getRoute().getRouteId().getLine());

@@ -26,7 +26,11 @@ public class CalendarUpdaterService {
     private final AgencyService agencyService;
 
     @Transactional
-    @PreAgencyAuthorize
+    @PreAgencyAuthorize(roles = {
+            PreAgencyAuthorize.Role.SUPER_USER,
+            PreAgencyAuthorize.Role.AGENCY_OWNER,
+            PreAgencyAuthorize.Role.PLANNER
+    })
     public Status updateCalendar(String instance, UpdateCalendarRequest updateCalendarRequest) {
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
         calendarSymbolRepository.findByAgencyAndCalendarNameAndDesignation(instance, updateCalendarRequest.getCalendarName(), updateCalendarRequest.getBody().getDesignation()).ifPresent(calendarEntity -> {
