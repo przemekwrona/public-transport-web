@@ -38,6 +38,16 @@ class PreAgencyAuthorizeAuthorizationManagerTest {
     }
 
     @Test
+    void grantsAccessWhenStoredRoleUsesDifferentCase() throws Exception {
+        when(agencyAccessSecurity.checkAccess("demo")).thenReturn(true);
+        doReturn(List.of(new SimpleGrantedAuthority("super_user"))).when(authentication).getAuthorities();
+
+        AuthorizationDecision decision = manager().check(() -> authentication, invocation("readWithRoles", "demo"));
+
+        assertThat(decision.isGranted()).isTrue();
+    }
+
+    @Test
     void grantsAccessWhenUserHasOneOfTheRoles() throws Exception {
         when(agencyAccessSecurity.checkAccess("demo")).thenReturn(true);
         doReturn(List.of(new SimpleGrantedAuthority("SUPER_USER"))).when(authentication).getAuthorities();
