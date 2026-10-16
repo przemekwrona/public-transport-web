@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -58,7 +59,8 @@ class PreAgencyAuthorizeAuthorizationManager implements AuthorizationManager<Met
                 .collect(Collectors.toSet());
         return authorities.stream()
                 .map(GrantedAuthority::getAuthority)
-                .anyMatch(requiredRoles::contains);
+                .filter(Objects::nonNull)
+                .anyMatch(authority -> requiredRoles.stream().anyMatch(authority::equals));
     }
 
     private PreAgencyAuthorize findAnnotation(Method method) {

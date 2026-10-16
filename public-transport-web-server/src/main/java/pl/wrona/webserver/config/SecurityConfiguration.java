@@ -39,7 +39,8 @@ public class SecurityConfiguration {
             "/actuator",
             "/actuator/health",
             "/actuator/health/**",
-            "/actuator/info"
+            "/actuator/info",
+            "/error"
     };
 
     @Bean

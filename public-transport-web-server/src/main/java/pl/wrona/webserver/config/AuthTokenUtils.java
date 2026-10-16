@@ -1,22 +1,28 @@
 package pl.wrona.webserver.config;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import com.nimbusds.jose.proc.SecurityContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
+import javax.crypto.spec.SecretKeySpec;
+import java.time.Instant;
+import java.util.Base64;
 
 @Slf4j
 @Component
 public class AuthTokenUtils {
-//    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
 //    @Value("${baeldung.app.jwtSecret}")
     private String jwtSecret = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzQmVOGH0XZgdcdILCCTFOCFKB83T+b5o6EaePx8XcnF8jhyNwuLGCKpII1O40NFAeDqJaRIHPEVp+sgkJs/lwoVpLXOK0rKwKCHvfs+JuI8qBzP9IkFiczkDwrUw8nBioJMAIbK+yPRgKDP9zgdyAGM7e5is1SwKfpPtsKKAJJ2LJDAe6sEJSlAMaweXCskZp2NcgjKKYVBhwl3kziLGQRbWNbxSU84SIn7kKiRM7iEs1I6gC8DZ1MtOxu8kvf7DxRca+8NJ733X9sN4lZz8B4pZpOwBl7xX607P4joLu3ye4ze9rP4fULSwD3M2wKn6wE3a8ikrRymekR9dbYRyBQIDAQAB";
@@ -24,48 +30,40 @@ public class AuthTokenUtils {
 //    @Value("${baeldung.app.jwtExpirationMs}")
     private int jwtExpirationMs = 36_000_000;
 
-    public String generateJwtToken(UserDetails userDetails) {
-        return Jwts.builder()
-                .subject((userDetails.getUsername()))
-                .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(getSigningKey())
-                .compact();
+    private final JwtEncoder jwtEncoder;
+    private final JwtDecoder jwtDecoder;
 
+    public AuthTokenUtils() {
+        byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
+        SecretKey secretKey = new SecretKeySpec(keyBytes, "HmacSHA512");
+        this.jwtEncoder = new NimbusJwtEncoder(new ImmutableSecret<SecurityContext>(secretKey));
+        this.jwtDecoder = NimbusJwtDecoder.withSecretKey(secretKey)
+                .macAlgorithm(MacAlgorithm.HS512)
+                .build();
     }
 
-    private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
-        return Keys.hmacShaKeyFor(keyBytes);
+    public String generateJwtToken(UserDetails userDetails) {
+        Instant issuedAt = Instant.now();
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(userDetails.getUsername())
+                .issuedAt(issuedAt)
+                .expiresAt(issuedAt.plusMillis(jwtExpirationMs))
+                .build();
+        JwsHeader header = JwsHeader.with(MacAlgorithm.HS512).build();
+        return jwtEncoder.encode(JwtEncoderParameters.from(header, claims)).getTokenValue();
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
-
+        return jwtDecoder.decode(token).getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser()
-                    .verifyWith(getSigningKey())
-                    .build()
-                    .parseSignedClaims(authToken);
+            jwtDecoder.decode(authToken);
             return true;
-        } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
+        } catch (JwtException exception) {
+            log.error("Invalid JWT token: {}", exception.getMessage());
         }
-
         return false;
     }
 }
