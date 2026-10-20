@@ -110,28 +110,6 @@
           }
         }
       ]
-    },
-    {
-      "id": "c0ffee00-0000-4000-8000-000000000002",
-      "clientId": "public-transport-provisioning",
-      "name": "Public transport provisioning",
-      "description": "Service account that creates users and agency groups. It is not the master-realm admin.",
-      "enabled": true,
-      "protocol": "openid-connect",
-      "publicClient": false,
-      "secret": "public-transport-provisioning-secret",
-      "directAccessGrantsEnabled": false,
-      "standardFlowEnabled": false,
-      "implicitFlowEnabled": false,
-      "serviceAccountsEnabled": true,
-      "fullScopeAllowed": true,
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "profile",
-        "roles",
-        "email"
-      ]
     }
   ],
   "groups": [
@@ -191,29 +169,9 @@
         {
           "type": "password",
           "temporary": false,
-          "credentialData": "{\"hashIterations\":10,\"algorithm\":\"bcrypt\",\"additionalParameters\":{}}",
-          "secretData": "{\"value\":\"$2a$10$yPoPJ9H4MAm5PP/.hIU/uebkqnFMiTGHb3/I.AMqpkDILHdwxi456\",\"salt\":\"\"}"
+          "value": "welcome1"
         }
       ]
-    },
-    {
-      "username": "service-account-public-transport-provisioning",
-      "enabled": true,
-      "serviceAccountClientId": "public-transport-provisioning",
-      "clientRoles": {
-        "realm-management": [
-          "manage-users",
-          "view-users",
-          "query-users",
-          "query-groups",
-          "manage-clients",
-          "view-clients",
-          "query-clients",
-          "create-client",
-          "manage-realm",
-          "view-realm"
-        ]
-      }
     }
   ],
   "components": {
