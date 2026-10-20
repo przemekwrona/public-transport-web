@@ -1,4 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS public_transport;
+CREATE SCHEMA IF NOT EXISTS keycloak;
 
 DO $$
 BEGIN
