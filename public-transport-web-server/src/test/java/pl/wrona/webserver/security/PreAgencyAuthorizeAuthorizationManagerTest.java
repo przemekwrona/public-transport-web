@@ -7,14 +7,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.util.SimpleMethodInvocation;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,29 +35,20 @@ class PreAgencyAuthorizeAuthorizationManagerTest {
     }
 
     @Test
-    void grantsAccessWhenStoredRoleUsesDifferentCase() throws Exception {
-        when(agencyAccessSecurity.checkAccess("demo")).thenReturn(true);
-        doReturn(List.of(new SimpleGrantedAuthority("super_user"))).when(authentication).getAuthorities();
-
-        AuthorizationDecision decision = manager().check(() -> authentication, invocation("readWithRoles", "demo"));
-
-        assertThat(decision.isGranted()).isTrue();
-    }
-
-    @Test
     void grantsAccessWhenUserHasOneOfTheRoles() throws Exception {
         when(agencyAccessSecurity.checkAccess("demo")).thenReturn(true);
-        doReturn(List.of(new SimpleGrantedAuthority("SUPER_USER"))).when(authentication).getAuthorities();
+        when(agencyAccessSecurity.hasRole("demo", "SUPER_USER")).thenReturn(true);
 
         AuthorizationDecision decision = manager().check(() -> authentication, invocation("readWithRoles", "demo"));
 
         assertThat(decision.isGranted()).isTrue();
+        verify(agencyAccessSecurity).hasRole("demo", "SUPER_USER");
     }
 
     @Test
     void deniesAccessWhenUserHasNoneOfTheRoles() throws Exception {
         when(agencyAccessSecurity.checkAccess("demo")).thenReturn(true);
-        doReturn(List.of(new SimpleGrantedAuthority("AGENCY_OWNER"))).when(authentication).getAuthorities();
+        when(agencyAccessSecurity.hasRole("demo", "SUPER_USER")).thenReturn(false);
 
         AuthorizationDecision decision = manager().check(() -> authentication, invocation("readWithRoles", "demo"));
 

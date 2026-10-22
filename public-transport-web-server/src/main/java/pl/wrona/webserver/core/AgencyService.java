@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.core.agency.AgencyEntity;
-import pl.wrona.webserver.security.AppUser;
+import pl.wrona.webserver.security.AgencyTokenPrincipal;
 import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminDetail;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
@@ -36,9 +36,12 @@ public class AgencyService {
     @Transactional(readOnly = true)
     public AgencyEntity getLoggedAgency() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = (AppUser) authentication.getPrincipal();
-
-        return agencyRepository.findByAppUser(appUser).orElse(null);
+        if (authentication == null || !(authentication.getPrincipal() instanceof AgencyTokenPrincipal principal)) {
+            return null;
+        }
+        return principal.primaryAgencyCode()
+                .map(agencyRepository::findByAgencyCodeEquals)
+                .orElse(null);
     }
 
     public AgenciesAdminResponse findAllAgencies() {

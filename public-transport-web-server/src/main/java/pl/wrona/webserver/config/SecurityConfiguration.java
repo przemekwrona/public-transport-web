@@ -13,9 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
+import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import pl.wrona.webserver.security.AppUserDetailsService;
+import pl.wrona.webserver.security.keycloak.KeycloakJwtAuthenticationConverter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -26,8 +28,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
 
     private final AppUserDetailsService appUserDetailsService;
-    private final AuthTokenFilter authTokenFilter;
     private final AuthTokenEntryPoint authTokenEntryPoint;
+    private final KeycloakJwtAuthenticationConverter keycloakJwtAuthenticationConverter;
 
     private static final String[] WHITE_LIST_URL = {
             "/",
@@ -75,9 +77,23 @@ public class SecurityConfiguration {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authTokenEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .bearerTokenResolver(bearerTokenResolver())
+                        .authenticationEntryPoint(authTokenEntryPoint)
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakJwtAuthenticationConverter))
+                );
 
         return http.build();
+    }
+
+    private static BearerTokenResolver bearerTokenResolver() {
+        DefaultBearerTokenResolver delegate = new DefaultBearerTokenResolver();
+        return request -> {
+            if (HttpMethod.POST.matches(request.getMethod()) && request.getRequestURI().endsWith("/api/v1/auth/login")) {
+                return null;
+            }
+            return delegate.resolve(request);
+        };
     }
 
 }
