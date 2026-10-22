@@ -10,14 +10,9 @@ import org.springframework.security.access.expression.method.MethodSecurityExpre
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class PreAgencyAuthorizeAuthorizationManager implements AuthorizationManager<MethodInvocation> {
@@ -42,25 +37,16 @@ class PreAgencyAuthorizeAuthorizationManager implements AuthorizationManager<Met
         Object agencyCode = instanceExpression.getValue(context);
         boolean granted = agencyCode instanceof String code
                 && agencyAccessSecurity.checkAccess(code)
-                && hasRequiredRole(authentication.get(), annotation.roles());
+                && hasRequiredRole(code, annotation.roles());
         return new AuthorizationDecision(granted);
     }
 
-    private boolean hasRequiredRole(Authentication authentication, PreAgencyAuthorize.Role[] roles) {
+    private boolean hasRequiredRole(String agencyCode, PreAgencyAuthorize.Role[] roles) {
         if (roles.length == 0) {
             return true;
         }
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        if (authorities == null) {
-            return false;
-        }
-        Set<String> requiredRoles = Stream.of(roles)
-                .map(PreAgencyAuthorize.Role::name)
-                .collect(Collectors.toSet());
-        return authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .filter(Objects::nonNull)
-                .anyMatch(authority -> requiredRoles.stream().anyMatch(authority::equals));
+        return Stream.of(roles)
+                .anyMatch(role -> agencyAccessSecurity.hasRole(agencyCode, role.name()));
     }
 
     private PreAgencyAuthorize findAnnotation(Method method) {

@@ -9,6 +9,7 @@ import {
 import {Injectable} from "@angular/core";
 import {catchError, Observable, of, tap, throwError} from "rxjs";
 import {LoginService} from "./login.service";
+import {AgencyStorageService} from "./agency-storage.service";
 import {Router} from "@angular/router";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -24,12 +25,10 @@ export class AddHeaderInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // Get token
         const token: string = sessionStorage.getItem(LoginService.SESSION_STORAGE_AUTH_TOKEN_KEY) || '';
-
-        // Clone the request to add the new header
-        const clonedRequest = req.clone({
-            // url: `/api/v1${req.url}`,
-            headers: req.headers.append('Authorization', `Bearer ${token}`)
-        });
+        const isLogin = req.url.includes('/auth/login');
+        const clonedRequest = !isLogin && token
+            ? req.clone({headers: req.headers.set('Authorization', `Bearer ${token}`)})
+            : req;
 
         // Pass the cloned request instead of the original request to the next handle
         return next.handle(clonedRequest)
@@ -41,7 +40,12 @@ export class AddHeaderInterceptor implements HttpInterceptor {
             .pipe(catchError((error: HttpErrorResponse) => {
                 const httpStatus: number = error.status;
                 if (httpStatus === 401) {
-                    this._router.navigate(['/signin']);
+                    sessionStorage.setItem(LoginService.SESSION_STORAGE_AUTH_TOKEN_KEY, '');
+                    sessionStorage.setItem(LoginService.SESSION_STORAGE_ROLES_KEY, '[]');
+                    sessionStorage.setItem(AgencyStorageService.SESSION_STORAGE_INSTANCE_KEY, '');
+                    if (!isLogin) {
+                        this._router.navigate(['/signin']);
+                    }
                     return of();
                 } else {
                     return throwError(() => error);
