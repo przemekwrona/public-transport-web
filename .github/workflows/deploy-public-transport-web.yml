@@ -1,4 +1,4 @@
-name: Deploy public-transport-web
+name: Deploy public-transport-web to Docker Registry
 
 on:
   workflow_dispatch:
