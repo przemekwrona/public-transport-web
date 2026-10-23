@@ -40,11 +40,10 @@ services:
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       GEOAPIFY_KEY: ${GEOAPIFY_KEY:-}
-      KEYCLOAK_ENABLED: "true"
-      KEYCLOAK_SERVER_URL: http://keycloak:8080
       KEYCLOAK_ISSUER_URI: http://localhost:8081/realms/public-transport
       KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/public-transport/protocol/openid-connect/certs
       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-public-transport-web-secret}
+      KEYCLOAK_PROVISIONING_CLIENT_ID: ${KEYCLOAK_PROVISIONING_CLIENT_ID:-public-transport-provisioning}
       KEYCLOAK_PROVISIONING_CLIENT_SECRET: ${KEYCLOAK_PROVISIONING_CLIENT_SECRET:-public-transport-provisioning-secret}
     # Liquibase runs at startup, so Postgres has to accept connections first.
     # Keycloak must be ready so the resource server can read its signing keys.
