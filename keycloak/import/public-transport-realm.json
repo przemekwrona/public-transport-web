@@ -110,6 +110,30 @@
           }
         }
       ]
+    },
+    {
+      "id": "c0ffee00-0000-4000-8000-000000000002",
+      "clientId": "public-transport-provisioning",
+      "name": "Public transport provisioning",
+      "description": "Service account that creates users. It is not a login client.",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "public-transport-provisioning-secret",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ]
     }
   ],
   "groups": [
@@ -172,6 +196,16 @@
           "value": "welcome1"
         }
       ]
+    },
+    {
+      "username": "service-account-public-transport-provisioning",
+      "enabled": true,
+      "serviceAccountClientId": "public-transport-provisioning",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users"
+        ]
+      }
     }
   ],
   "components": {

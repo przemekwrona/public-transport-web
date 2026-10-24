@@ -52,7 +52,9 @@ class KeycloakLoginClientTest {
         resourceServer.getJwt().setJwkSetUri("http://keycloak:8080/realms/public-transport/protocol/openid-connect/certs");
         return new KeycloakLoginClient(builder.build(), new KeycloakProperties(
                 "public-transport-web",
-                "public-transport-web-secret"), resourceServer);
+                "public-transport-web-secret",
+                "public-transport-provisioning",
+                "public-transport-provisioning-secret"), resourceServer);
     }
 
 }
