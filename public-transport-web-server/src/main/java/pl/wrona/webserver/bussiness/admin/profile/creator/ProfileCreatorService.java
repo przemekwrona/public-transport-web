@@ -11,11 +11,13 @@ import pl.wrona.webserver.client.geoapify.GeoapifyService;
 import pl.wrona.webserver.client.geoapify.geocode.Geometry;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
+import pl.wrona.webserver.security.keycloak.KeycloakAgencyProvisioner;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +29,7 @@ public class ProfileCreatorService {
     private final ProfileCreatorAgencyRepository profileCreatorAgencyRepository;
     private final ProfileCreatorAppRolesRepository profileCreatorAppRolesRepository;
     private final GeoapifyService geoapifyService;
+    private final KeycloakAgencyProvisioner keycloakAgencyProvisioner;
 
     @Transactional
     public Status createNewAccount(AgencyAdminCreateAccountRequest agencyAdminCreateAccountRequest) {
@@ -55,6 +58,10 @@ public class ProfileCreatorService {
         agencyEntity.setCreatedAt(LocalDateTime.now());
 
         AgencyEntity savedAgencyEntity = profileCreatorAgencyRepository.save(agencyEntity);
+        keycloakAgencyProvisioner.createAgency(
+                savedAgencyEntity.getAgencyCode(),
+                user.getUsername(),
+                superUsers.stream().map(AppUser::getUsername).collect(Collectors.toSet()));
 
         return new Status().status(Status.StatusEnum.CREATED);
     }
