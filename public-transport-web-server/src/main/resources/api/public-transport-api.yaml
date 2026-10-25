@@ -1379,12 +1379,12 @@ components:
       properties:
         routeId:
           $ref: '#/components/schemas/RouteId'
-        variantName:
-          type: string
         variantMode:
           $ref: '#/components/schemas/TripMode'
         trafficMode:
           $ref: '#/components/schemas/TrafficMode'
+        tripCode:
+          type: string
 
     Route:
       type: object
@@ -1467,8 +1467,6 @@ components:
         name:
           type: string
         line:
-          type: string
-        variant:
           type: string
         mode:
           $ref: '#/components/schemas/TripMode'
@@ -1708,8 +1706,6 @@ components:
       type: object
       properties:
         tripCode:
-          type: string
-        variantName:
           type: string
         variantDesignation:
           type: string

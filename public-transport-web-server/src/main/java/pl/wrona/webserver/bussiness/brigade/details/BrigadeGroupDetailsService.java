@@ -164,7 +164,6 @@ public class BrigadeGroupDetailsService {
                         .version(trip.getRoute().getVersion())
                         .routeCode(trip.getRoute().getRouteCode()))
                 .tripCode(trip.getTripCode())
-                .variantName(trip.getVariantName())
                 .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
                 .trafficMode(TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
     }

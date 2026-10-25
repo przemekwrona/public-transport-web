@@ -16,6 +16,6 @@ public interface TripRepository extends JpaRepository<TripEntity, Long> {
     @Query("SELECT t FROM TripEntity t JOIN t.tripProfiles WHERE t.route.agency = :agency AND t.route.routeCode = :routeCode")
     List<TripEntity> findByAgencyAndRouteCode(@Param("agency") AgencyEntity agencyEntity, @Param("routeCode") String routeCode);
 
-    @Query("SELECT t FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.variantName = :variantName AND t.variantMode = :variantMode")
-    TripEntity findByLineAndNameAndVariantAndMode(@Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode);
+    @Query("SELECT t FROM TripEntity t WHERE t.route.line = :line AND t.route.name = :name AND t.tripCode = :tripCode AND t.variantMode = :variantMode")
+    TripEntity findByLineAndNameAndTripCodeAndMode(@Param("line") String line, @Param("name") String name, @Param("tripCode") String tripCode, @Param("variantMode") TripVariantMode variantMode);
 }

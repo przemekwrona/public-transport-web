@@ -58,7 +58,7 @@ class StopGraphSequencerServiceTest {
 
     @Test
     void linearMainTripHasOriginTrunkDestinationAndNoBranches() {
-        TripStopSequence main = sequence(1L, "MAIN", true, 1L, 2L, 3L);
+        TripStopSequence main = sequence(1L, true, 1L, 2L, 3L);
 
         StopGraph graph = sequencer.sequence(TripVariantMode.FRONT, List.of(main));
 
@@ -75,8 +75,8 @@ class StopGraphSequencerServiceTest {
 
     @Test
     void detourCreatesForkJoinAndBranch() {
-        TripStopSequence main = sequence(1L, "MAIN", true, 1L, 2L, 3L, 4L, 5L);
-        TripStopSequence viaSchool = sequence(2L, "SZKOLA", false, 1L, 2L, 10L, 4L, 5L);
+        TripStopSequence main = sequence(1L, true, 1L, 2L, 3L, 4L, 5L);
+        TripStopSequence viaSchool = sequence(2L, false, 1L, 2L, 10L, 4L, 5L);
 
         StopGraph graph = sequencer.sequence(TripVariantMode.FRONT, List.of(main, viaSchool));
 
@@ -88,44 +88,44 @@ class StopGraphSequencerServiceTest {
         assertThat(graph.edges()).extracting(StopGraph.Edge::fromStopId, StopGraph.Edge::toStopId)
                 .contains(tuple(2L, 3L), tuple(2L, 10L), tuple(10L, 4L));
         assertThat(graph.branches()).containsExactly(new StopGraph.Branch(
-                "T2", "SZKOLA", "S", StopGraph.BranchType.DETOUR, 2L, 4L, List.of(10L)));
+                "T2", "S", StopGraph.BranchType.DETOUR, 2L, 4L, List.of(10L)));
     }
 
     @Test
     void shortcutIsClassifiedAgainstMainSpine() {
-        TripStopSequence main = sequence(1L, "MAIN", true, 1L, 2L, 3L, 4L);
-        TripStopSequence shortTrip = sequence(2L, "SKROT", false, 1L, 2L, 3L);
+        TripStopSequence main = sequence(1L, true, 1L, 2L, 3L, 4L);
+        TripStopSequence shortTrip = sequence(2L, false, 1L, 2L, 3L);
 
         StopGraph graph = sequencer.sequence(TripVariantMode.FRONT, List.of(main, shortTrip));
 
         assertThat(graph.branches()).containsExactly(new StopGraph.Branch(
-                "T2", "SKROT", "S", StopGraph.BranchType.SHORTCUT, 3L, null, List.of()));
+                "T2", "S", StopGraph.BranchType.SHORTCUT, 3L, null, List.of()));
         assertThat(node(graph, 3L).roles()).containsExactly(StopGraph.NodeRole.TRUNK);
         assertThat(node(graph, 4L).roles()).containsExactly(StopGraph.NodeRole.DESTINATION);
     }
 
     @Test
     void extensionContinuesPastMainDestination() {
-        TripStopSequence main = sequence(1L, "MAIN", true, 1L, 2L, 3L);
-        TripStopSequence longer = sequence(2L, "DALEJ", false, 1L, 2L, 3L, 4L, 5L);
+        TripStopSequence main = sequence(1L, true, 1L, 2L, 3L);
+        TripStopSequence longer = sequence(2L, false, 1L, 2L, 3L, 4L, 5L);
 
         StopGraph graph = sequencer.sequence(TripVariantMode.FRONT, List.of(main, longer));
 
         assertThat(graph.branches()).containsExactly(new StopGraph.Branch(
-                "T2", "DALEJ", "S", StopGraph.BranchType.EXTENSION, 3L, null, List.of(4L, 5L)));
+                "T2", "S", StopGraph.BranchType.EXTENSION, 3L, null, List.of(4L, 5L)));
         assertThat(node(graph, 3L).roles()).containsExactly(StopGraph.NodeRole.TRUNK);
         assertThat(node(graph, 5L).roles()).containsExactly(StopGraph.NodeRole.DESTINATION);
     }
 
     @Test
     void differentOriginRejoinsTheSpine() {
-        TripStopSequence main = sequence(1L, "MAIN", true, 1L, 2L, 3L, 4L, 5L);
-        TripStopSequence fromDepot = sequence(2L, "ZAJEZDNIA", false, 20L, 21L, 3L, 4L, 5L);
+        TripStopSequence main = sequence(1L, true, 1L, 2L, 3L, 4L, 5L);
+        TripStopSequence fromDepot = sequence(2L, false, 20L, 21L, 3L, 4L, 5L);
 
         StopGraph graph = sequencer.sequence(TripVariantMode.FRONT, List.of(main, fromDepot));
 
         assertThat(graph.branches()).containsExactly(new StopGraph.Branch(
-                "T2", "ZAJEZDNIA", "S", StopGraph.BranchType.DIFFERENT_ORIGIN, null, 3L, List.of(20L, 21L)));
+                "T2", "S", StopGraph.BranchType.DIFFERENT_ORIGIN, null, 3L, List.of(20L, 21L)));
         assertThat(node(graph, 1L).roles()).containsExactly(StopGraph.NodeRole.ORIGIN);
         assertThat(node(graph, 20L).roles()).containsExactly(StopGraph.NodeRole.ORIGIN);
         assertThat(node(graph, 3L).roles()).containsExactly(StopGraph.NodeRole.JOIN);
@@ -133,13 +133,13 @@ class StopGraphSequencerServiceTest {
 
     @Test
     void differentDestinationLeavesTheSpine() {
-        TripStopSequence main = sequence(1L, "MAIN", true, 1L, 2L, 3L, 4L, 5L);
-        TripStopSequence otherEnd = sequence(2L, "OSIEDLE", false, 1L, 2L, 8L, 9L);
+        TripStopSequence main = sequence(1L, true, 1L, 2L, 3L, 4L, 5L);
+        TripStopSequence otherEnd = sequence(2L, false, 1L, 2L, 8L, 9L);
 
         StopGraph graph = sequencer.sequence(TripVariantMode.FRONT, List.of(main, otherEnd));
 
         assertThat(graph.branches()).containsExactly(new StopGraph.Branch(
-                "T2", "OSIEDLE", "S", StopGraph.BranchType.DIFFERENT_DESTINATION, 2L, null, List.of(8L, 9L)));
+                "T2", "S", StopGraph.BranchType.DIFFERENT_DESTINATION, 2L, null, List.of(8L, 9L)));
         assertThat(node(graph, 2L).roles()).containsExactly(StopGraph.NodeRole.FORK);
         assertThat(node(graph, 5L).roles()).containsExactly(StopGraph.NodeRole.DESTINATION);
         assertThat(node(graph, 9L).roles()).containsExactly(StopGraph.NodeRole.DESTINATION);
@@ -182,8 +182,8 @@ class StopGraphSequencerServiceTest {
 
     @Test
     void prefersMainVariantAsSpineEvenWhenShorter() {
-        TripStopSequence main = sequence(1L, "MAIN", true, 1L, 2L, 3L);
-        TripStopSequence longer = sequence(2L, "DALEJ", false, 1L, 2L, 3L, 4L);
+        TripStopSequence main = sequence(1L, true, 1L, 2L, 3L);
+        TripStopSequence longer = sequence(2L, false, 1L, 2L, 3L, 4L);
 
         StopGraph graph = sequencer.sequence(TripVariantMode.BACK, List.of(longer, main));
 
@@ -209,18 +209,17 @@ class StopGraphSequencerServiceTest {
                 .orElseThrow();
     }
 
-    private static TripStopSequence sequence(Long tripId, String variantName, boolean main, Long... stopIds) {
+    private static TripStopSequence sequence(Long tripId, boolean main, Long... stopIds) {
         List<StopRef> stops = Arrays.stream(stopIds)
                 .map(stopId -> new StopRef(stopId, "Stop " + stopId, stopId.doubleValue(), stopId.doubleValue()))
                 .toList();
-        return new TripStopSequence(tripId, "T" + tripId, variantName, "S", main, stops);
+        return new TripStopSequence(tripId, "T" + tripId, "S", main, stops);
     }
 
     private static TripEntity trip(Long tripId, TripVariantMode mode, boolean mainVariant) {
         return TripEntity.builder()
                 .tripId(tripId)
                 .tripCode("T" + tripId)
-                .variantName("MAIN")
                 .variantMode(mode)
                 .mainVariant(mainVariant)
                 .build();

@@ -34,9 +34,6 @@ public class TripEntity {
     @SequenceGenerator(name = "trip_id_seq", sequenceName = "trip_id_seq", allocationSize = 1)
     private Long tripId;
 
-    @Column(name = "variant_name")
-    private String variantName;
-
     @Column(name = "variant_mode")
     @Enumerated(EnumType.STRING)
     private TripVariantMode variantMode;
