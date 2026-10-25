@@ -58,10 +58,6 @@ public class TripQueryService {
         return tripQueryRepository.findByAgencyAndRouteCodeAndVariantMode(instance, routeCode, variantMode);
     }
 
-    public boolean existsUniqueTripIndex(String agencyCode, String line, String name, String variantName, TripVariantMode tripMode) {
-        return tripQueryRepository.existsTripUniqueIndex(agencyCode, line, name, variantName, tripMode);
-    }
-
     public List<TripEntity> findByExistsBrigade(String agency) {
         return tripQueryRepository.findByExistsBrigade(agency);
     }

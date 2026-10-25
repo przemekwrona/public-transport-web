@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.trip.TripProfileCommandService;
-import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.bussiness.trip.TripSequenceQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
@@ -22,9 +21,7 @@ import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
-import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
-import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalDateTime;
@@ -39,7 +36,6 @@ public class TripCreatorService {
     private final StopService stopService;
     private final TripRepository tripRepository;
     private final StopTimeRepository stopTimeRepository;
-    private final TripQueryService tripQueryService;
     private final RouteQueryService routeQueryService;
     private final TripSequenceQueryService tripSequenceQueryService;
     private final TripProfileCommandService tripProfileCommandService;
@@ -51,16 +47,6 @@ public class TripCreatorService {
             PreAgencyAuthorize.Role.PLANNER
     })
     public Status createTrip(String instance, String routeCode, CreateTripDetailsRequest createTripDetailsRequest) {
-        boolean uniqueTripIndexExists = tripQueryService.existsUniqueTripIndex(instance,
-                createTripDetailsRequest.getBody().getTripId().getRouteId().getLine(),
-                createTripDetailsRequest.getBody().getTripId().getRouteId().getName(),
-                createTripDetailsRequest.getBody().getTripId().getVariantName(),
-                TripVariantModeMapper.map(createTripDetailsRequest.getBody().getTripId().getVariantMode()));
-
-        if (uniqueTripIndexExists) {
-            throw new BusinessException("ERROR:202510300047", "Trip index already exists");
-        }
-
         TripsDetails tripRequest = createTripDetailsRequest.getBody();
         List<Long> stopIds = tripRequest.getTripProfiles().stream()
                 .flatMap(profile -> profile.getStops().stream())

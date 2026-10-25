@@ -71,7 +71,6 @@ public class TripDetailsService {
                                 .name(tripEntity.getRoute().getName())
                                 .version(tripEntity.getRoute().getVersion())
                                 .routeCode(tripEntity.getRoute().getRouteCode()))
-                        .variantName(tripEntity.getVariantName())
                         .variantMode(TripVariantModeMapper.map(tripEntity.getVariantMode())))
                 .isMainVariant(tripEntity.isMainVariant())
                 .tripProfiles(tripProfiles)

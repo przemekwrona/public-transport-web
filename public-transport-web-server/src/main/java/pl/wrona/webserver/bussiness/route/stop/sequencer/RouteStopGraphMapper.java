@@ -49,7 +49,6 @@ public class RouteStopGraphMapper {
     private RouteStopGraphBranch map(StopGraph.Branch branch) {
         return new RouteStopGraphBranch()
                 .tripCode(branch.tripCode())
-                .variantName(branch.variantName())
                 .variantDesignation(branch.variantDesignation())
                 .type(RouteStopGraphBranchType.fromValue(branch.type().name()))
                 .divergeFromStopId(branch.divergeFromStopId())

@@ -92,8 +92,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private routePolyline: Polyline;
     private popup: Popup;
 
-    private previousVariantName = '';
-
     public tripModeSelectValue = TripMode;
     public tripEditorComponentMode: TripEditorComponentMode;
 
@@ -168,7 +166,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         this.modelForm = this.formBuilder.group({
                 isMainVariant: [true, [Validators.required]],
-                tripVariantName: ['', [Validators.required]],
                 tripVariantMode: [initialTripMode, [Validators.required]],
 
                 variantDesignation: ['', [Validators.required]],
@@ -191,11 +188,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.tripVariantModeControl.setValue(this.resolveTripVariantMode(tripDetails));
 
             this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
-
-            if (tripDetails.isMainVariant) {
-                this.modelForm.controls['tripVariantName'].disable();
-                this.modelForm.controls['tripVariantName'].setValue('MAIN');
-            }
 
             this.modelForm.controls['variantDesignation'].setValue(tripDetails.variantDesignation);
             this.modelForm.controls['variantDescription'].setValue(tripDetails.variantDescription);
@@ -223,7 +215,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
                     if (size(this.$tripVariants?.trips) === 0) {
                         this.modelForm.controls["isMainVariant"].setValue(true);
-                        this.modelForm.controls["tripVariantName"].setValue("MAIN");
                         this.modelForm.controls["variantDesignation"].setValidators(null);
                         this.modelForm.controls["variantDescription"].setValidators(null);
 
@@ -306,10 +297,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     get tripVariantModeControl(): FormControl {
         return this.modelForm.get('tripVariantMode') as FormControl;
-    }
-
-    get tripVariantNameControl(): FormControl {
-        return this.modelForm.get('tripVariantName') as FormControl;
     }
 
     get variantDesignationControl(): FormControl {
@@ -547,7 +534,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         const labels: Record<string, string> = {
             isMainVariant: 'Wariant podstawowy',
-            tripVariantName: 'Nazwa wariantu',
             tripVariantMode: 'Kierunek wariantu',
             trafficMode: 'Ruch panujący na drodze',
             variantDesignation: 'Symbol kursu na rozkładzie jazdy',
@@ -615,16 +601,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         routeId.version = this.$tripVariants.route.routeId.version;
         routeId.routeCode = this.$tripVariants.route.routeId.routeCode;
 
-        const tripId: TripId = {};
-        tripId.routeId = routeId;
-        tripId.variantName = this.modelForm.controls['tripVariantName'].value;
-        tripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
-
         const tripDetailsRequest: UpdateTripDetailsRequest = {};
 
         const updatedTripId: TripId = {};
         updatedTripId.routeId = routeId;
-        updatedTripId.variantName = this.modelForm.controls['tripVariantName'].value;
         updatedTripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
 
         tripDetailsRequest.body = {};
@@ -740,14 +720,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     clickIsMainVariant(isMainVariant: boolean): void {
-        const tripVariantNameControl: AbstractControl = this.modelForm.get('tripVariantName');
         const variantDesignationControl: AbstractControl = this.modelForm.get('variantDesignation');
         const variantDescriptionControl: AbstractControl = this.modelForm.get('variantDescription');
 
         if (isMainVariant) {
-            tripVariantNameControl.setValue(this.previousVariantName);
-            tripVariantNameControl?.disable();
-
             variantDesignationControl.setValue('');
             variantDesignationControl.setValidators([]);
             variantDesignationControl.updateValueAndValidity({emitEvent: false});
@@ -756,9 +732,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             variantDescriptionControl.setValidators([]);
             variantDescriptionControl.updateValueAndValidity({emitEvent: false});
         } else {
-            this.previousVariantName = tripVariantNameControl.value;
-            tripVariantNameControl.setValue('MAIN');
-
             variantDesignationControl.setValue('');
             variantDesignationControl.setValidators([Validators.required]);
             variantDesignationControl.updateValueAndValidity({emitEvent: false});
@@ -766,8 +739,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             variantDescriptionControl.setValue('');
             variantDescriptionControl.setValidators([Validators.required]);
             variantDescriptionControl.updateValueAndValidity({emitEvent: false});
-
-            tripVariantNameControl?.enable();
         }
     }
 

@@ -225,7 +225,6 @@ export class TimetableWizardComponent implements OnInit {
                         name: trip?.name ?? trip?.tripId?.routeId?.name,
                         version: trip?.tripId?.routeId?.version
                     },
-                    variantName: trip?.tripId?.variantName ?? trip?.variant,
                     variantMode,
                     trafficMode: departure.trafficMode,
                     tripCode: departure.tripCode

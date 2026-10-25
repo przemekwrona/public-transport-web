@@ -68,13 +68,7 @@ export class TripListVariantsComponent implements OnInit {
     public onDelete($event: TripId1): void {
         const agency: string = this.agencyStorageService.getInstance();
         this.tripService.deleteTripByTripId(agency, this.routeCode, $event.tripCode).subscribe({
-            next: () => remove(this.trips.trips, {
-                line: $event.routeId.line,
-                name: $event.routeId.name,
-                variant: $event.variantName,
-                mode: $event.variantMode,
-                trafficMode: $event.trafficMode
-            })
+            next: () => remove(this.trips.trips, (trip: Trip) => trip.tripId?.tripCode === $event.tripCode)
         });
     }
 

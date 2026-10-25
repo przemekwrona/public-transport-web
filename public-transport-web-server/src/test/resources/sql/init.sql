@@ -38,11 +38,11 @@ VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), (SELECT
 INSERT INTO route (route_id, name, line, origin_name, active, google, description, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, via, agency_id)
 VALUES (1, 'Chmielnik - Kije', 'L1', 'Chmielnik',true, false, null, '142902', 'Chmielnik', '145543', 'Kije', null, 1);
 
-INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
-VALUES (1, 'MAIN', 'FRONT', 'Kije', null, null, 27, 13382, 1781, true, null, 'Chmielnik', null, 'Kije', 1);
+INSERT INTO trip (trip_id, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
+VALUES (1, 'FRONT', 'Kije', null, null, 27, 13382, 1781, true, null, 'Chmielnik', null, 'Kije', 1);
 
-INSERT INTO trip (trip_id, variant_name, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
-VALUES (2, 'MAIN', 'BACK', 'Chmielnik', null, null, 27, 13417, 1784, true, null, 'Kije', null, 'Chmielnik', 1);
+INSERT INTO trip (trip_id, mode, headsign, variant_designation, variant_description, communication_velocity, distance_in_meters, travel_time_in_seconds, is_main_variant, origin_stop_id, origin_stop_name, destination_stop_id, destination_stop_name, route_id)
+VALUES (2, 'BACK', 'Chmielnik', null, null, 27, 13417, 1784, true, null, 'Kije', null, 'Chmielnik', 1);
 
 INSERT INTO app_user_app_role(app_user_id, app_role_id) VALUES ((SELECT app_user_id FROM app_user WHERE username = 'jkowalski'), 'AGENCY_OWNER');
 
