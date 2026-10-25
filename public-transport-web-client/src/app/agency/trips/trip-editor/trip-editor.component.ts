@@ -241,6 +241,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return tripDetails?.tripId?.variantMode ?? TripMode.Front;
     }
 
+    private routeLineAndName(): string {
+        const routeId = this.$tripVariants?.route?.routeId ?? this.tripDetails?.tripId?.routeId;
+        return [routeId?.line, routeId?.name].filter(value => !!value).join(' ');
+    }
+
 
     private createStop(stop: Stop): FormGroup {
         const stopControl: FormGroup = this.formBuilder.group({
@@ -574,7 +579,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
                 this.tripService.createTrip(this.agencyStorageService.getInstance(), this.$tripVariants.route.routeId.routeCode, tripDetailsRequest).subscribe({
                     next: () => {
-                        this.notificationService.showSuccess(`Linia ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} została utworzona`);
+                        this.notificationService.showSuccess(`Linia ${this.routeLineAndName()} została utworzona`);
                         this.router.navigate(['/agency/routes', this.routeCode, 'trips', 'variants'], { replaceUrl: true }).then(() => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                         });
@@ -588,7 +593,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
                 this.tripService.updateTrip(this.agencyStorageService.getInstance(), this.routeCode, this.tripCode, tripDetailsRequest).subscribe({
                     next: () => {
-                        this.notificationService.showSuccess(`Linia ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} została zaktualizowana`);
+                        this.notificationService.showSuccess(`Linia ${this.routeLineAndName()} została zaktualizowana`);
                         this.router.navigate(['/agency/routes', this.routeCode, 'trips', 'variants'], {}).then(() => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                         });
