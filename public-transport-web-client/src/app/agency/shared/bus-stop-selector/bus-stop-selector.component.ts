@@ -1,7 +1,8 @@
 import {
-    Component,
-    inject,
-    Input, OnInit
+  Component,
+  inject,
+  Input, OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport-api";
 import {faMap, faBus, IconDefinition} from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +27,7 @@ export class LonLat {
     selector: 'app-bus-stop-selector',
     templateUrl: './bus-stop-selector.component.html',
     styleUrl: './bus-stop-selector.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BusStopSelectorComponent implements OnInit {

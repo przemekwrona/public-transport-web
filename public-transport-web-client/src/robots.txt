@@ -1,7 +1,5 @@
 User-agent: *
-Disallow: /assets/
-Disallow: /media/
+Allow: /
 Disallow: /api/
 
-# Sitemap
 Sitemap: https://www.nastepnastacja.pl/sitemap.xml

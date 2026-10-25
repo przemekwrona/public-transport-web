@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {AgencyComponent} from "./agency.component";
-import {StopsModule} from "./stops/stops.module";
+import {StopsDbModule} from "./stops-db/stops-db.module";
 import {StopService} from "../http/stop.service";
 import {RouterModule} from "@angular/router";
 import {RoutesModule} from "./routes/routes.module";
@@ -33,7 +33,7 @@ import {CalendarsModule} from "./calendars/calendars.module";
         RouterModule,
         RoutesModule,
         TripsModule,
-        StopsModule,
+        StopsDbModule,
         GoogleMapsModule,
         MatTreeModule,
         BrigadeModule,

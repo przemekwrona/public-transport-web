@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {
     AgencyAddress,
     ModificationRouteResponse,
@@ -16,6 +16,7 @@ import {take} from "rxjs";
     selector: 'app-create-route',
     templateUrl: './create-route.component.html',
     styleUrl: './create-route.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CreateRouteComponent implements OnInit {

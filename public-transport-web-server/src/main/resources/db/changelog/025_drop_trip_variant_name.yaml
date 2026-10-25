@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-variant-name-from-trip
+      author: pwrona
+      changes:
+        - dropIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+        - dropColumn:
+            tableName: trip
+            columnName: variant_name
+        - createIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+            unique: true
+            columns:
+              - column:
+                  name: route_id
+              - column:
+                  name: variant_designation
+              - column:
+                  name: variant_mode
+      rollback:
+        - dropIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+        - addColumn:
+            tableName: trip
+            columns:
+              - column:
+                  name: variant_name
+                  type: varchar(30)
+        - createIndex:
+            indexName: idx_trip_unique
+            tableName: trip
+            unique: true
+            columns:
+              - column:
+                  name: route_id
+              - column:
+                  name: variant_name
+              - column:
+                  name: variant_mode

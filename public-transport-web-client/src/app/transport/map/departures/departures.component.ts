@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {interval, Subscription} from "rxjs";
 import moment from 'moment';
 import {Departure} from "../../../http/timetable.service";
@@ -18,6 +18,7 @@ export class TimeTuple {
     selector: 'app-departures',
     templateUrl: './departures.component.html',
     styleUrl: './departures.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DeparturesComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -33,6 +33,7 @@ import moment from "moment";
         CalendarService
     ],
     templateUrl: './calendar-item-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './calendar-item-modal.component.scss'
 })
 export class CalendarItemModalComponent {

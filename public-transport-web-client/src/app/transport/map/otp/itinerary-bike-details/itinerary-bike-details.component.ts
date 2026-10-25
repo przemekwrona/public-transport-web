@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-itinerary-bike-details',
     templateUrl: './itinerary-bike-details.component.html',
     styleUrl: './itinerary-bike-details.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ItineraryBikeDetailsComponent {

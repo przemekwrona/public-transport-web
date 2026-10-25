@@ -13,6 +13,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatIconModule} from "@angular/material/icon";
 import {RouteNameNormPipe} from "../timetable/create-timetable/route-id-normalization.pipe";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import {RouteNameNormPipe} from "../timetable/create-timetable/route-id-normaliz
         MatSelectModule,
         MatDialogModule,
         MatIconModule,
-        RouteNameNormPipe
+        RouteNameNormPipe,
+        NgxSpinnerModule
     ],
     declarations: [
         BrigadeListComponent,

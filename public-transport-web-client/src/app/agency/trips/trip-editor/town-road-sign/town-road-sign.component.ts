@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-town-road-sign',
   imports: [],
   templateUrl: './town-road-sign.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './town-road-sign.component.scss'
 })
 export class TownRoadSignComponent {

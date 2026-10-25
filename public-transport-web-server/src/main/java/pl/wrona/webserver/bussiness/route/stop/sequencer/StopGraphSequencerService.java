@@ -177,7 +177,6 @@ public class StopGraphSequencerService {
         return new TripStopSequence(
                 trip.getTripId(),
                 trip.getTripCode(),
-                trip.getVariantName(),
                 trip.getVariantDesignation(),
                 trip.isMainVariant(),
                 stops);
@@ -355,7 +354,6 @@ public class StopGraphSequencerService {
 
         return List.of(new StopGraph.Branch(
                 variant.tripCode(),
-                variant.variantName(),
                 variant.variantDesignation(),
                 type,
                 divergeFromStopId,

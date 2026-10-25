@@ -2,7 +2,7 @@ import {Routes} from '@angular/router';
 import {LandingComponent} from "./landing/landing.component";
 import {TransportComponent} from "./transport/transport.component";
 import {AgencyComponent} from "./agency/agency.component";
-import {StopsComponent} from "./agency/stops/stops.component";
+import {StopsDbComponent} from "./agency/stops-db/stops-db.component";
 import {RouteListComponent} from "./agency/routes/route-list/route-list.component";
 import {SigninComponent} from "./auth/signin/signin.component";
 import {CreateRouteComponent} from "./agency/routes/create-route/create-route.component";
@@ -31,7 +31,7 @@ import {agenciesResolver} from "./agency/profile/profile-list/agencies.resolver"
 import {ProfileDetailsComponent} from "./agency/profile/profile-details/profile-details.component";
 import {profileDetailsResolver} from "./agency/profile/profile-details/profile-details.resolver";
 import {CreateProfileComponent} from "./agency/profile/create-profile/create-profile.component";
-import {centerPointResolver} from "./agency/stops/center-point.resolver";
+import {centerPointResolver} from "./agency/stops-db/center-point.resolver";
 import {UserListComponent} from "./agency/user/user-list/user-list.component";
 import {usersResolver} from "./agency/user/user-list/users.resolver";
 import {CreateUserComponent} from "./agency/user/create-user/create-user.component";
@@ -58,7 +58,7 @@ export const routes: Routes = [
     {
         path: 'agency', component: AgencyComponent, resolve: {agencyDetails: agencyDetailsResolver}, children: [
             {path: 'profile', component: ProfileDetailsComponent, resolve: { agencyDetails: profileDetailsResolver }},
-            {path: 'stops', component: StopsComponent, resolve: { centerPoint: centerPointResolver }},
+            {path: 'stops', component: StopsDbComponent, resolve: { centerPoint: centerPointResolver }},
             {path: 'routes', component: RouteListComponent, resolve: { routes: RoutesResolver }},
             {path: 'routes/create', component: CreateRouteComponent},
             {path: 'routes/:routeCode', resolve: { routeDetails: tripsResolver }, children: [

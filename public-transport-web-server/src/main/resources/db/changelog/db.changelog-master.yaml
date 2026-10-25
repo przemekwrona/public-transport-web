@@ -95,3 +95,7 @@ databaseChangeLog:
       file: 024_app_roles.yaml
       relativeToChangelogFile: true
 
+  - include:
+      file: 025_drop_trip_variant_name.yaml
+      relativeToChangelogFile: true
+

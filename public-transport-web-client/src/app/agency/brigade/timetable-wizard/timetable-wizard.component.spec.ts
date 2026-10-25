@@ -157,7 +157,6 @@ describe('TimetableWizardComponent', () => {
       sequenceHex: 'EVT-1',
       tripId: {
         routeId: {routeCode: 'R1', line: '1', name: 'Centrum', version: undefined},
-        variantName: undefined,
         variantMode: TripMode.Front,
         trafficMode: TrafficMode.Normal,
         tripCode: 'T-FRONT'
@@ -172,7 +171,6 @@ describe('TimetableWizardComponent', () => {
       sequenceHex: 'EVT-2',
       tripId: {
         routeId: {routeCode: 'R1', line: '1', name: 'Dworzec', version: undefined},
-        variantName: undefined,
         variantMode: TripMode.Back,
         trafficMode: TrafficMode.Normal,
         tripCode: 'T-BACK'

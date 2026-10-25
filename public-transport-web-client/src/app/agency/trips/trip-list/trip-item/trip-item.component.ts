@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {TrafficMode, Trip, TripId1, TripService} from "../../../../generated/public-transport-api";
 import moment from "moment/moment";
@@ -15,6 +15,7 @@ import {MatIconModule} from "@angular/material/icon";
         MatIconModule
     ],
     templateUrl: './trip-item.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './trip-item.component.scss'
 })
 export class TripItemComponent {
@@ -42,7 +43,6 @@ export class TripItemComponent {
     public deleteTrip(trip: Trip) {
         const tripId: TripId1 = {
             routeId: {line: this.state.line, name: this.state.name, version: this.state.version},
-            variantName: trip.variant,
             variantMode: trip.mode,
             trafficMode: trip.trafficMode,
             tripCode: trip.tripId?.tripCode

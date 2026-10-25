@@ -1,5 +1,5 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
+
 import {
     MAT_DIALOG_DATA,
     MatDialogActions,
@@ -24,19 +24,19 @@ export interface BrigadeTimetableModalData {
 @Component({
     selector: 'app-brigade-timetable-modal',
     imports: [
-        CommonModule,
-        MatDialogTitle,
-        MatDialogContent,
-        MatDialogActions,
-        MatDialogClose,
-        MatButton,
-        TimetableBoardComponent
-    ],
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+    MatButton,
+    TimetableBoardComponent
+],
     providers: [
         AgencyStorageService,
         BrigadeTimetableService
     ],
     templateUrl: './brigade-timetable-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './brigade-timetable-modal.component.scss'
 })
 export class BrigadeTimetableModalComponent implements OnInit {

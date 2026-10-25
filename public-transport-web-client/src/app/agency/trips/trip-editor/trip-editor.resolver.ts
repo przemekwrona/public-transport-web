@@ -23,7 +23,6 @@ export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: A
                 routeId: {
                     routeCode: routeCode
                 },
-                variantName: '',
                 variantMode: tripMode,
                 trafficMode: TrafficMode.Normal
             },

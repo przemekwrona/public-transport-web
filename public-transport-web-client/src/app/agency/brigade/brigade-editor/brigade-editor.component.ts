@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {
     BrigadeService, BrigadeTrip, CalendarSymbolId, ErrorResponse,
     GetAllTripsResponse, GetBrigadeDetailsResponse, GetCalendarSymbolsResponse,
@@ -33,6 +33,7 @@ import {
             transition(':enter', [style({opacity: 0}), animate('500ms 600ms ease-in')])
         ])
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BrigadeEditorComponent implements OnInit {
@@ -79,7 +80,6 @@ export class BrigadeEditorComponent implements OnInit {
                 const brigadeModel: BrigadeModel = {} as BrigadeModel;
                 brigadeModel.line = trip.tripId.routeId.line;
                 brigadeModel.name = trip.tripId.routeId.name;
-                brigadeModel.variant = trip.tripId.variantName;
                 brigadeModel.mode = trip.tripId.variantMode;
 
                 brigadeModel.origin = trip.origin;
@@ -111,7 +111,7 @@ export class BrigadeEditorComponent implements OnInit {
             const brigadeModel: BrigadeModel = {} as BrigadeModel;
             brigadeModel.line = previousBrigadeModel.line
             brigadeModel.name = previousBrigadeModel.name
-            brigadeModel.variant = previousBrigadeModel.variant
+            brigadeModel.variant = previousBrigadeModel.variantDesignation
             brigadeModel.mode = previousBrigadeModel.mode;
             brigadeModel.origin = previousBrigadeModel.origin
             brigadeModel.destination = previousBrigadeModel.destination

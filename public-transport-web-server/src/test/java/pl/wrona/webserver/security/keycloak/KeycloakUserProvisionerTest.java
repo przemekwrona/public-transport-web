@@ -82,11 +82,11 @@ class KeycloakUserProvisionerTest {
     private static KeycloakUserProvisioner provisioner(RestClient.Builder builder) {
         OAuth2ResourceServerProperties resourceServer = new OAuth2ResourceServerProperties();
         resourceServer.getJwt().setJwkSetUri("http://keycloak:8080/realms/public-transport/protocol/openid-connect/certs");
-        return new KeycloakUserProvisioner(builder.build(), new KeycloakProperties(
+        return new KeycloakUserProvisioner(new KeycloakAdminApi(builder.build(), new KeycloakProperties(
                 "public-transport-web",
                 "public-transport-web-secret",
                 "public-transport-provisioning",
-                "public-transport-provisioning-secret"), resourceServer);
+                "public-transport-provisioning-secret"), resourceServer));
     }
 
 }

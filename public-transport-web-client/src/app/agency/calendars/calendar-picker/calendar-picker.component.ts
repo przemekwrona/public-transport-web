@@ -1,11 +1,12 @@
 import {
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    OnInit,
-    Output,
-    SimpleChanges, ViewChild
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges, ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import moment from "moment";
 import {MatCalendar, MatDatepickerModule} from "@angular/material/datepicker";
@@ -22,6 +23,7 @@ import {TranslocoModule} from "@jsverse/transloco";
     ],
     selector: 'app-calendar-picker',
     templateUrl: './calendar-picker.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './calendar-picker.component.scss'
 })
 export class CalendarPickerComponent implements OnInit, OnChanges {

@@ -70,7 +70,6 @@ public class TimetableTripPaginationService {
                                 .line(trip.getRoute().getLine())
                                 .name(trip.getRoute().getName())
                                 .version(trip.getRoute().getVersion()))
-                        .variantName(trip.getVariantName())
                         .variantMode(TripVariantModeMapper.map(trip.getVariantMode())))
                 .designation(trip.getVariantDesignation())
                 .description(trip.getVariantDescription());

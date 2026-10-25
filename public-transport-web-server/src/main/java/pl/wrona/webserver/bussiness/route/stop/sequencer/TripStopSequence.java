@@ -5,7 +5,6 @@ import java.util.List;
 public record TripStopSequence(
         Long tripId,
         String tripCode,
-        String variantName,
         String variantDesignation,
         boolean mainVariant,
         List<StopRef> stops

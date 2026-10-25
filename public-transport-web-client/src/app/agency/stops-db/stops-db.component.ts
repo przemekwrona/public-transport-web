@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {find} from "lodash";
@@ -6,7 +6,7 @@ import {find} from "lodash";
 import {CenterPoint, Stop, StopsResponse, StopsService, Territory} from "../../generated/public-transport-api";
 import {LoginService} from "../../auth/login.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {CommonModule} from "@angular/common";
+
 import {SharedModule} from "../shared/shared.module";
 import {GoogleAnalyticsService} from "../../google-analytics.service";
 import {TerritoryDetailsComponent} from "./territory-details/territory-details.component";
@@ -17,18 +17,18 @@ interface StopMarker extends L.Marker {
 
 @Component({
     imports: [
-        CommonModule,
-        SharedModule,
-        TerritoryDetailsComponent
-    ],
+    SharedModule,
+    TerritoryDetailsComponent
+],
     providers: [
         LoginService
     ],
-    selector: 'app-stops',
-    templateUrl: './stops.component.html',
-    styleUrl: './stops.component.scss'
+    selector: 'app-stops-db',
+    templateUrl: './stops-db.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: './stops-db.component.scss'
 })
-export class StopsComponent implements OnInit, AfterViewInit {
+export class StopsDbComponent implements OnInit, AfterViewInit {
     private ICON_BDOT = L.divIcon({
         html: `<div style="background-color: #0096FF; padding: 1px 0 0 1px; width: 20px; height: 20px; border-radius: 2px; color: whitesmoke"><img src="assets/bus-solid.svg"></div>`,
         className: 'stop-marker'

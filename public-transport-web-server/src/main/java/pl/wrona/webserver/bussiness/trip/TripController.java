@@ -5,7 +5,8 @@ import org.igeolab.iot.pt.server.api.TripApi;
 import org.igeolab.iot.pt.server.api.model.CreateTripDetailsRequest;
 import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
 import org.igeolab.iot.pt.server.api.model.Status;
-import org.igeolab.iot.pt.server.api.model.TripId;
+import org.igeolab.iot.pt.server.api.model.TripExistence;
+import org.igeolab.iot.pt.server.api.model.TripExistenceResult;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
 import org.springframework.http.HttpStatus;
@@ -54,8 +55,8 @@ public class TripController implements TripApi {
     }
 
     @Override
-    public ResponseEntity<Status> hasVariantDetails(String agency, TripId tripId) {
-        return ResponseEntity.ok(tripExistenceService.hasVariantDetails(agency, tripId));
+    public ResponseEntity<TripExistenceResult> hasVariantDetails(String agency, TripExistence tripExistence) {
+        return ResponseEntity.ok(tripExistenceService.hasVariantDetails(agency, tripExistence));
     }
 
     @Override

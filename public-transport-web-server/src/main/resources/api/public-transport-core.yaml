@@ -35,8 +35,6 @@ components:
       properties:
         routeId:
           $ref: '#/components/schemas/RouteId'
-        variantName:
-          type: string
         variantMode:
           $ref: '#/components/schemas/TripMode'
         trafficMode:

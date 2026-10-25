@@ -763,17 +763,18 @@ paths:
           schema:
             type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TripId'
+              $ref: '#/components/schemas/TripExistence'
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Status'
+                $ref: '#/components/schemas/TripExistenceResult'
 
   /trips/approximate-distance:
     post:
@@ -1379,12 +1380,36 @@ components:
       properties:
         routeId:
           $ref: '#/components/schemas/RouteId'
-        variantName:
-          type: string
         variantMode:
           $ref: '#/components/schemas/TripMode'
         trafficMode:
           $ref: '#/components/schemas/TrafficMode'
+        tripCode:
+          type: string
+
+    TripExistence:
+      type: object
+      properties:
+        routeId:
+          $ref: '#/components/schemas/RouteId'
+        isMainVariant:
+          type: boolean
+        variantDesignation:
+          type: string
+        tripMode:
+          $ref: '#/components/schemas/TripMode'
+        tripId:
+          $ref: '#/components/schemas/TripId'
+        tripCode:
+          type: string
+
+    TripExistenceResult:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        tripId:
+          $ref: '#/components/schemas/TripId'
 
     Route:
       type: object
@@ -1467,8 +1492,6 @@ components:
         name:
           type: string
         line:
-          type: string
-        variant:
           type: string
         mode:
           $ref: '#/components/schemas/TripMode'
@@ -1708,8 +1731,6 @@ components:
       type: object
       properties:
         tripCode:
-          type: string
-        variantName:
           type: string
         variantDesignation:
           type: string

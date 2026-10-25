@@ -23,12 +23,10 @@ public class TripMapper {
     }
 
     public TripEntity update(TripEntity tripEntity, TripsDetails tripsDetails) {
-        tripEntity.setVariantName(tripsDetails.getTripId().getVariantName());
         tripEntity.setVariantMode(TripVariantModeMapper.map(tripsDetails.getTripId().getVariantMode()));
         tripEntity.setMainVariant(tripsDetails.getIsMainVariant());
 
         if (Optional.of(tripsDetails).map(TripsDetails::getIsMainVariant).orElse(Boolean.FALSE)) {
-            tripEntity.setVariantName("MAIN");
             tripEntity.setVariantDesignation(StringUtils.EMPTY);
             tripEntity.setVariantDescription(StringUtils.EMPTY);
         } else {
@@ -57,12 +55,10 @@ public class TripMapper {
                                 .name(trip.getRoute().getName())
                                 .version(trip.getRoute().getVersion())
                                 .routeCode(trip.getRoute().getRouteCode()))
-                        .variantName(trip.getVariantName())
                         .variantMode(TripVariantModeMapper.map(trip.getVariantMode()))
                         .tripCode(trip.getTripCode()))
                 .name(trip.getRoute().getName())
                 .line(trip.getRoute().getLine())
-                .variant(trip.getVariantName())
                 .calculatedCommunicationVelocity(calculatedCommunicationVelocity(trip))
                 .variantDesignation(trip.getVariantDesignation())
                 .variantDescription(trip.getVariantDescription())

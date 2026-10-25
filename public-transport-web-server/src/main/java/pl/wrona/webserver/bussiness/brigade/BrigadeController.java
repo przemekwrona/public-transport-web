@@ -5,6 +5,7 @@ import org.igeolab.iot.pt.server.api.BrigadeApi;
 import org.igeolab.iot.pt.server.api.model.BrigadeGroupBody;
 import org.igeolab.iot.pt.server.api.model.BrigadePatchBody;
 import org.igeolab.iot.pt.server.api.model.CreateBrigadeBody;
+import org.igeolab.iot.pt.server.api.model.CreateBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeRequest;
 import org.igeolab.iot.pt.server.api.model.CreateCalendarSymbolBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.GetBrigadeDetailsResponse;
@@ -75,7 +76,7 @@ public class BrigadeController implements BrigadeApi {
     }
 
     @Override
-    public ResponseEntity<Status> createBrigade(String agency, CreateBrigadeBody createBrigadeRequest) {
+    public ResponseEntity<CreateBrigadeResponse> createBrigade(String agency, CreateBrigadeBody createBrigadeRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(brigadeItemCreatorService.createBrigade(agency, createBrigadeRequest));
     }
 

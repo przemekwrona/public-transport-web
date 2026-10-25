@@ -14,6 +14,6 @@ public class TripService {
 
     @Deprecated
     public TripEntity findByTripId(TripId tripId) {
-        return tripRepository.findByLineAndNameAndVariantAndMode(tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getVariantName(), TripVariantModeMapper.map(tripId.getVariantMode()));
+        return tripRepository.findByLineAndNameAndTripCodeAndMode(tripId.getRouteId().getLine(), tripId.getRouteId().getName(), tripId.getTripCode(), TripVariantModeMapper.map(tripId.getVariantMode()));
     }
 }

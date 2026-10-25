@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {ItineraryComponent} from "../itinerary/itinerary.component";
 import moment from "moment";
 
@@ -9,6 +9,7 @@ import moment from "moment";
         '../itinerary/itinerary.component.scss',
         './itinerary-bike-header.component.scss'
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ItineraryBikeHeaderComponent extends ItineraryComponent {

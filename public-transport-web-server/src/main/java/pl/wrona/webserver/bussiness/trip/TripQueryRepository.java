@@ -1,7 +1,9 @@
 package pl.wrona.webserver.bussiness.trip;
 
+import jakarta.persistence.QueryHint;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.RouteEntity;
@@ -23,30 +25,20 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
     List<TripEntity> findByAgencyCodeAndRoute(@Param("agencyCode") String agencyCode, @Param("route") RouteEntity route);
 
     @Query("""
-            SELECT CASE WHEN (COUNT(*) > 0) THEN TRUE ELSE FALSE END
-            FROM TripEntity t
-            WHERE t.route.agency.agencyCode = :agencyCode
-            AND t.route.line = :line
-            AND t.route.name = :name
-            AND t.variantName = :variantName
-            AND t.variantMode = :variantMode""")
-    boolean existsTripUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode);
-
-    @Query("""
-            SELECT t FROM TripEntity t
-            WHERE t.route.agency.agencyCode = :agencyCode
-            AND t.route.line = :line
-            AND t.route.name = :name
-            AND t.variantName = :variantName
-            AND t.variantMode = :variantMode""")
-    TripEntity findTripByUniqueIndex(@Param("agencyCode") String agencyCode, @Param("line") String line, @Param("name") String name, @Param("variantName") String variantName, @Param("variantMode") TripVariantMode variantMode);
-
-    @Query("""
             SELECT t FROM TripEntity t
             WHERE t.route.agency.agencyCode = :agencyCode
             AND t.route.routeCode = :routeCode
             AND t.tripCode = :tripCode""")
     TripEntity findTripByAgencyAndRouteCodeAndTripCode(@Param("agencyCode") String agencyCode, @Param("routeCode") String routeCode, @Param("tripCode") String tripCode);
+
+    @QueryHints(@QueryHint(name = "org.hibernate.flushMode", value = "COMMIT"))
+    @Query("""
+            SELECT t FROM TripEntity t
+            WHERE t.route.agency.agencyCode = :agencyCode
+            AND t.route.routeCode = :routeCode""")
+    List<TripEntity> findAllByAgencyAndRouteCode(
+            @Param("agencyCode") String agencyCode,
+            @Param("routeCode") String routeCode);
 
     @Query("""
             SELECT t FROM TripEntity t

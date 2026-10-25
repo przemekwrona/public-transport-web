@@ -1,30 +1,35 @@
-<div *ngIf="stop != null" class="container departures">
-
-  <div class="departures-list" *ngIf="hasDepartures()"
-       [ngClass]="{'departures-1': numberOfDepartures === 1, 'departures-2': numberOfDepartures === 2, 'departures-3': numberOfDepartures === 3, 'departures-4': numberOfDepartures === 4, 'departures-5': numberOfDepartures === 5, 'departures-6': numberOfDepartures === 6, 'departures-7': numberOfDepartures === 7, 'departures-8': numberOfDepartures === 8}">
-    <div *ngFor="let departure of departures.slice(0, 8);">
-
-      <div class="row py-2" [ngClass]="{pulse: lessThan1Min(departure.time)}" (click)="showShape(departure.time.tripId || '')">
-        <div class="col-2 text-center">{{getRouteByRouteId(departure?.pattern?.routeId || '')?.shortName || ''}}</div>
-        <div class="col-6 text-truncate">{{departure.time.headsign || ''}}</div>
-        <div class="col-4 text-end mx-0">
-          <span class="in">{{departure.time.scheduledDeparture | departureTimePrefix | async}}</span>
-          <span>{{departure.time.scheduledDeparture | departureTime:'H:mm' | async}}</span>
+@if (stop != null) {
+  <div class="container departures">
+    @if (hasDepartures()) {
+      <div class="departures-list"
+        [ngClass]="{'departures-1': numberOfDepartures === 1, 'departures-2': numberOfDepartures === 2, 'departures-3': numberOfDepartures === 3, 'departures-4': numberOfDepartures === 4, 'departures-5': numberOfDepartures === 5, 'departures-6': numberOfDepartures === 6, 'departures-7': numberOfDepartures === 7, 'departures-8': numberOfDepartures === 8}">
+        @for (departure of departures.slice(0, 8); track departure) {
+          <div>
+            <div class="row py-2" [ngClass]="{pulse: lessThan1Min(departure.time)}" (click)="showShape(departure.time.tripId || '')">
+              <div class="col-2 text-center">{{getRouteByRouteId(departure?.pattern?.routeId || '')?.shortName || ''}}</div>
+              <div class="col-6 text-truncate">{{departure.time.headsign || ''}}</div>
+              <div class="col-4 text-end mx-0">
+                <span class="in">{{departure.time.scheduledDeparture | departureTimePrefix | async}}</span>
+                <span>{{departure.time.scheduledDeparture | departureTime:'H:mm' | async}}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+    @if (!hasDepartures()) {
+      <div class="departures-list">
+        <div class="row text-center">
+          <div class="col">
+            <i class="fa fa-calendar-times-o fa-3x" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="row text-center">
+          <div class="col">Brak odjazdów</div>
         </div>
       </div>
-    </div>
+    }
   </div>
-
-  <div class="departures-list" *ngIf="!hasDepartures()">
-    <div class="row text-center">
-      <div class="col">
-        <i class="fa fa-calendar-times-o fa-3x" aria-hidden="true"></i>
-      </div>
-    </div>
-    <div class="row text-center">
-      <div class="col">Brak odjazdów</div>
-    </div>
-  </div>
-</div>
+}
 
 

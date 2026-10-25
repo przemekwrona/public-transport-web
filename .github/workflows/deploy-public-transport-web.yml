@@ -23,8 +23,8 @@ env:
   DOCKER_REGISTRY: registry.digitalocean.com/public-transport-registry
 
 jobs:
-  docker:
-    name: Build and push Docker image
+  build:
+    name: Build Docker image
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
@@ -41,11 +41,6 @@ jobs:
       - name: Build Maven project
         run: mvn clean package -DskipTests
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_REGISTRY_ACCESS_TOKEN }}
-
       - name: Build docker ${{ env.IMAGE_NAME }}:${{ inputs.tag }}
         run: |
           cd ${{ env.MODULE }}
@@ -53,6 +48,39 @@ jobs:
             -t ${{ env.IMAGE_NAME }}:${{ inputs.tag }} \
             -t ${{ env.IMAGE_NAME }}:${{ github.sha }} \
             .
+
+      - name: Save Docker image
+        run: |
+          docker save \
+            -o image.tar \
+            ${{ env.IMAGE_NAME }}:${{ inputs.tag }} \
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Upload Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+          retention-days: 1
+
+  push:
+    name: Push Docker image
+    needs: build
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Download Docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker image
+        run: docker load -i image.tar
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_REGISTRY_ACCESS_TOKEN }}
 
       - name: Tag image for DigitalOcean Container Registry
         run: |
@@ -68,3 +96,17 @@ jobs:
         run: |
           docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.tag }}
           docker push ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+  redeploy:
+    name: Redeploy app
+    needs: push
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_REGISTRY_ACCESS_TOKEN }}
+
+      - name: Redeploy app with the new image
+        run: doctl apps create-deployment "${{ secrets.DIGITALOCEAN_APP_ID }}" --wait
