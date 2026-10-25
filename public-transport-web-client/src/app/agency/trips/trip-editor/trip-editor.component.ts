@@ -159,6 +159,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         this.routeCode = this._route.snapshot.paramMap.get('routeCode')!;
         this.tripCode = this._route.snapshot.paramMap.get('tripCode')!;
         this.tripEditorComponentMode = this._route.snapshot.data['mode'];
+        this.$tripVariants = this.routeDetailsFromSnapshot() ?? this.$tripVariants;
 
         this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
 
@@ -215,7 +216,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             );
 
             this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe((routeDetails: RouteDetails) => {
-                this.$tripVariants = routeDetails;
+                if (routeDetails?.route) {
+                    this.$tripVariants = routeDetails;
+                }
 
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
                     if (size(this.$tripVariants?.trips) === 0) {
@@ -224,8 +227,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                         this.modelForm.controls["variantDesignation"].setValidators(null);
                         this.modelForm.controls["variantDescription"].setValidators(null);
 
-                        this.modelForm.controls["headsign"].setValue(this.$tripVariants.route.destinationStop.name);
+                        this.modelForm.controls["headsign"].setValue(this.headsignStop()?.name);
                     }
+
+                    this.focusMapOnSelectedDirection();
                 }
 
             });
@@ -333,9 +338,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.map = this.initMap();
-        if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
-            this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
-        }
         this.drawPolyline(this.geometry || []);
         this.zoomPolyline();
         this.reloadStops(this.map);
@@ -382,11 +384,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private initMap(): Map {
+        const startStop = this.tripEditorComponentMode === TripEditorComponentMode.CREATE ? this.startStop() : undefined;
         const map: Map = L.map('map', {
-            center: [50.613531, 20.743607],
-            // center: [52.2321, 20.0559],
-            // zoom: 7,
-            zoom: 14,
+            center: this.toLatLng(startStop) ?? [50.613531, 20.743607],
+            zoom: startStop ? 15 : 14,
             zoomControl: false
         });
 
@@ -919,13 +920,53 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public onChangeVariantMode(tripMode: TripMode): void {
-        // if (this.stops.length === 0) {
-        //     if (tripMode === TripMode.Front) {
-        //         this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
-        //     }
-        //     if (tripMode === TripMode.Back) {
-        //         this.map.flyTo([this.$tripVariants.route.destinationStop.lat, this.$tripVariants.route.destinationStop.lon], 15)
-        //     }
-        // }
+        if (this.hasAnyStops()) {
+            return;
+        }
+
+        this.focusMapOnSelectedDirection(tripMode);
+    }
+
+    private hasAnyStops(): boolean {
+        return this.profiles?.controls?.some(profile => this.getStops(profile).length > 0) ?? false;
+    }
+
+    private headsignStop(): Stop | undefined {
+        return this.isFrontVariantMode()
+            ? this.$tripVariants?.route?.destinationStop
+            : this.$tripVariants?.route?.originStop;
+    }
+
+    private routeDetailsFromSnapshot(): RouteDetails | undefined {
+        return this._route.pathFromRoot
+            .map(route => route.snapshot.data['routeDetails'] as RouteDetails | undefined)
+            .find(details => !!details?.route);
+    }
+
+    private startStop(tripMode: TripMode = this.modelForm?.controls['tripVariantMode']?.value): Stop | undefined {
+        const route = this.$tripVariants?.route;
+        if (!route) {
+            return undefined;
+        }
+
+        return tripMode === TripMode.Back ? route.destinationStop : route.originStop;
+    }
+
+    private toLatLng(stop?: Stop): [number, number] | undefined {
+        if (stop?.lat == null || stop?.lon == null) {
+            return undefined;
+        }
+
+        return [stop.lat, stop.lon];
+    }
+
+    private focusMapOnSelectedDirection(tripMode: TripMode = this.modelForm?.controls['tripVariantMode']?.value): void {
+        const center = this.toLatLng(this.startStop(tripMode));
+        if (!this.map || !center) {
+            return;
+        }
+
+        this.map.invalidateSize();
+        this.map.setView(center, 15, {animate: false});
     }
 }
