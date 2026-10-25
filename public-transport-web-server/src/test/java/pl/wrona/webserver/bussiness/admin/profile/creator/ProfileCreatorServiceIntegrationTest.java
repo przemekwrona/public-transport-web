@@ -80,7 +80,7 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
         assertThat(appUser).isNotNull();
         assertThat(appUser.getUsername()).isEqualTo(appUsername);
         assertThat(appUser.getAppRoles()).hasSize(1).hasSameElementsAs(createdUserAppRoles);
-        verify(keycloakAgencyProvisioner).createAgency(agencyCode, appUsername, Set.of("pwrona"));
+        verify(keycloakAgencyProvisioner).createAgency(agencyCode, appUsername, Set.of(appUsername, "pwrona"));
     }
 
 }
