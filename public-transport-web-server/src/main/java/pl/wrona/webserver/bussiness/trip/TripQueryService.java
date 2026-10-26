@@ -1,10 +1,12 @@
 package pl.wrona.webserver.bussiness.trip;
 
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripVariantMode;
+import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -69,5 +71,16 @@ public class TripQueryService {
 
     public boolean existsTripInBrigade(TripEntity trip) {
         return tripQueryRepository.existsTripInBrigade(trip);
+    }
+
+    public void assertUniqueDesignation(Long routeId, String designation, TripVariantMode variantMode, Long excludedTripId) {
+        String normalizedDesignation = StringUtils.defaultString(designation);
+        boolean exists = excludedTripId == null
+                ? tripQueryRepository.existsByRouteIdAndVariantDesignationAndVariantMode(routeId, normalizedDesignation, variantMode)
+                : tripQueryRepository.existsByRouteIdAndVariantDesignationAndVariantModeAndTripIdNot(routeId, normalizedDesignation, variantMode, excludedTripId);
+
+        if (exists) {
+            throw new BusinessException("ERROR:202610251802", "Trip with this designation and direction already exists on the route");
+        }
     }
 }

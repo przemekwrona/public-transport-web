@@ -5,6 +5,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.stoptime.StopTimeCommandService;
@@ -18,9 +19,11 @@ import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripProfileMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
+import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -54,6 +57,17 @@ public class TripUpdaterService {
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         TripEntity tripEntity = tripQueryService.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
+
+        String designation = Boolean.TRUE.equals(tripDetails.getIsMainVariant())
+                ? StringUtils.EMPTY
+                : StringUtils.defaultString(tripDetails.getVariantDesignation());
+        TripVariantMode variantMode = tripDetails.getTripId() == null
+                ? tripEntity.getVariantMode()
+                : TripVariantModeMapper.map(tripDetails.getTripId().getVariantMode());
+        if (variantMode == null) {
+            variantMode = tripEntity.getVariantMode();
+        }
+        tripQueryService.assertUniqueDesignation(tripEntity.getRoute().getRouteId(), designation, variantMode, tripEntity.getTripId());
 
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
 
