@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.trip.TripProfileCommandService;
+import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.bussiness.trip.TripSequenceQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
@@ -37,6 +38,7 @@ public class TripCreatorService {
     private final TripRepository tripRepository;
     private final StopTimeRepository stopTimeRepository;
     private final RouteQueryService routeQueryService;
+    private final TripQueryService tripQueryService;
     private final TripSequenceQueryService tripSequenceQueryService;
     private final TripProfileCommandService tripProfileCommandService;
 
@@ -68,6 +70,7 @@ public class TripCreatorService {
         tripEntity.setCreatedAt(now);
         tripEntity.setUpdatedAt(now);
 
+        tripQueryService.assertUniqueDesignation(route.getRouteId(), tripEntity.getVariantDesignation(), tripEntity.getVariantMode(), null);
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
         for (TripProfile tripProfile : tripRequest.getTripProfiles()) {

@@ -1,7 +1,9 @@
 package pl.wrona.webserver.bussiness.trip;
 
+import jakarta.persistence.QueryHint;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.RouteEntity;
@@ -28,6 +30,32 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
             AND t.route.routeCode = :routeCode
             AND t.tripCode = :tripCode""")
     TripEntity findTripByAgencyAndRouteCodeAndTripCode(@Param("agencyCode") String agencyCode, @Param("routeCode") String routeCode, @Param("tripCode") String tripCode);
+
+    @QueryHints(@QueryHint(name = "org.hibernate.flushMode", value = "COMMIT"))
+    @Query("""
+            SELECT CASE WHEN (COUNT(t) > 0) THEN TRUE ELSE FALSE END
+            FROM TripEntity t
+            WHERE t.route.routeId = :routeId
+            AND t.variantMode = :variantMode
+            AND COALESCE(t.variantDesignation, '') = :variantDesignation""")
+    boolean existsByRouteIdAndVariantDesignationAndVariantMode(
+            @Param("routeId") Long routeId,
+            @Param("variantDesignation") String variantDesignation,
+            @Param("variantMode") TripVariantMode variantMode);
+
+    @QueryHints(@QueryHint(name = "org.hibernate.flushMode", value = "COMMIT"))
+    @Query("""
+            SELECT CASE WHEN (COUNT(t) > 0) THEN TRUE ELSE FALSE END
+            FROM TripEntity t
+            WHERE t.route.routeId = :routeId
+            AND t.variantMode = :variantMode
+            AND COALESCE(t.variantDesignation, '') = :variantDesignation
+            AND t.tripId <> :tripId""")
+    boolean existsByRouteIdAndVariantDesignationAndVariantModeAndTripIdNot(
+            @Param("routeId") Long routeId,
+            @Param("variantDesignation") String variantDesignation,
+            @Param("variantMode") TripVariantMode variantMode,
+            @Param("tripId") Long tripId);
 
     @Query("""
             SELECT t FROM TripEntity t

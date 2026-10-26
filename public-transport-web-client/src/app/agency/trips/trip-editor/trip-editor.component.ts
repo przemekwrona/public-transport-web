@@ -573,7 +573,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     },
                     error: (response: HttpErrorResponse) => {
                         const payload: ErrorResponse = response.error;
-                        this.notificationService.showError(`${payload.errorCode}`);
+                        this.notificationService.showError(payload?.message || payload?.errorCode);
                     }
                 });
             } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
@@ -587,7 +587,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     },
                     error: (response: HttpErrorResponse) => {
                         const payload: ErrorResponse = response.error;
-                        console.log(payload);
+                        this.notificationService.showError(payload?.message || payload?.errorCode);
                     }
                 });
             }
