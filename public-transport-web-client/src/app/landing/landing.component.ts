@@ -41,15 +41,18 @@ export class LandingComponent implements OnInit {
         this.googleAnalyticsService.pageView('landing');
     }
 
-    public scrollToHeader(): void {
+    public scrollToHeader(event?: Event): void {
+        event?.preventDefault();
         this.scrollToElement("#header");
     }
 
-    public scrollToProduct(): void {
+    public scrollToProduct(event?: Event): void {
+        event?.preventDefault();
         this.scrollToElement("#product");
     }
 
-    public scrollToAbout(): void {
+    public scrollToAbout(event?: Event): void {
+        event?.preventDefault();
         this.scrollToElement("#about");
     }
 
