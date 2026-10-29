@@ -1,62 +1,101 @@
 import {Injectable} from '@angular/core';
-import {AbstractControl, AsyncValidatorFn, FormGroup, ValidatorFn} from '@angular/forms';
-import {delay, Observable, of} from 'rxjs';
-import {map, catchError, switchMap} from 'rxjs/operators';
+import {AbstractControl, AsyncValidatorFn, FormGroup} from '@angular/forms';
+import {Observable, of, timer} from 'rxjs';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
-import {RouteId, Status, TrafficMode, TripId, TripMode, TripService} from "../../../../generated/public-transport-api";
+import {
+    RouteId,
+    Status,
+    TripExistence,
+    TripExistenceResult,
+    TripId,
+    TripMode,
+    TripService
+} from "../../../../generated/public-transport-api";
+
+export interface CurrentTripSelection {
+    routeId?: RouteId;
+    designation?: string;
+    tripMode?: TripMode;
+    isMainVariant?: boolean;
+}
+
+export interface TripExistenceContext {
+    routeId: RouteId | undefined;
+    tripId?: TripId;
+    current?: CurrentTripSelection;
+}
 
 @Injectable({providedIn: 'root'})
 export class TripIdExistenceValidator {
+
     constructor(private agencyStorageService: AgencyStorageService, private tripService: TripService) {
     }
 
-    variantExistsValidator(line: string, name: string, variantName: string, tripMode: TripMode): AsyncValidatorFn {
-        return (control: FormGroup): Observable<{ variantExists: boolean } | null> => {
-
-            const variantNameControl: AbstractControl = control.get('tripVariantName');
-            const variantModeControl: AbstractControl = control.get('tripVariantMode');
-            const trafficModeControl: AbstractControl = control.get('tripTrafficMode');
-
-            if (variantNameControl.pristine && variantModeControl.pristine) {
+    variantExistsValidator(context: () => TripExistenceContext): AsyncValidatorFn {
+        return (control: AbstractControl): Observable<{ variantExists: boolean } | null> => {
+            const form = control as FormGroup;
+            const isMainVariant = !!form.get('isMainVariant')?.value;
+            const designation = isMainVariant ? '' : `${form.get('variantDesignation')?.value ?? ''}`.trim();
+            const tripMode = form.get('tripVariantMode')?.value as TripMode | undefined;
+            const {routeId, tripId, current} = context();
+            if (tripId && !current) {
+                return of(null);
+            }
+            if (this.sameAsCurrent(current, {routeId, designation, tripMode, isMainVariant})) {
+                return of(null);
+            }
+            if (!isMainVariant && !designation) {
+                return of(null);
+            }
+            if (!routeId?.routeCode || !tripMode) {
                 return of(null);
             }
 
-            const variantNameControlValue: string = variantNameControl?.value;
-            const variantModeControlValue: TripMode = variantModeControl?.value;
+            const tripExistence: TripExistence = {
+                routeId,
+                isMainVariant,
+                variantDesignation: designation,
+                tripMode,
+                tripCode: tripId?.tripCode
+            };
 
-            // Return True if it is the same trip
-            if (variantName === variantNameControlValue && tripMode === variantModeControlValue) {
-                return of(null);
-            }
-
-            const instance: string = this.agencyStorageService.getInstance();
-
-            const routeId: RouteId = {};
-            routeId.line = line;
-            routeId.name = name;
-
-            const tripId: TripId = {};
-            tripId.routeId = routeId;
-
-            tripId.variantName = variantNameControlValue;
-            tripId.variantMode = variantModeControlValue;
-
-            return of(control.value).pipe(
-                // Delay processing to debounce user input
-                delay(3 * 1000),
-                // debounceTime(3 * 1000),
-                // Cancel previous requests and switch to the latest
-                switchMap((value): Observable<{ variantExists: boolean } | null> =>
-                    this.tripService.hasVariantDetails(instance, tripId).pipe(
-                        // If the API returns data, emit { emailExists: true }; otherwise null
-                        map((response: Status): {
-                            variantExists: boolean
-                        } => (response.status === Status.StatusEnum.Exists ? {variantExists: true} : null)),
-                        // Handle errors (e.g., network issues)
-                        catchError((): Observable<null> => of(null))
-                    )
-                )
+            return timer(400).pipe(
+                switchMap(() => this.tripService.hasVariantDetails(this.agencyStorageService.getInstance(), tripExistence)),
+                map((response: TripExistenceResult) => this.toFormError(response)),
+                catchError(() => of(null))
             );
         };
+    }
+
+    private sameAsCurrent(current: CurrentTripSelection | undefined, selected: CurrentTripSelection): boolean {
+        if (!current?.tripMode || !selected.tripMode || current.tripMode !== selected.tripMode) {
+            return false;
+        }
+        if (!!current.isMainVariant !== !!selected.isMainVariant) {
+            return false;
+        }
+        if (!this.sameRoute(current.routeId, selected.routeId)) {
+            return false;
+        }
+        const currentDesignation = current.isMainVariant ? '' : `${current.designation ?? ''}`.trim();
+        return currentDesignation === (selected.designation ?? '');
+    }
+
+    private sameRoute(current: RouteId | undefined, selected: RouteId | undefined): boolean {
+        if (current?.routeCode && selected?.routeCode) {
+            return current.routeCode === selected.routeCode;
+        }
+        return !!current?.line && current.line === selected?.line
+            && !!current?.name && current.name === selected?.name
+            && current.version === selected?.version;
+    }
+
+    private toFormError(response: TripExistenceResult): { variantExists: boolean } | null {
+        const status = response?.status?.status ?? response?.status;
+        if (status === Status.StatusEnum.Exists) {
+            return {variantExists: true};
+        }
+        return null;
     }
 }

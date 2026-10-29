@@ -92,8 +92,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private routePolyline: Polyline;
     private popup: Popup;
 
-    private previousVariantName = '';
-
     public tripModeSelectValue = TripMode;
     public tripEditorComponentMode: TripEditorComponentMode;
 
@@ -156,9 +154,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
-        this.routeCode = this._route.snapshot.paramMap.get('routeCode')!;
-        this.tripCode = this._route.snapshot.paramMap.get('tripCode')!;
+        this.routeCode = this.paramFromRoute('routeCode') ?? '';
+        this.tripCode = this.paramFromRoute('tripCode') ?? '';
         this.tripEditorComponentMode = this._route.snapshot.data['mode'];
+        this.$tripVariants = this.routeDetailsFromSnapshot() ?? this.$tripVariants;
 
         this._route.data.subscribe((data: Data) => this.tripEditorComponentMode = data['mode']);
 
@@ -167,7 +166,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         this.modelForm = this.formBuilder.group({
                 isMainVariant: [true, [Validators.required]],
-                tripVariantName: ['', [Validators.required]],
                 tripVariantMode: [initialTripMode, [Validators.required]],
 
                 variantDesignation: ['', [Validators.required]],
@@ -178,8 +176,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
             },
             {
-                // TODO uncomment
-                // asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.tripMode)
+                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(() => ({
+                    routeId: this.currentRouteId(),
+                    tripId: this.currentTripId(),
+                    current: this.currentTripSelection()
+                }))
             });
 
         this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
@@ -190,11 +191,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             this.tripVariantModeControl.setValue(this.resolveTripVariantMode(tripDetails));
 
             this.modelForm.controls['isMainVariant'].setValue(tripDetails.isMainVariant);
-
-            if (tripDetails.isMainVariant) {
-                this.modelForm.controls['tripVariantName'].disable();
-                this.modelForm.controls['tripVariantName'].setValue('MAIN');
-            }
 
             this.modelForm.controls['variantDesignation'].setValue(tripDetails.variantDesignation);
             this.modelForm.controls['variantDescription'].setValue(tripDetails.variantDescription);
@@ -215,17 +211,20 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             );
 
             this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe((routeDetails: RouteDetails) => {
-                this.$tripVariants = routeDetails;
+                if (routeDetails?.route) {
+                    this.$tripVariants = routeDetails;
+                }
 
                 if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
                     if (size(this.$tripVariants?.trips) === 0) {
                         this.modelForm.controls["isMainVariant"].setValue(true);
-                        this.modelForm.controls["tripVariantName"].setValue("MAIN");
                         this.modelForm.controls["variantDesignation"].setValidators(null);
                         this.modelForm.controls["variantDescription"].setValidators(null);
 
-                        this.modelForm.controls["headsign"].setValue(this.$tripVariants.route.destinationStop.name);
+                        this.modelForm.controls["headsign"].setValue(this.headsignStop()?.name);
                     }
+
+                    this.focusMapOnSelectedDirection();
                 }
 
             });
@@ -234,6 +233,62 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     private resolveTripVariantMode(tripDetails?: TripsDetails): TripMode {
         return tripDetails?.tripId?.variantMode ?? TripMode.Front;
+    }
+
+    private currentTripSelection(): { routeId?: RouteId, designation?: string, tripMode?: TripMode, isMainVariant?: boolean } | undefined {
+        if (this.tripEditorComponentMode !== TripEditorComponentMode.EDIT || !this.tripDetails) {
+            return undefined;
+        }
+        return {
+            routeId: this.tripDetails.tripId?.routeId ?? this.currentRouteId(),
+            designation: this.tripDetails.variantDesignation,
+            tripMode: this.resolveTripVariantMode(this.tripDetails),
+            isMainVariant: !!this.tripDetails.isMainVariant
+        };
+    }
+
+    private currentTripId(): TripId | undefined {
+        if (this.tripEditorComponentMode !== TripEditorComponentMode.EDIT) {
+            return undefined;
+        }
+        const routeId = this.tripDetails?.tripId?.routeId ?? this.currentRouteId();
+        const tripCode = this.tripDetails?.tripId?.tripCode ?? this.tripCode;
+        if (!routeId && !tripCode) {
+            return undefined;
+        }
+        return {
+            ...this.tripDetails?.tripId,
+            routeId,
+            tripCode
+        };
+    }
+
+    private paramFromRoute(name: string): string | null {
+        let route: ActivatedRoute | null = this._route;
+        while (route) {
+            const value = route.snapshot.paramMap.get(name);
+            if (value) {
+                return value;
+            }
+            route = route.parent;
+        }
+        return null;
+    }
+
+    private currentRouteId(): RouteId | undefined {
+        const routeId = this.$tripVariants?.route?.routeId ?? this.tripDetails?.tripId?.routeId;
+        if (!routeId && !this.routeCode) {
+            return undefined;
+        }
+        return {
+            ...routeId,
+            routeCode: routeId?.routeCode ?? this.routeCode
+        };
+    }
+
+    private routeLineAndName(): string {
+        const routeId = this.$tripVariants?.route?.routeId ?? this.tripDetails?.tripId?.routeId;
+        return [routeId?.line, routeId?.name].filter(value => !!value).join(' ');
     }
 
 
@@ -298,10 +353,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return this.modelForm.get('tripVariantMode') as FormControl;
     }
 
-    get tripVariantNameControl(): FormControl {
-        return this.modelForm.get('tripVariantName') as FormControl;
-    }
-
     get variantDesignationControl(): FormControl {
         return this.modelForm.get('variantDesignation') as FormControl;
     }
@@ -333,9 +384,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.map = this.initMap();
-        if (this.tripEditorComponentMode === TripEditorComponentMode.CREATE) {
-            this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
-        }
         this.drawPolyline(this.geometry || []);
         this.zoomPolyline();
         this.reloadStops(this.map);
@@ -382,11 +430,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     private initMap(): Map {
+        const startStop = this.tripEditorComponentMode === TripEditorComponentMode.CREATE ? this.startStop() : undefined;
         const map: Map = L.map('map', {
-            center: [50.613531, 20.743607],
-            // center: [52.2321, 20.0559],
-            // zoom: 7,
-            zoom: 14,
+            center: this.toLatLng(startStop) ?? [50.613531, 20.743607],
+            zoom: startStop ? 15 : 14,
             zoomControl: false
         });
 
@@ -505,10 +552,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     get formValidationErrors(): AllValidationErrors[] {
-        if (!this.isSubmited || !this.modelForm) {
+        if (!this.modelForm) {
             return [];
         }
-        return FormUtils.getFormValidationErrors(this.modelForm);
+        const errors = FormUtils.getFormValidationErrors(this.modelForm);
+        if (this.isSubmited) {
+            return errors;
+        }
+        return errors.filter(error => error.errorName === 'variantExists');
     }
 
     public getFormErrorMessage(error: AllValidationErrors): string {
@@ -525,10 +576,20 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             case 'minlength':
                 return `${label}: musisz dodać co najmniej ${error.errorValue?.requiredLength} przystanki. Obecna liczba przystanków wynosi ${error.errorValue?.actualLength || 0}.`;
             case 'variantExists':
-                return `Trasa ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} posiada wskazany wariant.`;
+                return this.variantExistsMessage();
             default:
                 return `${label}: ${error.errorName}`;
         }
+    }
+
+    public variantExistsMessage(): string {
+        const route = this.currentRouteId();
+        const routeLabel = [route?.line, route?.name].filter(value => !!value).join(' ');
+        if (this.isMainVariant()) {
+            return `Trasa ${routeLabel} posiada już wariant podstawowy.`;
+        }
+        const designation = this.modelForm?.controls['variantDesignation']?.value;
+        return `Trasa ${routeLabel} posiada już kurs oznaczony symbolem ${designation}.`;
     }
 
     private getControlLabel(controlName: string): string {
@@ -541,7 +602,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
         const labels: Record<string, string> = {
             isMainVariant: 'Wariant podstawowy',
-            tripVariantName: 'Nazwa wariantu',
             tripVariantMode: 'Kierunek wariantu',
             trafficMode: 'Ruch panujący na drodze',
             variantDesignation: 'Symbol kursu na rozkładzie jazdy',
@@ -560,6 +620,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public clickCreateOrEdit(): void {
         this.isSubmited = true;
+        if (this.modelForm.pending) {
+            this.notificationService.showError('Sprawdzanie czy kurs już istnieje');
+            return;
+        }
         if (this.modelForm.invalid) {
             this.notificationService.showError('Formularz jest niepoprawny uzupełnij braki');
             this.scrollToFirstError();
@@ -573,7 +637,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
                 this.tripService.createTrip(this.agencyStorageService.getInstance(), this.$tripVariants.route.routeId.routeCode, tripDetailsRequest).subscribe({
                     next: () => {
-                        this.notificationService.showSuccess(`Linia ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} została utworzona`);
+                        this.notificationService.showSuccess(`Linia ${this.routeLineAndName()} została utworzona`);
                         this.router.navigate(['/agency/routes', this.routeCode, 'trips', 'variants'], { replaceUrl: true }).then(() => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                         });
@@ -581,13 +645,13 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     },
                     error: (response: HttpErrorResponse) => {
                         const payload: ErrorResponse = response.error;
-                        this.notificationService.showError(`${payload.errorCode}`);
+                        this.notificationService.showError(payload?.message || payload?.errorCode);
                     }
                 });
             } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
                 this.tripService.updateTrip(this.agencyStorageService.getInstance(), this.routeCode, this.tripCode, tripDetailsRequest).subscribe({
                     next: () => {
-                        this.notificationService.showSuccess(`Linia ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} została zaktualizowana`);
+                        this.notificationService.showSuccess(`Linia ${this.routeLineAndName()} została zaktualizowana`);
                         this.router.navigate(['/agency/routes', this.routeCode, 'trips', 'variants'], {}).then(() => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                         });
@@ -595,7 +659,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                     },
                     error: (response: HttpErrorResponse) => {
                         const payload: ErrorResponse = response.error;
-                        console.log(payload);
+                        this.notificationService.showError(payload?.message || payload?.errorCode);
                     }
                 });
             }
@@ -609,17 +673,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         routeId.version = this.$tripVariants.route.routeId.version;
         routeId.routeCode = this.$tripVariants.route.routeId.routeCode;
 
-        const tripId: TripId = {};
-        tripId.routeId = routeId;
-        tripId.variantName = this.modelForm.controls['tripVariantName'].value;
-        tripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
-
         const tripDetailsRequest: UpdateTripDetailsRequest = {};
 
         const updatedTripId: TripId = {};
         updatedTripId.routeId = routeId;
-        updatedTripId.variantName = this.modelForm.controls['tripVariantName'].value;
         updatedTripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
+        updatedTripId.tripCode = this.currentTripId()?.tripCode;
 
         tripDetailsRequest.body = {};
         tripDetailsRequest.body.tripId = updatedTripId;
@@ -734,14 +793,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     clickIsMainVariant(isMainVariant: boolean): void {
-        const tripVariantNameControl: AbstractControl = this.modelForm.get('tripVariantName');
         const variantDesignationControl: AbstractControl = this.modelForm.get('variantDesignation');
         const variantDescriptionControl: AbstractControl = this.modelForm.get('variantDescription');
 
         if (isMainVariant) {
-            tripVariantNameControl.setValue(this.previousVariantName);
-            tripVariantNameControl?.disable();
-
             variantDesignationControl.setValue('');
             variantDesignationControl.setValidators([]);
             variantDesignationControl.updateValueAndValidity({emitEvent: false});
@@ -750,9 +805,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             variantDescriptionControl.setValidators([]);
             variantDescriptionControl.updateValueAndValidity({emitEvent: false});
         } else {
-            this.previousVariantName = tripVariantNameControl.value;
-            tripVariantNameControl.setValue('MAIN');
-
             variantDesignationControl.setValue('');
             variantDesignationControl.setValidators([Validators.required]);
             variantDesignationControl.updateValueAndValidity({emitEvent: false});
@@ -760,8 +812,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             variantDescriptionControl.setValue('');
             variantDescriptionControl.setValidators([Validators.required]);
             variantDescriptionControl.updateValueAndValidity({emitEvent: false});
-
-            tripVariantNameControl?.enable();
         }
     }
 
@@ -919,13 +969,53 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public onChangeVariantMode(tripMode: TripMode): void {
-        // if (this.stops.length === 0) {
-        //     if (tripMode === TripMode.Front) {
-        //         this.map.flyTo([this.$tripVariants.route.originStop.lat, this.$tripVariants.route.originStop.lon], 15)
-        //     }
-        //     if (tripMode === TripMode.Back) {
-        //         this.map.flyTo([this.$tripVariants.route.destinationStop.lat, this.$tripVariants.route.destinationStop.lon], 15)
-        //     }
-        // }
+        if (this.hasAnyStops()) {
+            return;
+        }
+
+        this.focusMapOnSelectedDirection(tripMode);
+    }
+
+    private hasAnyStops(): boolean {
+        return this.profiles?.controls?.some(profile => this.getStops(profile).length > 0) ?? false;
+    }
+
+    private headsignStop(): Stop | undefined {
+        return this.isFrontVariantMode()
+            ? this.$tripVariants?.route?.destinationStop
+            : this.$tripVariants?.route?.originStop;
+    }
+
+    private routeDetailsFromSnapshot(): RouteDetails | undefined {
+        return this._route.pathFromRoot
+            .map(route => route.snapshot.data['routeDetails'] as RouteDetails | undefined)
+            .find(details => !!details?.route);
+    }
+
+    private startStop(tripMode: TripMode = this.modelForm?.controls['tripVariantMode']?.value): Stop | undefined {
+        const route = this.$tripVariants?.route;
+        if (!route) {
+            return undefined;
+        }
+
+        return tripMode === TripMode.Back ? route.destinationStop : route.originStop;
+    }
+
+    private toLatLng(stop?: Stop): [number, number] | undefined {
+        if (stop?.lat == null || stop?.lon == null) {
+            return undefined;
+        }
+
+        return [stop.lat, stop.lon];
+    }
+
+    private focusMapOnSelectedDirection(tripMode: TripMode = this.modelForm?.controls['tripVariantMode']?.value): void {
+        const center = this.toLatLng(this.startStop(tripMode));
+        if (!this.map || !center) {
+            return;
+        }
+
+        this.map.invalidateSize();
+        this.map.setView(center, 15, {animate: false});
     }
 }

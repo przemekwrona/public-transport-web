@@ -42,7 +42,6 @@ export class TripItemComponent {
     public deleteTrip(trip: Trip) {
         const tripId: TripId1 = {
             routeId: {line: this.state.line, name: this.state.name, version: this.state.version},
-            variantName: trip.variant,
             variantMode: trip.mode,
             trafficMode: trip.trafficMode,
             tripCode: trip.tripId?.tripCode

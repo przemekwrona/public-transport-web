@@ -56,7 +56,7 @@ class RouteStopsServiceTest {
                 List.of(11L),
                 "T2",
                 List.of(new StopGraph.Branch(
-                        "T3", "SZKOLA", "S", StopGraph.BranchType.DETOUR, 11L, 10L, List.of(99L))));
+                        "T3", "S", StopGraph.BranchType.DETOUR, 11L, 10L, List.of(99L))));
 
         when(routeQueryService.findRouteByAgencyCodeAndRouteCode("WAWA", "R1")).thenReturn(route);
         when(tripQueryService.findByAgencyCodeAndRoute("WAWA", route)).thenReturn(trips);

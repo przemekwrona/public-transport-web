@@ -5,6 +5,7 @@ import org.igeolab.iot.pt.server.api.model.Status;
 import org.igeolab.iot.pt.server.api.model.StopTime;
 import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.stoptime.StopTimeCommandService;
@@ -17,10 +18,12 @@ import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripProfileMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
+import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.List;
@@ -54,6 +57,17 @@ public class TripUpdaterService {
 
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         TripEntity tripEntity = tripQueryService.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
+
+        boolean mainVariant = Boolean.TRUE.equals(tripDetails.getIsMainVariant());
+        String designation = mainVariant ? StringUtils.EMPTY : StringUtils.trimToEmpty(tripDetails.getVariantDesignation());
+        TripVariantMode tripVariantMode = TripVariantModeMapper.map(updateTripDetailsRequest.getBody().getTripId().getVariantMode());
+
+        if (tripEntity != null
+                && !tripEntity.getRoute().getRouteCode().equals(routeCode)
+                && !tripEntity.getVariantMode().equals(tripVariantMode)
+                && !tripEntity.getVariantDesignation().equals(designation)) {
+            tripQueryService.assertUniqueTrip(instance, routeCode, mainVariant, designation, tripVariantMode, tripEntity.getTripId());
+        }
 
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
 

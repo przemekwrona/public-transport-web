@@ -253,13 +253,13 @@
                                 kalendarzy</a>
 
                             @if (isCreate()) {
-                                <button type="submit" (click)="save()" class="btn btn-success">Zapisz i wroć do listy
+                                <button type="submit" (click)="save()" class="btn btn-success" [disabled]="isSaving">Zapisz i wroć do listy
                                     linii
                                 </button>
                             }
 
                             @if (isEdit()) {
-                                <button type="submit" (click)="update()" class="btn btn-success">Aktulaizuj i wróć do
+                                <button type="submit" (click)="update()" class="btn btn-success" [disabled]="isSaving">Aktulaizuj i wróć do
                                     listy lini
                                 </button>
                             }
@@ -471,4 +471,15 @@
     </div>
 
 </div>
+
+<ngx-spinner
+    name="calendar-editor"
+    bdColor="rgba(51,51,51,0.8)"
+    size="large"
+    color="#fff"
+    type="ball-scale-multiple"
+    [fullScreen]="true"
+    [disableAnimation]="false">
+    <p class="text-white text-lg mt-4">{{ savingMessage }}</p>
+</ngx-spinner>
 

@@ -66,7 +66,6 @@ public record StopGraph(
 
     public record Branch(
             String tripCode,
-            String variantName,
             String variantDesignation,
             BranchType type,
             Long divergeFromStopId,

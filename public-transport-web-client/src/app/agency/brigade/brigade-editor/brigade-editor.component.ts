@@ -79,7 +79,6 @@ export class BrigadeEditorComponent implements OnInit {
                 const brigadeModel: BrigadeModel = {} as BrigadeModel;
                 brigadeModel.line = trip.tripId.routeId.line;
                 brigadeModel.name = trip.tripId.routeId.name;
-                brigadeModel.variant = trip.tripId.variantName;
                 brigadeModel.mode = trip.tripId.variantMode;
 
                 brigadeModel.origin = trip.origin;
@@ -111,7 +110,7 @@ export class BrigadeEditorComponent implements OnInit {
             const brigadeModel: BrigadeModel = {} as BrigadeModel;
             brigadeModel.line = previousBrigadeModel.line
             brigadeModel.name = previousBrigadeModel.name
-            brigadeModel.variant = previousBrigadeModel.variant
+            brigadeModel.variant = previousBrigadeModel.variantDesignation
             brigadeModel.mode = previousBrigadeModel.mode;
             brigadeModel.origin = previousBrigadeModel.origin
             brigadeModel.destination = previousBrigadeModel.destination
