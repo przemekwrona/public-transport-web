@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.brigade.item.creator;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.BrigadeBody;
 import org.igeolab.iot.pt.server.api.model.CreateBrigadeBody;
+import org.igeolab.iot.pt.server.api.model.CreateBrigadeResponse;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class BrigadeItemCreatorService {
             PreAgencyAuthorize.Role.BRIGADIER
     })
     @Transactional
-    public Status createBrigade(String instance, CreateBrigadeBody request) {
+    public CreateBrigadeResponse createBrigade(String instance, CreateBrigadeBody request) {
 
         var agencyEntity = agencyService.findAgencyByAgencyCode(instance);
 
@@ -56,7 +57,9 @@ public class BrigadeItemCreatorService {
 
         var savedBrigade = brigadeItemCommandService.save(brigadeItemEntity);
 
-        return new Status().status(Status.StatusEnum.CREATED);
+        return new CreateBrigadeResponse()
+                .status(new Status().status(Status.StatusEnum.CREATED))
+                .brigadeCode(savedBrigade.getBrigadeItemCode());
     }
 
 }

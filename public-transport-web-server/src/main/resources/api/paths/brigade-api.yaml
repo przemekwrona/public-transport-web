@@ -44,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '../public-transport-api.yaml/#/components/schemas/Status'
+                $ref: '#/components/schemas/CreateBrigadeResponse'
 
     put:
       tags:
@@ -586,6 +586,14 @@ components:
         selectedRouteCode:
           type: string
         calendarCode:
+          type: string
+
+    CreateBrigadeResponse:
+      type: object
+      properties:
+        status:
+          $ref: '../public-transport-api.yaml/#/components/schemas/Status'
+        brigadeCode:
           type: string
 
     BrigadeBody:
