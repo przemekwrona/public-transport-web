@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {
     CalendarSymbolQuery,
@@ -23,7 +23,7 @@ import moment from "moment";
 export class CalendarListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public calendarsResponse: GetCalendarItemResponse;
-    readonly panelOpenState: WritableSignal<boolean> = signal(false);
+    public selectedCalendarCode: string | null = null;
     public pulsingSymbol: { calendarCode: string; symbol: string } | null = null;
     private openedFromCreateCode: string | null = null;
     private pulseTimer: ReturnType<typeof setTimeout> | null = null;
@@ -42,6 +42,7 @@ export class CalendarListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnInit(): void {
         this.calendarsResponse = this.route.snapshot.data['calendars'];
+        this.selectDefaultCalendar();
         if (this.pulsingSymbol) {
             this.pulseTimer = setTimeout(() => {
                 this.pulsingSymbol = null;
@@ -70,8 +71,20 @@ export class CalendarListComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.calendarService.deleteCalendarByCalendarNameAndSymbol(this.loginService.getInstance(), calendarCode, calendarSymbolCode).subscribe((response: Status) => {
             this.calendarService.getCalendarItems(this.loginService.getInstance())
-                .subscribe((calendarResponse: GetCalendarItemResponse) => this.calendarsResponse = calendarResponse);
+                .subscribe((calendarResponse: GetCalendarItemResponse) => this.setCalendars(calendarResponse));
         });
+    }
+
+    public selectCalendar(calendarItem: CalendarItemBody): void {
+        this.selectedCalendarCode = calendarItem?.calendarItemId?.code ?? null;
+    }
+
+    public isCalendarSelected(calendarItem: CalendarItemBody): boolean {
+        return calendarItem?.calendarItemId?.code === this.selectedCalendarCode;
+    }
+
+    public get selectedCalendar(): CalendarItemBody | undefined {
+        return (this.calendarsResponse?.items ?? []).find(item => item?.calendarItemId?.code === this.selectedCalendarCode);
     }
 
     public hasElements(array: any[]): boolean {
@@ -119,6 +132,25 @@ export class CalendarListComponent implements OnInit, AfterViewInit, OnDestroy {
         return days === 1 ? '1 dzień' : `${days} dni`;
     }
 
+    private selectDefaultCalendar(): void {
+        const items = this.calendarsResponse?.items ?? [];
+        const fromCreate = this.openedFromCreateCode
+            ? items.find(item => item?.calendarItemId?.code === this.openedFromCreateCode)
+            : undefined;
+        const expanded = items.find(item => this.isPanelExpanded(item));
+        const selected = fromCreate ?? expanded ?? items[0];
+        this.selectedCalendarCode = selected?.calendarItemId?.code ?? null;
+    }
+
+    private setCalendars(response: GetCalendarItemResponse): void {
+        this.calendarsResponse = response;
+        const stillSelected = (response.items ?? []).some(item => item?.calendarItemId?.code === this.selectedCalendarCode);
+        if (!stillSelected) {
+            this.openedFromCreateCode = null;
+            this.selectDefaultCalendar();
+        }
+    }
+
     private daysUntilStart(startDate?: string): number {
         if (!startDate) {
             return 0;
@@ -149,7 +181,7 @@ export class CalendarListComponent implements OnInit, AfterViewInit, OnDestroy {
             next: (status) => {
                 console.log(status);
                 this.calendarService.getCalendarItems(this.loginService.getInstance())
-                    .subscribe((calendarResponse: GetCalendarItemResponse) => this.calendarsResponse = calendarResponse);
+                    .subscribe((calendarResponse: GetCalendarItemResponse) => this.setCalendars(calendarResponse));
             },
             error: (response: HttpErrorResponse): void => {
                 const payload: ErrorResponse = response.error;
