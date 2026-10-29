@@ -154,8 +154,8 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
-        this.routeCode = this._route.snapshot.paramMap.get('routeCode')!;
-        this.tripCode = this._route.snapshot.paramMap.get('tripCode')!;
+        this.routeCode = this.paramFromRoute('routeCode') ?? '';
+        this.tripCode = this.paramFromRoute('tripCode') ?? '';
         this.tripEditorComponentMode = this._route.snapshot.data['mode'];
         this.$tripVariants = this.routeDetailsFromSnapshot() ?? this.$tripVariants;
 
@@ -176,8 +176,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
                 profiles: this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
             },
             {
-                // TODO uncomment
-                // asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(this.state.line, this.state.name, this.state.variant, this.state.tripMode)
+                asyncValidators: this.tripIdExistenceValidator.variantExistsValidator(() => ({
+                    routeId: this.currentRouteId(),
+                    tripId: this.currentTripId(),
+                    current: this.currentTripSelection()
+                }))
             });
 
         this.modelForm.get('isMainVariant').valueChanges.pipe(pairwise()).subscribe(([prev, next]: [boolean, boolean]) => this.clickIsMainVariant(next));
@@ -230,6 +233,57 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     private resolveTripVariantMode(tripDetails?: TripsDetails): TripMode {
         return tripDetails?.tripId?.variantMode ?? TripMode.Front;
+    }
+
+    private currentTripSelection(): { routeId?: RouteId, designation?: string, tripMode?: TripMode, isMainVariant?: boolean } | undefined {
+        if (this.tripEditorComponentMode !== TripEditorComponentMode.EDIT || !this.tripDetails) {
+            return undefined;
+        }
+        return {
+            routeId: this.tripDetails.tripId?.routeId ?? this.currentRouteId(),
+            designation: this.tripDetails.variantDesignation,
+            tripMode: this.resolveTripVariantMode(this.tripDetails),
+            isMainVariant: !!this.tripDetails.isMainVariant
+        };
+    }
+
+    private currentTripId(): TripId | undefined {
+        if (this.tripEditorComponentMode !== TripEditorComponentMode.EDIT) {
+            return undefined;
+        }
+        const routeId = this.tripDetails?.tripId?.routeId ?? this.currentRouteId();
+        const tripCode = this.tripDetails?.tripId?.tripCode ?? this.tripCode;
+        if (!routeId && !tripCode) {
+            return undefined;
+        }
+        return {
+            ...this.tripDetails?.tripId,
+            routeId,
+            tripCode
+        };
+    }
+
+    private paramFromRoute(name: string): string | null {
+        let route: ActivatedRoute | null = this._route;
+        while (route) {
+            const value = route.snapshot.paramMap.get(name);
+            if (value) {
+                return value;
+            }
+            route = route.parent;
+        }
+        return null;
+    }
+
+    private currentRouteId(): RouteId | undefined {
+        const routeId = this.$tripVariants?.route?.routeId ?? this.tripDetails?.tripId?.routeId;
+        if (!routeId && !this.routeCode) {
+            return undefined;
+        }
+        return {
+            ...routeId,
+            routeCode: routeId?.routeCode ?? this.routeCode
+        };
     }
 
     private routeLineAndName(): string {
@@ -498,10 +552,14 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     get formValidationErrors(): AllValidationErrors[] {
-        if (!this.isSubmited || !this.modelForm) {
+        if (!this.modelForm) {
             return [];
         }
-        return FormUtils.getFormValidationErrors(this.modelForm);
+        const errors = FormUtils.getFormValidationErrors(this.modelForm);
+        if (this.isSubmited) {
+            return errors;
+        }
+        return errors.filter(error => error.errorName === 'variantExists');
     }
 
     public getFormErrorMessage(error: AllValidationErrors): string {
@@ -518,10 +576,20 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             case 'minlength':
                 return `${label}: musisz dodać co najmniej ${error.errorValue?.requiredLength} przystanki. Obecna liczba przystanków wynosi ${error.errorValue?.actualLength || 0}.`;
             case 'variantExists':
-                return `Trasa ${this.tripDetails.tripId.routeId.line} ${this.tripDetails.tripId.routeId.name} posiada wskazany wariant.`;
+                return this.variantExistsMessage();
             default:
                 return `${label}: ${error.errorName}`;
         }
+    }
+
+    public variantExistsMessage(): string {
+        const route = this.currentRouteId();
+        const routeLabel = [route?.line, route?.name].filter(value => !!value).join(' ');
+        if (this.isMainVariant()) {
+            return `Trasa ${routeLabel} posiada już wariant podstawowy.`;
+        }
+        const designation = this.modelForm?.controls['variantDesignation']?.value;
+        return `Trasa ${routeLabel} posiada już kurs oznaczony symbolem ${designation}.`;
     }
 
     private getControlLabel(controlName: string): string {
@@ -552,6 +620,10 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public clickCreateOrEdit(): void {
         this.isSubmited = true;
+        if (this.modelForm.pending) {
+            this.notificationService.showError('Sprawdzanie czy kurs już istnieje');
+            return;
+        }
         if (this.modelForm.invalid) {
             this.notificationService.showError('Formularz jest niepoprawny uzupełnij braki');
             this.scrollToFirstError();
@@ -606,6 +678,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         const updatedTripId: TripId = {};
         updatedTripId.routeId = routeId;
         updatedTripId.variantMode = this.modelForm.controls['tripVariantMode'].value;
+        updatedTripId.tripCode = this.currentTripId()?.tripCode;
 
         tripDetailsRequest.body = {};
         tripDetailsRequest.body.tripId = updatedTripId;
