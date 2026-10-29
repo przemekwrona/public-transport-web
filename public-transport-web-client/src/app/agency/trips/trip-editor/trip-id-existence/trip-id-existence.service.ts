@@ -48,7 +48,7 @@ export class TripIdExistenceValidator {
             if (!isMainVariant && !designation) {
                 return of(null);
             }
-            if (!routeId?.routeCode) {
+            if (!routeId?.routeCode || !tripMode) {
                 return of(null);
             }
 
@@ -56,6 +56,7 @@ export class TripIdExistenceValidator {
                 routeId,
                 isMainVariant,
                 variantDesignation: designation,
+                tripMode,
                 tripCode: tripId?.tripCode
             };
 

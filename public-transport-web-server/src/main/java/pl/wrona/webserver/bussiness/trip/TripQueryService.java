@@ -73,19 +73,20 @@ public class TripQueryService {
         return tripQueryRepository.existsTripInBrigade(trip);
     }
 
-    public List<TripEntity> findByRouteMainVariantAndDesignation(String agencyCode, String routeCode, boolean mainVariant, String designation, Long excludedTripId) {
+    public List<TripEntity> findByRouteMainVariantAndDesignation(String agencyCode, String routeCode, boolean mainVariant, String designation, TripVariantMode variantMode, Long excludedTripId) {
         String normalizedDesignation = mainVariant ? StringUtils.EMPTY : StringUtils.trimToEmpty(designation);
         return tripQueryRepository.findAllByAgencyAndRouteCode(agencyCode, routeCode).stream()
                 .filter(trip -> trip.isMainVariant() == mainVariant)
+                .filter(trip -> variantMode != null && variantMode.equals(trip.getVariantMode()))
                 .filter(trip -> normalizedDesignation.equals(mainVariant ? StringUtils.EMPTY : StringUtils.trimToEmpty(trip.getVariantDesignation())))
                 .filter(trip -> excludedTripId == null || !excludedTripId.equals(trip.getTripId()))
                 .toList();
     }
 
-    public void assertUniqueTrip(String agencyCode, String routeCode, boolean mainVariant, String designation, Long excludedTripId) {
-        boolean exists = !findByRouteMainVariantAndDesignation(agencyCode, routeCode, mainVariant, designation, excludedTripId).isEmpty();
+    public void assertUniqueTrip(String agencyCode, String routeCode, boolean mainVariant, String designation, TripVariantMode variantMode, Long excludedTripId) {
+        boolean exists = !findByRouteMainVariantAndDesignation(agencyCode, routeCode, mainVariant, designation, variantMode, excludedTripId).isEmpty();
         if (exists) {
-            throw new BusinessException("ERROR:202610251802", "Trip with this route, main variant and designation already exists");
+            throw new BusinessException("ERROR:202610251802", "Trip with this route, main variant, designation and direction already exists");
         }
     }
 }

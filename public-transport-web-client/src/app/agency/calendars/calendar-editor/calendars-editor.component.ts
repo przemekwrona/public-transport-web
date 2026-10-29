@@ -13,6 +13,8 @@ import {LoginService} from "../../../auth/login.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {faCalendar} from "@fortawesome/free-solid-svg-icons";
 import {NotificationService} from "../../../shared/notification.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {catchError, finalize, Observable, of, switchMap, throwError, timer} from "rxjs";
 
 @Component({
     selector: 'app-calendars-editor',
@@ -38,6 +40,11 @@ export class CalendarsEditorComponent implements OnInit {
 
     public presentedMonths: Date[] = [];
     public weekdays: number[] = [];
+    public isSaving = false;
+    public savingMessage = '';
+
+    private readonly spinnerName = 'calendar-editor';
+    private readonly minimumEffectMs = 2000;
 
     public CALENDAR_SYMBOLS: { [key: string]: string } = {
         A: 'kursuje od poniedziałku do piątku',
@@ -71,12 +78,11 @@ export class CalendarsEditorComponent implements OnInit {
         n: 'nie kursuje w Wielką Sobotę oraz w dniach 24 i 31.XII'
     }
 
-    constructor(private calendarService: CalendarService, private loginService: LoginService, private _route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private notificationService: NotificationService) {
+    constructor(private calendarService: CalendarService, private loginService: LoginService, private _route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private notificationService: NotificationService, private spinner: NgxSpinnerService) {
     }
 
     ngOnInit(): void {
         this._route.data.subscribe(data => this.componentMode = data['mode']);
-        this._route.paramMap.subscribe(params => this.queryCalendarName = params.get('calendarName'));
         this.calendarCode = this._route.snapshot.paramMap.get('calendarCode');
    
         this.modelForm = this.formBuilder.group({
@@ -107,6 +113,7 @@ export class CalendarsEditorComponent implements OnInit {
 
         this._route.data.subscribe(data => {
             const calendar: CalendarSymbolBody = data['calendar'];
+            this.queryCalendarName = calendar.calendarName;
             this.modelForm.get('designation').setValue(calendar.designation);
             this.modelForm.get('description').setValue(calendar.description);
             this.modelForm.get('startDate').setValue(calendar.startDate);
@@ -224,17 +231,23 @@ export class CalendarsEditorComponent implements OnInit {
             this.scrollToFirstError();
             return;
         }
+        if (this.isSaving) {
+            return;
+        }
 
         const body: CalendarSymbolBody = this.buildCalendarBodyReuest();
         const payload: CalendarPayload = {};
         payload.body = body;
 
-        this.calendarService.createCalendar(this.loginService.getInstance(), payload).subscribe(status => {
-            this.notificationService.showSuccess('Kalendarz został utworzony');
-            this.notificationService.showInfo('Zaraz zostaniesz przekieowany na listę kalendarzy');
-            setTimeout(() => {
-                this.navigateToCalendars();
-            }, 3000);
+        this.showSpinner('Zapisywanie kalendarza...');
+        this.keepEffect(this.calendarService.createCalendar(this.loginService.getInstance(), payload)).pipe(
+            finalize(() => this.hideSpinner())
+        ).subscribe({
+            next: () => this.completeSave('Kalendarz został utworzony', {
+                calendarCode: this.calendarCode,
+                symbol: body.designation
+            }),
+            error: () => this.notificationService.showError('Nie udało się zapisać kalendarza')
         });
     }
 
@@ -243,19 +256,54 @@ export class CalendarsEditorComponent implements OnInit {
             this.scrollToFirstError();
             return;
         }
+        if (this.isSaving) {
+            return;
+        }
 
         const body: CalendarSymbolBody = this.buildCalendarBodyReuest();
         const request: UpdateCalendarRequest = {};
         request.calendarName = this.queryCalendarName;
         request.body = body;
 
-        this.calendarService.updateCalendar(this.loginService.getInstance(), request).subscribe(status => {
-            this.notificationService.showSuccess('Kalendarz został zaktualizowany');
-            this.notificationService.showInfo('Zaraz zostaniesz przekieowany na listę kalendarzy');
-            setTimeout(() => {
-                this.navigateToCalendars();
-            }, 4000);
+        this.showSpinner('Zapisywanie kalendarza...');
+        this.keepEffect(this.calendarService.updateCalendar(this.loginService.getInstance(), request)).pipe(
+            finalize(() => this.hideSpinner())
+        ).subscribe({
+            next: () => this.completeSave('Kalendarz został zaktualizowany'),
+            error: () => this.notificationService.showError('Nie udało się zapisać kalendarza')
         });
+    }
+
+    private keepEffect<T>(source: Observable<T>): Observable<T> {
+        const startedAt = Date.now();
+        const waitRemaining = () => timer(Math.max(0, this.minimumEffectMs - (Date.now() - startedAt)));
+
+        return source.pipe(
+            switchMap(value => waitRemaining().pipe(switchMap(() => of(value)))),
+            catchError(error => waitRemaining().pipe(switchMap(() => throwError(() => error))))
+        );
+    }
+
+    private showSpinner(message: string): void {
+        this.isSaving = true;
+        this.savingMessage = message;
+        this.spinner.show(this.spinnerName, {
+            type: 'ball-scale-multiple',
+            size: 'large',
+            bdColor: 'rgba(51,51,51,0.8)',
+            color: '#fff',
+            fullScreen: true
+        });
+    }
+
+    private hideSpinner(): void {
+        this.isSaving = false;
+        this.spinner.hide(this.spinnerName);
+    }
+
+    private completeSave(message: string, createdSymbol?: { calendarCode: string; symbol: string }): void {
+        this.notificationService.showSuccess(message);
+        this.navigateToCalendars(createdSymbol);
     }
 
     private buildCalendarBodyReuest() {
@@ -284,8 +332,10 @@ export class CalendarsEditorComponent implements OnInit {
         return body;
     }
 
-    public navigateToCalendars() {
-        this.router.navigate(['/agency/calendars']).then(() => {
+    public navigateToCalendars(createdSymbol?: { calendarCode: string; symbol: string }): void {
+        this.router.navigate(['/agency/calendars'], {
+            state: createdSymbol ? {createdSymbol} : {}
+        }).then(() => {
         });
     }
 
