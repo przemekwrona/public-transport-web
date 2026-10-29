@@ -5,10 +5,10 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {CommonModule} from "@angular/common";
 import {
-    BrigadeService, CalendarItemId,
+    CalendarItemId,
     CalendarService,
-    CalendarSymbolId, CreateBrigadeBody, CreateCalendarSymbolBrigadeRequest, CreateCalendarSymbolBrigadeResponse,
-    GetCalendarItemResponse, RouteId, Status
+    CalendarSymbolId, CreateBrigadeBody,
+    GetCalendarItemResponse, RouteId
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatInput} from "@angular/material/input";
@@ -30,8 +30,7 @@ import moment from "moment";
     ],
     providers: [
         AgencyStorageService,
-        CalendarService,
-        BrigadeService
+        CalendarService
     ],
     templateUrl: './brigade-creator-modal.component.html',
     styleUrl: './brigade-creator-modal.component.scss'
@@ -45,8 +44,7 @@ export class BrigadeCreatorModalComponent implements OnInit {
         private formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<BrigadeCreatorModalComponent>,
         private agencyStorageService: AgencyStorageService,
-        private calendarService: CalendarService,
-        private brigadeService: BrigadeService) {
+        private calendarService: CalendarService) {
         this.modelForm = this.formBuilder.group({
             brigadeName: ['', [Validators.required]],
             defaultRouteCode: ['', [Validators.required]],
@@ -60,8 +58,6 @@ export class BrigadeCreatorModalComponent implements OnInit {
     }
 
     public createBrigade(): void {
-
-        console.log(this.modelForm.valid);
         if (!this.modelForm.valid) {
             return;
         }
@@ -69,16 +65,12 @@ export class BrigadeCreatorModalComponent implements OnInit {
         const brigadeName: string = this.brigadeNameControl.value;
         const calendarSymbolId: CalendarItemId = this.modelForm.get('calendarId').value;
 
-        const instance: string = this.agencyStorageService.getInstance();
-
         const brigadeBody: CreateBrigadeBody = {} as CreateBrigadeBody;
         brigadeBody.brigadeName = brigadeName;
         brigadeBody.calendarCode = calendarSymbolId.code;
         brigadeBody.selectedRouteCode = (this.defaultRouteCodeControl.value as RouteId).routeCode;
 
-        this.brigadeService.createBrigade(instance, brigadeBody).subscribe((response: Status) => {
-            this.dialogRef.close(response);
-        });
+        this.dialogRef.close(brigadeBody);
     }
 
     public hasError(controlName: string, error: string): boolean {
