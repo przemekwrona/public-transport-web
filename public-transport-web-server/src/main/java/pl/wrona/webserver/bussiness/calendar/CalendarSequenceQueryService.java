@@ -16,8 +16,7 @@ public class CalendarSequenceQueryService {
     public Integer findByAgencyCode(String agencyCode) {
         var sequencer = calendarSequenceQueryRepository.findByAgencyCode(agencyCode);
         if (sequencer == null) {
-            var savedCalendarSequencer = calendarSequenceCommandService.init(agencyCode);
-            return savedCalendarSequencer.getNextValue();
+            sequencer = calendarSequenceCommandService.init(agencyCode);
         }
         var nextValue = sequencer.getNextValue();
         sequencer.setNextValue(nextValue + 1);
