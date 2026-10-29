@@ -4,6 +4,7 @@ import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import pl.wrona.webserver.BaseIntegrationTest;
 import pl.wrona.webserver.core.AgencyRepository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
@@ -11,11 +12,13 @@ import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppRoleRepository;
 import pl.wrona.webserver.security.AppUser;
 import pl.wrona.webserver.security.AppUserRepository;
+import pl.wrona.webserver.security.keycloak.KeycloakAgencyProvisioner;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
 
@@ -30,6 +33,9 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ProfileCreatorService profileCreatorService;
+
+    @MockBean
+    private KeycloakAgencyProvisioner keycloakAgencyProvisioner;
 
     @Test
     void shouldCreateProfile() {
@@ -72,6 +78,7 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
         assertThat(appUser).isNotNull();
         assertThat(appUser.getUsername()).isEqualTo(appUsername);
         assertThat(appUser.getAppRoles()).hasSize(1).hasSameElementsAs(createdUserAppRoles);
+        verify(keycloakAgencyProvisioner).createAgency(agencyCode, appUsername, Set.of(appUsername, "pwrona"));
     }
 
 }

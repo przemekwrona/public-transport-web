@@ -3,7 +3,7 @@ set -e
 
 # Sprawdź, czy zmienna z certyfikatem została przekazana
 if [ -n "$KEYCLOAK_CERT_PEM" ]; then
-    echo "Konfigurowanie niestandardowego certyfikatu Keycloaka dla tego środowiska..."
+    echo "Configuring a custom Keycloak certificate for this environment..."
 
     # Zapisz certyfikat ze zmiennej środowiskowej do pliku tymczasowego
     printf '%s\n' "$KEYCLOAK_CERT_PEM" | sed 's/\\n/\n/g' > /tmp/keycloak-cert.pem
