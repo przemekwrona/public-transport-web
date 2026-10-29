@@ -70,7 +70,7 @@ public class TripCreatorService {
         tripEntity.setCreatedAt(now);
         tripEntity.setUpdatedAt(now);
 
-        tripQueryService.assertUniqueDesignation(route.getRouteId(), tripEntity.getVariantDesignation(), tripEntity.getVariantMode(), null);
+        tripQueryService.assertUniqueTrip(instance, route.getRouteCode(), tripEntity.isMainVariant(), tripEntity.getVariantDesignation(), null);
         TripEntity savedTrip = tripRepository.save(tripEntity);
 
         for (TripProfile tripProfile : tripRequest.getTripProfiles()) {

@@ -73,14 +73,19 @@ public class TripQueryService {
         return tripQueryRepository.existsTripInBrigade(trip);
     }
 
-    public void assertUniqueDesignation(Long routeId, String designation, TripVariantMode variantMode, Long excludedTripId) {
-        String normalizedDesignation = StringUtils.defaultString(designation);
-        boolean exists = excludedTripId == null
-                ? tripQueryRepository.existsByRouteIdAndVariantDesignationAndVariantMode(routeId, normalizedDesignation, variantMode)
-                : tripQueryRepository.existsByRouteIdAndVariantDesignationAndVariantModeAndTripIdNot(routeId, normalizedDesignation, variantMode, excludedTripId);
+    public List<TripEntity> findByRouteMainVariantAndDesignation(String agencyCode, String routeCode, boolean mainVariant, String designation, Long excludedTripId) {
+        String normalizedDesignation = mainVariant ? StringUtils.EMPTY : StringUtils.trimToEmpty(designation);
+        return tripQueryRepository.findAllByAgencyAndRouteCode(agencyCode, routeCode).stream()
+                .filter(trip -> trip.isMainVariant() == mainVariant)
+                .filter(trip -> normalizedDesignation.equals(mainVariant ? StringUtils.EMPTY : StringUtils.trimToEmpty(trip.getVariantDesignation())))
+                .filter(trip -> excludedTripId == null || !excludedTripId.equals(trip.getTripId()))
+                .toList();
+    }
 
+    public void assertUniqueTrip(String agencyCode, String routeCode, boolean mainVariant, String designation, Long excludedTripId) {
+        boolean exists = !findByRouteMainVariantAndDesignation(agencyCode, routeCode, mainVariant, designation, excludedTripId).isEmpty();
         if (exists) {
-            throw new BusinessException("ERROR:202610251802", "Trip with this designation and direction already exists on the route");
+            throw new BusinessException("ERROR:202610251802", "Trip with this route, main variant and designation already exists");
         }
     }
 }

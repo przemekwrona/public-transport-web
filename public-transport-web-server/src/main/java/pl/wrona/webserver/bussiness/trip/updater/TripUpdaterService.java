@@ -18,8 +18,8 @@ import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.StopTimeId;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
-import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.agency.TripVariantMode;
+import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.mapper.TripMapper;
 import pl.wrona.webserver.core.mapper.TripProfileMapper;
 import pl.wrona.webserver.core.mapper.TripTrafficModeMapper;
@@ -58,16 +58,16 @@ public class TripUpdaterService {
         Map<Long, StopEntity> stopDictionary = stopService.mapStopByIdsIn(stopIds);
         TripEntity tripEntity = tripQueryService.findTripByAgencyAndRouteCodeAndTripCode(instance, routeCode, tripCode);
 
-        String designation = Boolean.TRUE.equals(tripDetails.getIsMainVariant())
-                ? StringUtils.EMPTY
-                : StringUtils.defaultString(tripDetails.getVariantDesignation());
-        TripVariantMode variantMode = tripDetails.getTripId() == null
-                ? tripEntity.getVariantMode()
-                : TripVariantModeMapper.map(tripDetails.getTripId().getVariantMode());
-        if (variantMode == null) {
-            variantMode = tripEntity.getVariantMode();
+        boolean mainVariant = Boolean.TRUE.equals(tripDetails.getIsMainVariant());
+        String designation = mainVariant ? StringUtils.EMPTY : StringUtils.trimToEmpty(tripDetails.getVariantDesignation());
+        TripVariantMode tripVariantMode = TripVariantModeMapper.map(updateTripDetailsRequest.getBody().getTripId().getVariantMode());
+
+        if (tripEntity != null
+                && !tripEntity.getRoute().getRouteCode().equals(routeCode)
+                && !tripEntity.getVariantMode().equals(tripVariantMode)
+                && !tripEntity.getVariantDesignation().equals(designation)) {
+            tripQueryService.assertUniqueTrip(instance, routeCode, mainVariant, designation, tripEntity.getTripId());
         }
-        tripQueryService.assertUniqueDesignation(tripEntity.getRoute().getRouteId(), designation, variantMode, tripEntity.getTripId());
 
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
 

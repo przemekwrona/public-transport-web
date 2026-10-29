@@ -23,7 +23,7 @@
     <form [formGroup]="modelForm" (ngSubmit)="clickCreateOrEdit()">
         @if (formValidationErrors.length > 0) {
             <div id="form-errors" class="mb-5 p-4 border border-danger rounded-xl">
-                <div class="text-sm font-medium text-danger mb-2">Formularz jest niepoprawny — uzupełnij braki:</div>
+                <div class="text-sm font-medium text-danger mb-2">Formularz jest niepoprawny - uzupełnij braki:</div>
                 <ul class="flex flex-col gap-1 list-disc ps-5">
                     @for (error of formValidationErrors; track error.controlName + error.errorName) {
                         <li class="text-danger text-2sm">{{ getFormErrorMessage(error) }}</li>
@@ -118,15 +118,7 @@
                             @if (modelForm?.errors?.["variantExists"]) {
                                 <span class="badge badge-sm badge-outline badge-danger block"
                                       style="line-height: inherit">
-                                    <div>
-                                        Trasa <strong>{{ tripDetails.tripId.routeId.line }} {{ tripDetails.tripId.routeId.name }} </strong> posiada wskazany wariant.
-                                    </div>
-                                    <div>
-                                        Kierunek wariantu: <strong> {{ "agency.trip.edit." + modelForm.controls["tripVariantMode"].value | transloco }} </strong>
-                                    </div>
-                                    <div>
-                                        Ruch panujący na drodze: <strong>{{ "agency.trip.traffic." + modelForm.controls["tripTrafficMode"].value | transloco }}</strong>
-                                    </div>
+                                    {{ variantExistsMessage() }}
                                 </span>
                             }
 
