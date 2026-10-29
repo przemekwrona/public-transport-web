@@ -1,7 +1,7 @@
 <!-- home section -->
-<section id="header" class="bg-white mb-5 min-h-screen">
+<header id="header" class="bg-white mb-5 min-h-screen">
 
-    <nav>
+    <nav aria-label="Główne">
         <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div class="relative flex h-16 items-center justify-between">
                 <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -10,7 +10,7 @@
                             class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset"
                             aria-controls="mobile-menu" aria-expanded="false">
                         <span class="absolute -inset-0.5"></span>
-                        <span class="sr-only">Open main menu</span>
+                        <span class="sr-only">Otwórz menu</span>
                         <!--
                           Icon when menu is closed.
 
@@ -46,9 +46,9 @@
                             <!--                               aria-current="page">Dashboard</a>-->
                             <!--                            <a href="#"-->
                             <!--                               class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">Team</a>-->
-                            <a (click)="scrollToProduct()"
+                            <a href="#/company" (click)="scrollToProduct($event)"
                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">Produkt</a>
-                            <a (click)="scrollToAbout()"
+                            <a href="#/company" (click)="scrollToAbout($event)"
                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">O
                                 Mnie</a>
                         </div>
@@ -81,7 +81,7 @@
                     </h1>
                     <span class="flex items-center">
                         <img class="inline-block" src="assets/media/images/landing-page/google_maps_logo.png"
-                             height="48">
+                             width="200" alt="Logo Google Maps">
                     </span>
                 </div>
 
@@ -105,16 +105,21 @@
             </div>
 
             <div class="hidden xl:block xl:absolute top-0 right-0">
-                <img src="assets/media/images/landing-page/bus.jpg" class="max-h-screen" alt="Home img">
+                <picture>
+                    <source srcset="assets/media/images/landing-page/bus.webp" type="image/webp">
+                    <img src="assets/media/images/landing-page/bus.jpg" class="max-h-screen h-auto w-auto" width="1280" height="1920"
+                         alt="Autobus miejski">
+                </picture>
             </div>
 
         </div>
 
     </div> <!-- container.// -->
 
-</section>
+</header>
 <!-- home section //nd -->
 
+<main>
 <!-- feature section -->
 <section id="product" class="bg-white xl:relative">
 
@@ -123,14 +128,15 @@
         <div class="flex flex-col xl:flex-row justify-end">
 
             <div class="hidden xl:block xl:absolute left-0 bottom-0 w-full h-full">
-                <img src="assets/media/images/landing-page/city-map-routes.png" class="h-full" alt="Feature img">
+                <img src="assets/media/images/landing-page/city-map-routes.png" class="h-full w-auto" width="650" height="580"
+                     alt="Mapa z przebiegiem linii autobusowych" loading="lazy" decoding="async">
             </div>
 
             <div class="bg-white/95 z-1 lg:pl-8">
 
-                <h1 class="font-semibold text-gray-900 text-4xl text-center leading-normal my-6">
+                <h2 class="font-semibold text-gray-900 text-4xl text-center leading-normal my-6">
                     Digitalizacja Rozkładów Jazdy
-                </h1>
+                </h2>
 
                 <p class="font-normal text-gray-600 text-md md:text-xl text-center mb-8">
                     Dostarczam rozkłady jazdy dla <br>
@@ -140,11 +146,11 @@
                 <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4 mb-20">
                     <div class="px-4 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
                         <!--                        <i class="ki-filled ki-map text-xl text-green-900"></i>-->
-                        <img src="../../assets/media/images/landing-page/google_maps_logo_icon.png" width="48">
+                        <img src="assets/media/images/landing-page/google_maps_logo_icon.png" width="48" height="48" alt="" loading="lazy" decoding="async">
                     </div>
 
                     <div class="text-center lg:text-left">
-                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Rozkłady Jazdy na Google Maps</h4>
+                        <h3 class="font-semibold text-gray-900 text-2xl mb-2">Rozkłady Jazdy na Google Maps</h3>
                         <p class="font-normal text-gray-600 text-xl leading-relaxed">
                             Wdrażam rozkłady jazdy do powszechnie znanych aplikacji, <br> w tym do Map Google
                         </p>
@@ -153,11 +159,11 @@
 
                 <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4 mb-20">
                     <div class="px-2 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
-                        <img src="assets/media/images/landing-page/routes_icon.png" width="64">
+                        <img src="assets/media/images/landing-page/routes_icon.png" width="64" height="64" alt="" loading="lazy" decoding="async">
                     </div>
 
                     <div class="text-center lg:text-left">
-                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Zarządaj Liniami i Trasami</h4>
+                        <h3 class="font-semibold text-gray-900 text-2xl mb-2">Zarządzaj Liniami i Trasami</h3>
                         <p class="font-normal text-gray-600 text-xl leading-relaxed">
                             W aplikacji możesz samodzielnie dodawać nowe linie <br>
                             oraz konfigurować wariant trasy
@@ -167,11 +173,11 @@
 
                 <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4 mb-20">
                     <div class="px-2 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
-                        <img src="../../assets/media/images/landing-page/timetable_icon.png" width="72">
+                        <img src="assets/media/images/landing-page/timetable_icon.png" width="72" height="72" alt="" loading="lazy" decoding="async">
                     </div>
 
                     <div class="text-center lg:text-left">
-                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Zaplanuj Rozkład Jazdy</h4>
+                        <h3 class="font-semibold text-gray-900 text-2xl mb-2">Zaplanuj Rozkład Jazdy</h3>
                         <p class="font-normal text-gray-600 text-xl leading-relaxed">
                             Skonfiguruj kalendarz i zdecyduj w jakie dni kursuje linia autobusowa <br>
                         </p>
@@ -180,11 +186,11 @@
 
                 <div class="flex flex-col md:flex-row justify-center xl:justify-start space-x-4">
                     <div class="px-2 h-20 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center mb-5 md:mb-0">
-                        <img src="assets/media/images/landing-page/timetables_icon.png" width="64">
+                        <img src="assets/media/images/landing-page/timetables_icon.png" width="64" height="64" alt="" loading="lazy" decoding="async">
                     </div>
 
                     <div class="text-center lg:text-left">
-                        <h4 class="font-semibold text-gray-900 text-2xl mb-2">Tabliczki przystankowe</h4>
+                        <h3 class="font-semibold text-gray-900 text-2xl mb-2">Tabliczki przystankowe</h3>
                         <p class="font-normal text-gray-600 text-xl leading-relaxed">
                             Na podstawie danych wygenerujesz tabliczki przystankowe.
                         </p>
@@ -243,7 +249,7 @@
 
         <p class="font-normal text-gray-600 text-lg md:text-xl text-center uppercase mb-6">O Mnie</p>
 
-        <h1 class="font-semibold text-gray-900 text-2xl md:text-4xl text-center leading-normal">Kim jestem?</h1>
+        <h2 class="font-semibold text-gray-900 text-2xl md:text-4xl text-center leading-normal">Kim jestem?</h2>
 
         <!--        <div class="hidden xl:block xl:absolute top-0">-->
         <!--            <img src="assets/image/testimoni-1.png" alt="Image">-->
@@ -286,7 +292,7 @@
 </section>
 <!-- testimoni section //end -->
 
-<a href="tel:+48570552653" class="call-button md:hidden" title="Call Now">
+<a href="tel:+48570552653" class="call-button md:hidden" title="Zadzwoń">
     <fa-icon [icon]="faPhone"></fa-icon>
 </a>
 
@@ -328,10 +334,11 @@
 
             <div class="relative">
                 <img class="absolute inset-x-0 bottom-0 -mb-48 -translate-x-1/2 left-1/2"
-                     src="assets/media/svg/landing-page/blob-shape.svg" alt="Blob shape SVG"/>
+                     src="assets/media/svg/landing-page/blob-shape.svg" alt=""/>
 
-                <img class="relative w-full xl:max-w-lg xl:mx-auto 2xl:origin-bottom 2xl:scale-110"
-                     src="assets/media/images/landing-page/me_landing_page.png" alt=""/>
+                <img class="relative w-full h-auto xl:max-w-lg xl:mx-auto 2xl:origin-bottom 2xl:scale-110"
+                     src="assets/media/images/landing-page/me_landing_page.webp" width="998" height="1400"
+                     alt="Przemysław Wrona" loading="lazy" decoding="async"/>
 
                 <!--                <img src="assets/media/images/landing-page/wrona.jpg">-->
             </div>
@@ -339,6 +346,7 @@
         </div>
     </div>
 </section>
+</main>
 
 <!-- book section -->
 <!--<section class="bg-white py-10 md:py-16">-->
@@ -423,17 +431,17 @@
 
             <!-- Linki nawigacyjne -->
             <div>
-                <h4 class="text-white font-semibold mb-4">Nawigacja</h4>
+                <h2 class="text-white font-semibold mb-4">Nawigacja</h2>
                 <ul class="space-y-2 text-sm">
-                    <li><a (click)="scrollToHeader()" class="hover:underline">Strona główna</a></li>
-                    <li><a (click)="scrollToProduct()" class="hover:underline">Usługi</a></li>
-                    <li><a (click)="scrollToAbout()" class="hover:underline">O mnie</a></li>
+                    <li><a href="#/company" (click)="scrollToHeader($event)" class="hover:underline">Strona główna</a></li>
+                    <li><a href="#/company" (click)="scrollToProduct($event)" class="hover:underline">Usługi</a></li>
+                    <li><a href="#/company" (click)="scrollToAbout($event)" class="hover:underline">O mnie</a></li>
                 </ul>
             </div>
 
             <!-- Kontakt -->
             <div>
-                <h4 class="text-white font-semibold mb-4">Kontakt</h4>
+                <h2 class="text-white font-semibold mb-4">Kontakt</h2>
                 <ul class="space-y-2 text-sm text-gray-400">
                     <!--                    <li>-->
                     <!--                        <span class="block">📍 ul. Przykładowa 123, 00-001 Warszawa</span>-->
@@ -442,7 +450,10 @@
                     <!--                        <span class="block">📞 +48 123 456 789</span>-->
                     <!--                    </li>-->
                     <li>
-                        <a class="block" href="mailto:biuro&#64;nastepnastacja.pl?subject={{title}}">✉️ biuro&#64;nastepnastacja.pl</a>
+                        <a class="block" href="tel:+48570552653">+48 570 552 653</a>
+                    </li>
+                    <li>
+                        <a class="block" href="mailto:biuro&#64;nastepnastacja.pl?subject={{title}}">biuro&#64;nastepnastacja.pl</a>
                     </li>
                 </ul>
             </div>
@@ -450,7 +461,7 @@
         </div>
 
         <div class="mt-8 border-t border-gray-700 pt-4 text-center text-sm text-gray-500">
-            &copy; 2025 <span class="tracking-widest">NASTĘPNA STACJA</span>. Wszelkie prawa zastrzeżone.
+            &copy; {{ year() }} <span class="tracking-widest">NASTĘPNA STACJA</span>. Wszelkie prawa zastrzeżone.
         </div>
     </div>
 </footer>
