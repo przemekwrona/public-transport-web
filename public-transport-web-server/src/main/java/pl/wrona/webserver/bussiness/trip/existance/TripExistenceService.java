@@ -13,6 +13,7 @@ import pl.wrona.webserver.bussiness.trip.TripQueryRepository;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.mapper.TripVariantModeMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
@@ -35,10 +36,11 @@ public class TripExistenceService {
         String routeCode = tripExistence.getRouteId() == null ? null : tripExistence.getRouteId().getRouteCode();
         boolean mainVariant = Boolean.TRUE.equals(tripExistence.getIsMainVariant());
         String designation = tripExistence.getVariantDesignation();
+        TripVariantMode variantMode = TripVariantModeMapper.map(tripExistence.getTripMode());
         Long excludedTripId = currentTripId(instance, routeCode, tripExistence.getTripCode());
 
         List<TripEntity> matches = tripQueryService.findByRouteMainVariantAndDesignation(
-                instance, routeCode, mainVariant, designation, excludedTripId);
+                instance, routeCode, mainVariant, designation, variantMode, excludedTripId);
         if (matches.isEmpty()) {
             return result(Status.StatusEnum.NOT_EXIST, null);
         }

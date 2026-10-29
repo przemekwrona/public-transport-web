@@ -15,6 +15,7 @@ import {provideLuxonDateAdapter} from "@angular/material-luxon-adapter";
 import {CalendarPickerComponent} from "./calendar-picker/calendar-picker.component";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatButtonModule} from "@angular/material/button";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 export const MY_FORMATS = {
     parse: {
@@ -42,7 +43,8 @@ export const MY_FORMATS = {
         FaIconComponent,
         CalendarPickerComponent,
         MatExpansionModule,
-        MatButtonModule
+        MatButtonModule,
+        NgxSpinnerModule
     ],
     declarations: [
         CalendarListComponent,

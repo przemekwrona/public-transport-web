@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {AfterViewInit, Component, inject, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {
     CalendarSymbolQuery,
@@ -20,16 +20,48 @@ import moment from "moment";
     styleUrl: './calendar-list.component.scss',
     standalone: false
 })
-export class CalendarListComponent implements OnInit {
+export class CalendarListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public calendarsResponse: GetCalendarItemResponse;
     readonly panelOpenState: WritableSignal<boolean> = signal(false);
+    public pulsingSymbol: { calendarCode: string; symbol: string } | null = null;
+    private openedFromCreateCode: string | null = null;
+    private pulseTimer: ReturnType<typeof setTimeout> | null = null;
 
     constructor(private calendarService: CalendarService, private loginService: LoginService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private notificationService: NotificationService) {
+        const navigation = this.router.getCurrentNavigation();
+        const previousUrl = (navigation?.previousNavigation?.finalUrl ?? navigation?.previousNavigation?.extractedUrl)?.toString() ?? '';
+        const createdSymbol = navigation?.extras?.state?.['createdSymbol'] as { calendarCode: string; symbol: string } | undefined;
+        const cameFromCreate = /\/agency\/calendars\/[^/?#]+\/symbol\/create\/?(?:[?#].*)?$/.test(previousUrl);
+
+        if (cameFromCreate && createdSymbol?.calendarCode && createdSymbol?.symbol) {
+            this.pulsingSymbol = createdSymbol;
+            this.openedFromCreateCode = createdSymbol.calendarCode;
+        }
     }
 
     ngOnInit(): void {
         this.calendarsResponse = this.route.snapshot.data['calendars'];
+        if (this.pulsingSymbol) {
+            this.pulseTimer = setTimeout(() => {
+                this.pulsingSymbol = null;
+            }, 5000);
+        }
+    }
+
+    ngAfterViewInit(): void {
+        if (!this.pulsingSymbol) {
+            return;
+        }
+        setTimeout(() => {
+            document.getElementById('created-calendar-symbol')?.scrollIntoView({behavior: 'smooth', block: 'center'});
+        });
+    }
+
+    ngOnDestroy(): void {
+        if (this.pulseTimer) {
+            clearTimeout(this.pulseTimer);
+        }
     }
 
     public deleteByCalendarSymbol(calendarSymbol: CalendarSymbolBody) {
@@ -54,6 +86,19 @@ export class CalendarListComponent implements OnInit {
 
     public hasCalendar(): boolean {
         return size(this.calendarsResponse.items) > 0;
+    }
+
+    public isPanelExpanded(calendarItem: CalendarItemBody): boolean {
+        return this.isActive(calendarItem?.startDate, calendarItem?.endDate)
+            || calendarItem?.calendarItemId?.code === this.openedFromCreateCode;
+    }
+
+    public isPulsingSymbol(calendarSymbol: CalendarSymbolBody): boolean {
+        if (!this.pulsingSymbol) {
+            return false;
+        }
+        return calendarSymbol?.calendarSymbolId?.calendarItemId?.code === this.pulsingSymbol.calendarCode
+            && calendarSymbol?.calendarSymbolId?.symbol === this.pulsingSymbol.symbol;
     }
 
     public isStartInFuture(startDate?: string): boolean {

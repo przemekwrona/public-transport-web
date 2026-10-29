@@ -18,7 +18,7 @@
         @if (hasCalendar()) {
             <mat-accordion>
                 @for (calendarItem of calendarsResponse.items || []; track calendarItem; ) {
-                    <mat-expansion-panel [expanded]="isActive(calendarItem?.startDate, calendarItem?.endDate)"
+                    <mat-expansion-panel [expanded]="isPanelExpanded(calendarItem)"
                                         (opened)="panelOpenState.set(true)"
                                         (closed)="panelOpenState.set(false)">
                         <mat-expansion-panel-header>
@@ -45,7 +45,9 @@
 
                         @for (calendarSymbol of calendarItem.symbols || []; track calendarSymbol; ) {
 
-                            <div class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg mb-2">
+                            <div class="flex items-center flex-wrap sm:flex-nowrap justify-between grow border border-gray-200 rounded-xl gap-2 p-5 rtl:[background-position:-195px_-85px] [background-position:195px_-85px] bg-no-repeat bg-[length:650px] user-access-bg mb-2"
+                                 [class.symbol-pulse]="isPulsingSymbol(calendarSymbol)"
+                                 [attr.id]="isPulsingSymbol(calendarSymbol) ? 'created-calendar-symbol' : null">
                                 <div class="flex items-center gap-4">
                                     <div class="relative size-[50px] shrink-0">
                                         <svg class="w-full h-full stroke-brand-clarity fill-brand-light" width="44" height="48"

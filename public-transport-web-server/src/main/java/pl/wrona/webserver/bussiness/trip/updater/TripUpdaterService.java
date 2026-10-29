@@ -66,7 +66,7 @@ public class TripUpdaterService {
                 && !tripEntity.getRoute().getRouteCode().equals(routeCode)
                 && !tripEntity.getVariantMode().equals(tripVariantMode)
                 && !tripEntity.getVariantDesignation().equals(designation)) {
-            tripQueryService.assertUniqueTrip(instance, routeCode, mainVariant, designation, tripEntity.getTripId());
+            tripQueryService.assertUniqueTrip(instance, routeCode, mainVariant, designation, tripVariantMode, tripEntity.getTripId());
         }
 
         TripEntity updatedTrip = TripMapper.update(tripEntity, tripDetails);
