@@ -80,15 +80,29 @@
 						Rozkład Jazdy
 					</span>
                 </div>
-                <div class="menu-item" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
-                    <div [routerLink]="['/agency/stops-db']"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent"
-                         href="" tabindex="0">
-                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400"><i
-                                    class="ki-filled ki-map text-lg"></i></span>
+                <div class="menu-item show" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+                    <div class="menu-link gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent"
+                         tabindex="0">
+                        <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
+                            <i class="ki-filled ki-map text-lg"></i>
+                        </span>
                         <span class="menu-title text-sm font-semibold text-gray-700"> Przystanki </span>
+                        <span class="menu-arrow">
+                            <i class="ki-filled ki-down text-2xs menu-item-show:hidden"></i>
+                            <i class="ki-filled ki-up text-2xs hidden menu-item-show:inline-flex"></i>
+                        </span>
                     </div>
-
+                    <div class="menu-accordion show">
+                        <div class="menu-item">
+                            <a [routerLink]="['/agency/stops']"
+                               routerLinkActive="bg-gray-100"
+                               class="menu-link no-underline gap-[10px] pl-[50px] pr-[10px] py-[6px] border border-transparent">
+                                <span class="menu-title text-sm font-semibold text-gray-700"> Baza Danych Przystanków </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">
                     <div [routerLink]="['/agency/routes']"
                          data-testid="line"
                          class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
