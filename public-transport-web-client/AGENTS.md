@@ -16,7 +16,7 @@ Routing uses `useHash: true`. Browser URLs look like `/#/agency/routes`. The gen
 ## Layout
 
 - `src/app/app.routes.ts` — routes. Screen data is loaded by resolvers, not `ngOnInit`, when the neighboring screen already does that.
-- `src/app/agency/` — routes, trips, brigades, calendars, timetables, stops, users, carrier profile.
+- `src/app/agency/` — routes, trips, brigades, calendars, timetables, stops-db, users, carrier profile.
 - `src/app/auth/` — sign-in, header interceptor, `AgencyStorageService`.
 - `src/app/transport/` and `landing/` — journey planner and the public page.
 - `src/app/generated/` — `typescript-angular` clients. Read only. Regenerate with `generate:api`, `generate:pdf:api`, `generate:planner:api`.

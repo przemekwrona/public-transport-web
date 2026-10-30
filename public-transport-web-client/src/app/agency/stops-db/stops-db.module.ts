@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {StopsComponent} from "./stops.component";
+import {StopsDbComponent} from "./stops-db.component";
 import {MatIconModule} from "@angular/material/icon";
 import {SharedModule} from "../shared/shared.module";
 import {LoginService} from "../../auth/login.service";
@@ -10,7 +10,7 @@ import {StopsService} from "../../generated/public-transport-api";
 
 @NgModule({
     imports: [
-        StopsComponent,
+        StopsDbComponent,
         CommonModule,
         SharedModule,
         MatIconModule,
@@ -19,11 +19,11 @@ import {StopsService} from "../../generated/public-transport-api";
     declarations: [
     ],
     exports: [
-        StopsComponent
+        StopsDbComponent
     ], providers: [
         StopsService,
         LoginService
     ]
 })
-export class StopsModule {
+export class StopsDbModule {
 }
