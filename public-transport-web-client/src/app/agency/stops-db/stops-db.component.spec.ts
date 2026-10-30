@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StopsComponent } from './stops.component';
+import { StopsDbComponent } from './stops-db.component';
 
-describe('StopsComponent', () => {
-  let component: StopsComponent;
-  let fixture: ComponentFixture<StopsComponent>;
+describe('StopsDbComponent', () => {
+  let component: StopsDbComponent;
+  let fixture: ComponentFixture<StopsDbComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StopsComponent]
+      imports: [StopsDbComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(StopsComponent);
+    fixture = TestBed.createComponent(StopsDbComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

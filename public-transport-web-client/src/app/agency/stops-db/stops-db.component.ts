@@ -24,11 +24,11 @@ interface StopMarker extends L.Marker {
     providers: [
         LoginService
     ],
-    selector: 'app-stops',
-    templateUrl: './stops.component.html',
-    styleUrl: './stops.component.scss'
+    selector: 'app-stops-db',
+    templateUrl: './stops-db.component.html',
+    styleUrl: './stops-db.component.scss'
 })
-export class StopsComponent implements OnInit, AfterViewInit {
+export class StopsDbComponent implements OnInit, AfterViewInit {
     private ICON_BDOT = L.divIcon({
         html: `<div style="background-color: #0096FF; padding: 1px 0 0 1px; width: 20px; height: 20px; border-radius: 2px; color: whitesmoke"><img src="assets/bus-solid.svg"></div>`,
         className: 'stop-marker'
