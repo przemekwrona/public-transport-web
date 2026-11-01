@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {AfterViewInit, Component, NgZone, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {find} from "lodash";
@@ -28,7 +28,7 @@ interface StopMarker extends L.Marker {
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './stops-db.component.scss'
 })
-export class StopsDbComponent implements OnInit, AfterViewInit {
+export class StopsDbComponent implements OnInit, AfterViewInit, OnDestroy {
     private ICON_BDOT = L.divIcon({
         html: `<div style="background-color: #0096FF; padding: 1px 0 0 1px; width: 20px; height: 20px; border-radius: 2px; color: whitesmoke"><img src="assets/bus-solid.svg"></div>`,
         className: 'stop-marker'
@@ -47,12 +47,61 @@ export class StopsDbComponent implements OnInit, AfterViewInit {
 
     public lastClickedStop: Stop = {} as Stop;
     public lastClickedStopTerritory: Territory = {} as Territory;
+    public detailsOpen = false;
 
-    constructor(private stopsService: StopsService, private authService: LoginService, private router: Router, private route: ActivatedRoute, private googleAnalyticsService: GoogleAnalyticsService) {
+    private detailsResizeTimer = 0;
+    private mapResizeSettled = false;
+    private ignoreMapReload = false;
+
+    constructor(private stopsService: StopsService, private authService: LoginService, private router: Router, private route: ActivatedRoute, private googleAnalyticsService: GoogleAnalyticsService, private ngZone: NgZone) {
     }
 
     public isAdmin(): boolean {
         return this.authService.hasRoleSuperAdmin();
+    }
+
+    public hasSelectedStop(): boolean {
+        return this.lastClickedStop?.id != null;
+    }
+
+    private openDetails(): void {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion) {
+            this.detailsOpen = true;
+            setTimeout(() => this.finishMapResize());
+            return;
+        }
+
+        this.detailsOpen = false;
+        setTimeout(() => {
+            this.ignoreMapReload = true;
+            this.detailsOpen = true;
+            const layout = document.querySelector('.stops-layout');
+            const onEnd = (event: TransitionEvent) => {
+                if (event.propertyName !== 'flex-basis') {
+                    return;
+                }
+                layout?.removeEventListener('transitionend', onEnd);
+                window.clearTimeout(this.detailsResizeTimer);
+                this.finishMapResize();
+            };
+            layout?.addEventListener('transitionend', onEnd);
+            this.detailsResizeTimer = window.setTimeout(() => {
+                layout?.removeEventListener('transitionend', onEnd);
+                this.finishMapResize();
+            }, 520);
+        });
+    }
+
+    private finishMapResize(): void {
+        if (this.mapResizeSettled) {
+            return;
+        }
+        this.mapResizeSettled = true;
+        this.ignoreMapReload = true;
+        this.map?.invalidateSize({animate: false, pan: false});
+        this.ignoreMapReload = false;
+        this.reloadStops(this.map);
     }
 
     ngAfterViewInit(): void {
@@ -60,10 +109,15 @@ export class StopsDbComponent implements OnInit, AfterViewInit {
         this.reloadStops(this.map);
         this.onZoomEnd(this.map);
         this.onMoveEnd(this.map);
+        setTimeout(() => this.map.invalidateSize());
     }
 
     ngOnInit(): void {
         this.googleAnalyticsService.pageView(this.router.url);
+    }
+
+    ngOnDestroy(): void {
+        window.clearTimeout(this.detailsResizeTimer);
     }
 
     private initMap(): Map {
@@ -97,6 +151,9 @@ export class StopsDbComponent implements OnInit, AfterViewInit {
     }
 
     private reloadStops(map: Map) {
+        if (this.ignoreMapReload) {
+            return;
+        }
         if (map.getZoom() > 11) {
             const bounds = map.getBounds();
             this.stopsService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
@@ -115,8 +172,14 @@ export class StopsDbComponent implements OnInit, AfterViewInit {
                     return stopMarker;
                 }) || []
                 stopMarkers.forEach(marker => marker.on('click', (event: LeafletMouseEvent) => {
-                    this.lastClickedStop = find(this.stops, {id: event.target.id});
-                    this.lastClickedStopTerritory = find(this.territories, {id: this.lastClickedStop.territory_osm_id});
+                    this.ngZone.run(() => {
+                        const opening = !this.hasSelectedStop();
+                        this.lastClickedStop = find(this.stops, {id: event.target.id});
+                        this.lastClickedStopTerritory = find(this.territories, {id: this.lastClickedStop.territory_osm_id});
+                        if (opening) {
+                            this.openDetails();
+                        }
+                    });
                 }));
                 stopMarkers.forEach(marker => marker.addTo(map));
 
