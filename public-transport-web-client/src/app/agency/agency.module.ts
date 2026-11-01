@@ -14,6 +14,7 @@ import {FooterComponent} from "./footer/footer.component";
 import {GoogleMapsModule} from "./google-maps/google-maps.module";
 import {BrigadeModule} from "./brigade/brigade.module";
 import {CalendarsModule} from "./calendars/calendars.module";
+import {SidebarModule} from "primeng/sidebar";
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {CalendarsModule} from "./calendars/calendars.module";
         GoogleMapsModule,
         MatTreeModule,
         BrigadeModule,
-        CalendarsModule
+        CalendarsModule,
+        SidebarModule
     ],
     providers: [
         StopService

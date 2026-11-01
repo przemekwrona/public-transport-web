@@ -1,9 +1,25 @@
-.menu-accordion .menu-link {
-  align-items: flex-start;
+.agency-shell.p-sidebar-layout {
+  min-height: 0;
+  height: 100%;
 }
 
-.menu-accordion .menu-title {
-  white-space: normal;
-  line-height: 1.25rem;
-  min-width: 0;
+.demo1.agency-sidebar-push.sidebar-fixed.header-fixed .header {
+  left: var(--tw-sidebar-width) !important;
+  inset-inline-start: var(--tw-sidebar-width) !important;
+  transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1), inset-inline-start 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agency-nav-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  border-radius: 0.375rem;
+  background: #000;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0;
 }

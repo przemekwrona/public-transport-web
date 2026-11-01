@@ -1,160 +1,131 @@
-<ng-container>
-    <div class="sidebar-header hidden lg:flex items-center relative justify-between px-3 lg:px-6 shrink-0"
-         id="sidebar_header">
-        <a [routerLink]="['/agency/profile']" class="dark:hidden">
-            <div class="default-logo min-h-[22px] max-w-none font-bold tracking-widest">NASTĘPNA&nbsp;STACJA</div>
-            <div class="small-logo min-h-[22px] max-w-none font-bold tracking-widest">NS</div>
-        </a>
-        <a [routerLink]="['/agency/profile']" class="hidden dark:block">
-            <img class="default-logo min-h-[22px] max-w-none" src="assets/media/app/default-logo-dark.svg"/>
-            <img class="small-logo min-h-[22px] max-w-none" src="assets/media/app/mini-logo.svg"/>
-        </a>
-        <button
-                class="btn btn-icon btn-icon-md size-[30px] rounded-lg border border-gray-200 dark:border-gray-300 bg-light text-gray-500 hover:text-gray-700 toggle absolute left-full top-2/4 -translate-x-2/4 -translate-y-2/4"
-                data-toggle="body" data-toggle-class="sidebar-collapse" id="sidebar_toggle">
-            <i class="ki-filled ki-black-left-line toggle-active:rotate-180 transition-all duration-300">
-            </i>
-        </button>
-    </div>
-    <div class="sidebar-content flex grow shrink-0 py-5 pr-2" id="sidebar_content">
-        <div class="scrollable-y-hover grow shrink-0 flex pl-2 lg:pl-5 pr-1 lg:pr-3" data-scrollable="true"
-             data-scrollable-dependencies="#sidebar_header" data-scrollable-height="auto" data-scrollable-offset="0px"
-             data-scrollable-wrappers="#sidebar_content" id="sidebar_scrollable">
-            <div class="menu flex flex-col grow gap-0.5" data-menu="true" data-menu-accordion-expand-all="false"
-                 id="sidebar_menu">
+@if (sidebar.mobile() && sidebar.open()) {
+    <p-sidebar-backdrop/>
+}
 
+<p-sidebar id="agency"
+           [open]="sidebar.open()"
+           (openChange)="onOpenChange($event)"
+           [collapsible]="sidebar.mobile() ? 'offcanvas' : 'icon'"
+           [overlay]="sidebar.mobile()"
+           width="17.5rem"
+           iconWidth="5rem">
+    <p-sidebar-spacer/>
+    <p-sidebar-aside>
+        <p-sidebar-panel>
+            <p-sidebar-header>
+                <p-sidebar-menu>
+                    <p-sidebar-menu-item>
+                        <a routerLink="/agency/profile" pSidebarMenuButton
+                           routerLinkActive [isActive]="brandLink.isActive" #brandLink="routerLinkActive">
+                            <span class="agency-nav-mark">NS</span>
+                            <span>NASTĘPNA STACJA</span>
+                        </a>
+                    </p-sidebar-menu-item>
+                </p-sidebar-menu>
+            </p-sidebar-header>
+            <p-sidebar-content>
                 @if (isAdmin()) {
-                    <div class="menu-item pt-2.25 pb-px">
-					<span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-800">
-						{{ getAgencyName() }}
-					</span>
-                    </div>
-
-                    <div class="menu-item pt-2.25 pb-px">
-					<span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
-						Admin
-					</span>
-                    </div>
-
-                    <div class="menu-item">
-                        <div [routerLink]="['/admin/agency/profiles']"
-                             class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
-                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                                <i class="ki-filled ki-profile-circle text-lg"></i>
-                            </span>
-                            <span class="menu-title text-sm font-semibold text-gray-700">Lista Agencji</span>
-                            <span class="badge badge-sm badge-outline badge-danger">Admin</span>
-                        </div>
-                    </div>
-
-                    <div class="menu-item">
-                        <div [routerLink]="['/admin/users']"
-                             class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
-                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                                <i class="ki-filled ki-profile-circle text-lg"></i>
-                            </span>
-                            <span class="menu-title text-sm font-semibold text-gray-700">Użytkownicy</span>
-                            <span class="badge badge-sm badge-outline badge-danger">Admin</span>
-                        </div>
-                    </div>
+                    <p-sidebar-group>
+                        <p-sidebar-group-label>{{ getAgencyName() }}</p-sidebar-group-label>
+                        <p-sidebar-group-content>
+                            <p-sidebar-menu>
+                                <p-sidebar-menu-item>
+                                    <a routerLink="/admin/agency/profiles" pSidebarMenuButton
+                                       routerLinkActive [isActive]="agenciesLink.isActive" #agenciesLink="routerLinkActive">
+                                        <svg data-p-icon="building"></svg>
+                                        <span>Lista Agencji</span>
+                                    </a>
+                                    <p-sidebar-menu-badge>Admin</p-sidebar-menu-badge>
+                                </p-sidebar-menu-item>
+                                <p-sidebar-menu-item>
+                                    <a routerLink="/admin/users" pSidebarMenuButton
+                                       routerLinkActive [isActive]="usersLink.isActive" #usersLink="routerLinkActive">
+                                        <svg data-p-icon="users"></svg>
+                                        <span>Użytkownicy</span>
+                                    </a>
+                                    <p-sidebar-menu-badge>Admin</p-sidebar-menu-badge>
+                                </p-sidebar-menu-item>
+                            </p-sidebar-menu>
+                        </p-sidebar-group-content>
+                    </p-sidebar-group>
                 }
 
-                <div class="menu-item pt-2.25 pb-px">
-					<span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
-						Agencje
-					</span>
-                </div>
+                <p-sidebar-group>
+                    <p-sidebar-group-label>Agencje</p-sidebar-group-label>
+                    <p-sidebar-group-content>
+                        <p-sidebar-menu>
+                            <p-sidebar-menu-item>
+                                <a routerLink="/agency/profile" pSidebarMenuButton
+                                   routerLinkActive [isActive]="profileLink.isActive" #profileLink="routerLinkActive">
+                                    <svg data-p-icon="user"></svg>
+                                    <span>Mój Profil</span>
+                                </a>
+                            </p-sidebar-menu-item>
+                        </p-sidebar-menu>
+                    </p-sidebar-group-content>
+                </p-sidebar-group>
 
-                <div class="menu-item" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
-                    <div [routerLink]="['/agency/profile']"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href=""
-                         tabindex="0">
-                        <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                            <i class="ki-filled ki-profile-circle text-lg"></i>
-                        </span>
-                        <span class="menu-title text-sm font-semibold text-gray-700"> Mój Profil </span>
-                    </div>
-                </div>
-                <div class="menu-item pt-2.25 pb-px">
-					<span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
-						Rozkład Jazdy
-					</span>
-                </div>
-                <div class="menu-item show" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
-                    <div class="menu-link gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent"
-                         tabindex="0">
-                        <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                            <i class="ki-filled ki-map text-lg"></i>
-                        </span>
-                        <span class="menu-title text-sm font-semibold text-gray-700"> Przystanki </span>
-                        <span class="menu-arrow">
-                            <i class="ki-filled ki-down text-2xs menu-item-show:hidden"></i>
-                            <i class="ki-filled ki-up text-2xs hidden menu-item-show:inline-flex"></i>
-                        </span>
-                    </div>
-                    <div class="menu-accordion show">
-                        <div class="menu-item">
-                            <a [routerLink]="['/agency/stops']"
-                               routerLinkActive="bg-gray-100"
-                               class="menu-link no-underline gap-[10px] pl-[50px] pr-[10px] py-[6px] border border-transparent">
-                                <span class="menu-title text-sm font-semibold text-gray-700"> Baza Danych Przystanków </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="menu-item">
-                    <div [routerLink]="['/agency/routes']"
-                         data-testid="line"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
-                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                                <i class="ki-filled ki-route text-lg"></i>
-                            </span>
-                        <span class="menu-title text-sm font-semibold text-gray-700"> Linie </span>
-                    </div>
+                <p-sidebar-group>
+                    <p-sidebar-group-label>Rozkład Jazdy</p-sidebar-group-label>
+                    <p-sidebar-group-content>
+                        <p-sidebar-menu>
+                            <p-sidebar-menu-item [collapsible]="true" [defaultOpen]="true">
+                                <button type="button" pSidebarMenuButton>
+                                    <svg data-p-icon="map"></svg>
+                                    <span>Przystanki</span>
+                                    <svg data-p-icon="chevron-down" class="ml-auto"></svg>
+                                </button>
+                                <p-sidebar-menu-sub>
+                                    <p-sidebar-menu-sub-item>
+                                        <a routerLink="/agency/stops" pSidebarMenuSubButton
+                                           routerLinkActive [isActive]="stopsLink.isActive" #stopsLink="routerLinkActive">
+                                            <span>Baza Danych Przystanków</span>
+                                        </a>
+                                    </p-sidebar-menu-sub-item>
+                                </p-sidebar-menu-sub>
+                            </p-sidebar-menu-item>
+                            <p-sidebar-menu-item>
+                                <a routerLink="/agency/routes" pSidebarMenuButton data-testid="line"
+                                   routerLinkActive [isActive]="linesLink.isActive" #linesLink="routerLinkActive">
+                                    <svg data-p-icon="directions"></svg>
+                                    <span>Linie</span>
+                                </a>
+                            </p-sidebar-menu-item>
+                            <p-sidebar-menu-item>
+                                <a routerLink="/agency/calendars" pSidebarMenuButton
+                                   routerLinkActive [isActive]="calendarsLink.isActive" #calendarsLink="routerLinkActive">
+                                    <svg data-p-icon="calendar"></svg>
+                                    <span>Kalendarz</span>
+                                </a>
+                            </p-sidebar-menu-item>
+                            <p-sidebar-menu-item>
+                                <a routerLink="/agency/brigades" pSidebarMenuButton
+                                   routerLinkActive [isActive]="brigadesLink.isActive" #brigadesLink="routerLinkActive">
+                                    <svg data-p-icon="clipboard"></svg>
+                                    <span>Brygady</span>
+                                </a>
+                            </p-sidebar-menu-item>
+                        </p-sidebar-menu>
+                    </p-sidebar-group-content>
+                </p-sidebar-group>
 
-                    <div [routerLink]="['/agency/calendars']"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
-                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                                <i class="ki-filled ki-calendar text-lg"></i>
-                            </span>
-                        <span class="menu-title text-sm font-semibold text-gray-700"> Kalendarz </span>
-                    </div>
-
-                    <!-- Hidden: Rozkład Jazdy (/agency/timetables)
-                    <div [routerLink]="['/agency/timetables']" data-testid="timetables"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
-                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                                <i class="ki-filled ki-calendar-2 text-lg"></i>
-                            </span>
-                        <span class="menu-title text-sm font-semibold text-gray-700"> Rozkład Jazdy </span>
-                        <span class="badge badge-sm badge-outline badge-info">Beta</span>
-                    </div>
-                    -->
-
-                    <div [routerLink]="['/agency/brigades']"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent">
-                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                                <i class="ki-filled ki-notepad-edit text-lg"></i>
-                            </span>
-                        <span class="menu-title text-sm font-semibold text-gray-700"> Brygady </span>
-                    </div>
-                </div>
-                <div class="menu-item pt-2.25 pb-px">
-					<span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
-						Dane
-					</span>
-                </div>
-                <div class="menu-item" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
-                    <div [routerLink]="['/agency/google/maps']"
-                         class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent"
-                         tabindex="0">
-                            <span class="menu-icon items-start w-[30px] text-gray-500 dark:text-gray-400">
-                                <img src="assets/google.gif" alt="Google Logo"/>
-                            </span>
-                        <span class="menu-title text-sm font-semibold text-gray-700"> Mapy Google </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</ng-container>
+                <p-sidebar-group>
+                    <p-sidebar-group-label>Dane</p-sidebar-group-label>
+                    <p-sidebar-group-content>
+                        <p-sidebar-menu>
+                            <p-sidebar-menu-item>
+                                <a routerLink="/agency/google/maps" pSidebarMenuButton
+                                   routerLinkActive [isActive]="mapsLink.isActive" #mapsLink="routerLinkActive">
+                                    <svg data-p-icon="google"></svg>
+                                    <span>Mapy Google</span>
+                                </a>
+                            </p-sidebar-menu-item>
+                        </p-sidebar-menu>
+                    </p-sidebar-group-content>
+                </p-sidebar-group>
+            </p-sidebar-content>
+            <button type="button" pSidebarRail
+                    [attr.aria-label]="(sidebar.open() ? 'sidebar.collapse' : 'sidebar.expand') | transloco"></button>
+        </p-sidebar-panel>
+    </p-sidebar-aside>
+</p-sidebar>

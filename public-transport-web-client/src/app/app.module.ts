@@ -21,7 +21,7 @@ import {provideEnvironmentNgxMask} from "ngx-mask";
 import {DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter} from "@angular/material/core";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {providePrimeNG} from "primeng/config";
-import Aura from "@primeng/themes/aura";
+import Aura from "@primeuix/themes/aura";
 
 @Injectable()
 export class MondayDateAdapter extends NativeDateAdapter {
@@ -60,6 +60,7 @@ export class MondayDateAdapter extends NativeDateAdapter {
         {provide: DateAdapter, useClass: MondayDateAdapter},
         {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'},
         providePrimeNG({
+            license: 'eyJpZCI6IjdhNzNlYzg0LTNhMTUtNDM0Mi1iY2M3LWQ5NWUzODRjMWFmMyIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3OTM1NzE5MTcsImV4cCI6MTgyNTEwNzkxN30.u4u5cUV5ZSwzeywhC-243HED4KBpbBgmNGaokIkXvwxHiu1FzZplbAFyMboWZ0IP3CwXRXopoZbsm5zMUJENAg',
             theme: {
                 preset: Aura,
                 options: {
