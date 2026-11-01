@@ -21,8 +21,6 @@ import {
     TimetableStopTime, TripFilter, TripResponse
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute, Data, Router, RouterModule} from "@angular/router";
-import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
@@ -42,7 +40,6 @@ export enum TimetableEditorComponentMode {
     TimetableBoardComponent,
     ReactiveFormsModule,
     FormsModule,
-    NgxMaterialTimepickerModule,
     NgxMatSelectSearchModule,
     MatFormFieldModule,
     MatSelectModule,
