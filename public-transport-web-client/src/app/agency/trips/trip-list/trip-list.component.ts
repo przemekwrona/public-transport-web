@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Data, RouterModule} from "@angular/router";
 import {RouteDetails} from "../../../generated/public-transport-api";
 import {map} from "rxjs";
-import {CommonModule} from "@angular/common";
+
 import {MatTabsModule} from "@angular/material/tabs";
 import {TRIP_LIST_TABS} from "./trip-list.tabs";
 
@@ -10,11 +10,11 @@ import {TRIP_LIST_TABS} from "./trip-list.tabs";
     selector: 'app-trip-list',
     templateUrl: './trip-list.component.html',
     styleUrl: './trip-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
-        CommonModule,
-        RouterModule,
-        MatTabsModule
-    ]
+    RouterModule,
+    MatTabsModule
+]
 })
 export class TripListComponent implements OnInit {
     public readonly tabs = TRIP_LIST_TABS;

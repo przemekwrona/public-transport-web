@@ -1,5 +1,5 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
@@ -27,14 +27,14 @@ import {concatMap, finalize, from, of, switchMap, tap, toArray} from 'rxjs';
 @Component({
     selector: 'app-timetable-wizard',
     imports: [
-        CommonModule,
-        RouterModule,
-        ReactiveFormsModule,
-        TimetableBoardComponent,
-        NgxSpinnerModule
-    ],
+    RouterModule,
+    ReactiveFormsModule,
+    TimetableBoardComponent,
+    NgxSpinnerModule
+],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     templateUrl: './timetable-wizard.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './timetable-wizard.component.scss'
 })
 export class TimetableWizardComponent implements OnInit {

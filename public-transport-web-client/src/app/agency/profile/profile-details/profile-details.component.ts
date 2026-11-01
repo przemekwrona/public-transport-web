@@ -1,4 +1,4 @@
-import {Component, OnInit, SecurityContext} from '@angular/core';
+import {Component, OnInit, SecurityContext, ChangeDetectionStrategy} from '@angular/core';
 import {
     AgencyAddress,
     AgencyDetails,
@@ -32,6 +32,7 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
         NgxMaskDirective,
         ReactiveFormsModule
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         AgencyService,
         provideNgxMask()

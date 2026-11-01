@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {LoginService} from "../login.service";
 import {LoginAppUserRequest, LoginAppUserResponse} from "../../generated/public-transport-api";
 import {Router} from "@angular/router";
@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
     selector: 'app-signin',
     templateUrl: './signin.component.html',
     styleUrl: './signin.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SigninComponent implements OnInit {

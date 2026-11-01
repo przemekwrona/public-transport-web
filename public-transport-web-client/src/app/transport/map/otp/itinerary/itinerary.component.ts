@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import * as L from 'leaflet';
 import {DivIcon, LatLng, LatLngBounds, Map, Marker, Polyline, PolyUtil} from "leaflet";
 import moment from "moment";
@@ -11,6 +11,7 @@ import {Itinerary, Leg} from "../../../../generated/public-transport-planner-api
     selector: 'app-itinerary',
     templateUrl: './itinerary.component.html',
     styleUrl: './itinerary.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ItineraryComponent implements OnInit, OnDestroy {

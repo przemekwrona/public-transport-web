@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, RouterModule} from "@angular/router";
 import {
     Status,
@@ -18,6 +18,7 @@ import {NotificationService} from "../../../shared/notification.service";
         RouterModule
     ],
     templateUrl: './timetable-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './timetable-list.component.scss'
 })
 export class TimetableListComponent implements OnInit {

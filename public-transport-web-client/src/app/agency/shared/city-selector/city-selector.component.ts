@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -10,20 +10,20 @@ import {
 } from "../../../generated/public-transport-api";
 import {debounceTime, distinctUntilChanged, map, Observable, of, startWith} from "rxjs";
 import {switchMap} from "rxjs/operators";
-import {CommonModule} from "@angular/common";
+
 import {MatSelectSearchComponent} from "ngx-mat-select-search";
 
 @Component({
     selector: 'app-city-selector',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatSelectSearchComponent
-    ],
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSelectSearchComponent
+],
     templateUrl: './city-selector.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './city-selector.component.scss'
 })
 export class CitySelectorComponent {

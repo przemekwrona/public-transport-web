@@ -1,16 +1,16 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {StopsPatchRequest, StopsService} from "../../../generated/public-transport-api";
-import {CommonModule} from "@angular/common";
+
 import {FormsModule} from "@angular/forms";
 
 @Component({
     imports: [
-        CommonModule,
-        FormsModule
-    ],
+    FormsModule
+],
     providers: [],
     selector: 'app-bus-stop-editor',
     templateUrl: './bus-stop-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './bus-stop-editor.component.scss'
 })
 export class BusStopEditorComponent implements OnChanges {

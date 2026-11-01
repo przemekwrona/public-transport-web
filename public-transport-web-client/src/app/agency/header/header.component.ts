@@ -1,10 +1,10 @@
-import {Component, HostBinding, OnInit} from '@angular/core';
+import {Component, HostBinding, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {LoginService} from "../../auth/login.service";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {ActivatedRoute, Data, Router, RouterModule} from "@angular/router";
 import {AgencyStorageService} from "../../auth/agency-storage.service";
 import {AgencyDetails, AgencyService, TripsDetails} from "../../generated/public-transport-api";
-import {CommonModule, NgOptimizedImage} from "@angular/common";
+import { NgOptimizedImage } from "@angular/common";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {map} from "rxjs";
 
@@ -13,10 +13,10 @@ import {map} from "rxjs";
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
     imports: [
-        CommonModule,
-        RouterModule,
-        NgOptimizedImage
-    ],
+    RouterModule,
+    NgOptimizedImage
+],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [LoginService]
 })
 export class HeaderComponent implements OnInit {

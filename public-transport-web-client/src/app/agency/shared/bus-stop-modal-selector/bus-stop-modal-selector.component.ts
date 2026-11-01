@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, model} from '@angular/core';
+import {AfterViewInit, Component, inject, model, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
 import * as L from "leaflet";
@@ -31,6 +31,7 @@ export interface BusStopSelectorData {
     selector: 'app-bus-stop-modal-selector',
     templateUrl: './bus-stop-modal-selector.component.html',
     styleUrl: './bus-stop-modal-selector.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BusStopModalSelectorComponent implements AfterViewInit {

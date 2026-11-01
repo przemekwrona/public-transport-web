@@ -1,5 +1,5 @@
-import {Component, forwardRef, input, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, forwardRef, input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+
 import {
     ControlValueAccessor,
     FormControl,
@@ -18,14 +18,13 @@ import {RouteNameNormPipe} from '../../timetable/create-timetable/route-id-norma
 @Component({
     selector: 'app-route-select',
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatSelectSearchComponent,
-        RouteNameNormPipe
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatSelectSearchComponent,
+    RouteNameNormPipe
+],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -34,6 +33,7 @@ import {RouteNameNormPipe} from '../../timetable/create-timetable/route-id-norma
         }
     ],
     templateUrl: './route-select.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './route-select.component.scss'
 })
 export class RouteSelectComponent implements OnInit, ControlValueAccessor {

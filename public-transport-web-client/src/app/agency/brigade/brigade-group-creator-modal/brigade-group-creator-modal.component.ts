@@ -1,5 +1,5 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
+
 import {
     MAT_DIALOG_DATA,
     MatDialogModule,
@@ -29,19 +29,19 @@ export interface BrigadeGroupCreatorModalData {
 @Component({
     selector: 'app-brigade-group-creator-modal',
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        ReactiveFormsModule,
-        MatSelectModule
-    ],
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatSelectModule
+],
     providers: [
         AgencyStorageService,
         CalendarService,
         BrigadeService
     ],
     templateUrl: './brigade-group-creator-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './brigade-group-creator-modal.component.scss'
 })
 export class BrigadeGroupCreatorModalComponent implements OnInit {

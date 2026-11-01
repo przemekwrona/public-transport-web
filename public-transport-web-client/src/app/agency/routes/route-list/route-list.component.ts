@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Route, RouteId, Routes, RouteService, Status, Stop} from "../../../generated/public-transport-api";
 import {ActivatedRoute, Router} from "@angular/router";
-import {CommonModule} from "@angular/common";
+
 import {PdfService} from "../../../generated/public-transport-pdf-api";
 import {LoginService} from "../../../auth/login.service";
 import {NotificationService} from "../../../shared/notification.service";
@@ -9,16 +9,14 @@ import {size} from "lodash";
 import {GoogleAnalyticsService} from "../../../google-analytics.service";
 
 @Component({
-    imports: [
-        CommonModule
-    ],
+    imports: [],
     providers: [
         PdfService
     ],
     selector: 'app-routes',
     templateUrl: './route-list.component.html',
     styleUrl: './route-list.component.scss',
-    changeDetection: ChangeDetectionStrategy.Default
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class RouteListComponent implements OnInit {
     public stops: Stop[] = [];

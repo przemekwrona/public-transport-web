@@ -1,6 +1,6 @@
 # Frontend — public-transport-web-client
 
-Angular 19 carrier console. The app is built on NgModules. Newer code is sometimes standalone and imported into the feature module. Match the style of the file you are editing.
+Angular 22 carrier console. The app is built on NgModules. Newer code is sometimes standalone and imported into the feature module. Match the style of the file you are editing.
 
 ## Run
 

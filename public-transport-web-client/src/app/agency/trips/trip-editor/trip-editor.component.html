@@ -335,8 +335,8 @@
                                                         <span>{{ stopTime.controls["name"].value }} </span>
                                                     </span>
                                                     <span>
-                                                        <span>{{ stopTime.controls["meters"]?.value | distance | number: '1.1-1' }}
-                                                            km ({{ stopTime.controls["calculatedSeconds"]?.value | time | number: '1.0-0' }}
+                                                        <span>{{ $safeNavigationMigration(stopTime.controls["meters"]?.value) | distance | number: '1.1-1' }}
+                                                            km ({{ $safeNavigationMigration(stopTime.controls["calculatedSeconds"]?.value) | time | number: '1.0-0' }}
                                                             min)</span>
                                                         <span (click)="openDialogEditStop(stopTime)">
                                                             <a class="btn btn-sm btn-icon btn-clear btn-primary">

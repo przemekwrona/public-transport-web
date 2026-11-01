@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostBinding, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Routes} from "../generated/public-transport-api";
 import KTComponents from "../../metronic/core";
 import KTLayout from '../../metronic/app/layouts/demo1';
@@ -7,6 +7,7 @@ import KTLayout from '../../metronic/app/layouts/demo1';
     selector: 'app-agency',
     templateUrl: './agency.component.html',
     styleUrl: './agency.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AgencyComponent implements OnInit, AfterViewInit {

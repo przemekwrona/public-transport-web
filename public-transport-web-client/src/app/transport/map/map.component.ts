@@ -1,4 +1,4 @@
-import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {StopService} from "../../http/stop.service";
@@ -18,6 +18,7 @@ import {ItineraryManagerService} from "./service/itinerary-manager.service";
     selector: 'app-map',
     templateUrl: './map.component.html',
     styleUrl: './map.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MapComponent implements OnInit, AfterViewInit {
