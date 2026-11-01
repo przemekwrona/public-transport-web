@@ -56,45 +56,52 @@ export const routes: Routes = [
     {path: 'signin', component: SigninComponent},
     {path: 'planner', component: TransportComponent},
     {
-        path: 'agency', component: AgencyComponent, resolve: {agencyDetails: agencyDetailsResolver}, children: [
-            {path: 'profile', component: ProfileDetailsComponent, resolve: { agencyDetails: profileDetailsResolver }},
-            {path: 'stops', component: StopsDbComponent, resolve: { centerPoint: centerPointResolver }},
-            {path: 'routes', component: RouteListComponent, resolve: { routes: RoutesResolver }},
-            {path: 'routes/create', component: CreateRouteComponent},
-            {path: 'routes/:routeCode', resolve: { routeDetails: tripsResolver }, children: [
-                {path: 'trips/create', component: TripEditorComponent, resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.CREATE }},
-                {path: 'trips/:tripCode/edit', component: TripEditorComponent,  resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
-                {path: 'trips', component: TripListComponent, children: tripListChildRoutes},
-            ]},
-            {path: 'timetables', component: TimetableListComponent, resolve: { timetables: generatedTimetablesResolver }},
-            {path: 'timetables/create', component: TimetableEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver }, data: { mode: TimetableEditorComponentMode.CREATE }},
-            {path: 'timetables/edit', component: TimetableEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, timetableGenerator: timetableEditorResolver }, data: { mode: TimetableEditorComponentMode.EDIT }},
-            {path: 'brigades', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
-            {path: 'brigades/create', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver }, data: { mode: BrigadeEditorComponentMode.CREATE }},
-            {path: 'calendars', component: CalendarListComponent, resolve: { calendars: getAllCalendarsResolver }},
-            {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
-            {path: 'calendars/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
-            {path: 'calendars/:calendarCode/symbol/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
-            {path: 'calendars/:calendarCode/symbol/:calendarSymbol/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
-            {path: 'brigades/:brigadeCode/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
-            {path: 'brigades/:brigadeCode/symbol/:calendarSymbol/timetable', component: TimetableWizardComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, brigade: brigadeResolver, defaultRoute: defaultRouteResolver }, data: { mode: TimetableEditorComponentMode.GENERATE }},
-            {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
+        path: '',
+        component: AgencyComponent,
+        resolve: {agencyDetails: agencyDetailsResolver},
+        children: [
+            {
+                path: 'agency', children: [
+                    {path: 'profile', component: ProfileDetailsComponent, resolve: { agencyDetails: profileDetailsResolver }},
+                    {path: 'stops', component: StopsDbComponent, resolve: { centerPoint: centerPointResolver }},
+                    {path: 'routes', component: RouteListComponent, resolve: { routes: RoutesResolver }},
+                    {path: 'routes/create', component: CreateRouteComponent},
+                    {path: 'routes/:routeCode', resolve: { routeDetails: tripsResolver }, children: [
+                        {path: 'trips/create', component: TripEditorComponent, resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.CREATE }},
+                        {path: 'trips/:tripCode/edit', component: TripEditorComponent,  resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
+                        {path: 'trips', component: TripListComponent, children: tripListChildRoutes},
+                    ]},
+                    {path: 'timetables', component: TimetableListComponent, resolve: { timetables: generatedTimetablesResolver }},
+                    {path: 'timetables/create', component: TimetableEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver }, data: { mode: TimetableEditorComponentMode.CREATE }},
+                    {path: 'timetables/edit', component: TimetableEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, timetableGenerator: timetableEditorResolver }, data: { mode: TimetableEditorComponentMode.EDIT }},
+                    {path: 'brigades', component: BrigadeListComponent, resolve: { brigades: brigadeGetAllResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
+                    {path: 'brigades/create', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver }, data: { mode: BrigadeEditorComponentMode.CREATE }},
+                    {path: 'calendars', component: CalendarListComponent, resolve: { calendars: getAllCalendarsResolver }},
+                    {path: 'calendars/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
+                    {path: 'calendars/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
+                    {path: 'calendars/:calendarCode/symbol/create', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.CREATE}, resolve: { calendar: calendarEmptyResolver}},
+                    {path: 'calendars/:calendarCode/symbol/:calendarSymbol/edit', component: CalendarsEditorComponent, data: {mode: CalendarEditorComponentMode.EDIT}, resolve: { calendar: calendarResolver }},
+                    {path: 'brigades/:brigadeCode/edit', component: BrigadeEditorComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, brigade: brigadeResolver }, data: { mode: BrigadeEditorComponentMode.EDIT }},
+                    {path: 'brigades/:brigadeCode/symbol/:calendarSymbol/timetable', component: TimetableWizardComponent, resolve: { calendars: brigadeGetAllCalendarsResolver, routes: routesInGeneratedTimetableResolver, brigade: brigadeResolver, defaultRoute: defaultRouteResolver }, data: { mode: TimetableEditorComponentMode.GENERATE }},
+                    {path: 'google/maps', component: GoogleMapsComponent, resolve: { googleAgreements: googleAgreementsResolver }}
+                ]
+            },
+            {
+                path: 'admin/agency', children: [
+                    {path: 'profiles', component: ProfileListComponent, resolve: {agencies: agenciesResolver}},
+                    {path: 'create', component: CreateProfileComponent }
+                ]
+            },
+            {
+                path: 'admin', children: [
+                    {path: 'users', component: UserListComponent, resolve: {users: usersResolver}},
+                    {path: 'users/create', component: CreateUserComponent}
+                ]
+            }
         ]
     },
     {
         path: 'documentation', component: DocumentationComponent
-    },
-    {
-        path: 'admin/agency', component: AgencyComponent, children: [
-            {path: 'profiles', component: ProfileListComponent, resolve: {agencies: agenciesResolver}},
-            {path: 'create', component: CreateProfileComponent }
-        ]
-    },
-    {
-        path: 'admin', component: AgencyComponent, children: [
-            {path: 'users', component: UserListComponent, resolve: {users: usersResolver}},
-            {path: 'users/create', component: CreateUserComponent}
-        ]
     },
     {path: 'info', component: LandingComponent},
 ];

@@ -1,36 +1,73 @@
-import {Component, HostBinding, ChangeDetectionStrategy} from '@angular/core';
-import {LoginService} from "../../auth/login.service";
-
-import {RouterModule} from "@angular/router";
-import {AgencyStorageService} from "../../auth/agency-storage.service";
+import {ChangeDetectionStrategy, Component, DestroyRef, HostBinding, ViewEncapsulation, inject} from '@angular/core';
+import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {filter} from 'rxjs';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {TranslocoPipe} from '@jsverse/transloco';
+import {SidebarModule} from 'primeng/sidebar';
+import {Building} from '@primeicons/angular/building';
+import {Users} from '@primeicons/angular/users';
+import {User} from '@primeicons/angular/user';
+import {Map} from '@primeicons/angular/map';
+import {ChevronDown} from '@primeicons/angular/chevron-down';
+import {Directions} from '@primeicons/angular/directions';
+import {Calendar} from '@primeicons/angular/calendar';
+import {Clipboard} from '@primeicons/angular/clipboard';
+import {Google} from '@primeicons/angular/google';
+import {LoginService} from '../../auth/login.service';
+import {AgencyStorageService} from '../../auth/agency-storage.service';
+import {AgencySidebarService} from './agency-sidebar.service';
 
 @Component({
     imports: [
-    RouterModule
-],
+        RouterLink,
+        RouterLinkActive,
+        TranslocoPipe,
+        SidebarModule,
+        Building,
+        Users,
+        User,
+        Map,
+        ChevronDown,
+        Directions,
+        Calendar,
+        Clipboard,
+        Google
+    ],
     providers: [
         LoginService
     ],
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
-    styleUrl: './sidebar.component.scss'
+    styleUrl: './sidebar.component.scss',
+    encapsulation: ViewEncapsulation.None
 })
 export class SidebarComponent {
-    @HostBinding('class') hostClass = 'sidebar dark:bg-coal-600 bg-light border-r border-r-gray-200 dark:border-r-coal-100 fixed z-20 hidden lg:flex flex-col items-stretch shrink-0';
-    @HostBinding('attr.data-drawer') drawer = 'true';
-    @HostBinding('attr.data-drawer-class') drawerClass = 'drawer drawer-start top-0 bottom-0';
-    @HostBinding('attr.data-drawer-enable') drawerEnable = 'true|lg:false';
-    @HostBinding('attr.id') id = 'sidebar';
+    @HostBinding('style.display') hostDisplay = 'contents';
 
-    constructor(private authService: LoginService, private agencyStorageService: AgencyStorageService) {
+    constructor(
+        private authService: LoginService,
+        private agencyStorageService: AgencyStorageService,
+        private router: Router,
+        readonly sidebar: AgencySidebarService
+    ) {
+        this.sidebar.applyLayout();
+        inject(DestroyRef).onDestroy(() => this.sidebar.clearLayout());
+        this.router.events.pipe(
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+            takeUntilDestroyed()
+        ).subscribe(() => this.sidebar.close());
     }
 
-    public isAdmin(): boolean {
+    isAdmin(): boolean {
         return this.authService.hasRoleSuperAdmin();
     }
 
-    public getAgencyName(): string {
+    getAgencyName(): string {
         return this.agencyStorageService.getInstance();
+    }
+
+    onOpenChange(open: boolean): void {
+        this.sidebar.setOpen(open);
     }
 }

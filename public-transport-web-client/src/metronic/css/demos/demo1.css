@@ -50,10 +50,6 @@
 		display: none;
 	}
 
-	.demo1.sidebar-fixed .wrapper {
-		padding-inline-start: var(--tw-sidebar-width);
-	}
-
 	.demo1.sidebar-fixed.header-fixed .header {
 		inset-inline-start: var(--tw-sidebar-width);
 	}
