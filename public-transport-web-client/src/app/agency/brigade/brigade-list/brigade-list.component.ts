@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {BrigadeService, CreateBrigadeBody, CreateBrigadeResponse, GetBrigadeResponse} from "../../../generated/public-transport-api";
 import {size} from "lodash";
@@ -13,6 +13,7 @@ import {map, switchMap, timer} from "rxjs";
     selector: 'app-brigade-list',
     templateUrl: './brigade-list.component.html',
     styleUrl: './brigade-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BrigadeListComponent {

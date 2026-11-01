@@ -1,4 +1,4 @@
-import {Component, forwardRef, input, output, OnInit} from '@angular/core';
+import {Component, forwardRef, input, output, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
@@ -26,6 +26,7 @@ import {FormatSecondsPipe} from "./format-seconds.pipe";
         }
     ],
     templateUrl: './trip-variant-select.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './trip-variant-select.component.scss'
 })
 export class TripVariantSelectComponent implements OnInit, ControlValueAccessor {

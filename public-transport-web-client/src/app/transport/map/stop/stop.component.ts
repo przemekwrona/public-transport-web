@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {interval, Subscription} from "rxjs";
 import moment from "moment";
 import {Route, Stop, StopDetails} from "../../../generated/public-transport-planner-api";
@@ -7,6 +7,7 @@ import {Route, Stop, StopDetails} from "../../../generated/public-transport-plan
     selector: 'app-stop',
     templateUrl: './stop.component.html',
     styleUrl: './stop.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class StopComponent implements OnInit, OnDestroy {

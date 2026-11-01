@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostBinding, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import KTComponents from "../metronic/core";
 import KTLayout from '../metronic/app/layouts/demo1';
 
@@ -6,6 +6,7 @@ import KTLayout from '../metronic/app/layouts/demo1';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AppComponent implements OnInit, AfterViewInit {

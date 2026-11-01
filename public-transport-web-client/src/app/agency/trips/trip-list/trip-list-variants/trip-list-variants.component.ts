@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {
     RouteDetails,
@@ -9,8 +9,7 @@ import {
 } from "../../../../generated/public-transport-api";
 import {remove} from "lodash";
 import {map} from "rxjs";
-import {CommonModule} from "@angular/common";
-import {TranslocoPipe} from "@jsverse/transloco";
+
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
 import {TripItemComponent} from "../trip-item/trip-item.component";
 
@@ -18,10 +17,9 @@ import {TripItemComponent} from "../trip-item/trip-item.component";
     selector: 'app-trip-list-variants',
     templateUrl: './trip-list-variants.component.html',
     imports: [
-        CommonModule,
-        TranslocoPipe,
-        TripItemComponent
-    ],
+    TripItemComponent
+],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         TripService
     ]

@@ -27,16 +27,16 @@
                              (click)="selectCalendar(calendarItem)">
                             <div class="flex flex-col gap-1 min-w-0">
                                 <div class="text-sm font-medium text-gray-900">
-                                    {{ calendarItem?.startDate | date:'dd.MM.yy' }} - {{ calendarItem?.endDate | date:'dd.MM.yy' }}
+                                    {{ $safeNavigationMigration(calendarItem?.startDate) | date:'dd.MM.yy' }} - {{ $safeNavigationMigration(calendarItem?.endDate) | date:'dd.MM.yy' }}
                                 </div>
                                 <div class="flex flex-wrap items-center gap-1">
-                                    @if (isStartInFuture(calendarItem?.startDate)) {
+                                    @if (isStartInFuture($safeNavigationMigration(calendarItem?.startDate))) {
                                         <span class="text-2sm font-normal text-gray-700">
                                             Aktywny za
-                                            <span class="badge badge-sm badge-outline badge-info">{{ daysUntilStartText(calendarItem?.startDate) }}</span>
+                                            <span class="badge badge-sm badge-outline badge-info">{{ daysUntilStartText($safeNavigationMigration(calendarItem?.startDate)) }}</span>
                                         </span>
                                     }
-                                    @if (isActive(calendarItem?.startDate, calendarItem?.endDate)) {
+                                    @if (isActive($safeNavigationMigration(calendarItem?.startDate), $safeNavigationMigration(calendarItem?.endDate))) {
                                         <span class="badge badge-sm badge-outline badge-success">Aktywny</span>
                                     }
                                 </div>
@@ -129,7 +129,7 @@
                                             class="btn btn-sm btn-dark shrink-0">
                                         Usuń
                                     </button>
-                                    <a [routerLink]="['/agency/calendars', calendarSymbol?.calendarSymbolId.calendarItemId.code, 'symbol', calendarSymbol?.calendarSymbolId.symbol, 'edit']"
+                                    <a [routerLink]="['/agency/calendars', calendarSymbol?.calendarSymbolId.calendarItemId.code, 'symbol', $safeNavigationMigration(calendarSymbol?.calendarSymbolId.symbol), 'edit']"
                                        class="btn btn-sm shrink-0 btn-secondary">Pokaż szczegóły</a>
                                 </div>
                             </div>

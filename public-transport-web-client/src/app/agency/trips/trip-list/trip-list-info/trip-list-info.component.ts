@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Data, RouterModule} from "@angular/router";
 import {
     Route,
@@ -11,7 +11,7 @@ import {
 } from "../../../../generated/public-transport-api";
 import {faCircleXmark, faMap, faSpinner, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {map} from "rxjs";
-import {CommonModule} from "@angular/common";
+
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
@@ -29,17 +29,17 @@ import {MatButtonModule} from "@angular/material/button";
     selector: 'app-trip-list-info',
     templateUrl: './trip-list-info.component.html',
     imports: [
-        CommonModule,
-        RouterModule,
-        FormsModule,
-        ReactiveFormsModule,
-        FaIconComponent,
-        MatError,
-        MatFormField,
-        MatInput,
-        MatLabel,
-        MatButtonModule
-    ],
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FaIconComponent,
+    MatError,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatButtonModule
+],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         RouteService,
         RouteGtfsService

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 import moment from "moment";
 import {Pattern, StopTime, Time} from "../../../generated/public-transport-planner-api";
 
@@ -21,6 +21,7 @@ export class PatternTime {
     selector: 'app-timetable-content',
     templateUrl: './timetable-content.component.html',
     styleUrl: './timetable-content.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TimetableContentComponent {

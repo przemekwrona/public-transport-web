@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import * as L from "leaflet";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline, Popup} from "leaflet";
 import {find, size} from "lodash";
@@ -74,6 +74,7 @@ import {BusStopData} from "../../shared/bus-stop-modal-selector/bus-stop-modal-s
             ])
         ])
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TripEditorComponent implements OnInit, AfterViewInit {

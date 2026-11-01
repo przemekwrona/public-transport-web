@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router, RouterModule} from "@angular/router";
-import {CommonModule} from "@angular/common";
+
 import {
     AgencyAdminCreateAccountRequest,
     AgencyService, AppUser,
@@ -15,15 +15,15 @@ import {MatSelectModule} from "@angular/material/select";
 @Component({
     selector: 'app-create-profile',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        RouterModule,
-        FormsModule,
-        MatInputModule,
-        MatSelectModule
-    ],
+    ReactiveFormsModule,
+    RouterModule,
+    FormsModule,
+    MatInputModule,
+    MatSelectModule
+],
     providers: [],
     templateUrl: './create-profile.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './create-profile.component.scss'
 })
 export class CreateProfileComponent implements OnInit {

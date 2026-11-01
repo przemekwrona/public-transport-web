@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {
     GoogleAgreementsRequest,
     GoogleAgreementsResponse,
@@ -6,7 +6,7 @@ import {
     GtfsService
 } from "../../generated/public-transport-api";
 import moment from "moment";
-import {CommonModule} from "@angular/common";
+
 import {FormsModule} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {LoginService} from "../../auth/login.service";
@@ -17,9 +17,9 @@ import {AgencyStorageService} from "../../auth/agency-storage.service";
     templateUrl: './google-maps.component.html',
     styleUrl: './google-maps.component.scss',
     imports: [
-        CommonModule,
-        FormsModule
-    ],
+    FormsModule
+],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         GtfsService,
         GoogleAgreementsService,

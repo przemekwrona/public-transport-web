@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {
     AbstractControl,
@@ -49,6 +49,7 @@ export interface AvailableTripProfile {
         FontAwesomeModule
     ],
     templateUrl: './timetable-board.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './timetable-board.component.scss'
 })
 export class TimetableBoardComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {
     BrigadeService, BrigadeTrip, CalendarSymbolId, ErrorResponse,
     GetAllTripsResponse, GetBrigadeDetailsResponse, GetCalendarSymbolsResponse,
@@ -33,6 +33,7 @@ import {
             transition(':enter', [style({opacity: 0}), animate('500ms 600ms ease-in')])
         ])
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BrigadeEditorComponent implements OnInit {

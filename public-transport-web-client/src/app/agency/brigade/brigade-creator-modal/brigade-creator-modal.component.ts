@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -33,6 +33,7 @@ import moment from "moment";
         CalendarService
     ],
     templateUrl: './brigade-creator-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './brigade-creator-modal.component.scss'
 })
 export class BrigadeCreatorModalComponent implements OnInit {
