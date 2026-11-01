@@ -66,31 +66,52 @@ export class StopsDbComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private openDetails(): void {
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.ignoreMapReload = true;
         if (reduceMotion) {
             this.detailsOpen = true;
             setTimeout(() => this.finishMapResize());
             return;
         }
 
-        this.detailsOpen = false;
-        setTimeout(() => {
-            this.ignoreMapReload = true;
-            this.detailsOpen = true;
-            const layout = document.querySelector('.stops-layout');
-            const onEnd = (event: TransitionEvent) => {
-                if (event.propertyName !== 'flex-basis') {
-                    return;
-                }
-                layout?.removeEventListener('transitionend', onEnd);
-                window.clearTimeout(this.detailsResizeTimer);
-                this.finishMapResize();
-            };
-            layout?.addEventListener('transitionend', onEnd);
-            this.detailsResizeTimer = window.setTimeout(() => {
-                layout?.removeEventListener('transitionend', onEnd);
-                this.finishMapResize();
-            }, 520);
+        this.ngZone.runOutsideAngular(() => {
+            requestAnimationFrame(() => this.playDetailsAnimation());
         });
+    }
+
+    private playDetailsAnimation(): void {
+        const layout = document.querySelector('.stops-layout') as HTMLElement | null;
+        const details = document.querySelector('.stops-details') as HTMLElement | null;
+        const panel = document.querySelector('.stops-details-panel') as HTMLElement | null;
+        if (!layout || !details) {
+            this.ngZone.run(() => this.finishMapResize());
+            return;
+        }
+
+        const wide = window.matchMedia('(min-width: 1024px)').matches;
+        const target = Math.max(0, (layout.getBoundingClientRect().width - 30) / 3);
+        const motion: KeyframeAnimationOptions = {
+            duration: 420,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            fill: 'forwards'
+        };
+        if (wide) {
+            details.animate([
+                {flexBasis: '0px', marginRight: '0px'},
+                {flexBasis: `${target}px`, marginRight: '30px'}
+            ], motion);
+            panel?.animate([
+                {opacity: 0, transform: 'translateX(-1.5rem)'},
+                {opacity: 1, transform: 'none'}
+            ], motion);
+        } else {
+            panel?.animate([
+                {opacity: 0, transform: 'translateY(-0.75rem)'},
+                {opacity: 1, transform: 'none'}
+            ], motion);
+        }
+        this.ngZone.run(() => this.detailsOpen = true);
+
+        this.detailsResizeTimer = window.setTimeout(() => this.ngZone.run(() => this.finishMapResize()), 450);
     }
 
     private finishMapResize(): void {
@@ -98,6 +119,8 @@ export class StopsDbComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
         this.mapResizeSettled = true;
+        document.querySelector('.stops-details')?.getAnimations().forEach(animation => animation.cancel());
+        document.querySelector('.stops-details-panel')?.getAnimations().forEach(animation => animation.cancel());
         this.ignoreMapReload = true;
         this.map?.invalidateSize({animate: false, pan: false});
         this.ignoreMapReload = false;
