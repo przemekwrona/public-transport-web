@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {uniq, isEmpty} from "lodash";
 import moment from "moment";
 import {
@@ -20,6 +20,7 @@ import {catchError, finalize, Observable, of, switchMap, throwError, timer} from
     selector: 'app-calendars-editor',
     templateUrl: './calendars-editor.component.html',
     styleUrl: './calendars-editor.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CalendarsEditorComponent implements OnInit {

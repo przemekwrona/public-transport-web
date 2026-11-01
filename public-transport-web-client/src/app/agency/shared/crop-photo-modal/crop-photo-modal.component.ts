@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, Sanitizer} from '@angular/core';
+import {Component, inject, OnInit, Sanitizer, ChangeDetectionStrategy} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {ImageCroppedEvent, ImageCropperComponent, LoadedImage} from "ngx-image-cropper";
@@ -16,6 +16,7 @@ export interface ImageEvent {
         ImageCropperComponent
     ],
     templateUrl: './crop-photo-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './crop-photo-modal.component.scss'
 })
 export class CropPhotoModalComponent implements OnInit {

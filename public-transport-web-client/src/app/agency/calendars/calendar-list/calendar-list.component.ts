@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {
     CalendarSymbolQuery,
@@ -18,6 +18,7 @@ import moment from "moment";
     selector: 'app-calendars',
     templateUrl: './calendar-list.component.html',
     styleUrl: './calendar-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CalendarListComponent implements OnInit, AfterViewInit, OnDestroy {

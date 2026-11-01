@@ -1,4 +1,4 @@
-import {APP_ID, CUSTOM_ELEMENTS_SCHEMA, InjectionToken, NgModule} from '@angular/core';
+import {APP_ID, CUSTOM_ELEMENTS_SCHEMA, Injectable, NgModule} from '@angular/core';
 import {AppComponent} from "./app.component";
 import {LandingModule} from "./landing/landing.module";
 import {BrowserModule} from "@angular/platform-browser";
@@ -23,6 +23,7 @@ import {NgxSpinnerModule} from "ngx-spinner";
 import {providePrimeNG} from "primeng/config";
 import Aura from "@primeng/themes/aura";
 
+@Injectable()
 export class MondayDateAdapter extends NativeDateAdapter {
     override getFirstDayOfWeek(): number {
         return 1; // 0 = Sunday, 1 = Monday
@@ -32,7 +33,7 @@ export class MondayDateAdapter extends NativeDateAdapter {
 @NgModule({
     imports: [
         BrowserModule,
-        RouterModule.forRoot(routes, {useHash: true}),
+        RouterModule.forRoot(routes, {useHash: true, paramsInheritanceStrategy: 'emptyOnly'}),
         HttpClientModule,
         BrowserAnimationsModule,
         TransportModule,

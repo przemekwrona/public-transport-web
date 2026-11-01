@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy} from '@angular/core';
 import {TripVariantSelectComponent} from "../trip-variant-select/trip-variant-select.component";
 import {FormatSecondsPipe} from "../trip-variant-select/format-seconds.pipe";
 import {
@@ -15,7 +15,7 @@ import {
     TripId1,
     TripService
 } from "../../../../generated/public-transport-api";
-import {CommonModule} from "@angular/common";
+
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
@@ -38,17 +38,17 @@ export interface TripProfileChoice {
 @Component({
     selector: 'app-on-time-range-selected-modal',
     imports: [
-        CommonModule,
-        FormatSecondsPipe,
-        MatDialogContent,
-        MatDialogTitle,
-        FormsModule,
-        MatButton,
-        MatDialogActions,
-        MatDialogClose,
-        ReactiveFormsModule
-    ],
+    FormatSecondsPipe,
+    MatDialogContent,
+    MatDialogTitle,
+    FormsModule,
+    MatButton,
+    MatDialogActions,
+    MatDialogClose,
+    ReactiveFormsModule
+],
     templateUrl: './on-time-range-selected-modal.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './on-time-range-selected-modal.component.scss'
 })
 export class OnTimeRangeSelectedModalComponent {

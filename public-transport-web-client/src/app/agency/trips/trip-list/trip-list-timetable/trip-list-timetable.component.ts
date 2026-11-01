@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Data} from "@angular/router";
 import {map} from "rxjs";
 import {MatTabsModule} from "@angular/material/tabs";
@@ -25,6 +25,7 @@ export interface TimetableDirectionTab {
     templateUrl: './trip-list-timetable.component.html',
     styleUrl: './trip-list-timetable.component.scss',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [TimetableBoardComponent, MatTabsModule, TranslocoPipe]
 })
 export class TripListTimetableComponent implements OnInit {

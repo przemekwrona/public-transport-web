@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {AgenciesAdminResponse, AgencyAdminDetail} from "../../../generated/public-transport-api";
@@ -12,6 +12,7 @@ import {AgencyStorageService} from "../../../auth/agency-storage.service";
         RouterModule
     ],
     templateUrl: './profile-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './profile-list.component.scss'
 })
 export class ProfileListComponent implements OnInit {

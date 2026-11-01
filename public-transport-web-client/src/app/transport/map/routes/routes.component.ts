@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Route, Stop, StopDetails} from "../../../generated/public-transport-planner-api";
 
 @Component({
     selector: 'app-routes',
     templateUrl: './routes.component.html',
     styleUrl: './routes.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class RoutesComponent {

@@ -1,4 +1,4 @@
-import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, OnInit, QueryList, ViewChildren, ChangeDetectionStrategy} from '@angular/core';
 import {TimetableBoardComponent} from "./timetable-board/timetable-board.component";
 import {
     FormArray,
@@ -22,7 +22,7 @@ import {
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute, Data, Router, RouterModule} from "@angular/router";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {CommonModule} from "@angular/common";
+
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
@@ -39,18 +39,18 @@ export enum TimetableEditorComponentMode {
 @Component({
     selector: 'app-create-timetable',
     imports: [
-        CommonModule,
-        TimetableBoardComponent,
-        ReactiveFormsModule,
-        FormsModule,
-        NgxMaterialTimepickerModule,
-        NgxMatSelectSearchModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        RouteNameNormPipe,
-        RouterModule
-    ],
+    TimetableBoardComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    NgxMaterialTimepickerModule,
+    NgxMatSelectSearchModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    RouteNameNormPipe,
+    RouterModule
+],
     templateUrl: './timetable-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './timetable-editor.component.scss'
 })
 export class TimetableEditorComponent implements OnInit {

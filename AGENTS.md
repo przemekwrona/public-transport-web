@@ -4,7 +4,7 @@ Monorepo for public-transport timetable planning. An agent working inside a modu
 
 ## Modules
 
-- `public-transport-web-client` — Angular 19, carrier console and journey planner. Context: `public-transport-web-client/AGENTS.md`.
+- `public-transport-web-client` — Angular 22, carrier console and journey planner. Context: `public-transport-web-client/AGENTS.md`.
 - `public-transport-web-server` — Spring Boot 3.2, Java 17, PostgreSQL. Context: `public-transport-web-server/AGENTS.md`.
 - `public-transport-documentation` — AsciiDoc user and technical manuals. Context: `public-transport-documentation/AGENTS.md`.
 - `public-transport-web-e2e` — WebdriverIO. Keep e2e tests separate from an API change until the contract is in place.

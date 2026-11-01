@@ -1,19 +1,19 @@
-import {Component, HostBinding} from '@angular/core';
+import {Component, HostBinding, ChangeDetectionStrategy} from '@angular/core';
 import {LoginService} from "../../auth/login.service";
-import {CommonModule} from "@angular/common";
+
 import {RouterModule} from "@angular/router";
 import {AgencyStorageService} from "../../auth/agency-storage.service";
 
 @Component({
     imports: [
-        CommonModule,
-        RouterModule
-    ],
+    RouterModule
+],
     providers: [
         LoginService
     ],
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {

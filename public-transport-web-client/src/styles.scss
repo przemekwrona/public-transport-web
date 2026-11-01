@@ -3,7 +3,8 @@
 @use '@angular/material' as mat;
 @use '@angular/material/prebuilt-themes/azure-blue.css';
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 
 
@@ -114,12 +115,12 @@ html {
 }
 
 .custom-form-field {
-  //--mdc-outlined-text-field-outline-color: #DBDFE9; /* default */
-  //--mdc-outlined-text-field-focus-outline-color: #1e40af; /* focused */
-  //--mdc-outlined-text-field-hover-outline-color: #9e9e9e; /* hover */
-  //--mdc-outlined-text-field-error-outline-color: red;
-  --mdc-outlined-text-field-outline-width: 1px; /* default */
-  --mdc-outlined-text-field-focus-outline-width: 1px; /* focused */
+  //--mat-form-field-outlined-outline-color: #DBDFE9; /* default */
+  //--mat-form-field-outlined-focus-outline-color: #1e40af; /* focused */
+  //--mat-form-field-outlined-hover-outline-color: #9e9e9e; /* hover */
+  //--mat-form-field-outlined-error-outline-color: red;
+  --mat-form-field-outlined-outline-width: 1px; /* default */
+  --mat-form-field-outlined-focus-outline-width: 1px; /* focused */
 
   .mdc-text-field--outlined, .mdc-text-field--outlined.mdc-text-field--focused {
     .mdc-notched-outline {

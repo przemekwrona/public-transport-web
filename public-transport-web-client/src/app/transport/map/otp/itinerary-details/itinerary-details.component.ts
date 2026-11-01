@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, Input, OnDestroy, ChangeDetectionStrategy} from '@angular/core';
 import * as L from 'leaflet';
 import {Map, Polyline, PolyUtil} from "leaflet";
 import {Itinerary, Leg, TripPoint} from "../../../../generated/public-transport-planner-api";
@@ -7,6 +7,7 @@ import {Itinerary, Leg, TripPoint} from "../../../../generated/public-transport-
     selector: 'app-itinerary-details',
     templateUrl: './itinerary-details.component.html',
     styleUrl: './itinerary-details.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ItineraryDetailsComponent implements OnDestroy {

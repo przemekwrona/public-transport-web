@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {finalize, map, Observable, Subscription, takeWhile, timer} from "rxjs";
 import {CommonModule} from "@angular/common";
 
@@ -8,6 +8,7 @@ import {CommonModule} from "@angular/common";
         CommonModule
     ],
     templateUrl: './count-down.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './count-down.component.scss'
 })
 export class CountDownComponent implements OnInit {

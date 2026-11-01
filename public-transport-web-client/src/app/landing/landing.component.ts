@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from "@angular/router";
 import moment from "moment";
 import {GoogleAnalyticsService} from "../google-analytics.service";
@@ -8,6 +8,7 @@ import {faPhone, IconDefinition} from "@fortawesome/free-solid-svg-icons";
     selector: 'app-landing',
     templateUrl: './landing.component.html',
     styleUrl: './landing.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LandingComponent implements OnInit {

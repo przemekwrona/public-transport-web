@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
-import {CommonModule} from "@angular/common";
+
 import moment from "moment";
 import {MatDialog} from "@angular/material/dialog";
 import {
@@ -45,13 +45,13 @@ const DEFAULT_SCHEDULER_ZOOM = SCHEDULER_ZOOM_STEPS.findIndex(step => step.cellW
 @Component({
     selector: 'app-brigade-scheduler',
     imports: [
-        CommonModule,
-        DayPilotModule,
-        MatIconModule,
-        RouterModule,
-    ],
+    DayPilotModule,
+    MatIconModule,
+    RouterModule
+],
     providers: [],
     templateUrl: './brigade-scheduler.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './brigade-scheduler.component.scss'
 })
 export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestroy {

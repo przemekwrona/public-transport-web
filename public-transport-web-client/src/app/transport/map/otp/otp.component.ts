@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, Output, ChangeDetectionStrategy} from '@angular/core';
 import * as L from 'leaflet';
 import {DivIcon, LatLng, LatLngBounds, Map, Marker, polyline, Polyline} from "leaflet";
 import {OtpService} from "../../../http/otp.service";
@@ -21,6 +21,7 @@ export class OtpPoint {
     selector: 'app-otp',
     templateUrl: './otp.component.html',
     styleUrl: './otp.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class OtpComponent implements OnDestroy {

@@ -1,7 +1,7 @@
-import {Component, inject, model, OnInit} from '@angular/core';
+import {Component, inject, model, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {StopsPatchRequest} from "../../../generated/public-transport-api";
-import {CommonModule} from "@angular/common";
+
 import {BusStopEditorComponent} from "../bus-stop-editor/bus-stop-editor.component";
 
 export interface BusStopModalEditorData {
@@ -13,12 +13,12 @@ export interface BusStopModalEditorData {
 
 @Component({
     imports: [
-        CommonModule,
-        MatDialogModule,
-        BusStopEditorComponent
-    ],
+    MatDialogModule,
+    BusStopEditorComponent
+],
     selector: 'app-bus-stop-modal-editor',
     templateUrl: './bus-stop-modal-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './bus-stop-modal-editor.component.scss'
 })
 export class BusStopModalEditorComponent implements OnInit {
