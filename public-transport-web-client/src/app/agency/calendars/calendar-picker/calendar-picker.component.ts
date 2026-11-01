@@ -37,10 +37,29 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
     @Input() public weekdays: number[] = []
 
-    @Input() public includeDays: Date[] = [];
+    private includedDates: Date[] = [];
+    private excludedDates: Date[] = [];
+
+    @Input()
+    public set includeDays(value: Date[] | null | undefined) {
+        this.includedDates = value ?? [];
+    }
+
+    public get includeDays(): Date[] {
+        return this.includedDates;
+    }
+
     @Output() public includeDaysChange: EventEmitter<Date> = new EventEmitter<Date>();
 
-    @Input() public excludeDays: Date[] = [];
+    @Input()
+    public set excludeDays(value: Date[] | null | undefined) {
+        this.excludedDates = value ?? [];
+    }
+
+    public get excludeDays(): Date[] {
+        return this.excludedDates;
+    }
+
     @Output() public excludeDaysChange: EventEmitter<Date> = new EventEmitter<Date>();
 
     public selectedMonth: moment.Moment;
@@ -58,7 +77,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['weekdays'] && changes['weekdays'].previousValue) {
+        if (changes['weekdays'] && changes['weekdays'].previousValue && this.selectedMonth) {
             const start: moment.Moment = this.selectedMonth;
             const end: moment.Moment = start.clone().endOf('month');
 
@@ -82,15 +101,15 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
                 }
             }
 
-            this.calendar.updateTodaysDate();
+            this.calendar?.updateTodaysDate();
         }
 
         if (changes['startDate'] && changes['startDate'].previousValue) {
-            this.calendar.updateTodaysDate();
+            this.calendar?.updateTodaysDate();
         }
 
         if (changes['endDate'] && changes['endDate'].previousValue) {
-            this.calendar.updateTodaysDate();
+            this.calendar?.updateTodaysDate();
         }
     }
 
@@ -107,7 +126,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
             return '';
         }
 
-        if (this.weekdays.includes(date.getDay())) {
+        if ((this.weekdays ?? []).includes(date.getDay())) {
             const index: number = this.excludeDays.findIndex((excludedDate: Date): boolean => this.isSameDay(excludedDate, date));
             if (index > -1) {
                 return ['has-week-day', 'has-excluded-day'];
@@ -125,7 +144,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     };
 
     private handleDay(clickedDate: Date): void {
-        if (this.weekdays.includes(clickedDate.getDay())) {
+        if ((this.weekdays ?? []).includes(clickedDate.getDay())) {
             const index: number = this.excludeDays.findIndex(d => this.isSameDay(d, clickedDate));
             if (index > -1) {
                 this.excludeDaysChange.emit(clickedDate);
