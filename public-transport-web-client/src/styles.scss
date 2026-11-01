@@ -12,6 +12,13 @@
 @tailwind components;
 @tailwind utilities;
 
+// PrimeFlex's .grid is a flex row with negative margins. Screens use Tailwind's CSS grid.
+.grid {
+  margin-top: 0;
+  margin-right: 0;
+  margin-left: 0;
+}
+
 /* Demos */
 @import "./metronic/css/demos/demo1.css";
 

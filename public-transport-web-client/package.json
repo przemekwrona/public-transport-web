@@ -35,6 +35,7 @@
     "@googlemaps/polyline-codec": "^1.0.28",
     "@jsverse/transloco": "^7.6.1",
     "@popperjs/core": "2.11.8",
+    "@primeng/themes": "^19.1.4",
     "@types/leaflet": "^1.9.8",
     "@types/lodash": "^4.17.1",
     "font-awesome": "^4.7.0",
@@ -53,6 +54,9 @@
     "ngx-progressbar": "^14.0.0",
     "ngx-sortable": "^2.1.0",
     "ngx-spinner": "^19.0.0",
+    "primeflex": "^4.0.0",
+    "primeicons": "^8.0.2",
+    "primeng": "^19.1.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"

@@ -20,6 +20,8 @@ import {CreateUserComponent} from "./agency/user/create-user/create-user.compone
 import {provideEnvironmentNgxMask} from "ngx-mask";
 import {DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter} from "@angular/material/core";
 import {NgxSpinnerModule} from "ngx-spinner";
+import {providePrimeNG} from "primeng/config";
+import Aura from "@primeng/themes/aura";
 
 export class MondayDateAdapter extends NativeDateAdapter {
     override getFirstDayOfWeek(): number {
@@ -55,7 +57,15 @@ export class MondayDateAdapter extends NativeDateAdapter {
         {provide: PDF_BASE_PATH, useValue: '/api/v1'},
         provideEnvironmentNgxMask({validation: false}),
         {provide: DateAdapter, useClass: MondayDateAdapter},
-        {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'}
+        {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'},
+        providePrimeNG({
+            theme: {
+                preset: Aura,
+                options: {
+                    darkModeSelector: false
+                }
+            }
+        })
     ],
     bootstrap: [
         AppComponent
