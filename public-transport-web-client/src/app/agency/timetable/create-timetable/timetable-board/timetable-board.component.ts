@@ -8,7 +8,6 @@ import {
     ReactiveFormsModule, Validators,
 } from "@angular/forms";
 import moment, {Moment} from "moment";
-import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {faClock, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {
@@ -45,7 +44,6 @@ export interface AvailableTripProfile {
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        NgxMaterialTimepickerModule,
         FontAwesomeModule
     ],
     templateUrl: './timetable-board.component.html',
@@ -66,6 +64,11 @@ export class TimetableBoardComponent implements OnInit {
 
     public faClock: IconDefinition = faClock;
 
+    public openTimePicker(input: HTMLInputElement): void {
+        input.showPicker?.();
+        input.focus();
+    }
+
     public hours: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 
     constructor(private formBuilder: FormBuilder) {
@@ -76,15 +79,18 @@ export class TimetableBoardComponent implements OnInit {
     }
 
     public mapDepartures(generatedDepartures: Moment[], appendEmpty: boolean = false) {
-        const defaultProfile: AvailableTripProfile = this.getFirstProfile(this.tripProfiles);
+        const defaultProfile: AvailableTripProfile | undefined = this.getFirstProfile(this.tripProfiles);
+        const routeCode = defaultProfile?.routeCode ?? '';
+        const tripCode = defaultProfile?.tripCode ?? '';
+        const symbol = defaultProfile?.variantDesignation ?? '';
         for (const departure of generatedDepartures) {
-            const departureControl: FormGroup = this.buildDepartureControl(defaultProfile.routeCode, defaultProfile.tripCode, defaultProfile.variantDesignation, departure.hour(), departure.minutes());
+            const departureControl: FormGroup = this.buildDepartureControl(routeCode, tripCode, symbol, departure.hour(), departure.minutes());
             this.controlDepartures.push(departureControl);
         }
 
         if (appendEmpty) {
             for (const hour of this.hours) {
-                this.controlDepartures.push(this.buildEmptyDepartureControl(defaultProfile.routeCode, defaultProfile.tripCode, defaultProfile.variantDesignation, hour));
+                this.controlDepartures.push(this.buildEmptyDepartureControl(routeCode, tripCode, symbol, hour));
             }
         }
     }
@@ -111,14 +117,14 @@ export class TimetableBoardComponent implements OnInit {
     }
 
     public addEmptyDepartureInHour(hour: number) {
-        const defaultProfile: AvailableTripProfile = this.getFirstProfile(this.tripProfiles);
+        const defaultProfile: AvailableTripProfile | undefined = this.getFirstProfile(this.tripProfiles);
         const hasEmptyDeparture: boolean = this.controlDepartures.controls
             .filter((group: FormGroup): boolean => group.get("hour").value === hour)
             .map((group: FormGroup): AbstractControl => group.get("minutes"))
             .filter((minuteControl: AbstractControl): boolean => minuteControl.value == null).length > 0;
 
         if (!hasEmptyDeparture) {
-            this.controlDepartures.push(this.buildEmptyDepartureControl(defaultProfile.routeCode, defaultProfile.tripCode, defaultProfile.variantDesignation, hour));
+            this.controlDepartures.push(this.buildEmptyDepartureControl(defaultProfile?.routeCode ?? '', defaultProfile?.tripCode ?? '', defaultProfile?.variantDesignation ?? '', hour));
         }
     }
 
