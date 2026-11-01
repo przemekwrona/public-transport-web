@@ -20,6 +20,8 @@ import {CreateUserComponent} from "./agency/user/create-user/create-user.compone
 import {provideEnvironmentNgxMask} from "ngx-mask";
 import {DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter} from "@angular/material/core";
 import {NgxSpinnerModule} from "ngx-spinner";
+import {providePrimeNG} from "primeng/config";
+import Aura from "@primeuix/themes/aura";
 
 @Injectable()
 export class MondayDateAdapter extends NativeDateAdapter {
@@ -56,7 +58,16 @@ export class MondayDateAdapter extends NativeDateAdapter {
         {provide: PDF_BASE_PATH, useValue: '/api/v1'},
         provideEnvironmentNgxMask({validation: false}),
         {provide: DateAdapter, useClass: MondayDateAdapter},
-        {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'}
+        {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'},
+        providePrimeNG({
+            license: 'eyJpZCI6IjdhNzNlYzg0LTNhMTUtNDM0Mi1iY2M3LWQ5NWUzODRjMWFmMyIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3OTM1NzE5MTcsImV4cCI6MTgyNTEwNzkxN30.u4u5cUV5ZSwzeywhC-243HED4KBpbBgmNGaokIkXvwxHiu1FzZplbAFyMboWZ0IP3CwXRXopoZbsm5zMUJENAg',
+            theme: {
+                preset: Aura,
+                options: {
+                    darkModeSelector: false
+                }
+            }
+        })
     ],
     bootstrap: [
         AppComponent

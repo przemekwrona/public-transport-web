@@ -7,6 +7,10 @@ import {AgencyDetails, AgencyService, TripsDetails} from "../../generated/public
 import { NgOptimizedImage } from "@angular/common";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {map} from "rxjs";
+import {AgencySidebarService} from "../sidebar/agency-sidebar.service";
+import {ButtonModule} from "primeng/button";
+import {SidebarModule} from "primeng/sidebar";
+import {Sidebar} from "@primeicons/angular/sidebar";
 
 @Component({
     selector: 'app-header',
@@ -14,7 +18,11 @@ import {map} from "rxjs";
     styleUrl: './header.component.scss',
     imports: [
     RouterModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    TranslocoPipe,
+    ButtonModule,
+    SidebarModule,
+    Sidebar
 ],
     changeDetection: ChangeDetectionStrategy.Eager,
     providers: [LoginService]
@@ -29,7 +37,11 @@ export class HeaderComponent implements OnInit {
     public agencyDetails: AgencyDetails | null;
     public image: SafeUrl;
 
-    constructor(private authService: LoginService, private router: Router, private route: ActivatedRoute, private agencyStorageService: AgencyStorageService, private agencyService: AgencyService, private sanitizer: DomSanitizer) {
+    constructor(private authService: LoginService, private router: Router, private route: ActivatedRoute, private agencyStorageService: AgencyStorageService, private agencyService: AgencyService, private sanitizer: DomSanitizer, private agencySidebar: AgencySidebarService) {
+    }
+
+    menuOpen(): boolean {
+        return this.agencySidebar.open();
     }
 
     ngOnInit(): void {
