@@ -8,8 +8,7 @@ import {
     ReactiveFormsModule, Validators,
 } from "@angular/forms";
 import moment, {Moment} from "moment";
-import {faClock, IconDefinition} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {DatePicker} from "primeng/datepicker";
 import {
     TimetablePayload,
     TimetableStopTime,
@@ -44,7 +43,7 @@ export interface AvailableTripProfile {
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        FontAwesomeModule
+        DatePicker
     ],
     templateUrl: './timetable-board.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -62,20 +61,40 @@ export class TimetableBoardComponent implements OnInit {
         return this.group.get('departures') as FormArray<FormGroup>;
     }
 
-    public faClock: IconDefinition = faClock;
-
-    public openTimePicker(input: HTMLInputElement): void {
-        input.showPicker?.();
-        input.focus();
-    }
+    public startTime: Date | null = null;
+    public endTime: Date | null = null;
+    readonly startTimeInputId: string;
+    readonly endTimeInputId: string;
 
     public hours: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 
+    private static boardSequence = 0;
+
     constructor(private formBuilder: FormBuilder) {
+        const boardId = TimetableBoardComponent.boardSequence++;
+        this.startTimeInputId = `calendar-timeonly-start-${boardId}`;
+        this.endTimeInputId = `calendar-timeonly-end-${boardId}`;
     }
 
     ngOnInit(): void {
+        this.startTime = this.readRangeTime('startTime', 6, 0);
+        this.endTime = this.readRangeTime('endTime', 20, 0);
         this.mapDepartures([], true);
+    }
+
+    public updateRangeTime(controlName: 'startTime' | 'endTime', value: Date | null): void {
+        if (!(value instanceof Date) || Number.isNaN(value.getTime())) {
+            return;
+        }
+        this[controlName] = value;
+        this.group?.get(controlName)?.setValue(moment(value).format('HH:mm'));
+    }
+
+    private readRangeTime(controlName: 'startTime' | 'endTime', hour: number, minute: number): Date {
+        const parsed = moment(this.group?.get(controlName)?.value, 'HH:mm', true);
+        const date = new Date();
+        date.setHours(parsed.isValid() ? parsed.hours() : hour, parsed.isValid() ? parsed.minutes() : minute, 0, 0);
+        return date;
     }
 
     public mapDepartures(generatedDepartures: Moment[], appendEmpty: boolean = false) {
