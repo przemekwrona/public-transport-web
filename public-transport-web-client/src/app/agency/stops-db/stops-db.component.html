@@ -15,8 +15,10 @@
 <!-- Container -->
 <div class="container-fixed">
     <!-- begin: grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
-        <div class="col-span-1">
+    <div class="stops-layout" [class.open]="detailsOpen">
+        <div class="stops-details">
+        @if (hasSelectedStop()) {
+            <div class="stops-details-panel">
             <div class="grid gap-5 lg:gap-7.5">
                 <!-- begin: cards -->
 
@@ -121,8 +123,10 @@
                 </div>
                 <!-- end: cards -->
             </div>
+            </div>
+        }
         </div>
-        <div class="col-span-1 lg:col-span-2">
+        <div class="stops-map">
             <div class="flex flex-col gap-5 lg:gap-7.5 h-full">
                 <div class="card h-full">
                     <div class="flex flex-wrap items-center gap-5 h-full">
