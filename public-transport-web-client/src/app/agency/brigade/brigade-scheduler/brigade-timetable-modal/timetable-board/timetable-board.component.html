@@ -4,7 +4,7 @@
 
 @for (hour of visibleHours; track hour) {
     <div class="border-b border-zinc-200 row py-1 min-w-96" [class.bg-gray-50]="$odd">
-        <div class="inline-block font-bold px-2 w-8 mr-4">{{ hour | number: '2.0-0' }}</div>
+        <div class="inline-block font-bold px-2 w-[2rem] shrink-0 mr-4">{{ hour | number: '2.0-0' }}</div>
         <div class="inline-flex flex-wrap gap-1.5">
             @for (departure of departuresForHour(hour); track $index) {
                 <span class="text-sm mr-2 minute" [class.minute-updating]="isUpdating">

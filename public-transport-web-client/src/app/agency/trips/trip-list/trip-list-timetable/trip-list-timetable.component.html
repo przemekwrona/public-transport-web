@@ -21,7 +21,7 @@
                              [class.border-primary]="isSelected(stop)"
                              [class.text-gray-600]="stop.variant"
                              (click)="loadStopTimetable(stop)">
-                            <span class="text-2sm text-gray-500 tabular-nums w-6">{{ $index + 1 }}</span>
+                            <span class="text-2sm text-gray-500 tabular-nums w-[1.5rem] shrink-0">{{ $index + 1 }}</span>
                             <a class="text-sm font-medium hover:text-primary-active hover:underline underline-offset-2"
                                [class.text-gray-900]="!stop.variant">{{ stop.name }}</a>
                             @if (stop.variant && stop.designation) {
