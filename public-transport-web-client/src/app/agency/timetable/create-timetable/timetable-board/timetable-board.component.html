@@ -5,13 +5,16 @@
             <div class="text-gray-900 text-sm font-medium">Czas początkowy</div>
             <span class="text-gray-700 text-2sm"></span>
         </div>
-        <label class="input sm:max-w-full xl:max-w-96 w-36">
-            <input #startTimeInput type="time" formControlName="startTime"
-                   class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"/>
-            <button type="button" class="btn btn-icon" (click)="openTimePicker(startTimeInput)">
-                <fa-icon [icon]="faClock"></fa-icon>
-            </button>
-        </label>
+        <p-datepicker
+            class="range-time"
+            [inputId]="startTimeInputId"
+            [ngModel]="startTime"
+            (ngModelChange)="updateRangeTime('startTime', $event)"
+            [ngModelOptions]="{standalone: true}"
+            [timeOnly]="true"
+            hourFormat="24"
+            [showIcon]="true"
+            appendTo="body"/>
     </div>
 
     <div class="flex flex-wrap justify-between gap-5 my-5">
@@ -19,13 +22,16 @@
             <div class="text-gray-900 text-sm font-medium">Czas końcowy</div>
             <span class="text-gray-700 text-2sm"></span>
         </div>
-        <label class="input sm:max-w-full xl:max-w-96 w-36">
-            <input #endTimeInput type="time" formControlName="endTime"
-                   class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"/>
-            <button type="button" class="btn btn-icon" (click)="openTimePicker(endTimeInput)">
-                <fa-icon [icon]="faClock"></fa-icon>
-            </button>
-        </label>
+        <p-datepicker
+            class="range-time"
+            [inputId]="endTimeInputId"
+            [ngModel]="endTime"
+            (ngModelChange)="updateRangeTime('endTime', $event)"
+            [ngModelOptions]="{standalone: true}"
+            [timeOnly]="true"
+            hourFormat="24"
+            [showIcon]="true"
+            appendTo="body"/>
     </div>
 
     <div class="flex flex-wrap justify-between gap-5 my-5">
@@ -68,7 +74,7 @@
                             <input type="number" formControlName="minutes"
                                    (blur)="sortDepartures()"
                                    [ngClass]="{'border-danger': submitted && departureControl.get('minutes')?.invalid}"
-                                   class="input input-sm text-center w-10 no-spin">
+                                   class="input input-sm text-center minute-input no-spin">
                         </div>
                     }
                 }

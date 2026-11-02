@@ -11,3 +11,37 @@
 .no-spin {
   -moz-appearance: textfield;
 }
+
+.range-time {
+  display: inline-flex;
+  align-items: stretch;
+  width: 14rem;
+}
+
+:host ::ng-deep .range-time {
+  .p-datepicker-input {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 5.5rem;
+  }
+
+  .p-datepicker-dropdown {
+    align-self: stretch;
+    width: 2.75rem;
+    height: auto;
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+}
+
+.minute-input {
+  box-sizing: content-box;
+  width: 4ch;
+  min-width: 4ch;
+  max-width: 4ch;
+  padding-inline: 1px;
+  flex: 0 0 auto;
+}
