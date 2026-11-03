@@ -1,0 +1,156 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-stop-agency-table
+      author: pwrona
+      changes:
+        - createSequence:
+            sequenceName: stop_agency_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: stop_agency
+            columns:
+              - column:
+                  name: stop_agency_id
+                  type: integer
+                  defaultValueSequenceNext: stop_agency_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_stop_agency
+                    nullable: false
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_stop_agency_agency
+                    references: agency(agency_id)
+                    deleteCascade: true
+              - column:
+                  name: stop_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_stop_agency_stop
+                    references: stop(stop_id)
+                    deleteCascade: true
+              - column:
+                  name: name
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lon
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lat
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            indexName: uq_stop_agency_agency_stop
+            tableName: stop_agency
+            unique: true
+            columns:
+              - column:
+                  name: agency_id
+              - column:
+                  name: stop_id
+      rollback:
+        - dropTable:
+            tableName: stop_agency
+        - dropSequence:
+            sequenceName: stop_agency_id_seq
+
+  - changeSet:
+      id: create-stop-agency-history-table
+      author: pwrona
+      changes:
+        - createSequence:
+            sequenceName: stop_agency_history_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: stop_agency_history
+            columns:
+              - column:
+                  name: stop_agency_history_id
+                  type: integer
+                  defaultValueSequenceNext: stop_agency_history_id_seq
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_stop_agency_history
+                    nullable: false
+              - column:
+                  name: agency_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_stop_agency_history_agency
+                    references: agency(agency_id)
+                    deleteCascade: true
+              - column:
+                  name: stop_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_stop_agency_history_stop
+                    references: stop(stop_id)
+                    deleteCascade: true
+              - column:
+                  name: name
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lon
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lat
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: valid_from
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: valid_to
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            indexName: uq_stop_agency_history_agency_stop_valid_from
+            tableName: stop_agency_history
+            unique: true
+            columns:
+              - column:
+                  name: agency_id
+              - column:
+                  name: stop_id
+              - column:
+                  name: valid_from
+      rollback:
+        - dropTable:
+            tableName: stop_agency_history
+        - dropSequence:
+            sequenceName: stop_agency_history_id_seq

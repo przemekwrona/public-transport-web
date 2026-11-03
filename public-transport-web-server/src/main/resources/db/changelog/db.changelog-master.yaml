@@ -99,3 +99,7 @@ databaseChangeLog:
       file: 025_drop_trip_variant_name.yaml
       relativeToChangelogFile: true
 
+  - include:
+      file: 026_stop_agency.yaml
+      relativeToChangelogFile: true
+

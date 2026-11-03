@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.wrona.webserver.core.agency.StopAgencyEntity;
+import pl.wrona.webserver.core.agency.StopAgencyHistoryEntity;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 
 import java.util.List;
@@ -54,6 +56,12 @@ public class StopEntity {
 
     @OneToMany(mappedBy = "stopEntity")
     private List<StopTimeEntity> stopTimeEntities;
+
+    @OneToMany(mappedBy = "stop")
+    private List<StopAgencyEntity> stopAgencies;
+
+    @OneToMany(mappedBy = "stop")
+    private List<StopAgencyHistoryEntity> stopAgencyHistory;
 
     @Column(name = "territorial_unit_id")
     private Long territorialUnitId;

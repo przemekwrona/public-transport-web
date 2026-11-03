@@ -114,5 +114,10 @@ public class AgencyEntity {
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
     private Set<TimetableGeneratorEntity> timetableGenerators;
 
+    @OneToMany(mappedBy = "agency")
+    private Set<StopAgencyEntity> stopAgencies;
+
+    @OneToMany(mappedBy = "agency")
+    private Set<StopAgencyHistoryEntity> stopAgencyHistory;
 
 }
