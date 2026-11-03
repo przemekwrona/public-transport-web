@@ -48,6 +48,8 @@ import {calendarEmptyResolver} from "./agency/calendars/calendar-editor/calendar
 import {TimetableWizardComponent} from "./agency/brigade/timetable-wizard/timetable-wizard.component";
 import {defaultRouteResolver} from "./agency/brigade/timetable-wizard/default-route.resolver";
 import {DocumentationComponent} from "./documentation/documentation.component";
+import {AgencyStopListComponent} from "./agency/agency-stops/agency-stop-list.component";
+import {agencyStopsResolver} from "./agency/agency-stops/agency-stops.resolver";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -64,6 +66,7 @@ export const routes: Routes = [
                 path: 'agency', children: [
                     {path: 'profile', component: ProfileDetailsComponent, resolve: { agencyDetails: profileDetailsResolver }},
                     {path: 'stops', component: StopsDbComponent, resolve: { centerPoint: centerPointResolver }},
+                    {path: 'stops/used', component: AgencyStopListComponent, resolve: { stops: agencyStopsResolver }},
                     {path: 'routes', component: RouteListComponent, resolve: { routes: RoutesResolver }},
                     {path: 'routes/create', component: CreateRouteComponent},
                     {path: 'routes/:routeCode', resolve: { routeDetails: tripsResolver }, children: [

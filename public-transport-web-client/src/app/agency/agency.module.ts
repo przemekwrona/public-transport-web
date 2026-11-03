@@ -14,6 +14,7 @@ import {FooterComponent} from "./footer/footer.component";
 import {GoogleMapsModule} from "./google-maps/google-maps.module";
 import {BrigadeModule} from "./brigade/brigade.module";
 import {CalendarsModule} from "./calendars/calendars.module";
+import {AgencyStopsModule} from "./agency-stops/agency-stops.module";
 import {SidebarModule} from "primeng/sidebar";
 
 
@@ -35,6 +36,7 @@ import {SidebarModule} from "primeng/sidebar";
         RoutesModule,
         TripsModule,
         StopsDbModule,
+        AgencyStopsModule,
         GoogleMapsModule,
         MatTreeModule,
         BrigadeModule,
