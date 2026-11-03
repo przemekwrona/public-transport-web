@@ -1,0 +1,89 @@
+<div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+        <div class="flex flex-col justify-center gap-2">
+            <h1 class="text-xl font-medium leading-none text-gray-900">{{ 'agency.stops.used.title' | transloco }}</h1>
+            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
+                {{ 'agency.stops.used.subtitle' | transloco }}
+            </div>
+        </div>
+        @if (hasStops()) {
+            <input class="input sm:max-w-full xl:max-w-96 w-full"
+                   type="search"
+                   [value]="query"
+                   (input)="onSearch($event)"
+                   [placeholder]="'agency.stops.used.search' | transloco">
+        }
+    </div>
+</div>
+
+<div class="container-fixed">
+    @if (hasStops() && visibleStops.length > 0) {
+        <div class="card">
+            <div class="card-body flex flex-col gap-3">
+                @for (item of visibleStops; track trackStop(item)) {
+                    <div class="flex flex-col gap-3 border border-gray-200 rounded-xl p-4">
+                        <div class="flex items-baseline gap-2">
+                            <div class="text-base font-medium text-gray-900">
+                                {{ item.stop?.name || ('agency.stops.used.unnamed' | transloco) }}
+                            </div>
+                            @if (!item.stop?.name) {
+                                <span class="text-2sm text-gray-500">#{{ item.stop?.id }}</span>
+                            }
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @for (route of item.routes ?? []; track route.routeCode) {
+                                <div class="flex flex-col gap-2">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        @if (route.line) {
+                                            <span class="badge badge-sm badge-outline badge-info">{{ route.line }}</span>
+                                        }
+                                        <a class="text-sm font-medium text-gray-900 hover:text-primary-active"
+                                           [routerLink]="['/agency/routes', route.routeCode, 'trips']">
+                                            {{ route.name }}
+                                        </a>
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        @for (trip of tripsFor(item, route); track trip.tripCode + trip.variantMode) {
+                                            <span class="badge badge-sm badge-outline">
+                                                {{ trip.tripCode }}
+                                                @if (trip.variantMode) {
+                                                    · {{ ('agency.trip.' + trip.variantMode) | transloco }}
+                                                }
+                                                @if (trip.headsign) {
+                                                    · {{ trip.headsign }}
+                                                }
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    } @else if (hasStops()) {
+        <div class="card">
+            <div class="card-body text-sm text-gray-700">
+                {{ 'agency.stops.used.noResults' | transloco }}
+            </div>
+        </div>
+    } @else {
+        <div class="card w-full">
+            <div class="card-body flex flex-col items-center gap-2.5 py-7.5">
+                <div class="flex justify-center p-7.5 py-9">
+                    <img alt="" class="dark:hidden max-h-[230px]" src="assets/media/illustrations/22.svg">
+                    <img alt="" class="light:hidden max-h-[230px]" src="assets/media/illustrations/22-dark.svg">
+                </div>
+                <div class="flex flex-col gap-3 text-center">
+                    <h2 class="text-1.5xl font-semibold text-gray-900">
+                        {{ 'agency.stops.used.emptyTitle' | transloco }}
+                    </h2>
+                    <p class="text-sm text-gray-800">
+                        {{ 'agency.stops.used.emptyDescription' | transloco }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
