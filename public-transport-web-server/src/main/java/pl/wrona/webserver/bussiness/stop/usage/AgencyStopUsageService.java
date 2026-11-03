@@ -54,7 +54,7 @@ public class AgencyStopUsageService {
                 .map(stopTimes -> toAgencyStop(stopTimes, polish))
                 .sorted(Comparator
                         .comparing((AgencyStop item) -> stopName(item).isBlank())
-                        .thenComparing(this::stopName, polish))
+                        .thenComparing(AgencyStopUsageService::stopName, polish))
                 .toList();
 
         return new AgencyStops().items(items);
