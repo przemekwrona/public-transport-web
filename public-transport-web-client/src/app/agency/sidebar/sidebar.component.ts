@@ -8,7 +8,6 @@ import {Building} from '@primeicons/angular/building';
 import {Users} from '@primeicons/angular/users';
 import {User} from '@primeicons/angular/user';
 import {Map} from '@primeicons/angular/map';
-import {ChevronDown} from '@primeicons/angular/chevron-down';
 import {Directions} from '@primeicons/angular/directions';
 import {Calendar} from '@primeicons/angular/calendar';
 import {Clipboard} from '@primeicons/angular/clipboard';
@@ -27,7 +26,6 @@ import {AgencySidebarService} from './agency-sidebar.service';
         Users,
         User,
         Map,
-        ChevronDown,
         Directions,
         Calendar,
         Clipboard,
