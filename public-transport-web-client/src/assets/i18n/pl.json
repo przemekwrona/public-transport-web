@@ -43,6 +43,18 @@
       "title": "Profil Firmy",
       "subtitle": "Informacje o Firmie"
     },
+    "stops": {
+      "used": {
+        "menu": "Przystanki na liniach",
+        "title": "Przystanki na liniach",
+        "subtitle": "Przystanki, które występują na liniach i kursach Twojej agencji.",
+        "search": "Szukaj po nazwie przystanku, linii lub kursu",
+        "emptyTitle": "Brak używanych przystanków",
+        "emptyDescription": "Żaden kurs nie ma jeszcze przypisanych przystanków.",
+        "noResults": "Brak przystanków pasujących do wyszukiwania.",
+        "unnamed": "Przystanek bez nazwy"
+      }
+    },
     "trip": {
       "listOfVariants": "Lista wariantów",
       "addNewVariant": "Dodaj nowy wariant",
