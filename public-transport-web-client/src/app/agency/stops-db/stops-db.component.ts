@@ -64,8 +64,66 @@ export class StopsDbComponent implements OnInit, AfterViewInit, OnDestroy {
         return this.lastClickedStop?.id != null;
     }
 
+    public closeDetails(): void {
+        window.clearTimeout(this.detailsResizeTimer);
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion || !this.detailsOpen) {
+            this.finishDetailsClose();
+            return;
+        }
+
+        this.ignoreMapReload = true;
+        this.ngZone.runOutsideAngular(() => {
+            requestAnimationFrame(() => this.playDetailsCloseAnimation());
+        });
+    }
+
+    private playDetailsCloseAnimation(): void {
+        const details = document.querySelector('.stops-details') as HTMLElement | null;
+        const panel = document.querySelector('.stops-details-panel') as HTMLElement | null;
+        const wide = window.matchMedia('(min-width: 1024px)').matches;
+        const motion: KeyframeAnimationOptions = {
+            duration: 420,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            fill: 'forwards'
+        };
+        if (wide && details) {
+            const current = details.getBoundingClientRect().width;
+            details.animate([
+                {flexBasis: `${current}px`, marginRight: '30px'},
+                {flexBasis: '0px', marginRight: '0px'}
+            ], motion);
+            panel?.animate([
+                {opacity: 1, transform: 'none'},
+                {opacity: 0, transform: 'translateX(-1.5rem)'}
+            ], motion);
+        } else {
+            panel?.animate([
+                {opacity: 1, transform: 'none'},
+                {opacity: 0, transform: 'translateY(-0.75rem)'}
+            ], motion);
+        }
+
+        this.detailsResizeTimer = window.setTimeout(() => this.ngZone.run(() => this.finishDetailsClose()), 450);
+    }
+
+    private finishDetailsClose(): void {
+        this.detailsOpen = false;
+        this.lastClickedStop = {} as Stop;
+        this.lastClickedStopTerritory = {} as Territory;
+        this.mapResizeSettled = false;
+        requestAnimationFrame(() => {
+            document.querySelector('.stops-details')?.getAnimations().forEach(animation => animation.cancel());
+            this.ignoreMapReload = true;
+            this.map?.invalidateSize({animate: false, pan: false});
+            this.ignoreMapReload = false;
+            this.reloadStops(this.map);
+        });
+    }
+
     private openDetails(): void {
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.mapResizeSettled = false;
         this.ignoreMapReload = true;
         if (reduceMotion) {
             this.detailsOpen = true;

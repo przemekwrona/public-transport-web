@@ -24,10 +24,13 @@
 
                 @if (isAdmin()) {
                     <div class="card">
-                        <div class="card-header" id="advanced_settings_preferences">
+                        <div class="card-header flex items-center justify-between gap-2" id="advanced_settings_preferences">
                             <h3 class="card-title">
                                 Informacje o Przystanku
                             </h3>
+                            <button type="button" class="btn btn-sm btn-icon btn-light" (click)="closeDetails()" aria-label="Zamknij">
+                                <i class="ki-filled ki-cross"></i>
+                            </button>
                         </div>
                         <div class="card-body">
                             <app-bus-stop-editor
@@ -48,8 +51,11 @@
                     </div>
                 } @else {
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header flex items-center justify-between gap-2">
                             <h3 class="card-title">Informacje o przystanku</h3>
+                            <button type="button" class="btn btn-sm btn-icon btn-light" (click)="closeDetails()" aria-label="Zamknij">
+                                <i class="ki-filled ki-cross"></i>
+                            </button>
                         </div>
                         <div class="card-body">
 

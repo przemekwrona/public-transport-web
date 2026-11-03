@@ -78,8 +78,15 @@
                                 <p-sidebar-menu-sub>
                                     <p-sidebar-menu-sub-item>
                                         <a routerLink="/agency/stops" pSidebarMenuSubButton
-                                           routerLinkActive [isActive]="stopsLink.isActive" #stopsLink="routerLinkActive">
+                                           routerLinkActive [routerLinkActiveOptions]="{exact: true}"
+                                           [isActive]="stopsLink.isActive" #stopsLink="routerLinkActive">
                                             <span>Baza Danych Przystanków</span>
+                                        </a>
+                                    </p-sidebar-menu-sub-item>
+                                    <p-sidebar-menu-sub-item>
+                                        <a routerLink="/agency/stops/used" pSidebarMenuSubButton
+                                           routerLinkActive [isActive]="usedStopsLink.isActive" #usedStopsLink="routerLinkActive">
+                                            <span>{{ 'agency.stops.used.menu' | transloco }}</span>
                                         </a>
                                     </p-sidebar-menu-sub-item>
                                 </p-sidebar-menu-sub>
