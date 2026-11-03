@@ -31,5 +31,19 @@
   "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
   "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'",
   "agency.trip.timetable.FRONT": "FRONT",
-  "agency.trip.timetable.BACK": "BACK"
+  "agency.trip.timetable.BACK": "BACK",
+  "agency": {
+    "stops": {
+      "used": {
+        "menu": "Stops on lines",
+        "title": "Stops on lines",
+        "subtitle": "Stops that appear on your agency's routes and trips.",
+        "search": "Search by stop, line or trip",
+        "emptyTitle": "No stops in use",
+        "emptyDescription": "None of the trips have stops assigned yet.",
+        "noResults": "No stops match the search.",
+        "unnamed": "Unnamed stop"
+      }
+    }
+  }
 }
