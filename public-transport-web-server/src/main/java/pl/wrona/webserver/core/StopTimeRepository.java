@@ -64,4 +64,15 @@ public interface StopTimeRepository extends JpaRepository<StopTimeEntity, StopTi
             )
             """)
     List<StopTimeEntity> findFirstAndLastByTripProfileIds(@Param("tripProfileIds") Collection<Long> tripProfileIds);
+
+    @Query("""
+            SELECT st FROM StopTimeEntity st
+            JOIN FETCH st.stopEntity
+            JOIN FETCH st.tripProfile tp
+            JOIN FETCH tp.trip t
+            JOIN FETCH t.route r
+            JOIN r.agency a
+            WHERE a.agencyCode = :agencyCode
+            """)
+    List<StopTimeEntity> findAllUsedByAgencyCode(@Param("agencyCode") String agencyCode);
 }

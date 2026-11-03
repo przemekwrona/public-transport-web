@@ -396,6 +396,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/CenterPoint'
 
+  /agency/{agency}/stops:
+    get:
+      tags:
+        - agency-stops
+      summary: Return stops used by the agency routes and trips
+      operationId: getAgencyStops
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyStops'
+
   /agency/{agency}/routes:
     post:
       tags:
@@ -1350,6 +1370,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Territory'
+
+    AgencyStopRoute:
+      type: object
+      properties:
+        routeCode:
+          type: string
+        line:
+          type: string
+        name:
+          type: string
+
+    AgencyStopTrip:
+      type: object
+      properties:
+        routeCode:
+          type: string
+        line:
+          type: string
+        tripCode:
+          type: string
+        variantMode:
+          $ref: '#/components/schemas/TripMode'
+        headsign:
+          type: string
+
+    AgencyStop:
+      type: object
+      properties:
+        stop:
+          $ref: '#/components/schemas/Stop'
+        routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgencyStopRoute'
+        trips:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgencyStopTrip'
+
+    AgencyStops:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgencyStop'
 
     RouteId:
       type: object
