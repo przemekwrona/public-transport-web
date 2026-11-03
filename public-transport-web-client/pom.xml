@@ -14,8 +14,8 @@
 
         <!-- Directory containing package.json and the frontend source -->
         <frontend-src-dir>src/main/resources/static</frontend-src-dir>
-        <node.version>v24.5.0</node.version>
-        <npm.version>11.5.1</npm.version>
+        <node.version>v24.22.2</node.version>
+        <npm.version>11.19.1</npm.version>
     </properties>
 
     <!-- ... Other dependencies and plugins ... -->
