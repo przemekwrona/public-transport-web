@@ -66,30 +66,31 @@
                 </p-sidebar-group>
 
                 <p-sidebar-group>
+                    <p-sidebar-group-label>Baza Danych</p-sidebar-group-label>
+                    <p-sidebar-group-content>
+                        <p-sidebar-menu>
+                            <p-sidebar-menu-item>
+                                <a routerLink="/agency/stops" pSidebarMenuButton
+                                   routerLinkActive [routerLinkActiveOptions]="{exact: true}"
+                                   [isActive]="stopsLink.isActive" #stopsLink="routerLinkActive">
+                                    <svg data-p-icon="map"></svg>
+                                    <span>Wszyskie Przystanki</span>
+                                </a>
+                            </p-sidebar-menu-item>
+                        </p-sidebar-menu>
+                    </p-sidebar-group-content>
+                </p-sidebar-group>
+
+                <p-sidebar-group>
                     <p-sidebar-group-label>Rozkład Jazdy</p-sidebar-group-label>
                     <p-sidebar-group-content>
                         <p-sidebar-menu>
-                            <p-sidebar-menu-item [collapsible]="true" [defaultOpen]="true">
-                                <button type="button" pSidebarMenuButton>
+                            <p-sidebar-menu-item>
+                                <a routerLink="/agency/stops/used" pSidebarMenuButton
+                                   routerLinkActive [isActive]="usedStopsLink.isActive" #usedStopsLink="routerLinkActive">
                                     <svg data-p-icon="map"></svg>
-                                    <span>Przystanki</span>
-                                    <svg data-p-icon="chevron-down" class="ml-auto"></svg>
-                                </button>
-                                <p-sidebar-menu-sub>
-                                    <p-sidebar-menu-sub-item>
-                                        <a routerLink="/agency/stops" pSidebarMenuSubButton
-                                           routerLinkActive [routerLinkActiveOptions]="{exact: true}"
-                                           [isActive]="stopsLink.isActive" #stopsLink="routerLinkActive">
-                                            <span>Baza Danych Przystanków</span>
-                                        </a>
-                                    </p-sidebar-menu-sub-item>
-                                    <p-sidebar-menu-sub-item>
-                                        <a routerLink="/agency/stops/used" pSidebarMenuSubButton
-                                           routerLinkActive [isActive]="usedStopsLink.isActive" #usedStopsLink="routerLinkActive">
-                                            <span>{{ 'agency.stops.used.menu' | transloco }}</span>
-                                        </a>
-                                    </p-sidebar-menu-sub-item>
-                                </p-sidebar-menu-sub>
+                                    <span>Moje Przystanki</span>
+                                </a>
                             </p-sidebar-menu-item>
                             <p-sidebar-menu-item>
                                 <a routerLink="/agency/routes" pSidebarMenuButton data-testid="line"
