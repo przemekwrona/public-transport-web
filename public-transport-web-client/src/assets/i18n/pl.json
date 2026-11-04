@@ -7,6 +7,7 @@
   "signin.password.label": "Hasło",
   "signin.notification.lack-of-account": "Nie masz konta? Skontaktuj się z zespołem Następna Stacja mailowo w celu jego założenia. Napisz na adres biuro@nastepnastacja.pl",
   "signin.login.button": "Zaloguj się",
+  "signin.login.progress": "Logowanie...",
   "agency.trip.mainVariant": "Missing value for 'agency.trip.mainVariant'",
   "agency.trip.variantDetails": "Missing value for 'agency.trip.variantDetails'",
   "sidebar.collapse": "Zwiń menu",
