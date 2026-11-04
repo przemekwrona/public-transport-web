@@ -7,6 +7,7 @@
   "signin.password.label": "Missing value for 'signin.password.label'",
   "signin.notification.lack-of-account": "Missing value for 'signin.notification.lack-of-account'",
   "signin.login.button": "Missing value for 'signin.login.button'",
+  "signin.login.progress": "Missing value for 'signin.login.progress'",
   "agency.trip.mainVariant": "Missing value for 'agency.trip.mainVariant'",
   "agency.trip.variantDetails": "Missing value for 'agency.trip.variantDetails'",
   "sidebar.collapse": "Collapse menu",
