@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.AgencyRepository;
@@ -54,6 +55,7 @@ public class RouteStopTimetableService {
     private final StopService stopService;
     private final AgencyRepository agencyRepository;
     private final RouteStopTimetablePdfRenderer routeStopTimetablePdfRenderer;
+    private final AgencyStopNameService agencyStopNameService;
 
     @PreAgencyAuthorize(roles = {
             PreAgencyAuthorize.Role.SUPER_USER,
@@ -92,7 +94,7 @@ public class RouteStopTimetableService {
                 agencyName(agency),
                 line(route),
                 routeName(route),
-                stopName(stop, stopCode),
+                stopName(instance, stop, stopCode),
                 direction(trips, route, tripMode),
                 tripMode == null ? "" : tripMode.getValue(),
                 calendars(departures),
@@ -225,11 +227,15 @@ public class RouteStopTimetableService {
         return route == null ? "" : Optional.ofNullable(route.getName()).orElse("");
     }
 
-    private static String stopName(StopEntity stop, String stopCode) {
-        return Optional.ofNullable(stop)
-                .map(StopEntity::getName)
-                .filter(RouteStopTimetableService::hasText)
-                .orElse(stopCode);
+    private String stopName(String agency, StopEntity stop, String stopCode) {
+        if (stop == null || stop.getStopId() == null) {
+            return stopCode;
+        }
+        String preferred = AgencyStopNameService.prefer(
+                stop.getName(),
+                agencyStopNameService.findOverrides(agency, List.of(stop.getStopId())),
+                stop.getStopId());
+        return hasText(preferred) ? preferred : stopCode;
     }
 
     private static String direction(List<TripEntity> trips, RouteEntity route, TripMode tripMode) {

@@ -6,8 +6,8 @@ import {
     ErrorResponse,
     Point2D,
     RouteDetails, RouteId,
+    AgencyStopsService,
     Stop,
-    StopsService,
     StopTime,
     TrafficMode,
     TripDistanceMeasuresService,
@@ -26,9 +26,10 @@ import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {ViewportScroller} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {
-    BusStopModalEditorComponent,
-    BusStopModalEditorData
-} from "../../shared/bus-stop-modal-editor/bus-stop-modal-editor.component";
+    AgencyStopNameDialogData,
+    AgencyStopNameDialogResult,
+    AgencyStopNameModalComponent
+} from "../../agency-stops/agency-stop-name-modal/agency-stop-name-modal.component";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
@@ -43,7 +44,6 @@ import {
 } from "@angular/forms";
 import {TripIdExistenceValidator} from "./trip-id-existence/trip-id-existence.service";
 import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
-import {BusStopData} from "../../shared/bus-stop-modal-selector/bus-stop-modal-selector.component";
 
 @Component({
     selector: 'app-trip-editor',
@@ -151,7 +151,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return index >= 0 ? index : 0;
     }
 
-    constructor(private stopsService: StopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
+    constructor(private agencyStopsService: AgencyStopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
     }
 
     ngOnInit(): void {
@@ -462,7 +462,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     private reloadStops(map: Map) {
         if (map.getZoom() > 12) {
             const bounds = map.getBounds();
-            this.stopsService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
+            this.agencyStopsService.getAgencyStopsInArea(this.agencyStorageService.getInstance(), bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
                 const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: stop.isBdot10k ? this.BDOT10K_STOP : this.OTP_STOP})
                     .on('click', (event: LeafletMouseEvent) => {
                         for (const profile of this.profiles.controls) {
@@ -817,21 +817,32 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     openDialogEditStop(stopTime: FormGroup): void {
-        const data: BusStopModalEditorData = {} as BusStopModalEditorData;
-        data.stopId = stopTime.controls["id"].value;
-        data.stopName = stopTime.controls["name"].value;
-        data.lat = stopTime.controls["lon"].value;
-        data.lon = stopTime.controls["lat"].value;
+        const stopId = stopTime.controls["id"].value;
+        if (stopId == null) {
+            return;
+        }
+        const data: AgencyStopNameDialogData = {
+            stopId,
+            name: stopTime.controls["name"].value ?? '',
+            lat: stopTime.controls["lat"].value,
+            lon: stopTime.controls["lon"].value
+        };
 
-        const dialogRef = this.dialog.open(BusStopModalEditorComponent, {
-            data: data,
-        });
-
-        dialogRef.afterClosed().subscribe((busStopSelectorData: BusStopData | undefined) => {
-            if (busStopSelectorData !== undefined) {
-                // const stopTimeControl: FormGroup = this.stops.controls.find((formGroup: FormGroup) => formGroup.controls["id"].value === busStopSelectorData.stopId)
-                // stopTimeControl.controls["name"].setValue(busStopSelectorData.stopName);
+        this.dialog.open(AgencyStopNameModalComponent, {
+            data,
+            width: '960px',
+            maxWidth: '95vw'
+        }).afterClosed().subscribe((result: AgencyStopNameDialogResult | undefined) => {
+            if (!result) {
+                return;
             }
+            this.profiles.controls.forEach(profile => {
+                this.getStops(profile).controls.forEach(stop => {
+                    if (stop.controls["id"].value === result.stopId) {
+                        stop.controls["name"].setValue(result.name);
+                    }
+                });
+            });
         });
     }
 

@@ -16,7 +16,7 @@ import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
-import {StopsService, TripService} from "../../generated/public-transport-api";
+import {TripService} from "../../generated/public-transport-api";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {CountDownComponent} from "./trip-editor/count-down/count-down.component";
 import {MatRadioModule} from "@angular/material/radio";
@@ -68,7 +68,6 @@ import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign
         TripListComponent
     ],
     providers: [
-        StopsService,
         TripService
     ]
 })

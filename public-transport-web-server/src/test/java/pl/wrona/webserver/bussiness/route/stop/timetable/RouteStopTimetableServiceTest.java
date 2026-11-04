@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.AgencyRepository;
@@ -60,6 +61,8 @@ class RouteStopTimetableServiceTest {
     private AgencyRepository agencyRepository;
     @Mock
     private RouteStopTimetablePdfRenderer routeStopTimetablePdfRenderer;
+    @Mock
+    private AgencyStopNameService agencyStopNameService;
 
     @InjectMocks
     private RouteStopTimetableService routeStopTimetableService;

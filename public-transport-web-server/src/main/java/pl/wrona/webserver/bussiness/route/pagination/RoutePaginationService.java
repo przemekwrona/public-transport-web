@@ -1,9 +1,11 @@
 package pl.wrona.webserver.bussiness.route.pagination;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.Routes;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
@@ -17,6 +19,7 @@ public class RoutePaginationService {
 
     private final RouteQueryService routeQueryService;
     private final StopService stopService;
+    private final AgencyStopNameService agencyStopNameService;
 
     @PreAgencyAuthorize(roles = {
             PreAgencyAuthorize.Role.SUPER_USER,
@@ -35,9 +38,16 @@ public class RoutePaginationService {
                 .toList();
 
         var routesWithBrigades = routeQueryService.findByExistsBrigade(instance);
+        var agencyNames = agencyStopNameService.findOverrides(instance, stopsIds);
 
         var items = routes.stream()
-                .map(route -> RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds), routesWithBrigades, Map.of()))
+                .map(route -> {
+                    Route mapped = RouteMapper.map(route, stopService.mapStopByIdsIn(stopsIds), routesWithBrigades, Map.of());
+                    if (mapped != null) {
+                        agencyStopNameService.apply(agencyNames, mapped.getOriginStop(), mapped.getDestinationStop());
+                    }
+                    return mapped;
+                })
                 .toList();
 
         return new Routes()

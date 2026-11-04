@@ -36,6 +36,7 @@
                             <app-bus-stop-editor
                                     [stopId]="lastClickedStop.id"
                                     [stopName]="lastClickedStop.name"
+                                    (onSaved)="onStopSaved($event)"
                                     [lon]="lastClickedStop.lon"
                                     [lat]="lastClickedStop.lat"
                                     [isBdot]="lastClickedStop.isBdot10k"

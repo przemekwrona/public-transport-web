@@ -8,6 +8,7 @@ import org.igeolab.iot.pt.server.api.model.AgencyStops;
 import org.igeolab.iot.pt.server.api.model.Stop;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
@@ -29,6 +30,7 @@ import java.util.Map;
 public class AgencyStopUsageService {
 
     private final StopTimeRepository stopTimeRepository;
+    private final AgencyStopNameService agencyStopNameService;
 
     @Transactional(readOnly = true)
     @PreAgencyAuthorize(roles = {
@@ -50,8 +52,9 @@ public class AgencyStopUsageService {
             stopTimesByStopId.computeIfAbsent(stop.getStopId(), ignored -> new ArrayList<>()).add(stopTime);
         }
 
+        Map<Long, String> agencyNames = agencyStopNameService.findOverrides(instance, stopTimesByStopId.keySet());
         List<AgencyStop> items = stopTimesByStopId.values().stream()
-                .map(stopTimes -> toAgencyStop(stopTimes, polish))
+                .map(stopTimes -> toAgencyStop(stopTimes, polish, agencyNames))
                 .sorted(Comparator
                         .comparing((AgencyStop item) -> stopName(item).isBlank())
                         .thenComparing(AgencyStopUsageService::stopName, polish))
@@ -60,7 +63,7 @@ public class AgencyStopUsageService {
         return new AgencyStops().items(items);
     }
 
-    private AgencyStop toAgencyStop(List<StopTimeEntity> stopTimes, Collator polish) {
+    private AgencyStop toAgencyStop(List<StopTimeEntity> stopTimes, Collator polish, Map<Long, String> agencyNames) {
         Map<Long, RouteEntity> routes = new LinkedHashMap<>();
         Map<Long, TripEntity> trips = new LinkedHashMap<>();
         for (StopTimeEntity stopTime : stopTimes) {
@@ -78,7 +81,7 @@ public class AgencyStopUsageService {
         }
 
         return new AgencyStop()
-                .stop(mapStop(stopTimes.get(0).getStopEntity()))
+                .stop(mapStop(stopTimes.get(0).getStopEntity(), agencyNames))
                 .routes(routes.values().stream().map(this::mapRoute).sorted(routeOrder(polish)).toList())
                 .trips(trips.values().stream().map(this::mapTrip).sorted(tripOrder(polish)).toList());
     }
@@ -90,12 +93,12 @@ public class AgencyStopUsageService {
         return item.getStop().getName();
     }
 
-    private Stop mapStop(StopEntity stop) {
+    private Stop mapStop(StopEntity stop, Map<Long, String> agencyNames) {
         return new Stop()
                 .id(stop.getStopId())
                 .bdot10kId(stop.getBdot10kId())
                 .osmId(stop.getOsmId())
-                .name(stop.getName())
+                .name(AgencyStopNameService.prefer(stop.getName(), agencyNames, stop.getStopId()))
                 .lon((float) stop.getLon())
                 .lat((float) stop.getLat())
                 .isOsm(stop.isOsm())

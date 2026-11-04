@@ -14,6 +14,7 @@ import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.trip.TripProfileQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopService;
@@ -44,6 +45,7 @@ public class TripDetailsService {
     private final StopService stopService;
     private final ObjectMapper objectMapper;
     private final TerritorialUnitQueryService territorialUnitQueryService;
+    private final AgencyStopNameService agencyStopNameService;
 
     @PreAgencyAuthorize(roles = {
             PreAgencyAuthorize.Role.SUPER_USER,
@@ -59,7 +61,7 @@ public class TripDetailsService {
         var profiles = tripProfileQueryService.findAllByTrip(tripEntity);
         var stopTimes = stopTimeRepository.findAllByTripId(tripEntity.getTripId());
         var stops = stopService.findStopByTripId(tripEntity.getTripId());
-        var tripProfiles = buildTripProfiles(profiles, stopTimes, stops);
+        var tripProfiles = buildTripProfiles(instance, profiles, stopTimes, stops);
 
         var originTerritory = territorialUnitQueryService.findAllByStopIdIn(List.of(tripEntity.getRoute().getOriginStopId())).get(0);
         var targetTerritory = territorialUnitQueryService.findAllByStopIdIn(List.of(tripEntity.getRoute().getDestinationStopId())).get(0);
@@ -85,7 +87,8 @@ public class TripDetailsService {
                 .headsign(tripEntity.getHeadsign());
     }
 
-    private List<TripProfile> buildTripProfiles(List<TripProfileEntity> profiles, List<StopTimeEntity> stopTimes, List<StopEntity> stops) {
+    private List<TripProfile> buildTripProfiles(String instance, List<TripProfileEntity> profiles, List<StopTimeEntity> stopTimes, List<StopEntity> stops) {
+        Map<Long, String> agencyNames = agencyStopNameService.findOverrides(instance, stops.stream().map(StopEntity::getStopId).toList());
         Map<Long, StopEntity> stopById = stops.stream()
                 .collect(Collectors.toMap(StopEntity::getStopId, Function.identity(), (left, right) -> left));
         Map<Long, List<StopTimeEntity>> stopTimesByProfileId = stopTimes.stream()
@@ -100,17 +103,17 @@ public class TripDetailsService {
                         .isDefault(profile.isDefaultProfile())
                         .isCustomized(profile.isCustomized())
                         .stops(stopTimesByProfileId.getOrDefault(profile.getTripProfileId(), List.of()).stream()
-                                .map(stopTime -> mapStopTime(stopTime, stopById))
+                                .map(stopTime -> mapStopTime(stopTime, stopById, agencyNames))
                                 .toList()))
                 .toList();
     }
 
-    private StopTime mapStopTime(StopTimeEntity stopTime, Map<Long, StopEntity> stopById) {
+    private StopTime mapStopTime(StopTimeEntity stopTime, Map<Long, StopEntity> stopById, Map<Long, String> agencyNames) {
         StopEntity stop = stopById.getOrDefault(stopTime.getStopEntity().getStopId(), stopTime.getStopEntity());
 
         return new StopTime()
                 .stopId(stop.getStopId())
-                .stopName(stop.getName())
+                .stopName(AgencyStopNameService.prefer(stop.getName(), agencyNames, stop.getStopId()))
                 .calculatedSeconds(stopTime.getCalculatedTimeSeconds())
                 .customizedSeconds(stopTime.getCustomizedTimeSeconds())
                 .meters(stopTime.getDistanceMeters())
