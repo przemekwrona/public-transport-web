@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
 
 import moment from "moment";
@@ -15,7 +15,7 @@ import {
     BrigadeResource,
     BrigadeService, GetAllTripsResponse, GetBrigadeDetailsResponse,
     NextCalendarResourceSequenceResponse,
-    PutBrigadeEventBody, ResourceOptimizerService, ResourceService, TripId2
+    PutBrigadeEventBody, ResourceOptimizerService, ResourceService, Route, TripId2
 } from "../../../generated/public-transport-api";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatIconModule} from "@angular/material/icon";
@@ -54,7 +54,7 @@ const DEFAULT_SCHEDULER_ZOOM = SCHEDULER_ZOOM_STEPS.findIndex(step => step.cellW
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './brigade-scheduler.component.scss'
 })
-export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BrigadeSchedulerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
     @ViewChild("scheduler")
     scheduler!: DayPilotSchedulerComponent;
@@ -166,6 +166,12 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     ngOnInit(): void {
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['defaultRoutes'] && this.scheduler?.control) {
+            this.refreshEventLabels();
+        }
     }
 
     ngAfterViewInit(): void {
@@ -371,19 +377,22 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestr
             this.brigadeService.getNextBrigadeEventSequence(instance, this.brigadeCode, this.brigadeBody.calendarSymbolId.calendarItemId.code, this.brigadeBody.calendarSymbolId.symbol, result.resourceId).subscribe((response) => {
                 const line = result.tripId.routeId.line;
                 const name = result.tripId.routeId.name;
+                const localities = this.localitiesFor(tripId.variantMode, tripId.routeId?.routeCode);
 
                 const event: DayPilot.EventData = {
                     start: new DayPilot.Date(result.start),
                     end: new DayPilot.Date(result.end),
                     id: response.sequenceHex,
                     resource: result.resourceId,
-                    text: `${startDate}-${endDate}\n${line} ${result.origin} - ${result.destination} ${result.tripId.variantMode}`,
+                    text: this.formatEventText(startDate, endDate, line, localities),
                     tags: {
                         line,
                         name,
                         tripId: tripId,
                         sequence: response.sequence,
                         sequenceHex: response.sequenceHex,
+                        originLocality: localities.start,
+                        destinationLocality: localities.end,
                     }
                 } as DayPilot.EventData;
 
@@ -439,6 +448,9 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestr
         };
 
         const instance: string = this.agencyStorage.getInstance();
+        const startDate = startMoment.format('HH:mm');
+        const endDate = endMoment.format('HH:mm');
+        this.paintMovedEventText(args.e, startDate, endDate, tags, tripId);
 
         this.brigadeService.putBrigadeEvent(
             instance,
@@ -448,10 +460,32 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestr
             String(args.newResource),
             putBrigadeEventBody
         ).subscribe(() => {
-            const startDate = startMoment.format('HH:mm');
-            const endDate = endMoment.format('HH:mm');
-            args.e.text(`${startDate}-${endDate}\n${line} ${name}`);
+            this.paintMovedEventText(args.e, startDate, endDate, args.e.data.tags ?? tags, tripId);
         });
+    }
+
+    private paintMovedEventText(event: DayPilot.Event, startDate: string, endDate: string, tags: Record<string, any>, tripId: TripId2 | undefined): void {
+        const lookedUp = this.localitiesFor(tripId?.variantMode, tripId?.routeId?.routeCode);
+        const localities = {
+            start: String(tags['originLocality'] ?? '').trim() || lookedUp.start,
+            end: String(tags['destinationLocality'] ?? '').trim() || lookedUp.end,
+        };
+        const line = String(tags['line'] ?? tripId?.routeId?.line ?? '').trim();
+        let text = this.formatEventText(startDate, endDate, line, localities);
+        const previousSecondLine = String(event.data.text ?? '').split('\n').slice(1).join('\n').trim();
+        if (!text.split('\n')[1]?.trim() && previousSecondLine) {
+            text = `${startDate}-${endDate}\n${previousSecondLine}`;
+        }
+
+        event.data.tags = {
+            ...tags,
+            line,
+            originLocality: localities.start,
+            destinationLocality: localities.end,
+        };
+        event.data.text = text;
+        delete event.data.html;
+        this.scheduler?.control?.events.update(event);
     }
 
     // --- DELETE EVENT ---
@@ -605,12 +639,14 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestr
                 const departureTime = moment().startOf('day').add(event.startSecond, 'seconds');
                 const arrivalTime = moment().startOf('day').add(event.endSecond, 'seconds');
 
+                const localities = this.localitiesFor(event.tripId?.variantMode, event.tripId?.routeId?.routeCode);
+
                 return {
                     id: event.sequenceHex,
                     resource: resource.sequenceHex,
                     start: departureTime.format('YYYY-MM-DDTHH:mm:ss'),
                     end: arrivalTime.format('YYYY-MM-DDTHH:mm:ss'),
-                    text: `${departureTime.format('HH:mm')}-${arrivalTime.format('HH:mm')} \n${event.tripId.variantMode} ${event.line} ${event.name}`,
+                    text: this.formatEventText(departureTime.format('HH:mm'), arrivalTime.format('HH:mm'), event.line, localities),
                     color: '#e69138',
                     tags: {
                         line: event.line,
@@ -618,6 +654,8 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestr
                         sequence: event.sequence,
                         sequenceHex: event.sequenceHex,
                         tripId: event.tripId,
+                        originLocality: localities.start,
+                        destinationLocality: localities.end,
                     }
                 } as DayPilot.EventData;
             });
@@ -675,7 +713,10 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestr
 
                 event.start = alignedStart.format('YYYY-MM-DDTHH:mm:ss');
                 event.end = alignedEnd.format('YYYY-MM-DDTHH:mm:ss');
-                event.text = `${alignedStart.format('HH:mm')}-${alignedEnd.format('HH:mm')}\n${tags.line} ${tags.name}`;
+                event.text = this.formatEventText(alignedStart.format('HH:mm'), alignedEnd.format('HH:mm'), tags.line, {
+                    start: tags.originLocality ?? '',
+                    end: tags.destinationLocality ?? '',
+                });
 
                 const putBrigadeEventBody: PutBrigadeEventBody = {
                     startSecond: alignedStartSeconds,
@@ -699,6 +740,71 @@ export class BrigadeSchedulerComponent implements OnInit, AfterViewInit, OnDestr
         }
 
         scheduler.update({events});
+    }
+
+    private refreshEventLabels(): void {
+        const scheduler = this.scheduler?.control;
+        if (!scheduler) {
+            return;
+        }
+
+        const events = [...(scheduler.events.list ?? [])];
+        let changed = false;
+
+        for (const event of events) {
+            const tags = event.tags ?? {};
+            const tripId: TripId2 | undefined = tags.tripId;
+            const localities = this.localitiesFor(tripId?.variantMode, tripId?.routeId?.routeCode);
+            const start = moment(event.start.toString());
+            const end = moment(event.end.toString());
+            const text = this.formatEventText(start.format('HH:mm'), end.format('HH:mm'), tags.line, localities);
+
+            if (event.text === text && tags.originLocality === localities.start && tags.destinationLocality === localities.end) {
+                continue;
+            }
+
+            event.text = text;
+            event.tags = {
+                ...tags,
+                originLocality: localities.start,
+                destinationLocality: localities.end,
+            };
+            changed = true;
+        }
+
+        if (changed) {
+            const scrollX = scheduler.getScrollX();
+            scheduler.update({events});
+            scheduler.setScrollX(scrollX);
+        }
+    }
+
+    private localitiesFor(variantMode: string | undefined, routeCode: string | undefined): { start: string; end: string } {
+        const route = this.findRoute(routeCode);
+        const origin = route?.originTerritory?.name?.trim() ?? '';
+        const destination = route?.destinationTerritory?.name?.trim() ?? '';
+
+        if (variantMode === 'BACK') {
+            return {start: destination, end: origin};
+        }
+
+        return {start: origin, end: destination};
+    }
+
+    private findRoute(routeCode: string | undefined): Route | undefined {
+        if (!routeCode) {
+            return undefined;
+        }
+
+        return (this.defaultRoutes?.lines ?? [])
+            .map(line => line.route)
+            .find(route => route?.routeCode === routeCode || route?.routeId?.routeCode === routeCode);
+    }
+
+    private formatEventText(startTime: string, endTime: string, line: string | undefined, localities: { start: string; end: string }): string {
+        const places = [localities.start, localities.end].filter(name => name.length > 0).join(' - ');
+        const secondLine = [line?.trim() ?? '', places].filter(part => part.length > 0).join(' ');
+        return `${startTime}-${endTime}\n${secondLine}`;
     }
 
 }

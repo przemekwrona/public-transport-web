@@ -17,9 +17,11 @@ import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.bussiness.trip.TripRepository;
 import pl.wrona.webserver.core.AgencyService;
 import pl.wrona.webserver.core.StopService;
+import pl.wrona.webserver.core.TerritorialUnitQueryService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.mapper.RouteMapper;
 import pl.wrona.webserver.core.mapper.TripMapper;
@@ -31,6 +33,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,6 +49,7 @@ public class TripPaginationService {
     private TripProfileQueryService tripProfileQueryService;
     private RouteQueryService routeQueryService;
     private AgencyStopNameService agencyStopNameService;
+    private TerritorialUnitQueryService territorialUnitQueryService;
 
     @PreAgencyAuthorize(roles = {
             PreAgencyAuthorize.Role.SUPER_USER,
@@ -72,6 +76,7 @@ public class TripPaginationService {
                 .toList();
 
         Map<Long, StopEntity> stopDictionary = this.stopService.mapStopByIdsIn(stopsIds);
+        Map<Long, TerritorialUnitEntity> territories = territoriesByStop(stopsIds);
         List<Long> agencyStopIds = dictTrips.values().stream()
                 .flatMap(Set::stream)
                 .flatMap(trip -> Stream.of(
@@ -82,7 +87,7 @@ public class TripPaginationService {
 
         List<RouteDetails> tripsResponse = dictTrips.keySet().stream()
                 .map(route -> new RouteDetails()
-                        .route(applyRouteStopNames(RouteMapper.map(route, stopDictionary, Map.of(), Map.of()), agencyNames))
+                        .route(applyRouteStopNames(RouteMapper.map(route, stopDictionary, Map.of(), territories), agencyNames))
                         .trips(dictTrips.get(route).stream()
                                 .map(trip -> applyTripStopNames(TripPaginationService.map(trip, dictProfiles, tripInBrigadeDictionary), trip, agencyNames))
                                 .sorted(Comparator
@@ -109,6 +114,18 @@ public class TripPaginationService {
         return trip
                 .origin(AgencyStopNameService.prefer(trip.getOrigin(), agencyNames, AgencyStopNameService.stopId(tripEntity.getOriginStopId())))
                 .destination(AgencyStopNameService.prefer(trip.getDestination(), agencyNames, AgencyStopNameService.stopId(tripEntity.getDestinationStopId())));
+    }
+
+    private Map<Long, TerritorialUnitEntity> territoriesByStop(List<Long> stopIds) {
+        if (stopIds.isEmpty()) {
+            return Map.of();
+        }
+
+        return territorialUnitQueryService.findAllByStopIdIn(stopIds).stream()
+                .collect(Collectors.toMap(
+                        TerritorialUnitEntity::getTerritorialUnitId,
+                        Function.identity(),
+                        (left, right) -> left));
     }
 
     private static List<Long> concat(List<Long> left, List<Long> right) {
