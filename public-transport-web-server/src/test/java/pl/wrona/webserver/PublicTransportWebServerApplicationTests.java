@@ -19,7 +19,9 @@ class PublicTransportWebServerApplicationTests {
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:14-alpine")
             .withDatabaseName("next_stop_db")
             .withUsername("test")
-            .withPassword("welcome1");
+            .withPassword("welcome1")
+            .withUrlParam("currentSchema", "public_transport")
+            .withInitScript("sql/create-schema.sql");
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
