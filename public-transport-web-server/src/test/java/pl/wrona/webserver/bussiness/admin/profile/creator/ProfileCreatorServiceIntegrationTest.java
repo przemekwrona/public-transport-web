@@ -4,6 +4,7 @@ import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import pl.wrona.webserver.BaseIntegrationTest;
 import pl.wrona.webserver.core.AgencyRepository;
@@ -38,6 +39,7 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
     private KeycloakAgencyProvisioner keycloakAgencyProvisioner;
 
     @Test
+    @Transactional
     void shouldCreateProfile() {
         // given
         var appUsername = "jkowalski";

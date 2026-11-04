@@ -13,11 +13,11 @@ public class ActuatorIntegrationTest extends BaseIntegrationTest {
         given()
                 .header(authHeader)
                 .when()
-                .get("/api/v1/actuator")
+                .get("/actuator")
                 .then()
                 .statusCode(200)
                 .assertThat()
-                .body("_links.health.href", endsWith("/api/v1/actuator/health"))
+                .body("_links.health.href", endsWith("/actuator/health"))
                 .body("_links.health.templated", equalTo(false));
     }
 
@@ -26,7 +26,7 @@ public class ActuatorIntegrationTest extends BaseIntegrationTest {
         given()
                 .header(authHeader)
                 .when()
-                .get("/api/v1/actuator/health")
+                .get("/actuator/health")
                 .then()
                 .statusCode(200)
                 .assertThat()

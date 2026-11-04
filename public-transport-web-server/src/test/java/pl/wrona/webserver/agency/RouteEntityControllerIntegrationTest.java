@@ -21,16 +21,20 @@ class RouteEntityControllerIntegrationTest extends BaseIntegrationTest {
                                 .line("201")
                                 .name("KIELCE - BUSKO-ZDRÓJ"))
                         .originStop(new Stop()
-                                .name("KIELCE"))
+                                .id(142902L)
+                                .name("Chmielnik"))
                         .destinationStop(new Stop()
-                                .name("BUSKO-ZDRÓJ"))
-                        .via("MORAWICA,CHMIELNIK"))
+                                .id(145543L)
+                                .name("Kije"))
+                        .via("MORAWICA,CHMIELNIK")
+                        .active(true)
+                        .google(false))
                 .when()
-                .post("/api/v1/routes")
+                .post("/api/v1/agency/NEXTSTOP/routes")
                 .then()
-                .statusCode(202)
+                .statusCode(200)
                 .assertThat()
-                .body("status", equalTo("CREATED"));
+                .body("status.status", equalTo("CREATED"));
     }
 
 }
