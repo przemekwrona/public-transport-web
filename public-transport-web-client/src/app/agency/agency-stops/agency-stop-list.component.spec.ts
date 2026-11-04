@@ -1,7 +1,10 @@
 import {AgencyStopListComponent} from './agency-stop-list.component';
 import {AgencyStops} from '../../generated/public-transport-api';
 import {ActivatedRoute, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {of, Subject} from 'rxjs';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {AgencyStopNameDialogResult} from './agency-stop-name-modal/agency-stop-name-modal.component';
 
 describe('AgencyStopListComponent', () => {
     const stops: AgencyStops = {
@@ -19,11 +22,11 @@ describe('AgencyStopListComponent', () => {
         ]
     };
 
-    function component(): AgencyStopListComponent {
-        const route = {snapshot: {data: {stops}}} as unknown as ActivatedRoute;
+    function component(dialog: MatDialog = {open: () => ({afterClosed: () => of(undefined)})} as unknown as MatDialog): AgencyStopListComponent {
+        const route = {snapshot: {data: {stops: structuredClone(stops)}}} as unknown as ActivatedRoute;
         const router = {url: '/agency/stops/used'} as Router;
         const analytics = {pageView: () => undefined} as unknown as GoogleAnalyticsService;
-        const list = new AgencyStopListComponent(route, router, analytics);
+        const list = new AgencyStopListComponent(route, router, analytics, dialog);
         list.ngOnInit();
         return list;
     }
@@ -48,5 +51,20 @@ describe('AgencyStopListComponent', () => {
         list.query = 'brak';
         expect(list.visibleStops).toEqual([]);
         expect(list.hasStops()).toBeTrue();
+    });
+
+    it('opens the name editor and keeps the agency name on the list', () => {
+        const closed = new Subject<AgencyStopNameDialogResult | undefined>();
+        const open = jasmine.createSpy('open').and.returnValue({afterClosed: () => closed.asObservable()});
+        const list = component({open} as unknown as MatDialog);
+
+        list.openNameEditor(list.visibleStops[0]);
+
+        expect(open).toHaveBeenCalled();
+        const config = open.calls.mostRecent().args[1];
+        expect(config.data).toEqual({stopId: 1, name: 'Rynek', lat: undefined, lon: undefined});
+
+        closed.next({stopId: 1, name: 'Plac'});
+        expect(list.visibleStops[0].stop?.name).toBe('Plac');
     });
 });

@@ -1,0 +1,34 @@
+<div class="card-header gap-2">
+    <h3 class="card-title">{{ 'agency.stops.used.edit.title' | transloco }}</h3>
+    <button type="button" (click)="close()"
+            class="btn btn-sm btn-icon btn-icon-lg text-gray-500 hover:text-primary-active"
+            [attr.aria-label]="'agency.stops.used.edit.cancel' | transloco">
+        <i class="ki-filled ki-cross"></i>
+    </button>
+</div>
+<mat-dialog-content>
+    <div class="grid grid-cols-2 gap-5">
+        <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="save()">
+            <div class="flex flex-col gap-2">
+                <label class="form-label" for="agency-stop-name">{{ 'agency.stops.used.edit.name' | transloco }}</label>
+                <input id="agency-stop-name" class="input" type="text" formControlName="name" maxlength="150" autocomplete="off">
+                @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+                    <span class="text-xs text-danger">{{ 'agency.stops.used.edit.required' | transloco }}</span>
+                }
+                @if (form.controls.name.touched && form.controls.name.hasError('maxlength')) {
+                    <span class="text-xs text-danger">{{ 'agency.stops.used.edit.tooLong' | transloco }}</span>
+                }
+            </div>
+            <p class="text-2sm text-gray-600">{{ 'agency.stops.used.edit.hint' | transloco }}</p>
+            <div class="mt-auto flex justify-end gap-2">
+                <button type="button" class="btn btn-light btn-sm" (click)="close()">
+                    {{ 'agency.stops.used.edit.cancel' | transloco }}
+                </button>
+                <button type="submit" class="btn btn-primary btn-sm" [disabled]="saving">
+                    {{ 'agency.stops.used.edit.save' | transloco }}
+                </button>
+            </div>
+        </form>
+        <div #mapHost class="agency-stop-name-map rounded-xl overflow-hidden border border-gray-200"></div>
+    </div>
+</mat-dialog-content>

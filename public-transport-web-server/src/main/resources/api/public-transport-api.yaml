@@ -347,7 +347,7 @@ paths:
     patch:
       tags:
         - stops
-      summary: Edit stop name
+      summary: Update stop visibility
       operationId: patchStop
       requestBody:
         content:
@@ -415,6 +415,107 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AgencyStops'
+
+  /agency/{agency}/stops/area:
+    get:
+      tags:
+        - agency-stops
+      summary: Return stops in the indicated area using the agency stop names
+      operationId: getAgencyStopsInArea
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - name: maxLat
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+        - name: minLon
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+        - name: minLat
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+        - name: maxLon
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopsResponse'
+
+  /agency/{agency}/stops/search:
+    get:
+      tags:
+        - agency-stops
+      summary: Find stops by name using the agency stop names
+      operationId: findAgencyStopsByStopName
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - name: stopName
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopsResponse'
+
+  /agency/{agency}/stops/{stopId}:
+    patch:
+      tags:
+        - agency-stops
+      summary: Change the stop name for one agency
+      operationId: updateAgencyStopName
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: stopId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyStopNameRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
 
   /agency/{agency}/routes:
     post:
@@ -1358,6 +1459,15 @@ components:
           type: string
         active:
           type: boolean
+
+    AgencyStopNameRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          maxLength: 150
 
     StopsResponse:
       type: object

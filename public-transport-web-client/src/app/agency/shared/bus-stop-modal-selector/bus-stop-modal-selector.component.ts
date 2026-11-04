@@ -2,7 +2,8 @@ import {AfterViewInit, Component, inject, model, ChangeDetectionStrategy} from '
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {LeafletEvent, LeafletMouseEvent, Map, Marker} from "leaflet";
 import * as L from "leaflet";
-import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport-api";
+import {AgencyStopsService, Stop, StopsResponse} from "../../../generated/public-transport-api";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {find} from "lodash";
 
 interface StopMarker extends L.Marker {
@@ -50,7 +51,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
     private stopMarkers: Marker[] = [];
     public stops: Stop[] = [];
 
-    constructor(private stopsService: StopsService) {
+    constructor(private agencyStopsService: AgencyStopsService, private agencyStorageService: AgencyStorageService) {
     }
 
     ngAfterViewInit(): void {
@@ -71,7 +72,7 @@ export class BusStopModalSelectorComponent implements AfterViewInit {
     private reloadStops(map: Map) {
         if (map.getZoom() > 11) {
             const bounds = map.getBounds();
-            this.stopsService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
+            this.agencyStopsService.getAgencyStopsInArea(this.agencyStorageService.getInstance(), bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
                 const stopMarkers: StopMarker[] = response.stops?.map(stop => {
                     const stopMarker: StopMarker = L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {
                         icon: this.ICON,

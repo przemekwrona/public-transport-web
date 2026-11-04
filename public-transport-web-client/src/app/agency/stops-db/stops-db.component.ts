@@ -3,8 +3,9 @@ import * as L from 'leaflet';
 import {CircleMarker, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map, Marker, Polyline} from "leaflet";
 import {find} from "lodash";
 
-import {CenterPoint, Stop, StopsResponse, StopsService, Territory} from "../../generated/public-transport-api";
+import {AgencyStopsService, CenterPoint, Stop, StopsPatchRequest, StopsResponse, Territory} from "../../generated/public-transport-api";
 import {LoginService} from "../../auth/login.service";
+import {AgencyStorageService} from "../../auth/agency-storage.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 import {SharedModule} from "../shared/shared.module";
@@ -53,7 +54,13 @@ export class StopsDbComponent implements OnInit, AfterViewInit, OnDestroy {
     private mapResizeSettled = false;
     private ignoreMapReload = false;
 
-    constructor(private stopsService: StopsService, private authService: LoginService, private router: Router, private route: ActivatedRoute, private googleAnalyticsService: GoogleAnalyticsService, private ngZone: NgZone) {
+    constructor(private agencyStopsService: AgencyStopsService, private authService: LoginService, private agencyStorageService: AgencyStorageService, private router: Router, private route: ActivatedRoute, private googleAnalyticsService: GoogleAnalyticsService, private ngZone: NgZone) {
+    }
+
+    public onStopSaved(request: StopsPatchRequest): void {
+        if (this.lastClickedStop?.id === request.id) {
+            this.lastClickedStop.name = request.name;
+        }
     }
 
     public isAdmin(): boolean {
@@ -237,7 +244,7 @@ export class StopsDbComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (map.getZoom() > 11) {
             const bounds = map.getBounds();
-            this.stopsService.getStopsInArea(bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
+            this.agencyStopsService.getAgencyStopsInArea(this.agencyStorageService.getInstance(), bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast() + 0.01).subscribe((response: StopsResponse) => {
                 const stopMarkers: StopMarker[] = response.stops?.map(stop => {
                     const stopMarker: StopMarker = stop.isBdot10k
                         ? L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {

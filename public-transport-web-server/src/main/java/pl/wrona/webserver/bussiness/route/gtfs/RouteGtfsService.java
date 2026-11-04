@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.bussiness.brigade.event.BrigadeEventQueryService;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.calendar.CalendarDatesQueryService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
@@ -70,6 +71,7 @@ public class RouteGtfsService {
     private final BrigadeEventQueryService brigadeEventQueryService;
     private final StopTimeRepository stopTimeRepository;
     private final CalendarDatesQueryService calendarDatesQueryService;
+    private final AgencyStopNameService agencyStopNameService;
 
     @PreAgencyAuthorize(roles = {
             PreAgencyAuthorize.Role.SUPER_USER,
@@ -114,7 +116,8 @@ public class RouteGtfsService {
 
         List<CalendarDatesEntity> calendarDates = calendarDatesQueryService.findAllByCalendar(new ArrayList<>(usedCalendars.values()));
 
-        byte[] zip = buildZip(agency, route, usedStops, gtfsTrips, usedCalendars.values(), calendarDates);
+        Map<Long, String> agencyNames = agencyStopNameService.findOverrides(instance, usedStops.stream().map(StopEntity::getStopId).toList());
+        byte[] zip = buildZip(agency, route, usedStops, agencyNames, gtfsTrips, usedCalendars.values(), calendarDates);
 
         String filename = "gtfs-%s.zip".formatted(routeCode);
         return ResponseEntity.ok()
@@ -130,13 +133,13 @@ public class RouteGtfsService {
                 .map(BrigadeGroupEntity::getCalendarSymbol);
     }
 
-    private byte[] buildZip(AgencyEntity agency, RouteEntity route, Set<StopEntity> stops, List<GtfsTrip> trips,
+    private byte[] buildZip(AgencyEntity agency, RouteEntity route, Set<StopEntity> stops, Map<Long, String> agencyNames, List<GtfsTrip> trips,
                              Collection<CalendarSymbolEntity> calendars, List<CalendarDatesEntity> calendarDates) {
         try (ByteArrayOutputStream buffer = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(buffer, StandardCharsets.UTF_8)) {
 
             writeEntry(zip, "agency.txt", agencyTxt(agency));
-            writeEntry(zip, "stops.txt", stopsTxt(stops));
+            writeEntry(zip, "stops.txt", stopsTxt(stops, agencyNames));
             writeEntry(zip, "routes.txt", routesTxt(agency, route));
             writeEntry(zip, "trips.txt", tripsTxt(route, trips));
             writeEntry(zip, "stop_times.txt", stopTimesTxt(trips));
@@ -170,13 +173,13 @@ public class RouteGtfsService {
         return csv.toString();
     }
 
-    private static String stopsTxt(Set<StopEntity> stops) {
+    private static String stopsTxt(Set<StopEntity> stops, Map<Long, String> agencyNames) {
         StringBuilder csv = new StringBuilder("stop_id,stop_name,stop_lat,stop_lon\n");
         stops.stream()
                 .sorted(Comparator.comparing(StopEntity::getStopId))
                 .forEach(stop -> csv.append(row(
                         String.valueOf(stop.getStopId()),
-                        orEmpty(stop.getName()),
+                        orEmpty(AgencyStopNameService.prefer(stop.getName(), agencyNames, stop.getStopId())),
                         String.valueOf(stop.getLat()),
                         String.valueOf(stop.getLon()))));
         return csv.toString();

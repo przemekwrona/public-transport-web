@@ -4,7 +4,8 @@ import {
   Input, OnInit,
   ChangeDetectionStrategy
 } from '@angular/core';
-import {Stop, StopsResponse, StopsService} from "../../../generated/public-transport-api";
+import {AgencyStopsService, Stop, StopsResponse} from "../../../generated/public-transport-api";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {faMap, faBus, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {MatDialog} from "@angular/material/dialog";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
@@ -48,7 +49,7 @@ export class BusStopSelectorComponent implements OnInit {
     searchStopControl: FormControl<string> = new FormControl<string>('');
     filteredStops: Stop[];
 
-    constructor(private stopsService: StopsService, private formBuilder: FormBuilder) {
+    constructor(private agencyStopsService: AgencyStopsService, private formBuilder: FormBuilder, private agencyStorageService: AgencyStorageService) {
         this.searchStopControl.valueChanges.pipe(
             startWith(''),
             debounceTime(300),
@@ -62,7 +63,7 @@ export class BusStopSelectorComponent implements OnInit {
 
     searchStops(filter: string): Observable<Stop[]> {
         if (filter.length >= 3) {
-            return this.stopsService.findStopsByStopName(filter)
+            return this.agencyStopsService.findAgencyStopsByStopName(this.agencyStorageService.getInstance(), filter)
                 .pipe(map((stopResponse: StopsResponse): Stop[] => stopResponse.stops));
         } else {
             return of(this.filteredStops);

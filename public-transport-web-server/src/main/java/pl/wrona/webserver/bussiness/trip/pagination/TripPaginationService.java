@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.trip.pagination;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.GetAllTripsResponse;
 import org.igeolab.iot.pt.server.api.model.ProfileShortcut;
+import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Trip;
@@ -10,6 +11,7 @@ import org.igeolab.iot.pt.server.api.model.TripId1;
 import org.igeolab.iot.pt.server.api.model.TripProfile;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.trip.TripProfileQueryService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.bussiness.trip.TripRepository;
@@ -30,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -42,6 +45,7 @@ public class TripPaginationService {
     private TripQueryService tripQueryService;
     private TripProfileQueryService tripProfileQueryService;
     private RouteQueryService routeQueryService;
+    private AgencyStopNameService agencyStopNameService;
 
     @PreAgencyAuthorize(roles = {
             PreAgencyAuthorize.Role.SUPER_USER,
@@ -68,12 +72,19 @@ public class TripPaginationService {
                 .toList();
 
         Map<Long, StopEntity> stopDictionary = this.stopService.mapStopByIdsIn(stopsIds);
+        List<Long> agencyStopIds = dictTrips.values().stream()
+                .flatMap(Set::stream)
+                .flatMap(trip -> Stream.of(
+                        AgencyStopNameService.stopId(trip.getOriginStopId()),
+                        AgencyStopNameService.stopId(trip.getDestinationStopId())))
+                .toList();
+        Map<Long, String> agencyNames = agencyStopNameService.findOverrides(instance, concat(stopsIds, agencyStopIds));
 
         List<RouteDetails> tripsResponse = dictTrips.keySet().stream()
                 .map(route -> new RouteDetails()
-                        .route(RouteMapper.map(route, stopDictionary, Map.of(), Map.of()))
+                        .route(applyRouteStopNames(RouteMapper.map(route, stopDictionary, Map.of(), Map.of()), agencyNames))
                         .trips(dictTrips.get(route).stream()
-                                .map(trip -> TripPaginationService.map(trip, dictProfiles, tripInBrigadeDictionary))
+                                .map(trip -> applyTripStopNames(TripPaginationService.map(trip, dictProfiles, tripInBrigadeDictionary), trip, agencyNames))
                                 .sorted(Comparator
                                         .comparing(Trip::getIsMainVariant).reversed()
                                         .thenComparing(Trip::getName))
@@ -85,6 +96,23 @@ public class TripPaginationService {
 
         return new GetAllTripsResponse()
                 .lines(tripsResponse);
+    }
+
+    private Route applyRouteStopNames(Route route, Map<Long, String> agencyNames) {
+        if (route != null) {
+            agencyStopNameService.apply(agencyNames, route.getOriginStop(), route.getDestinationStop());
+        }
+        return route;
+    }
+
+    private static Trip applyTripStopNames(Trip trip, TripEntity tripEntity, Map<Long, String> agencyNames) {
+        return trip
+                .origin(AgencyStopNameService.prefer(trip.getOrigin(), agencyNames, AgencyStopNameService.stopId(tripEntity.getOriginStopId())))
+                .destination(AgencyStopNameService.prefer(trip.getDestination(), agencyNames, AgencyStopNameService.stopId(tripEntity.getDestinationStopId())));
+    }
+
+    private static List<Long> concat(List<Long> left, List<Long> right) {
+        return Stream.concat(left.stream(), right.stream()).toList();
     }
 
     public static Trip map(TripEntity trip, Map<TripEntity, Set<TripProfileEntity>> dictProfiles, Map<Long, TripEntity> tripWithBrigades) {
