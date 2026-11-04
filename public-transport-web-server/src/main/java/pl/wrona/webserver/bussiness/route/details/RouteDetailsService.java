@@ -1,9 +1,12 @@
 package pl.wrona.webserver.bussiness.route.details;
 
 import lombok.AllArgsConstructor;
+import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.RouteDetails;
 import org.igeolab.iot.pt.server.api.model.TerritoryUnit;
+import org.igeolab.iot.pt.server.api.model.Trip;
 import org.springframework.stereotype.Service;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
@@ -33,6 +36,7 @@ public class RouteDetailsService {
     private final StopTimeService stopTimeService;
     private final StopService stopService;
     private final TerritorialUnitQueryService territorialUnitQueryService;
+    private final AgencyStopNameService agencyStopNameService;
 
     @PreAgencyAuthorize(roles = {
             PreAgencyAuthorize.Role.SUPER_USER,
@@ -48,8 +52,16 @@ public class RouteDetailsService {
 
         var tripEntities = tripQueryService.findByAgencyCodeAndLineAndName(instance, route.getLine(), route.getName());
 
+        var stopIds = Stream.concat(
+                Stream.of(route.getOriginStopId(), route.getDestinationStopId()),
+                tripEntities.stream().flatMap(trip -> Stream.of(
+                        AgencyStopNameService.stopId(trip.getOriginStopId()),
+                        AgencyStopNameService.stopId(trip.getDestinationStopId())))
+        ).toList();
+        var agencyNames = agencyStopNameService.findOverrides(instance, stopIds);
+
         var trips = tripEntities.stream()
-                .map(tripEntity -> TripMapper.map(tripEntity, tripWithBrigades))
+                .map(tripEntity -> applyTripStopNames(TripMapper.map(tripEntity, tripWithBrigades), tripEntity, agencyNames))
                 .toList();
 
         var mainTripStops = tripEntities.stream()
@@ -75,13 +87,22 @@ public class RouteDetailsService {
                 .map(territoriesDictionary::get)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
+        Route mappedRoute = RouteMapper.map(route, stopDictionary, Map.of(), territoriesDictionary);
+        agencyStopNameService.apply(agencyNames, mappedRoute.getOriginStop(), mappedRoute.getDestinationStop());
+
         return new RouteDetails()
-                .route(RouteMapper.map(route, stopDictionary, Map.of(), territoriesDictionary))
+                .route(mappedRoute)
                 .trips(trips)
                 .territories(territorialUnitsStops.stream()
                         .map(it -> new TerritoryUnit()
                                 .name(it.getNazwa()))
                         .toList());
+    }
+
+    private static Trip applyTripStopNames(Trip trip, TripEntity tripEntity, Map<Long, String> agencyNames) {
+        return trip
+                .origin(AgencyStopNameService.prefer(trip.getOrigin(), agencyNames, AgencyStopNameService.stopId(tripEntity.getOriginStopId())))
+                .destination(AgencyStopNameService.prefer(trip.getDestination(), agencyNames, AgencyStopNameService.stopId(tripEntity.getDestinationStopId())));
     }
 
 }

@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.route.stop.sequencer.RouteStopsService;
 import pl.wrona.webserver.bussiness.route.stop.sequencer.StopGraphSequencerService;
 import pl.wrona.webserver.bussiness.route.stop.sequencer.StopGraph;
@@ -34,6 +35,8 @@ class RouteStopsServiceTest {
     private TripQueryService tripQueryService;
     @Mock
     private StopGraphSequencerService stopGraphSequencerService;
+    @Mock
+    private AgencyStopNameService agencyStopNameService;
 
     @InjectMocks
     private RouteStopsService routeStopsService;

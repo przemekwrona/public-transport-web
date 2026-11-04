@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
@@ -18,6 +19,8 @@ import pl.wrona.webserver.core.agency.TripVariantMode;
 import pl.wrona.webserver.core.entity.StopEntity;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -27,6 +30,8 @@ class AgencyStopUsageServiceTest {
 
     @Mock
     private StopTimeRepository stopTimeRepository;
+    @Mock
+    private AgencyStopNameService agencyStopNameService;
 
     @InjectMocks
     private AgencyStopUsageService agencyStopUsageService;
@@ -61,6 +66,19 @@ class AgencyStopUsageServiceTest {
         AgencyStop stationUsage = response.getItems().get(0);
         assertThat(stationUsage.getRoutes()).extracting(route -> route.getRouteCode()).containsExactly("B2");
         assertThat(stationUsage.getTrips()).hasSize(1);
+    }
+
+    @Test
+    void prefersAgencyStopNameOverCatalogName() {
+        RouteEntity lineTwelve = route(1L, "A1", "12", "Centrum");
+        StopEntity market = stop(10L, "Rynek");
+        TripEntity outbound = trip(7L, "001", TripVariantMode.FRONT, "Dworzec", lineTwelve);
+        when(stopTimeRepository.findAllUsedByAgencyCode("WAWA")).thenReturn(List.of(stopTime(1L, 1, outbound, market)));
+        when(agencyStopNameService.findOverrides("WAWA", Set.of(10L))).thenReturn(Map.of(10L, "Rynek Miejski"));
+
+        AgencyStops response = agencyStopUsageService.getAgencyStops("WAWA");
+
+        assertThat(response.getItems()).extracting(item -> item.getStop().getName()).containsExactly("Rynek Miejski");
     }
 
     @Test

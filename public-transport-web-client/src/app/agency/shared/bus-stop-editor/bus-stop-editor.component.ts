@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
-import {StopsPatchRequest, StopsService} from "../../../generated/public-transport-api";
+import {AgencyStopNameRequest, AgencyStopsService, StopsPatchRequest, StopsService} from "../../../generated/public-transport-api";
+import {AgencyStorageService} from "../../../auth/agency-storage.service";
 
 import {FormsModule} from "@angular/forms";
 
@@ -25,17 +26,23 @@ export class BusStopEditorComponent implements OnChanges {
 
     public active: boolean = true;
 
-    constructor(private stopsService: StopsService) {
+    constructor(private stopsService: StopsService,
+                private agencyStopsService: AgencyStopsService,
+                private agencyStorageService: AgencyStorageService) {
     }
 
     public saveStop(): void {
-        const stopPatchRequest = {} as StopsPatchRequest;
-        stopPatchRequest.id = this.stopId;
-        stopPatchRequest.name = this.stopName;
-        stopPatchRequest.active = this.active;
+        const stopPatchRequest = {
+            id: this.stopId,
+            name: this.stopName,
+            active: this.active
+        } as StopsPatchRequest;
+        const request = {name: this.stopName} as AgencyStopNameRequest;
 
-        this.stopsService.patchStop(stopPatchRequest).subscribe(() => {
-            this.onSaved.emit(stopPatchRequest);
+        this.agencyStopsService.updateAgencyStopName(this.agencyStorageService.getInstance(), this.stopId, request).subscribe(() => {
+            this.stopsService.patchStop({id: this.stopId, active: this.active}).subscribe(() => {
+                this.onSaved.emit(stopPatchRequest);
+            });
         });
     }
 

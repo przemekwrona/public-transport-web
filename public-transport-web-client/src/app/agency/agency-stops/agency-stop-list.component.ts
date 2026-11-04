@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
 import {TranslocoPipe} from '@jsverse/transloco';
 import {
     AgencyStop,
@@ -8,6 +9,11 @@ import {
     AgencyStops
 } from '../../generated/public-transport-api';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {
+    AgencyStopNameDialogData,
+    AgencyStopNameDialogResult,
+    AgencyStopNameModalComponent
+} from './agency-stop-name-modal/agency-stop-name-modal.component';
 
 @Component({
     selector: 'app-agency-stops',
@@ -24,7 +30,8 @@ export class AgencyStopListComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private googleAnalyticsService: GoogleAnalyticsService
+        private googleAnalyticsService: GoogleAnalyticsService,
+        private dialog: MatDialog
     ) {
     }
 
@@ -52,6 +59,28 @@ export class AgencyStopListComponent implements OnInit {
 
     public onSearch(event: Event): void {
         this.query = (event.target as HTMLInputElement).value;
+    }
+
+    public openNameEditor(item: AgencyStop): void {
+        const stop = item.stop;
+        if (stop?.id == null) {
+            return;
+        }
+        const data: AgencyStopNameDialogData = {
+            stopId: stop.id,
+            name: stop.name ?? '',
+            lat: stop.lat,
+            lon: stop.lon
+        };
+        this.dialog.open(AgencyStopNameModalComponent, {
+            data,
+            width: '960px',
+            maxWidth: '95vw'
+        }).afterClosed().subscribe((result: AgencyStopNameDialogResult | undefined) => {
+            if (result && item.stop && result.stopId === item.stop.id) {
+                item.stop.name = result.name;
+            }
+        });
     }
 
     public trackStop(item: AgencyStop): number | string {

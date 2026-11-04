@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.Hex;
 import pl.wrona.webserver.bussiness.route.LineNameCleaner;
+import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.route.RouteCommandService;
 import pl.wrona.webserver.bussiness.route.RouteQueryService;
 import pl.wrona.webserver.bussiness.route.RouteSequenceQueryService;
@@ -19,6 +20,7 @@ import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +31,7 @@ public class RouteCreatorService {
     private final RouteCommandService routeCommandService;
     private final RouteQueryService routeQueryService;
     private final RouteSequenceQueryService routeSequenceQueryService;
+    private final AgencyStopNameService agencyStopNameService;
 
     @Transactional
     @PreAgencyAuthorize(roles = {
@@ -38,6 +41,7 @@ public class RouteCreatorService {
     })
     public ModificationRouteResponse createRoute(String instance, Route route) {
         var stopDictionary = stopService.mapStopByIdsIn(List.of(route.getOriginStop().getId(), route.getDestinationStop().getId()));
+        Map<Long, String> agencyNames = agencyStopNameService.findOverrides(instance, stopDictionary.keySet());
 
         var lastInsertedVersion = routeQueryService.findLastInsertedVersion(instance, route.getRouteId().getLine(), route.getRouteId().getName());
 
@@ -49,10 +53,12 @@ public class RouteCreatorService {
         unsavedRouteEntity.setVersion(++lastInsertedVersion);
 
         unsavedRouteEntity.setOriginStopId(route.getOriginStop().getId());
-        unsavedRouteEntity.setOriginStopName(stopDictionary.get(route.getOriginStop().getId()).getName());
+        unsavedRouteEntity.setOriginStopName(AgencyStopNameService.prefer(
+                stopDictionary.get(route.getOriginStop().getId()).getName(), agencyNames, route.getOriginStop().getId()));
 
         unsavedRouteEntity.setDestinationStopId(route.getDestinationStop().getId());
-        unsavedRouteEntity.setDestinationStopName(stopDictionary.get(route.getDestinationStop().getId()).getName());
+        unsavedRouteEntity.setDestinationStopName(AgencyStopNameService.prefer(
+                stopDictionary.get(route.getDestinationStop().getId()).getName(), agencyNames, route.getDestinationStop().getId()));
 
         unsavedRouteEntity.setVia(route.getVia());
         unsavedRouteEntity.setGoogle(route.getGoogle());

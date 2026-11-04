@@ -22,10 +22,17 @@
             <div class="card-body flex flex-col gap-3">
                 @for (item of visibleStops; track trackStop(item)) {
                     <div class="flex flex-col gap-3 border border-gray-200 rounded-xl p-4">
-                        <div class="flex items-baseline gap-2">
+                        <div class="flex items-center gap-2">
                             <div class="text-base font-medium text-gray-900">
                                 {{ item.stop?.name || ('agency.stops.used.unnamed' | transloco) }}
                             </div>
+                            <button type="button"
+                                    class="btn btn-sm btn-icon btn-clear btn-light"
+                                    (click)="openNameEditor(item)"
+                                    [attr.aria-label]="'agency.stops.used.edit.open' | transloco"
+                                    [title]="'agency.stops.used.edit.open' | transloco">
+                                <i class="ki-filled ki-pencil"></i>
+                            </button>
                             @if (!item.stop?.name) {
                                 <span class="text-2sm text-gray-500">#{{ item.stop?.id }}</span>
                             }
