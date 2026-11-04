@@ -4,6 +4,7 @@ import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.BaseIntegrationTest;
 import pl.wrona.webserver.core.AgencyRepository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
@@ -32,6 +33,7 @@ class ProfileCreatorServiceIntegrationTest extends BaseIntegrationTest {
     private ProfileCreatorService profileCreatorService;
 
     @Test
+    @Transactional
     void shouldCreateProfile() {
         // given
         var appUsername = "jkowalski";

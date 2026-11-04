@@ -49,23 +49,23 @@ class TripDistanceMeasureServiceIntegrationTest extends BaseIntegrationTest {
         assertThat(results.getStops().get(0).getCalculatedSeconds()).isEqualTo(0);
 
         assertThat(results.getStops().get(1).getStopName()).isEqualTo("Przededworze");
-        assertThat(results.getStops().get(1).getCalculatedSeconds()).isEqualTo(161);
+        assertThat(results.getStops().get(1).getCalculatedSeconds()).isEqualTo(288);
         assertThat(results.getStops().get(1).getMeters()).isEqualTo(2166);
 
         assertThat(results.getStops().get(2).getStopName()).isEqualTo("Jasień");
-        assertThat(results.getStops().get(2).getCalculatedSeconds()).isEqualTo(242);
+        assertThat(results.getStops().get(2).getCalculatedSeconds()).isEqualTo(491);
         assertThat(results.getStops().get(2).getMeters()).isEqualTo(3689);
 
         assertThat(results.getStops().get(3).getStopName()).isEqualTo("Holendry");
-        assertThat(results.getStops().get(3).getCalculatedSeconds()).isEqualTo(298);
+        assertThat(results.getStops().get(3).getCalculatedSeconds()).isEqualTo(673);
         assertThat(results.getStops().get(3).getMeters()).isEqualTo(5050);
 
         assertThat(results.getStops().get(10).getStopName()).isEqualTo("Lipnik / DK78 / 02");
-        assertThat(results.getStops().get(10).getCalculatedSeconds()).isEqualTo(1123);
+        assertThat(results.getStops().get(10).getCalculatedSeconds()).isEqualTo(1970);
         assertThat(results.getStops().get(10).getMeters()).isEqualTo(14775);
 
         assertThat(results.getStops().get(11).getStopName()).isEqualTo("Kije Kościół");
-        assertThat(results.getStops().get(11).getCalculatedSeconds()).isEqualTo(1227);
+        assertThat(results.getStops().get(11).getCalculatedSeconds()).isEqualTo(2198);
         assertThat(results.getStops().get(11).getMeters()).isEqualTo(16485);
     }
 

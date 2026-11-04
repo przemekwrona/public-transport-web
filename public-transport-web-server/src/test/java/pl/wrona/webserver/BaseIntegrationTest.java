@@ -5,10 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import org.igeolab.iot.pt.server.api.model.LoginAppUserRequest;
 import org.igeolab.iot.pt.server.api.model.LoginAppUserResponse;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -18,25 +15,27 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.wrona.webserver.security.AppUserService;
 
 @ActiveProfiles("test")
-@Testcontainers
 @Sql(value = {"/sql/init.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = { WireMockConfig.class })
-public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
+public class BaseIntegrationTest {
 
     @LocalServerPort
     private Integer port;
 
-    @Container
     public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:14-alpine")
             .withDatabaseName("next_stop_db")
             .withUsername("test")
-            .withPassword("welcome1");
+            .withPassword("welcome1")
+            .withUrlParam("currentSchema", "public_transport")
+            .withInitScript("sql/create-schema.sql");
+
+    static {
+        postgres.start();
+    }
 
     @Autowired
     protected WireMockServer mockGeoapifyClient;
@@ -53,30 +52,11 @@ public class BaseIntegrationTest implements BeforeAllCallback, ExtensionContext.
 
     protected Header authHeader;
 
-    @BeforeAll
-    static void setup() {
-        if (!postgres.isRunning()) {
-            postgres.start();
-        }
-    }
-
     @BeforeEach
     void setUp() {
         RestAssured.baseURI = "http://localhost:" + port;
 
         LoginAppUserResponse loginResponse = appUserService.login(new LoginAppUserRequest().username("pwrona").password("welcome1"));
         authHeader = new Header("Authorization", "Bearer %s".formatted(loginResponse.getToken()));
-    }
-
-    @Override
-    public void beforeAll(ExtensionContext extensionContext) throws Exception {
-
-    }
-
-    @Override
-    public void close() throws Throwable {
-        if (postgres.isRunning()) {
-            postgres.stop();
-        }
     }
 }
