@@ -42,6 +42,8 @@
   "agency.stops.used.edit.tooLong": "Nazwa może mieć najwyżej 150 znaków.",
   "agency.stops.used.edit.hint": "Ta nazwa obowiązuje tylko w Twojej agencji. Nazwa w katalogu przystanków pozostaje bez zmian.",
   "agency.stops.used.edit.save": "Zapisz",
+  "agency.account.title": "Moje Konto",
+  "agency.account.subtitle": "Infomracje podstawowe na temat Konto",
   "agency.stops.used.download.failed": "Nie udało się pobrać rozkładu jazdy.",
   "agency.stops.used.edit.saved": "Nazwa przystanku została zapisana dla Twojej agencji.",
   "agency.stops.used.edit.failed": "Nie udało się zapisać nazwy przystanku.",
