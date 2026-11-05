@@ -1,5 +1,5 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Data, RouterModule} from "@angular/router";
+import {ActivatedRoute, RouterModule} from "@angular/router";
 import {
     Route,
     RouteDetails,
@@ -10,7 +10,7 @@ import {
     UpdateRouteRequest
 } from "../../../../generated/public-transport-api";
 import {faCircleXmark, faMap, faSpinner, IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {map} from "rxjs";
+import {routeDetailsData} from "../trip-list.resolver";
 
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
@@ -73,10 +73,10 @@ export class TripListInfoComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe(trips => {
+        routeDetailsData(this._route)?.subscribe(trips => {
             this.getNameControl().setValue(trips.route.routeId.name);
             this.getLineControl().setValue(trips.route.routeId.line);
-            this.versionControl.setValue(trips.route.routeId.version);
+            this.versionControl.setValue(trips.route.routeId.version?.toString() ?? '');
             this.routeCode.setValue(trips.route.routeCode);
             this.trips = trips;
             this.state = {

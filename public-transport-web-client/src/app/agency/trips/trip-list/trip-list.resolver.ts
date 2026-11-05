@@ -1,6 +1,6 @@
 import {inject} from "@angular/core";
-import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from "@angular/router";
-import {Observable} from "rxjs";
+import {ActivatedRoute, ActivatedRouteSnapshot, Data, ResolveFn, RouterStateSnapshot} from "@angular/router";
+import {map, Observable} from "rxjs";
 import {
     RouteDetails,
     RouteService
@@ -14,6 +14,11 @@ export const tripsResolver: ResolveFn<Observable<RouteDetails>> = (route: Activa
     const routeCode: string = getRouteParam(route, 'routeCode')!;
 
     return routeService.getRouteDetails(authService.getInstance(), routeCode);
+}
+
+export function routeDetailsData(route: ActivatedRoute): Observable<RouteDetails> | undefined {
+    const source = route.pathFromRoot.find(parent => parent.snapshot.data['routeDetails'] !== undefined);
+    return source?.data.pipe(map((data: Data) => data['routeDetails'] as RouteDetails));
 }
 
 export function getRouteParam(route: ActivatedRouteSnapshot, key: string): string | null {

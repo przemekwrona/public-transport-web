@@ -1,5 +1,5 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Data, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {
     RouteDetails,
     Trip,
@@ -8,7 +8,7 @@ import {
     TripService
 } from "../../../../generated/public-transport-api";
 import {remove} from "lodash";
-import {map} from "rxjs";
+import {routeDetailsData} from "../trip-list.resolver";
 
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
 import {TripItemComponent} from "../trip-item/trip-item.component";
@@ -38,7 +38,7 @@ export class TripListVariantsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this._route.data.pipe(map((data: Data) => data['routeDetails'])).subscribe(trips => {
+        routeDetailsData(this._route)?.subscribe(trips => {
             this.trips = trips;
             this.routeCode = trips.route.routeCode;
             this.state = {
