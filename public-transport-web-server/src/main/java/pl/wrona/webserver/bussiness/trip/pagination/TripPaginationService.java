@@ -68,7 +68,7 @@ public class TripPaginationService {
 
         Map<TripEntity, Set<TripProfileEntity>> dictProfiles = tripProfileQueryService.dictAllByTrip(routeEntity);
 
-        Map<Long, TripEntity> tripInBrigadeDictionary = tripQueryService.mapByExistsBrigade(instance);
+        Map<Long, TripEntity> tripInBrigadeDictionary = tripQueryService.mapByExistsBrigade(instance, routeEntity);
 
         List<Long> stopsIds = dictTrips.keySet().stream()
                 .map(route -> List.of(route.getOriginStopId(), route.getDestinationStopId()))
