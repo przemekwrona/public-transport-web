@@ -45,6 +45,9 @@ public class BaseIntegrationTest {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri", WireMockConfig::keycloakIssuer);
+        registry.add("spring.security.oauth2.resourceserver.jwt.jwk-set-uri",
+                () -> WireMockConfig.keycloakIssuer() + "/protocol/openid-connect/certs");
     }
 
     @Autowired
