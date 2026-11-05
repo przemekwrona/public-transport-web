@@ -50,6 +50,7 @@ import {defaultRouteResolver} from "./agency/brigade/timetable-wizard/default-ro
 import {DocumentationComponent} from "./documentation/documentation.component";
 import {AgencyStopListComponent} from "./agency/agency-stops/agency-stop-list.component";
 import {agencyStopsResolver} from "./agency/agency-stops/agency-stops.resolver";
+import {AccountComponent} from "./agency/account/account.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -64,6 +65,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'agency', children: [
+                    {path: 'account', component: AccountComponent, resolve: { }},
                     {path: 'profile', component: ProfileDetailsComponent, resolve: { agencyDetails: profileDetailsResolver }},
                     {path: 'stops', component: StopsDbComponent, resolve: { centerPoint: centerPointResolver }},
                     {path: 'stops/used', component: AgencyStopListComponent, resolve: { stops: agencyStopsResolver }},
