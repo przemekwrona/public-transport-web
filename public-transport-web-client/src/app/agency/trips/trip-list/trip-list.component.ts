@@ -1,7 +1,7 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Data, RouterModule} from "@angular/router";
+import {ActivatedRoute, RouterModule} from "@angular/router";
 import {RouteDetails} from "../../../generated/public-transport-api";
-import {map} from "rxjs";
+import {routeDetailsData} from "./trip-list.resolver";
 
 import {MatTabsModule} from "@angular/material/tabs";
 import {TRIP_LIST_TABS} from "./trip-list.tabs";
@@ -24,8 +24,7 @@ export class TripListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const routeDetailsRoute = this._route.pathFromRoot.find(route => route.snapshot.data['routeDetails'] !== undefined);
-        routeDetailsRoute?.data.pipe(map((data: Data) => data['routeDetails'] as RouteDetails)).subscribe(trips => {
+        routeDetailsData(this._route)?.subscribe(trips => {
             this.trips = trips ?? {route: {routeId: {line: '', name: ''}}};
         });
     }
