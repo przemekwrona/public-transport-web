@@ -1,9 +1,12 @@
 import {AgencyStopListComponent} from './agency-stop-list.component';
-import {AgencyStops} from '../../generated/public-transport-api';
+import {AgencyStopTimetableService, AgencyStops} from '../../generated/public-transport-api';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {of, Subject} from 'rxjs';
+import {of, Subject, throwError} from 'rxjs';
+import {TranslocoService} from '@jsverse/transloco';
+import {LoginService} from '../../auth/login.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {NotificationService} from '../../shared/notification.service';
 import {AgencyStopNameDialogResult} from './agency-stop-name-modal/agency-stop-name-modal.component';
 
 describe('AgencyStopListComponent', () => {
@@ -22,11 +25,17 @@ describe('AgencyStopListComponent', () => {
         ]
     };
 
-    function component(dialog: MatDialog = {open: () => ({afterClosed: () => of(undefined)})} as unknown as MatDialog): AgencyStopListComponent {
+    function component(
+        dialog: MatDialog = {open: () => ({afterClosed: () => of(undefined)})} as unknown as MatDialog,
+        timetable: AgencyStopTimetableService = {downloadAgencyStopTimetable: () => of(new Blob())} as unknown as AgencyStopTimetableService,
+        notification: NotificationService = {showError: () => undefined} as unknown as NotificationService
+    ): AgencyStopListComponent {
         const route = {snapshot: {data: {stops: structuredClone(stops)}}} as unknown as ActivatedRoute;
         const router = {url: '/agency/stops/used'} as Router;
         const analytics = {pageView: () => undefined} as unknown as GoogleAnalyticsService;
-        const list = new AgencyStopListComponent(route, router, analytics, dialog);
+        const login = {getInstance: () => 'WAWA'} as LoginService;
+        const transloco = {translate: (key: string) => key} as TranslocoService;
+        const list = new AgencyStopListComponent(route, router, analytics, dialog, login, timetable, notification, transloco);
         list.ngOnInit();
         return list;
     }
@@ -66,5 +75,34 @@ describe('AgencyStopListComponent', () => {
 
         closed.next({stopId: 1, name: 'Plac'});
         expect(list.visibleStops[0].stop?.name).toBe('Plac');
+    });
+
+    it('downloads the timetable for the whole stop', () => {
+        const download = jasmine.createSpy('download').and.returnValue(of(new Blob(['%PDF'], {type: 'application/pdf'})));
+        const list = component(undefined as unknown as MatDialog, {downloadAgencyStopTimetable: download} as unknown as AgencyStopTimetableService);
+        spyOn(URL, 'createObjectURL').and.returnValue('blob:timetable');
+        spyOn(URL, 'revokeObjectURL');
+        const click = spyOn(HTMLAnchorElement.prototype, 'click');
+
+        list.downloadTimetable(list.visibleStops[0]);
+
+        expect(download).toHaveBeenCalledWith('WAWA', 1, 'body', false, {httpHeaderAccept: 'application/pdf'});
+        expect(click).toHaveBeenCalled();
+        expect(list.downloadingStopId).toBeNull();
+    });
+
+    it('reports a failed timetable download', () => {
+        const download = jasmine.createSpy('download').and.returnValue(throwError(() => new Error('pdf')));
+        const showError = jasmine.createSpy('showError');
+        const list = component(
+            undefined as unknown as MatDialog,
+            {downloadAgencyStopTimetable: download} as unknown as AgencyStopTimetableService,
+            {showError} as unknown as NotificationService
+        );
+
+        list.downloadTimetable(list.visibleStops[0]);
+
+        expect(showError).toHaveBeenCalledWith('agency.stops.used.download.failed');
+        expect(list.downloadingStopId).toBeNull();
     });
 });

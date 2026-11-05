@@ -517,6 +517,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+  /agency/{agency}/stops/{stopId}/timetable:
+    get:
+      tags:
+        - agency-stop-timetable
+      summary: Download the timetable of every departure at a stop as PDF
+      operationId: downloadAgencyStopTimetable
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: stopId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Timetable for the whole stop
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+
   /agency/{agency}/routes:
     post:
       tags:

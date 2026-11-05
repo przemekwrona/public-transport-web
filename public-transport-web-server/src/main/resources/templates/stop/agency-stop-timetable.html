@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm;
+        }
+
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            color: #111;
+            font-size: 11px;
+        }
+
+        .agency {
+            font-size: 11px;
+        }
+
+        .stop-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 4px 0 2px 0;
+        }
+
+        .title {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .generated {
+            text-align: right;
+            font-size: 10px;
+            margin-bottom: 10px;
+        }
+
+        .departures {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .departures th,
+        .departures td {
+            border: 1px solid #333;
+            padding: 4px 6px;
+            vertical-align: top;
+        }
+
+        .departures th {
+            background-color: #efefef;
+            text-align: left;
+        }
+
+        .direction {
+            width: 38%;
+            font-weight: bold;
+        }
+
+        .time {
+            display: inline-block;
+            white-space: nowrap;
+            margin: 0 10px 4px 0;
+        }
+
+        .symbol {
+            font-size: 8px;
+            vertical-align: super;
+        }
+
+        .empty {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .legend {
+            margin-top: 16px;
+        }
+
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="agency" th:text="${timetable.agencyName}">Przewoźnik</div>
+<div class="stop-name" th:text="${timetable.stopName}">Przystanek</div>
+<div class="title">Rozkład jazdy</div>
+<div class="generated">Przygotowano: <span th:text="${#temporals.format(now, 'yyyy-MM-dd HH:mm')}">2026-11-05 12:00</span></div>
+
+<div class="empty" th:if="${#lists.isEmpty(timetable.directions)}">Brak odjazdów</div>
+
+<table class="departures" th:if="${!#lists.isEmpty(timetable.directions)}">
+    <thead>
+    <tr>
+        <th>Kierunek / miejscowość docelowa</th>
+        <th>Godziny odjazdu</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row : ${timetable.directions}">
+        <td class="direction" th:text="${row.direction}">Kielce</td>
+        <td>
+            <span class="time" th:each="departure : ${row.departures}">
+                <span th:text="${departure.time}">06:05</span><span class="symbol" th:each="symbol : ${departure.symbols}" th:text="${symbol}">D</span>
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="legend" th:if="${!#lists.isEmpty(timetable.legend)}">
+    <div class="legend-title">Oznaczenia</div>
+    <div th:each="item : ${timetable.legend}">
+        <strong th:text="${item.symbol}">D</strong>
+        <span th:if="${item.description != null and !#strings.isEmpty(item.description)}" th:text="${' - ' + item.description}"> — dni robocze</span>
+    </div>
+</div>
+</body>
+</html>

@@ -33,6 +33,14 @@
                                     [title]="'agency.stops.used.edit.open' | transloco">
                                 <i class="ki-filled ki-pencil"></i>
                             </button>
+                            <button type="button"
+                                    class="btn btn-sm btn-icon btn-clear btn-light"
+                                    (click)="downloadTimetable(item)"
+                                    [disabled]="downloadingStopId !== null"
+                                    [attr.aria-label]="'agency.stops.used.download' | transloco"
+                                    [title]="'agency.stops.used.download' | transloco">
+                                <i class="ki-filled ki-file-down"></i>
+                            </button>
                             @if (!item.stop?.name) {
                                 <span class="text-2sm text-gray-500">#{{ item.stop?.id }}</span>
                             }
