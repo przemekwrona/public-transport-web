@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wrona.webserver.security.AppRole;
 import pl.wrona.webserver.security.AppUser;
 import pl.wrona.webserver.security.AppUserRepository;
+import pl.wrona.webserver.security.keycloak.KeycloakUserProvisioner;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -20,6 +21,7 @@ public class UserCreatorService {
     private final PasswordEncoder encoder;
     private final AppUserRepository appUserRepository;
     private final UserCreatorAppRolesRepository userCreatorAppRolesRepository;
+    private final KeycloakUserProvisioner keycloakUserProvisioner;
 
 
     @Transactional
@@ -40,6 +42,10 @@ public class UserCreatorService {
         appUser.setEnabled(true);
 
         appUserRepository.save(appUser);
+        keycloakUserProvisioner.createUser(
+                createAppUserRequest.getUsername(),
+                createAppUserRequest.getEmail(),
+                createAppUserRequest.getPassword());
 
         return new CreateAppUserResponse()
                 .username(createAppUserRequest.getUsername());
