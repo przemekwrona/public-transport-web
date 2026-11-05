@@ -33,25 +33,32 @@ public class WireMockConfig {
     private static final RSAKey SIGNING_KEY = signingKey();
 
     static final WireMockServer KEYCLOAK = new WireMockServer(WireMockConfiguration.options().dynamicPort());
+    private static final WireMockServer GEOAPIFY = geoapifyServer();
 
     static {
         KEYCLOAK.start();
         stubKeycloak();
-        Runtime.getRuntime().addShutdownHook(new Thread(KEYCLOAK::stop));
+        GEOAPIFY.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            KEYCLOAK.stop();
+            GEOAPIFY.stop();
+        }));
     }
 
     static String keycloakIssuer() {
         return KEYCLOAK.baseUrl() + REALM;
     }
 
-    @Bean(initMethod = "start", destroyMethod = "stop")
+    @Bean(destroyMethod = "")
     public WireMockServer mockGeoapifyClient() {
-        var wireMockConfiguration = new WireMockConfiguration()
+        return GEOAPIFY;
+    }
+
+    private static WireMockServer geoapifyServer() {
+        return new WireMockServer(WireMockConfiguration.options()
                 .port(8085)
                 .usingFilesUnderDirectory("src/test/resources/wiremock/geoapify-client")
-                .withRootDirectory("src/test/resources/wiremock/geoapify-client");
-
-        return new WireMockServer(wireMockConfiguration);
+                .withRootDirectory("src/test/resources/wiremock/geoapify-client"));
     }
 
     private static void stubKeycloak() {
