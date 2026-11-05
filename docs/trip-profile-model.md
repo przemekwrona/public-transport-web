@@ -17,6 +17,7 @@ Oddzielenie **struktury kursu** (przystanki, geometria, wariant trasy) od **wari
 ```
 Route
   -> Trip (struktura kursu)
+       -> TripGeometry (1:1, ten sam trip_id)
        -> TripProfile (NORMAL | TRAFFIC)
             -> StopTime (czasy na przystanku)
 Stop -> StopTime (wiele)
@@ -32,7 +33,8 @@ Stop -> StopTime (wiele)
 | NORMAL / TRAFFIC | osobny wiersz w `trip` | osobny wiersz w `trip_profile` |
 | StopTime PK | `(trip_id, stop_sequence)` | `(profile_id, stop_sequence)` |
 | Czas jazdy, prędkość, is_customized | na `trip` | na `trip_profile` |
-| Odległość, geometria, headsign | na `trip` | nadal na `trip` (wspólne) |
+| Odległość, headsign | na `trip` | nadal na `trip` (wspólne) |
+| Geometria | na `trip` | `trip_geometry` (1:1, ten sam `trip_id`) |
 | BrigadeEvent | tylko `trip_id` | `trip_id` + `profile_id` |
 | API TripId | bez zmian | nadal ma `trafficMode`, ale wskazuje **profil**, nie trip |
 
@@ -50,12 +52,20 @@ Stop -> StopTime (wiele)
 | headsign | tablica kierunkowa |
 | origin_stop_id/name, destination_stop_id/name | |
 | distance_in_meters | łączna odległość |
-| geometry | polyline trasy |
 | is_main_variant, variant_designation, variant_description | |
 | trip_code, trip_sequence | |
 | created_at, updated_at | |
 
-**Usunięte z trip:** `traffic_mode`, `travel_time_in_seconds`, `calculated_communication_velocity`, `customized_communication_velocity`, `is_customized`
+**Usunięte z trip:** `traffic_mode`, `travel_time_in_seconds`, `calculated_communication_velocity`, `customized_communication_velocity`, `is_customized`, `geometry`
+
+### 4.1a TripGeometry — polyline trasy
+
+Relacja 1:1 z `Trip`. Klucz główny `trip_id` ma tę samą wartość co `trip.trip_id` i jest jednocześnie kluczem obcym.
+
+| Kolumna | Opis |
+|---------|------|
+| trip_id | PK oraz FK do trip |
+| geometry | polyline trasy |
 
 ### 4.2 TripProfile — wariant czasowy
 
@@ -94,6 +104,7 @@ Stop -> StopTime (wiele)
 
 ## 5. Relacje
 
+- `Trip` 1 — 1 `TripGeometry`
 - `Trip` 1 — * `TripProfile` 1 — * `StopTime` * — 1 `Stop`
 - `Trip` 1 — * `BrigadeTrip`
 - `BrigadeEvent` * — 1 `Trip`
@@ -106,7 +117,7 @@ Stop -> StopTime (wiele)
 1. **Inny kierunek / inna trasa przystanków** → nowy `Trip` (FRONT vs BACK, inny wariant nazwy).
 2. **Ten sam kurs, inne czasy (korki)** → nowy `TripProfile` pod istniejącym `Trip`.
 3. **Tworzenie trip** → 1 `trip` + 1 profil `NORMAL`; opcjonalnie skopiowany profil `TRAFFIC`.
-4. **Edycja przystanków / geometrii** → aktualizacja `trip` (+ ewentualnie synchronizacja sekwencji we wszystkich profilach).
+4. **Edycja przystanków / geometrii** → aktualizacja `trip` i `trip_geometry` (+ ewentualnie synchronizacja sekwencji we wszystkich profilach).
 5. **Edycja czasów** → tylko wybrany `TripProfile` (po `trafficMode` z API).
 6. **Usunięcie** → usunięcie profilu TRAFFIC zostawia trip; usunięcie ostatniego profilu = usunięcie trip.
 7. **Brygada / rozkład** → event wskazuje `profile_id`, czas trwania z `profile.travel_time_in_seconds`.

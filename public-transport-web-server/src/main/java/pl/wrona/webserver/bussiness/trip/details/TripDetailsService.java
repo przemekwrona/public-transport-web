@@ -21,6 +21,8 @@ import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.core.TerritorialUnitQueryService;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
+import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripGeometryEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.entity.StopEntity;
 import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
@@ -77,7 +79,7 @@ public class TripDetailsService {
                         .tripCode(tripEntity.getTripCode()))
                 .isMainVariant(tripEntity.isMainVariant())
                 .tripProfiles(tripProfiles)
-                .geometry(buildGeometry(tripEntity.getGeometry()))
+                .geometry(buildGeometry(geometryOf(tripEntity)))
                 .variantDesignation(tripEntity.getVariantDesignation())
                 .variantDescription(tripEntity.getVariantDescription())
                 .originTerritory(new TerritoryUnit()
@@ -120,6 +122,14 @@ public class TripDetailsService {
                 .bdot10k(stop.isBdot10k())
                 .lon((float) stop.getLon())
                 .lat((float) stop.getLat());
+    }
+
+    private String geometryOf(TripEntity tripEntity) {
+        TripGeometryEntity tripGeometry = tripEntity.getTripGeometry();
+        if (tripGeometry == null) {
+            return null;
+        }
+        return tripGeometry.getGeometry();
     }
 
     private @NonNull List<Point2D> buildGeometry(String path) {

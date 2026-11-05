@@ -9,6 +9,7 @@ import org.igeolab.iot.pt.server.api.model.Trip;
 import org.igeolab.iot.pt.server.api.model.TripId1;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import pl.wrona.webserver.core.agency.TripEntity;
+import pl.wrona.webserver.core.agency.TripGeometryEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 
 import java.util.List;
@@ -41,10 +42,20 @@ public class TripMapper {
             List<List<Float>> geometry = tripsDetails.getGeometry().stream()
                     .map(point -> List.of(point.getLat(), point.getLon()))
                     .toList();
-            tripEntity.setGeometry(objectMapper.writeValueAsString(geometry));
+            applyGeometry(tripEntity, objectMapper.writeValueAsString(geometry));
         } catch (Exception e) {
         }
         return tripEntity;
+    }
+
+    private void applyGeometry(TripEntity tripEntity, String geometry) {
+        TripGeometryEntity tripGeometry = tripEntity.getTripGeometry();
+        if (tripGeometry == null) {
+            tripGeometry = new TripGeometryEntity();
+            tripGeometry.setTrip(tripEntity);
+            tripEntity.setTripGeometry(tripGeometry);
+        }
+        tripGeometry.setGeometry(geometry);
     }
 
     public Trip map(TripEntity trip, Map<Long, TripEntity> tripWithBrigades) {

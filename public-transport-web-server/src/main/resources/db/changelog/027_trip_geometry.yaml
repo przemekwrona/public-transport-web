@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: move-trip-geometry-to-trip-geometry
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: trip_geometry
+            columns:
+              - column:
+                  name: trip_id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_trip_geometry
+                    nullable: false
+                    foreignKeyName: fk_trip_geometry_trip
+                    references: trip(trip_id)
+                    deleteCascade: true
+              - column:
+                  name: geometry
+                  type: text
+        - sql:
+            sql: |
+              INSERT INTO trip_geometry (trip_id, geometry)
+              SELECT trip_id, geometry
+              FROM trip
+        - dropColumn:
+            tableName: trip
+            columnName: geometry
+      rollback:
+        - addColumn:
+            tableName: trip
+            columns:
+              - column:
+                  name: geometry
+                  type: text
+        - sql:
+            sql: |
+              UPDATE trip t
+              SET geometry = g.geometry
+              FROM trip_geometry g
+              WHERE t.trip_id = g.trip_id
+        - dropTable:
+            tableName: trip_geometry

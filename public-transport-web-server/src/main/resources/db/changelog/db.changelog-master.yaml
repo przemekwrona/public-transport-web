@@ -103,3 +103,7 @@ databaseChangeLog:
       file: 026_stop_agency.yaml
       relativeToChangelogFile: true
 
+  - include:
+      file: 027_trip_geometry.yaml
+      relativeToChangelogFile: true
+

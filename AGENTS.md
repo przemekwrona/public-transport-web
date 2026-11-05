@@ -27,7 +27,7 @@ Changing an endpoint:
 
 The carrier (`agency`) is the tenant. Resources hang off the agency code.
 
-`Route` → `Trip` (trip structure: variant, geometry, designation) → `TripProfile` (`NORMAL` | `TRAFFIC`, travel times) → `StopTime`.
+`Route` → `Trip` (trip structure: variant, designation; geometry in 1:1 `TripGeometry` with the same `trip_id`) → `TripProfile` (`NORMAL` | `TRAFFIC`, travel times) → `StopTime`.
 
 Vocabulary: route, trip, variant, time profile, brigade, calendar, timetable. The Java package `bussiness` is misspelled. Keep that spelling. New code goes in that package, not in a corrected name.
 

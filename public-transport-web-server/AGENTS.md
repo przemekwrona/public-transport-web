@@ -56,4 +56,4 @@ JUnit 5, Mockito (`@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`
 
 ## Trip model
 
-`TripEntity` is the trip structure (route, `variantMode`, geometry, trip code). `TripProfile` (`NORMAL` | `TRAFFIC`) carries the times. `StopTime` hangs off the profile. Details: `docs/trip-profile-model.md`. The trip code comes from the route sequence (`Hex.toHex3`), not from a name typed by the user.
+`TripEntity` is the trip structure (route, `variantMode`, trip code). Geometry is a 1:1 `TripGeometryEntity` (`trip_geometry`); its primary key is the same `trip_id`. `TripProfile` (`NORMAL` | `TRAFFIC`) carries the times. `StopTime` hangs off the profile. Details: `docs/trip-profile-model.md`. The trip code comes from the route sequence (`Hex.toHex3`), not from a name typed by the user.
