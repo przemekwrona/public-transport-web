@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {AgencyStopListComponent} from './agency-stop-list.component';
-import {AgencyStopsService} from '../../generated/public-transport-api';
+import {AgencyStopTimetableService, AgencyStopsService} from '../../generated/public-transport-api';
 
 @NgModule({
     imports: [
@@ -10,7 +10,8 @@ import {AgencyStopsService} from '../../generated/public-transport-api';
         AgencyStopListComponent
     ],
     providers: [
-        AgencyStopsService
+        AgencyStopsService,
+        AgencyStopTimetableService
     ]
 })
 export class AgencyStopsModule {

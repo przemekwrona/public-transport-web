@@ -1,14 +1,17 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {TranslocoPipe} from '@jsverse/transloco';
+import {TranslocoPipe, TranslocoService} from '@jsverse/transloco';
 import {
     AgencyStop,
     AgencyStopRoute,
+    AgencyStopTimetableService,
     AgencyStopTrip,
     AgencyStops
 } from '../../generated/public-transport-api';
+import {LoginService} from '../../auth/login.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {NotificationService} from '../../shared/notification.service';
 import {
     AgencyStopNameDialogData,
     AgencyStopNameDialogResult,
@@ -26,12 +29,17 @@ export class AgencyStopListComponent implements OnInit {
 
     public stops: AgencyStops = {items: []};
     public query = '';
+    public downloadingStopId: number | null = null;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private googleAnalyticsService: GoogleAnalyticsService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private loginService: LoginService,
+        private agencyStopTimetableService: AgencyStopTimetableService,
+        private notificationService: NotificationService,
+        private translocoService: TranslocoService
     ) {
     }
 
@@ -61,6 +69,38 @@ export class AgencyStopListComponent implements OnInit {
         this.query = (event.target as HTMLInputElement).value;
     }
 
+    public downloadTimetable(item: AgencyStop): void {
+        const stopId = item.stop?.id;
+        if (stopId == null || this.downloadingStopId != null) {
+            return;
+        }
+        this.downloadingStopId = stopId;
+        this.agencyStopTimetableService.downloadAgencyStopTimetable(
+            this.loginService.getInstance(),
+            stopId,
+            'body',
+            false,
+            {httpHeaderAccept: 'application/pdf'}
+        ).subscribe({
+            next: response => {
+                const blob = response instanceof Blob
+                    ? response
+                    : new Blob([response as BlobPart], {type: 'application/pdf'});
+                const objectUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = objectUrl;
+                link.download = `rozklad-${this.fileName(item, stopId)}.pdf`;
+                link.click();
+                URL.revokeObjectURL(objectUrl);
+                this.downloadingStopId = null;
+            },
+            error: () => {
+                this.downloadingStopId = null;
+                this.notificationService.showError(this.translocoService.translate('agency.stops.used.download.failed'));
+            }
+        });
+    }
+
     public openNameEditor(item: AgencyStop): void {
         const stop = item.stop;
         if (stop?.id == null) {
@@ -81,6 +121,12 @@ export class AgencyStopListComponent implements OnInit {
                 item.stop.name = result.name;
             }
         });
+    }
+
+    private fileName(item: AgencyStop, stopId: number): string {
+        const name = item.stop?.name?.trim();
+        const label = name ? name : `przystanek-${stopId}`;
+        return label.replaceAll(/\s+/g, '_');
     }
 
     public trackStop(item: AgencyStop): number | string {
