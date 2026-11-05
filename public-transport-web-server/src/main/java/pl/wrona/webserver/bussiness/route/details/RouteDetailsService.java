@@ -48,7 +48,7 @@ public class RouteDetailsService {
     })
     public RouteDetails getRouteDetails(String instance, String routeCode) {
         var route = routeQueryService.findRouteByAgencyCodeAndRouteCode(instance, routeCode);
-        var tripWithBrigades = tripQueryService.mapByExistsBrigade(instance);
+        var tripWithBrigades = tripQueryService.mapByExistsBrigade(instance, route);
 
         var tripEntities = tripQueryService.findByAgencyCodeAndLineAndName(instance, route.getLine(), route.getName());
 

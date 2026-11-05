@@ -60,12 +60,12 @@ public class TripQueryService {
         return tripQueryRepository.findByAgencyAndRouteCodeAndVariantMode(instance, routeCode, variantMode);
     }
 
-    public List<TripEntity> findByExistsBrigade(String agency) {
-        return tripQueryRepository.findByExistsBrigade(agency);
+    public List<TripEntity> findByExistsBrigade(String agency, RouteEntity routeEntity) {
+        return tripQueryRepository.findByExistsBrigade(agency, routeEntity);
     }
 
-    public Map<Long, TripEntity> mapByExistsBrigade(String agency) {
-        return findByExistsBrigade(agency).stream()
+    public Map<Long, TripEntity> mapByExistsBrigade(String agency, RouteEntity routeEntity) {
+        return findByExistsBrigade(agency, routeEntity).stream()
                 .collect(Collectors.toMap(TripEntity::getTripId, Function.identity()));
     }
 
