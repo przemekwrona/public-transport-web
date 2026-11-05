@@ -23,6 +23,8 @@ import pl.wrona.webserver.security.PreAgencyAuthorize;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -78,14 +80,11 @@ public class RouteDetailsService {
         var stopsIds = Stream.concat(originAndDestinationStopsIds.stream(), mainTripStops.stream()).toList();
         var stopDictionary = stopService.mapStopByIdsIn(stopsIds);
 
-        var territoriesUnits = territorialUnitQueryService.findAllByStopIdIn(stopsIds);
-        var territoriesDictionary = territoriesUnits.stream().collect(Collectors.toMap(TerritorialUnitEntity::getTerritorialUnitId, Function.identity()));
-
-        var territorialUnitsStops = mainTripStops.stream()
-                .map(stopDictionary::get)
-                .map(StopEntity::getTerritorialUnitId)
-                .map(territoriesDictionary::get)
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+        List<Long> territoryIdsAlongTrip = distinctTerritoryIds(mainTripStops, stopDictionary);
+        var territoryIds = new LinkedHashSet<>(territoryIdsAlongTrip);
+        addTerritoryId(territoryIds, stopDictionary.get(route.getOriginStopId()));
+        addTerritoryId(territoryIds, stopDictionary.get(route.getDestinationStopId()));
+        Map<Long, TerritorialUnitEntity> territoriesDictionary = territoriesById(territoryIds);
 
         Route mappedRoute = RouteMapper.map(route, stopDictionary, Map.of(), territoriesDictionary);
         agencyStopNameService.apply(agencyNames, mappedRoute.getOriginStop(), mappedRoute.getDestinationStop());
@@ -93,10 +92,36 @@ public class RouteDetailsService {
         return new RouteDetails()
                 .route(mappedRoute)
                 .trips(trips)
-                .territories(territorialUnitsStops.stream()
-                        .map(it -> new TerritoryUnit()
-                                .name(it.getNazwa()))
+                .territories(territoryIdsAlongTrip.stream()
+                        .map(territoriesDictionary::get)
+                        .filter(Objects::nonNull)
+                        .map(unit -> new TerritoryUnit().name(unit.getNazwa()))
                         .toList());
+    }
+
+    private Map<Long, TerritorialUnitEntity> territoriesById(Set<Long> territoryIds) {
+        if (territoryIds.isEmpty()) {
+            return Map.of();
+        }
+        return territorialUnitQueryService.findAllByTerritoriesIdIn(List.copyOf(territoryIds)).stream()
+                .collect(Collectors.toMap(
+                        TerritorialUnitEntity::getTerritorialUnitId,
+                        Function.identity(),
+                        (left, right) -> left));
+    }
+
+    private static List<Long> distinctTerritoryIds(List<Long> stopIds, Map<Long, StopEntity> stops) {
+        Set<Long> territoryIds = new LinkedHashSet<>();
+        for (Long stopId : stopIds) {
+            addTerritoryId(territoryIds, stops.get(stopId));
+        }
+        return List.copyOf(territoryIds);
+    }
+
+    private static void addTerritoryId(Set<Long> territoryIds, StopEntity stop) {
+        if (stop != null && stop.getTerritorialUnitId() != null) {
+            territoryIds.add(stop.getTerritorialUnitId());
+        }
     }
 
     private static Trip applyTripStopNames(Trip trip, TripEntity tripEntity, Map<Long, String> agencyNames) {
