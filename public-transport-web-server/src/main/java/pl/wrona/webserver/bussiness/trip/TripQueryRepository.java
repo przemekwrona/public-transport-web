@@ -59,9 +59,10 @@ public interface TripQueryRepository extends JpaRepository<TripEntity, Long> {
 
     @Query("""
             SELECT t FROM TripEntity t
-            WHERE t.route.agency.agencyCode = :agencyCode
+            WHERE t.route = :route
+                AND t.route.agency.agencyCode = :agencyCode
                 AND EXISTS (SELECT 1 FROM BrigadeEventEntity e WHERE e.tripProfile.trip.tripId = t.tripId)""")
-    List<TripEntity> findByExistsBrigade(@Param("agencyCode") String agencyCode);
+    List<TripEntity> findByExistsBrigade(@Param("agencyCode") String agencyCode, @Param("route") RouteEntity route);
 
     @Query("""
             SELECT t FROM TripEntity t
