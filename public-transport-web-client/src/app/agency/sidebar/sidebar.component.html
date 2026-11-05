@@ -31,7 +31,8 @@
                             <p-sidebar-menu>
                                 <p-sidebar-menu-item>
                                     <a routerLink="/admin/agency/profiles" pSidebarMenuButton
-                                       routerLinkActive [isActive]="agenciesLink.isActive" #agenciesLink="routerLinkActive">
+                                       routerLinkActive [isActive]="agenciesLink.isActive"
+                                       #agenciesLink="routerLinkActive">
                                         <svg data-p-icon="building"></svg>
                                         <span>Lista Agencji</span>
                                     </a>
@@ -51,14 +52,29 @@
                 }
 
                 <p-sidebar-group>
-                    <p-sidebar-group-label>Agencje</p-sidebar-group-label>
+                    <p-sidebar-group-label>Agencja</p-sidebar-group-label>
                     <p-sidebar-group-content>
                         <p-sidebar-menu>
                             <p-sidebar-menu-item>
                                 <a routerLink="/agency/profile" pSidebarMenuButton
                                    routerLinkActive [isActive]="profileLink.isActive" #profileLink="routerLinkActive">
                                     <svg data-p-icon="user"></svg>
-                                    <span>Mój Profil</span>
+                                    <span>Moja Firma</span>
+                                </a>
+                            </p-sidebar-menu-item>
+                        </p-sidebar-menu>
+                    </p-sidebar-group-content>
+                </p-sidebar-group>
+
+                <p-sidebar-group>
+                    <p-sidebar-group-label>Użytkownik</p-sidebar-group-label>
+                    <p-sidebar-group-content>
+                        <p-sidebar-menu>
+                            <p-sidebar-menu-item>
+                                <a routerLink="/agency/account" pSidebarMenuButton
+                                   routerLinkActive [isActive]="accountLink.isActive" #accountLink="routerLinkActive">
+                                    <svg data-p-icon="user"></svg>
+                                    <span>Moje Konto</span>
                                 </a>
                             </p-sidebar-menu-item>
                         </p-sidebar-menu>
@@ -87,7 +103,8 @@
                         <p-sidebar-menu>
                             <p-sidebar-menu-item>
                                 <a routerLink="/agency/stops/used" pSidebarMenuButton
-                                   routerLinkActive [isActive]="usedStopsLink.isActive" #usedStopsLink="routerLinkActive">
+                                   routerLinkActive [isActive]="usedStopsLink.isActive"
+                                   #usedStopsLink="routerLinkActive">
                                     <svg data-p-icon="map"></svg>
                                     <span>Moje Przystanki</span>
                                 </a>
@@ -101,7 +118,8 @@
                             </p-sidebar-menu-item>
                             <p-sidebar-menu-item>
                                 <a routerLink="/agency/calendars" pSidebarMenuButton
-                                   routerLinkActive [isActive]="calendarsLink.isActive" #calendarsLink="routerLinkActive">
+                                   routerLinkActive [isActive]="calendarsLink.isActive"
+                                   #calendarsLink="routerLinkActive">
                                     <svg data-p-icon="calendar"></svg>
                                     <span>Kalendarz</span>
                                 </a>
