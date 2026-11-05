@@ -42,6 +42,8 @@
   "agency.stops.used.edit.tooLong": "The name can be at most 150 characters.",
   "agency.stops.used.edit.hint": "This name applies only to your agency. The catalog stop name stays unchanged.",
   "agency.stops.used.edit.save": "Save",
+  "agency.account.title": "Missing value for 'agency.account.title'",
+  "agency.account.subtitle": "Missing value for 'agency.account.subtitle'",
   "agency.stops.used.download.failed": "The timetable could not be downloaded.",
   "agency.stops.used.edit.saved": "The stop name was saved for your agency.",
   "agency.stops.used.edit.failed": "The stop name could not be saved.",
