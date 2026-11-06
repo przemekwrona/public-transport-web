@@ -1,5 +1,6 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {HttpErrorResponse} from '@angular/common/http';
+import {provideNoopAnimations} from '@angular/platform-browser/animations';
 import {TranslocoTestingModule} from '@jsverse/transloco';
 import {of, throwError} from 'rxjs';
 import {AuthService} from '../../generated/public-transport-api';
@@ -32,6 +33,7 @@ describe('AccountComponent', () => {
                             'agency.account.password.current.invalid': 'Obecne hasło jest nieprawidłowe',
                             'agency.account.password.new': 'Nowe hasło',
                             'agency.account.password.new.required': 'Podaj nowe hasło',
+                            'agency.account.password.new.minLength': 'Hasło musi mieć co najmniej 5 znaków',
                             'agency.account.password.repeat': 'Powtórz hasło',
                             'agency.account.password.repeat.required': 'Powtórz nowe hasło',
                             'agency.account.password.mismatch': 'Hasła nie są takie same',
@@ -46,6 +48,7 @@ describe('AccountComponent', () => {
                 })
             ],
             providers: [
+                provideNoopAnimations(),
                 {provide: AuthService, useValue: {changePassword}},
                 {provide: NotificationService, useValue: {showSuccess, showError}}
             ]
@@ -60,14 +63,31 @@ describe('AccountComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('asks for the current password and a matching new password', () => {
+    it('shows the repeat field only after five characters', () => {
+        component.form.controls.newPassword.setValue('abcd');
+        expect(component.showRepeat).toBeFalse();
+
+        component.form.controls.newPassword.setValue('abcde');
+        expect(component.showRepeat).toBeTrue();
+    });
+
+    it('does not open the current-password dialog until the new password is repeated', () => {
         component.form.controls.newPassword.setValue('welcome2');
         component.form.controls.repeatedPassword.setValue('other');
-        component.changePassword();
+        component.requestCurrentPassword();
 
+        expect(component.confirming).toBeFalse();
         expect(changePassword).not.toHaveBeenCalled();
-        expect(component.form.controls.currentPassword.hasError('required')).toBeTrue();
         expect(component.mismatch()).toBeTrue();
+    });
+
+    it('asks for the current password after the new password is repeated', () => {
+        component.form.controls.newPassword.setValue('welcome2');
+        component.form.controls.repeatedPassword.setValue('welcome2');
+        component.requestCurrentPassword();
+
+        expect(component.confirming).toBeTrue();
+        expect(changePassword).not.toHaveBeenCalled();
     });
 
     it('changes the password and clears the form', () => {
@@ -84,6 +104,7 @@ describe('AccountComponent', () => {
             newPassword: 'welcome2'
         });
         expect(showSuccess).toHaveBeenCalledWith('Hasło zostało zmienione');
+        expect(component.confirming).toBeFalse();
         expect(component.form.controls.currentPassword.value).toBeNull();
         expect(component.saving).toBeFalse();
     });

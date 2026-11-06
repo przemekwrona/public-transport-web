@@ -50,6 +50,7 @@
   "agency.account.password.current.invalid": "Obecne hasło jest nieprawidłowe",
   "agency.account.password.new": "Nowe hasło",
   "agency.account.password.new.required": "Podaj nowe hasło",
+  "agency.account.password.new.minLength": "Hasło musi mieć co najmniej 5 znaków",
   "agency.account.password.repeat": "Powtórz hasło",
   "agency.account.password.repeat.required": "Powtórz nowe hasło",
   "agency.account.password.mismatch": "Hasła nie są takie same",

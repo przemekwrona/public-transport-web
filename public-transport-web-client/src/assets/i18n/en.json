@@ -50,6 +50,7 @@
   "agency.account.password.current.invalid": "The current password is incorrect",
   "agency.account.password.new": "New password",
   "agency.account.password.new.required": "Enter a new password",
+  "agency.account.password.new.minLength": "The password must be at least 5 characters",
   "agency.account.password.repeat": "Repeat password",
   "agency.account.password.repeat.required": "Repeat the new password",
   "agency.account.password.mismatch": "The passwords do not match",
