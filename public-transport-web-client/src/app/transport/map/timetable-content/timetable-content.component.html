@@ -14,10 +14,10 @@
       @for (hour of getHours(); track hour; let index = $index) {
         <div [ngClass]="{even: index % 2 === 1, odd: index % 2 !== 1}"
           class="row row-container">
-          <div class="col-1 hour">
+          <div class="w-1/12 hour">
             {{hour | timetableHour}}
           </div>
-          <div class="col-11">
+          <div class="w-11/12">
             @for (timetable of groupedTimetables[hour]; track timetable) {
               <div (click)="showTimetable(timetable)"
                 [ngClass]="{close: isClose(timetable)}" class="minutes">

@@ -1,14 +1,86 @@
-<!-- Container -->
 <div class="container-fixed">
-    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-        <div class="flex flex-col justify-center gap-2">
-            <h1 class="text-xl font-medium leading-none text-gray-900">
-                {{ 'agency.account.title' | transloco }}
-            </h1>
-            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-                {{ 'agency.account.subtitle' | transloco }}
-            </div>
+    <div class="flex flex-col gap-2 mb-5">
+        <h1 class="text-xl font-medium leading-none text-gray-900 m-0">
+            {{ 'agency.account.title' | transloco }}
+        </h1>
+        <div class="text-sm font-normal text-gray-700">
+            {{ 'agency.account.subtitle' | transloco }}
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3">
+        <div class="md:col-span-2">
+            <p-card [header]="'agency.account.password.title' | transloco">
+                <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="changePassword()">
+                    <p-fluid class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-2">
+                            <label for="currentPassword" class="text-sm font-medium text-gray-900">
+                                {{ 'agency.account.password.current' | transloco }}
+                            </label>
+                            <p-password inputId="currentPassword"
+                                        formControlName="currentPassword"
+                                        [feedback]="false"
+                                        [toggleMask]="true"
+                                        autocomplete="current-password"/>
+                            @if (required('currentPassword')) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.account.password.current.required' | transloco }}
+                                </p-message>
+                            }
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <label for="newPassword" class="text-sm font-medium text-gray-900">
+                                {{ 'agency.account.password.new' | transloco }}
+                            </label>
+                            <p-password inputId="newPassword"
+                                        formControlName="newPassword"
+                                        [feedback]="false"
+                                        [toggleMask]="true"
+                                        autocomplete="new-password"/>
+                            @if (required('newPassword')) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.account.password.new.required' | transloco }}
+                                </p-message>
+                            } @else if (mismatch()) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.account.password.mismatch' | transloco }}
+                                </p-message>
+                            } @else if (samePassword()) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.account.password.same' | transloco }}
+                                </p-message>
+                            }
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <label for="repeatedPassword" class="text-sm font-medium text-gray-900">
+                                {{ 'agency.account.password.repeat' | transloco }}
+                            </label>
+                            <p-password inputId="repeatedPassword"
+                                        formControlName="repeatedPassword"
+                                        [feedback]="false"
+                                        [toggleMask]="true"
+                                        autocomplete="new-password"/>
+                            @if (required('repeatedPassword')) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.account.password.repeat.required' | transloco }}
+                                </p-message>
+                            } @else if (mismatch()) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.account.password.mismatch' | transloco }}
+                                </p-message>
+                            }
+                        </div>
+                    </p-fluid>
+
+                    <div class="flex justify-end">
+                        <button pButton type="submit" severity="success" [disabled]="saving" [loading]="saving">
+                            {{ 'agency.account.password.submit' | transloco }}
+                        </button>
+                    </div>
+                </form>
+            </p-card>
         </div>
     </div>
 </div>
-<!-- End of Container -->

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="routes row">
     @if (routes.length > 0) {
-      <div class="col-12 line-section">
+      <div class="w-full line-section">
         @for (route of getRoutes(); track route) {
           <div (click)="onClickLine(route.shortName || '')" class="line mt-1"
           [ngStyle]="{'background-color': getColor(route)}">{{route?.shortName}}</div>

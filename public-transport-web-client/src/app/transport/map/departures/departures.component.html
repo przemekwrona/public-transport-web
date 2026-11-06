@@ -6,9 +6,9 @@
         @for (departure of departures.slice(0, 8); track departure) {
           <div>
             <div class="row py-2" [ngClass]="{pulse: lessThan1Min(departure.time)}" (click)="showShape(departure.time.tripId || '')">
-              <div class="col-2 text-center">{{getRouteByRouteId(departure?.pattern?.routeId || '')?.shortName || ''}}</div>
-              <div class="col-6 text-truncate">{{departure.time.headsign || ''}}</div>
-              <div class="col-4 text-end mx-0">
+              <div class="w-1/6 text-center">{{getRouteByRouteId(departure?.pattern?.routeId || '')?.shortName || ''}}</div>
+              <div class="w-1/2 text-truncate">{{departure.time.headsign || ''}}</div>
+              <div class="w-1/3 text-end mx-0">
                 <span class="in">{{departure.time.scheduledDeparture | departureTimePrefix | async}}</span>
                 <span>{{departure.time.scheduledDeparture | departureTime:'H:mm' | async}}</span>
               </div>
@@ -20,12 +20,12 @@
     @if (!hasDepartures()) {
       <div class="departures-list">
         <div class="row text-center">
-          <div class="col">
+          <div class="flex-1">
             <i class="fa fa-calendar-times-o fa-3x" aria-hidden="true"></i>
           </div>
         </div>
         <div class="row text-center">
-          <div class="col">Brak odjazdów</div>
+          <div class="flex-1">Brak odjazdów</div>
         </div>
       </div>
     }

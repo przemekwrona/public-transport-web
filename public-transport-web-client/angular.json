@@ -37,7 +37,6 @@
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/primeflex/primeflex.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -117,7 +116,6 @@
             "styles": [
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/primeflex/primeflex.css",
               "src/styles.scss"
             ],
             "scripts": []

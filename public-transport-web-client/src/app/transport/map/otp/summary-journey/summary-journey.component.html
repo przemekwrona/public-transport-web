@@ -2,23 +2,23 @@
 <mat-dialog-content class="mat-typography">
 
     <div class="row my-3">
-        <div class="col-12">
+        <div class="w-full">
             <h2 class="mx-0">Porównywanie różnych środków transpory</h2>
         </div>
     </div>
 
     <div class="row text-center my-2">
-        <div class="col-4"></div>
-        <div class="col-2">
+        <div class="w-1/3"></div>
+        <div class="w-1/6">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_bus"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             <mat-icon aria-hidden="false" aria-label="bike" fontIcon="directions_bike"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_car"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_walk"></mat-icon>
         </div>
     </div>
@@ -26,22 +26,22 @@
     <mat-divider></mat-divider>
 
     <div class="row text-center my-2">
-        <div class="col-4 text-start">
+        <div class="w-1/3 text-start">
             Całkowita trasa
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.transit?.totalDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.transit?.totalDuration) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.bike?.totalDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.bike?.totalDuration) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.car?.totalDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.car?.totalDuration) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.walk?.totalDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.walk?.totalDuration) | journeyDuration : true}}
         </div>
@@ -50,99 +50,99 @@
     <mat-divider></mat-divider>
 
     <div class="row text-center my-2">
-        <div class="col-4 text-start">
+        <div class="w-1/3 text-start">
             Do przystanku/stacji roweru miejskiego
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.transit?.walkDistanceToStation) | journeyDistance}}
             {{$safeNavigationMigration(summary?.transit?.walkDurationToStation) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.bike?.walkDistanceToStation) | journeyDistance}}
             {{$safeNavigationMigration(summary?.bike?.walkDurationToStation) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.car?.walkDistanceToStation) | journeyDistance}}
             {{$safeNavigationMigration(summary?.car?.walkDurationToStation) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.walk?.walkDistanceToStation) | journeyDistance}}
             {{$safeNavigationMigration(summary?.walk?.walkDurationToStation) | journeyDuration : true}}
         </div>
     </div>
 
     <div class="row text-center my-0">
-        <div class="col-4 text-start">
+        <div class="w-1/3 text-start">
             Liczba przesiadek
         </div>
-        <div class="col-2 border-top border-danger border-start border-end">
+        <div class="w-1/6 border-top border-danger border-start border-end">
             {{summary?.transit?.transfers}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
     </div>
 
     <div class="row text-center my-0">
-        <div class="col-4 text-start">
+        <div class="w-1/3 text-start">
             Przesiadki
         </div>
-        <div class="col-2 border-danger border-start border-end">
+        <div class="w-1/6 border-danger border-start border-end">
             {{$safeNavigationMigration(summary?.transit?.transferWalkDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.transit?.transferWalkDuration) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
     </div>
 
     <div class="row text-center my-0">
-        <div class="col-4 text-start">
+        <div class="w-1/3 text-start">
             Czas oczekiwania
         </div>
-        <div class="col-2 border-bottom border-danger border-start border-end">
+        <div class="w-1/6 border-bottom border-danger border-start border-end">
             {{$safeNavigationMigration(summary?.transit?.transfersWaitingAtStop) | journeyDuration}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
     </div>
 
     <div class="row text-center my-2">
-        <div class="col-4 text-start">
+        <div class="w-1/3 text-start">
             Z przystanku/stacji roweru miejskiego
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.transit?.walkDistanceFromStation) | journeyDistance}}
             {{$safeNavigationMigration(summary?.transit?.walkDurationFromStation) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.bike?.walkDistanceFromStation) | journeyDistance}}
             {{$safeNavigationMigration(summary?.bike?.walkDurationFromStation) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.car?.walkDistanceFromStation) | journeyDistance}}
             {{$safeNavigationMigration(summary?.car?.walkDurationFromStation) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.walk?.walkDistanceFromStation) | journeyDistance}}
             {{$safeNavigationMigration(summary?.walk?.walkDurationFromStation) | journeyDuration : true}}
         </div>
@@ -151,44 +151,44 @@
     <mat-divider></mat-divider>
 
     <div class="row text-center my-2">
-        <div class="col-4 text-start">
+        <div class="w-1/3 text-start">
             Trasa TYLKO pieszo
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.transit?.totalWalkDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.transit?.totalWalkDuration) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.bike?.totalWalkDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.bike?.totalWalkDuration) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.car?.totalWalkDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.car?.totalWalkDuration) | journeyDuration : true}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.walk?.totalWalkDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.walk?.totalWalkDuration) | journeyDuration : true}}
         </div>
     </div>
 
     <div class="row text-center my-2">
-        <div class="col-4 text-start">
+        <div class="w-1/3 text-start">
             Trasa TYLKO środkiem transportu
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.transit?.travelModeDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.transit?.travelModeDuration) | journeyDuration}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.bike?.travelModeDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.bike?.travelModeDuration) | journeyDuration}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.car?.travelModeDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.car?.travelModeDuration) | journeyDuration}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.walk?.travelModeDistance) | journeyDistance}}
             {{$safeNavigationMigration(summary?.walk?.travelModeDuration) | journeyDuration}}
         </div>
@@ -197,46 +197,46 @@
     <mat-divider></mat-divider>
 
     <div class="row my-3">
-        <div class="col-12">
+        <div class="w-full">
             <h2 class="mx-0">Porównywanie różnych środków transpory</h2>
         </div>
     </div>
 
     <div class="row text-center py-2">
-        <div class="col-4"></div>
-        <div class="col-2">
+        <div class="w-1/3"></div>
+        <div class="w-1/6">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_bus"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             <mat-icon aria-hidden="false" aria-label="bike" fontIcon="directions_bike"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_car"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_walk"></mat-icon>
         </div>
     </div>
 
     <div class="row text-center">
-        <div class="col-4">
+        <div class="w-1/3">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_bus"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.transit?.bike?.time) | journeyDuration}}
             ({{summary?.differences?.transit?.bike?.percentage}}%)
             x{{$safeNavigationMigration(summary?.differences?.transit?.bike?.ratio) | number : '.2-2'}}
         </div>
-        <div class="col-2"
+        <div class="w-1/6"
              [ngClass]="{'green': isPositive($safeNavigationMigration(summary?.differences?.transit?.car?.time)), 'red': isNegative($safeNavigationMigration(summary?.differences?.transit?.car?.time))}">
             {{$safeNavigationMigration(summary?.differences?.transit?.car?.time) | journeyDuration}}
             ({{summary?.differences?.transit?.car?.percentage}}%)
             x{{$safeNavigationMigration(summary?.differences?.transit?.car?.ratio) | number : '.2-2'}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.transit?.walk?.time) | journeyDuration}}
             ({{summary?.differences?.transit?.walk?.percentage}}%)
             x{{$safeNavigationMigration(summary?.differences?.transit?.walk?.ratio) | number : '.2-2'}}
@@ -244,24 +244,24 @@
     </div>
 
     <div class="row text-center">
-        <div class="col-4">
+        <div class="w-1/3">
             <mat-icon aria-hidden="false" aria-label="bike" fontIcon="directions_bike"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.bike?.transit?.time) | journeyDuration}}
             ({{summary?.differences?.bike?.transit?.percentage}}%)
             x{{$safeNavigationMigration(summary?.differences?.bike?.transit?.ratio) | number : '.2-2'}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2"
+        <div class="w-1/6"
              [ngClass]="{'green': isPositive($safeNavigationMigration(summary?.differences?.bike?.car?.time)), 'red': isNegative($safeNavigationMigration(summary?.differences?.bike?.car?.time))}">
             {{$safeNavigationMigration(summary?.differences?.bike?.car?.time) | journeyDuration}}
             ({{summary?.differences?.bike?.car?.percentage}}%)
             x{{$safeNavigationMigration(summary?.differences?.bike?.car?.ratio) | number : '.2-2'}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.bike?.walk?.time) | journeyDuration}}
             ({{summary?.differences?.bike?.walk?.percentage}}%)
             x{{$safeNavigationMigration(summary?.differences?.bike?.walk?.ratio) | number : '.2-2'}}
@@ -269,23 +269,23 @@
     </div>
 
     <div class="row text-center">
-        <div class="col-4">
+        <div class="w-1/3">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_car"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.car?.transit?.time) | journeyDuration}}
             ({{summary?.differences?.car?.transit?.percentage}}%)
             {{$safeNavigationMigration(summary?.differences?.car?.transit?.ratio) | number : '.2-2'}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.car?.bike?.time) | journeyDuration}}
             ({{summary?.differences?.car?.bike?.percentage}}%)
             {{$safeNavigationMigration(summary?.differences?.car?.bike?.ratio) | number : '.2-2'}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.car?.walk?.time) | journeyDuration}}
             ({{summary?.differences?.car?.walk?.percentage}}%)
             {{$safeNavigationMigration(summary?.differences?.car?.walk?.ratio) | number : '.2-2'}}
@@ -293,26 +293,26 @@
     </div>
 
     <div class="row text-center mb-4">
-        <div class="col-4">
+        <div class="w-1/3">
             <mat-icon aria-hidden="false" aria-label="walk" fontIcon="directions_walk"></mat-icon>
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.walk?.transit?.time) | journeyDuration}}
             ({{summary?.differences?.walk?.transit?.percentage}}%)
             {{$safeNavigationMigration(summary?.differences?.walk?.transit?.ratio) | number : '.2-2'}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             {{$safeNavigationMigration(summary?.differences?.walk?.bike?.time) | journeyDuration}}
             ({{summary?.differences?.walk?.bike?.percentage}}%)
             {{$safeNavigationMigration(summary?.differences?.walk?.bike?.ratio) | number : '.2-2'}}
         </div>
-        <div class="col-2"
+        <div class="w-1/6"
              [ngClass]="{'green': isPositive($safeNavigationMigration(summary?.differences?.walk?.car?.time)), 'red': isNegative($safeNavigationMigration(summary?.differences?.walk?.car?.time))}">
             {{$safeNavigationMigration(summary?.differences?.walk?.car?.time) | journeyDuration}}
             ({{summary?.differences?.walk?.car?.percentage}}%)
             {{$safeNavigationMigration(summary?.differences?.walk?.car?.percentage) | number : '.2-2'}}
         </div>
-        <div class="col-2">
+        <div class="w-1/6">
             -
         </div>
     </div>
@@ -320,7 +320,7 @@
     <mat-divider></mat-divider>
 
     <div class="row my-3">
-        <div class="col-12">
+        <div class="w-full">
             <h2 class="mx-0">Dostępność roweru miejskiego</h2>
         </div>
     </div>
@@ -333,7 +333,7 @@
     </div>
 
     <div class="row mb-3">
-        <div class="col-3 text-center">
+        <div class="w-1/4 text-center">
             <ngx-gauge [type]="'arch'" [size]="130" [value]="round($safeNavigationMigration(summary?.city_bike?.nearest?.occupancyRatio))"
                        [label]="'Najbliższa'" [append]="'%'"></ngx-gauge>
             <div>
@@ -341,7 +341,7 @@
                 ({{$safeNavigationMigration(summary?.city_bike?.nearest?.occupancyRatio) | number : '.0-0'}}%)
             </div>
         </div>
-        <div class="col-3 text-center">
+        <div class="w-1/4 text-center">
             <ngx-gauge [type]="'arch'" [size]="130" [value]="round($safeNavigationMigration(summary?.city_bike?._100_m?.occupancyRatio))"
                        [label]="'<100m'" [append]="'%'"></ngx-gauge>
             <div>
@@ -349,7 +349,7 @@
                 ({{$safeNavigationMigration(summary?.city_bike?._100_m?.occupancyRatio) | number : '.0-0'}}%)
             </div>
         </div>
-        <div class="col-3 text-center">
+        <div class="w-1/4 text-center">
             <ngx-gauge [type]="'arch'" [size]="130" [value]="round($safeNavigationMigration(summary?.city_bike?._250_m?.occupancyRatio))"
                        [label]="'<250m'" [append]="'%'"></ngx-gauge>
             <div>
@@ -357,7 +357,7 @@
                 ({{$safeNavigationMigration(summary?.city_bike?._250_m?.occupancyRatio) | number : '.0-0'}}%)
             </div>
         </div>
-        <div class="col-3 text-center">
+        <div class="w-1/4 text-center">
             <ngx-gauge [type]="'arch'" [size]="130" [value]="round($safeNavigationMigration(summary?.city_bike?._500_m?.occupancyRatio))"
                        [label]="'<500m'" [append]="'%'"></ngx-gauge>
             <div>
@@ -370,28 +370,28 @@
     <mat-divider></mat-divider>
 
     <div class="row my-3">
-        <div class="col-12">
+        <div class="w-full">
             <h2 class="mx-0">Warunki pogodowe</h2>
         </div>
     </div>
 
 
     <div class="row">
-        <div class="col-2">Temperatura</div>
-        <div class="col-2">Wilgotność</div>
-        <div class="col-2">Zachmurzenie</div>
-        <div class="col-2"></div>
-        <div class="col-2"></div>
-        <div class="col-2"></div>
+        <div class="w-1/6">Temperatura</div>
+        <div class="w-1/6">Wilgotność</div>
+        <div class="w-1/6">Zachmurzenie</div>
+        <div class="w-1/6"></div>
+        <div class="w-1/6"></div>
+        <div class="w-1/6"></div>
     </div>
 
     <div class="row mb-3">
-        <div class="col-2">{{summary?.weather?.tempC}}&deg;C</div>
-        <div class="col-2">{{summary?.weather?.humidity}}%</div>
-        <div class="col-2">{{summary?.weather?.cloud}}%</div>
-        <div class="col-2"></div>
-        <div class="col-2"></div>
-        <div class="col-2"></div>
+        <div class="w-1/6">{{summary?.weather?.tempC}}&deg;C</div>
+        <div class="w-1/6">{{summary?.weather?.humidity}}%</div>
+        <div class="w-1/6">{{summary?.weather?.cloud}}%</div>
+        <div class="w-1/6"></div>
+        <div class="w-1/6"></div>
+        <div class="w-1/6"></div>
     </div>
 
     <mat-divider></mat-divider>

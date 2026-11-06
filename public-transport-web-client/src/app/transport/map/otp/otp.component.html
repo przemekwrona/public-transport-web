@@ -1,7 +1,7 @@
 <div class="container otp-container">
   <form>
     <div class="row">
-      <div class="col col-first">
+      <div class="flex-1 col-first">
         <mat-form-field class="w-100">
           <mat-label>Skąd ruszamy?</mat-label>
           <input matInput name="startPointName" [(ngModel)]="startPoint.name">
@@ -10,7 +10,7 @@
     </div>
 
     <div class="row mt-2">
-      <div class="col">
+      <div class="flex-1">
         <mat-form-field class="w-100">
           <mat-label>Gdzie jedziemy?</mat-label>
           <input matInput name="endPointName" [(ngModel)]="endPoint.name">
@@ -19,7 +19,7 @@
     </div>
 
     <div class="row mt-3">
-      <div class="col text-end">
+      <div class="flex-1 text-end">
         <!--                <mat-form-field class="example-full-width">-->
         <!--                    <mat-label>Number</mat-label>-->
         <!--                    <input type="text"-->
@@ -48,10 +48,10 @@
 @if (hasPlan()) {
   <div class="container">
     <div class="row">
-      <div matRipple (mouseenter)="showItineraryBikeMap()" (mouseleave)="hideItineraryBikeMap()" class="col-6 header bicycle">
+      <div matRipple (mouseenter)="showItineraryBikeMap()" (mouseleave)="hideItineraryBikeMap()" class="w-1/2 header bicycle">
         <app-itinerary-bike-header [itinerary]="bikeItinerary" [map]="map"></app-itinerary-bike-header>
       </div>
-      <div matRipple (mouseenter)="showItineraryWalkMap()" (mouseleave)="hideItineraryWalkMap()" class="col-6 header walk">
+      <div matRipple (mouseenter)="showItineraryWalkMap()" (mouseleave)="hideItineraryWalkMap()" class="w-1/2 header walk">
         <app-itinerary-walk [itinerary]="walkItinerary" [map]="map"></app-itinerary-walk>
       </div>
     </div>
