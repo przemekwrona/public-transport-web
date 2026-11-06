@@ -3,6 +3,7 @@ import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/da
 
 import moment from "moment";
 import {MatDialog} from "@angular/material/dialog";
+import {DialogService} from "primeng/dynamicdialog";
 import {
     OnTimeRangeAndTripSelected,
     OnTimeRangeSelectedModalComponent
@@ -17,6 +18,7 @@ import {
     NextCalendarResourceSequenceResponse,
     PutBrigadeEventBody, ResourceOptimizerService, ResourceService, Route, TripId2
 } from "../../../generated/public-transport-api";
+import {TranslocoService} from "@jsverse/transloco";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatIconModule} from "@angular/material/icon";
 import {RouterModule} from "@angular/router";
@@ -49,7 +51,7 @@ const DEFAULT_SCHEDULER_ZOOM = SCHEDULER_ZOOM_STEPS.findIndex(step => step.cellW
     MatIconModule,
     RouterModule
 ],
-    providers: [],
+    providers: [DialogService],
     templateUrl: './brigade-scheduler.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './brigade-scheduler.component.scss'
@@ -162,7 +164,7 @@ export class BrigadeSchedulerComponent implements OnInit, OnChanges, AfterViewIn
         }),
     };
 
-    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private resourceService: ResourceService, private resourceOptimizerService: ResourceOptimizerService, private dialog: MatDialog, private ngZone: NgZone) {
+    constructor(private agencyStorage: AgencyStorageService, private brigadeService: BrigadeService, private resourceService: ResourceService, private resourceOptimizerService: ResourceOptimizerService, private dialog: MatDialog, private dialogService: DialogService, private transloco: TranslocoService, private ngZone: NgZone) {
     }
 
     ngOnInit(): void {
@@ -353,8 +355,17 @@ export class BrigadeSchedulerComponent implements OnInit, OnChanges, AfterViewIn
     }
 
     openMyCreateModal(start: DayPilot.Date, end: DayPilot.Date, resource: DayPilot.ResourceId, dpControl: DayPilot.Scheduler) {
-        const dialogRef = this.dialog.open(OnTimeRangeSelectedModalComponent, {
+        const dialogRef = this.dialogService.open(OnTimeRangeSelectedModalComponent, {
+            header: this.transloco.translate('agency.brigade.addTrip.title'),
             width: '920px',
+            modal: true,
+            closable: true,
+            closeOnEscape: true,
+            dismissableMask: true,
+            draggable: false,
+            resizable: false,
+            focusTrap: false,
+            style: {maxWidth: 'calc(100vw - 2rem)'},
             data: {
                 start: start.toString(),
                 end: end.toString(),
@@ -363,7 +374,7 @@ export class BrigadeSchedulerComponent implements OnInit, OnChanges, AfterViewIn
             }
         });
 
-        dialogRef.afterClosed().subscribe((result: OnTimeRangeAndTripSelected) => {
+        dialogRef?.onClose.subscribe((result: OnTimeRangeAndTripSelected) => {
             // If the user cancelled the modal, result is null/undefined
             if (!result) return;
 

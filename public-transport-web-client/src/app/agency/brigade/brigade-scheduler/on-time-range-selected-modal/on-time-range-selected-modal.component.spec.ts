@@ -1,5 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {provideNoopAnimations} from '@angular/platform-browser/animations';
 import {TranslocoTestingModule} from '@jsverse/transloco';
 import {of, throwError} from 'rxjs';
@@ -37,7 +37,10 @@ describe('OnTimeRangeSelectedModalComponent', () => {
                             agency: {
                                 brigade: {
                                     addTrip: {
-                                        description: 'Wybierz kierunek i profil czasu przejazdu.'
+                                        title: 'Dodaj nową linię',
+                                        description: 'Wybierz kierunek i profil czasu przejazdu.',
+                                        cancel: 'Anuluj',
+                                        save: 'Zapisz i dodaj kurs do trasy'
                                     },
                                     direction: 'z {{from}} do {{to}}',
                                     loadMoreRoutes: {
@@ -58,18 +61,20 @@ describe('OnTimeRangeSelectedModalComponent', () => {
             ],
             providers: [
                 provideNoopAnimations(),
-                {provide: MatDialogRef, useValue: {close: () => undefined}},
+                {provide: DynamicDialogRef, useValue: {close: () => undefined}},
                 {provide: AgencyStorageService, useValue: {getInstance: () => 'agency'}},
                 {provide: TripService, useValue: {getTripsByRouteAndFilterLineOrName: getTrips}},
                 {provide: RouteService, useValue: {getRoutes: () => of({items: []})}},
                 {provide: NotificationService, useValue: {showError}},
                 {
-                    provide: MAT_DIALOG_DATA,
+                    provide: DynamicDialogConfig,
                     useValue: {
-                        start: '2026-11-06T08:00:00',
-                        end: '2026-11-06T09:00:00',
-                        resourceId: 'brigade-1',
-                        defaultRoutes: {lines: [defaultLine]}
+                        data: {
+                            start: '2026-11-06T08:00:00',
+                            end: '2026-11-06T09:00:00',
+                            resourceId: 'brigade-1',
+                            defaultRoutes: {lines: [defaultLine]}
+                        }
                     }
                 }
             ]
