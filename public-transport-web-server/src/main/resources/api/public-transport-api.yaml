@@ -24,6 +24,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/LoginAppUserResponse'
 
+  /auth/password:
+    put:
+      tags:
+        - auth
+      summary: Change the signed-in user's password
+      operationId: changePassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        200:
+          description: Password changed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
   /admin/agencies:
     get:
       tags:
@@ -1225,6 +1245,17 @@ components:
           items:
             type: string
         instance:
+          type: string
+
+    ChangePasswordRequest:
+      type: object
+      required:
+        - currentPassword
+        - newPassword
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
           type: string
 
     AgencyAddress:
