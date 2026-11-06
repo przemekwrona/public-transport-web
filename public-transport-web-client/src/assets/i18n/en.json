@@ -73,7 +73,10 @@
   "agency": {
     "brigade": {
       "addTrip": {
-        "description": "Choose a direction and a travel-time profile. Each tile shows whether the trip runs in normal traffic or congestion, and how long it takes. After you save, the trip is added to the brigade."
+        "title": "Add a line",
+        "description": "Choose a direction and a travel-time profile. Each tile shows whether the trip runs in normal traffic or congestion, and how long it takes. After you save, the trip is added to the brigade.",
+        "cancel": "Cancel",
+        "save": "Save and add the trip"
       },
       "direction": "from {{from}} to {{to}}",
       "loadMoreRoutes": {

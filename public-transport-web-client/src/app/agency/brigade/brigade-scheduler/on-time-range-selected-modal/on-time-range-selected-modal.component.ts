@@ -1,14 +1,7 @@
 import {NgTemplateOutlet} from '@angular/common';
-import {Component, ElementRef, inject, ChangeDetectionStrategy} from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormatSecondsPipe} from "../trip-variant-select/format-seconds.pipe";
-import {
-    MAT_DIALOG_DATA,
-    MatDialogActions,
-    MatDialogClose,
-    MatDialogContent, MatDialogRef,
-    MatDialogTitle
-} from "@angular/material/dialog";
 import {
     GetAllTripsResponse,
     ProfileShortcut,
@@ -21,8 +14,9 @@ import {
 } from "../../../../generated/public-transport-api";
 
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatButton} from "@angular/material/button";
 import {TranslocoPipe, TranslocoService} from '@jsverse/transloco';
+import {ButtonDirective} from 'primeng/button';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {Select} from 'primeng/select';
 import {catchError, distinctUntilChanged, map, of, switchMap} from 'rxjs';
 import {AgencyStorageService} from "../../../../auth/agency-storage.service";
@@ -57,13 +51,9 @@ export interface TripProfileChoice {
     FormatSecondsPipe,
     RouteNameNormPipe,
     Select,
+    ButtonDirective,
     TranslocoPipe,
-    MatDialogContent,
-    MatDialogTitle,
     FormsModule,
-    MatButton,
-    MatDialogActions,
-    MatDialogClose,
     ReactiveFormsModule
 ],
     templateUrl: './on-time-range-selected-modal.component.html',
@@ -73,8 +63,10 @@ export interface TripProfileChoice {
 export class OnTimeRangeSelectedModalComponent {
 
     private formBuilder: FormBuilder = inject(FormBuilder);
+    private dialogRef = inject(DynamicDialogRef);
+    private dialogConfig = inject(DynamicDialogConfig);
 
-    data = inject<{ start: string, end: string, resourceId: string, defaultRoutes: GetAllTripsResponse }>(MAT_DIALOG_DATA);
+    data = this.dialogConfig.data as { start: string, end: string, resourceId: string, defaultRoutes: GetAllTripsResponse };
 
     modelForm = this.formBuilder.group({
         tripId: this.formBuilder.control<TripId1 | null>(null, [Validators.required]),
@@ -93,9 +85,8 @@ export class OnTimeRangeSelectedModalComponent {
     private selectedProfile: ProfileShortcut | null = null;
     private notificationService = inject(NotificationService);
     private transloco = inject(TranslocoService);
-    private elementRef = inject(ElementRef<HTMLElement>);
 
-    constructor(private dialogRef: MatDialogRef<OnTimeRangeSelectedModalComponent>, private agencyStorageService: AgencyStorageService, private tripService: TripService, private routeService: RouteService) {
+    constructor(private agencyStorageService: AgencyStorageService, private tripService: TripService, private routeService: RouteService) {
         this.modelForm.controls.extraRouteId.valueChanges.pipe(
             distinctUntilChanged((left, right) => left?.routeCode === right?.routeCode),
             switchMap(routeId => this.loadExtraRoute(routeId)),
@@ -111,7 +102,6 @@ export class OnTimeRangeSelectedModalComponent {
     }
 
     openRoutePicker(): void {
-        this.routeOverlayAppendTo = this.dialogOverlayHost();
         this.showRoutePicker = true;
         if (this.routeOptions.length === 0 && !this.loadingRoutes) {
             this.loadRouteOptions();
@@ -125,6 +115,10 @@ export class OnTimeRangeSelectedModalComponent {
 
     trackRoute(route: RouteDetails): string {
         return this.routeCodeOf(route) ?? '';
+    }
+
+    cancel(): void {
+        this.dialogRef.close();
     }
 
     public selectProfile(choice: TripProfileChoice): void {
@@ -245,9 +239,8 @@ export class OnTimeRangeSelectedModalComponent {
         const spaceBelow = window.innerHeight - rect.bottom;
         const openAbove = panelHeight > spaceBelow - 8 && rect.top > spaceBelow;
         const top = openAbove ? Math.max(8, rect.top - panelHeight - 4) : rect.bottom + 4;
-        const host = this.dialogOverlayHost();
-        if (overlay.parentElement !== host) {
-            host.appendChild(overlay);
+        if (overlay.parentElement !== document.body) {
+            document.body.appendChild(overlay);
         }
 
         const next: Record<string, string> = {
@@ -277,12 +270,6 @@ export class OnTimeRangeSelectedModalComponent {
             return;
         }
         this.routeOverlayStyle = next;
-    }
-
-    private dialogOverlayHost(): HTMLElement {
-        return this.elementRef.nativeElement.closest('.cdk-overlay-popover')
-            ?? document.querySelector('.cdk-overlay-popover')
-            ?? document.body;
     }
 
     private isDefaultRoute(routeCode: string | undefined): boolean {

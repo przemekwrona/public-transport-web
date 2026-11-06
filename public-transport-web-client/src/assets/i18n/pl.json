@@ -79,7 +79,10 @@
   "agency": {
     "brigade": {
       "addTrip": {
-        "description": "Wybierz kierunek i profil czasu przejazdu. Na kafelku widać, czy kurs jedzie w normalnym ruchu, czy w korku, oraz jak długo trwa. Po zapisaniu kurs zostanie dodany do brygady."
+        "title": "Dodaj nową linię",
+        "description": "Wybierz kierunek i profil czasu przejazdu. Na kafelku widać, czy kurs jedzie w normalnym ruchu, czy w korku, oraz jak długo trwa. Po zapisaniu kurs zostanie dodany do brygady.",
+        "cancel": "Anuluj",
+        "save": "Zapisz i dodaj kurs do trasy"
       },
       "direction": "z {{from}} do {{to}}",
       "loadMoreRoutes": {

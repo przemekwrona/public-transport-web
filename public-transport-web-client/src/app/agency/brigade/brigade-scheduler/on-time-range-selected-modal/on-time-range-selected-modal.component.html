@@ -1,8 +1,4 @@
-<h2 mat-dialog-title>Dodaj nową linię</h2>
-
-<form [formGroup]="modelForm" (ngSubmit)="selectTrip()">
-
-    <mat-dialog-content class="mat-typography">
+<form class="flex flex-col gap-5" [formGroup]="modelForm" (ngSubmit)="selectTrip()">
         <p>{{ 'agency.brigade.addTrip.description' | transloco }}</p>
 
         <ng-template #routeProfiles let-route="route">
@@ -171,9 +167,12 @@
             }
         </div>
 
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Anuluj</button>
-        <button type="submit" mat-button cdkFocusInitial>Zapisz i dodaj kurs do trasy</button>
-    </mat-dialog-actions>
+        <div class="flex justify-end gap-2">
+            <button pButton type="button" severity="secondary" [outlined]="true" (click)="cancel()">
+                {{ 'agency.brigade.addTrip.cancel' | transloco }}
+            </button>
+            <button pButton type="submit">
+                {{ 'agency.brigade.addTrip.save' | transloco }}
+            </button>
+        </div>
 </form>
