@@ -1,3 +1,90 @@
+::ng-deep .p-overlay:has(.route-select-panel) {
+    z-index: 11000 !important;
+    pointer-events: auto;
+    visibility: hidden;
+}
+
+::ng-deep .p-overlay.route-select-ready:has(.route-select-panel) {
+    visibility: visible;
+}
+
+::ng-deep .route-select-panel.p-select-overlay {
+    position: relative;
+    top: auto;
+    left: auto;
+    inset-inline-start: auto;
+    min-width: 18rem;
+    max-width: min(28rem, calc(100vw - 2rem));
+    background: #fff;
+    color: var(--tw-gray-800, #1f2937);
+    border: 1px solid var(--tw-gray-200, #e5e7eb);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    overflow: visible;
+}
+
+::ng-deep .route-select-panel .p-select-header {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--tw-gray-200, #e5e7eb);
+}
+
+::ng-deep .route-select-panel .p-select-filter,
+::ng-deep .route-select-panel .p-inputtext {
+    width: 100%;
+    height: 2.25rem;
+    margin: 0;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--tw-gray-300, #d1d5db);
+    border-radius: 0.5rem;
+    background: #fff;
+    color: var(--tw-gray-900, #111827);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    box-shadow: none;
+}
+
+::ng-deep .route-select-panel .p-select-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin: 0;
+    padding: 0.375rem;
+    list-style: none;
+}
+
+::ng-deep .route-select-panel .p-select-option {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--tw-gray-800, #1f2937);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    white-space: normal;
+    cursor: pointer;
+}
+
+::ng-deep .route-select-panel .p-select-option:hover,
+::ng-deep .route-select-panel .p-select-option.p-focus {
+    background: var(--tw-primary-light, #eff6ff);
+    color: var(--tw-gray-900, #111827);
+}
+
+::ng-deep .route-select-panel .p-select-option.p-select-option-selected {
+    background: color-mix(in srgb, var(--tw-primary, #1b84ff) 12%, #fff);
+    color: var(--tw-gray-900, #111827);
+}
+
+::ng-deep .route-select-panel .p-select-empty-message {
+    padding: 0.75rem;
+    color: var(--tw-gray-600, #4b5563);
+    font-size: 0.875rem;
+}
+
 .profile-cell-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
