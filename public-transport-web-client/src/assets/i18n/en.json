@@ -71,6 +71,21 @@
   "agency.trip.timetable.FRONT": "FRONT",
   "agency.trip.timetable.BACK": "BACK",
   "agency": {
+    "brigade": {
+      "addTrip": {
+        "description": "Choose a direction and a travel-time profile. Each tile shows whether the trip runs in normal traffic or congestion, and how long it takes. After you save, the trip is added to the brigade."
+      },
+      "direction": "from {{from}} to {{to}}",
+      "loadMoreRoutes": {
+        "link": "Load more lines",
+        "label": "Line number and name",
+        "placeholder": "Choose a line",
+        "search": "Search by line number or name",
+        "empty": "No lines found",
+        "loading": "Loading line…",
+        "failed": "The line could not be loaded."
+      }
+    },
     "stops": {
       "used": {
         "menu": "Stops on lines",

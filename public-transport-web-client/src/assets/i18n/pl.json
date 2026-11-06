@@ -77,6 +77,21 @@
     "logout": "Wyloguj się"
   },
   "agency": {
+    "brigade": {
+      "addTrip": {
+        "description": "Wybierz kierunek i profil czasu przejazdu. Na kafelku widać, czy kurs jedzie w normalnym ruchu, czy w korku, oraz jak długo trwa. Po zapisaniu kurs zostanie dodany do brygady."
+      },
+      "direction": "z {{from}} do {{to}}",
+      "loadMoreRoutes": {
+        "link": "Załaduj więcej linii",
+        "label": "Numer i nazwa linii",
+        "placeholder": "Wybierz linię",
+        "search": "Szukaj po numerze lub nazwie linii",
+        "empty": "Nie znaleziono linii",
+        "loading": "Wczytywanie linii…",
+        "failed": "Nie udało się wczytać linii."
+      }
+    },
     "profile": {
       "title": "Profil Firmy",
       "subtitle": "Informacje o Firmie"

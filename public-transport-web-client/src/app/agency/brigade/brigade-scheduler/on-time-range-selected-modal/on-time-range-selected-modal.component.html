@@ -3,22 +3,24 @@
 <form [formGroup]="modelForm" (ngSubmit)="selectTrip()">
 
     <mat-dialog-content class="mat-typography">
-        <p>
-            Prosimy o wskazanie okresu, który ma obejmować kalendarz. Sugerujemy, aby wybrane daty były tożsame z
-            terminami
-            widniejącymi we wniosku o oficjalne pozwolenie. Dzięki temu brygady zostaną utworzone wyłącznie na czas
-            realnego, usankcjonowanego prawnie działania, co ułatwi rozliczenia i kontrolę nad projektem.
-        </p>
+        <p>{{ 'agency.brigade.addTrip.description' | transloco }}</p>
 
-        <div class="flex flex-col gap-5">
-            @for (route of data.defaultRoutes.lines; track route.route.routeCode) {
-                <div>
-                    <div class="card-table scrollable-x-auto">
+        <ng-template #routeProfiles let-route="route">
+            <div>
+                <div class="mb-2 text-sm font-medium text-gray-900">
+                    <span class="font-semibold">{{ route.route?.routeId?.line }}</span>
+                    {{ (route.route?.routeId?.name ?? '') | routeNameNorm }}
+                </div>
+                <div class="card-table scrollable-x-auto">
                         <table class="table align-middle text-sm text-gray-600 w-full">
                             <thead>
                             <tr class="bg-gray-100">
-                                <th class="text-start font-medium">FRONT</th>
-                                <th class="text-start font-medium">BACK</th>
+                                <th class="text-start font-medium">
+                                    {{ 'agency.brigade.direction' | transloco: { from: route.route?.originTerritory?.name || '', to: route.route?.destinationTerritory?.name || '' } }}
+                                </th>
+                                <th class="text-start font-medium">
+                                    {{ 'agency.brigade.direction' | transloco: { from: route.route?.destinationTerritory?.name || '', to: route.route?.originTerritory?.name || '' } }}
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -107,30 +109,66 @@
                             </tbody>
                         </table>
                     </div>
+            </div>
+        </ng-template>
+
+        <div class="flex flex-col gap-5">
+            @for (route of defaultLines; track trackRoute(route)) {
+                <ng-container [ngTemplateOutlet]="routeProfiles" [ngTemplateOutletContext]="{route: route}"></ng-container>
+            }
+
+            @if (!showRoutePicker) {
+                <button type="button" class="self-end cursor-pointer border-0 bg-transparent p-0 text-sm font-medium text-blue-600 underline" (click)="openRoutePicker()">
+                    {{ 'agency.brigade.loadMoreRoutes.link' | transloco }}
+                </button>
+            } @else {
+                <div class="flex w-full max-w-xl flex-col gap-2 self-end">
+                    <label for="extraRoute" class="text-sm font-semibold text-gray-900">
+                        {{ 'agency.brigade.loadMoreRoutes.label' | transloco }}
+                    </label>
+                    <p-select inputId="extraRoute"
+                              formControlName="extraRouteId"
+                              [options]="routeOptions"
+                              optionLabel="line"
+                              optionValue="routeId"
+                              [filter]="true"
+                              filterBy="line,name"
+                              [fluid]="true"
+                              [appendTo]="routeOverlayAppendTo"
+                              panelStyleClass="route-select-panel"
+                              [overlayOptions]="{autoZIndex: true, baseZIndex: 10000, style: routeOverlayStyle}"
+                              scrollHeight="16rem"
+                              [loading]="loadingRoutes"
+                              [resetFilterOnHide]="true"
+                              [placeholder]="'agency.brigade.loadMoreRoutes.placeholder' | transloco"
+                              [filterPlaceholder]="'agency.brigade.loadMoreRoutes.search' | transloco"
+                              [emptyFilterMessage]="'agency.brigade.loadMoreRoutes.empty' | transloco"
+                              (onShow)="placeRouteOverlay()"
+                              class="w-full">
+                        <ng-template #item let-route>
+                            <span class="flex w-full items-baseline gap-2">
+                                <span class="font-semibold text-gray-900">{{ route.line }}</span>
+                                <span class="text-sm text-gray-600">{{ route.name }}</span>
+                            </span>
+                        </ng-template>
+                        <ng-template #selectedItem let-route>
+                            @if (route) {
+                                <span class="flex items-baseline gap-2">
+                                    <span class="font-semibold">{{ route.line }}</span>
+                                    <span>{{ route.name }}</span>
+                                </span>
+                            }
+                        </ng-template>
+                    </p-select>
+                    @if (loadingExtraRoute) {
+                        <span class="text-sm text-gray-600">{{ 'agency.brigade.loadMoreRoutes.loading' | transloco }}</span>
+                    }
                 </div>
             }
-        </div>
-        <div class="lg:py-5 py-2.5">
 
-            <div class="flex flex-wrap justify-between gap-5">
-                <div class="flex flex-col">
-                    <div class="text-gray-900 text-sm font-medium">
-                        Rozkład Obowiązuje OD
-                    </div>
-                    <span class="text-gray-700 text-2sm">OD kiedy dany rozkład jazdy jest aktualny.</span>
-                </div>
-
-                <span class="sm:max-w-full xl:min-w-96">
-
-                    <!-- Pass the Observable directly to the input -->
-<!--                    <app-trip-variant-select-->
-<!--                            formControlName="tripId"-->
-<!--                            label="Numer lini"-->
-<!--                            (onChange)="selectTrip()">-->
-<!--                    </app-trip-variant-select>-->
-
-                </span>
-            </div>
+            @for (route of extraLines; track trackRoute(route)) {
+                <ng-container [ngTemplateOutlet]="routeProfiles" [ngTemplateOutletContext]="{route: route}"></ng-container>
+            }
         </div>
 
     </mat-dialog-content>
