@@ -10,7 +10,9 @@ import org.springframework.web.client.RestClient;
 import pl.wrona.webserver.exception.BusinessException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -77,6 +79,59 @@ class KeycloakUserProvisionerTest {
         assertThatThrownBy(() -> provisioner(builder).createUser("jan", "jan@example.com", "welcome1"))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Keycloak provisioning login failed with HTTP 401");
+    }
+
+    @Test
+    void resetsThePasswordOfTheMatchingUser() {
+        RestClient.Builder builder = RestClient.builder();
+        MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+        server.expect(requestTo("http://keycloak:8080/realms/public-transport/protocol/openid-connect/token"))
+                .andRespond(withSuccess("{\"access_token\":\"provisioning-token\"}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://keycloak:8080/admin/realms/public-transport/users?username=pwrona&exact=true"))
+                .andExpect(method(GET))
+                .andExpect(header(HttpHeaders.AUTHORIZATION, "Bearer provisioning-token"))
+                .andRespond(withSuccess("[{\"id\":\"user-1\",\"username\":\"pwrona\"}]", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://keycloak:8080/admin/realms/public-transport/users/user-1/reset-password"))
+                .andExpect(method(PUT))
+                .andExpect(header(HttpHeaders.AUTHORIZATION, "Bearer provisioning-token"))
+                .andExpect(content().json("""
+                        {"type":"password","value":"welcome2","temporary":false}
+                        """))
+                .andRespond(withStatus(HttpStatus.NO_CONTENT));
+
+        provisioner(builder).changePassword("pwrona", "welcome2");
+
+        server.verify();
+    }
+
+    @Test
+    void rejectsAnUnknownUser() {
+        RestClient.Builder builder = RestClient.builder();
+        MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+        server.expect(requestTo("http://keycloak:8080/realms/public-transport/protocol/openid-connect/token"))
+                .andRespond(withSuccess("{\"access_token\":\"provisioning-token\"}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://keycloak:8080/admin/realms/public-transport/users?username=missing&exact=true"))
+                .andRespond(withSuccess("[]", MediaType.APPLICATION_JSON));
+
+        assertThatThrownBy(() -> provisioner(builder).changePassword("missing", "welcome2"))
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("exceptionCode", "ERROR:202610240300");
+    }
+
+    @Test
+    void reportsARejectedPassword() {
+        RestClient.Builder builder = RestClient.builder();
+        MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+        server.expect(requestTo("http://keycloak:8080/realms/public-transport/protocol/openid-connect/token"))
+                .andRespond(withSuccess("{\"access_token\":\"provisioning-token\"}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://keycloak:8080/admin/realms/public-transport/users?username=pwrona&exact=true"))
+                .andRespond(withSuccess("[{\"id\":\"user-1\",\"username\":\"pwrona\"}]", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://keycloak:8080/admin/realms/public-transport/users/user-1/reset-password"))
+                .andRespond(withStatus(HttpStatus.BAD_REQUEST));
+
+        assertThatThrownBy(() -> provisioner(builder).changePassword("pwrona", "short"))
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("exceptionCode", "ERROR:202611060004");
     }
 
     private static KeycloakUserProvisioner provisioner(RestClient.Builder builder) {

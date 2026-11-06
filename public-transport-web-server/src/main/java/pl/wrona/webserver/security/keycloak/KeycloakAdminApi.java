@@ -94,6 +94,16 @@ class KeycloakAdminApi {
                 .toBodilessEntity();
     }
 
+    void put(String accessToken, String uri, Object body) {
+        keycloakRestClient.put()
+                .uri(uri)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(body)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
     private String tokenUri() {
         return realmBase() + TOKEN_SUFFIX;
     }
