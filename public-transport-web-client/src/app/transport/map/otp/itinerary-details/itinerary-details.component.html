@@ -1,7 +1,7 @@
 <div class="itinerary-details container open">
   @for (leg of itinerary?.legs; track leg; let last = $last; let first = $first) {
     <div class="row legs">
-      <div class="col-2 itinerary-shortcut" (click)="zoomPath(leg)">
+      <div class="w-1/6 itinerary-shortcut" (click)="zoomPath(leg)">
         @if (isWalk(leg) && first) {
           <div class="walk first">&nbsp;</div>
         }
@@ -48,7 +48,7 @@
           </div>
         }
       </div>
-      <div class="col-10 itinerary-description">
+      <div class="w-5/6 itinerary-description">
         @if (isWalk(leg) && first) {
           <div (click)="zoomPoint($safeNavigationMigration(leg?.from))" class="walk walk-from">
             <span>{{leg.from?.name}}</span>

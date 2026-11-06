@@ -1,11 +1,11 @@
 <!--<div class="itinerary container" (click)="isOpen = !isOpen; zoomToItineraryIfOpen()">-->
 <div class="details row"  (click)="zoomToItineraryIfOpen()">
-  <div class="col-2 ticking">
+  <div class="w-1/6 ticking">
     <div class="time">{{startTime()}}</div>
     <div class="unit">min</div>
   </div>
 
-  <div class="col-10">
+  <div class="w-5/6">
     <div class="legs-departures">
       <div class="legs">
         <div>{{getFirst().startTime | otpDate}} - {{getLast().endTime | otpDate}}</div>

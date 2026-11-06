@@ -27,7 +27,8 @@ A feature screen is a directory with a component, template, scss, resolver, and 
 
 - User-facing copy goes through Transloco: `transloco="key"` or `{{ 'key' | transloco }}`. Dictionaries: `src/assets/i18n/pl.json` and `en.json`. After new keys: `npm run i18n:extract`. The default UI language is Polish.
 - Forms: Reactive Forms. Validation and errors follow `src/app/shared/form.utils.ts`.
-- Look: Angular Material plus Tailwind and Metronic classes (`btn`, `card`, `input`, `form-label`). Do not introduce another styling system.
+- Look: PrimeNG and Tailwind for new UI. Use PrimeNG components (`primeng` 22, already a dependency) instead of Angular Material. Skip Metronic classes (`btn`, `card`, `input`, `form-label`) in new templates. Existing Material and Metronic markup stays until that screen is rebuilt.
+- Arrange new screens with the Tailwind CSS grid (`grid`, `grid-cols-*`, `col-span-*`). Do not add PrimeFlex. A screen uses one of three splits: **2:1** (`grid-cols-1 md:grid-cols-3`, with `md:col-span-2` and `md:col-span-1`), **1:1** (`grid-cols-1 md:grid-cols-2`), or **1** (a single column). Columns stack on narrow viewports and the split starts at `md`.
 - Maps: Leaflet. Dates: adapter with Monday as the first day of the week, locale `pl-PL`.
 
 ## API from the UI
