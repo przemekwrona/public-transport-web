@@ -1,60 +1,43 @@
 <div class="container-fixed">
-    <div class="flex flex-col gap-2 mb-5">
-        <h1 class="text-xl font-medium leading-none text-gray-900 m-0">
+    <div class="mb-6">
+        <h1 class="text-2xl font-semibold text-gray-900 m-0">
             {{ 'agency.account.title' | transloco }}
         </h1>
-        <div class="text-sm font-normal text-gray-700">
+        <p class="text-sm text-gray-600 mt-2 mb-0">
             {{ 'agency.account.subtitle' | transloco }}
-        </div>
+        </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3">
-        <div class="md:col-span-2">
-            <p-card [header]="'agency.account.password.title' | transloco">
-                <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="changePassword()">
-                    <p-fluid class="flex flex-col gap-4">
-                        <div class="flex flex-col gap-2">
-                            <label for="currentPassword" class="text-sm font-medium text-gray-900">
-                                {{ 'agency.account.password.current' | transloco }}
-                            </label>
-                            <p-password inputId="currentPassword"
-                                        formControlName="currentPassword"
-                                        [feedback]="false"
-                                        [toggleMask]="true"
-                                        autocomplete="current-password"/>
-                            @if (required('currentPassword')) {
-                                <p-message severity="error" variant="simple" size="small">
-                                    {{ 'agency.account.password.current.required' | transloco }}
-                                </p-message>
-                            }
-                        </div>
+    <form class="grid grid-cols-1 md:grid-cols-3" [formGroup]="form" (ngSubmit)="requestCurrentPassword()">
+        <div class="md:col-span-2 flex flex-col gap-4">
+            <h2 class="text-lg font-semibold text-gray-900 m-0">
+                {{ 'agency.account.password.title' | transloco }}
+            </h2>
+            <div class="flex flex-col gap-6 bg-white border border-gray-200 rounded-xl p-6">
+                <p-fluid class="flex flex-col gap-6">
+                    <div class="flex flex-col gap-2">
+                        <label for="newPassword" class="text-sm font-semibold text-gray-900">
+                            {{ 'agency.account.password.new' | transloco }}
+                        </label>
+                        <p-password inputId="newPassword"
+                                    formControlName="newPassword"
+                                    [feedback]="false"
+                                    [toggleMask]="true"
+                                    autocomplete="new-password"/>
+                        @if (required('newPassword')) {
+                            <p-message severity="error" variant="simple" size="small">
+                                {{ 'agency.account.password.new.required' | transloco }}
+                            </p-message>
+                        } @else if (tooShort()) {
+                            <p-message severity="error" variant="simple" size="small">
+                                {{ 'agency.account.password.new.minLength' | transloco }}
+                            </p-message>
+                        }
+                    </div>
 
-                        <div class="flex flex-col gap-2">
-                            <label for="newPassword" class="text-sm font-medium text-gray-900">
-                                {{ 'agency.account.password.new' | transloco }}
-                            </label>
-                            <p-password inputId="newPassword"
-                                        formControlName="newPassword"
-                                        [feedback]="false"
-                                        [toggleMask]="true"
-                                        autocomplete="new-password"/>
-                            @if (required('newPassword')) {
-                                <p-message severity="error" variant="simple" size="small">
-                                    {{ 'agency.account.password.new.required' | transloco }}
-                                </p-message>
-                            } @else if (mismatch()) {
-                                <p-message severity="error" variant="simple" size="small">
-                                    {{ 'agency.account.password.mismatch' | transloco }}
-                                </p-message>
-                            } @else if (samePassword()) {
-                                <p-message severity="error" variant="simple" size="small">
-                                    {{ 'agency.account.password.same' | transloco }}
-                                </p-message>
-                            }
-                        </div>
-
-                        <div class="flex flex-col gap-2">
-                            <label for="repeatedPassword" class="text-sm font-medium text-gray-900">
+                    @if (showRepeat) {
+                        <div class="flex flex-col gap-2" @repeatPassword>
+                            <label for="repeatedPassword" class="text-sm font-semibold text-gray-900">
                                 {{ 'agency.account.password.repeat' | transloco }}
                             </label>
                             <p-password inputId="repeatedPassword"
@@ -72,15 +55,51 @@
                                 </p-message>
                             }
                         </div>
-                    </p-fluid>
+                    }
+                </p-fluid>
 
-                    <div class="flex justify-end">
-                        <button pButton type="submit" severity="success" [disabled]="saving" [loading]="saving">
-                            {{ 'agency.account.password.submit' | transloco }}
-                        </button>
-                    </div>
-                </form>
-            </p-card>
+                <div>
+                    <button pButton type="submit" severity="success" [disabled]="saving" [loading]="saving">
+                        {{ 'agency.account.password.submit' | transloco }}
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
+    </form>
+
+    <p-dialog [header]="'agency.account.password.current' | transloco"
+              [(visible)]="confirming"
+              [modal]="true"
+              [draggable]="false"
+              [focusOnShow]="true"
+              [style]="{width: '28rem', maxWidth: 'calc(100vw - 2rem)'}">
+        <form class="flex flex-col gap-6" [formGroup]="form" (ngSubmit)="changePassword()">
+            <p-fluid>
+                <div class="flex flex-col gap-2">
+                    <label for="currentPassword" class="text-sm font-semibold text-gray-900">
+                        {{ 'agency.account.password.current' | transloco }}
+                    </label>
+                    <p-password inputId="currentPassword"
+                                formControlName="currentPassword"
+                                [feedback]="false"
+                                [toggleMask]="true"
+                                autocomplete="current-password"/>
+                    @if (required('currentPassword')) {
+                        <p-message severity="error" variant="simple" size="small">
+                            {{ 'agency.account.password.current.required' | transloco }}
+                        </p-message>
+                    } @else if (samePassword()) {
+                        <p-message severity="error" variant="simple" size="small">
+                            {{ 'agency.account.password.same' | transloco }}
+                        </p-message>
+                    }
+                </div>
+            </p-fluid>
+            <div>
+                <button pButton type="submit" severity="success" [disabled]="saving" [loading]="saving">
+                    {{ 'agency.account.password.submit' | transloco }}
+                </button>
+            </div>
+        </form>
+    </p-dialog>
 </div>

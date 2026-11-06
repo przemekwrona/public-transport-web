@@ -1,9 +1,11 @@
+import {animate, style, transition, trigger} from '@angular/animations';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslocoPipe, TranslocoService} from '@jsverse/transloco';
 import {ButtonDirective} from 'primeng/button';
-import {Card} from 'primeng/card';
+import {Dialog} from 'primeng/dialog';
 import {Fluid} from 'primeng/fluid';
 import {Message} from 'primeng/message';
 import {Password} from 'primeng/password';
@@ -11,12 +13,14 @@ import {AuthService, ChangePasswordRequest, ErrorResponse} from '../../generated
 import {NotificationService} from '../../shared/notification.service';
 import {passwordChangeValidator} from './password-change.validator';
 
+const MIN_PASSWORD_LENGTH = 5;
+
 @Component({
     selector: 'app-account',
     imports: [
         ReactiveFormsModule,
         TranslocoPipe,
-        Card,
+        Dialog,
         Fluid,
         Password,
         Message,
@@ -24,11 +28,24 @@ import {passwordChangeValidator} from './password-change.validator';
     ],
     templateUrl: './account.component.html',
     styleUrl: './account.component.scss',
-    changeDetection: ChangeDetectionStrategy.Eager
+    changeDetection: ChangeDetectionStrategy.Eager,
+    animations: [
+        trigger('repeatPassword', [
+            transition(':enter', [
+                style({opacity: 0, height: 0, overflow: 'hidden'}),
+                animate('280ms ease-out', style({opacity: 1, height: '*'}))
+            ]),
+            transition(':leave', [
+                style({overflow: 'hidden'}),
+                animate('200ms ease-in', style({opacity: 0, height: 0}))
+            ])
+        ])
+    ]
 })
 export class AccountComponent {
 
     public saving = false;
+    public confirming = false;
     public readonly form;
 
     constructor(
@@ -39,11 +56,23 @@ export class AccountComponent {
     ) {
         this.form = formBuilder.group({
             currentPassword: ['', Validators.required],
-            newPassword: ['', Validators.required],
+            newPassword: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
             repeatedPassword: ['', Validators.required]
         }, {
             validators: passwordChangeValidator()
         });
+        this.form.controls.newPassword.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
+            if ((value?.length ?? 0) >= MIN_PASSWORD_LENGTH) {
+                return;
+            }
+            if (this.form.controls.repeatedPassword.value) {
+                this.form.controls.repeatedPassword.setValue('');
+            }
+        });
+    }
+
+    public get showRepeat(): boolean {
+        return (this.form.controls.newPassword.value?.length ?? 0) >= MIN_PASSWORD_LENGTH;
     }
 
     public invalid(fieldName: 'currentPassword' | 'newPassword' | 'repeatedPassword'): boolean {
@@ -55,30 +84,51 @@ export class AccountComponent {
         return this.invalid(fieldName) && !!this.form.get(fieldName)?.errors?.['required'];
     }
 
+    public tooShort(): boolean {
+        const control = this.form.controls.newPassword;
+        return !!(control.touched && control.hasError('minlength'));
+    }
+
     public mismatch(): boolean {
-        const next = this.form.get('newPassword');
-        const repeat = this.form.get('repeatedPassword');
-        return !!((next?.touched || repeat?.touched) && this.form.errors?.['passwordMismatch']);
+        const repeat = this.form.controls.repeatedPassword;
+        return !!(repeat.touched && this.form.errors?.['passwordMismatch']);
     }
 
     public samePassword(): boolean {
-        const next = this.form.get('newPassword');
-        return !!(next?.touched && this.form.errors?.['samePassword']);
+        const current = this.form.controls.currentPassword;
+        return !!(current.touched && this.form.errors?.['samePassword']);
+    }
+
+    public requestCurrentPassword(): void {
+        const next = this.form.controls.newPassword;
+        const repeat = this.form.controls.repeatedPassword;
+        next.markAsTouched();
+        if (this.showRepeat) {
+            repeat.markAsTouched();
+        }
+        const repeated = this.showRepeat && repeat.valid && !this.form.hasError('passwordMismatch');
+        if (this.saving || next.invalid || !repeated) {
+            return;
+        }
+        this.form.controls.currentPassword.reset('');
+        this.confirming = true;
     }
 
     public changePassword(): void {
-        this.form.markAllAsTouched();
-        if (this.form.invalid || this.saving) {
+        const current = this.form.controls.currentPassword;
+        current.markAsTouched();
+        if (this.saving || current.invalid || this.form.hasError('samePassword') || this.form.hasError('passwordMismatch')) {
             return;
         }
         const request: ChangePasswordRequest = {
-            currentPassword: this.form.controls.currentPassword.value ?? '',
+            currentPassword: current.value ?? '',
             newPassword: this.form.controls.newPassword.value ?? ''
         };
         this.saving = true;
         this.authService.changePassword(request).subscribe({
             next: () => {
                 this.saving = false;
+                this.confirming = false;
                 this.form.reset();
                 this.notificationService.showSuccess(this.transloco.translate('agency.account.password.success'));
             },
