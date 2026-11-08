@@ -12,8 +12,8 @@
   "agency.trip.variantDetails": "Missing value for 'agency.trip.variantDetails'",
   "sidebar.collapse": "Collapse menu",
   "sidebar.expand": "Expand menu",
-  "agency.profile.title": "Missing value for 'agency.profile.title'",
-  "agency.profile.subtitle": "Missing value for 'agency.profile.subtitle'",
+  "agency.profile.title": "Company profile",
+  "agency.profile.subtitle": "Company information",
   "common.date.months.1": "Missing value for 'common.date.months.1'",
   "common.date.months.2": "Missing value for 'common.date.months.2'",
   "common.date.months.3": "Missing value for 'common.date.months.3'",
@@ -103,6 +103,67 @@
         "loading": "Loading line…",
         "failed": "The line could not be loaded."
       }
+    },
+    "profile": {
+      "title": "Company profile",
+      "subtitle": "Company information",
+      "basic": {
+        "title": "Basic information"
+      },
+      "logo": {
+        "label": "Company logo",
+        "hint": "150×150 px JPEG or PNG",
+        "choose": "Choose logo",
+        "alt": "Company logo"
+      },
+      "name": {
+        "label": "Company name",
+        "hint": "Company name from the business register",
+        "placeholder": "Enter the company name",
+        "required": "Company name is required",
+        "minLength": "Company name must be at least 3 characters"
+      },
+      "address": {
+        "title": "Business address"
+      },
+      "street": {
+        "label": "Street",
+        "placeholder": "Enter the street",
+        "required": "Street is required"
+      },
+      "houseNumber": {
+        "label": "Building number",
+        "placeholder": "Enter the building number",
+        "required": "Building number is required"
+      },
+      "flatNumber": {
+        "label": "Apartment number",
+        "placeholder": "Enter the apartment number",
+        "maxLength": "Apartment number can be at most 5 characters"
+      },
+      "postalCode": {
+        "label": "Postal code",
+        "placeholder": "Postal code",
+        "required": "Postal code is required"
+      },
+      "city": {
+        "label": "City",
+        "placeholder": "City",
+        "required": "City is required"
+      },
+      "website": {
+        "label": "Website",
+        "hint": "URL",
+        "open": "Open the website"
+      },
+      "timetable": {
+        "label": "Timetable",
+        "hint": "Timetable URL",
+        "open": "Open the timetable"
+      },
+      "save": "Save basic information",
+      "saved": "The details have been updated",
+      "invalid": "The form contains errors"
     },
     "stops": {
       "used": {

@@ -12,8 +12,8 @@
   "agency.trip.variantDetails": "Missing value for 'agency.trip.variantDetails'",
   "sidebar.collapse": "Zwiń menu",
   "sidebar.expand": "Rozwiń menu",
-  "agency.profile.title": "Missing value for 'agency.profile.title'",
-  "agency.profile.subtitle": "Missing value for 'agency.profile.subtitle'",
+  "agency.profile.title": "Profil Firmy",
+  "agency.profile.subtitle": "Informacje o Firmie",
   "common.date.months.1": "Styczeń",
   "common.date.months.2": "Luty",
   "common.date.months.3": "Marzec",
@@ -112,7 +112,64 @@
     },
     "profile": {
       "title": "Profil Firmy",
-      "subtitle": "Informacje o Firmie"
+      "subtitle": "Informacje o Firmie",
+      "basic": {
+        "title": "Informacje podstawowe"
+      },
+      "logo": {
+        "label": "Logo firmy",
+        "hint": "150×150 px, JPEG lub PNG",
+        "choose": "Wybierz logo",
+        "alt": "Logo firmy"
+      },
+      "name": {
+        "label": "Nazwa firmy",
+        "hint": "Nazwa firmy z CEIDG",
+        "placeholder": "Podaj nazwę firmy",
+        "required": "Nazwa firmy jest wymagana",
+        "minLength": "Nazwa firmy ma mniej niż 3 znaki"
+      },
+      "address": {
+        "title": "Adres prowadzenia działalności gospodarczej"
+      },
+      "street": {
+        "label": "Ulica",
+        "placeholder": "Podaj ulicę",
+        "required": "Ulica jest wymagana"
+      },
+      "houseNumber": {
+        "label": "Numer domu",
+        "placeholder": "Podaj numer domu",
+        "required": "Numer domu jest wymagany"
+      },
+      "flatNumber": {
+        "label": "Numer mieszkania",
+        "placeholder": "Podaj numer mieszkania",
+        "maxLength": "Numer mieszkania może mieć najwyżej 5 znaków"
+      },
+      "postalCode": {
+        "label": "Kod pocztowy",
+        "placeholder": "Kod pocztowy",
+        "required": "Kod pocztowy jest wymagany"
+      },
+      "city": {
+        "label": "Miasto",
+        "placeholder": "Miasto",
+        "required": "Miasto jest wymagane"
+      },
+      "website": {
+        "label": "Strona internetowa",
+        "hint": "Adres URL",
+        "open": "Otwórz stronę internetową"
+      },
+      "timetable": {
+        "label": "Rozkład jazdy",
+        "hint": "Adres URL rozkładu jazdy",
+        "open": "Otwórz rozkład jazdy"
+      },
+      "save": "Zapisz informacje podstawowe",
+      "saved": "Dane zostały zaktualizowane",
+      "invalid": "Formularz zawiera błędy"
     },
     "stops": {
       "used": {
