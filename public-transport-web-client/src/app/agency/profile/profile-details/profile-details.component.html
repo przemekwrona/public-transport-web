@@ -1,313 +1,189 @@
-<!-- Container -->
 <div class="container-fixed">
-    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-        <div class="flex flex-col justify-center gap-2">
-            <h1 class="text-xl font-medium leading-none text-gray-900">
-                {{ 'agency.profile.title' | transloco }}
-            </h1>
-            <div class="flex items-center gap-2 text-sm font-normal text-gray-700">
-                {{ 'agency.profile.subtitle' | transloco }}
-            </div>
-        </div>
+    <div class="mb-6">
+        <h1 class="text-2xl font-semibold text-gray-900 m-0">
+            {{ 'agency.profile.title' | transloco }}
+        </h1>
+        <p class="text-sm text-gray-600 mt-2 mb-0">
+            {{ 'agency.profile.subtitle' | transloco }}
+        </p>
     </div>
-</div>
-<!-- End of Container -->
 
-<!-- Container -->
-<div class="container-fixed">
-    <!-- begin: grid -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
-        <div class="col-span-2">
-            <div class="flex flex-col gap-5 lg:gap-7.5">
-                <div class="card min-w-full">
-                    <div class="card-header gap-2">
-                        <h3 class="card-title">Informacje Podstawowe</h3>
+    <form class="grid grid-cols-1 md:grid-cols-3" [formGroup]="modelForm" (ngSubmit)="saveAgencyDetails(modelForm)">
+        <div class="md:col-span-2 flex flex-col gap-4">
+            <h2 class="text-lg font-semibold text-gray-900 m-0">
+                {{ 'agency.profile.basic.title' | transloco }}
+            </h2>
+            <div class="flex flex-col gap-6 bg-white border border-gray-200 rounded-xl p-6">
+                <div class="flex flex-wrap items-center gap-6">
+                    <div class="size-32 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-50">
+                        @if (image) {
+                            <img [src]="image" class="size-full object-cover" [alt]="'agency.profile.logo.alt' | transloco">
+                        } @else {
+                            <div class="flex size-full items-center justify-center text-gray-400" aria-hidden="true">
+                                <svg data-p-icon="camera" class="size-8"></svg>
+                            </div>
+                        }
                     </div>
-                    <form [formGroup]="modelForm" (ngSubmit)="saveAgencyDetails(modelForm)">
-                        <div class="card-body lg:py-7.5 py-5">
-                            <div class="flex flex-wrap justify-between gap-5">
-                                <div class="flex flex-col justify-center">
-                                    <div class="text-gray-900 text-sm font-medium">Logo Firmy</div>
-                                    <!--                                    <span class="text-gray-700 text-2sm">Logo firmy</span>/-->
-                                    <span class="text-gray-700 text-2sm">150x150px JPEG, PNG Image</span>
-                                </div>
-                                <div class="flex justify-center items-center">
-                                    <div class="image-input size-32" data-image-input="true">
-                                        <input accept=".png, .jpg, .jpeg" name="avatar" type="file"
-                                               (change)="fileChangeEvent($event)"/>
-                                        <input name="avatar_remove" type="hidden"/>
-                                        <div class="btn btn-icon btn-icon-xs btn-light shadow-default absolute z-1 size-5 -top-0.5 -end-0.5 rounded-full"
-                                             data-image-input-remove="" data-tooltip="#image_input_tooltip"
-                                             data-tooltip-trigger="hover">
-                                            <i class="ki-filled ki-cross"></i>
-                                        </div>
-                                        <span class="tooltip" id="image_input_tooltip">Click to remove or revert</span>
-                                        <div class="image-input-placeholder rounded-full border-2 border-success image-input-empty:border-gray-300 blank-photo">
-                                            <!-- <div class="image-input-preview rounded-full" [ngStyle]="{'background-image': 'url({{image}})'}"></div>-->
-                                            <img [src]="image" class="image-input-preview rounded-full" alt="">
-                                            <div class="flex items-center justify-center cursor-pointer h-5 left-0 right-0 bottom-0 bg-dark-clarity absolute">
-                                                <svg class="fill-light opacity-80" height="12" viewbox="0 0 14 12"
-                                                     width="14" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M11.6665 2.64585H11.2232C11.0873 2.64749 10.9538 2.61053 10.8382 2.53928C10.7225 2.46803 10.6295 2.36541 10.5698 2.24335L10.0448 1.19918C9.91266 0.931853 9.70808 0.707007 9.45438 0.550249C9.20068 0.393491 8.90806 0.311121 8.60984 0.312517H5.38984C5.09162 0.311121 4.799 0.393491 4.5453 0.550249C4.2916 0.707007 4.08701 0.931853 3.95484 1.19918L3.42984 2.24335C3.37021 2.36541 3.27716 2.46803 3.1615 2.53928C3.04584 2.61053 2.91234 2.64749 2.7765 2.64585H2.33317C1.90772 2.64585 1.49969 2.81486 1.19885 3.1157C0.898014 3.41654 0.729004 3.82457 0.729004 4.25002V10.0834C0.729004 10.5088 0.898014 10.9168 1.19885 11.2177C1.49969 11.5185 1.90772 11.6875 2.33317 11.6875H11.6665C12.092 11.6875 12.5 11.5185 12.8008 11.2177C13.1017 10.9168 13.2707 10.5088 13.2707 10.0834V4.25002C13.2707 3.82457 13.1017 3.41654 12.8008 3.1157C12.5 2.81486 12.092 2.64585 11.6665 2.64585ZM6.99984 9.64585C6.39413 9.64585 5.80203 9.46624 5.2984 9.12973C4.79478 8.79321 4.40225 8.31492 4.17046 7.75532C3.93866 7.19572 3.87802 6.57995 3.99618 5.98589C4.11435 5.39182 4.40602 4.84613 4.83432 4.41784C5.26262 3.98954 5.80831 3.69786 6.40237 3.5797C6.99644 3.46153 7.61221 3.52218 8.1718 3.75397C8.7314 3.98576 9.2097 4.37829 9.54621 4.88192C9.88272 5.38554 10.0623 5.97765 10.0623 6.58335C10.0608 7.3951 9.73765 8.17317 9.16365 8.74716C8.58965 9.32116 7.81159 9.64431 6.99984 9.64585Z"
-                                                          fill=""></path>
-                                                    <path d="M7 8.77087C8.20812 8.77087 9.1875 7.7915 9.1875 6.58337C9.1875 5.37525 8.20812 4.39587 7 4.39587C5.79188 4.39587 4.8125 5.37525 4.8125 6.58337C4.8125 7.7915 5.79188 8.77087 7 8.77087Z"
-                                                          fill=""></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border-t border-gray-200 my-7.5"></div>
-                            <div class="flex flex-wrap justify-between gap-5">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 text-sm font-medium">Nazwa firmy</div>
-                                    @if (validControl('agencyName')) {
-                                        <span class="text-gray-700 text-2sm">Nazwa firmy z CEIDG</span>
-                                    } @else {
-                                        @if (modelForm.controls['agencyName'].errors['required']) {
-                                            <span class="text-danger text-2sm">Nazwa firmy jest wymagana</span>
-                                        }
-                                        @if (modelForm.controls['agencyName'].errors['minlength']) {
-                                            <span class="text-danger text-2sm">Nazwa firmy ma mniej niż 3 znaki</span>
-                                        }
-                                    }
-                                </div>
-                                <label for="agencyName" class="input sm:max-w-full xl:max-w-96 w-full"
-                                       [ngClass]="{'border-danger': !validControl('agencyName')}">
-                                    <input type="text" name="agencyName" id="agencyName"
-                                           formControlName="agencyName"
-                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                           placeholder="Podaj nazwę firmy"/>
-                                </label>
-                            </div>
-
-
-                            <div class="border-t border-gray-200 my-7.5"></div>
-
-                            <h2>Adres prowadzenia działalności gosodarczej</h2>
-
-                            <div class="my-7.5"></div>
-
-                            <div class="flex flex-wrap justify-between gap-5">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 text-sm font-medium">Ulica</div>
-                                    @if (validControl('street')) {
-                                        <span class="text-gray-700 text-2sm"></span>
-                                    } @else {
-                                        @if (modelForm.controls['street'].errors['required']) {
-                                            <span class="text-danger text-2sm">Ulica jest wymagana</span>
-                                        }
-                                        @if (modelForm.controls['street'].errors['minlength']) {
-                                            <span class="text-danger text-2sm">Ulica ma mniej niż 3 znaki</span>
-                                        }
-                                    }
-                                </div>
-                                <label for="street" class="input sm:max-w-full xl:max-w-96 w-full"
-                                       [ngClass]="{'border-danger': !validControl('street')}">
-                                    <input type="text" name="street" id="street"
-                                           formControlName="street"
-                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                           placeholder="Podaj ulicę"/>
-                                </label>
-                            </div>
-
-                            <div class="my-7.5"></div>
-
-                            <div class="flex flex-wrap justify-between gap-5">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 text-sm font-medium">Numer domu</div>
-                                    @if (validControl('houseNumber')) {
-                                        <span class="text-gray-700 text-2sm"></span>
-                                    } @else {
-                                        @if (modelForm.controls['houseNumber'].errors['required']) {
-                                            <span class="text-danger text-2sm">Numer domu jest wymagany</span>
-                                        }
-                                    }
-                                </div>
-                                <label for="houseNumber" class="input sm:max-w-full xl:max-w-96 w-full"
-                                       [ngClass]="{'border-danger': !validControl('houseNumber')}">
-                                    <input type="text" name="houseNumber" id="houseNumber"
-                                           formControlName="houseNumber"
-                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                           placeholder="Podaj numer domu"/>
-                                </label>
-                            </div>
-
-                            <div class="my-7.5"></div>
-
-                            <div class="flex flex-wrap justify-between gap-5">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 text-sm font-medium">Numer mieszkania</div>
-                                    @if (validControl('flatNumber')) {
-                                        <span class="text-gray-700 text-2sm"></span>
-                                    } @else {
-                                        @if (modelForm.controls['flatNumber'].errors['required']) {
-                                            <span class="text-danger text-2sm">Numer mieszkania jest wymagany</span>
-                                        }
-                                    }
-                                </div>
-                                <label for="flatNumber" class="input sm:max-w-full xl:max-w-96 w-full"
-                                       [ngClass]="{'border-danger': !validControl('flatNumber')}">
-                                    <input type="text" name="flatNumber" id="flatNumber"
-                                           formControlName="flatNumber"
-                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                           placeholder="Podaj numer mieszkania"/>
-                                </label>
-                            </div>
-
-                            <div class="my-7.5"></div>
-
-                            <div class="flex flex-wrap justify-between gap-5">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 text-sm font-medium">Kod pocztowy</div>
-                                    @if (validControl('postalCode')) {
-                                        <span class="text-gray-700 text-2sm"></span>
-                                    } @else {
-                                        @if (modelForm.controls['postalCode'].errors['required']) {
-                                            <span class="text-danger text-2sm">Kod pocztowy jest wymagany</span>
-                                        }
-
-                                        @if (modelForm.controls['postalCode'].errors['minlength']) {
-                                            <span class="text-danger text-2sm">Kod pocztowy wymaga 5 znaków</span>
-                                        }
-                                    }
-                                </div>
-
-                                <label for="postalCode" class="input sm:max-w-full xl:max-w-96 w-full"
-                                       [ngClass]="{'border-danger': !validControl('postalCode')}">
-                                    <input type="text" name="postalCode" id="postalCode"
-                                           formControlName="postalCode" mask="99-999"
-                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                           placeholder="Kod pocztowy"/>
-                                </label>
-                            </div>
-
-                            <div class="my-7.5"></div>
-
-                            <div class="flex flex-wrap justify-between gap-5">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 text-sm font-medium">Miasto</div>
-                                    @if (validControl('postalCity')) {
-                                        <span class="text-gray-700 text-2sm"></span>
-                                    } @else {
-                                        @if (modelForm.controls['postalCity'].errors['required']) {
-                                            <span class="text-danger text-2sm">Miasto jest wymagane</span>
-                                        }
-                                    }
-                                </div>
-                                <label for="postalCity" class="input sm:max-w-full xl:max-w-96 w-full"
-                                       [ngClass]="{'border-danger': !validControl('postalCity')}">
-                                    <input type="text" name="postalCity" id="postalCity"
-                                           formControlName="postalCity"
-                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                           placeholder="Miasto"/>
-                                </label>
-                            </div>
-
-                            <div class="border-t border-gray-200 my-7.5"></div>
-
-                            <div class="flex flex-wrap justify-between gap-5 my-7.5">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 text-sm font-medium">Strona internetowa</div>
-                                    <span class="text-gray-700 text-2sm">Adres URL</span>
-                                </div>
-                                <label for="agencyUrl" class="input sm:max-w-full xl:max-w-96 w-full"
-                                       [ngClass]="{'border-danger': !validControl('agencyUrl')}">
-                                    <div class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">https://
-                                    </div>
-                                    <input type="text" name="agencyUrl" id="agencyUrl"
-                                           formControlName="agencyUrl"
-                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                           placeholder=""/>
-                                    <a class="btn btn-icon"
-                                       [attr.href]="'https://www.' + modelForm.controls['agencyUrl'].value"
-                                       target="_blank">
-                                        <fa-icon [icon]="faGlobe"></fa-icon>
-                                    </a>
-                                </label>
-                            </div>
-
-                            <div class="flex flex-wrap justify-between gap-5 my-7.5">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 text-sm font-medium">Rozkład jazdy</div>
-                                    <span class="text-gray-700 text-2sm">Adres URL rozkładu jazdy</span>
-                                </div>
-                                <label for="agencyTimetableUrl" class="input sm:max-w-full xl:max-w-96 w-full"
-                                       [ngClass]="{'border-danger': !validControl('agencyTimetableUrl')}">
-                                    <div class="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">
-                                        https://{{ modelForm.controls['agencyUrl'].value }}/
-                                    </div>
-                                    <input type="text" name="agencyTimetableUrl" id="agencyTimetableUrl"
-                                           formControlName="agencyTimetableUrl"
-                                           class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                           placeholder=""/>
-                                    <a class="btn btn-icon"
-                                       [attr.href]="'https://www.' + modelForm.controls['agencyUrl'].value + '/' + modelForm.controls['agencyTimetableUrl'].value"
-                                       target="_blank">
-                                        <fa-icon [icon]="faGlobe"></fa-icon>
-                                    </a>
-                                </label>
-                            </div>
-
-                            <div class="border-t border-gray-200 my-7.5"></div>
-                            <div class="flex justify-end">
-                                <button (click)="saveAgencyDetails(modelForm)" class="btn btn-success"
-                                        [disabled]="isAgencyDetailsSaving">
-                                    Zapisz Informacje Podstawowe
-
-                                    @if (isAgencyDetailsSaving) {
-                                        <fa-icon [icon]="faSpinner" [animation]="'spin'"/>
-                                    }
-                                </button>
-                            </div>
+                    <div class="flex flex-col items-start gap-2">
+                        <div class="text-sm font-semibold text-gray-900">
+                            {{ 'agency.profile.logo.label' | transloco }}
                         </div>
-                    </form>
+                        <p class="text-sm text-gray-600 m-0">
+                            {{ 'agency.profile.logo.hint' | transloco }}
+                        </p>
+                        <input #logoInput class="hidden" type="file" accept=".png,.jpg,.jpeg"
+                               (change)="fileChangeEvent($event)">
+                        <button pButton type="button" severity="secondary" (click)="logoInput.click()">
+                            {{ 'agency.profile.logo.choose' | transloco }}
+                        </button>
+                    </div>
+                </div>
+
+                <p-fluid class="flex flex-col gap-6">
+                    <div class="flex flex-col gap-2">
+                        <label for="agencyName" class="text-sm font-semibold text-gray-900">
+                            {{ 'agency.profile.name.label' | transloco }}
+                        </label>
+                        <input pInputText id="agencyName" formControlName="agencyName"
+                               [invalid]="invalid('agencyName')"
+                               [placeholder]="'agency.profile.name.placeholder' | transloco"/>
+                        @if (hasError('agencyName', 'required')) {
+                            <p-message severity="error" variant="simple" size="small">
+                                {{ 'agency.profile.name.required' | transloco }}
+                            </p-message>
+                        } @else if (hasError('agencyName', 'minlength')) {
+                            <p-message severity="error" variant="simple" size="small">
+                                {{ 'agency.profile.name.minLength' | transloco }}
+                            </p-message>
+                        } @else {
+                            <small class="text-sm text-gray-600">{{ 'agency.profile.name.hint' | transloco }}</small>
+                        }
+                    </div>
+
+                    <h3 class="text-base font-semibold text-gray-900 m-0">
+                        {{ 'agency.profile.address.title' | transloco }}
+                    </h3>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="street" class="text-sm font-semibold text-gray-900">
+                            {{ 'agency.profile.street.label' | transloco }}
+                        </label>
+                        <input pInputText id="street" formControlName="street"
+                               [invalid]="invalid('street')"
+                               [placeholder]="'agency.profile.street.placeholder' | transloco"/>
+                        @if (hasError('street', 'required')) {
+                            <p-message severity="error" variant="simple" size="small">
+                                {{ 'agency.profile.street.required' | transloco }}
+                            </p-message>
+                        }
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex flex-col gap-2">
+                            <label for="houseNumber" class="text-sm font-semibold text-gray-900">
+                                {{ 'agency.profile.houseNumber.label' | transloco }}
+                            </label>
+                            <input pInputText id="houseNumber" formControlName="houseNumber"
+                                   [invalid]="invalid('houseNumber')"
+                                   [placeholder]="'agency.profile.houseNumber.placeholder' | transloco"/>
+                            @if (hasError('houseNumber', 'required')) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.profile.houseNumber.required' | transloco }}
+                                </p-message>
+                            }
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="flatNumber" class="text-sm font-semibold text-gray-900">
+                                {{ 'agency.profile.flatNumber.label' | transloco }}
+                            </label>
+                            <input pInputText id="flatNumber" formControlName="flatNumber"
+                                   [invalid]="invalid('flatNumber')"
+                                   [placeholder]="'agency.profile.flatNumber.placeholder' | transloco"/>
+                            @if (hasError('flatNumber', 'maxlength')) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.profile.flatNumber.maxLength' | transloco }}
+                                </p-message>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex flex-col gap-2">
+                            <label for="postalCode" class="text-sm font-semibold text-gray-900">
+                                {{ 'agency.profile.postalCode.label' | transloco }}
+                            </label>
+                            <input pInputText id="postalCode" formControlName="postalCode" mask="99-999"
+                                   [invalid]="invalid('postalCode')"
+                                   [placeholder]="'agency.profile.postalCode.placeholder' | transloco"/>
+                            @if (hasError('postalCode', 'required')) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.profile.postalCode.required' | transloco }}
+                                </p-message>
+                            }
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="postalCity" class="text-sm font-semibold text-gray-900">
+                                {{ 'agency.profile.city.label' | transloco }}
+                            </label>
+                            <input pInputText id="postalCity" formControlName="postalCity"
+                                   [invalid]="invalid('postalCity')"
+                                   [placeholder]="'agency.profile.city.placeholder' | transloco"/>
+                            @if (hasError('postalCity', 'required')) {
+                                <p-message severity="error" variant="simple" size="small">
+                                    {{ 'agency.profile.city.required' | transloco }}
+                                </p-message>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="agencyUrl" class="text-sm font-semibold text-gray-900">
+                            {{ 'agency.profile.website.label' | transloco }}
+                        </label>
+                        <p-inputgroup>
+                            <p-inputgroup-addon>https://</p-inputgroup-addon>
+                            <input pInputText id="agencyUrl" formControlName="agencyUrl"/>
+                            @if (websiteHref()) {
+                                <p-inputgroup-addon>
+                                    <button type="button" pButton severity="secondary" variant="text" iconOnly
+                                            (click)="openWebsite()"
+                                            [attr.aria-label]="'agency.profile.website.open' | transloco">
+                                        <svg data-p-icon="external-link"></svg>
+                                    </button>
+                                </p-inputgroup-addon>
+                            }
+                        </p-inputgroup>
+                        <small class="text-sm text-gray-600">{{ 'agency.profile.website.hint' | transloco }}</small>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="agencyTimetableUrl" class="text-sm font-semibold text-gray-900">
+                            {{ 'agency.profile.timetable.label' | transloco }}
+                        </label>
+                        <p-inputgroup>
+                            <p-inputgroup-addon>{{ timetablePrefix() }}</p-inputgroup-addon>
+                            <input pInputText id="agencyTimetableUrl" formControlName="agencyTimetableUrl"/>
+                            @if (timetableHref()) {
+                                <p-inputgroup-addon>
+                                    <button type="button" pButton severity="secondary" variant="text" iconOnly
+                                            (click)="openTimetable()"
+                                            [attr.aria-label]="'agency.profile.timetable.open' | transloco">
+                                        <svg data-p-icon="external-link"></svg>
+                                    </button>
+                                </p-inputgroup-addon>
+                            }
+                        </p-inputgroup>
+                        <small class="text-sm text-gray-600">{{ 'agency.profile.timetable.hint' | transloco }}</small>
+                    </div>
+                </p-fluid>
+
+                <div>
+                    <button pButton type="submit" severity="success"
+                            [disabled]="isAgencyDetailsSaving" [loading]="isAgencyDetailsSaving">
+                        {{ 'agency.profile.save' | transloco }}
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="col-span-1">
-            <!--            <div class="flex flex-col gap-5 lg:gap-7.5">-->
-            <!--                <div class="card">-->
-            <!--                    <div class="card-body py-10 flex flex-col gap-5 lg:gap-7.5">-->
-            <!--                        <div class="flex flex-col items-start gap-2.5">-->
-            <!--                            <div class="mb-2.5">-->
-            <!--                                <div class="relative size-[50px] shrink-0">-->
-            <!--                                    <svg class="w-full h-full stroke-brand-clarity fill-brand-light" fill="none"-->
-            <!--                                         height="48" viewBox="0 0 44 48" width="44" xmlns="http://www.w3.org/2000/svg">-->
-            <!--                                        <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506-->
-            <!--			18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937-->
-            <!--			39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z"-->
-            <!--                                              fill="">-->
-            <!--                                        </path>-->
-            <!--                                        <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506-->
-            <!--			18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937-->
-            <!--			39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z"-->
-            <!--                                              stroke="">-->
-            <!--                                        </path>-->
-            <!--                                    </svg>-->
-            <!--                                    <div class="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4">-->
-            <!--                                        <i class="ki-filled ki-note-2 text-1.5xl ps-px text-brand">-->
-            <!--                                        </i>-->
-            <!--                                    </div>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                            <a class="text-base font-semibold text-gray-900 hover:text-primary" href="#">-->
-            <!--                                Instrukcja osbługi dla użytkownika-->
-            <!--                            </a>-->
-            <!--                            <p class="text-sm text-gray-700">-->
-            <!--                                Poznaj możliwośći systemu-->
-            <!--                            </p>-->
-            <!--                            <a class="btn btn-link flex-none" href="#">-->
-            <!--                                Pobierz i Dowiedz się więcej-->
-            <!--                            </a>-->
-            <!--                        </div>-->
-            <!--                        <span class="hidden [&amp;:not(:last-child)]:block [&amp;:not(:last-child)]:border-b border-b-gray-200"></span>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-        </div>
-    </div>
-    <!-- end: grid -->
+    </form>
 </div>
-<!-- End of Container -->
