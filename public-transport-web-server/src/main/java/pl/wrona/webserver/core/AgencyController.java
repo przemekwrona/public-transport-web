@@ -3,6 +3,7 @@ package pl.wrona.webserver.core;
 import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.AgencyApi;
 import org.igeolab.iot.pt.server.api.model.AgenciesAdminResponse;
+import org.igeolab.iot.pt.server.api.model.AgencyAddress;
 import org.igeolab.iot.pt.server.api.model.AgencyAdminCreateAccountRequest;
 import org.igeolab.iot.pt.server.api.model.AgencyDetails;
 import org.igeolab.iot.pt.server.api.model.Status;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.wrona.webserver.bussiness.admin.profile.creator.ProfileCreatorService;
+import pl.wrona.webserver.bussiness.agency.address.AgencyAddressUpdaterService;
 import pl.wrona.webserver.bussiness.agency.details.AgencyDetailsService;
 import pl.wrona.webserver.bussiness.agency.photo.AgencyPhotoService;
 import pl.wrona.webserver.bussiness.agency.updater.AgencyUpdaterService;
@@ -26,6 +28,7 @@ public class AgencyController implements AgencyApi {
     private final ProfileCreatorService profileCreatorService;
     private final AgencyDetailsService agencyDetailsService;
     private final AgencyUpdaterService agencyUpdaterService;
+    private final AgencyAddressUpdaterService agencyAddressUpdaterService;
     private final AgencyPhotoService agencyPhotoService;
 
     @Override
@@ -56,5 +59,10 @@ public class AgencyController implements AgencyApi {
     @Override
     public ResponseEntity<Status> updateAgency(String agency, AgencyDetails agencyDetails) {
         return ResponseEntity.ok(agencyUpdaterService.updateAgency(agency, agencyDetails));
+    }
+
+    @Override
+    public ResponseEntity<Status> updateAgencyAddress(String agency, AgencyAddress agencyAddress) {
+        return ResponseEntity.ok(agencyAddressUpdaterService.updateAgencyAddress(agency, agencyAddress));
     }
 }

@@ -1,0 +1,86 @@
+<form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="save()">
+    <h2 class="text-lg font-semibold text-gray-900 m-0">
+        {{ 'agency.profile.address.title' | transloco }}
+    </h2>
+    <div class="flex flex-col gap-6 bg-white border border-gray-200 rounded-xl p-6">
+        <p-fluid class="flex flex-col gap-6">
+            <div class="flex flex-col gap-2">
+                <label for="street" class="text-sm font-semibold text-gray-900">
+                    {{ 'agency.profile.street.label' | transloco }}
+                </label>
+                <input pInputText id="street" formControlName="street"
+                       [invalid]="invalid('street')"
+                       [placeholder]="'agency.profile.street.placeholder' | transloco"/>
+                @if (hasError('street', 'required')) {
+                    <p-message severity="error" variant="simple" size="small">
+                        {{ 'agency.profile.street.required' | transloco }}
+                    </p-message>
+                }
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-2">
+                    <label for="houseNumber" class="text-sm font-semibold text-gray-900">
+                        {{ 'agency.profile.houseNumber.label' | transloco }}
+                    </label>
+                    <input pInputText id="houseNumber" formControlName="houseNumber"
+                           [invalid]="invalid('houseNumber')"
+                           [placeholder]="'agency.profile.houseNumber.placeholder' | transloco"/>
+                    @if (hasError('houseNumber', 'required')) {
+                        <p-message severity="error" variant="simple" size="small">
+                            {{ 'agency.profile.houseNumber.required' | transloco }}
+                        </p-message>
+                    }
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="flatNumber" class="text-sm font-semibold text-gray-900">
+                        {{ 'agency.profile.flatNumber.label' | transloco }}
+                    </label>
+                    <input pInputText id="flatNumber" formControlName="flatNumber"
+                           [invalid]="invalid('flatNumber')"
+                           [placeholder]="'agency.profile.flatNumber.placeholder' | transloco"/>
+                    @if (hasError('flatNumber', 'maxlength')) {
+                        <p-message severity="error" variant="simple" size="small">
+                            {{ 'agency.profile.flatNumber.maxLength' | transloco }}
+                        </p-message>
+                    }
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-2">
+                    <label for="postalCode" class="text-sm font-semibold text-gray-900">
+                        {{ 'agency.profile.postalCode.label' | transloco }}
+                    </label>
+                    <input pInputText id="postalCode" formControlName="postalCode" mask="99-999"
+                           [invalid]="invalid('postalCode')"
+                           [placeholder]="'agency.profile.postalCode.placeholder' | transloco"/>
+                    @if (hasError('postalCode', 'required')) {
+                        <p-message severity="error" variant="simple" size="small">
+                            {{ 'agency.profile.postalCode.required' | transloco }}
+                        </p-message>
+                    }
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="postalCity" class="text-sm font-semibold text-gray-900">
+                        {{ 'agency.profile.city.label' | transloco }}
+                    </label>
+                    <input pInputText id="postalCity" formControlName="postalCity"
+                           [invalid]="invalid('postalCity')"
+                           [placeholder]="'agency.profile.city.placeholder' | transloco"/>
+                    @if (hasError('postalCity', 'required')) {
+                        <p-message severity="error" variant="simple" size="small">
+                            {{ 'agency.profile.city.required' | transloco }}
+                        </p-message>
+                    }
+                </div>
+            </div>
+        </p-fluid>
+
+        <div>
+            <button pButton type="submit" severity="success" [disabled]="saving" [loading]="saving">
+                {{ 'agency.profile.address.save' | transloco }}
+            </button>
+        </div>
+    </div>
+</form>
