@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {DayPilot, DayPilotModule, DayPilotSchedulerComponent} from "@daypilot/daypilot-lite-angular";
 
 import moment from "moment";
@@ -18,10 +18,11 @@ import {
     NextCalendarResourceSequenceResponse,
     PutBrigadeEventBody, ResourceOptimizerService, ResourceService, Route, TripId2
 } from "../../../generated/public-transport-api";
-import {TranslocoService} from "@jsverse/transloco";
+import {TranslocoPipe, TranslocoService} from "@jsverse/transloco";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {MatIconModule} from "@angular/material/icon";
 import {RouterModule} from "@angular/router";
+import {NgxSpinnerModule, NgxSpinnerService} from "ngx-spinner";
 
 const SCHEDULER_TIME_HEADERS: DayPilot.TimeHeaderData[] = [
     {groupBy: "Day", format: "Dzień 1"},
@@ -49,7 +50,9 @@ const DEFAULT_SCHEDULER_ZOOM = SCHEDULER_ZOOM_STEPS.findIndex(step => step.cellW
     imports: [
     DayPilotModule,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    TranslocoPipe,
+    NgxSpinnerModule
 ],
     providers: [DialogService],
     templateUrl: './brigade-scheduler.component.html',
@@ -81,6 +84,23 @@ export class BrigadeSchedulerComponent implements OnInit, OnChanges, AfterViewIn
 
     selectedAlignMinutes: number | null = null;
     isOptimizing = false;
+    thinkingIndex = 0;
+    readonly optimizeSteps = [
+        'agency.brigade.optimize.steps.trips',
+        'agency.brigade.optimize.steps.deadhead',
+        'agency.brigade.optimize.steps.cycles',
+        'agency.brigade.optimize.steps.breaks',
+        'agency.brigade.optimize.steps.check',
+        'agency.brigade.optimize.steps.found',
+        'agency.brigade.optimize.steps.update'
+    ];
+    private readonly finishStepCount = 2;
+    private optimizeToken = 0;
+    private optimizeStartedAt = 0;
+    private thinkingTimer: ReturnType<typeof setInterval> | undefined;
+    private thinkingReveal: ReturnType<typeof setTimeout> | undefined;
+    private readonly optimizeSpinnerName = 'brigade-optimize';
+    private spinner = inject(NgxSpinnerService);
 
     readonly zoomSteps = SCHEDULER_ZOOM_STEPS;
     zoomIndex = DEFAULT_SCHEDULER_ZOOM;
@@ -182,6 +202,9 @@ export class BrigadeSchedulerComponent implements OnInit, OnChanges, AfterViewIn
     }
 
     ngOnDestroy(): void {
+        this.optimizeToken++;
+        this.clearThinking();
+        this.spinner.hide(this.optimizeSpinnerName);
         this.removeZoomWheelListener?.();
     }
 
@@ -598,7 +621,17 @@ export class BrigadeSchedulerComponent implements OnInit, OnChanges, AfterViewIn
             return;
         }
 
+        const token = ++this.optimizeToken;
         this.isOptimizing = true;
+        this.optimizeStartedAt = Date.now();
+        this.startThinking();
+        this.spinner.show(this.optimizeSpinnerName, {
+            type: 'ball-scale-multiple',
+            size: 'large',
+            bdColor: 'rgba(51,51,51,0.8)',
+            color: '#fff',
+            fullScreen: true
+        });
         this.resourceOptimizerService.optimizeBrigades(
             this.agencyStorage.getInstance(),
             this.brigadeCode,
@@ -613,17 +646,80 @@ export class BrigadeSchedulerComponent implements OnInit, OnChanges, AfterViewIn
                             this.brigadeBody = brigadeBody;
                             this.applyBrigadeToScheduler(this.brigadeBody);
                         }
-                        this.isOptimizing = false;
+                        this.endOptimizing(token, true);
                     },
                     error: () => {
-                        this.isOptimizing = false;
+                        this.endOptimizing(token);
                     }
                 });
             },
             error: () => {
-                this.isOptimizing = false;
+                this.endOptimizing(token);
             }
         });
+    }
+
+    private startThinking(): void {
+        this.thinkingIndex = -1;
+        this.clearThinking();
+        const lastThinkingStep = this.optimizeSteps.length - this.finishStepCount - 1;
+        this.thinkingReveal = setTimeout(() => {
+            this.thinkingIndex = 0;
+            this.thinkingTimer = setInterval(() => {
+                if (this.thinkingIndex < lastThinkingStep) {
+                    this.thinkingIndex++;
+                }
+            }, 900);
+        }, 320);
+    }
+
+    private endOptimizing(token: number, found = false): void {
+        const wait = Math.max(0, 2200 - (Date.now() - this.optimizeStartedAt));
+        setTimeout(() => {
+            if (token !== this.optimizeToken) {
+                return;
+            }
+            if (!found) {
+                this.finishOptimizing();
+                return;
+            }
+            this.showFinishSteps(token);
+        }, wait);
+    }
+
+    private showFinishSteps(token: number): void {
+        this.clearThinking();
+        const foundStep = this.optimizeSteps.length - this.finishStepCount;
+        this.thinkingIndex = foundStep;
+        this.thinkingReveal = setTimeout(() => {
+            if (token !== this.optimizeToken) {
+                return;
+            }
+            this.thinkingIndex = foundStep + 1;
+            this.thinkingReveal = setTimeout(() => {
+                if (token !== this.optimizeToken) {
+                    return;
+                }
+                this.finishOptimizing();
+            }, 800);
+        }, 800);
+    }
+
+    private finishOptimizing(): void {
+        this.isOptimizing = false;
+        this.clearThinking();
+        this.spinner.hide(this.optimizeSpinnerName);
+    }
+
+    private clearThinking(): void {
+        if (this.thinkingReveal) {
+            clearTimeout(this.thinkingReveal);
+            this.thinkingReveal = undefined;
+        }
+        if (this.thinkingTimer) {
+            clearInterval(this.thinkingTimer);
+            this.thinkingTimer = undefined;
+        }
     }
 
     public clearGroup(): void {

@@ -144,7 +144,7 @@
                         [class.is-optimizing]="isOptimizing"
                         title="Optymalizuj przydział brygad">
                     <mat-icon>auto_awesome</mat-icon>
-                    <span>{{ isOptimizing ? 'Trwa…' : 'Optymalizuj' }}</span>
+                    <span>{{ (isOptimizing ? 'agency.brigade.optimize.running' : 'agency.brigade.optimize.action') | transloco }}</span>
                 </button>
             </div>
             <div class="brigade-ribbon__label">Optymalizacja</div>
@@ -159,3 +159,26 @@
             #scheduler>
     </daypilot-scheduler>
 </div>
+
+<ngx-spinner
+        name="brigade-optimize"
+        bdColor="rgba(51,51,51,0.8)"
+        size="large"
+        color="#fff"
+        type="ball-scale-multiple"
+        [fullScreen]="true"
+        [disableAnimation]="false">
+    @if (thinkingIndex >= 0) {
+        <div class="optimize-status" role="status" aria-live="polite">
+            <p class="optimize-status__title">{{ 'agency.brigade.optimize.title' | transloco }}</p>
+            <p class="optimize-status__hint">{{ 'agency.brigade.optimize.hint' | transloco }}</p>
+            <ol class="optimize-status__trace">
+                @for (step of optimizeSteps; track step; let i = $index) {
+                    @if (i <= thinkingIndex) {
+                        <li [class.is-active]="i === thinkingIndex">{{ step | transloco }}</li>
+                    }
+                }
+            </ol>
+        </div>
+    }
+</ngx-spinner>
