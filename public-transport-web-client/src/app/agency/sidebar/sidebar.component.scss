@@ -1,6 +1,7 @@
 .agency-shell.p-sidebar-layout {
-  min-height: 0;
-  height: 100%;
+  align-self: flex-start;
+  min-height: 100%;
+  height: auto;
 }
 
 .demo1.agency-sidebar-push.sidebar-fixed.header-fixed .header {
