@@ -79,6 +79,21 @@
         "save": "Save and add the trip"
       },
       "direction": "from {{from}} to {{to}}",
+      "optimize": {
+        "action": "Optimize",
+        "running": "Thinking…",
+        "title": "Optimizing the assignment",
+        "hint": "Rebuilding the trips and cutting empty runs.",
+        "steps": {
+          "trips": "Reading trips and travel times",
+          "deadhead": "Looking for empty runs between trips",
+          "cycles": "Arranging vehicle cycles",
+          "breaks": "Balancing breaks in the shift",
+          "check": "Checking whether the plan can still be shorter",
+          "found": "Found the optimal timetable",
+          "update": "Updating the schedule"
+        }
+      },
       "loadMoreRoutes": {
         "link": "Load more lines",
         "label": "Line number and name",

@@ -85,6 +85,21 @@
         "save": "Zapisz i dodaj kurs do trasy"
       },
       "direction": "z {{from}} do {{to}}",
+      "optimize": {
+        "action": "Optymalizuj",
+        "running": "Myślę…",
+        "title": "Optymalizuję przydział",
+        "hint": "Układam kursy od nowa i skracam puste przebiegi.",
+        "steps": {
+          "trips": "Czytam kursy i czasy przejazdu",
+          "deadhead": "Szukam pustych przebiegów między kursami",
+          "cycles": "Układam obiegi w brygadach",
+          "breaks": "Wyrównuję przerwy w zmianie",
+          "check": "Sprawdzam, czy plan da się jeszcze skrócić",
+          "found": "Znalazłem optymalny rozkład jazdy",
+          "update": "Aktualizuję harmonogram"
+        }
+      },
       "loadMoreRoutes": {
         "link": "Załaduj więcej linii",
         "label": "Numer i nazwa linii",
