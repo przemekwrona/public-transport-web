@@ -9,7 +9,6 @@ import {TranslocoPipe, TranslocoService} from "@jsverse/transloco";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LoginService} from "../../../auth/login.service";
 import {GoogleAnalyticsService} from "../../../google-analytics.service";
-import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 import {NotificationService} from "../../../shared/notification.service";
 import {ImageCroppedEvent} from "ngx-image-cropper";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
@@ -24,6 +23,7 @@ import {InputGroup} from "primeng/inputgroup";
 import {InputGroupAddon} from "primeng/inputgroupaddon";
 import {InputText} from "primeng/inputtext";
 import {Message} from "primeng/message";
+import {AgencyAddressComponent} from "../agency-address/agency-address.component";
 
 @Component({
     selector: 'app-profile',
@@ -32,7 +32,6 @@ import {Message} from "primeng/message";
     imports: [
         ReactiveFormsModule,
         TranslocoPipe,
-        NgxMaskDirective,
         ButtonDirective,
         Fluid,
         InputGroup,
@@ -40,17 +39,19 @@ import {Message} from "primeng/message";
         InputText,
         Message,
         Camera,
-        ExternalLink
+        ExternalLink,
+        AgencyAddressComponent
     ],
     changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
-        AgencyService,
-        provideNgxMask()
+        AgencyService
     ]
 })
 export class ProfileDetailsComponent implements OnInit {
 
     public modelForm: FormGroup;
+
+    public agencyAddress: AgencyAddress | null = null;
 
     public isSubmitted: boolean = false;
     public isAgencyDetailsSaving = false;
@@ -59,11 +60,6 @@ export class ProfileDetailsComponent implements OnInit {
     constructor(private agencyService: AgencyService, private router: Router, private route: ActivatedRoute, private authService: LoginService, private agencyStorageService: AgencyStorageService, private googleAnalyticsService: GoogleAnalyticsService, private notificationService: NotificationService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer, private dialog: MatDialog, private transloco: TranslocoService) {
         this.modelForm = this.formBuilder.group({
             agencyName: ['', [Validators.required, Validators.minLength(3)]],
-            street: ['', Validators.required],
-            houseNumber: ['', Validators.required],
-            flatNumber: ['', Validators.maxLength(5)],
-            postalCode: ['', Validators.required],
-            postalCity: ['', Validators.required],
             agencyUrl: [''],
             agencyTimetableUrl: ['']
         });
@@ -73,11 +69,7 @@ export class ProfileDetailsComponent implements OnInit {
         this.route.data.subscribe(data => {
             const agencyDetails: AgencyDetails = data['agencyDetails'];
             this.modelForm.controls['agencyName'].setValue(agencyDetails.agencyName);
-            this.modelForm.controls['street'].setValue(agencyDetails.agencyAddress.street);
-            this.modelForm.controls['houseNumber'].setValue(agencyDetails.agencyAddress.houseNumber);
-            this.modelForm.controls['flatNumber'].setValue(agencyDetails.agencyAddress.flatNumber);
-            this.modelForm.controls['postalCode'].setValue(agencyDetails.agencyAddress.postalCode);
-            this.modelForm.controls['postalCity'].setValue(agencyDetails.agencyAddress.postalCity);
+            this.agencyAddress = agencyDetails.agencyAddress ?? null;
             this.modelForm.controls['agencyUrl'].setValue(agencyDetails.agencyUrl);
             this.modelForm.controls['agencyTimetableUrl'].setValue(agencyDetails.agencyTimetableUrl);
         });
@@ -97,14 +89,6 @@ export class ProfileDetailsComponent implements OnInit {
                 this.isAgencyDetailsSaving = true;
                 const agencyDetails: AgencyDetails = {} as AgencyDetails;
                 agencyDetails.agencyName = this.modelForm.controls['agencyName'].value;
-
-                agencyDetails.agencyAddress = {} as AgencyAddress;
-                agencyDetails.agencyAddress.street = this.modelForm.controls['street'].value;
-                agencyDetails.agencyAddress.houseNumber = this.modelForm.controls['houseNumber'].value;
-                agencyDetails.agencyAddress.flatNumber = this.modelForm.controls['flatNumber'].value;
-                agencyDetails.agencyAddress.postalCode = this.modelForm.controls['postalCode'].value;
-                agencyDetails.agencyAddress.postalCity = this.modelForm.controls['postalCity'].value;
-
                 agencyDetails.agencyUrl = this.modelForm.controls['agencyUrl'].value;
                 agencyDetails.agencyTimetableUrl = this.modelForm.controls['agencyTimetableUrl'].value;
 
