@@ -884,7 +884,7 @@ paths:
     put:
       tags:
         - trip
-      summary: Update trip's stops list and headsign
+      summary: Update trip variant and headsign
       operationId: updateTrip
       parameters:
         - in: path
@@ -939,6 +939,78 @@ paths:
       responses:
         204:
           description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /agency/{agency}/routes/{routeCode}/trips/{tripCode}/profile:
+    put:
+      tags:
+        - trip-profile
+      summary: Update trip profile, communication speed, distance and stop list
+      operationId: updateTripProfile
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: tripCode
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTripProfileRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /agency/{agency}/routes/{routeCode}/trips/{tripCode}/profiles:
+    put:
+      tags:
+        - trip-profile
+      summary: Replace the trip profile list for a route and trip
+      operationId: updateTripProfiles
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: tripCode
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTripProfileRequest'
+      responses:
+        200:
+          description: OK
           content:
             application/json:
               schema:
@@ -1819,6 +1891,19 @@ components:
       properties:
         body:
           $ref: '#/components/schemas/TripsDetails'
+
+    UpdateTripProfileRequest:
+      type: object
+      description: Route profile edited on the trip editor. Communication speed, distance and the stop list.
+      properties:
+        tripProfiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TripProfile'
+        geometry:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point2D'
 
     GetAllTripsResponse:
       type: object

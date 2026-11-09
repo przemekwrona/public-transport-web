@@ -3,6 +3,7 @@ package pl.wrona.webserver.bussiness.brigade.event;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.Hex;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEventQueryRepository;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
@@ -43,6 +44,10 @@ public class BrigadeEventQueryService {
 
     public BrigadeEventEntity findByBrigadeGroupAndEventCode(BrigadeGroupEntity brigadeGroup, String eventCode) {
         return brigadeEventQueryRepository.findByBrigadeGroupAndEventCode(brigadeGroup, Hex.fromHex(eventCode));
+    }
+
+    public boolean existsByTripProfile(TripProfileEntity tripProfile) {
+        return tripProfile != null && brigadeEventQueryRepository.existsByTripProfile(tripProfile);
     }
 
     public List<BrigadeEventEntity> findAllByTripIds(Collection<Long> tripIds) {

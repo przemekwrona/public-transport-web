@@ -269,7 +269,10 @@
       "edit": {
         "mainVariant": "Wariant podstawowy",
         "FRONT": "TAM",
-        "BACK": "POWRÓT"
+        "BACK": "POWRÓT",
+        "saveDetails": "Zapisz szczegóły",
+        "saveStops": "Zapisz listę przystanków",
+        "saveAll": "Zapisz wszystko"
       }
     }
   }

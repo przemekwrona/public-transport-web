@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pl.wrona.webserver.core.agency.TripProfileEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -74,5 +75,7 @@ public interface BrigadeEventQueryRepository extends JpaRepository<BrigadeEventE
             WHERE t.tripId IN :tripIds
             ORDER BY e.startSecond ASC""")
     List<BrigadeEventEntity> findAllByTripIdInOrderByStartSecondAsc(@Param("tripIds") Collection<Long> tripIds);
+
+    boolean existsByTripProfile(TripProfileEntity tripProfile);
 
 }

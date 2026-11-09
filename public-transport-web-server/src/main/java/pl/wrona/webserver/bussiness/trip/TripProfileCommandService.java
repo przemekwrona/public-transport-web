@@ -16,4 +16,8 @@ public class TripProfileCommandService {
         return tripProfileCommandRepository.save(entity);
     }
 
+    public void delete(TripProfileEntity entity) {
+        tripProfileCommandRepository.delete(entity);
+    }
+
 }
