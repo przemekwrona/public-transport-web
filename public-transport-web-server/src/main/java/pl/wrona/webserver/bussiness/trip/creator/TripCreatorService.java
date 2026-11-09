@@ -77,7 +77,7 @@ public class TripCreatorService {
             TripProfileEntity tripProfileEntity = new TripProfileEntity();
             tripProfileEntity.setTrip(savedTrip);
             tripProfileEntity.setTrafficMode(TripTrafficModeMapper.map(tripProfile.getTrafficMode()));
-            tripProfileEntity.setTravelTimeInSeconds(0);
+            tripProfileEntity.setTravelTimeInSeconds(travelTimeInSeconds(tripProfile));
             tripProfileEntity.setCalculatedCommunicationVelocity(tripProfile.getCustomizedCommunicationVelocity());
             tripProfileEntity.setCustomizedCommunicationVelocity(tripProfile.getCustomizedCommunicationVelocity());
             tripProfileEntity.setDefaultProfile(tripProfile.getIsDefault());
@@ -112,6 +112,14 @@ public class TripCreatorService {
 
         return new Status()
                 .status(Status.StatusEnum.CREATED);
+    }
+
+    private static int travelTimeInSeconds(TripProfile tripProfile) {
+        if (tripProfile.getStops() == null || tripProfile.getStops().isEmpty()) {
+            return 0;
+        }
+        Integer seconds = tripProfile.getStops().get(tripProfile.getStops().size() - 1).getCalculatedSeconds();
+        return seconds == null ? 0 : seconds;
     }
 
 }

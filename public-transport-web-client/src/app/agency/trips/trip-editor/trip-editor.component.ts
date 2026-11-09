@@ -23,7 +23,7 @@ import {
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {debounceTime, map, Observable, pairwise, startWith, Subject, switchMap} from "rxjs";
+import {debounceTime, forkJoin, map, Observable, of, pairwise, startWith, Subject, switchMap, tap} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {ViewportScroller} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
@@ -854,25 +854,29 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public measureDistance(): Observable<TripMeasure> {
         const primaryProfile = this.getActiveProfile();
-        const refreshedStops: Observable<TripMeasure> = this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(primaryProfile));
-        refreshedStops.subscribe(response => {
-            this.applyMeasureResponseToCurrentStops(response, primaryProfile);
-
-            this.drawPolyline(response.geometry);
-            this.geometry = response.geometry;
-        });
-
-        for (const profile of this.profiles.controls) {
-            if (profile === primaryProfile || this.getStops(profile).length <= 1) {
-                continue;
-            }
-
-            this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(profile)).subscribe(response => {
-                this.applyMeasureResponseToCurrentStops(response, profile);
-            });
+        const profiles = this.profiles.controls.filter(profile =>
+            profile === primaryProfile || this.getStops(profile).length > 1
+        );
+        if (profiles.length === 0) {
+            return of({} as TripMeasure);
         }
 
-        return refreshedStops;
+        return forkJoin(profiles.map(profile =>
+            this.tripDistanceMeasuresService.measureDistance(this.buildTripsMeasureRequest(profile)).pipe(
+                tap(response => {
+                    this.applyMeasureResponseToCurrentStops(response, profile);
+                    if (profile === primaryProfile) {
+                        this.drawPolyline(response.geometry);
+                        this.geometry = response.geometry;
+                    }
+                })
+            )
+        )).pipe(
+            map(responses => {
+                const primaryIndex = profiles.indexOf(primaryProfile);
+                return responses[primaryIndex >= 0 ? primaryIndex : 0];
+            })
+        );
     }
 
     public getLastStop(profile: FormGroup): FormGroup | null {
@@ -942,8 +946,12 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         });
     }
 
+    public refreshDistance(): void {
+        this.measureDistance().subscribe();
+    }
+
     public refreshMap(): void {
-        this.measureDistance();
+        this.refreshDistance();
         this.isRefreshingExpanded = false;
         this.isRefreshExpanded = true;
     }
