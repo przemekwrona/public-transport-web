@@ -3,6 +3,7 @@ package pl.wrona.webserver.core.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
+import org.igeolab.iot.pt.server.api.model.Point2D;
 import org.igeolab.iot.pt.server.api.model.ProfileShortcut;
 import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Trip;
@@ -36,16 +37,22 @@ public class TripMapper {
         }
 
         tripEntity.setHeadsign(tripsDetails.getHeadsign());
+        applyGeometry(tripEntity, tripsDetails.getGeometry());
+        return tripEntity;
+    }
 
+    public void applyGeometry(TripEntity tripEntity, List<Point2D> points) {
+        if (points == null) {
+            return;
+        }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<List<Float>> geometry = tripsDetails.getGeometry().stream()
+            List<List<Float>> geometry = points.stream()
                     .map(point -> List.of(point.getLat(), point.getLon()))
                     .toList();
             applyGeometry(tripEntity, objectMapper.writeValueAsString(geometry));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
-        return tripEntity;
     }
 
     private void applyGeometry(TripEntity tripEntity, String geometry) {

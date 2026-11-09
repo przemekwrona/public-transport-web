@@ -14,14 +14,16 @@ import {
     TripId,
     TripMeasure,
     TripMode, TripProfile,
+    TripProfileService,
     TripsDetails,
     TripService,
-    UpdateTripDetailsRequest
+    UpdateTripDetailsRequest,
+    UpdateTripProfileRequest
 } from "../../../generated/public-transport-api";
 import {ActivatedRoute, Data, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {debounceTime, map, Observable, pairwise, startWith, Subject} from "rxjs";
+import {debounceTime, map, Observable, pairwise, startWith, Subject, switchMap} from "rxjs";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {ViewportScroller} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
@@ -111,6 +113,9 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
 
     public modelForm: FormGroup;
     public isSubmited: boolean = false;
+    public isSaving: boolean = false;
+    private submitScope: 'details' | 'stops' | 'all' = 'all';
+    private readonly detailControlNames = ['isMainVariant', 'tripVariantMode', 'variantDesignation', 'variantDescription', 'headsign'];
     private isShiftingFollowingStopTimes = false;
 
     public tripDetails: TripsDetails = {} as TripsDetails;
@@ -151,7 +156,7 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return index >= 0 ? index : 0;
     }
 
-    constructor(private agencyStopsService: AgencyStopsService, private tripService: TripService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
+    constructor(private agencyStopsService: AgencyStopsService, private tripService: TripService, private tripProfileService: TripProfileService, private tripDistanceMeasuresService: TripDistanceMeasuresService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private _viewportScroller: ViewportScroller, private dialog: MatDialog, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator) {
     }
 
     ngOnInit(): void {
@@ -552,15 +557,22 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return tripMeasure;
     }
 
+    public get isEdit(): boolean {
+        return this.tripEditorComponentMode === TripEditorComponentMode.EDIT;
+    }
+
     get formValidationErrors(): AllValidationErrors[] {
         if (!this.modelForm) {
             return [];
         }
         const errors = FormUtils.getFormValidationErrors(this.modelForm);
+        const scoped = this.submitScope === 'all'
+            ? errors
+            : errors.filter(error => this.submitScope === 'details' ? this.isDetailError(error) : this.isStopError(error));
         if (this.isSubmited) {
-            return errors;
+            return scoped;
         }
-        return errors.filter(error => error.errorName === 'variantExists');
+        return scoped.filter(error => error.errorName === 'variantExists');
     }
 
     public getFormErrorMessage(error: AllValidationErrors): string {
@@ -619,52 +631,120 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         return labels[fieldName] || controlName;
     }
 
-    public clickCreateOrEdit(): void {
-        this.isSubmited = true;
-        if (this.modelForm.pending) {
-            this.notificationService.showError('Sprawdzanie czy kurs już istnieje');
+    public saveDetails(): void {
+        if (!this.beginSave('details')) {
             return;
         }
-        if (this.modelForm.invalid) {
-            this.notificationService.showError('Formularz jest niepoprawny uzupełnij braki');
-            this.scrollToFirstError();
-            return
+
+        const agency = this.agencyStorageService.getInstance();
+        this.tripService.updateTrip(agency, this.routeCode, this.tripCode, this.buildTripMetadataRequest()).subscribe({
+            next: () => {
+                this.isSaving = false;
+                this.notificationService.showSuccess(`Szczegóły linii ${this.routeLineAndName()} zostały zapisane`);
+            },
+            error: (response: HttpErrorResponse) => this.showHttpError(response)
+        });
+    }
+
+    public saveStopList(): void {
+        if (!this.beginSave('stops')) {
+            return;
         }
 
-        this.measureDistance().subscribe(success => {
-            this.forceRefreshSubject.next(false);
-            const tripDetailsRequest: UpdateTripDetailsRequest = this.buildCreateOrUpdateTripRequest();
-
-            if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
-                this.tripService.createTrip(this.agencyStorageService.getInstance(), this.$tripVariants.route.routeId.routeCode, tripDetailsRequest).subscribe({
+        this.measureDistance().subscribe({
+            next: () => {
+                this.forceRefreshSubject.next(false);
+                const agency = this.agencyStorageService.getInstance();
+                this.tripProfileService.updateTripProfiles(agency, this.routeCode, this.tripCode, this.buildTripProfileRequest()).subscribe({
                     next: () => {
-                        this.notificationService.showSuccess(`Linia ${this.routeLineAndName()} została utworzona`);
-                        this.router.navigate(['/agency/routes', this.routeCode, 'trips', 'variants'], { replaceUrl: true }).then(() => {
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        });
-                   
+                        this.isSaving = false;
+                        this.notificationService.showSuccess('Lista przystanków została zapisana');
                     },
-                    error: (response: HttpErrorResponse) => {
-                        const payload: ErrorResponse = response.error;
-                        this.notificationService.showError(payload?.message || payload?.errorCode);
-                    }
+                    error: (response: HttpErrorResponse) => this.showHttpError(response)
                 });
-            } else if (this.tripEditorComponentMode == TripEditorComponentMode.EDIT) {
-                this.tripService.updateTrip(this.agencyStorageService.getInstance(), this.routeCode, this.tripCode, tripDetailsRequest).subscribe({
+            },
+            error: (response: HttpErrorResponse) => this.showHttpError(response)
+        });
+    }
+
+    public saveEverything(): void {
+        if (!this.beginSave('all')) {
+            return;
+        }
+
+        this.measureDistance().subscribe({
+            next: () => {
+                this.forceRefreshSubject.next(false);
+
+                if (this.tripEditorComponentMode == TripEditorComponentMode.CREATE) {
+                    const tripDetailsRequest: UpdateTripDetailsRequest = this.buildCreateOrUpdateTripRequest();
+                    this.tripService.createTrip(this.agencyStorageService.getInstance(), this.$tripVariants.route.routeId.routeCode, tripDetailsRequest).subscribe({
+                        next: () => {
+                            this.isSaving = false;
+                            this.notificationService.showSuccess(`Linia ${this.routeLineAndName()} została utworzona`);
+                            this.router.navigate(['/agency/routes', this.routeCode, 'trips', 'variants'], { replaceUrl: true }).then(() => {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            });
+                        },
+                        error: (response: HttpErrorResponse) => this.showHttpError(response)
+                    });
+                    return;
+                }
+
+                const agency = this.agencyStorageService.getInstance();
+                this.tripService.updateTrip(agency, this.routeCode, this.tripCode, this.buildTripMetadataRequest()).pipe(
+                    switchMap(() => this.tripProfileService.updateTripProfiles(agency, this.routeCode, this.tripCode, this.buildTripProfileRequest()))
+                ).subscribe({
                     next: () => {
+                        this.isSaving = false;
                         this.notificationService.showSuccess(`Linia ${this.routeLineAndName()} została zaktualizowana`);
                         this.router.navigate(['/agency/routes', this.routeCode, 'trips', 'variants'], {}).then(() => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                         });
-                   
                     },
-                    error: (response: HttpErrorResponse) => {
-                        const payload: ErrorResponse = response.error;
-                        this.notificationService.showError(payload?.message || payload?.errorCode);
-                    }
+                    error: (response: HttpErrorResponse) => this.showHttpError(response)
                 });
-            }
+            },
+            error: (response: HttpErrorResponse) => this.showHttpError(response)
         });
+    }
+
+    private beginSave(scope: 'details' | 'stops' | 'all'): boolean {
+        this.submitScope = scope;
+        this.isSubmited = true;
+        if (this.modelForm.pending) {
+            this.notificationService.showError('Sprawdzanie czy kurs już istnieje');
+            return false;
+        }
+        if ((scope === 'details' && this.detailsInvalid()) || (scope === 'stops' && this.stopsInvalid()) || (scope === 'all' && this.modelForm.invalid)) {
+            this.notificationService.showError('Formularz jest niepoprawny uzupełnij braki');
+            this.scrollToFirstError();
+            return false;
+        }
+        this.isSaving = true;
+        return true;
+    }
+
+    private detailsInvalid(): boolean {
+        return this.detailControlNames.some(name => this.modelForm.get(name)?.invalid) || !!this.modelForm.errors?.['variantExists'];
+    }
+
+    private stopsInvalid(): boolean {
+        return this.profiles.invalid;
+    }
+
+    private isDetailError(error: AllValidationErrors): boolean {
+        return error.controlName === 'form' || this.detailControlNames.includes(error.controlName);
+    }
+
+    private isStopError(error: AllValidationErrors): boolean {
+        return error.controlName === 'profiles' || error.controlName.startsWith('profiles');
+    }
+
+    private showHttpError(response: HttpErrorResponse): void {
+        this.isSaving = false;
+        const payload: ErrorResponse = response.error;
+        this.notificationService.showError(payload?.message || payload?.errorCode);
     }
 
     private buildCreateOrUpdateTripRequest() {
@@ -690,8 +770,27 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
         tripDetailsRequest.body.variantDescription = this.modelForm.controls['variantDescription'].value
 
         tripDetailsRequest.body.headsign = this.modelForm.controls['headsign'].value
+        tripDetailsRequest.body.tripProfiles = this.buildTripProfiles();
+        tripDetailsRequest.body.geometry = this.geometry;
+        return tripDetailsRequest;
+    }
 
-        tripDetailsRequest.body.tripProfiles = this.profiles.controls.map((profileFormGroup: FormGroup): TripProfile => {
+    private buildTripMetadataRequest(): UpdateTripDetailsRequest {
+        const tripDetailsRequest = this.buildCreateOrUpdateTripRequest();
+        tripDetailsRequest.body.tripProfiles = undefined;
+        tripDetailsRequest.body.geometry = undefined;
+        return tripDetailsRequest;
+    }
+
+    private buildTripProfileRequest(): UpdateTripProfileRequest {
+        return {
+            tripProfiles: this.buildTripProfiles(),
+            geometry: this.geometry
+        };
+    }
+
+    private buildTripProfiles(): TripProfile[] {
+        return this.profiles.controls.map((profileFormGroup: FormGroup): TripProfile => {
             const profile: TripProfile = {};
             profile.trafficMode = profileFormGroup.controls['trafficMode'].value;
             profile.travelTimeInSeconds = profileFormGroup.controls['travelTimeInSeconds'].value;
@@ -717,9 +816,6 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             });
             return profile;
         });
-
-        tripDetailsRequest.body.geometry = this.geometry;
-        return tripDetailsRequest;
     }
 
     public drawPolyline(geometry: Point2D[]) {
@@ -962,7 +1058,21 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
     public validControl(controlName: string, group: FormGroup = this.modelForm): ValidationErrors | null {
-        return this.isSubmited && group?.controls[controlName]?.errors;
+        if (!this.isSubmited || !this.errorApplies(controlName, group)) {
+            return null;
+        }
+        return group?.controls[controlName]?.errors ?? null;
+    }
+
+    private errorApplies(controlName: string, group: FormGroup): boolean {
+        const onProfile = group !== this.modelForm || controlName === 'profiles';
+        if (this.submitScope === 'stops') {
+            return onProfile;
+        }
+        if (this.submitScope === 'details') {
+            return !onProfile;
+        }
+        return true;
     }
 
     public checkControlHasError(controlName: string, errorName: string, group: FormGroup = this.modelForm): boolean {

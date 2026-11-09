@@ -20,7 +20,7 @@
 <!-- Container -->
 <div class="container-fixed">
     <!-- begin: grid -->
-    <form [formGroup]="modelForm" (ngSubmit)="clickCreateOrEdit()">
+    <form [formGroup]="modelForm">
         @if (formValidationErrors.length > 0) {
             <div id="form-errors" class="mb-5 p-4 border border-danger rounded-xl">
                 <div class="text-sm font-medium text-danger mb-2">Formularz jest niepoprawny - uzupełnij braki:</div>
@@ -419,9 +419,17 @@
                     </div>
 
                     <div class="card-body pr-2">
-                        <div class="flex justify-end gap-2">
-                            <button type="submit" class="btn btn-success">
-                                Odśwież Trasę, Zapisz Przystanki i Wróć do Listy Wariantów
+                        <div class="flex flex-wrap justify-end gap-2">
+                            @if (isEdit) {
+                                <button type="button" class="btn btn-secondary" [disabled]="isSaving" (click)="saveDetails()">
+                                    {{ 'agency.trip.edit.saveDetails' | transloco }}
+                                </button>
+                                <button type="button" class="btn btn-secondary" [disabled]="isSaving" (click)="saveStopList()">
+                                    {{ 'agency.trip.edit.saveStops' | transloco }}
+                                </button>
+                            }
+                            <button type="button" class="btn btn-success" [disabled]="isSaving" (click)="saveEverything()">
+                                {{ 'agency.trip.edit.saveAll' | transloco }}
                             </button>
                         </div>
                     </div>

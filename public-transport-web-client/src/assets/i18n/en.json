@@ -123,6 +123,9 @@
   "common.attention": "Missing value for 'common.attention'",
   "agency.trip.edit.FRONT": "Missing value for 'agency.trip.edit.FRONT'",
   "agency.trip.edit.BACK": "Missing value for 'agency.trip.edit.BACK'",
+  "agency.trip.edit.saveDetails": "Save details",
+  "agency.trip.edit.saveStops": "Save stop list",
+  "agency.trip.edit.saveAll": "Save everything",
   "agency.trip.timetable.FRONT": "FRONT",
   "agency.trip.timetable.BACK": "BACK",
   "agency": {
