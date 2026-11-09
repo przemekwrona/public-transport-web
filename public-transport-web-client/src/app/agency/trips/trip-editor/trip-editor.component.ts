@@ -46,6 +46,7 @@ import {
 } from "@angular/forms";
 import {TripIdExistenceValidator} from "./trip-id-existence/trip-id-existence.service";
 import {AllValidationErrors, FormUtils} from "../../../shared/form.utils";
+import {stopInsertIndex} from "./stop-insert-index";
 
 @Component({
     selector: 'app-trip-editor',
@@ -298,6 +299,25 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
     }
 
 
+    private addStop(stop: Stop): void {
+        for (const profile of this.profiles.controls) {
+            const stopControl: FormGroup = this.createStop(stop);
+            this.subscribeToStopTimeChanges(profile, stopControl);
+            const stops = this.getStops(profile);
+            const insertAt = this.isEdit
+                ? stopInsertIndex(stops.controls.map(control => ({
+                    lat: control.controls['lat'].value,
+                    lon: control.controls['lon'].value
+                })), {lat: stop.lat, lon: stop.lon})
+                : stops.length;
+            if (insertAt < stops.length) {
+                stops.insert(insertAt, stopControl);
+            } else {
+                stops.push(stopControl);
+            }
+        }
+    }
+
     private createStop(stop: Stop): FormGroup {
         const stopControl: FormGroup = this.formBuilder.group({
             id: [stop.id],
@@ -469,18 +489,11 @@ export class TripEditorComponent implements OnInit, AfterViewInit {
             const bounds = map.getBounds();
             this.agencyStopsService.getAgencyStopsInArea(this.agencyStorageService.getInstance(), bounds.getNorth(), bounds.getWest(), bounds.getSouth(), bounds.getEast()).subscribe(response => {
                 const stopMarkers: Marker[] = response.stops?.map((stop: Stop) => L.marker([stop?.lat || 0.0, stop?.lon || 0.0], {icon: stop.isBdot10k ? this.BDOT10K_STOP : this.OTP_STOP})
-                    .on('click', (event: LeafletMouseEvent) => {
-                        for (const profile of this.profiles.controls) {
-                            const stopControl: FormGroup = this.createStop(stop);
-                            this.subscribeToStopTimeChanges(profile, stopControl);
-                            this.getStops(profile).push(stopControl);
-                        }
-
+                    .on('click', () => {
+                        this.addStop(stop);
                         this.forceRefreshIn10seconds();
                         this.approximateDistances();
-
                         this._viewportScroller.scrollToAnchor('map');
-
                     })
                     .on('mouseover', (event: LeafletMouseEvent) => {
                         this.popup = L.popup({closeButton: false})
