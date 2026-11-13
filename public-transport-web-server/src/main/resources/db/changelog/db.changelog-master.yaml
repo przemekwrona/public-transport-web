@@ -107,3 +107,6 @@ databaseChangeLog:
       file: 027_trip_geometry.yaml
       relativeToChangelogFile: true
 
+  - include:
+      file: 028_subdivision.yaml
+      relativeToChangelogFile: true
