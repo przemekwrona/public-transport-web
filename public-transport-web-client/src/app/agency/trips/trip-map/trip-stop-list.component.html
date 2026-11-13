@@ -1,0 +1,75 @@
+<div [formGroup]="profile" class="flex flex-col gap-3">
+    <div class="flex justify-end">
+        <button type="button" pButton size="small" severity="secondary" variant="outlined"
+                (click)="refreshDistance()">
+            <svg data-p-icon="refresh"></svg>
+            <span>{{ 'agency.trip.map.refresh' | transloco }}</span>
+        </button>
+    </div>
+
+    <div [class.hidden]="!isRefreshingExpanded">
+        <p-message severity="warn" size="small" class="w-full [&_p]:m-0">
+            <app-count-down [initialSeconds]="10" [forceRefresh]="store.forceRefresh$"
+                            (onTime)="refreshMap()"></app-count-down>
+        </p-message>
+    </div>
+
+    @if (isRefreshExpanded) {
+        <p-message severity="success" size="small" class="w-full">
+            {{ 'agency.trip.map.updated' | transloco }}
+        </p-message>
+    }
+
+    @if (showStopCountError) {
+        <p-message severity="error" size="small" class="w-full">
+            {{ 'agency.trip.map.minStops' | transloco }}
+        </p-message>
+    }
+
+    @if (getStops(profile).length === 0) {
+        <p-message severity="info" size="small" class="w-full">
+            {{ 'agency.trip.map.empty' | transloco }}
+        </p-message>
+    }
+
+    <div cdkDropList class="stop-list" (cdkDropListDropped)="drop($event)" formArrayName="stops">
+        @for (stopTime of getStops(profile).controls; track stopTime; let stopIndex = $index) {
+            <div class="stop-row" cdkDrag [formGroupName]="stopIndex">
+                <button type="button" cdkDragHandle class="stop-handle"
+                        [attr.aria-label]="'agency.trip.map.reorder' | transloco">
+                    <svg data-p-icon="bars" aria-hidden="true"></svg>
+                </button>
+                <p-tag [value]="(stopIndex + 1).toString()"
+                       [severity]="stopTime.controls['bdot10k'].value ? 'info' : 'secondary'">
+                </p-tag>
+                <div class="min-w-0 flex-1">
+                    <div class="truncate text-sm text-gray-900">{{ stopTime.controls["name"].value }}</div>
+                    <div class="text-sm text-gray-600">
+                        {{ stopTime.controls["meters"].value | distance | number: '1.1-1' }} km
+                        · {{ stopTime.controls["calculatedSeconds"].value | time | number: '1.0-0' }} min
+                    </div>
+                </div>
+                @if (isCustomized(profile)) {
+                    <p-inputnumber [inputId]="'stop-minutes-' + stopIndex"
+                                   formControlName="customizedMinutes"
+                                   size="small"
+                                   [min]="0"
+                                   suffix=" min"
+                                   [inputStyle]="{width: '4.75rem'}"
+                                   [ariaLabel]="'agency.trip.map.minutesFor' | transloco: {name: stopTime.controls['name'].value}">
+                    </p-inputnumber>
+                }
+                <button type="button" pButton severity="secondary" variant="text" iconOnly size="small"
+                        [attr.aria-label]="'agency.trip.map.editName' | transloco"
+                        (click)="openDialogEditStop(stopTime)">
+                    <svg data-p-icon="pencil"></svg>
+                </button>
+                <button type="button" pButton severity="danger" variant="text" iconOnly size="small"
+                        [attr.aria-label]="'agency.trip.map.remove' | transloco"
+                        (click)="remove(stopIndex)">
+                    <svg data-p-icon="trash"></svg>
+                </button>
+            </div>
+        }
+    </div>
+</div>

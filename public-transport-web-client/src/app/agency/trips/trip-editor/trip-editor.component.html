@@ -11,6 +11,11 @@
             </div>
         </div>
         <div class="flex items-center gap-2.5">
+            @if (isEdit && tripCode) {
+                <a pButton severity="secondary" [routerLink]="['/agency/routes', routeCode, 'trips', tripCode, 'map']">
+                    {{ 'agency.trip.edit.editOnMap' | transloco }}
+                </a>
+            }
             <a mat-stroked-button [routerLink]="['/agency/routes/', tripDetails.tripId.routeId.routeCode, 'trips', 'variants']">Wróć do lini</a>
         </div>
     </div>
@@ -310,84 +315,8 @@
                                     <div class="border-t border-gray-200 my-0"></div>
 
                                     <!--<div class="card-body">-->
-                                    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-                                        <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
-                                              class="badge badge-sm badge-outline badge-danger w-full">
-                                            <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"
-                                                            (onTime)="refreshMap()"></app-count-down>
-                                        </span>
-
-                                        <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
-                                              class="badge badge-sm badge-outline badge-success w-full">
-                                            Trasa, czas przjazdu i dystans są zaktualizowane.
-                                        </span>
-                                        <div class="px-3">
-                                            @if (checkControlHasError("profiles", "required") || checkControlHasError("profiles", "minlength")) {
-                                                <span class="text-danger text-2sm">Musisz dodać co najmniej 2 przystanki na trasie.</span>
-                                            }
-                                        </div>
-
-                                        <div formArrayName="stops">
-                                            @for (stopTime of getStops(profile).controls; track stopTime; let stopIndex = $index) {
-                                                <div class="example-box" cdkDrag [formGroupName]="stopIndex">
-                                                    <span>
-                                                        <span [ngClass]="{'blue': stopTime.controls['bdot10k'].value, 'dark-blue': !stopTime.controls['bdot10k'].value}">{{ stopIndex + 1 }}</span>
-                                                        <span>{{ stopTime.controls["name"].value }} </span>
-                                                    </span>
-                                                    <span>
-                                                        <span>{{ $safeNavigationMigration(stopTime.controls["meters"]?.value) | distance | number: '1.1-1' }}
-                                                            km ({{ $safeNavigationMigration(stopTime.controls["calculatedSeconds"]?.value) | time | number: '1.0-0' }}
-                                                            min)</span>
-                                                        <span (click)="openDialogEditStop(stopTime)">
-                                                            <a class="btn btn-sm btn-icon btn-clear btn-primary">
-                                                                <i class="ki-filled ki-notepad-edit"></i>
-                                                            </a>
-                                                        </span>
-
-                                                        @if (isCustomized(profile)) {
-                                                            <div class="inline-block">
-                                                                <div class="input-group mx-1">
-                                                                    <input type="number"
-                                                                           id="customizedMinutes"
-                                                                           name="customizedMinutes"
-                                                                           formControlName="customizedMinutes"
-                                                                           class="input w-16 h-7.5"/>
-                                                                    <span class="btn btn-secondary h-7.5 px-1">min</span>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                        <span (click)="remove(stopIndex)">
-                                                            <a class="btn btn-sm btn-icon btn-clear btn-danger">
-                                                                <i class="ki-filled ki-cross-square"></i>
-                                                            </a>
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-
-                                    <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
-                                          class="badge badge-sm badge-outline badge-danger w-full">
-                                        <app-count-down [initialSeconds]="10"
-                                                        [forceRefresh]="forceRefresh$"></app-count-down>
-                                    </span>
-
-                                    <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
-                                          class="badge badge-sm badge-outline badge-success w-full">
-                                        Trasa, czas przjazdu i dystans są zaktualizowane.
-                                    </span>
-
-                                    <div class="card-body pr-2">
-                                        <div class="flex justify-end gap-2">
-                                            <button (click)="refreshDistance()" class="btn btn-secondary px-3">
-                                                <i class="ki-filled ki-arrows-circle"></i>
-                                            </button>
-                                            <!--                            <button (click)="addBrake()" class="btn btn-secondary pr-2">-->
-                                            <!--                                Dodaj postój na przystanku-->
-                                            <!--                            </button>-->
-                                        </div>
-                                    </div>
+                                    <app-trip-stop-list [profile]="profile"
+                                                        [showStopCountError]="checkControlHasError('profiles', 'required') || checkControlHasError('profiles', 'minlength')"></app-trip-stop-list>
                                 </div>
                             </mat-tab>
                         }
@@ -398,23 +327,10 @@
                             <h3 class="card-title">
                                 Mapa
                             </h3>
-                            <a (click)="zoomPolyline()" class="btn btn-link">Zoom</a>
+                            <a (click)="tripMap.zoom()" class="btn btn-link">Zoom</a>
                         </div>
-                        <span [@heightCollapse]="isRefreshingExpanded ? 'expanded' : 'collapsed'"
-                              class="badge badge-sm badge-outline badge-danger w-full">
-                                <app-count-down [initialSeconds]="10" [forceRefresh]="forceRefresh$"></app-count-down>
-                    </span>
-
-                        <span [@heightCollapse]="isRefreshExpanded ? 'expanded' : 'collapsed'"
-                              class="badge badge-sm badge-outline badge-success w-full">
-                                Trasa, czas przjazdu i dystans są zaktualizowane.
-                    </span>
-
-                        <!--<div style="display: grid" class="card-body p-5 lg:p-7.5 lg:pb-7">-->
                         <div style="display: grid">
-                            <div class="map-container">
-                                <div id="map"></div>
-                            </div>
+                            <app-trip-stops-map #tripMap></app-trip-stops-map>
                         </div>
                     </div>
 

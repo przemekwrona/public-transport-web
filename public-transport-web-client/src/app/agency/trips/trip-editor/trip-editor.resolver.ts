@@ -9,11 +9,12 @@ import {
 } from "../../../generated/public-transport-api";
 import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
+import {getRouteParam} from "../trip-list/trip-list.resolver";
 
 export const tripEditorResolver: ResolveFn<Observable<TripsDetails>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TripsDetails> => {
     const agencyStorageService: AgencyStorageService = inject(AgencyStorageService);
-    const routeCode: string = route.params['routeCode'];
-    const tripCode: string = route.params['tripCode'];
+    const routeCode: string = getRouteParam(route, 'routeCode') ?? '';
+    const tripCode: string = getRouteParam(route, 'tripCode') ?? '';
 
     const tripEditorComponentMode: TripEditorComponentMode = route.data['mode'];
     const tripMode: TripMode = (route.queryParams['tripMode'] as TripMode) ?? TripMode.Front;

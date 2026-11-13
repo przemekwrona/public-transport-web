@@ -1,0 +1,14 @@
+<div class="pointer-events-none absolute inset-x-3 top-14 z-[500] flex flex-col gap-2">
+    <div class="pointer-events-auto" [class.hidden]="!store.isRefreshingExpanded">
+        <p-message severity="warn" size="small" class="w-full [&_p]:m-0">
+            <app-count-down [initialSeconds]="10" [forceRefresh]="store.forceRefresh$"></app-count-down>
+        </p-message>
+    </div>
+    @if (store.isRefreshExpanded) {
+        <p-message severity="success" size="small" class="w-full">
+            {{ 'agency.trip.map.updated' | transloco }}
+        </p-message>
+    }
+</div>
+
+<div #mapHost id="map" class="trip-stops-map"></div>

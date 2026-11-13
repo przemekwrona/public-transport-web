@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.trip-map-page.p-sidebar-layout {
+  min-height: 0;
+  height: calc(100dvh - 6.5rem);
+}
+
+.trip-map-page .p-sidebar-main {
+  min-width: 0;
+  min-height: 0;
+}
+
+.trip-map-page .p-sidebar-main app-trip-stops-map {
+  flex: 1;
+  min-height: 0;
+}
+
+.trip-map-page .p-sidebar-content {
+  overflow: auto;
+}
+
+.trip-map-page .trip-map-switch {
+  --p-toggleswitch-width: 2.75rem;
+  --p-toggleswitch-height: 1.75rem;
+  --p-toggleswitch-handle-size: 1.125rem;
+}

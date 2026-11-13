@@ -1,0 +1,137 @@
+<p-sidebar-layout class="trip-map-page">
+    <p-sidebar id="trip-stops"
+               [(open)]="sidebarOpen"
+               collapsible="none"
+               width="36rem">
+        <p-sidebar-spacer/>
+        <p-sidebar-aside>
+            <p-sidebar-panel>
+                <p-sidebar-header>
+                    <div class="flex flex-col gap-1">
+                        @if (routeLabel) {
+                            <span class="text-base font-semibold text-gray-900">{{ routeLabel }}</span>
+                        }
+                        <span class="text-sm text-gray-600">{{ 'agency.trip.map.stops' | transloco }}</span>
+                    </div>
+                </p-sidebar-header>
+                <p-sidebar-content>
+                    <div class="flex flex-col gap-4 px-4">
+                        <fieldset class="m-0 flex flex-col gap-2 border-0 p-0">
+                            <legend class="text-sm font-semibold text-gray-900">
+                                {{ 'agency.trip.map.profile' | transloco }}
+                            </legend>
+                            <div class="flex flex-wrap gap-2">
+                                @for (mode of stops.trafficModes; track mode) {
+                                    @if (stops.hasProfileForTrafficMode(mode)) {
+                                        <button type="button" pButton size="small"
+                                                [severity]="stops.activeTrafficMode === mode ? 'primary' : 'secondary'"
+                                                [variant]="stops.activeTrafficMode === mode ? undefined : 'outlined'"
+                                                (click)="stops.selectProfileByTrafficMode(mode)">
+                                            {{ 'agency.trip.traffic.' + mode | transloco }}
+                                        </button>
+                                    } @else {
+                                        <button type="button" pButton size="small" severity="secondary" variant="outlined"
+                                                (click)="stops.addProfileForTrafficMode(mode)">
+                                            {{ 'agency.trip.map.addProfile' | transloco }}: {{ 'agency.trip.traffic.' + mode | transloco }}
+                                        </button>
+                                    }
+                                }
+                            </div>
+                        </fieldset>
+
+                        @if (activeProfile; as profile) {
+                            <form [formGroup]="profile" class="flex flex-col gap-4 rounded-xl bg-white">
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold text-gray-900" for="trip-map-velocity">
+                                        {{ 'agency.trip.map.velocity' | transloco }}
+                                    </label>
+                                    <p-inputnumber inputId="trip-map-velocity"
+                                                   formControlName="calculatedCommunicationVelocity"
+                                                   [min]="0"
+                                                   suffix=" km/h"
+                                                   [inputStyle]="{width: '11rem'}"
+                                                   [ariaLabel]="'agency.trip.map.velocity' | transloco">
+                                    </p-inputnumber>
+                                    @if (velocityError(profile, 'required')) {
+                                        <p-message severity="error" variant="simple" size="small">
+                                            {{ 'agency.trip.map.velocityRequired' | transloco }}
+                                        </p-message>
+                                    } @else if (velocityError(profile, 'min')) {
+                                        <p-message severity="error" variant="simple" size="small">
+                                            {{ 'agency.trip.map.velocityMin' | transloco: {value: profile.get('calculatedCommunicationVelocity')?.value} }}
+                                        </p-message>
+                                    } @else {
+                                        <small class="text-sm text-gray-600">{{ 'agency.trip.map.velocityHint' | transloco }}</small>
+                                    }
+                                </div>
+
+                                <dl class="m-0 grid grid-cols-2 gap-3">
+                                    <div class="flex flex-col gap-1">
+                                        <dt class="text-sm text-gray-600">{{ 'agency.trip.map.distanceLabel' | transloco }}</dt>
+                                        <dd class="m-0 text-sm font-semibold text-gray-900">
+                                            {{ lastStopValue(profile, 'meters') | distance | number:'1.1-1' }} km
+                                        </dd>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <dt class="text-sm text-gray-600">{{ 'agency.trip.map.travelTime' | transloco }}</dt>
+                                        <dd class="m-0 text-sm font-semibold text-gray-900">
+                                            {{ lastStopValue(profile, 'calculatedSeconds') | time | number:'1.0-0' }} min
+                                        </dd>
+                                    </div>
+                                </dl>
+
+                                <div class="flex items-start justify-between gap-4 border-t border-b border-gray-200 py-4">
+                                    <div class="flex min-w-0 flex-1 flex-col gap-1">
+                                        <label class="text-sm font-semibold text-gray-900" for="trip-map-customize">
+                                            {{ 'agency.trip.map.customize' | transloco }}
+                                        </label>
+                                        <small class="text-sm text-gray-600">{{ 'agency.trip.map.customizeHint' | transloco }}</small>
+                                    </div>
+                                    <p-toggleswitch class="trip-map-switch shrink-0"
+                                                    inputId="trip-map-customize"
+                                                    formControlName="isCustomized">
+                                    </p-toggleswitch>
+                                </div>
+
+                                @if (stops.isCustomized(profile)) {
+                                    <dl class="m-0 grid grid-cols-2 gap-3 border-b border-gray-200 pb-4">
+                                        <div class="flex flex-col gap-1">
+                                            <dt class="text-sm text-gray-600">{{ 'agency.trip.map.actualVelocity' | transloco }}</dt>
+                                            <dd class="m-0 text-sm font-semibold text-gray-900">
+                                                {{ stops.customizedCommunicationVelocity(profile) | number:'1.1-1' }} km/h
+                                            </dd>
+                                        </div>
+                                        <div class="flex flex-col gap-1">
+                                            <dt class="text-sm text-gray-600">{{ 'agency.trip.map.actualTravelTime' | transloco }}</dt>
+                                            <dd class="m-0 text-sm font-semibold text-gray-900">
+                                                {{ lastStopValue(profile, 'customizedMinutes') | number:'1.0-0' }} min
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                }
+                            </form>
+
+                            <app-trip-stop-list [profile]="profile"
+                                                [showStopCountError]="showStopErrors && stops.profiles.invalid"></app-trip-stop-list>
+                        }
+                    </div>
+                </p-sidebar-content>
+                <p-sidebar-footer>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <a pButton severity="secondary" variant="outlined"
+                           [routerLink]="['/agency/routes', routeCode, 'trips', tripCode, 'edit']">
+                            {{ 'agency.trip.map.back' | transloco }}
+                        </a>
+                        <button type="button" pButton severity="success" [disabled]="isSaving" [loading]="isSaving"
+                                (click)="saveStopList()">
+                            {{ 'agency.trip.edit.saveStops' | transloco }}
+                        </button>
+                    </div>
+                </p-sidebar-footer>
+            </p-sidebar-panel>
+        </p-sidebar-aside>
+    </p-sidebar>
+    <p-sidebar-main>
+        <app-trip-stops-map class="map-fill"></app-trip-stops-map>
+    </p-sidebar-main>
+</p-sidebar-layout>
