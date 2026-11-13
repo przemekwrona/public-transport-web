@@ -9,6 +9,7 @@ import {CreateRouteComponent} from "./agency/routes/create-route/create-route.co
 import {RoutesResolver} from "./agency/routes/routes.resolver";
 import {TripListComponent} from "./agency/trips/trip-list/trip-list.component";
 import {TripEditorComponent} from "./agency/trips/trip-editor/trip-editor.component";
+import {TripMapComponent} from "./agency/trips/trip-map/trip-map.component";
 import {GoogleMapsComponent} from "./agency/google-maps/google-maps.component";
 import {TripEditorComponentMode} from "./agency/trips/trip-editor/trip-editor-component-mode";
 import {tripsResolver} from "./agency/trips/trip-list/trip-list.resolver";
@@ -74,6 +75,7 @@ export const routes: Routes = [
                     {path: 'routes/:routeCode', resolve: { routeDetails: tripsResolver }, children: [
                         {path: 'trips/create', component: TripEditorComponent, resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.CREATE }},
                         {path: 'trips/:tripCode/edit', component: TripEditorComponent,  resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
+                        {path: 'trips/:tripCode/map', component: TripMapComponent, resolve: { trip: tripEditorResolver }, data: { mode: TripEditorComponentMode.EDIT }},
                         {path: 'trips', component: TripListComponent, children: tripListChildRoutes},
                     ]},
                     {path: 'timetables', component: TimetableListComponent, resolve: { timetables: generatedTimetablesResolver }},

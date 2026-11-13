@@ -1,6 +1,9 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TripEditorComponent} from "./trip-editor/trip-editor.component";
+import {TripMapComponent} from "./trip-map/trip-map.component";
+import {TripStopListComponent} from "./trip-map/trip-stop-list.component";
+import {TripStopsMapComponent} from "./trip-map/trip-stops-map.component";
 import {TripListComponent} from "./trip-list/trip-list.component";
 import {DistancePipe} from "./trip-editor/distance.pipe";
 import {TimePipe} from "./trip-editor/time.pipe";
@@ -12,7 +15,7 @@ import {
     DndModule,
     DndPlaceholderRefDirective
 } from "ngx-drag-drop";
-import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
+import {CdkDrag, CdkDragHandle, CdkDropList} from "@angular/cdk/drag-drop";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RouterModule} from "@angular/router";
@@ -26,6 +29,16 @@ import {MatInputModule} from "@angular/material/input";
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign.component";
+import {Bars} from "@primeicons/angular/bars";
+import {Pencil} from "@primeicons/angular/pencil";
+import {Refresh} from "@primeicons/angular/refresh";
+import {Trash} from "@primeicons/angular/trash";
+import {ButtonModule} from "primeng/button";
+import {InputNumberModule} from "primeng/inputnumber";
+import {MessageModule} from "primeng/message";
+import {SidebarModule} from "primeng/sidebar";
+import {TagModule} from "primeng/tag";
+import {ToggleSwitchModule} from "primeng/toggleswitch";
 
 @NgModule({
     imports: [
@@ -37,6 +50,7 @@ import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign
 
         CdkDropList,
         CdkDrag,
+        CdkDragHandle,
 
         DndDropzoneDirective,
         DndPlaceholderRefDirective,
@@ -56,10 +70,23 @@ import {TownRoadSignComponent} from "./trip-editor/town-road-sign/town-road-sign
         MatFormFieldModule,
         MatInputModule,
         MatTabsModule,
-        MatButtonModule
+        MatButtonModule,
+        Bars,
+        Pencil,
+        Refresh,
+        Trash,
+        ButtonModule,
+        InputNumberModule,
+        MessageModule,
+        SidebarModule,
+        TagModule,
+        ToggleSwitchModule
     ],
     declarations: [
         TripEditorComponent,
+        TripMapComponent,
+        TripStopListComponent,
+        TripStopsMapComponent,
         DistancePipe,
         TimePipe
     ],
