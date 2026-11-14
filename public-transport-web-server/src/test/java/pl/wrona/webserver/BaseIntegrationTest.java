@@ -48,6 +48,7 @@ public class BaseIntegrationTest {
         registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri", WireMockConfig::keycloakIssuer);
         registry.add("spring.security.oauth2.resourceserver.jwt.jwk-set-uri",
                 () -> WireMockConfig.keycloakIssuer() + "/protocol/openid-connect/certs");
+        registry.add("geoapify.client.url", WireMockConfig::geoapifyUrl);
     }
 
     @Autowired

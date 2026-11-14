@@ -34,24 +34,32 @@ public class WireMockConfig {
 
     static final WireMockServer KEYCLOAK = new WireMockServer(WireMockConfiguration.options().dynamicPort());
 
+    static final WireMockServer GEOAPIFY = new WireMockServer(WireMockConfiguration.options()
+            .dynamicPort()
+            .usingFilesUnderDirectory("src/test/resources/wiremock/geoapify-client")
+            .withRootDirectory("src/test/resources/wiremock/geoapify-client"));
+
     static {
         KEYCLOAK.start();
+        GEOAPIFY.start();
         stubKeycloak();
-        Runtime.getRuntime().addShutdownHook(new Thread(KEYCLOAK::stop));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            KEYCLOAK.stop();
+            GEOAPIFY.stop();
+        }));
     }
 
     static String keycloakIssuer() {
         return KEYCLOAK.baseUrl() + REALM;
     }
 
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    public WireMockServer mockGeoapifyClient() {
-        var wireMockConfiguration = new WireMockConfiguration()
-                .port(8085)
-                .usingFilesUnderDirectory("src/test/resources/wiremock/geoapify-client")
-                .withRootDirectory("src/test/resources/wiremock/geoapify-client");
+    static String geoapifyUrl() {
+        return GEOAPIFY.baseUrl();
+    }
 
-        return new WireMockServer(wireMockConfiguration);
+    @Bean(destroyMethod = "")
+    public WireMockServer mockGeoapifyClient() {
+        return GEOAPIFY;
     }
 
     private static void stubKeycloak() {
