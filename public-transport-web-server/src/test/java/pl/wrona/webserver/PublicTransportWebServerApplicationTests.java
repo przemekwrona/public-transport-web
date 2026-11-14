@@ -28,6 +28,7 @@ class PublicTransportWebServerApplicationTests {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("geoapify.client.url", WireMockConfig::geoapifyUrl);
     }
 
     @BeforeAll
