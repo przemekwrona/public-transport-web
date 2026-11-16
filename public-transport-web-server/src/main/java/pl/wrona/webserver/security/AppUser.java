@@ -39,7 +39,10 @@ public class AppUser implements UserDetails {
     @SequenceGenerator(name = "app_user_id_seq", sequenceName = "app_user_id_seq", allocationSize = 1)
     private Long id;
 
+    @Column(name = "username", length = 60)
     private String username;
+
+    @Column(name = "email", length = 60)
     private String email;
     private String password;
     private LocalDateTime createdAt;

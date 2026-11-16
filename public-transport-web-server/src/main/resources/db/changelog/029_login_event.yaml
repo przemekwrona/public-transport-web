@@ -1,0 +1,69 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-login-event-table
+      author: pwrona
+      changes:
+        - createTable:
+            tableName: login_event
+            columns:
+              - column:
+                  name: occurred_at
+                  type: timestamp
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_login_event
+                    nullable: false
+              - column:
+                  name: agency_code
+                  type: varchar(15)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_login_event
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(60)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_login_event
+                    nullable: false
+              - column:
+                  name: success
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_login
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_refresh
+                  type: boolean
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: login_event
+
+  - changeSet:
+      id: widen-app-user-username-and-email
+      author: pwrona
+      changes:
+        - modifyDataType:
+            tableName: app_user
+            columnName: username
+            newDataType: varchar(60)
+        - modifyDataType:
+            tableName: app_user
+            columnName: email
+            newDataType: varchar(60)
+      rollback:
+        - modifyDataType:
+            tableName: app_user
+            columnName: username
+            newDataType: varchar(30)
+        - modifyDataType:
+            tableName: app_user
+            columnName: email
+            newDataType: varchar(30)
