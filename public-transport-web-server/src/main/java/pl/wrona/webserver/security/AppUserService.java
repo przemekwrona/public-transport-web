@@ -21,10 +21,21 @@ public class AppUserService {
     private final KeycloakLoginClient keycloakLoginClient;
     private final JwtDecoder jwtDecoder;
     private final KeycloakUserProvisioner keycloakUserProvisioner;
+    private final LoginAuditService loginAuditService;
 
     public LoginAppUserResponse login(LoginAppUserRequest loginAppUserRequest) {
-        String accessToken = keycloakLoginClient.login(loginAppUserRequest.getUsername(), loginAppUserRequest.getPassword());
-        AgencyTokenPrincipal principal = AgencyTokenPrincipal.from(jwtDecoder.decode(accessToken));
+        String username = loginAppUserRequest.getUsername();
+        String accessToken;
+        AgencyTokenPrincipal principal;
+        try {
+            accessToken = keycloakLoginClient.login(username, loginAppUserRequest.getPassword());
+            principal = AgencyTokenPrincipal.from(jwtDecoder.decode(accessToken));
+        } catch (RuntimeException exception) {
+            loginAuditService.record(username, "NONE", false, true, false);
+            throw exception;
+        }
+        String agencyCode = principal.primaryAgencyCode().orElse("NONE");
+        loginAuditService.record(username, agencyCode, true, true, false);
 
         return new LoginAppUserResponse()
                 .token(accessToken)

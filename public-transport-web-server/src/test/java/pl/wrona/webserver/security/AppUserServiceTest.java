@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 class AppUserServiceTest {
@@ -30,7 +31,8 @@ class AppUserServiceTest {
     private final KeycloakLoginClient keycloakLoginClient = mock(KeycloakLoginClient.class);
     private final JwtDecoder jwtDecoder = mock(JwtDecoder.class);
     private final KeycloakUserProvisioner keycloakUserProvisioner = mock(KeycloakUserProvisioner.class);
-    private final AppUserService appUserService = new AppUserService(keycloakLoginClient, jwtDecoder, keycloakUserProvisioner);
+    private final LoginAuditService loginAuditService = mock(LoginAuditService.class);
+    private final AppUserService appUserService = new AppUserService(keycloakLoginClient, jwtDecoder, keycloakUserProvisioner, loginAuditService);
 
     @AfterEach
     void clearAuthentication() {
@@ -55,6 +57,17 @@ class AppUserServiceTest {
         assertThat(response.getToken()).isEqualTo("keycloak-token");
         assertThat(response.getInstance()).isEqualTo("NEXTSTOP");
         assertThat(response.getRoles()).containsExactly("AGENCY_OWNER", "SUPER_USER");
+        verify(loginAuditService).record("pwrona", "NEXTSTOP", true, true, false);
+    }
+
+    @Test
+    void loginRecordsAFailedAttemptAndRethrows() {
+        when(keycloakLoginClient.login("pwrona", "wrong")).thenThrow(new BadCredentialsException("Invalid credentials"));
+
+        assertThatThrownBy(() -> appUserService.login(new LoginAppUserRequest().username("pwrona").password("wrong")))
+                .isInstanceOf(BadCredentialsException.class);
+
+        verify(loginAuditService).record("pwrona", "NONE", false, true, false);
     }
 
     @Test
@@ -68,6 +81,7 @@ class AppUserServiceTest {
 
         assertThat(status.getStatus()).isEqualTo(Status.StatusEnum.SUCCESS);
         verify(keycloakUserProvisioner).changePassword("pwrona", "welcome2");
+        verifyNoInteractions(loginAuditService);
     }
 
     @Test
@@ -81,6 +95,7 @@ class AppUserServiceTest {
                 .isInstanceOf(BusinessException.class)
                 .hasFieldOrPropertyWithValue("exceptionCode", "ERROR:202611060001");
         verify(keycloakUserProvisioner, never()).changePassword("pwrona", "welcome2");
+        verifyNoInteractions(loginAuditService);
     }
 
     @Test
@@ -94,6 +109,7 @@ class AppUserServiceTest {
                 .isInstanceOf(BusinessException.class)
                 .hasFieldOrPropertyWithValue("exceptionCode", "ERROR:202611060003");
         verify(keycloakUserProvisioner, never()).changePassword("pwrona", "welcome1");
+        verifyNoInteractions(loginAuditService);
     }
 
     private void authenticate(String username) {
