@@ -12,6 +12,7 @@ import {Directions} from '@primeicons/angular/directions';
 import {Calendar} from '@primeicons/angular/calendar';
 import {Clipboard} from '@primeicons/angular/clipboard';
 import {Google} from '@primeicons/angular/google';
+import {SignIn} from '@primeicons/angular/sign-in';
 import {LoginService} from '../../auth/login.service';
 import {AgencyStorageService} from '../../auth/agency-storage.service';
 import {AgencySidebarService} from './agency-sidebar.service';
@@ -29,7 +30,8 @@ import {AgencySidebarService} from './agency-sidebar.service';
         Directions,
         Calendar,
         Clipboard,
-        Google
+        Google,
+        SignIn
     ],
     providers: [
         LoginService

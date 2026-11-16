@@ -46,6 +46,14 @@
                                     </a>
                                     <p-sidebar-menu-badge>Admin</p-sidebar-menu-badge>
                                 </p-sidebar-menu-item>
+                                <p-sidebar-menu-item>
+                                    <a routerLink="/admin/login-events" pSidebarMenuButton
+                                       routerLinkActive [isActive]="loginsLink.isActive" #loginsLink="routerLinkActive">
+                                        <svg data-p-icon="sign-in"></svg>
+                                        <span>Logowania</span>
+                                    </a>
+                                    <p-sidebar-menu-badge>Admin</p-sidebar-menu-badge>
+                                </p-sidebar-menu-item>
                             </p-sidebar-menu>
                         </p-sidebar-group-content>
                     </p-sidebar-group>

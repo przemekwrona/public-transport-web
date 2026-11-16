@@ -1,0 +1,37 @@
+<div class="grid grid-cols-1 gap-4 px-6">
+    <div>
+        <h1 class="text-xl font-medium leading-none text-gray-900">{{ 'admin.logins.title' | transloco }}</h1>
+        <p class="mt-2 text-sm text-gray-600">{{ 'admin.logins.hint' | transloco }}</p>
+    </div>
+
+    <p-table
+            [value]="events"
+            [lazy]="true"
+            [paginator]="true"
+            [rows]="rows"
+            [totalRecords]="totalRecords"
+            [loading]="loading"
+            (onLazyLoad)="load($event)"
+            [tableStyle]="{ 'min-width': '60rem' }">
+        <ng-template #header>
+            <tr>
+                <th>{{ 'admin.logins.column.time' | transloco }}</th>
+                <th>{{ 'admin.logins.column.agency' | transloco }}</th>
+                <th>{{ 'admin.logins.column.username' | transloco }}</th>
+                <th>{{ 'admin.logins.column.result' | transloco }}</th>
+                <th>{{ 'admin.logins.column.login' | transloco }}</th>
+                <th>{{ 'admin.logins.column.refresh' | transloco }}</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-event>
+            <tr>
+                <td>{{ event.occurredAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                <td>{{ event.agencyCode }}</td>
+                <td>{{ event.username }}</td>
+                <td>{{ (event.success ? 'admin.logins.success' : 'admin.logins.failure') | transloco }}</td>
+                <td>{{ (event.login ? 'admin.logins.yes' : 'admin.logins.no') | transloco }}</td>
+                <td>{{ (event.refresh ? 'admin.logins.yes' : 'admin.logins.no') | transloco }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

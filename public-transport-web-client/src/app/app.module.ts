@@ -15,6 +15,7 @@ import {AddHeaderInterceptor} from "./auth/auth.interceptor";
 import {BASE_PATH as API_BASE_PATH} from "./generated/public-transport-api";
 import {TranslocoRootModule} from './transloco-root.module';
 import {BASE_PATH as PDF_BASE_PATH} from "./generated/public-transport-pdf-api";
+import {LoginEventsComponent} from "./agency/login-events/login-events.component";
 import {UserListComponent} from "./agency/user/user-list/user-list.component";
 import {CreateUserComponent} from "./agency/user/create-user/create-user.component";
 import {provideEnvironmentNgxMask} from "ngx-mask";
@@ -45,6 +46,7 @@ export class MondayDateAdapter extends NativeDateAdapter {
         TranslocoRootModule,
         UserListComponent,
         CreateUserComponent,
+        LoginEventsComponent,
         NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
     ],
     declarations: [

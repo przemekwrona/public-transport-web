@@ -52,6 +52,7 @@ import {DocumentationComponent} from "./documentation/documentation.component";
 import {AgencyStopListComponent} from "./agency/agency-stops/agency-stop-list.component";
 import {agencyStopsResolver} from "./agency/agency-stops/agency-stops.resolver";
 import {AccountComponent} from "./agency/account/account.component";
+import {LoginEventsComponent} from "./agency/login-events/login-events.component";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'company', pathMatch: 'full'},
@@ -102,7 +103,8 @@ export const routes: Routes = [
             {
                 path: 'admin', children: [
                     {path: 'users', component: UserListComponent, resolve: {users: usersResolver}},
-                    {path: 'users/create', component: CreateUserComponent}
+                    {path: 'users/create', component: CreateUserComponent},
+                    {path: 'login-events', component: LoginEventsComponent}
                 ]
             }
         ]
