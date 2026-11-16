@@ -110,3 +110,7 @@ databaseChangeLog:
   - include:
       file: 028_subdivision.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 029_login_event.yaml
+      relativeToChangelogFile: true
