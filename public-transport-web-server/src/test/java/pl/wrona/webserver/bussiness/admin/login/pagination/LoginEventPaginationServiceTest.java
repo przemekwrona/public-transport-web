@@ -7,9 +7,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import pl.wrona.webserver.security.LoginEventCommandRepository;
 import pl.wrona.webserver.security.LoginEventEntity;
 import pl.wrona.webserver.security.LoginEventId;
-import pl.wrona.webserver.security.LoginEventQueryRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,8 +22,8 @@ import static org.mockito.Mockito.when;
 
 class LoginEventPaginationServiceTest {
 
-    private final LoginEventQueryRepository loginEventQueryRepository = mock(LoginEventQueryRepository.class);
-    private final LoginEventPaginationService service = new LoginEventPaginationService(loginEventQueryRepository);
+    private final LoginEventCommandRepository loginEventCommandRepository = mock(LoginEventCommandRepository.class);
+    private final LoginEventPaginationService service = new LoginEventPaginationService(loginEventCommandRepository);
 
     @Test
     void findLatestReturnsTheNewestPage() {
@@ -38,13 +38,13 @@ class LoginEventPaginationServiceTest {
                 .login(true)
                 .refresh(false)
                 .build();
-        when(loginEventQueryRepository.findAll(any(Pageable.class)))
+        when(loginEventCommandRepository.findAll(any(Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of(event), PageRequest.of(0, 20), 21));
 
         LoginEventsResponse response = service.findLatest(0, 20);
 
         ArgumentCaptor<Pageable> pageable = ArgumentCaptor.forClass(Pageable.class);
-        verify(loginEventQueryRepository).findAll(pageable.capture());
+        verify(loginEventCommandRepository).findAll(pageable.capture());
         assertThat(pageable.getValue().getPageNumber()).isZero();
         assertThat(pageable.getValue().getPageSize()).isEqualTo(20);
         assertThat(pageable.getValue().getSort().getOrderFor("id.occurredAt").getDirection()).isEqualTo(Sort.Direction.DESC);
@@ -63,13 +63,13 @@ class LoginEventPaginationServiceTest {
 
     @Test
     void findLatestClampsThePageSize() {
-        when(loginEventQueryRepository.findAll(any(Pageable.class)))
+        when(loginEventCommandRepository.findAll(any(Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 100), 0));
 
         service.findLatest(-1, 500);
 
         ArgumentCaptor<Pageable> pageable = ArgumentCaptor.forClass(Pageable.class);
-        verify(loginEventQueryRepository).findAll(pageable.capture());
+        verify(loginEventCommandRepository).findAll(pageable.capture());
         assertThat(pageable.getValue().getPageNumber()).isZero();
         assertThat(pageable.getValue().getPageSize()).isEqualTo(100);
     }
