@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.StopTimeRepository;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
-import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
 
 import java.util.Collection;
 import java.util.Comparator;

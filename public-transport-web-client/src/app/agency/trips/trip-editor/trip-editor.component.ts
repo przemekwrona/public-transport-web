@@ -22,6 +22,7 @@ import {TripEditorComponentMode} from "./trip-editor-component-mode";
 import {AgencyStorageService} from "../../../auth/agency-storage.service";
 import {NotificationService} from "../../../shared/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
+import {TranslocoService} from "@jsverse/transloco";
 import {
     AbstractControl,
     FormArray,
@@ -87,6 +88,7 @@ export class TripEditorComponent implements OnInit {
 
     public routeCode: string = '';
     public tripCode: string = '';
+    public downloadingMapPdf = false;
 
 
     get profiles(): FormArray<FormGroup> {
@@ -121,7 +123,18 @@ export class TripEditorComponent implements OnInit {
         return index >= 0 ? index : 0;
     }
 
-    constructor(private tripService: TripService, private tripProfileService: TripProfileService, private agencyStorageService: AgencyStorageService, private router: Router, private _route: ActivatedRoute, private notificationService: NotificationService, private formBuilder: FormBuilder, private tripIdExistenceValidator: TripIdExistenceValidator, private stops: TripStopListStore) {
+    constructor(
+        private tripService: TripService,
+        private tripProfileService: TripProfileService,
+        private agencyStorageService: AgencyStorageService,
+        private router: Router,
+        private _route: ActivatedRoute,
+        private notificationService: NotificationService,
+        private formBuilder: FormBuilder,
+        private tripIdExistenceValidator: TripIdExistenceValidator,
+        private stops: TripStopListStore,
+        private translocoService: TranslocoService
+    ) {
     }
 
     get geometry(): Point2D[] {
@@ -314,6 +327,40 @@ export class TripEditorComponent implements OnInit {
 
     public get isEdit(): boolean {
         return this.tripEditorComponentMode === TripEditorComponentMode.EDIT;
+    }
+
+    public downloadMapPdf(): void {
+        if (!this.isEdit || !this.routeCode || !this.tripCode || this.downloadingMapPdf) {
+            return;
+        }
+        this.downloadingMapPdf = true;
+        this.tripService.downloadTripMapPdf(
+            this.agencyStorageService.getInstance(),
+            this.routeCode,
+            this.tripCode,
+            'body',
+            false,
+            {httpHeaderAccept: 'application/pdf'}
+        ).subscribe({
+            next: response => {
+                const blob = response instanceof Blob
+                    ? response
+                    : new Blob([response as BlobPart], {type: 'application/pdf'});
+                const objectUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = objectUrl;
+                link.download = `mapa-trasy-${this.routeCode}-${this.tripCode}.pdf`;
+                link.click();
+                URL.revokeObjectURL(objectUrl);
+                this.downloadingMapPdf = false;
+            },
+            error: () => {
+                this.downloadingMapPdf = false;
+                this.notificationService.showError(
+                    this.translocoService.translate('agency.trip.edit.downloadMapPdf.failed')
+                );
+            }
+        });
     }
 
     get formValidationErrors(): AllValidationErrors[] {

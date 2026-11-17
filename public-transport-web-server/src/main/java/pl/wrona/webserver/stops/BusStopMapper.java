@@ -2,7 +2,7 @@ package pl.wrona.webserver.stops;
 
 import org.apache.commons.lang3.StringUtils;
 import org.igeolab.iot.pt.server.api.model.Stop;
-import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
+import pl.wrona.webserver.core.stop.TerritorialUnitEntity;
 
 import java.util.Optional;
 

@@ -1,11 +1,9 @@
-package pl.wrona.webserver.core;
+package pl.wrona.webserver.bussiness.stop;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
-import pl.wrona.webserver.core.entity.TerritorialUnitRepository;
+import pl.wrona.webserver.core.stop.TerritorialUnitEntity;
+import pl.wrona.webserver.core.stop.TerritorialUnitRepository;
 
 import java.util.List;
 

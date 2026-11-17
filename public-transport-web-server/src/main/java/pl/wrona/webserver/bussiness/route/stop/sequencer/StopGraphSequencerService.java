@@ -11,7 +11,7 @@ import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.agency.TripTrafficMode;
 import pl.wrona.webserver.core.agency.TripVariantMode;
-import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

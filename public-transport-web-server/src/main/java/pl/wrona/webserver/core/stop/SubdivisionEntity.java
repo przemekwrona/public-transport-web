@@ -1,4 +1,4 @@
-package pl.wrona.webserver.core.entity;
+package pl.wrona.webserver.core.stop;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

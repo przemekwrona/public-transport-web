@@ -11,12 +11,12 @@ import org.igeolab.iot.pt.server.api.model.Teryt;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.core.AgencyService;
-import pl.wrona.webserver.core.TerritorialUnitQueryService;
-import pl.wrona.webserver.core.TerytQueryService;
+import pl.wrona.webserver.bussiness.stop.TerritorialUnitQueryService;
+import pl.wrona.webserver.bussiness.stop.TerytQueryService;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.StopAgencyRepository;
-import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
-import pl.wrona.webserver.core.entity.TerytEntity;
+import pl.wrona.webserver.core.stop.TerritorialUnitEntity;
+import pl.wrona.webserver.core.stop.TerytEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.ArrayList;

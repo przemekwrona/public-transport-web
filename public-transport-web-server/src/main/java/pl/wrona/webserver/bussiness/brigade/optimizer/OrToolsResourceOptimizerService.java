@@ -15,7 +15,7 @@ import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEventCommandRepository;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
-import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
 import java.util.ArrayList;

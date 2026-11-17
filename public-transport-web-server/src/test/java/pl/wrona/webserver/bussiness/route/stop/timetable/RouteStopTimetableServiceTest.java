@@ -30,7 +30,7 @@ import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeGroupEntity;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
 import pl.wrona.webserver.core.calendar.CalendarSymbolEntity;
-import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
 import pl.wrona.webserver.exception.BusinessException;
 
 import java.util.List;

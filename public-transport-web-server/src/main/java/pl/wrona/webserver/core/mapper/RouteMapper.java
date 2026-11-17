@@ -4,12 +4,11 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.igeolab.iot.pt.server.api.model.Route;
 import org.igeolab.iot.pt.server.api.model.RouteId;
-import org.igeolab.iot.pt.server.api.model.RouteId;
 import org.igeolab.iot.pt.server.api.model.Stop;
 import org.igeolab.iot.pt.server.api.model.TerritoryRoute;
 import pl.wrona.webserver.core.agency.RouteEntity;
-import pl.wrona.webserver.core.entity.StopEntity;
-import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
+import pl.wrona.webserver.core.stop.TerritorialUnitEntity;
 
 import java.util.Map;
 import java.util.Optional;

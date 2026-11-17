@@ -6,7 +6,7 @@ import pl.wrona.webserver.bussiness.stop.FirstAndLastStop;
 import pl.wrona.webserver.core.agency.TripProfileEntity;
 import pl.wrona.webserver.core.brigade.BrigadeEventEntity;
 import pl.wrona.webserver.core.brigade.BrigadeResourceEntity;
-import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
 
 import java.util.List;
 import java.util.Map;

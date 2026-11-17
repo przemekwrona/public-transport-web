@@ -9,6 +9,7 @@ import org.igeolab.iot.pt.server.api.model.TripExistence;
 import org.igeolab.iot.pt.server.api.model.TripExistenceResult;
 import org.igeolab.iot.pt.server.api.model.TripsDetails;
 import org.igeolab.iot.pt.server.api.model.UpdateTripDetailsRequest;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import pl.wrona.webserver.bussiness.trip.creator.TripCreatorService;
 import pl.wrona.webserver.bussiness.trip.deletion.TripDeletionService;
 import pl.wrona.webserver.bussiness.trip.details.TripDetailsService;
 import pl.wrona.webserver.bussiness.trip.existance.TripExistenceService;
+import pl.wrona.webserver.bussiness.trip.mappdf.TripMapPdfService;
 import pl.wrona.webserver.bussiness.trip.pagination.TripPaginationService;
 import pl.wrona.webserver.bussiness.trip.updater.TripUpdaterService;
 
@@ -33,6 +35,7 @@ public class TripController implements TripApi {
     private final TripDetailsService tripDetailsService;
     private final TripUpdaterService tripUpdaterService;
     private final TripExistenceService tripExistenceService;
+    private final TripMapPdfService tripMapPdfService;
 
     @Override
     public ResponseEntity<Status> createTrip(String agency, String routeCode, CreateTripDetailsRequest createTripDetailsRequest) {
@@ -47,6 +50,11 @@ public class TripController implements TripApi {
     @Override
     public ResponseEntity<TripsDetails> getTripVariantDetails(String agency, String routeCode, String tripCode) {
         return ResponseEntity.ok(tripDetailsService.getTripVariantDetails(agency, routeCode, tripCode));
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadTripMapPdf(String agency, String routeCode, String tripCode) {
+        return tripMapPdfService.downloadTripMapPdf(agency, routeCode, tripCode);
     }
 
     @Override

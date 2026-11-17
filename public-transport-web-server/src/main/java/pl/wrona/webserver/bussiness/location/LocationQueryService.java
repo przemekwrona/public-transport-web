@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.igeolab.iot.pt.server.api.model.LocationSearch;
 import org.igeolab.iot.pt.server.api.model.LocationSearchResponse;
 import org.springframework.stereotype.Service;
-import pl.wrona.webserver.core.TerytQueryService;
-import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
-import pl.wrona.webserver.core.entity.TerritorialUnitRepository;
-import pl.wrona.webserver.core.entity.TerytEntity;
+import pl.wrona.webserver.bussiness.stop.TerytQueryService;
+import pl.wrona.webserver.core.stop.TerritorialUnitEntity;
+import pl.wrona.webserver.core.stop.TerritorialUnitRepository;
+import pl.wrona.webserver.core.stop.TerytEntity;
 
 import java.util.Comparator;
 import java.util.function.Function;

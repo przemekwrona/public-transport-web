@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm;
+        }
+
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            color: #111;
+            font-size: 11px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 4px 0;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .meta {
+            margin-bottom: 10px;
+        }
+
+        .generated {
+            text-align: right;
+            font-size: 10px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .map {
+            border: 1px solid #cbd5e1;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .map img {
+            width: 186mm;
+            height: auto;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin: 0 0 6px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 4px 6px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #efefef;
+        }
+
+        .empty {
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+<div class="generated" th:text="${#temporals.format(now, 'yyyy-MM-dd HH:mm')}"></div>
+<div class="title"
+     th:text="'Linia ' + ${view.line()} + ' - ' + ${view.routeName()}">
+</div>
+<div class="subtitle"
+     th:text="'Wariant ' + ${view.tripCode()} + ' / ' + ${view.variantDesignation()}">
+</div>
+<div class="meta">
+    <div th:text="'Agencja: ' + ${view.agencyCode()}"></div>
+    <div th:if="${view.headsign() != null}" th:text="'Kierunek: ' + ${view.headsign()}"></div>
+</div>
+
+<div class="map" th:utext="${view.mapHtml()}"></div>
+
+<div class="section-title">Gminy na trasie</div>
+<p th:if="${!#strings.isEmpty(view.municipalitiesSummary())}"
+   th:text="'Trasa przebiega przez: ' + ${view.municipalitiesSummary()}">
+</p>
+<table th:if="${!view.municipalities().isEmpty()}">
+    <thead>
+    <tr>
+        <th>TERYT</th>
+        <th>Województwo</th>
+        <th>Powiat</th>
+        <th>Gmina</th>
+        <th>Km</th>
+        <th>% trasy</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${view.municipalities()}">
+        <td th:text="${item.teryt()}"></td>
+        <td th:text="${item.wojewodztwo()}"></td>
+        <td th:text="${item.powiat()}"></td>
+        <td th:text="${item.gmina()}"></td>
+        <td th:text="${item.kilometers()}"></td>
+        <td th:text="${item.percent()} + '%'"></td>
+    </tr>
+    </tbody>
+</table>
+<p class="empty" th:if="${view.municipalities().isEmpty()}">
+    Brak gmin powiązanych z przystankami na trasie.
+</p>
+</body>
+</html>

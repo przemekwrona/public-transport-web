@@ -972,6 +972,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/Status'
 
+  /agency/{agency}/routes/{routeCode}/trips/{tripCode}/map-pdf:
+    get:
+      tags:
+        - trip
+      summary: Download PDF with trip geometry and crossed municipalities
+      operationId: downloadTripMapPdf
+      parameters:
+        - in: path
+          name: agency
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: routeCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: tripCode
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Trip map PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+
   /agency/{agency}/routes/{routeCode}/trips/{tripCode}/profile:
     put:
       tags:
@@ -1334,6 +1365,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LocationSearchResponse'
+
+  /subdivisions/by-stops:
+    post:
+      tags:
+        - subdivision
+      summary: Return subdivision geometries for stops
+      operationId: findSubdivisionsByStopIds
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubdivisionByStopsRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubdivisionByStopsResponse'
 
 components:
   schemas:
@@ -2369,6 +2420,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocationSearch'
+
+    SubdivisionByStopsRequest:
+      type: object
+      required:
+        - stopIds
+      properties:
+        stopIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+
+    Subdivision:
+      type: object
+      properties:
+        teryt:
+          type: string
+        wojewodztwo:
+          type: string
+        powiat:
+          type: string
+        gmina:
+          type: string
+        geometry:
+          type: string
+
+    SubdivisionByStopsResponse:
+      type: object
+      properties:
+        subdivisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subdivision'
 
     TerritoryUnit:
       type: object
