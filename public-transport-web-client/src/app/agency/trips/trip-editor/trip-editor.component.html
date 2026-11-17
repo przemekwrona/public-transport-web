@@ -12,6 +12,15 @@
         </div>
         <div class="flex items-center gap-2.5">
             @if (isEdit && tripCode) {
+                <button pButton
+                        type="button"
+                        severity="secondary"
+                        [disabled]="downloadingMapPdf"
+                        (click)="downloadMapPdf()">
+                    {{ downloadingMapPdf
+                        ? ('agency.trip.edit.downloadMapPdf.loading' | transloco)
+                        : ('agency.trip.edit.downloadMapPdf' | transloco) }}
+                </button>
                 <a pButton severity="secondary" [routerLink]="['/agency/routes', routeCode, 'trips', tripCode, 'map']">
                     {{ 'agency.trip.edit.editOnMap' | transloco }}
                 </a>

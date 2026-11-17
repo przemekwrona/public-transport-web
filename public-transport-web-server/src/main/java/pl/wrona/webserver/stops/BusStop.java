@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
+import pl.wrona.webserver.core.stop.TerritorialUnitEntity;
 
 @Entity
 @Table(name = "stop")

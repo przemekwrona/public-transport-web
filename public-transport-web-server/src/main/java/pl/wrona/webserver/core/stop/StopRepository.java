@@ -1,11 +1,10 @@
-package pl.wrona.webserver.core;
+package pl.wrona.webserver.core.stop;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
-import pl.wrona.webserver.core.entity.StopEntity;
 
 import java.util.List;
 

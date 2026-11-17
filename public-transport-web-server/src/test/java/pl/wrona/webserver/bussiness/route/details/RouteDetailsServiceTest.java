@@ -12,13 +12,13 @@ import pl.wrona.webserver.bussiness.stop.name.AgencyStopNameService;
 import pl.wrona.webserver.bussiness.trip.TripQueryService;
 import pl.wrona.webserver.core.StopService;
 import pl.wrona.webserver.core.StopTimeService;
-import pl.wrona.webserver.core.TerritorialUnitQueryService;
+import pl.wrona.webserver.bussiness.stop.TerritorialUnitQueryService;
 import pl.wrona.webserver.core.agency.RouteEntity;
 import pl.wrona.webserver.core.agency.StopTimeEntity;
 import pl.wrona.webserver.core.agency.TripEntity;
 import pl.wrona.webserver.core.agency.TripVariantMode;
-import pl.wrona.webserver.core.entity.StopEntity;
-import pl.wrona.webserver.core.entity.TerritorialUnitEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
+import pl.wrona.webserver.core.stop.TerritorialUnitEntity;
 
 import java.util.List;
 import java.util.Map;

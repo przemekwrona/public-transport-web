@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:8080/api/v1
+
+### Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "pwrona",
+  "password": "welcome1"
+}
+
+> {%
+client.global.set("token", response.body.token);
+%}
+
+### Find subdivisions by stop ids
+POST {{baseUrl}}/subdivisions/by-stops
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "stopIds": [105195, 2, 3]
+}
+
+### Download trip map PDF
+@agency = NEXTSTOP
+@routeCode = 00001
+@tripCode = 001
+GET {{baseUrl}}/agency/{{agency}}/routes/{{routeCode}}/trips/{{tripCode}}/map-pdf
+Authorization: Bearer {{token}}
+Accept: application/pdf
+

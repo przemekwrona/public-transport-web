@@ -3,7 +3,8 @@ package pl.wrona.webserver.core;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wrona.webserver.core.agency.AgencyEntity;
-import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
+import pl.wrona.webserver.core.stop.StopRepository;
 
 import java.util.List;
 import java.util.Map;

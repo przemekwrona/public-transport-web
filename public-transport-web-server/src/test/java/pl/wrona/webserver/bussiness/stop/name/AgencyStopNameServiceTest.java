@@ -10,7 +10,7 @@ import pl.wrona.webserver.core.AgencyRepository;
 import pl.wrona.webserver.core.agency.AgencyEntity;
 import pl.wrona.webserver.core.agency.StopAgencyEntity;
 import pl.wrona.webserver.core.agency.StopAgencyRepository;
-import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
 
 import java.util.List;
 import java.util.Map;

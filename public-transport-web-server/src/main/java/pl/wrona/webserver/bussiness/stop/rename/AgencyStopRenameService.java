@@ -12,7 +12,7 @@ import pl.wrona.webserver.core.agency.StopAgencyEntity;
 import pl.wrona.webserver.core.agency.StopAgencyHistoryEntity;
 import pl.wrona.webserver.core.agency.StopAgencyHistoryRepository;
 import pl.wrona.webserver.core.agency.StopAgencyRepository;
-import pl.wrona.webserver.core.entity.StopEntity;
+import pl.wrona.webserver.core.stop.StopEntity;
 import pl.wrona.webserver.exception.BusinessException;
 import pl.wrona.webserver.security.PreAgencyAuthorize;
 
