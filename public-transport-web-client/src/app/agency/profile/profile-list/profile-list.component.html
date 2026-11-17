@@ -116,8 +116,8 @@
                                     <tr>
                                         <td>
                                             <div class="flex items-center grow gap-2.5">
-                                                <img alt="" class="rounded-full size-9 shrink-0"
-                                                     src="assets/media/avatars/300-3.png"/>
+                                                <img alt="" class="rounded-full size-9 shrink-0 object-cover"
+                                                     [src]="agencyPhoto(agency.agencyCode)"/>
                                                 <div class="flex flex-col">
                                                     <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
                                                         {{ agency.agencyName }}
