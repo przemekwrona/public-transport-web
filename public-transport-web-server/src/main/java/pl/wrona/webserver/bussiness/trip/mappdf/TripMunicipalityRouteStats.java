@@ -109,24 +109,27 @@ final class TripMunicipalityRouteStats {
 
     static void applyLargestRemainderPercents(List<ShareDraft> drafts) {
         int totalCents = 10_000;
+        int[] cents = new int[drafts.size()];
         List<Remainder> remainders = new ArrayList<>();
         int assigned = 0;
         for (int i = 0; i < drafts.size(); i++) {
             ShareDraft draft = drafts.get(i);
-            int floorCents = (int) Math.floor(draft.rawPercent() * 100.0 + 1e-9);
-            double fraction = draft.rawPercent() * 100.0 - floorCents;
-            drafts.set(i, draft.withRoundedPercent(floorCents / 100.0));
+            BigDecimal rawCents = BigDecimal.valueOf(draft.rawPercent()).movePointRight(2);
+            int floorCents = rawCents.setScale(0, RoundingMode.DOWN).intValue();
+            BigDecimal fraction = rawCents.subtract(BigDecimal.valueOf(floorCents));
+            cents[i] = floorCents;
             assigned += floorCents;
             remainders.add(new Remainder(i, fraction));
         }
 
         int missing = totalCents - assigned;
-        remainders.sort(Comparator.comparingDouble(Remainder::fraction).reversed()
+        remainders.sort(Comparator.comparing(Remainder::fraction).reversed()
                 .thenComparingInt(Remainder::index));
         for (int i = 0; i < missing && i < remainders.size(); i++) {
-            int index = remainders.get(i).index();
-            ShareDraft draft = drafts.get(index);
-            drafts.set(index, draft.withRoundedPercent(draft.roundedPercent() + 0.01));
+            cents[remainders.get(i).index()]++;
+        }
+        for (int i = 0; i < drafts.size(); i++) {
+            drafts.set(i, drafts.get(i).withRoundedPercent(cents[i] / 100.0));
         }
     }
 
@@ -277,6 +280,6 @@ final class TripMunicipalityRouteStats {
         }
     }
 
-    private record Remainder(int index, double fraction) {
+    private record Remainder(int index, BigDecimal fraction) {
     }
 }
