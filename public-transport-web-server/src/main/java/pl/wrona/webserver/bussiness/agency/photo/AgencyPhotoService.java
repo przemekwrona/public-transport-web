@@ -6,6 +6,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,15 +57,7 @@ public class AgencyPhotoService {
         return new Status().status(Status.StatusEnum.SUCCESS);
     }
 
-    @PreAgencyAuthorize(roles = {
-            PreAgencyAuthorize.Role.SUPER_USER,
-            PreAgencyAuthorize.Role.AGENCY_OWNER,
-            PreAgencyAuthorize.Role.AGENCY_ADMIN,
-            PreAgencyAuthorize.Role.PLANNER,
-            PreAgencyAuthorize.Role.BRIGADIER,
-            PreAgencyAuthorize.Role.DISPATCHER,
-            PreAgencyAuthorize.Role.DRIVER
-    })
+    @PreAuthorize("hasAuthority('SUPER_USER') or @agencyAccessSecurity.hasRole(#instance, 'AGENCY_OWNER') or @agencyAccessSecurity.hasRole(#instance, 'AGENCY_ADMIN') or @agencyAccessSecurity.hasRole(#instance, 'PLANNER') or @agencyAccessSecurity.hasRole(#instance, 'BRIGADIER') or @agencyAccessSecurity.hasRole(#instance, 'DISPATCHER') or @agencyAccessSecurity.hasRole(#instance, 'DRIVER')")
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getAgencyPhoto(String instance) {
         AgencyEntity agencyEntity = agencyRepository.findByAgencyCodeEquals(instance);
