@@ -42,7 +42,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
     @Input()
     public set includeDays(value: Date[] | null | undefined) {
-        this.includedDates = value ?? [];
+        this.setDates(this.includedDates, value, (next: Date[]) => this.includedDates = next);
     }
 
     public get includeDays(): Date[] {
@@ -53,7 +53,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
 
     @Input()
     public set excludeDays(value: Date[] | null | undefined) {
-        this.excludedDates = value ?? [];
+        this.setDates(this.excludedDates, value, (next: Date[]) => this.excludedDates = next);
     }
 
     public get excludeDays(): Date[] {
@@ -82,40 +82,44 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
             const end: moment.Moment = start.clone().endOf('month');
 
             for (let day: moment.Moment = start.clone(); day.isSameOrBefore(end); day.add(1, 'day')) {
-                const includedDay: number = this.includeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
+                const current: Date = day.toDate();
+                const includedDay: number = this.includeDays.findIndex((date: Date): boolean => this.isSameDay(current, date));
                 if (includedDay > -1) {
-                    const isWeekday: boolean = this.weekdays.includes(day.day());
+                    const isWeekday: boolean = this.isConfiguredWeekday(day.day());
                     if (isWeekday) {
-                        this.includeDaysChange.emit(day.toDate());
+                        this.includedDates = this.toggleDate(this.includedDates, current);
+                        this.includeDaysChange.emit(current);
                     }
                 }
             }
 
             for (let day: moment.Moment = start.clone(); day.isSameOrBefore(end); day.add(1, 'day')) {
-                const excludedDayIndex: number = this.excludeDays.findIndex((date: Date): boolean => this.isSameDay(day.toDate(), date));
+                const current: Date = day.toDate();
+                const excludedDayIndex: number = this.excludeDays.findIndex((date: Date): boolean => this.isSameDay(current, date));
                 if (excludedDayIndex > -1) {
-                    const isWeekday: boolean = this.weekdays.includes(day.day());
+                    const isWeekday: boolean = this.isConfiguredWeekday(day.day());
                     if (!isWeekday) {
-                        this.excludeDaysChange.emit(day.toDate());
+                        this.excludedDates = this.toggleDate(this.excludedDates, current);
+                        this.excludeDaysChange.emit(current);
                     }
                 }
             }
 
-            this.calendar?.updateTodaysDate();
+            this.refreshCalendar();
         }
 
         if (changes['startDate'] && changes['startDate'].previousValue) {
-            this.calendar?.updateTodaysDate();
+            this.refreshCalendar();
         }
 
         if (changes['endDate'] && changes['endDate'].previousValue) {
-            this.calendar?.updateTodaysDate();
+            this.refreshCalendar();
         }
     }
 
     public selectedChange($event: Date) {
         this.handleDay($event);
-        this.calendar.updateTodaysDate();
+        this.refreshCalendar();
     }
 
     dateClass: (date: Date) => string | string[] = (date: Date): string | string[] => {
@@ -126,7 +130,7 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
             return '';
         }
 
-        if ((this.weekdays ?? []).includes(date.getDay())) {
+        if (this.isConfiguredWeekday(date.getDay())) {
             const index: number = this.excludeDays.findIndex((excludedDate: Date): boolean => this.isSameDay(excludedDate, date));
             if (index > -1) {
                 return ['has-week-day', 'has-excluded-day'];
@@ -144,21 +148,42 @@ export class CalendarPickerComponent implements OnInit, OnChanges {
     };
 
     private handleDay(clickedDate: Date): void {
-        if ((this.weekdays ?? []).includes(clickedDate.getDay())) {
-            const index: number = this.excludeDays.findIndex(d => this.isSameDay(d, clickedDate));
-            if (index > -1) {
-                this.excludeDaysChange.emit(clickedDate);
-            } else {
-                this.excludeDaysChange.emit(clickedDate);
-            }
+        if (this.isConfiguredWeekday(clickedDate.getDay())) {
+            this.excludedDates = this.toggleDate(this.excludedDates, clickedDate);
+            this.excludeDaysChange.emit(clickedDate);
         } else {
-            const index: number = this.includeDays.findIndex(d => this.isSameDay(d, clickedDate));
-            if (index > -1) {
-                this.includeDaysChange.emit(clickedDate);
-            } else {
-                this.includeDaysChange.emit(clickedDate);
-            }
+            this.includedDates = this.toggleDate(this.includedDates, clickedDate);
+            this.includeDaysChange.emit(clickedDate);
         }
+    }
+
+    private isConfiguredWeekday(jsDay: number): boolean {
+        const weekdays: number[] = this.weekdays ?? [];
+        if (weekdays.includes(jsDay)) {
+            return true;
+        }
+        return jsDay === 0 && weekdays.includes(7);
+    }
+
+    private toggleDate(dates: Date[], clickedDate: Date): Date[] {
+        const index: number = dates.findIndex((date: Date): boolean => this.isSameDay(date, clickedDate));
+        if (index > -1) {
+            return dates.filter((_: Date, dateIndex: number): boolean => dateIndex !== index);
+        }
+        return [...dates, clickedDate];
+    }
+
+    private setDates(current: Date[], value: Date[] | null | undefined, assign: (next: Date[]) => void): void {
+        const next: Date[] = value ?? [];
+        if (next === current) {
+            return;
+        }
+        assign(next);
+        this.refreshCalendar();
+    }
+
+    private refreshCalendar(): void {
+        this.calendar?.updateTodaysDate();
     }
 
     private isSameDay(firstDate: Date, secondDate: Date): boolean {
