@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -12,8 +11,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
-@Slf4j
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class PhpFileRequestFilter extends OncePerRequestFilter {
@@ -47,9 +46,9 @@ public class PhpFileRequestFilter extends OncePerRequestFilter {
         if (uri == null) {
             return false;
         }
-        log.info("Test uri {}", uri);
+        String path = uri.toLowerCase(Locale.ROOT);
         for (String fragment : BLACKLISTED_FRAGMENTS) {
-            if (uri.startsWith(fragment)) {
+            if (path.contains(fragment)) {
                 return true;
             }
         }
