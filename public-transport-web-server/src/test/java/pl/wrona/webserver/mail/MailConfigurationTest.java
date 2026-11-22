@@ -18,10 +18,11 @@ class MailConfigurationTest {
     @Test
     void configuresTheZimbraMailbox() {
         assertThat(mailSender.getHost()).isEqualTo("mail.example.pl");
-        assertThat(mailSender.getPort()).isEqualTo(587);
+        assertThat(mailSender.getPort()).isEqualTo(465);
+        assertThat(mailSender.getProtocol()).isEqualTo("smtps");
         assertThat(mailSender.getUsername()).isEqualTo("biuro@zimbra.pl");
         assertThat(mailSender.getPassword()).isEqualTo("zimbra-secret");
-        assertThat(mailSender.getJavaMailProperties().getProperty("mail.smtp.starttls.required")).isEqualTo("true");
-        assertThat(mailSender.getJavaMailProperties().getProperty("mail.smtp.ssl.trust")).isEqualTo("mail.example.pl");
+        assertThat(mailSender.getJavaMailProperties().getProperty("mail.smtps.ssl.enable")).isEqualTo("true");
+        assertThat(mailSender.getJavaMailProperties().getProperty("mail.smtps.ssl.trust")).isEqualTo("mail.example.pl");
     }
 }
