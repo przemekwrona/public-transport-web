@@ -34,7 +34,9 @@ class MailConfiguration {
         mailProperties.put("mail.smtps.timeout", "30000");
         mailProperties.put("mail.smtps.writetimeout", "30000");
         mailProperties.put("mail.smtps.ssl.protocols", "TLSv1.2");
-        mailProperties.put("mail.smtps.ssl.trust", properties.host());
+        if (properties.host() != null) {
+            mailProperties.put("mail.smtps.ssl.trust", properties.host());
+        }
 
         return mailProperties;
     }

@@ -11,6 +11,6 @@ public record MailProperties(
         String password,
         String from,
         String fromName,
-        boolean trustServerCertificate
+        String trustServerCertificate
 ) {
 }
