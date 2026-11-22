@@ -30,7 +30,8 @@ public class WelcomeMailService {
         String body = templateEngine.process(TEMPLATE, context);
         List<MailMessage.InlineImage> images = List.of(
                 new MailMessage.InlineImage("logo", "mail/ns.png"));
-        MailMessage mailMessage = new MailMessage(mailProperties.from(), email, SUBJECT, body, Boolean.TRUE, images);
+        MailMessage mailMessage = new MailMessage(
+                mailProperties.from(), mailProperties.fromName(), email, SUBJECT, body, Boolean.TRUE, images);
 
         mailService.send(mailMessage);
     }
