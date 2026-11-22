@@ -1,6 +1,7 @@
 package pl.wrona.webserver.mail;
 
 import jakarta.mail.Session;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,25 @@ class MailServiceTest {
         verify(sender).send(message);
         assertThat(message.getSubject()).isEqualTo("Temat");
         assertThat(message.getFrom()[0].toString()).isEqualTo("powiadomienia@zimbra.pl");
+    }
+
+    @Test
+    void showsTheSenderNameInTheMailbox() throws Exception {
+        MimeMessage message = mimeMessage();
+        when(sender.createMimeMessage()).thenReturn(message);
+
+        mailService.send(message(
+                "powiadomienia@nastepnastacja.pl",
+                "Następna Stacja",
+                "jan@example.com",
+                "Temat",
+                "Treść",
+                false,
+                List.of()));
+
+        InternetAddress from = (InternetAddress) message.getFrom()[0];
+        assertThat(from.getPersonal()).isEqualTo("Następna Stacja");
+        assertThat(from.getAddress()).isEqualTo("powiadomienia@nastepnastacja.pl");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo("jan@example.com");
     }
 
@@ -64,7 +84,11 @@ class MailServiceTest {
     }
 
     private static MailMessage message(String from, String to, String subject, String body, boolean html, List<MailMessage.InlineImage> images) {
-        return new MailMessage(from, to, subject, body, html, images);
+        return message(from, null, to, subject, body, html, images);
+    }
+
+    private static MailMessage message(String from, String fromName, String to, String subject, String body, boolean html, List<MailMessage.InlineImage> images) {
+        return new MailMessage(from, fromName, to, subject, body, html, images);
     }
 
     private static MimeMessage mimeMessage() {
