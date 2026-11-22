@@ -18,7 +18,7 @@ class WelcomeMailServiceTest {
             templateEngine(),
             mailService,
             new AppProperties("http://localhost:4200/"),
-            new MailProperties("mail.example.pl", 465, "smtps", "biuro@zimbra.pl", "secret", "powiadomienia@zimbra.pl", false));
+            new MailProperties("mail.example.pl", 465, "smtps", "biuro@zimbra.pl", "secret", "powiadomienia@zimbra.pl", "Następna Stacja", false));
 
     @Test
     void sendsTheLoginNameAndSignInLinkWithoutThePassword() throws Exception {
@@ -27,6 +27,7 @@ class WelcomeMailServiceTest {
         ArgumentCaptor<MailMessage> message = ArgumentCaptor.forClass(MailMessage.class);
         verify(mailService).send(message.capture());
         assertThat(message.getValue().from()).isEqualTo("powiadomienia@zimbra.pl");
+        assertThat(message.getValue().fromName()).isEqualTo("Następna Stacja");
         assertThat(message.getValue().to()).isEqualTo("jan@example.com");
         assertThat(message.getValue().subject()).isEqualTo("Witamy w Następna Stacja");
         assertThat(message.getValue().html()).isTrue();
