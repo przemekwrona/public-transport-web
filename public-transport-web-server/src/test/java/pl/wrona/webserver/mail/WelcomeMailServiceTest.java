@@ -18,7 +18,7 @@ class WelcomeMailServiceTest {
             templateEngine(),
             mailService,
             new AppProperties("http://localhost:4200/"),
-            new MailProperties("mail.example.pl", 465, "smtps", "biuro@zimbra.pl", "secret", "powiadomienia@zimbra.pl", "Następna Stacja", false));
+            new MailProperties("mail.example.pl", 465, "smtps", "biuro@zimbra.pl", "secret", "powiadomienia@zimbra.pl", "Następna Stacja", "false"));
 
     @Test
     void sendsTheLoginNameAndSignInLinkWithoutThePassword() throws Exception {
